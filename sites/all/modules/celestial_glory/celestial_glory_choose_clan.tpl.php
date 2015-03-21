@@ -1,0 +1,1 @@
+../stlouis/stlouis_choose_clan.tpl.php

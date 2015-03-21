@@ -1,0 +1,278 @@
+a, a:link, a:visited, a:hover, a:active {
+  color: #2c73f4;
+}
+
+li {
+	list-style: url('/sites/default/files/images/redbullet.png');
+}
+
+.header {
+	background: url(/sites/default/files/images/stlouis_header_bg.jpg) !important;
+}
+
+.header .experience {
+	border-bottom: 1px solid #333833 !important;
+}
+
+.title.loot {
+	color: #d4c41c;
+}
+
+.welcome .subtitle {
+	color: #2c73f4;
+	font-weight: bold;
+	margin-top: 9px;
+}
+
+.welcome-continue a, .election-continue a {
+	border: 1px solid #2c73f4;
+	background-color: #2c73f4;
+}
+
+.main-menu, .elders-menu {
+	font-weight: bold;
+}
+
+.main-menu .menu-option {
+	border: 2px solid white;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+  width: 45%;
+  margin: 6px 2%;
+  float: left;
+  background: #444f44;
+}
+
+.elders-menu .menu-option {
+	border: 2px solid white;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+  width: 72%;
+  margin: 10px 14%;
+  text-align: center;
+  background: #444f44;
+}
+
+.menu-option a {
+	text-decoration: none;
+}
+
+.menu-option.not-yet {
+	text-decoration: none;
+	color: #bbb;
+}
+
+.quests, .land {
+	background-color: #0a141e;
+}
+
+.quests .quest-experience, .quests .quest-money,
+.quests .quest-required_energy, .quests .quest-required_stuff,
+.land .land-cost, .land .land-action-cost, .land .land-payout,
+.land .land-required_level, .land-soon .land-action-cost {
+  color: #2c73f4;
+}
+
+.quests .quest-required_stuff.missing {
+	color: #a41c43;
+}
+
+.quests .quest-loot {
+	color: #d4c41c;
+}
+
+.land .land-payout.negative, .land-soon .land-payout.negative {
+	color: #a41c43;
+}
+
+.quests .quest-description, .land .land-description {
+  color: #cbb;
+}
+
+.quests-soon .quest-experience, .quests-soon .quest-money,
+.quests-soon .quest-required_energy,
+.land-soon .land-cost, .land-soon .land-payout,
+.land-soon .land-required_level {
+  color: #032152;
+}
+
+.quests-soon a, .quests-soon a:link, .quests-soon a:visited,
+.quests-soon a:hover, .quests-soon a:active,
+.land-soon a, .land-soon a:link, .land-soon a:visited,
+.land-soon a:hover, .land-soon a:active {
+	  color: #032152;
+}
+
+.quest-succeeded, .election-succeeded, .land-succeeded {
+  color: #2c73f4;
+}
+
+.quest-failed, .election-failed, .land-failed {
+  color: #a41c43;
+}
+
+.quest-do-again, .land-buy-again {
+  text-align: right;
+  margin-right: 8px;
+  margin-bottom: 28px;
+  padding-top: 3px;
+}
+
+.quest-do-again-inside, .land-buy-again-inside {
+	padding: 3px;
+  background-color: #2c73f4;
+  border: 1px solid #2c73f4;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  float: right;
+}
+
+.quest-do-again a, .land-buy-again a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.quests .quest-name.loot {
+	color: #d4c41c;
+}
+
+.land .land-owned {
+  color: #fff;
+}
+
+.level-up {
+	border: 1px solid #032152;
+  background-color: #032152;
+}
+
+.choose-clan-name {
+	margin-left: 6px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #2c73f4;
+}
+
+.choose-clan-name a {
+  text-decoration: none;
+}
+
+.choose-clan-slogan {
+	margin: 0px 0px 8px 54px;
+	font-style: italic;
+	font-size: 11px;
+	color: #bcb;
+}
+
+.help .subtitle {
+	margin: 8px 0 4px;
+}
+
+.help .subtitle {
+	color: #2c73f4;
+}
+
+.wise_old_man_large {
+	background-image: url('/sites/default/files/images/robber_barons_welcome_man_large.png');
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  width: 106px;
+  height: 144px;
+  float: left;
+}
+
+.wise_old_man_small {
+	background-image: url('/sites/default/files/images/robber_barons_welcome_man_small.png');
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  width: 63px;
+  height: 80px;
+  float: left;
+}
+
+.username-error {
+  color: #a41c43;
+}
+
+.elections-header {
+	color: #1a43a4;
+}
+
+.elections .election-details .action, .land .land-buy-button,
+.land .land-sell-button, .land .land-perform-button,
+.send-message-send-wrapper .send-message-send {
+	padding: 3px 12px;
+  background-color: #183384;
+  border: 1px solid #183384;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.send-message .block-user {
+	padding: 3px 12px;
+  background-color: #183384;
+  border: 1px solid #183384;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.send-message .block-user a {
+	color: #fff;
+	text-decoration: none;
+}
+
+.elections .election-details .action.not-yet, .land .land-buy-button.not-yet,
+.land .land-sell-button.not-yet {
+  background-color: #333833;
+  border: 1px solid #333833;
+}
+
+.elections .election-details .action a, .land .land-buy-button a,
+.land .land-sell-button a {
+  color: #fff;
+	text-decoration: none;
+}
+
+.try-an-election {
+	background-color: #183384 !important;
+	border: 1px solid #183384 !important;
+}
+
+.try-an-election.not-yet {
+	background-color: #333833 !important;
+	border: 1px solid #333833 !important;
+}
+
+.news .message-body {
+	border: 1px solid #111811 !important;
+	background-color: #111811 !important;
+}
+
+.news .button {
+	background-color: #032152 !important;
+	border: 1px solid #032152 !important;
+}
+
+.news .button.active {
+	background-color: #183384 !important;
+	border: 1px solid #fff !important;
+}
+
+.news .message-reply {
+	background-color: #183384 !important;
+	border: 1px solid #183384 !important;
+}
+
+.user-profile .action {
+	background-color: #183384 !important;
+	border: 1px solid #183384 !important;
+}
+
+.user-profile .action.not-yet {
+  background-color: #333833 !important;
+  border: 1px solid #333833 !important;
+}
+
+.highlighted {
+	color: #183384;
+	font-weight: bold;
+}

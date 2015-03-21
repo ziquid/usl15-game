@@ -1,0 +1,1 @@
+../stlouis/stlouis_party_msg.tpl.php

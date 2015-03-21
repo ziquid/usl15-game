@@ -1,0 +1,1 @@
+../stlouis/stlouis_elders_ask_reset_skills.tpl.php

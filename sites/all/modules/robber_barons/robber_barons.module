@@ -1,0 +1,2044 @@
+<?php
+// $Id$
+
+function robber_barons_help($path, $arg) {
+
+  $output = '';
+
+  switch ($path) {
+
+    case "admin/help#robber_barons":
+      $output = '<p>'.  t('Back end for <em>Robber Barons</em> game') .'</p>';
+      break;
+
+  }
+
+  return $output;
+
+} // robber_barons_help()
+
+
+function robber_barons_perm() {
+
+  return array('access robber barons content');
+
+} // robber_barons_perm()
+
+
+function robber_barons_menu() {
+
+  $items['robber_barons/home/%'] = array(
+    'title' => 'Robber Barons Home Page',
+    'page callback' => 'robber_barons_homepage_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/user/%'] = array(
+    'title' => 'Robber Barons User Profile Page',
+    'page callback' => 'robber_barons_userprofile_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/clan_list/%/%'] = array(
+    'title' => 'Robber Barons Clan List Page',
+    'page callback' => 'robber_barons_clan_list_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/clan_list_available/%'] = array(
+    'title' => 'Robber Barons Available Clan List Page',
+    'page callback' => 'robber_barons_clan_list_available_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/clan_msg/%/%'] = array(
+    'title' => 'Robber Barons Clan Messages Page',
+    'page callback' => 'robber_barons_clan_msg_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/clan_announcements/%/%'] = array(
+    'title' => 'Robber Barons Clan Announcements Page',
+    'page callback' => 'robber_barons_clan_announcements_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/class_list/%/%'] = array(
+    'title' => 'Robber Barons Class List Page',
+    'page callback' => 'robber_barons_class_list_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/block_user_toggle/%/%'] = array(
+    'title' => 'Robber Barons Block User Toggle',
+    'page callback' => 'robber_barons_block_user_toggle_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/msg_delete/%/%'] = array(
+    'title' => 'Robber Barons Message Delete Page',
+    'page callback' => 'robber_barons_msg_delete_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/party_msg/%'] = array(
+    'title' => 'Robber Barons Party Message Page',
+    'page callback' => 'robber_barons_party_msg_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/increase_skills/%/%'] = array(
+    'title' => 'Robber Barons Increase Skills Page',
+    'page callback' => 'robber_barons_increase_skills_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/quests/%'] = array(
+    'title' => 'Robber Barons Quests List',
+    'page callback' => 'robber_barons_quests_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/quests_do/%/%'] = array(
+    'title' => 'Robber Barons Quests Do',
+    'page callback' => 'robber_barons_quests_do_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders/%'] = array(
+    'title' => 'Robber Barons Elders',
+    'page callback' => 'robber_barons_elders_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_ask_reset/%'] = array(
+    'title' => 'Robber Barons Elders Ask Reset',
+    'page callback' => 'robber_barons_elders_ask_reset_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_do_reset/%'] = array(
+    'title' => 'Robber Barons Elders Do Reset',
+    'page callback' => 'robber_barons_elders_do_reset_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_ask_reset_skills/%'] = array(
+    'title' => 'Robber Barons Elders Ask Reset Skills',
+    'page callback' => 'robber_barons_elders_ask_reset_skills_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_do_reset_skills/%'] = array(
+    'title' => 'Robber Barons Elders Do Reset Skills',
+    'page callback' => 'robber_barons_elders_do_reset_skills_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_ask_purchase/%'] = array(
+    'title' => 'Robber Barons Elders Ask Purchase',
+    'page callback' => 'robber_barons_elders_ask_purchase_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elders_do_purchase/%'] = array(
+    'title' => 'Robber Barons Elders Do Purchase',
+    'page callback' => 'robber_barons_elders_do_purchase_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/elders_do_fill/%/%'] = array(
+    'title' => 'Robber Barons Elders Do Fill',
+    'page callback' => 'robber_barons_elders_do_fill_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/elders_rename/%'] = array(
+    'title' => 'Robber Barons Elders Rename',
+    'page callback' => 'robber_barons_elders_rename_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/welcome/%'] = array(
+    'title' => 'Robber Barons Welcome',
+    'page callback' => 'robber_barons_welcome_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/choose_clan/%/%'] = array(
+    'title' => 'Robber Barons Choose Clan',
+    'page callback' => 'robber_barons_choose_clan_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/help/%'] = array(
+    'title' => 'Robber Barons Help',
+    'page callback' => 'robber_barons_help_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/debates/%'] = array(
+    'title' => 'Robber Barons Debates List',
+    'page callback' => 'robber_barons_debates_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/debates_challenge/%/%'] = array(
+    'title' => 'Robber Barons Debates Challenge',
+    'page callback' => 'robber_barons_debates_challenge_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elections/%'] = array(
+    'title' => 'Robber Barons Elections List',
+    'page callback' => 'robber_barons_elections_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/elections_challenge/%/%'] = array(
+    'title' => 'Robber Barons Elections Challenge',
+    'page callback' => 'robber_barons_elections_challenge_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/top20/%'] = array(
+    'title' => 'Robber Barons Top 20 List',
+    'page callback' => 'robber_barons_top20_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/top_wards/%'] = array(
+    'title' => 'Robber Barons Top Wards List',
+    'page callback' => 'robber_barons_top_wards_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/choose_name/%'] = array(
+    'title' => 'Robber Barons Choose Name',
+    'page callback' => 'robber_barons_choose_name_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  $items['robber_barons/enter_referral_code/%'] = array(
+    'title' => 'Robber Barons Enter Referral Code',
+    'page callback' => 'robber_barons_enter_referral_code_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/aides/%'] = array(
+    'title' => 'Robber Barons Aides',
+    'page callback' => 'robber_barons_aides_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/land/%'] = array(
+    'title' => 'Robber Barons Land',
+    'page callback' => 'robber_barons_land_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/land_buy/%/%/%'] = array(
+    'title' => 'Robber Barons Land Buy',
+    'page callback' => 'robber_barons_land_buy_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/staff/%'] = array(
+    'title' => 'Robber Barons Staff',
+    'page callback' => 'robber_barons_staff_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/staff_hire/%/%/%'] = array(
+    'title' => 'Robber Barons Staff Hire',
+    'page callback' => 'robber_barons_staff_hire_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/agents/%'] = array(
+    'title' => 'Robber Barons Agents',
+    'page callback' => 'robber_barons_agents_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/agents_hire/%/%/%'] = array(
+    'title' => 'Robber Barons Agents Hire',
+    'page callback' => 'robber_barons_agents_hire_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/actions/%'] = array(
+    'title' => 'Robber Barons Actions',
+    'page callback' => 'robber_barons_actions_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/actions_do/%/%'] = array(
+    'title' => 'Robber Barons Actions Do',
+    'page callback' => 'robber_barons_actions_do_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/equipment/%'] = array(
+    'title' => 'Robber Barons Equipment',
+    'page callback' => 'robber_barons_equipment_list_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/equipment_buy/%/%/%'] = array(
+    'title' => 'Robber Barons Equipment Buy',
+    'page callback' => 'robber_barons_equipment_buy_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/equipment_sell/%/%/%'] = array(
+    'title' => 'Robber Barons Equipment Sell',
+    'page callback' => 'robber_barons_equipment_sell_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/move/%/%'] = array(
+    'title' => 'Robber Barons Move',
+    'page callback' => 'robber_barons_move_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['robber_barons/move_do/%/%'] = array(
+    'title' => 'Robber Barons Move Do',
+    'page callback' => 'robber_barons_move_do_callback',
+    'page arguments' => array(2, 3),
+    'access arguments' => array('access robber barons content'),
+    'type' => MENU_CALLBACK,
+  );
+  
+  return $items;
+
+}
+
+
+function robber_barons_homepage_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_homepage', $phone_id);
+
+}
+
+
+function robber_barons_userprofile_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_userprofile', $phone_id);
+
+}
+
+
+function robber_barons_clan_list_callback($phone_id, $clan_id) {
+
+  if (empty($phone_id) || !is_numeric($clan_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_clan_list', $phone_id, $clan_id);
+
+}
+
+
+function robber_barons_clan_list_available_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_clan_list_available', $phone_id);
+
+}
+
+
+function robber_barons_clan_msg_callback($phone_id, $clan_id) {
+
+  if (empty($phone_id) || !is_numeric($clan_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_clan_msg', $phone_id, $clan_id);
+
+}
+
+
+function robber_barons_clan_announcements_callback($phone_id, $clan_id) {
+
+  if (empty($phone_id) || !is_numeric($clan_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_clan_announcements', $phone_id, $clan_id);
+
+}
+
+
+function robber_barons_class_list_callback($phone_id, $class_id) {
+
+  if (empty($phone_id) || !is_numeric($class_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_class_list', $phone_id, $class_id);
+
+}
+
+
+function robber_barons_block_user_toggle_callback($phone_id, $phone_id_to_block) {
+
+  if (empty($phone_id) || empty($phone_id_to_block)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_block_user_toggle', $phone_id,
+    check_plain(filter_xss($phone_id_to_block, array())));
+
+}
+
+
+function robber_barons_msg_delete_callback($phone_id, $msg_id) {
+
+  if (empty($phone_id) || !is_numeric($msg_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_msg_delete', $phone_id, $msg_id);
+
+}
+
+
+function robber_barons_party_msg_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_party_msg', $phone_id);
+
+}
+
+
+function robber_barons_increase_skills_callback($phone_id, $skill) {
+
+  if (empty($phone_id) || empty($skill)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_increase_skills', $phone_id, $skill);
+
+}
+
+
+function robber_barons_quests_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_quests_list', $phone_id);
+
+}
+
+
+function robber_barons_quests_do_callback($phone_id, $quest_id) {
+
+  if (empty($phone_id) || !is_numeric($quest_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_quests_do', $phone_id, $quest_id);
+
+}
+
+
+function robber_barons_elders_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders', $phone_id);
+
+}
+
+
+function robber_barons_elders_ask_reset_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_ask_reset', $phone_id);
+
+}
+
+
+function robber_barons_elders_do_reset_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_do_reset', $phone_id);
+
+}
+
+
+function robber_barons_elders_ask_reset_skills_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_ask_reset_skills', $phone_id);
+
+}
+
+
+function robber_barons_elders_do_reset_skills_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_do_reset_skills', $phone_id);
+
+}
+
+
+function robber_barons_elders_do_fill_callback($phone_id, $fill_type) {
+
+  if (empty($phone_id) || empty($fill_type)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_do_fill', $phone_id, $fill_type);
+
+}
+
+
+function robber_barons_elders_rename_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_rename', $phone_id);
+
+}
+
+
+function robber_barons_elders_ask_purchase_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_ask_purchase', $phone_id);
+
+}
+
+
+function robber_barons_elders_do_purchase_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elders_do_purchase', $phone_id);
+
+}
+
+
+function robber_barons_welcome_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_welcome', $phone_id);
+
+}
+
+
+function robber_barons_choose_clan_callback($phone_id, $clan_id) {
+
+  if (empty($phone_id) || !is_numeric($clan_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_choose_clan', $phone_id, $clan_id);
+
+}
+
+
+function robber_barons_help_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_help', $phone_id);
+
+}
+
+
+function robber_barons_debates_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_debates_list', $phone_id);
+
+}
+
+
+function robber_barons_debates_challenge_callback($phone_id, $position_id) {
+
+  if (empty($phone_id) || !is_numeric($position_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_debates_challenge', $phone_id, $position_id);
+
+}
+
+
+function robber_barons_elections_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elections_list', $phone_id);
+
+}
+
+
+function robber_barons_elections_challenge_callback($phone_id, $position_id) {
+
+  if (empty($phone_id) || !is_numeric($position_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_elections_challenge', $phone_id, $position_id);
+
+}
+
+
+function robber_barons_top20_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_top20_list', $phone_id);
+
+}
+
+
+function robber_barons_top_wards_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_top_wards_list', $phone_id);
+
+}
+
+
+function robber_barons_choose_name_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_choose_name', $phone_id);
+
+}
+
+
+function robber_barons_enter_referral_code_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_enter_referral_code', $phone_id);
+
+}
+
+
+function robber_barons_aides_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_aides', $phone_id);
+
+}
+
+
+function robber_barons_land_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_land_list', $phone_id);
+
+}
+
+
+function robber_barons_land_buy_callback($phone_id, $land_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($land_id) || !is_numeric($quantity)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_land_buy', $phone_id, $land_id, $quantity);
+
+}
+
+
+function robber_barons_staff_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_staff_list', $phone_id);
+
+}
+
+
+function robber_barons_staff_hire_callback($phone_id, $staff_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($staff_id) || !is_numeric($quantity)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_staff_hire', $phone_id, $staff_id, $quantity);
+
+}
+
+
+function robber_barons_agents_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_agents_list', $phone_id);
+
+}
+
+
+function robber_barons_agents_hire_callback($phone_id, $staff_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($staff_id) || !is_numeric($quantity)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_agents_hire', $phone_id, $staff_id, $quantity);
+
+}
+
+
+function robber_barons_actions_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_actions_list', $phone_id);
+
+}
+
+
+function robber_barons_actions_do_callback($phone_id, $action_id) {
+
+  if (empty($phone_id) || !is_numeric($action_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_actions_do', $phone_id, $action_id);
+
+}
+
+
+function robber_barons_equipment_list_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_equipment_list', $phone_id);
+
+}
+
+
+function robber_barons_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($equipment_id) || !is_numeric($quantity)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_equipment_buy', $phone_id, $equipment_id, $quantity);
+
+}
+
+
+function robber_barons_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($equipment_id) || !is_numeric($quantity)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_equipment_sell', $phone_id, $equipment_id, $quantity);
+
+}
+
+
+function robber_barons_move_callback($phone_id, $neighborhood_id) {
+
+  if (empty($phone_id) || !is_numeric($neighborhood_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_move', $phone_id, $neighborhood_id);
+
+}
+
+
+function robber_barons_move_do_callback($phone_id, $neighborhood_id) {
+
+  if (empty($phone_id) || !is_numeric($neighborhood_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('robber_barons_move_do', $phone_id, $neighborhood_id);
+
+}
+
+function robber_barons_theme() {
+  // theme "A" uses template "B" with args "C"
+
+  return array(
+
+    'robber_barons_homepage' => array(
+      'template' => 'robber_barons_homepage',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_userprofile' => array(
+      'template' => 'robber_barons_userprofile',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_clan_list' => array(
+      'template' => 'robber_barons_clan_list',
+      'arguments' => array(
+        'phone_id' => null,
+        'clan_id' => null,
+      )
+    ),
+
+    'robber_barons_clan_list_available' => array(
+      'template' => 'robber_barons_clan_list_available',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_clan_msg' => array(
+      'template' => 'robber_barons_clan_msg',
+      'arguments' => array(
+        'phone_id' => null,
+        'clan_id' => null,
+      )
+    ),
+    
+    'robber_barons_clan_announcements' => array(
+      'template' => 'robber_barons_clan_announcements',
+      'arguments' => array(
+        'phone_id' => null,
+        'clan_id' => null,
+      )
+    ),
+    
+    'robber_barons_class_list' => array(
+      'template' => 'robber_barons_class_list',
+      'arguments' => array(
+        'phone_id' => null,
+        'class_id' => null,
+      )
+    ),
+
+    'robber_barons_block_user_toggle' => array(
+      'template' => 'robber_barons_block_user_toggle',
+      'arguments' => array(
+        'phone_id' => null,
+        'phone_id_to_block' => null,
+      )
+    ),
+    
+    'robber_barons_msg_delete' => array(
+      'template' => 'robber_barons_msg_delete',
+      'arguments' => array(
+        'phone_id' => null,
+        'msg_id' => null,
+      )
+    ),
+
+    'robber_barons_party_msg' => array(
+      'template' => 'robber_barons_party_msg',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_increase_skills' => array(
+      'template' => 'robber_barons_increase_skills',
+      'arguments' => array(
+        'phone_id' => null,
+        'skill' => null,
+      )
+    ),
+
+    'robber_barons_quests_list' => array(
+      'template' => 'robber_barons_quests_list',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_quests_do' => array(
+      'template' => 'robber_barons_quests_do',
+      'arguments' => array(
+        'phone_id' => null,
+        'quest_id' => null,
+      )
+    ),
+
+    'robber_barons_elders' => array(
+      'template' => 'robber_barons_elders',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_elders_ask_reset' => array(
+      'template' => 'robber_barons_elders_ask_reset',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_elders_do_reset' => array(
+      'template' => 'robber_barons_elders_do_reset',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_elders_ask_reset_skills' => array(
+      'template' => 'robber_barons_elders_ask_reset_skills',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_elders_do_reset_skills' => array(
+      'template' => 'robber_barons_elders_do_reset_skills',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+    
+    'robber_barons_elders_do_fill' => array(
+      'template' => 'robber_barons_elders_do_fill',
+      'arguments' => array(
+        'phone_id' => null,
+        'fill_type' => null,
+      )
+    ),
+
+    'robber_barons_elders_rename' => array(
+      'template' => 'robber_barons_elders_rename',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_elders_ask_purchase' => array(
+      'template' => 'robber_barons_elders_ask_purchase',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+    
+    'robber_barons_elders_do_purchase' => array(
+      'template' => 'robber_barons_elders_do_purchase',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+    
+    'robber_barons_welcome' => array(
+      'template' => 'robber_barons_welcome',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'robber_barons_choose_clan' => array(
+      'template' => 'robber_barons_choose_clan',
+      'arguments' => array(
+        'phone_id' => null,
+        'clan_id' => null,
+      )
+    ),
+
+    'robber_barons_help' => array(
+      'template' => 'robber_barons_help',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_elections_list' => array(
+      'template' => 'robber_barons_elections_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_elections_challenge' => array(
+      'template' => 'robber_barons_elections_challenge',
+      'arguments' => array(
+        'phone_id' => null,
+        'position_id' => null,
+      )
+    ),
+
+    'robber_barons_debates_list' => array(
+      'template' => 'robber_barons_debates_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_debates_challenge' => array(
+      'template' => 'robber_barons_debates_challenge',
+      'arguments' => array(
+        'phone_id' => null,
+        'position_id' => null,
+      )
+    ),
+    
+    'robber_barons_top20_list' => array(
+      'template' => 'robber_barons_top20_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+    
+    'robber_barons_top_wards_list' => array(
+      'template' => 'robber_barons_top_wards_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+    
+    'robber_barons_choose_name' => array(
+      'template' => 'robber_barons_choose_name',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+    
+    'robber_barons_enter_referral_code' => array(
+      'template' => 'robber_barons_enter_referral_code',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_aides' => array(
+      'template' => 'robber_barons_aides',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_land_list' => array(
+      'template' => 'robber_barons_land_list',
+      'arguments' => array(
+        'phone_id' => null,
+  )
+  ),
+
+    'robber_barons_land_buy' => array(
+      'template' => 'robber_barons_land_buy',
+      'arguments' => array(
+        'phone_id' => null,
+        'land_id' => null,
+        'quantity' => null,    
+      )
+    ),
+
+    'robber_barons_staff_list' => array(
+      'template' => 'robber_barons_staff_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_staff_hire' => array(
+      'template' => 'robber_barons_staff_hire',
+      'arguments' => array(
+        'phone_id' => null,
+        'staff_id' => null,
+        'quantity' => null,    
+      )
+    ),
+
+    'robber_barons_agents_list' => array(
+      'template' => 'robber_barons_agents_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_agents_hire' => array(
+      'template' => 'robber_barons_agents_hire',
+      'arguments' => array(
+        'phone_id' => null,
+        'staff_id' => null,
+        'quantity' => null,    
+      )
+    ),
+
+    'robber_barons_actions_list' => array(
+      'template' => 'robber_barons_actions_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_actions_do' => array(
+      'template' => 'robber_barons_actions_do',
+      'arguments' => array(
+        'phone_id' => null,
+        'action_id' => null,
+      )
+    ),
+
+    'robber_barons_equipment_list' => array(
+      'template' => 'robber_barons_equipment_list',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
+    'robber_barons_equipment_buy' => array(
+      'template' => 'robber_barons_equipment_buy',
+      'arguments' => array(
+        'phone_id' => null,
+        'equipment_id' => null,
+        'quantity' => null,
+      )
+    ),
+    
+    'robber_barons_equipment_sell' => array(
+      'template' => 'robber_barons_equipment_sell',
+      'arguments' => array(
+        'phone_id' => null,
+        'equipment_id' => null,
+        'quantity' => null,
+      )
+    ),
+    
+    'robber_barons_move' => array(
+      'template' => 'robber_barons_move',
+      'arguments' => array(
+        'phone_id' => null,
+        'neighborhood_id' => null,
+      )
+    ),
+    
+    'robber_barons_move_do' => array(
+      'template' => 'robber_barons_move_do',
+      'arguments' => array(
+        'phone_id' => null,
+        'neighborhood_id' => null,
+      )
+    ),
+
+  );
+
+} // robber_barons_theme()
+
+
+function robber_barons_copy_of_stlouis_cron() {
+
+  db_set_active('game_robber_barons');
+  
+// move all elected officials toward a 60% approval rating
+
+  $sql = 'update elected_officials set approval_rating = 60
+    where (approval_rating >= 59 AND approval_rating <= 61);';
+  $result = db_query($sql);  
+
+  $sql = 'update elected_officials
+    set approval_rating = approval_rating + 1
+    where approval_rating <= 59;';
+  $result = db_query($sql);  
+  
+  $sql = 'update elected_officials
+    set approval_rating = approval_rating - 1
+    where approval_rating >= 61;';
+  $result = db_query($sql);
+
+  $sql = 'update elected_officials
+    set approval_rating = 0 where approval_rating < 0;';
+  $result = db_query($sql);
+  
+  $sql = 'update elected_officials
+    set approval_rating = 100 where approval_rating > 100;';
+  $result = db_query($sql);
+  
+// move all hoods toward a 50 beauty rating
+
+  $sql = 'update neighborhoods set rating = 50
+    where (rating >= 49.7 AND rating <= 50.3);';
+  $result = db_query($sql);  
+
+  $sql = 'update neighborhoods
+    set rating = rating + 0.3
+    where rating < 49.7;';
+  $result = db_query($sql);  
+  
+  $sql = 'update neighborhoods
+    set rating = rating - 0.3
+    where rating > 50.3;';
+  $result = db_query($sql);
+
+// give hoods residents to match - each gets 5 plus rating / 10
+  $sql = 'UPDATE `neighborhoods` SET residents = residents + 1
+    WHERE floor(rating / 10) > (residents - 5) AND rand() > 0.9';
+  $result = db_query($sql);
+
+  $sql = 'UPDATE `neighborhoods` SET residents = residents - 1
+    WHERE floor(rating / 10) < (residents - 5) AND rand() > 0.9';
+  $result = db_query($sql);
+  
+// update maps
+
+  $map_large =
+    imagecreatefrompng('sites/default/files/images/robber_barons_map_large.png');
+  $map_large_overlay =
+    imagecreatefrompng('sites/default/files/images/robber_barons_map_large_overlay.png');
+  $map_mid = imagecreatetruecolor(690, 580);
+  
+  $sql = 'SELECT color, xcoor, ycoor
+    FROM `elected_officials`
+    left join users on fkey_users_id = users.id
+    left join `values` on fkey_values_id = `values`.id
+    left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
+    WHERE fkey_elected_positions_id = 1 and (xcoor > 1 or ycoor > 1);';
+  $result = db_query($sql);
+  while ($item = db_fetch_object($result)) $data[] = $item;
+  
+  foreach ($data as $item)
+    imagefill($map_large, $item->xcoor, $item->ycoor,
+      imagecolorallocate($map_large,
+      hexdec(substr($item->color, 0, 2)),
+      hexdec(substr($item->color, 2, 2)),
+      hexdec(substr($item->color, 4, 2))));
+      
+  imagecopy($map_large, $map_large_overlay, 0, 0, 0, 0,
+    imagesx($map_large_overlay), imagesy($map_large_overlay));
+
+  imagecopy($map_mid, $map_large, 0, 0, 54, 488, 690, 580);
+  
+  imagepng($map_large,
+    "sites/default/files/images/robber_barons_map_large_colored.png");
+  imagepng($map_mid,
+    "sites/default/files/images/robber_barons_map_mid.png");
+
+  imagedestroy($map_large);
+  imagedestroy($map_large_overlay);
+  imagedestroy($map_mid);
+
+  db_set_active('default');
+  
+}
+
+
+function robber_barons_copy_of_cg_cron() {
+
+  $too_big = 600;
+  
+  db_set_active('game_celestial_glory');
+  
+// reshuffle ward "boundaries", if needed
+
+  $sql = 'select count(users.id) as count, users.fkey_neighborhoods_id as ward_num
+    from users 
+    group by fkey_neighborhoods_id
+    order by count DESC;'; 
+  $result = db_query($sql);
+  while ($item = db_fetch_object($result)) $wards[] = $item;
+    
+  foreach($wards as $ward) {
+
+    if ($ward->count > $too_big) {
+      
+      $ward_size_to_find = $too_big - ($ward->count / 2);
+      
+      $sql = 'select count(users.id) as count, users.fkey_neighborhoods_id as ward_num
+        from users 
+        group by fkey_neighborhoods_id
+        order by count ASC
+        LIMIT 1;'; 
+      $result = db_query($sql);
+      $small_ward = db_fetch_object($result);
+      
+      if ($small_ward->count < $ward_size_to_find) { // split!
+        
+// find new ward name
+        $sql = 'select neighborhoods.name from neighborhoods
+          where neighborhoods.id = %d;';
+        $result = db_query($sql, $small_ward->ward_num);
+        $small_ward_name = db_fetch_object($result);
+        
+// find members of the ward
+        $sql = 'select users.id, users.username, neighborhoods.name as ward from users
+          left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
+          where neighborhoods.id = %d;';
+        $result = db_query($sql, $ward->ward_num);
+        while ($item = db_fetch_object($result)) $players[] = $item;
+        
+        $sql = 'insert into system_messages set message = "%s";';
+        $message = 'The ' . $players[0]->ward . ' ward has split.&nbsp; ' .
+          'Many former members of the ' . $players[0]->ward .
+          ' ward now belong to the ' .
+          $small_ward_name->name . ' ward.<br/><br/>Wish them luck!';
+        db_query($sql, $message);              
+        
+        foreach ($players as $player) {
+          
+          if (mt_rand(1,2) == 2) { // should i stay or should i go?
+            
+            $sql = 'update users set fkey_neighborhoods_id = %d
+              where id = %d;';
+            $result = db_query($sql, $small_ward->ward_num, $player->id);
+            
+          }
+          
+        } // foreach player
+        
+      } else { // no ward with which to split
+      
+           mail('cheekdotcom@gmail.com', 'ward ' . $ward->ward_num. ' too big',
+           'Egads!  It has ' . $ward->count . ' members!  ' .
+           'No ward is small enough to accept the new members 8-(((.');
+           
+      } // no ward small enough
+       
+    } // ward too big?
+    
+  } // foreach ward
+      
+  db_set_active('default');
+  
+}
+
+
+function robber_barons_init() {
+
+  global $custom_theme;
+
+  if ((arg(0) == 'stlouis') || (arg(0) == 'celestial_glory') ||
+    (arg(0) == 'robber_barons')) {
+
+    $custom_theme = 'cdc_games';
+    drupal_add_css(drupal_get_path('module', arg(0)) . '/' . arg(0) . '.css');
+    
+    if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE)
+      drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/' . 'playbook.css');
+
+  }
+
+}
+
+
+function _robber_barons_filter_profanity($message) {
+  
+  $profanity = array(
+    'asshole',
+    'bastard',
+    'bitch',
+    'cock',
+    'cunt',
+    'dammit',
+    'damn',
+    'dick',
+    'fuck',
+    'lmao',
+    'lmfao',
+    'pussy',
+    'rape',
+    'shit',
+    'slut',
+    'twat',
+    'whore',
+  );
+  
+  $msg = str_replace(
+    array('@', '$'),
+    array('a', 's'),
+    $message);
+  
+  setlocale(LC_ALL, 'en_US');
+  $msg = preg_replace('/[^A-Za-z0-9]/', '',
+    iconv('utf-8', 'ascii//TRANSLIT', $msg));
+  
+  foreach ($profanity as $word) {
+    
+    if (stripos($msg, $word) !== FALSE) return 'XXX';
+      
+  }
+  
+  return $message;
+  
+}
+
+
+function _robber_barons_format_date($epoch) {
+
+  $time_diff = time() - $epoch;
+// firep("time difference: $time_diff");
+
+  if ($time_diff < 10) {
+    return t('A few seconds ago');
+  } else if ($time_diff < 60) {
+    return t('@time seconds ago', array('@time' => $time_diff));
+  } else if ($time_diff < 120) {
+    return t('1 minute ago');
+  } else if ($time_diff < 3600) {
+    return t('@time minutes ago', array('@time' => floor($time_diff / 60)));
+  } else if ($time_diff < 7200) {
+    return t('1 hour ago');
+  } else if ($time_diff < 86400) {
+    return t('@time hours ago', array('@time' => floor($time_diff / 3600)));
+  } else if ($time_diff < 172800) {
+    return t('A day ago');
+  } else if ($time_diff < 864000) {
+    return t('@time days ago', array('@time' => floor($time_diff / 86400)));
+  } else {
+    return date('d M Y', $epoch);
+  }
+
+}
+
+
+function _robber_barons_ordinal($number) {
+// lifted from http://php.net/manual/en/function.number-format.php
+
+  if ( ($num / 10) % 10 != 1 ) { // Special case "teenth"
+    
+    switch( $num % 10 ) { // Handle 1st, 2nd, 3rd
+          
+      case 1: return $num . 'st';
+      case 2: return $num . 'nd';
+      case 3: return $num . 'rd'; 
+
+    }
+        
+  }
+    
+// Everything else is "nth"
+  return $num . 'th';
+  
+}
+
+
+function _robber_barons_fetch_user() {
+
+  global $game, $phone_id, $extra_messages, $next_level, $user;
+  
+// only allow access through authorized clients
+  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.stlouis') === FALSE) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.celestialglory') === FALSE) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.robberbarons') === FALSE) &&
+    ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') && // paypal IPN
+    ($user->uid != 1) && // joseph user
+    ($user->uid != 246)) { // sarah user
+    
+    echo t('This game must be accessed through an authorized client');
+    exit;
+    
+  }
+
+  $changes_made = FALSE;
+
+  $game = check_plain(arg(0));
+  $phone_id = check_plain(arg(2));
+  db_set_active('game_' . $game);
+
+  $sql = 'select users.*, elected_positions.energy_bonus as ep_energy_bonus,
+    elected_positions.can_broadcast_to_party, clan_members.fkey_clans_id,
+    elected_positions.max_level as max_level_for_office
+    
+    from users
+
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    
+    LEFT OUTER JOIN clan_members
+    ON clan_members.fkey_users_id = users.id
+    
+    where phone_id = "%s";';
+  $result = db_query($sql, $phone_id);
+  $game_user = db_fetch_object($result);
+  
+  $sql = 'select sum(equipment.energy_increase * equipment_ownership.quantity)
+    as energy_increase from equipment
+        
+    LEFT OUTER JOIN equipment_ownership
+    ON equipment_ownership.fkey_equipment_id = equipment.id
+    WHERE equipment_ownership.fkey_users_id = %d
+    
+    union all
+    
+    select sum(staff.energy_increase * staff_ownership.quantity)
+    as energy_increase from staff
+        
+    LEFT OUTER JOIN staff_ownership
+    ON staff_ownership.fkey_staff_id = staff.id
+    WHERE staff_ownership.fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id, $game_user->id);
+  $eq = db_fetch_object($result); // equipment
+  $game_user->eq_energy_increase = $eq->energy_increase;
+  $st = db_fetch_object($result); // staff
+  $game_user->st_energy_increase = $st->energy_increase;
+  firep($game_user);
+
+  if (empty($game_user->id)) drupal_goto($game . '/welcome/' . $phone_id);
+  // start welcome wizard if user not in db
+
+  $sql = 'select experience from levels where level = %d;';
+  $result = db_query($sql, $game_user->level + 1);
+  $level = db_fetch_object($result);
+  $next_level = $level->experience;
+  if ($next_level == 0) $next_level = 99999999;
+
+  if ($game_user->experience >= $next_level) { // leveled up!
+     
+    $changes_made = $leveled_up = TRUE;
+     
+    if ($game_user->level >= 5)
+    $game_user->skill_points += 4;
+
+    $game_user->energy = $game_user->energy_max;
+    $game_user->actions = $game_user->actions_max;
+    $game_user->level++;
+
+    // leveled up?  read levels again!
+    $sql = 'select experience from levels where level = %d;';
+    $result = db_query($sql, $game_user->level + 1);
+    $level = db_fetch_object($result);
+    $next_level = $level->experience;
+    if ($next_level == 0) $next_level = 99999999;
+     
+    $extra_messages .= '<div class="level-up">
+      <div class="level-up-header">Congratulations!</div>
+      <div class="level-up-text">You have reached level ' . 
+    $game_user->level . '!</div>';
+
+    if ($game_user->level >= 6) {
+       
+      $extra_messages .= '<div class="level-up-text"><a href="/' . $game .
+        '/increase_skills/' . $game_user->phone_id . '/none">You have
+        <strong>4</strong> new skill points to spend</a></div>';
+       
+    }
+    
+    if (!empty($game_user->max_level_for_office) &&
+      $game_user->level > $game_user->max_level_for_office) {
+      
+      $sql = 'delete from elected_officials where fkey_users_id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $extra_messages .= '<div class="level-up-text">' .
+        t('You have become too influential to remain
+        in your current office.&nbsp; You resign your position.') . '</div>';
+      
+    }
+
+    $extra_messages .= '</div>';
+
+  } // leveled up!
+
+// calculate energy
+
+  $energy_next_gain = strtotime($game_user->energy_next_gain);
+  $energy_bonus = 10 + $game_user->ep_energy_bonus +
+    $game_user->eq_energy_increase + $game_user->st_energy_increase;
+  if (!empty($game_user->fkey_clans_id)) $energy_bonus++; // bonus for joining a clan  
+  $secs_until = $energy_next_gain - time();
+
+  while (($game_user->energy < $game_user->energy_max) &&
+  ($secs_until <= 0)) { // do we need energy?
+
+    $changes_made = TRUE;
+    $game_user->energy += $energy_bonus; // add 10 energy
+    $energy_next_gain += 300; // next add in 5 mins
+    $secs_until += 300; // ditto
+
+  }
+
+  if ($game_user->energy > $game_user->energy_max) {
+    $changes_made = TRUE; // just in case
+    $game_user->energy = $game_user->energy_max; // can't go beyond max
+  }
+
+  // calculate income
+
+  $income_next_gain = strtotime($game_user->income_next_gain);
+  $secs_until = $income_next_gain - time();
+
+  while ($secs_until <= 0) { // do we get money?
+
+    $changes_made = TRUE;
+    $game_user->money += $game_user->income - $game_user->expenses; // add money
+    $income_next_gain += 3600; // next add in 60 mins
+    $secs_until += 3600; // ditto
+
+  }
+
+  $actions_next_gain = strtotime($game_user->actions_next_gain);
+  $secs_until = $actions_next_gain - time();
+
+  // calculate actions
+
+  while (($game_user->actions < $game_user->actions_max) &&
+  ($secs_until <= 0)) { // do we need actions?
+
+    $changes_made = TRUE;
+    $game_user->actions++; // add 1 action
+    $actions_next_gain += 180; // next add in 3 mins
+    $secs_until += 180; // ditto
+
+  }
+
+// now you can go above actions_max - jwc 5 May 2011
+
+//  if ($game_user->actions > $game_user->actions_max) {
+//    $changes_made = TRUE; // just in case
+//    $game_user->actions = $game_user->actions_max; // can't go beyond max
+//  }
+
+  if ($changes_made) { // save changes, if needed
+
+    $game_user->energy_next_gain = date('Y-m-d H:i:s', $energy_next_gain);
+    $game_user->income_next_gain = date('Y-m-d H:i:s', $income_next_gain);
+    $game_user->actions_next_gain = date('Y-m-d H:i:s', $actions_next_gain);
+    $sql = 'update users set energy_next_gain = "%s", energy = %d,
+      energy_max = %d, level = %d, income_next_gain = "%s",
+      actions = %d, actions_next_gain = "%s",
+      money = %d, skill_points = %d where id = %d;';
+    $result = db_query($sql, $game_user->energy_next_gain,
+    $game_user->energy, $game_user->energy_max,
+    $game_user->level, $game_user->income_next_gain,
+    $game_user->actions, $game_user->actions_next_gain,
+    $game_user->money, $game_user->skill_points, $game_user->id);
+
+  }
+
+  if ($leveled_up && ($game_user->level == 6)) {
+
+    if (($game == 'stlouis') || ($game == 'robber_barons'))
+      drupal_goto($game . '/choose_clan/' . $phone_id . '/0');
+
+    if ($game == 'celestial_glory')
+      drupal_goto($game . '/debates/' . $phone_id);
+
+  }
+
+  return $game_user;
+
+}
+
+
+function _robber_barons_header($game_user) {
+
+  global $game, $phone_id, $extra_messages, $next_level;
+
+  // energy
+
+  $energy_text = '';
+  $energy_bonus = 10 + $game_user->ep_energy_bonus +
+    $game_user->eq_energy_increase + $game_user->st_energy_increase;
+  if (!empty($game_user->fkey_clans_id)) $energy_bonus++; // bonus for joining a clan  
+  
+  if ($game_user->energy != $game_user->energy_max) {
+
+    $energy_secs_until = strtotime($game_user->energy_next_gain) - time();
+    //firep('secs_until now at ' . $secs_until);
+
+    $energy_minutes = (string) (int) ($energy_secs_until / 60);
+    $energy_seconds = sprintf('%02d', (int) ($energy_secs_until % 60));
+
+    $energy_text = '+' . $energy_bonus . ' in ' .
+      $energy_minutes . ':' . $energy_seconds;
+
+  } else {
+
+    $energy_minutes = $energy_seconds = 0;
+
+  }
+
+  // actions
+
+  $actions_text = '';
+
+  if ($game_user->actions < $game_user->actions_max) {
+
+    $actions_secs_until = strtotime($game_user->actions_next_gain) - time();
+// firep('secs_until now at ' . $secs_until);
+
+    $actions_minutes = (string) (int) ($actions_secs_until / 60);
+    $actions_seconds = sprintf('%02d', (int) ($actions_secs_until % 60));
+
+    $actions_text = '+1 in ' . $actions_minutes . ':' . $actions_seconds;
+
+  } else {
+
+    $actions_minutes = $actions_seconds = 0;
+
+  }
+
+  // income
+
+  $income_text = '';
+  $income_bonus = $game_user->income - $game_user->expenses;
+
+  if ($income_bonus != 0) {
+
+    $money_secs_until = strtotime($game_user->income_next_gain) - time();
+    //firep('income secs_until now at ' . $money_secs_until);
+
+    $money_minutes = (string) (int) ($money_secs_until / 60);
+    $money_seconds = sprintf('%02d', (int) ($money_secs_until % 60));
+
+    $income_text = '+' . $income_bonus . ' in ' . $money_minutes . ':' .
+    $money_seconds;
+
+  } else {
+
+    $money_minutes = $money_seconds = 0;
+
+  }
+
+  if ($game_user->skill_points > 0) {
+
+    $level_text = '<div class="level"><strong><a href="/' . $game .
+      '/increase_skills/' . $game_user->phone_id . '/none">' . $game_user->level .
+      '!</a></strong><div class="level-text">Level</div></div>';
+
+  } else {
+
+    $level_text = '<div class="level"><strong>' . $game_user->level .
+      '</strong><div class="level-text">Level</div></div>';
+
+  }
+  
+  $money_str = $game_user->money . '';
+  
+  if (strlen($money_str) > 6)
+    $money_str = substr($money_str, 0, strlen($money_str) - 3) . 'K';
+    
+  echo <<< EOF
+<div class="header">
+<div class="money"><div id="money-id">$money_str</div>
+  <div id="income-time">$income_text</div><div
+  class="money-text">$game_user->values</div></div>
+<div class="actions"><div id="actions-id">$game_user->actions</div> /
+$game_user->actions_max <div id="actions-time">$actions_text</div>
+  <div class="actions-text">Actions</div></div>
+  <div class="experience"><strong>$game_user->experience</strong> /
+  $next_level<div class="experience-text">Spirituality</div></div>
+<div class="energy"><div id="energy-id">$game_user->energy</div> /
+$game_user->energy_max <div id="energy-time">$energy_text</div>
+  <div class="energy-text">Energy</div></div>
+<div class="home"><a href="/$game/home/$phone_id"><img
+  src="/sites/default/files/images/{$game}_home_icon.png"/></a></div>
+$level_text
+</div>
+$extra_messages
+<script type="text/javascript">
+
+  var energy_minutes = $energy_minutes;
+  var energy_seconds = $energy_seconds;
+  var energy = $game_user->energy;
+  var energy_max = $game_user->energy_max;
+  var energy_to_add = $energy_bonus;
+  var energy_interval = 300;
+  
+  var money_minutes = $money_minutes;
+  var money_seconds = $money_seconds;
+  var money = $game_user->money;
+  var money_to_add = $income_bonus;
+  var money_interval = 3600;
+
+  var actions_minutes = $actions_minutes;
+  var actions_seconds = $actions_seconds;
+  var actions = $game_user->actions;
+  var actions_max = $game_user->actions_max;
+  var actions_to_add = 1;
+  var actions_interval = 180;
+
+  function display_energy() {
+  
+    document.getElementById('energy-id').innerHTML = energy;
+    
+    if ((energy < energy_max) && (energy_to_add > 0)) {
+      
+      document.getElementById('energy-time').innerHTML =
+        '+' + energy_to_add + ' in ' + energy_minutes + ':' +
+        (energy_seconds < 10 ? '0' + energy_seconds : energy_seconds);
+
+    } else {
+    
+      document.getElementById('energy-time').innerHTML = '';
+    
+    }
+      
+  }
+
+  function display_actions() {
+
+    document.getElementById('actions-id').innerHTML = actions;
+
+    if (actions < actions_max) {
+
+      document.getElementById('actions-time').innerHTML =
+        '+' + actions_to_add + ' in ' + actions_minutes + ':' +
+        (actions_seconds < 10 ? '0' + actions_seconds : actions_seconds);
+
+    } else {
+    
+      document.getElementById('actions-time').innerHTML = '';
+    
+    }
+
+  }
+
+  function display_money() {
+  
+    if (money_to_add > 0) {
+
+      if (money.toString().length > 6) {
+        moneyStr = money.toString().substr(0,money.toString().length - 3) + "K";
+      } else {
+        moneyStr = money.toString();
+      }
+      
+      document.getElementById('money-id').innerHTML = moneyStr;
+    
+      document.getElementById('income-time').innerHTML =
+        '+' + money_to_add + ' in ' + money_minutes + ':' +
+        (money_seconds < 10 ? '0' + money_seconds : money_seconds);
+    
+    }
+          
+  }
+  
+  function add_all_stuff() {
+  
+    if ((energy_seconds == 0) && (energy_minutes > 0)) {
+    
+      energy_seconds = 60;
+      energy_minutes -= 1;
+          
+    }
+
+    if ((money_seconds == 0) && (money_minutes > 0)) {
+    
+      money_seconds = 60;
+      money_minutes -= 1;
+          
+    }
+
+    if ((actions_seconds == 0) && (actions_minutes > 0)) {
+    
+      actions_seconds = 60;
+      actions_minutes -= 1;
+
+    }
+
+    energy_seconds--;
+    actions_seconds--;
+    money_seconds--;
+    
+    if ((energy_seconds == 0) && (energy_minutes == 0)) {
+    
+      energy += energy_to_add;
+      energy_seconds = energy_interval % 60;
+      energy_minutes = Math.floor(energy_interval / 60);
+          
+    }
+
+    if ((money_seconds == 0) && (money_minutes == 0)) {
+    
+      money += money_to_add;
+      money_seconds = money_interval % 60;
+      money_minutes = Math.floor(money_interval / 60);
+          
+    }
+
+    if ((actions_seconds == 0) && (actions_minutes == 0)) {
+    
+      actions += actions_to_add;
+      actions_seconds = actions_interval % 60;
+      actions_minutes = Math.floor(actions_interval / 60);
+          
+    }
+    
+    if (energy >= energy_max) {
+    
+      energy = energy_max;
+      
+    }
+
+//    if (actions >= actions_max) {
+    
+//      actions = actions_max;
+      
+//    }
+    
+    display_energy();
+    display_actions();
+    display_money();
+    
+  }
+  
+  var interval_timer = setInterval('add_all_stuff()', 1000);
+
+</script>
+EOF;
+
+}

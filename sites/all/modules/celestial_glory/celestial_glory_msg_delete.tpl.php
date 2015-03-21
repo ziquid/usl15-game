@@ -1,0 +1,1 @@
+../stlouis/stlouis_msg_delete.tpl.php

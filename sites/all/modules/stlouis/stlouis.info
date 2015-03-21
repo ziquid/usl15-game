@@ -1,0 +1,7 @@
+; $Id$
+name = StLouis
+description = Uprising: St. Louis game
+package = cheekdotcom games
+core = 6.x
+
+version = "6.x-0.01"
