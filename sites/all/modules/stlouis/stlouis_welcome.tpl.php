@@ -20,14 +20,14 @@
   }
 
   if ($game == 'celestial_glory') {
-    
+
     $sql = 'SELECT count(users.id) as count,
       fkey_neighborhoods_id from users
       left join neighborhoods on neighborhoods.id = users.fkey_neighborhoods_id
        group by fkey_neighborhoods_id
       order by count asc
       limit 1;';
-  
+
     $result = db_query($sql);
     $item = db_fetch_object($result);
     $default_neighborhood = $item->fkey_neighborhoods_id;
@@ -69,7 +69,7 @@
     remote_ip = "%s";';
   $result = db_query($sql, date('Y-m-d H:i:s'), $phone_id, ip_address());
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';  
+  $fetch_user = '_' . arg(0) . '_fetch_user';
   $game_user = $fetch_user();
 
   echo <<< EOF
@@ -174,5 +174,5 @@ EOF;
 </div>
 
 EOF;
-    
+
   db_set_active('default');

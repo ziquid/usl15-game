@@ -11,9 +11,9 @@
   $arg2 = check_plain(arg(2));
 
 // do AI moves from this page!!!
-  include_once(drupal_get_path('module', $game) . '/' . $game . '_ai.inc');
-  ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
-    _move_ai();
+//   include_once(drupal_get_path('module', $game) . '/' . $game . '_ai.inc');
+//   ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
+//     _move_ai();
 
   if (is_numeric(arg(3))) $group_to_show = arg(3);
 
@@ -21,7 +21,7 @@
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
   $data = db_fetch_object($result);
   $location = $data->name;
-  
+
   $sql = 'select clan_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
@@ -71,11 +71,11 @@ EOF;
 
     <li>Wait and rest for a few minutes if you run out of Energy</li>
   </ul>
-</div>    
+</div>
 
 EOF;
   } // experience = 0
-  
+
   if ($game_user->fkey_values_id == 0 && $game_user->level >= 6 &&
     $game_user->level <= 25)
     drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
@@ -95,7 +95,7 @@ EOF;
     You will find more {$quest}s as you move to different parts of the
     $city_lower.&quot;</p>
   <br/>
-</div>    
+</div>
 EOF;
 
     $sql = 'update users set seen_neighborhood_quests = 1 where id = %d;';
@@ -104,9 +104,9 @@ EOF;
   } // haven't seen quests intro
 
   if ($game_user->level < 6) $location = ''; // keep location from user
-  
+
   if ($game_user->level < 6 and $game_user->experience > 0) {
-    
+
     echo <<< EOF
 <ul>
   <li>Each $quest gives you more $game_user->values and $experience</li>
@@ -117,25 +117,25 @@ EOF;
   }
 
   if (is_numeric($group_to_show)) {
-    
+
     $sql_quest_neighborhood = 'where `group` = ' . $group_to_show .
       ' and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = ' .
       $game_user->fkey_neighborhoods_id . ')';
-      
+
   } elseif ($game_user->level < 6) { // show beginning quests
-    
+
     $group_to_show = '0';
     $sql_quest_neighborhood = 'where `group` = 0';
-    
+
   } else { // show the group for which the player last successfully completed a quest
-    
+
     $group_to_show = $game_user->fkey_last_played_quest_groups_id;
     $sql_quest_neighborhood = 'where `group` = ' . $group_to_show .
       ' and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = ' .
       $game_user->fkey_neighborhoods_id . ')';
-        
+
   }
-    
+
   $sql = 'select name from quest_groups where id = %s;';
   $result = db_query($sql, $group_to_show);
   $qg = db_fetch_object($result);
@@ -144,16 +144,16 @@ firep($qg);
   $location = str_replace('%location', $location, $qg->name);
 
   if ($game_user->level < 6) $location = '';
-  
+
   if ($group_to_show > 0) { // have i said i love php's automatic typecasting?
-    
+
     $older_group = $group_to_show - 1;
     $older_missions_html =<<< EOF
 <a href="/$game/quests/$arg2/$older_group">&lt;&lt;</a>
 EOF;
 
   }
-  
+
   $sql = 'select min(required_level) as min from quests
     where `group` = %d;';
   $result = db_query($sql, $group_to_show + 1);
@@ -161,24 +161,24 @@ EOF;
 firep($item);
 
   if (!empty($item->min) && ($item->min <= $game_user->level + 1)) {
-    
+
     $newer_group = $group_to_show + 1;
     $newer_missions_html =<<< EOF
 <a href="/$game/quests/$arg2/$newer_group">&gt;&gt;</a>
 EOF;
-    
+
   }
-  
+
   if ($game == 'celestial_glory') {
-    
+
     $quests = '';
-  
+
   } else {
-    
+
     $quests = "{$quest}s";
-    
+
   }
-  
+
   echo <<< EOF
 <div class="title">
 $older_missions_html $location $quests $newer_missions_html
@@ -190,7 +190,7 @@ EOF;
 
 // get quest group stats
   $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
-    FROM `quests` 
+    FROM `quests`
     left outer join quest_completion
     on quest_completion.fkey_quests_id = quests.id
     and fkey_users_id = %d
@@ -201,25 +201,25 @@ EOF;
 firep($quest_group);
 
   $quest_group->completed += 0; // haha!  typecasting!
-  
-  $sql = 'SELECT times_completed FROM `quest_group_completion` 
+
+  $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
   $result = db_query($sql, $game_user->id, $group_to_show);
   $quest_group_completion = db_fetch_object($result);
 
   $percentage_target = 100;
   $percentage_divisor = 1;
-  
+
   if ($quest_group_completion->times_completed > 0) {
-    
+
     $next_group_html = t('(2nd round)');
     $percentage_target = 200;
     $percentage_divisor = 2;
     $quest_group->completed -=
       ($quest_group->total * min($quest_group_completion->times_completed, 1));
-    
+
   }
-  
+
   echo <<< EOF
 <div class="quest-group-completion">
   <strong>$quest_group->completed</strong> of $quest_group->total {$quest}s
@@ -229,7 +229,7 @@ EOF;
 
 // show each quest
   $data = array();
-  $sql = 'select quests.*, quest_completion.percent_complete from quests 
+  $sql = 'select quests.*, quest_completion.percent_complete from quests
     LEFT OUTER JOIN quest_completion
     ON quest_completion.fkey_quests_id = quests.id
     AND quest_completion.fkey_users_id = %d
@@ -240,28 +240,28 @@ firep($sql);
   $result = db_query($sql, $game_user->id, $game_user->level);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
-    
+
     $description = str_replace('%clan', "<em>$clan_title</em>",
-      $item->description);  
-      
+      $item->description);
+
     if (empty($item->percent_complete)) $item->percent_complete = 0;
-    
+
     if ($item->percent_complete > floor($percentage_target / 2)) {
-      
+
       $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
         (4 * $percentage_divisor))) . 'c0';
-      
+
     } else {
-      
-      $rgb = 'c' . dechex(floor(($item->percent_complete) / 
+
+      $rgb = 'c' . dechex(floor(($item->percent_complete) /
         (4 * $percentage_divisor))) . '0';
-      
+
     }
-    
+
     $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
-    
+
 firep($rgb);
 
     $active = ($item->active) ? '' : ' (inactive)';
@@ -289,20 +289,20 @@ EOF;
 EOF;
 
     }
-    
+
     echo <<< EOF
     <div class="quest-required_energy">Requires $item->required_energy Energy</div>
 EOF;
 
 // required land
     if ($item->land_required_quantity > 0) {
-      
+
       $sql = 'select quantity from land_ownership
         where fkey_land_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $item->fkey_land_required_id,
         $game_user->id);
       $quantity = db_fetch_object($result);
-      
+
       if ($quantity->quantity >= $item->land_required_quantity) {
         $not_yet = $a_start = $a_end = '';
       } else {
@@ -312,7 +312,7 @@ EOF;
           ($item->land_required_quantity - $quantity->quantity) . '">';
         $a_end = '</a>';
       }
-      
+
       echo <<< EOF
     <div class="quest-required_stuff">Requires
       <div class="quest-required_equipment">$a_start<img class="$not_yet"
@@ -320,12 +320,12 @@ EOF;
         width="48">$a_end</div>&nbsp;x$item->land_required_quantity
     </div>
 EOF;
-    
+
     } // required land
-    
+
 // required equipment
     if ($item->equipment_1_required_quantity > 0) {
-      
+
       $sql = 'select quantity from equipment_ownership
         where fkey_equipment_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $item->fkey_equipment_1_required_id,
@@ -341,7 +341,7 @@ EOF;
           ($item->equipment_1_required_quantity - $quantity->quantity) . '">';
         $a_end = '</a>';
       }
-      
+
       echo <<< EOF
     <div class="quest-required_stuff">Requires
       <div class="quest-required_equipment">$a_start<img class="$not_yet"
@@ -349,16 +349,16 @@ EOF;
         width="48">$a_end</div>&nbsp;x$item->equipment_1_required_quantity
     </div>
 EOF;
-    
+
 // more required equipment
       if ($item->equipment_2_required_quantity > 0) {
-        
+
         $sql = 'select quantity from equipment_ownership
           where fkey_equipment_id = %d and fkey_users_id = %d;';
         $result = db_query($sql, $item->fkey_equipment_2_required_id,
           $game_user->id);
         $quantity = db_fetch_object($result);
-        
+
         if ($quantity->quantity >= $item->equipment_2_required_quantity) {
           $not_yet = $a_start = $a_end = '';
         } else {
@@ -368,7 +368,7 @@ EOF;
             ($item->equipment_2_required_quantity - $quantity->quantity) . '">';
           $a_end = '</a>';
         }
-                  
+
         echo <<< EOF
       <div class="quest-required_stuff">Requires
         <div class="quest-required_equipment">$a_start<img class="$not_yet"
@@ -379,13 +379,13 @@ EOF;
 
 // more more required equipment
         if ($item->equipment_3_required_quantity > 0) {
-          
+
           $sql = 'select quantity from equipment_ownership
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $item->fkey_equipment_3_required_id,
             $game_user->id);
           $quantity = db_fetch_object($result);
-          
+
           if ($quantity->quantity >= $item->equipment_3_required_quantity) {
             $not_yet = $a_start = $a_end = '';
           } else {
@@ -395,7 +395,7 @@ EOF;
               ($item->equipment_3_required_quantity - $quantity->quantity) . '">';
             $a_end = '</a>';
           }
-                    
+
           echo <<< EOF
         <div class="quest-required_stuff">Requires
           <div class="quest-required_equipment">$a_start<img class="$not_yet"
@@ -403,28 +403,28 @@ EOF;
           width="48">$a_end</div>&nbsp;x$item->equipment_3_required_quantity
         </div>
 EOF;
-          
+
         } // more more required equipment
-        
+
       } // more required equipment
-      
+
     } // required equipment
 
 // required staff
     if ($item->staff_required_quantity > 0) {
-      
+
       $sql = 'select quantity from staff_ownership
         where fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $item->fkey_staff_required_id,
         $game_user->id);
       $quantity = db_fetch_object($result);
-      
+
       if ($quantity->quantity >= $item->staff_required_quantity) {
         $not_yet = '';
       } else {
         $not_yet = 'not-yet';
       }
-      
+
       echo <<< EOF
     <div class="quest-required_stuff">Requires
       <div class="quest-required_equipment"><img class="$not_yet"
@@ -432,9 +432,9 @@ EOF;
         width="48"></div>&nbsp;x$item->staff_required_quantity
     </div>
 EOF;
-    
+
     } // required staff
-    
+
     echo <<< EOF
     </div>
   </div>
@@ -442,7 +442,7 @@ EOF;
 EOF;
 
   }
-  
+
 //  if ($game_user->level > 1) { // don't show extra quests at first
 
     $data = array();
@@ -450,16 +450,16 @@ EOF;
       ' and required_level = %d ' . $active_quests .
       ' order by required_level ASC;';
     $result = db_query($sql, $game_user->level + 1);
-  
+
     while ($item = db_fetch_object($result)) $data[] = $item;
-    
+
     foreach ($data as $item) {
-      
+
       $description = str_replace('%clan', "<em>$clan_title</em>",
-        $item->description);  
+        $item->description);
 
       $active = ($item->active) ? '' : ' (inactive)';
-    
+
       echo <<< EOF
 <div class="quests-soon">
   <div class="quest-name">$item->name $active</div>
@@ -473,7 +473,7 @@ EOF;
 EOF;
 
     }
-    
+
 //  }
-  
+
   db_set_active('default');
