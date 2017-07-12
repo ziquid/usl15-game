@@ -11,28 +11,28 @@
 
 // if they have chosen a clan
   if ($clan_id != 0) {
-    
+
     if ($clan_id == $game_user->fkey_values_id) // no change?  just show stats
       drupal_goto($game . '/user/' . $arg2);
-      
+
 // changing clans?  dock experience, bring level down to match
     $new_experience = floor($game_user->experience * 0.75);
     if ($new_experience < 75) $new_experience = 75;
-    
+
     $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
     $result = db_query($sql, $new_experience);
     $item = db_fetch_object($result);
     $new_level = $item->new_level;
-    
+
     $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
       left outer join quests
       on quest_group_completion.fkey_quest_groups_id = quests.group
       WHERE fkey_users_id = %d and quests.active = 1;';
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result); // limited to 1 in db
-  
+
     $new_skill_points = ($new_level * 4) + $item->bonus - 20;
-    
+
     $sql = 'select * from `values` where id = %d;';
     $result = db_query($sql, $clan_id);
     $item = db_fetch_object($result);
@@ -46,14 +46,14 @@
     $result = db_query($sql, $item->fkey_neighborhoods_id, $clan_id,
       $item->name, $new_level, $new_experience, $new_skill_points,
       $game_user->id);
-      
+
     if ($game_user->fkey_values_id != 0) { // remove Luck if changing clans
-      
+
       $sql = 'update users set luck = luck - 5 where id = %d;';
       $result = db_query($sql, $game_user->id);
-      
+
     }
-    
+
 // also delete any offices s/he held
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
@@ -62,35 +62,35 @@
     $sql = 'select * from clan_members where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
-  
+
     if ($item->is_clan_leader) { // clan leader? delete entire clan
-      
+
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $game_user->fkey_clans_id);
       $sql = 'delete from clan_members where fkey_clans_id = %d;';
       $result = db_query($sql, $item->fkey_clans_id);
       $sql = 'delete from clans where id = %d;';
       $result = db_query($sql, $item->fkey_clans_id);
-      
+
     } else {
-      
+
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $game_user->id);
-      
+
     }
 
 // add 24-hour waiting period on major actions
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 86400);
-  
+
     if ($game_user->clan == 0) // first time choosing?  go to debates
       drupal_goto($game . '/debates/' . $arg2);
 
 // otherwise show your character profile
     drupal_goto($game . '/user/' . $arg2);
-    
+
   }
-  
+
 // otherwise they have not chosen a clan or are rechoosing one
 
   if ($game_user->level <= 6) { // new clan
@@ -126,7 +126,7 @@
 EOF;
 
   } else {
-    
+
     echo <<< EOF
 <p>&nbsp;</p>
 <div class="welcome">
@@ -139,24 +139,21 @@ EOF;
 </div>
 <div class="choose-clan">
 EOF;
-    
+
   }
 
-  $sql = 'SELECT COUNT( users.id ) AS count,  `values` . * 
-    FROM  `users` 
-    LEFT JOIN  `values` ON users.fkey_values_id =  `values`.id
-    where `values`.user_selectable = 1
-    GROUP BY fkey_values_id
-    ORDER BY count ASC;';
+  $sql = 'SELECT * FROM  `values`
+     where `values`.`user_selectable` = 1
+     order by rand()';
   $result = db_query($sql);
   $data = array();
-  
+
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
     $value = strtolower($item->name);
     $icon = $game . '_clan_' . $item->clan_icon . '.png';
-    
+
     echo <<< EOF
 <div>
   <div class="choose-clan-icon"><img width="24"
@@ -166,10 +163,10 @@ EOF;
   value $value</div>
   <div class="choose-clan-slogan">$item->slogan</div>
 EOF;
-  
+
   }
 
   echo '</div>';
 
   db_set_active('default');
-  
+
