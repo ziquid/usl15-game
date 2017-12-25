@@ -142,6 +142,10 @@ function drupal_clear_path_cache() {
  *
  * Note: When sending a Content-Type header, always include a 'charset' type,
  * too. This is necessary to avoid security bugs (e.g. UTF-7 XSS).
+ *
+ * Note: No special sanitizing needs to be done to headers. However if a header
+ * value contains a line break a PHP warning will be thrown and the header
+ * will not be set.
  */
 function drupal_set_header($header = NULL) {
   // We use an array to guarantee there are no leading or trailing delimiters.
@@ -150,8 +154,15 @@ function drupal_set_header($header = NULL) {
   static $stored_headers = array();
 
   if (strlen($header)) {
-    header($header);
-    $stored_headers[] = $header;
+    // Protect against header injection attacks if PHP is too old to do that.
+    if (version_compare(PHP_VERSION, '5.1.2', '<') && (strpos($header, "\n") !== FALSE || strpos($header, "\r") !== FALSE)) {
+      // Use the same warning message that newer versions of PHP use.
+      trigger_error('Header may not contain more than a single header, new line detected', E_USER_WARNING);
+    }
+    else {
+      header($header);
+      $stored_headers[] = $header;
+    }
   }
   return implode("\n", $stored_headers);
 }
@@ -304,17 +315,18 @@ function drupal_get_destination() {
  * @param $fragment
  *   (optional) A destination fragment identifier (named anchor).
  * @param $http_response_code
- *   (optional) The HTTP status code to use for the redirection, defaults to
- *   302. Valid values for an actual "goto" as per RFC 2616 section 10.3 are:
- *   - 301 Moved Permanently (the recommended value for most redirects)
- *   - 302 Found (default in Drupal and PHP, sometimes used for spamming search
- *         engines)
- *   - 303 See Other
- *   - 304 Not Modified
- *   - 305 Use Proxy
- *   - 307 Temporary Redirect (alternative to "503 Site Down for Maintenance")
- *   Note: Other values are defined by RFC 2616, but are rarely used and poorly
- *   supported.
+ *   (optional) The HTTP status code to use for the redirection, defaults to 302.
+ *   The valid values for 3xx redirection status codes are defined in
+ *   @link http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.3 RFC 2616 @endlink
+ *   and the
+ *   @link http://tools.ietf.org/html/draft-reschke-http-status-308-07 draft for the new HTTP status codes: @endlink
+ *   - 301: Moved Permanently (the recommended value for most redirects).
+ *   - 302: Found (default in Drupal and PHP, sometimes used for spamming search
+ *     engines).
+ *   - 303: See Other.
+ *   - 304: Not Modified.
+ *   - 305: Use Proxy.
+ *   - 307: Temporary Redirect.
  * @see drupal_get_destination()
  */
 function drupal_goto($path = '', $query = NULL, $fragment = NULL, $http_response_code = 302) {
@@ -329,14 +341,20 @@ function drupal_goto($path = '', $query = NULL, $fragment = NULL, $http_response
 
   if ($destination) {
     // Do not redirect to an absolute URL originating from user input.
-    $colonpos = strpos($destination, ':');
-    $absolute = ($colonpos !== FALSE && !preg_match('![/?#]!', substr($destination, 0, $colonpos)));
-    if (!$absolute) {
-      extract(parse_url(urldecode($destination)));
+    if (!menu_path_is_external($destination)) {
+      extract(parse_url($destination));
     }
   }
 
-  $url = url($path, array('query' => $query, 'fragment' => $fragment, 'absolute' => TRUE));
+  $options = array('query' => $query, 'fragment' => $fragment, 'absolute' => TRUE);
+  // In some cases modules call drupal_goto($_GET['q']). We need to ensure that
+  // such a redirect is not to an external URL.
+  if ($path === $_GET['q'] && menu_path_is_external($path)) {
+    // Force url() to generate a non-external URL.
+    $options['external'] = FALSE;
+  }
+
+  $url = url($path, $options);
   // Remove newlines from the URL to avoid header injection attacks.
   $url = str_replace(array("\n", "\r"), '', $url);
 
@@ -379,7 +397,10 @@ function drupal_not_found() {
 
   // Keep old path for reference, and to allow forms to redirect to it.
   if (!isset($_REQUEST['destination'])) {
-    $_REQUEST['destination'] = $_GET['q'];
+    // Make sure that the current path is not interpreted as external URL.
+    if (!menu_path_is_external($_GET['q'])) {
+      $_REQUEST['destination'] = $_GET['q'];
+    }
   }
 
   $path = drupal_get_normal_path(variable_get('site_404', ''));
@@ -409,7 +430,10 @@ function drupal_access_denied() {
 
   // Keep old path for reference, and to allow forms to redirect to it.
   if (!isset($_REQUEST['destination'])) {
-    $_REQUEST['destination'] = $_GET['q'];
+    // Make sure that the current path is not interpreted as external URL.
+    if (!menu_path_is_external($_GET['q'])) {
+      $_REQUEST['destination'] = $_GET['q'];
+    }
   }
 
   $path = drupal_get_normal_path(variable_get('site_403', ''));
@@ -991,7 +1015,7 @@ function t($string, $args = array(), $langcode = NULL) {
 /**
  * Verifies the syntax of the given e-mail address.
  *
- * See RFC 2822 for details.
+ * See @link http://tools.ietf.org/html/rfc5322 RFC 5322 @endlink for details.
  *
  * @param $mail
  *   A string containing an e-mail address.
@@ -1473,12 +1497,9 @@ function url($path = NULL, $options = array()) {
     'alias' => FALSE,
     'prefix' => ''
   );
+
   if (!isset($options['external'])) {
-    // Return an external link if $path contains an allowed absolute URL.
-    // Only call the slow filter_xss_bad_protocol if $path contains a ':' before
-    // any / ? or #.
-    $colonpos = strpos($path, ':');
-    $options['external'] = ($colonpos !== FALSE && !preg_match('![/?#]!', substr($path, 0, $colonpos)) && filter_xss_bad_protocol($path, FALSE) == check_plain($path));
+    $options['external'] = menu_path_is_external($path);
   }
 
   // May need language dependent rewriting if language.inc is present.
@@ -1507,6 +1528,11 @@ function url($path = NULL, $options = array()) {
     // Reassemble.
     return $path . $options['fragment'];
   }
+
+  // Strip leading slashes from internal paths to prevent them becoming external
+  // URLs without protocol. /example.com should not be turned into
+  // //example.com.
+  $path = ltrim($path, '/');
 
   global $base_url;
   static $script;
@@ -2634,7 +2660,7 @@ function drupal_urlencode($text) {
  */
 function drupal_get_private_key() {
   if (!($key = variable_get('drupal_private_key', 0))) {
-    $key = md5(uniqid(mt_rand(), true)) . md5(uniqid(mt_rand(), true));
+    $key = drupal_random_key();
     variable_set('drupal_private_key', $key);
   }
   return $key;
@@ -2666,7 +2692,7 @@ function drupal_get_token($value = '') {
  */
 function drupal_valid_token($token, $value = '', $skip_anonymous = FALSE) {
   global $user;
-  return (($skip_anonymous && $user->uid == 0) || ($token == md5(session_id() . $value . variable_get('drupal_private_key', ''))));
+  return (($skip_anonymous && $user->uid == 0) || ($token === md5(session_id() . $value . variable_get('drupal_private_key', ''))));
 }
 
 /**
@@ -2724,6 +2750,10 @@ function _drupal_bootstrap_full() {
   fix_gpc_magic();
   // Load all enabled modules
   module_load_all();
+  // Ensure mt_rand is reseeded, to prevent random values from one page load
+  // being exploited to predict random values in subsequent page loads.
+  $seed = unpack("L", drupal_random_bytes(4));
+  mt_srand($seed[1]);
   // Let all modules take action before menu system handles the request
   // We do not want this while running update.php.
   if (!defined('MAINTENANCE_MODE') || MAINTENANCE_MODE != 'update') {
