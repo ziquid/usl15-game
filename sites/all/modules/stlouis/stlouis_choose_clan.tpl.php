@@ -149,17 +149,18 @@ EOF;
   $data = array();
 
   while ($item = db_fetch_object($result)) $data[] = $item;
-
+firep($data, 'values');
   foreach ($data as $item) {
     $value = strtolower($item->name);
-    $icon = $game . '_clan_' . $item->clan_icon . '.png';
+    $icon = $game . '_clan_' . $item->party_icon . '.png';
 
     echo <<< EOF
 <div>
   <div class="choose-clan-icon"><img width="24"
     src="/sites/default/files/images/$icon"/></div>
   <span class="choose-clan-name"><a
-  href="/$game/choose_clan/$arg2/$item->id">$item->clan_title</a></span>
+  href="/$game/choose_clan/$arg2/$item->id"
+  style="color: #$item->color;">$item->party_title</a></span>
   value $value</div>
   <div class="choose-clan-slogan">$item->slogan</div>
 EOF;
