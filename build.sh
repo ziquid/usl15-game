@@ -17,3 +17,11 @@ mv gitignore .gitignore
 # $DRUSH -y master-execute --scope=$SCOPE
 # $DRUSH -y fra
 $DRUSH -y updb
+
+if [ "$SCOPE" = dev ]; then
+  chown -R apache:apache .
+fi
+
+if [ "$SCOPE" = prod ]; then
+  chown -R apache:apache .
+fi
