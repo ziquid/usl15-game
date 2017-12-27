@@ -83,7 +83,7 @@
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 86400);
 
-    if ($game_user->clan == 0) // first time choosing?  go to debates
+    if ($game_user->fkey_values_id == 0) // first time choosing?  go to debates
       drupal_goto($game . '/debates/' . $arg2);
 
 // otherwise show your character profile
