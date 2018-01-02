@@ -1,7 +1,7 @@
 <?php
-  
+
 //  set_time_limit(10); // this page must not bog down server
-  
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
@@ -10,11 +10,11 @@
   $game_user = $fetch_user();
   $arg2 = check_plain(arg(2));
   include_once(drupal_get_path('module', $game) . '/game_defs.inc');
-  
+
   $message = check_plain($_GET['message']);
 
   if ($game_user->level < 6) {
-    
+
     echo <<< EOF
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
@@ -36,23 +36,23 @@ EOF;
 
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"home not-yet\"/>\n-->";
-  
+
   db_set_active('default');
   return;
-    
+
   }
-  
+
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"home\"/>\n-->";
 
   $today = date('Y-m-d');
-  
+
   if ($game_user->last_bonus_date != $today) {
-    
+
     $sql = 'select residents from neighborhoods where id = %d;';
     $result = db_query($sql, $game_user->fkey_neighborhoods_id);
     $item = db_fetch_object($result);
-    
+
     $money = ($game_user->level * $item->residents) + $game_user->income -
       $game_user->expenses;
     $extra_bonus = '';
@@ -82,23 +82,23 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
 
     $extra_bonus = '<div class="level-up">
         <div class="level-up-header">Daily Bonus!</div>
-        <div class="level-up-text">You have received a bonus of ' . 
+        <div class="level-up-text">You have received a bonus of ' .
           $money . ' ' . $game_user->values . '!</div>' .
           $extra_text .
         '<div class="level-up-text">Come back tomorrow for another bonus</div>
       </div>';
-    
+
   }
-  
+
   $fetch_header($game_user);
-  
+
   if (empty($game_user->referral_code)) {
-    
+
     $good_code = FALSE;
     $count = 0;
-    
+
     while (!$good_code && $count++ < 10) {
-      
+
       $referral_code = '0000' .
         base_convert(mt_rand(0, pow(36, 5) - 1) . '', 10, 36);
       $referral_code = strtoupper(substr($referral_code,
@@ -108,77 +108,81 @@ firep($referral_code);
       $sql = 'select referral_code from users where referral_code = "%s";';
       $result = db_query($sql, $referral_code);
       $item = db_fetch_object($result);
-      
+
       if (empty($item->referral_code)) { // code not already in use - use it!
-        
+
         $good_code = TRUE;
         $sql = 'update users set referral_code = "%s" where id = %d;';
         $result = db_query($sql, $referral_code, $game_user->id);
         $game_user->referral_code = $referral_code;
-        
+
       }
-      
+
     }
-    
+
   }
-  
+
   if (substr(arg(2), 0, 4) == 'nkc ') {
-    
+
     $coefficient = 1.875;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
-  	
+
     $coefficient = 1;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
-  	
+
     $coefficient = 1;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
-  	
+
     $coefficient = 1;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
-  	
+
     $coefficient = 1;
-    
+
   } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
     (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4') !== FALSE)) {
-  	
+
     $coefficient = 1;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
-  	
+
     $coefficient = 2.5;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
-    
+
     $coefficient = 1.875;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
-    
+
     $coefficient = 1.66;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
-    
+
     $coefficient = 1.5;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
-    
+
     $coefficient = 1.25;
-    
+
+  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
+
+    $coefficient = 1.25;
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
-    
+
     $coefficient = 1.2;
-    
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
-    
+
     $coefficient = 1.125;
-    
+
   } else {
-    
+
     $coefficient = 1;
-    
+
   }
 
 /*
@@ -217,7 +221,7 @@ if (($today == '2012-12-26') || $game_user->username == 'abc123')
 
 // dead presidents event
 if (FALSE)
-  if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game . 
+  if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
   '/top_event_points/' . $arg2 . '">-->
   <div class="event">
     <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
@@ -261,41 +265,41 @@ EOF;
 //  if ($game != 'celestial_glory') {
 
     $coords = _stlouis_scale_coords($coefficient, 32, 93, 127, 115);
-    
+
     echo <<< EOF
     <area shape="rect" coords="$coords" alt="Elections" href="/$game/elections/$arg2" />
 EOF;
-  
+
 //  }
-  
+
   $coords = _stlouis_scale_coords($coefficient, 197, 72, 257, 92);
   $coords2 = _stlouis_scale_coords($coefficient, 187, 93, 267, 115);
-  
+
   echo <<< EOF
     <area shape="rect" coords="$coords" alt="Aides" href="/$game/land/$arg2" />
     <area shape="rect" coords="$coords2" alt="Actions" href="/$game/actions/$arg2" />
 EOF;
 
-  
+
 // Move
     $coords = _stlouis_scale_coords($coefficient, 131, 127, 183, 147);
-    
+
     echo <<< EOF
     <area shape="rect" coords="$coords" alt="Move" href="/$game/move/$arg2/0" />
 EOF;
 
-    
+
 // Elders, Profile
   $coords = _stlouis_scale_coords($coefficient, 126, 155, 192, 180);
   $coords2 = _stlouis_scale_coords($coefficient, 45, 192, 100, 210);
-  
+
   echo <<< EOF
     <area shape="rect" coords="$coords" alt="Elders" href="/$game/elders/$arg2" />
     <area shape="rect" coords="$coords2" alt="Profile" href="/$game/user/$arg2" />
 EOF;
 
   $coords = _stlouis_scale_coords($coefficient, 113, 192, 151, 210);
-  
+
   if ($game_user->fkey_clans_id > 0) {
 
     echo <<< EOF
@@ -309,11 +313,11 @@ EOF;
     <area shape="rect" coords="$coords" alt="Clan"
       href="/$game/clan_list_available/$arg2" />
 EOF;
-    
+
   } // in a clan?
-  
+
     $coords = _stlouis_scale_coords($coefficient, 162, 192, 200, 210);
-    
+
     echo <<< EOF
     <area shape="rect" coords="$coords" alt="Help" href="/$game/help/$arg2" />
 EOF;
@@ -321,21 +325,21 @@ EOF;
     $coords = _stlouis_scale_coords($coefficient, 214, 192, 265, 210);
 
     if ($game == 'stlouis') {
-      
+
     echo <<< EOF
     <area shape="rect" coords="$coords" alt="Forum"
       href="http://forum.cheek.com/forum/2" />
 EOF;
 
     } else {
-      
+
     echo <<< EOF
     <area shape="rect" coords="$coords" alt="Forum"
       href="http://forum.cheek.com/forum/12" />
 EOF;
-   
+
     }
-    
+
     echo <<< EOF
   </map>
 </div>
@@ -356,7 +360,7 @@ EOF;
     db_set_active('default');
     return;
   }
-  
+
 
 // are we a type 2 elected official?
   $sql = 'SELECT type FROM elected_officials
@@ -364,11 +368,11 @@ EOF;
     WHERE fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-  
+
   $elected_official_type = $item->type;
 
   if ($elected_official_type == 2) { // if a party official
-    
+
     $data = array();
     $sql = 'SELECT fkey_clans_id FROM clan_members
       left join users on fkey_users_id = users.id
@@ -378,20 +382,20 @@ EOF;
     while ($item = db_fetch_object($result)) $data[] = $item->fkey_clans_id;
     // we need to do this separately to keep the db from locking
     // wish mysql had a select with nolock feature - jwc
-    
+
     $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
     $clan_id_to_use = implode(',', $data);
 //firep($clan_id_to_use);
     $limit = 50;
-    
+
   } else {
 
     $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
     $clan_id_to_use = $game_user->fkey_clans_id;
     $limit = 20;
-    
+
   }
-  
+
   $sql = '
     (
     select user_messages.timestamp, user_messages.message,
@@ -538,7 +542,7 @@ EOF;
 
 //  $load_avg = sys_getloadavg(); // FIXME: get load avg of db server
   $data = array();
-  
+
   if (TRUE/*$load_avg[0] <= 2.0*/) {
 // expensive query - goes to slave
 //   db_set_active('game_' . $game . '_slave1');
@@ -552,9 +556,9 @@ EOF;
     while ($item = db_fetch_object($result)) $data[] = $item;
     db_set_active('game_' . $game); // reset to master
   }
-  
+
   $msg_shown = FALSE;
-  
+
   foreach ($data as $item) {
 // firep($item);
 
@@ -563,7 +567,7 @@ EOF;
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
 
@@ -572,16 +576,16 @@ EOF;
     } else {
       $private_css = '';
     }
-        
+
     $private_css .= ' ' . $item->type;
-    
+
     if (empty($item->username)) {
-      
+
       $username = '';
       $reply = '';
-      
+
     } else {
-      
+
       $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
         $clan_acronym;
       $reply = '<div class="message-reply-wrapper"><div class="message-reply">
@@ -598,9 +602,9 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
-  
+
   echo <<< EOF
   </div>
   <div id="personal-text">
@@ -635,15 +639,15 @@ EOF;
 
   $data = array();
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
-    
+
     $display_time = _stlouis_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
 
@@ -665,9 +669,9 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
-  
+
   if (!$msg_shown) echo '<div class="dateline">Now</div>' .
     '<p>No Personal messages yet.</p>';
 
@@ -705,18 +709,18 @@ EOF;
 
   $data = array();
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
-    
+
     $display_time = _stlouis_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
-    
+
     echo <<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
@@ -729,12 +733,12 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
-  
+
   if (!$msg_shown) echo '<div class="dateline">Now</div>' .
     '<p>No ' . $election . ' messages yet.</p>';
-  
+
 // CLAN and PARTY messages
 
   echo <<< EOF
@@ -744,21 +748,21 @@ EOF;
 
   if ($game_user->can_broadcast_to_party || $game_user->fkey_clans_id ||
     $game == 'celestial_glory') {
-    
+
     if ($game == 'celestial_glory') {
-      
+
       echo <<< EOF
 <div class="message-title">Send a message to your clan</div>
 EOF;
 
     } else {
-      
+
       echo <<< EOF
 <div class="message-title">Send a message to your constituents or clan</div>
 EOF;
 
     }
-    
+
     echo <<< EOF
 <div class="send-message">
   <form method=get action="/$game/party_msg/$arg2">
@@ -770,10 +774,10 @@ EOF;
 
     if ($game_user->fkey_clans_id)
       echo ('<option value="clan">Clan</option>');
-    
+
     if ($game_user->can_broadcast_to_party)
       echo ('<option value="neighborhood">' . $hood . '</option>');
-      
+
     if ($elected_official_type == 2 || $game == 'celestial_glory')
 // if a party official
       echo ('<option value="values">' . $party . '</option>');
@@ -788,7 +792,7 @@ EOF;
 EOF;
 
   } // send a msg to your party
-  
+
   $sql = '
     (
     select party_messages.timestamp, party_messages.message,
@@ -879,7 +883,7 @@ EOF;
     )
     
     order by timestamp DESC limit %d;';
-  
+
   if (TRUE) {
     $result = db_query($sql, $game_user->fkey_neighborhoods_id, $limit,
       $clan_id_to_use, $limit,
@@ -891,15 +895,15 @@ EOF;
 
   $data = array();
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
-    
+
     $display_time = _stlouis_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
 
@@ -917,9 +921,9 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
-  
+
   if (!$msg_shown) echo '<div class="dateline">Now</div>' .
     '<p>No ' . $party . ' messages yet.</p>';
 
@@ -940,11 +944,11 @@ EOF;
 
   $data = array();
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
-    
+
     $display_time = _stlouis_format_date(strtotime($item->timestamp));
-    
+
     echo <<< EOF
 <div class="dateline">
   $display_time
@@ -954,7 +958,7 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
 
   echo <<< EOF
@@ -1043,7 +1047,7 @@ window.onload = function() {
 EOF;
 
   if (!empty($message)) { // message?  show the clan tab already
-    
+
   echo <<< EOF
     document.getElementById('all-text').style.display = 'none';
     document.getElementById('personal-text').style.display = 'none';
@@ -1057,9 +1061,9 @@ EOF;
     document.getElementById('system-button').className = 'button';
     
 EOF;
-    
+
   }
-    
+
   echo <<< EOF
   }
   
