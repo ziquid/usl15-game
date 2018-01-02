@@ -13,10 +13,10 @@
     $quantity = check_plain($_GET['quantity']);
   }
 
-  $sql = 'select clan_title from `values` where id = %d;';
+  $sql = 'select party_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
-  $clan_title = preg_replace('/^The /', '', $data->clan_title);
+  $party_title = preg_replace('/^The /', '', $data->party_title);
 
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
@@ -316,7 +316,7 @@ EOF;
   foreach ($data as $item) {
 firep($item);
 
-    $description = str_replace('%clan', "<em>$clan_title</em>",
+    $description = str_replace('%clan', "<em>$party_title</em>",
       $item->description);
 
     $quantity = $item->quantity;
@@ -450,7 +450,7 @@ firep($item);
 
   if (!empty($item)) {
 
-    $description = str_replace('%clan', "<em>$clan_title</em>",
+    $description = str_replace('%clan', "<em>$party_title</em>",
       $item->description);
 
     $quantity = $item->quantity;
