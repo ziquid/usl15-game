@@ -532,10 +532,16 @@ function stlouis_init() {
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
 
+      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
+        // 411dip width display
+
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width411.css');
+
       } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
 // 400dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width400.css');
+
       } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
 // 360dip width display
 
