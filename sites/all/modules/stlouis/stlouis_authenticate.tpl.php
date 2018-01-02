@@ -18,8 +18,7 @@
   $check_authkey($game_user);
 
 // check for authorized client
-  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.stlouis') === FALSE) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.celestialglory') === FALSE) &&
+  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
     ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') && // paypal IPN
     ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') && // paypal IPN
     ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') && // paypal IPN
@@ -47,10 +46,10 @@
     $user_agent = $_SERVER['HTTP_USER_AGENT'];
     $ip_addr = ip_address();
 
-    $extra_stuff_pos = stripos($user_agent, '(com.cheek');
+    $extra_stuff_pos = stripos($user_agent, '(com.ziquid');
     if ($extra_stuff_pos !== FALSE) { // remove our added stuff, if present
       $user_agent = trim(substr($user_agent, 0, $extra_stuff_pos));
-    } 
+    }
 
     $set_value = '_' . $game . '_set_value';
     $set_value($game_user->id, 'user_agent', $user_agent);
@@ -93,5 +92,5 @@
   </div>
 </div>
 EOF;
-    
+
   db_set_active('default');
