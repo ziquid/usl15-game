@@ -16,12 +16,12 @@
 //     "user $game_user->username");
 
   }
-  
-  $sql = 'select clan_title from `values` where id = %d;';
+
+  $sql = 'select party_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
-  $clan_title = preg_replace('/^The /', '', $data->clan_title);
-  
+  $clan_title = preg_replace('/^The /', '', $data->party_title);
+
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
@@ -43,17 +43,17 @@
   $staff_succeeded = TRUE;
   $outcome_reason = '<div class="land-succeeded">' . t('Success!') .
     '</div>';
-  
+
 // check to see if staff prerequisites are met
 
 // hit a quantity limit?
 
   if ($quantity > $game_staff->quantity) {
-    
+
     $staff_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' .
       t('You don\'t have that many!') . '</div>';
-    
+
   }
 
 // can't sell?
@@ -62,17 +62,18 @@
     $staff_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
       '</div><div class="subtitle">' .
-      t('This item cannot be sold') .
+      t('This staff member cannot be hired; he or she must be earned through @quests',
+        array('@quests' => $quest_lower . 's')) .
       '</div><br/>';
 
   }
-  
+
   if ($staff_succeeded) {
 
     $sql = 'update staff_ownership set quantity = quantity - %d where
        fkey_staff_id = %d and fkey_users_id = %d;';
      $result = db_query($sql, $quantity, $staff_id, $game_user->id);
-          
+
     $sql = 'update users set money = money + %d, income = income - %d,
       expenses = expenses - %d
       where id = %d;';
@@ -85,24 +86,27 @@
        $sql = 'update users set income_next_gain = "%s" where id = %d;';
       $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
          $game_user->id);
-      
+
     }
 
     $game_user = $fetch_user(); // reprocess user object
-    
+
   } else { // failed - add option to try an election
-    
-    $outcome .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a
-      href="/' . $game . '/elections/' . $arg2 . '">Run for
-      office instead</a></div></div>';
+
+    $outcome .= '<div class="try-an-election-wrapper">
+      <div class="try-an-election">
+        <a href="/' . $game . '/elections/' . $arg2 . '">
+          Run for office instead
+        </a>
+      </div>
+    </div>';
 
     $quantity = 0;
-    
+
   } // fire staff succeeded
 
   $fetch_header($game_user);
-  
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/land/$arg2" class="button">Businesses</a>
@@ -111,9 +115,9 @@
   <a href="/$game/agents/$arg2" class="button">Agents</a>
 </div>  
 EOF;
-  
+
   if ($game_user->level < 15) {
-  
+
     echo <<< EOF
 <ul>
   <li>Hire staff to help you win elections and stay elected</li>
@@ -123,21 +127,21 @@ EOF;
   } // user level < 15
 //firep("game_staff->quantity: $game_staff->quantity");
 //firep("quantity: $quantity");
-  
+
   $quantity = (int) $game_staff->quantity - (int) $quantity;
   $staff_price = $game_staff->price + ($quantity * $game_staff->price_increase);
 
   if (($staff_price % 1000) == 0)
     $staff_price = ($staff_price / 1000) . 'K';
-  
+
   if ($quantity == 0) $quantity = '<em>None</em>'; // gotta love PHP typecasting
-  
+
   if ($game_staff->quantity_limit > 0) {
     $quantity_limit = '<em>(Limited to ' . $game_staff->quantity_limit . ')</em>';
   } else {
     $quantity_limit = '';
   }
-    
+
   echo <<< EOF
 <div class="land">
   $outcome_reason
@@ -153,15 +157,15 @@ EOF;
 EOF;
 
     if ($game_staff->initiative_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$initiative: +$game_staff->initiative_bonus</div>
 EOF;
 
     }
-    
+
     if ($game_staff->endurance_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$endurance: +$game_staff->endurance_bonus</div>
 EOF;
@@ -177,32 +181,32 @@ EOF;
     }
 
     if ($game_staff->experience_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Experience: +$game_staff->experience_bonus</div>
 EOF;
 
     }
-  
+
     if ($game_staff->energy_increase > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Energy: +$game_staff->energy_increase every 5 minutes
       </div>
 EOF;
 
     } // energy increase?
-    
+
     if ($game_staff->upkeep > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
 EOF;
 
     } // upkeep
-    
+
     if ($game_staff->chance_of_loss > 0) {
-      
+
       $lifetime = floor(100 / $game_staff->chance_of_loss);
       $use = ($lifetime == 1) ? 'use' : 'uses';
       echo <<< EOF
@@ -210,7 +214,7 @@ EOF;
 EOF;
 
     } // expected lifetime
-    
+
     echo <<< EOF
   </div>
   <div class="land-button-wrapper">
@@ -242,7 +246,7 @@ EOF;
 Hire Staff
 </div>
 EOF;
-    
+
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
@@ -271,28 +275,28 @@ EOF;
     $game_user->fkey_values_id, $game_user->level);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
 firep($item);
-    
+
     $description = str_replace('%clan', "<em>$clan_title</em>",
       $item->description);
-      
+
     $quantity = $item->quantity;
     if (empty($quantity)) $quantity = '<em>None</em>';
-  
+
     $staff_price = $item->price + ($item->quantity *
       $item->price_increase);
 
     if (($staff_price % 1000) == 0)
       $staff_price = ($staff_price / 1000) . 'K';
-      
+
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
     } else {
       $quantity_limit = '';
     }
-    
+
     echo <<< EOF
 <div class="land">
   <div class="land-icon"><a href="/$game/staff_hire/$arg2/$item->id/1"><img
@@ -307,7 +311,7 @@ firep($item);
 EOF;
 
     if ($item->initiative_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$initiative: +$item->initiative_bonus</div>
 EOF;
@@ -315,13 +319,13 @@ EOF;
     }
 
     if ($item->endurance_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$endurance: +$item->endurance_bonus</div>
 EOF;
 
     }
-    
+
     if ($item->elocution_bonus > 0) {
 
       echo <<< EOF
@@ -331,32 +335,32 @@ EOF;
     }
 
     if ($item->experience_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$experience: +$item->experience_bonus</div>
 EOF;
 
     }
-    
+
     if ($item->energy_increase > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Energy: +$item->energy_increase every 5 minutes
       </div>
 EOF;
 
     } // energy increase?
-    
+
     if ($item->upkeep > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
     } // upkeep
-    
+
     if ($item->chance_of_loss > 0) {
-      
+
       $lifetime = floor(100 / $item->chance_of_loss);
        $use = ($lifetime == 1) ? 'use' : 'uses';
       echo <<< EOF
@@ -364,7 +368,7 @@ EOF;
 EOF;
 
     } // expected lifetime
-    
+
     echo <<< EOF
   </div>
   <div class="land-button-wrapper"><div class="land-buy-button"><a
@@ -375,7 +379,7 @@ EOF;
 EOF;
 
   }
-  
+
 // show next one
 
   $sql = 'SELECT staff.*, staff_ownership.quantity
@@ -408,21 +412,21 @@ EOF;
 firep($item);
 
   if (!empty($item)) {
-    
+
     $description = str_replace('%clan', "<em>$clan_title</em>",
       $item->description);
-      
+
     $quantity = $item->quantity;
     if (empty($quantity)) $quantity = '<em>None</em>';
-  
+
     $staff_price = $item->price + ($item->quantity * $item->price_increase);
-  
+
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
     } else {
       $quantity_limit = '';
     }
-      
+
     echo <<< EOF
 <div class="land-soon">
   <div class="land-details">
@@ -433,15 +437,15 @@ firep($item);
 EOF;
 
     if ($item->initiative_bonus > 0) {
-        
+
       echo <<< EOF
     <div class="land-payout">$initiative: +$item->initiative_bonus</div>
 EOF;
 
     }
-    
+
     if ($item->endurance_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$endurance: +$item->endurance_bonus</div>
 EOF;
@@ -449,32 +453,32 @@ EOF;
     }
 
     if ($item->experience_bonus > 0) {
-    
+
       echo <<< EOF
     <div class="land-payout">$experience: +$item->experience_bonus</div>
 EOF;
 
     }
-    
+
     if ($item->energy_increase > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Energy: +$item->energy_increase every 5 minutes
       </div>
 EOF;
 
     } // energy increase?
-    
+
     if ($item->upkeep > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
     } // upkeep
-    
+
     if ($item->chance_of_loss > 0) {
-      
+
       $lifetime = floor(100 / $item->chance_of_loss);
        $use = ($lifetime == 1) ? 'use' : 'uses';
       echo <<< EOF
@@ -482,8 +486,8 @@ EOF;
 EOF;
 
     } // expected lifetime
-  
+
   } // if !empty($item)
-  
+
   db_set_active('default');
-  
+
