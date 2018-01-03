@@ -1,5 +1,5 @@
 <?php
-// $Id$ 
+// $Id$
 
 
 function stlouis_menu() {
@@ -27,7 +27,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/clan_list_available/%'] = array(
     'title' => 'St. Louis Available Clan List Page',
     'page callback' => 'stlouis_clan_list_available_callback',
@@ -35,7 +35,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/clan_msg/%/%'] = array(
     'title' => 'St. Louis Clan Messages Page',
     'page callback' => 'stlouis_clan_msg_callback',
@@ -43,7 +43,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/clan_announcements/%/%'] = array(
     'title' => 'St. Louis Clan Announcements Page',
     'page callback' => 'stlouis_clan_announcements_callback',
@@ -51,7 +51,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/class_list/%/%'] = array(
     'title' => 'St. Louis Class List Page',
     'page callback' => 'stlouis_class_list_callback',
@@ -59,7 +59,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/block_user_toggle/%/%'] = array(
     'title' => 'St. Louis Block User Toggle',
     'page callback' => 'stlouis_block_user_toggle_callback',
@@ -163,7 +163,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/elders_check_receipt/%'] = array(
     'title' => 'St. Louis Elders Check Receipt',
     'page callback' => 'stlouis_elders_check_receipt_callback',
@@ -171,7 +171,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/google_checkout/%'] = array(
     'title' => 'St. Louis Google Checkout',
     'page callback' => 'stlouis_google_checkout_callback',
@@ -179,7 +179,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/elders_do_fill/%/%'] = array(
     'title' => 'St. Louis Elders Do Fill',
     'page callback' => 'stlouis_elders_do_fill_callback',
@@ -187,7 +187,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/elders_set_password/%'] = array(
     'title' => 'St. Louis Elders Set Password',
     'page callback' => 'stlouis_elders_set_password_callback',
@@ -195,7 +195,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/elders_rename/%'] = array(
     'title' => 'St. Louis Elders Rename',
     'page callback' => 'stlouis_elders_rename_callback',
@@ -203,7 +203,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/welcome/%'] = array(
     'title' => 'St. Louis Welcome',
     'page callback' => 'stlouis_welcome_callback',
@@ -227,7 +227,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/debates/%'] = array(
     'title' => 'St. Louis Debates List',
     'page callback' => 'stlouis_debates_list_callback',
@@ -259,7 +259,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/top20/%'] = array(
     'title' => 'St. Louis Top 20 List',
     'page callback' => 'stlouis_top20_list_callback',
@@ -299,7 +299,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/enter_referral_code/%'] = array(
     'title' => 'St. Louis Enter Referral Code',
     'page callback' => 'stlouis_enter_referral_code_callback',
@@ -443,7 +443,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/authenticate/%'] = array(
     'title' => 'St. Louis Authenticate',
     'page callback' => 'stlouis_authenticate_callback',
@@ -466,7 +466,15 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
+  $items['stlouis/bounce_001/%'] = array(
+    'title' => 'St. Louis bounce',
+    'page callback' => 'stlouis_bounce_001_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access stlouis content'),
+    'type' => MENU_CALLBACK,
+  );
+
   $items['stlouis/elders_preferences/%'] = array(
     'title' => 'St. Louis Preferences Page',
     'page callback' => 'stlouis_elders_preference_callback',
@@ -474,7 +482,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/zombie_move/%/%/%'] = array(
     'title' => 'St. Louis Zombie Move Page',
     'page callback' => 'stlouis_zombie_move_callback',
@@ -482,7 +490,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/event_info/%'] = array(
     'title' => 'St. Louis Event Info Page',
     'page callback' => 'stlouis_event_info_callback',
@@ -490,7 +498,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   $items['stlouis/event_prizes/%'] = array(
     'title' => 'St. Louis Event Prizes Page',
     'page callback' => 'stlouis_event_prizes_callback',
@@ -498,7 +506,7 @@ function stlouis_menu() {
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
-  
+
   return $items;
 
 }
@@ -1139,9 +1147,17 @@ function stlouis_playbook_null_callback() {
 }
 
 function stlouis_bounce_callback($phone_id) {
-
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
   return theme('stlouis_bounce', $phone_id);
+}
 
+function stlouis_bounce_001_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+  return theme('stlouis_bounce_001', $phone_id);
 }
 
 function stlouis_elders_preference_callback($phone_id) {
@@ -1232,7 +1248,7 @@ function stlouis_theme() {
         'clan_id' => null,
       )
     ),
-    
+
     'stlouis_clan_announcements' => array(
       'template' => 'stlouis_clan_announcements',
       'arguments' => array(
@@ -1240,7 +1256,7 @@ function stlouis_theme() {
         'clan_id' => null,
       )
     ),
-    
+
     'stlouis_class_list' => array(
       'template' => 'stlouis_class_list',
       'arguments' => array(
@@ -1256,7 +1272,7 @@ function stlouis_theme() {
         'phone_id_to_block' => null,
       )
     ),
-    
+
     'stlouis_msg_delete' => array(
       'template' => 'stlouis_msg_delete',
       'arguments' => array(
@@ -1329,7 +1345,7 @@ function stlouis_theme() {
         'phone_id' => null
       )
     ),
-    
+
     'stlouis_elders_do_fill' => array(
       'template' => 'stlouis_elders_do_fill',
       'arguments' => array(
@@ -1358,28 +1374,28 @@ function stlouis_theme() {
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_elders_do_purchase' => array(
       'template' => 'stlouis_elders_do_purchase',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_check_receipt' => array(
       'template' => 'stlouis_elders_check_receipt',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_google_checkout' => array(
       'template' => 'stlouis_google_checkout',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_welcome' => array(
       'template' => 'stlouis_welcome',
       'arguments' => array(
@@ -1431,42 +1447,42 @@ function stlouis_theme() {
         'position_id' => null,
       )
     ),
-    
+
     'stlouis_top20_list' => array(
       'template' => 'stlouis_top20_list',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_top_wards_list' => array(
       'template' => 'stlouis_top_wards_list',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_top_aldermen_list' => array(
       'template' => 'stlouis_top_aldermen_list',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_top_event_points' => array(
       'template' => 'stlouis_top_event_points',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_choose_name' => array(
       'template' => 'stlouis_choose_name',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-    
+
     'stlouis_enter_referral_code' => array(
       'template' => 'stlouis_enter_referral_code',
       'arguments' => array(
@@ -1493,7 +1509,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'land_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1502,7 +1518,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'land_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1518,7 +1534,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'staff_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1527,7 +1543,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'staff_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1543,7 +1559,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'staff_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1552,7 +1568,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => null,
         'staff_id' => null,
-        'quantity' => null,    
+        'quantity' => null,
       )
     ),
 
@@ -1586,7 +1602,7 @@ function stlouis_theme() {
         'quantity' => null,
       )
     ),
-    
+
     'stlouis_equipment_sell' => array(
       'template' => 'stlouis_equipment_sell',
       'arguments' => array(
@@ -1595,7 +1611,7 @@ function stlouis_theme() {
         'quantity' => null,
       )
     ),
-    
+
     'stlouis_move' => array(
       'template' => 'stlouis_move',
       'arguments' => array(
@@ -1603,7 +1619,7 @@ function stlouis_theme() {
         'neighborhood_id' => null,
       )
     ),
-    
+
     'stlouis_move_do' => array(
       'template' => 'stlouis_move_do',
       'arguments' => array(
@@ -1629,14 +1645,21 @@ function stlouis_theme() {
         'phone_id' => null,
       )
     ),
-    
+
+    'stlouis_bounce_001' => array(
+      'template' => 'stlouis_bounce_001',
+      'arguments' => array(
+        'phone_id' => null,
+      )
+    ),
+
     'stlouis_elders_preferences' => array(
       'template' => 'stlouis_elders_preferences',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-       
+
     'stlouis_zombie_move' => array(
       'template' => 'stlouis_zombie_move',
       'arguments' => array(
@@ -1645,21 +1668,21 @@ function stlouis_theme() {
         'hood_id' => null,
       )
     ),
-       
+
     'stlouis_event_info' => array(
       'template' => 'stlouis_event_info',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-       
+
     'stlouis_event_prizes' => array(
       'template' => 'stlouis_event_prizes',
       'arguments' => array(
         'phone_id' => null,
       )
     ),
-       
+
   );
 
 } // stlouis_theme()
