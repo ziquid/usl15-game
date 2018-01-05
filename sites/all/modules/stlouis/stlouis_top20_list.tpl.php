@@ -1,7 +1,7 @@
 <?php
 
   global $game, $phone_id;
-  
+
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
@@ -28,7 +28,7 @@
 </div>
 <div class="title">$title</div>
 EOF;
-  
+
   $data = array();
 
   if ($debate == 'Box') {
@@ -38,7 +38,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -67,7 +67,7 @@ EOF;
     
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql);
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -77,7 +77,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -108,7 +108,7 @@ EOF;
       AND users.id not in %s
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -118,7 +118,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -150,7 +150,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -160,7 +160,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -192,7 +192,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -202,7 +202,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -234,7 +234,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -244,7 +244,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -276,7 +276,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -286,7 +286,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -318,7 +318,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -328,7 +328,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -360,7 +360,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -370,7 +370,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -402,7 +402,7 @@ EOF;
 
       ORDER by users.meta_int DESC
       LIMIT 3;';
-  
+
     $result = db_query($sql, '(' . implode(',', $already_listed) . ')');
     while ($item = db_fetch_object($result)) {
       $data[] = $item;
@@ -414,7 +414,7 @@ EOF;
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
-      `values`.clan_title, `values`.clan_icon,
+      `values`.party_title, `values`.party_icon,
       `values`.name, users.id, users.fkey_neighborhoods_id,
       elected_positions.name as ep_name,
       elected_officials.approval_rating,
@@ -456,7 +456,7 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   foreach ($data as $item) {
 firep($item);
 
@@ -465,37 +465,37 @@ firep($item);
     $official_link = $item->ep_name;
     if ($debate == 'Box') $official_link = $item->weight;
     $clan_class = 'election-details';
-    
+
     if ($item->can_broadcast_to_party)
       $official_link .= '<div class="can-broadcast-to-party">*</div>';
-      
+
     $official_link .= '<br/><a href="/' . $game . '/user/' .
        $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
-    $icon = $game . '_clan_' . $item->clan_icon . '.png';
-    $clan_title = $item->clan_title;
+    $icon = $game . '_clan_' . $item->party_icon . '.png';
+    $party_title = $item->party_title;
     $exp = $item->experience;
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
-      
+
     if ($debate == 'Box') {
       $exp = $item->meta_int;
       $experience = 'Boxing Points';
     }
 
 //    if ($game == 'celestial_glory') {
-      
+
 //      $ward = "$item->neighborhood / ";
-      
+
 //    } else {
-      
+
       $ward = '';
-      
+
 //    }
 
     if (($item->weight != $last_weight) && $last_weight != '')
@@ -505,7 +505,7 @@ firep($item);
 <div class="$clan_class">
   <div class="clan-icon"><img width="24"
     src="/sites/default/files/images/$icon"/></div>
-  <div class="clan-title">$ward $clan_title</div>
+  <div class="clan-title">$ward $party_title</div>
   <div class="opponent-name">$official_link $clan_acronym</div>
   <div class="opponent-influence">$exp $experience<br/>
     Level $item->level</div>
@@ -513,7 +513,7 @@ firep($item);
 EOF;
 
     $last_weight = $item->weight;
-  
+
   } // foreach position
-  
+
   db_set_active('default');

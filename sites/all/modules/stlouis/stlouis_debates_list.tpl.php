@@ -130,7 +130,7 @@ EOF;
 // jwc flag day - make debates much more active
   $count = 12;
   while ($count-- && $item = db_fetch_object($result)) $data[] = $item;
-//firep(db_affected_rows());
+firep(db_affected_rows(), 'rows affected');
 
   echo <<< EOF
 <div class="elections-header">
