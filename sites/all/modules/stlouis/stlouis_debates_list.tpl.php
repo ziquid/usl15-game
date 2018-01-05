@@ -31,7 +31,7 @@ EOF;
 // intro neighborhood quests == debates, if they haven't been shown
 
     if ($game == 'celestial_glory') {
-      
+
       echo <<< EOF
 <p>&nbsp;</p>
 <div class="welcome">
@@ -44,16 +44,16 @@ EOF;
   <p></p>
 </div>    
 EOF;
-  
+
       $sql = 'update users set seen_neighborhood_quests = 1 where id = %d;';
       $result = db_query($sql, $game_user->id);
 
     }
-    
+
   }
 
   if ($game_user->level < 15) {
-    
+
     echo <<< EOF
 <ul>
   <li>Win {$debate_lower}s to give you more $game_user->values and $experience</li>
@@ -93,7 +93,7 @@ EOF;
     }
 
   }
-  
+
   echo <<< EOF
 <div class="title">
 Whom would you like to $debate_lower?
@@ -104,7 +104,7 @@ EOF;
 //  if ($debate == 'Box') $debate_time = 900;
 
   $data = array();
-  $sql = 'SELECT username, experience, `values`.clan_title, `values`.clan_icon,
+  $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
     users.id, users.phone_id, clan_members.is_clan_leader, users.meta,
     clans.acronym AS clan_acronym, neighborhoods.name as neighborhood
     FROM users
@@ -130,7 +130,7 @@ EOF;
 // jwc flag day - make debates much more active
   $count = 12;
   while ($count-- && $item = db_fetch_object($result)) $data[] = $item;
-firep(db_affected_rows());
+//firep(db_affected_rows());
 
   echo <<< EOF
 <div class="elections-header">
@@ -148,14 +148,14 @@ firep($item);
 
     $username = $item->username;
     if (empty($username)) $username = '<em>Anonymous</em>';
-    
+
     if ($item->id == $game_user->id) {
       $clan_class = 'election-details me';
     } else {
       $clan_class = 'election-details';
     }
-    
-    $icon = $game . '_clan_' . $item->clan_icon . '.png';
+
+    $icon = $game . '_clan_' . $item->party_icon . '.png';
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym)) {
@@ -172,25 +172,15 @@ firep($icon_path);
 
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
-    
+
     $action_class = '';
     $action = $debate;
-    
-//    if ($game == 'celestial_glory') {
-      
-//      $ward = "$item->neighborhood / ";
-      
-//    } else {
-      
-      $ward = '';
-      
-//    }
-    
+
     echo <<< EOF
 <div class="$clan_class">
   <div class="clan-icon"><img width="24"
     src="/sites/default/files/images/$icon"/></div>
-  <div class="clan-title">$ward $item->clan_title</div>
+  <div class="clan-title">$item->party_title</div>
   <div class="opponent-name"><a
     href="/$game/user/$arg2/$item->phone_id">$username $clan_acronym</a></div>
   <div class="action-wrapper"><div class="action $action_class"><a
