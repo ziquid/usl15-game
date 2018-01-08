@@ -8,9 +8,9 @@
   $game_user = $fetch_user();
   $fetch_header($game_user);
   include_once(drupal_get_path('module', $game) . '/game_defs.inc');
-  
+
 /*  if ($game == 'stlouis') {
-  	
+
   	echo <<< EOF
 <div class="title">
   Luck-free 4th
@@ -26,14 +26,14 @@
 EOF;
 
   	db_set_active('default');
-    
+
     return;
-  	
+
   }
-*/  
+*/
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== FALSE ) ||
      (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== FALSE )) {
-    
+
     echo <<< EOF
     
   <div class="elders-menu big">
@@ -48,13 +48,13 @@ EOF;
 EOF;
 
     db_set_active('default');
-    
+
     return;
-    
+
   }
-    
+
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
-    
+
     echo <<< EOF
     
   <div class="elders-menu big">
@@ -72,13 +72,13 @@ EOF;
 EOF;
 
     db_set_active('default');
-    
+
     return;
-    
+
   }
-  
+
   if (substr(arg(2), 0, 4) == 'nkc ') { // nook color - no in app purchases!
-    
+
     echo <<< EOF
     
 <div class="title">
@@ -114,11 +114,11 @@ Purchase 320 $luck for US $49.99
 EOF;
 
     db_set_active('default');
-    
+
     return;
-    
+
   } // nook
-  
+
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') !== FALSE) {
 // support for Google IAPs
 
@@ -171,7 +171,7 @@ or purchase through PayPal
 EOF;
 
     }
-  
+
   }
 
 // Win8/RT IAPs
@@ -230,7 +230,7 @@ EOF;
 
 
   $nonce = date('Y-m-d-H-i-s-') . mt_rand();
-  
+
   echo <<< EOF
 <div class="title">
 Purchase 10 $luck for US $1.99
@@ -241,11 +241,11 @@ Purchase 10 $luck for US $1.99
     <input type="hidden" name="cs" value="1">
     <input type="hidden" name="cbt" value="Return to $game_name_full">
     <input type="hidden" name="cancel_return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="notify_url"
-      value="http://codero1.cheek.com/$game/elders_do_purchase/$phone_id/10/$nonce">
+      value="http://uslce.dev.games.ziquid.com/$game/elders_do_purchase/$phone_id/10/$nonce">
     <input type="hidden" name="return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="DGL4LM2ZH4DZA">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
@@ -263,11 +263,11 @@ Purchase 35 $luck for US $5.99
     <input type="hidden" name="cs" value="1">
     <input type="hidden" name="cbt" value="Return to $game_name_full">
     <input type="hidden" name="cancel_return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="notify_url"
-      value="http://codero1.cheek.com/$game/elders_do_purchase/$phone_id/35/$nonce">
+      value="http://uslce.dev.games.ziquid.com/$game/elders_do_purchase/$phone_id/35/$nonce">
     <input type="hidden" name="return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="6AY77UK7KP2VU">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
@@ -285,11 +285,11 @@ Purchase 150 $luck for US $24.99
     <input type="hidden" name="cs" value="1">
     <input type="hidden" name="cbt" value="Return to $game_name_full">
     <input type="hidden" name="cancel_return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="notify_url"
-      value="http://codero1.cheek.com/$game/elders_do_purchase/$phone_id/150/$nonce">
+      value="http://uslce.dev.games.ziquid.com/$game/elders_do_purchase/$phone_id/150/$nonce">
     <input type="hidden" name="return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="PX5YB99UWYP32">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
@@ -307,11 +307,11 @@ Purchase 320 $luck for US $49.99
     <input type="hidden" name="cs" value="1">
     <input type="hidden" name="cbt" value="Return to $game_name_full">
     <input type="hidden" name="cancel_return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="notify_url"
-      value="http://codero1.cheek.com/$game/elders_do_purchase/$phone_id/320/$nonce">
+      value="http://uslce.dev.games.ziquid.com/$game/elders_do_purchase/$phone_id/320/$nonce">
     <input type="hidden" name="return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="33MQY96PK4246">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
@@ -333,11 +333,11 @@ Purchase 2000 $luck for US $250
     <input type="hidden" name="cs" value="1">
     <input type="hidden" name="cbt" value="Return to $game_name_full">
     <input type="hidden" name="cancel_return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="notify_url"
-      value="http://codero1.cheek.com/$game/elders_do_purchase/$phone_id/2000/$nonce">
+      value="http://uslce.dev.games.ziquid.com/$game/elders_do_purchase/$phone_id/2000/$nonce">
     <input type="hidden" name="return"
-      value="http://codero1.cheek.com/$game/elders/$phone_id">
+      value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="MXF6YM27PZK7A">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
@@ -376,7 +376,7 @@ TESTING Google Checkout - Purchase <strong>320</strong> $luck for US $49.99
   <input name="shopping-cart.items.item-1.digital-content.key.is-encrypted"
     type="hidden" value="true"/>
   <input name="shopping-cart.items.item-1.digital-content.url" type="hidden"
-    value="http://codero1.cheek.com/$game/elders/$phone_id"/>
+    value="http://uslce.dev.games.ziquid.com/$game/elders/$phone_id"/>
   <input name="_charset_" type="hidden" value="utf-8"/>
   <input alt="" type="image"
     src="https://checkout.google.com/buttons/buy.gif?merchant_id=835210018414803&amp;w=117&amp;h=48&amp;style=trans&amp;variant=text&amp;loc=en_US"/>
