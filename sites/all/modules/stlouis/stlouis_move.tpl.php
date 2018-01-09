@@ -138,6 +138,10 @@ EOF;
 
     $coefficient = 1.875;
 
+  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
+
+    $coefficient = 1;
+
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
 
     $coefficient = 1;
@@ -235,6 +239,10 @@ EOF;
   if (substr(arg(2), 0, 4) == 'nkc ') {
 
     $coefficient = 1.875;
+
+  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
+
+    $coefficient = 1;
 
   } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
 
