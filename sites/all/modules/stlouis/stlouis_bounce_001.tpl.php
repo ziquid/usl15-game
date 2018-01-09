@@ -18,6 +18,9 @@
   <h4>Please note this release is for testing only</h4>
   <h4>Do not expect anything in this release to be permanent</h4>
   <p>Jan 8: Working to fix Luck purchases</p>
+  <p>Jan 9: Some Galaxy S8 devices have the home page and map screen off a little.
+  We've fixed it some but let us know if your device still has the home page or
+  map offset.  Email zipport@ziquid.com.</p>
   <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
     <input type="Submit" value="Continue to the game"/>
   </form>
