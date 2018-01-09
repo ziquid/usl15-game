@@ -288,6 +288,7 @@ li {
   text-align: center;
   font-size: 22px;
   font-weight: bold;
+  margin-bottom: 6px;
 }
 
 .quest-failed, .election-failed, .land-failed {
@@ -322,6 +323,10 @@ li {
 .land .land-name {
   font-size: 14px;
   font-weight: bold;
+}
+
+.land .land-name .type {
+  text-transform: capitalize;
 }
 
 .land .land-description {
@@ -587,23 +592,23 @@ li {
 }
 
 .news .all {
-  
+
 }
 
 .news .personal {
-  
+
 }
 
 .news .elections {
-  
+
 }
 
 .news .clan {
-  
+
 }
 
 .news .system {
-  
+
 }
 
 .news .button {

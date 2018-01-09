@@ -1,5 +1,4 @@
 <?php
-// $Id$
 
 function stlouis_help($path, $arg) {
 
@@ -24,9 +23,8 @@ function stlouis_perm() {
 
 } // stlouis_perm()
 
-
 require_once(drupal_get_path('module', 'stlouis') . '/menu.inc');
-
+require_once(drupal_get_path('module', 'stlouis') . '/functions.inc');
 
 function stlouis_cron() {
 
@@ -93,7 +91,7 @@ function stlouis_cron() {
 
   if ($zombie_count > 0) {
 
-    mail('joseph@cheek.com', "$zombie_count zombies", 'fyi');
+//    mail('joseph@cheek.com', "$zombie_count zombies", 'fyi');
 
 // move them, enhance experience
     $sql = 'update users set experience = floor(rand() * 1500000) + 1
