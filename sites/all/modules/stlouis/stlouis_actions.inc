@@ -142,8 +142,8 @@ function actionlist() {
 
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
-  ' ORDER BY required_level DESC';
-// firep($sql);
+  ' ORDER BY actions.required_level DESC';
+ firep($sql, 'actions sql 1');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
@@ -153,7 +153,7 @@ function actionlist() {
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY name ASC';
-// firep($sql);
+  firep($sql, 'actions sql 2');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
