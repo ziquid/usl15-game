@@ -1,353 +1,324 @@
 <?php
 
-// includes for special functions
+/**
+ * @file stlouis_actions_do.inc
+ * Includes for special functions.
+ */
 
-  function _stlouis_action_create_a_clan_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . arg(0) . '_fetch_user';
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
-    $can_do_again = FALSE;
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
+  $can_do_again = FALSE;
 
-    $clan_name = trim(check_plain($_GET['name']));
-    $clan_acronym = trim(check_plain($_GET['acronym']));
+  $clan_name = trim(check_plain($_GET['name']));
+  $clan_acronym = trim(check_plain($_GET['acronym']));
 
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
 // limited to 1 in db
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item);
 
-    if (!empty($item)) { // already a member of a clan
-      $outcome_reason = '<div class="land-failed">' .
-        t('Already a member of a clan!') .
-        '</div><div class="action-effect">You already belong to a clan.&nbsp;
-        You must secede from it first.</div>';
-      return FALSE;
-    }
+  if (!empty($item)) { // already a member of a clan
+    $outcome_reason = '<div class="land-failed">' .
+      t('Already a member of a clan!') .
+      '</div><div class="action-effect">You already belong to a clan.&nbsp;
+      You must secede from it first.</div>';
+    return FALSE;
+  }
 
-  // Do they have the appropriate aides?
-    $sql = 'select sum(clan_size * quantity) as max_clan_size from users
-      left join equipment_ownership
-      on equipment_ownership.fkey_users_id = users.id
-      left join equipment
-      on equipment_ownership.fkey_equipment_id = equipment.id
-      where users.id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+// Do they have the appropriate aides?
+  $sql = 'select sum(clan_size * quantity) as max_clan_size from users
+    left join equipment_ownership
+    on equipment_ownership.fkey_users_id = users.id
+    left join equipment
+    on equipment_ownership.fkey_equipment_id = equipment.id
+    where users.id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item);
-    $max_clan_size = $item->max_clan_size;
+  $max_clan_size = $item->max_clan_size;
 
-    if ($max_clan_size <= 0) { // no aides to create a clan
-      $outcome_reason = '<div class="land-failed">' .
-        t('No place to hold meetings!') .
-        '</div><div class="action-effect">You need a place to hold
-        your clan meetings.</div>';
-      return FALSE;
-    }
+  if ($max_clan_size <= 0) { // no aides to create a clan
+    $outcome_reason = '<div class="land-failed">' .
+      t('No place to hold meetings!') .
+      '</div><div class="action-effect">You need a place to hold
+      your clan meetings.</div>';
+    return FALSE;
+  }
 
 
-    if (empty($clan_name) XOR empty($clan_acronym)) { // didn't fill both out
+  if (empty($clan_name) XOR empty($clan_acronym)) { // didn't fill both out
 
-      $form_reminder = '<div class="land-failed">' .
-        t('Both fields are required') .
-        '</div><div class="action-effect">Please give both a name and three
-          letters for your clan.</div>';
+    $form_reminder = '<div class="land-failed">' .
+      t('Both fields are required') .
+      '</div><div class="action-effect">Please give both a name and three
+        letters for your clan.</div>';
 
-    } // didn't fill out both fields
+  } // didn't fill out both fields
 
-    if (empty($clan_name) || empty($clan_acronym)) { // ask for name, acronym
+  if (empty($clan_name) || empty($clan_acronym)) { // ask for name, acronym
 
-      $outcome_reason = $form_reminder;
-      $outcome_reason .=<<< EOF
+    $outcome_reason = $form_reminder;
+    $outcome_reason .=<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$phone_id/$action_id">
-    <p>What will you name your clan?</p>
-    <input type="text" name="name" size="32" maxlength="32"/>
-    <p>Which three letters should appear<br/>after members' names?</p>
-    <input type="text" name="acronym" size="3" maxlength="3"/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$phone_id/$action_id">
+  <p>What will you name your clan?</p>
+  <input type="text" name="name" size="32" maxlength="32"/>
+  <p>Which three letters should appear<br/>after members' names?</p>
+  <input type="text" name="acronym" size="3" maxlength="3"/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
 
-      return FALSE;
+    return FALSE;
 
-    } // no name nor acronym
+  } // no name nor acronym
 
 // see if the clan already exists
 
-    $sql = 'select * from clans where acronym = "%s" or name = "%s" limit 1;';
-    $result = db_query($sql, $clan_acronym, $clan_name);
-    $item = db_fetch_object($result);
+  $sql = 'select * from clans where acronym = "%s" or name = "%s" limit 1;';
+  $result = db_query($sql, $clan_acronym, $clan_name);
+  $item = db_fetch_object($result);
 firep($item);
 
-    if (!empty($item)) { // clan does exist
+  if (!empty($item)) { // clan does exist
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('You have chosen an existing clan name or set of three letters') .
-        '</div><div class="action-effect">Please check that you enter a unique
-        clan name and three letters and try again</div>
-        <div class="try-an-election-wrapper"><div
-        class="try-an-election"><a
-        href="/' . $game . '/actions_do/' . $phone_id . '/' . $action_id .
-        '">Try again</a></div></div>';
+    $outcome_reason = '<div class="land-failed">' .
+      t('You have chosen an existing clan name or set of three letters') .
+      '</div><div class="action-effect">Please check that you enter a unique
+      clan name and three letters and try again</div>
+      <div class="try-an-election-wrapper"><div
+      class="try-an-election"><a
+      href="/' . $game . '/actions_do/' . $phone_id . '/' . $action_id .
+      '">Try again</a></div></div>';
 
-      return FALSE;
-
-    }
+    return FALSE;
+  }
 
 
 // doesn't exist - create it!
 
-    $sql = 'insert into clans (name, acronym) values ("%s", "%s");';
-    $result = db_query($sql, $clan_name, $clan_acronym);
+  $sql = 'insert into clans (name, acronym) values ("%s", "%s");';
+  $result = db_query($sql, $clan_name, $clan_acronym);
 
-    $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
-      is_clan_leader) values ((select id from clans where name = "%s"),
-      %d, 1);';
-    $result = db_query($sql, $clan_name, $game_user->id);
+  $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
+    is_clan_leader) values ((select id from clans where name = "%s"),
+    %d, 1);';
+  $result = db_query($sql, $clan_name, $game_user->id);
 
-    $outcome_reason .= '<div class="action-effect">The clan ' .
-      $clan_name . ' (' . $clan_acronym . ') has been created!';
+  $outcome_reason .= '<div class="action-effect">The clan ' .
+    $clan_name . ' (' . $clan_acronym . ') has been created!';
 
-    return TRUE;
+  return TRUE;
+}
 
-  }
+function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
+  &$can_do_again) {
 
-  function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
-    &$can_do_again) {
+  global $game, $phone_id;
 
+  $get_value = '_' . $game . '_get_value';
+  $set_value = '_' . $game . '_set_value';
+  $remove_value = '_' . $game . '_remove_value';
+  $fetch_user = '_' . $game . '_fetch_user';
 
-    global $game, $phone_id;
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
+  $arg2 = check_plain(arg(2));
+  $can_do_again = FALSE;
 
-    $get_value = '_' . $game . '_get_value';
-    $set_value = '_' . $game . '_set_value';
-    $remove_value = '_' . $game . '_remove_value';
-    $fetch_user = '_' . $game . '_fetch_user';
+  $clan_acronym = check_plain($_GET['acronym']);
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-    $can_do_again = FALSE;
-
-    $clan_acronym = check_plain($_GET['acronym']);
-
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
 // limited to 1 in db
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item);
 
-    if (!empty($item)) { // already a member of a clan
+  if (!empty($item)) { // already a member of a clan
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Already a member of a clan!') .
-        '</div><div class="action-effect">You already belong to a clan.&nbsp;
-        You must leave it first.</div>';
+    $outcome_reason = '<div class="land-failed">' .
+      t('Already a member of a clan!') .
+      '</div><div class="action-effect">You already belong to a clan.&nbsp;
+      You must leave it first.</div>';
 
-      return FALSE;
+    return FALSE;
+  }
 
-    }
+  if (empty($clan_acronym)) { // ask for acronym
 
-    if (empty($clan_acronym)) { // ask for acronym
-
-      $outcome_reason =<<< EOF
+    $outcome_reason =<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Which clan would you like to join (three letters)?</p>
-    <input type="text" name="acronym" size="3" maxlength="3"/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$arg2/$action_id">
+  <p>Which clan would you like to join (three letters)?</p>
+  <input type="text" name="acronym" size="3" maxlength="3"/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
 
-      return FALSE;
-
-    } // no acronym
+    return FALSE;
+  } // no acronym
 
 // does clan exist?
 
-    $sql = 'select * from clans where acronym = "%s";';
-// limited to 1 in db
-    $result = db_query($sql, $clan_acronym);
-    $item = db_fetch_object($result);
+  $sql = 'select * from clans where acronym = "%s";';
+  $result = db_query($sql, $clan_acronym);
+  $item = db_fetch_object($result);
 firep($item);
 
-    if (empty($item)) { // clan does not exist
+  if (empty($item)) { // clan does not exist
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('The %clan clan does not exist', array('%clan' => $clan_acronym)) .
-        '</div><div class="action-effect">Please check that you entered the
-        clan\'s three letters correctly and try again</div>
-        <div class="try-an-election-wrapper"><div
-        class="try-an-election"><a
-        href="/' . $game . '/actions_do/' . $phone_id . '/' . $action_id .
-        '">Try again</a></div></div>';
+    $outcome_reason = '<div class="land-failed">' .
+      t('The %clan clan does not exist', array('%clan' => $clan_acronym)) .
+      '</div><div class="action-effect">Please check that you entered the
+      clan\'s three letters correctly and try again</div>
+      <div class="try-an-election-wrapper"><div
+      class="try-an-election"><a
+      href="/' . $game . '/actions_do/' . $phone_id . '/' . $action_id .
+      '">Try again</a></div></div>';
 
-      return FALSE;
+    return FALSE;
+  }
 
-    }
+  $clan_name = $item->name;
+  $clan_id = $item->id;
+  $clan_password = strtolower($item->password);
 
-    $clan_name = $item->name;
-    $clan_id = $item->id;
-    $clan_password = strtolower($item->password);
-
-    $sql = 'select users.fkey_values_id, users.id from clan_members
-      left join clans on clan_members.fkey_clans_id = clans.id
-      left join users on clan_members.fkey_users_id = users.id
-      where clans.id = %d and clan_members.is_clan_leader = 1;';
-    $result = db_query($sql, $clan_id);
-    $item = db_fetch_object($result);
+  $sql = 'select users.fkey_values_id, users.id from clan_members
+    left join clans on clan_members.fkey_clans_id = clans.id
+    left join users on clan_members.fkey_users_id = users.id
+    where clans.id = %d and clan_members.is_clan_leader = 1;';
+  $result = db_query($sql, $clan_id);
+  $item = db_fetch_object($result);
 firep($item);
-    $clan_leader_id = $item->id;
+  $clan_leader_id = $item->id;
 
-    if ($item->fkey_values_id != $game_user->fkey_values_id) {
+  if ($item->fkey_values_id != $game_user->fkey_values_id) {
 // different political party
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Different political party') .
-        '</div><div class="action-effect">' .
-        t('That clan belongs to a different political party') . '</div>';
+    $outcome_reason = '<div class="land-failed">' .
+      t('Different political party') .
+      '</div><div class="action-effect">' .
+      t('That clan belongs to a different political party') . '</div>';
 
-      return FALSE;
+    return FALSE;
+  }
 
-    }
-
-    $sql = 'select sum(clan_size * quantity) as max_clan_size from users
-      left join equipment_ownership
-      on equipment_ownership.fkey_users_id = users.id
-      left join equipment
-      on equipment_ownership.fkey_equipment_id = equipment.id
-      where users.id = %d;';
-    $result = db_query($sql, $clan_leader_id);
-    $item = db_fetch_object($result);
+  $sql = 'select sum(clan_size * quantity) as max_clan_size from users
+    left join equipment_ownership
+    on equipment_ownership.fkey_users_id = users.id
+    left join equipment
+    on equipment_ownership.fkey_equipment_id = equipment.id
+    where users.id = %d;';
+  $result = db_query($sql, $clan_leader_id);
+  $item = db_fetch_object($result);
 firep($item);
-    $max_clan_size = $item->max_clan_size;
+  $max_clan_size = $item->max_clan_size;
 
-    $sql = 'select count(id) as current_clan_size from clan_members
-      where fkey_clans_id = %d;';
-    $result = db_query($sql, $clan_id);
-    $item = db_fetch_object($result);
+  $sql = 'select count(id) as current_clan_size from clan_members
+    where fkey_clans_id = %d;';
+  $result = db_query($sql, $clan_id);
+  $item = db_fetch_object($result);
 firep($item);
-    $current_clan_size = $item->current_clan_size;
+  $current_clan_size = $item->current_clan_size;
 
-    if ($current_clan_size >= $max_clan_size) { // clan full!
+  if ($current_clan_size >= $max_clan_size) { // clan full!
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('The clan is full!') .
-        '</div><div class="action-effect">' .
-        t('There is no room for new members in this clan.  ' .
-          'This clan can only hold @num members.',
-          array('@num' => $max_clan_size)) . '</div>';
+    $outcome_reason = '<div class="land-failed">' .
+      t('The clan is full!') .
+      '</div><div class="action-effect">' .
+      t('There is no room for new members in this clan.  ' .
+        'This clan can only hold @num members.',
+        array('@num' => $max_clan_size)) . '</div>';
 
-      return false;
+    return FALSE;
+  }
 
-    }
+  $password = strtolower(trim(check_plain($_GET['password'])));
 
+  // Need a password.
+  if (!empty($clan_password) && empty($password)) {
 
-    $password = strtolower(trim(check_plain($_GET['password'])));
+    $outcome_reason = '<div class="land-failed">' .
+      t('Enter the password') .
+      '</div><div class="action-effect">' .
+      t('This clan has a password.  What is it?') . '</div>';
 
-// need a password
-
-    if (!empty($clan_password) && empty($password)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Enter the password') .
-        '</div><div class="action-effect">' .
-        t('This clan has a password.  What is it?') . '</div>';
-
-      $outcome_reason .=<<< EOF
+    $outcome_reason .=<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <input type="hidden" name="acronym" value="$clan_acronym"/>
-    <input type="text" name="password" size="6" maxlength="6"/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$arg2/$action_id">
+  <input type="hidden" name="acronym" value="$clan_acronym"/>
+  <input type="text" name="password" size="6" maxlength="6"/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
 
-      return FALSE;
-
-    }
-
-
-// wrong password
-
-    if (!empty($clan_password) && ($clan_password != $password)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Wrong password!') .
-        '</div><div class="action-effect">' .
-        t('The password you entered is incorrect.') . '</div>';
-
-      return FALSE;
-
-    }
-
-
-// prohibited from joining for a time?
-
-    $join_allowed_time = $get_value($game_user->id, 'cant_join_clan', 0);
-firep($join_allowed_time);
-firep(time());
-
-    if (time() < $join_allowed_time) { // can't join yet!
-
-      $min = floor(($join_allowed_time - time()) / 60);
-      $sec = ($join_allowed_time - time()) % 60;
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Too soon!') .
-        '</div><div class="action-effect">' .
-        t('You can join a clan in @min minutes and @sec seconds',
-          array('@min' => $min, '@sec' => $sec))
-        . '</div>';
-
-mail('joseph@cheek.com', $target_name . ' tried to join a clan',
-  "but isn't allowed to for $min:$sec longer.");
-
-      return FALSE;
-
-    }
-
-// join succeeded!
-
-    $remove_value($target_id, 'cant_join_clan');
-    $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
-      is_clan_leader) values ((select id from clans where acronym = "%s"),
-      %d, 0);';
-    $result = db_query($sql, $clan_acronym, $game_user->id);
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_neighborhoods_id, message) values
-      (%d, (select id from clans where acronym = "%s"), "%s");';
-    $message = $game_user->username . ' has joined your clan.  Please welcome
-      him or her.';
-    $result = db_query($sql, $game_user->id, $clan_acronym, $message);
-
-    $outcome_reason .= '<div class="action-effect">You have successfully joined
-      the ' . $clan_name . ' (' . $clan_acronym . ') clan!';
-
-    $can_do_again = FALSE;
-    return TRUE;
-
+    return FALSE;
   }
 
+  // Wrong password.
+  if (!empty($clan_password) && ($clan_password != $password)) {
 
-  function _celestial_glory_action_join_a_clan_function(&$outcome_reason,
-    $target) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Wrong password!') .
+      '</div><div class="action-effect">' .
+      t('The password you entered is incorrect.') . '</div>';
 
-    return _stlouis_action_join_a_clan_function($outcome_reason, $target);
-
+    return FALSE;
   }
 
+  // Prohibited from joining for a time?
+  $join_allowed_time = $get_value($game_user->id, 'cant_join_clan', 0);
+  $now = time();
+firep($join_allowed_time, 'allowed time');
+firep($now, 'time now');
+
+  if ($now < $join_allowed_time) { // can't join yet!
+
+    $min = floor(($join_allowed_time - $now) / 60);
+    $sec = ($join_allowed_time - $now) % 60;
+
+    $outcome_reason = '<div class="land-failed">' .
+      t('Too soon!') .
+      '</div><div class="action-effect">' .
+      t('You can join a clan in @min minutes and @sec seconds',
+        array('@min' => $min, '@sec' => $sec))
+      . '</div>';
+
+    return FALSE;
+  }
+
+  // Join succeeded!
+  $remove_value($target_id, 'cant_join_clan');
+  $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
+    is_clan_leader) values ((select id from clans where acronym = "%s"),
+    %d, 0);';
+  db_query($sql, $clan_acronym, $game_user->id);
+
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_neighborhoods_id, message) values
+    (%d, (select id from clans where acronym = "%s"), "%s");';
+  $message = $game_user->username . ' has joined your clan.  Please welcome
+    him or her.';
+  db_query($sql, $game_user->id, $clan_acronym, $message);
+
+  $outcome_reason .= '<div class="action-effect">You have successfully joined
+    the ' . $clan_name . ' (' . $clan_acronym . ') clan!';
+
+  $can_do_again = FALSE;
+  return TRUE;
+}
 
   function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target,
     &$can_do_again) {
