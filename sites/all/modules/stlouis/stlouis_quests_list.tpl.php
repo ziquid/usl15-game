@@ -7,15 +7,31 @@
 
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include (drupal_get_path('module', $game) . '/game_defs.inc');
   $arg2 = check_plain(arg(2));
 
 // do AI moves from this page!!!
-//   include_once(drupal_get_path('module', $game) . '/' . $game . '_ai.inc');
-//   ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
-//     _move_ai();
+  include(drupal_get_path('module', $game) . '/' . $game . '_ai.inc');
+  ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
+    _move_ai();
 
   if (is_numeric(arg(3))) $group_to_show = arg(3);
+
+  if (is_numeric($group_to_show)) {
+
+    $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
+
+  } elseif ($game_user->level < 6) { // show beginning quests
+
+    $group_to_show = '0';
+    $sql_quest_neighborhood = 'where `group` = 0';
+
+  } else { // show the group for which the player last successfully completed a quest
+
+    $group_to_show = $game_user->fkey_last_played_quest_groups_id;
+    $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
+
+  }
 
   $sql = 'select name from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -81,7 +97,7 @@ EOF;
     drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
 // don't let them do quests at levels 6-25 without being in a party
 
-  if (!$game_user->seen_neighborhood_quests and $game_user->level >= 6) {
+  if (!$game_user->seen_neighborhood_quests && $game_user->level >= 6) {
 // intro neighborhood quests at level 6
 
     echo <<< EOF
@@ -113,26 +129,6 @@ EOF;
   <li>Wait and rest for a few minutes if you run out of Energy</li>
 </ul>
 EOF;
-
-  }
-
-  if (is_numeric($group_to_show)) {
-
-    $sql_quest_neighborhood = 'where `group` = ' . $group_to_show .
-      ' and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = ' .
-      $game_user->fkey_neighborhoods_id . ')';
-
-  } elseif ($game_user->level < 6) { // show beginning quests
-
-    $group_to_show = '0';
-    $sql_quest_neighborhood = 'where `group` = 0';
-
-  } else { // show the group for which the player last successfully completed a quest
-
-    $group_to_show = $game_user->fkey_last_played_quest_groups_id;
-    $sql_quest_neighborhood = 'where `group` = ' . $group_to_show .
-      ' and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = ' .
-      $game_user->fkey_neighborhoods_id . ')';
 
   }
 
@@ -227,9 +223,12 @@ firep($quest_group);
 </div>
 EOF;
 
-// show each quest
+  // Show each quest.
   $data = array();
-  $sql = 'select quests.*, quest_completion.percent_complete from quests
+  $sql = 'select quests.*, quest_completion.percent_complete,
+    neighborhoods.name as hood from quests
+    LEFT OUTER JOIN neighborhoods
+    ON quests.fkey_neighborhoods_id = neighborhoods.id
     LEFT OUTER JOIN quest_completion
     ON quest_completion.fkey_quests_id = quests.id
     AND quest_completion.fkey_users_id = %d
@@ -246,25 +245,66 @@ firep($sql);
     $description = str_replace('%clan', "<em>$clan_title</em>",
       $item->description);
 
-    if (empty($item->percent_complete)) $item->percent_complete = 0;
+    if (empty($item->percent_complete)) {
+      $item->percent_complete = 0;
+    }
 
     if ($item->percent_complete > floor($percentage_target / 2)) {
 
       $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
         (4 * $percentage_divisor))) . 'c0';
 
-    } else {
+    }
+    else {
 
       $rgb = 'c' . dechex(floor(($item->percent_complete) /
-        (4 * $percentage_divisor))) . '0';
+          (4 * $percentage_divisor))) . '0';
 
     }
 
     $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
-
-firep($rgb);
+// firep($rgb);
 
     $active = ($item->active) ? '' : ' (inactive)';
+    firep($item, 'quest item');
+
+    if (($group_to_show > 0) &&
+      (($item->fkey_neighborhoods_id != 0) &&
+        ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
+      // show quests in other hoods?
+
+      echo <<< EOF
+  <div class="quests wrong-hood">
+    <div class="quest-icon">
+      <img src="/sites/default/files/images/quests/$game-$item->id.png"
+        border="0" width="96"/>
+      <div class="quest-complete">
+        <div class="quest-complete-percentage"
+          style="background-color: #$rgb; width: {$width}px">
+          &nbsp;
+        </div>
+        <div class="quest-complete-text">
+          $item->percent_complete% complete
+        </div>
+      </div>
+    </div>
+    <div class="quest-details">
+      <div class="quest-name">
+        $item->name $active
+      </div>
+      <div class="quest-description">
+        This $quest_lower can only be completed in $item->hood.
+      </div>
+    </div>
+    <form action="/$game/move/$arg2/$item->fkey_neighborhoods_id">
+      <div class="quests-perform-button-wrapper">
+        <input class="quests-perform-button" type="submit" value="Go there"/>
+      </div>
+    </form>
+  </div>
+EOF;
+
+    } else { // quest in my hood
 
     echo <<< EOF
 <div class="quests">
@@ -294,7 +334,7 @@ EOF;
     <div class="quest-required_energy">Requires $item->required_energy Energy</div>
 EOF;
 
-// required land
+    // required land
     if ($item->land_required_quantity > 0) {
 
       $sql = 'select quantity from land_ownership
@@ -305,7 +345,8 @@ EOF;
 
       if ($quantity->quantity >= $item->land_required_quantity) {
         $not_yet = $a_start = $a_end = '';
-      } else {
+      }
+      else {
         $not_yet = 'not-yet';
         $a_start = '<a href="/' . $game . '/land_buy/' .
           $arg2 . '/' . $item->fkey_land_required_id . '/' .
@@ -323,7 +364,7 @@ EOF;
 
     } // required land
 
-// required equipment
+    // required equipment
     if ($item->equipment_1_required_quantity > 0) {
 
       $sql = 'select quantity from equipment_ownership
@@ -334,7 +375,8 @@ EOF;
 
       if ($quantity->quantity >= $item->equipment_1_required_quantity) {
         $not_yet = $a_start = $a_end = '';
-      } else {
+      }
+      else {
         $not_yet = 'not-yet';
         $a_start = '<a href="/' . $game . '/equipment_buy/' .
           $arg2 . '/' . $item->fkey_equipment_1_required_id . '/' .
@@ -350,7 +392,7 @@ EOF;
     </div>
 EOF;
 
-// more required equipment
+      // more required equipment
       if ($item->equipment_2_required_quantity > 0) {
 
         $sql = 'select quantity from equipment_ownership
@@ -361,7 +403,8 @@ EOF;
 
         if ($quantity->quantity >= $item->equipment_2_required_quantity) {
           $not_yet = $a_start = $a_end = '';
-        } else {
+        }
+        else {
           $not_yet = 'not-yet';
           $a_start = '<a href="/' . $game . '/equipment_buy/' .
             $arg2 . '/' . $item->fkey_equipment_2_required_id . '/' .
@@ -377,7 +420,7 @@ EOF;
       </div>
 EOF;
 
-// more more required equipment
+        // more more required equipment
         if ($item->equipment_3_required_quantity > 0) {
 
           $sql = 'select quantity from equipment_ownership
@@ -388,7 +431,8 @@ EOF;
 
           if ($quantity->quantity >= $item->equipment_3_required_quantity) {
             $not_yet = $a_start = $a_end = '';
-          } else {
+          }
+          else {
             $not_yet = 'not-yet';
             $a_start = '<a href="/' . $game . '/equipment_buy/' .
               $arg2 . '/' . $item->fkey_equipment_3_required_id . '/' .
@@ -410,7 +454,7 @@ EOF;
 
     } // required equipment
 
-// required staff
+    // required staff
     if ($item->staff_required_quantity > 0) {
 
       $sql = 'select quantity from staff_ownership
@@ -421,7 +465,8 @@ EOF;
 
       if ($quantity->quantity >= $item->staff_required_quantity) {
         $not_yet = '';
-      } else {
+      }
+      else {
         $not_yet = 'not-yet';
       }
 
@@ -441,7 +486,9 @@ EOF;
 </div>
 EOF;
 
-  }
+    } // show quests in other hoods?
+
+  } // foreach item
 
 //  if ($game_user->level > 1) { // don't show extra quests at first
 

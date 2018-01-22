@@ -137,7 +137,7 @@ li {
   color: #1ca443;
 }
 
-.quest-failed, .election-failed, .land-failed {
+.quest-failed, .election-failed, .land-failed, .title.failed {
   color: #a41c43;
 }
 
@@ -229,7 +229,8 @@ li {
 
 .elections .election-details .action, .land .land-buy-button,
 .land .land-sell-button, .land .land-perform-button,
-.send-message-send-wrapper .send-message-send {
+.send-message-send-wrapper .send-message-send,
+.quests .quests-perform-button, .crafting-submit-button {
   padding: 3px 12px;
   background-color: #188433;
   border: 1px solid #188433;
@@ -325,4 +326,35 @@ li {
 
 .event-info .subsubtitle {
   color: #aaa;
+}
+
+a.version {
+  color: #aa6;
+  text-decoration: none;
+}
+
+
+.new-main-menu .elections-menu {
+  position: absolute;
+  top: 97px;
+  left: 53px;
+  text-decoration: none;
+  color: rgba(255, 255, 170, 0.7);
+  font-size: 15px;
+  font-family: Georgia, "times new roman", serif;
+  font-style: italic;
+  font-weight: bold;
+  text-shadow: 0 0 8px yellow;
+}
+
+.competency-pip {
+  border-right: solid 2px #693318 !important;
+}
+
+.competency-pip.attained {
+  border-right: solid 2px yellow !important;
+}
+
+.too-soon {
+  color: rgba(255, 255, 70, 0.7);
 }

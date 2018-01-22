@@ -7,6 +7,8 @@
   $debate_time = 1200;
   $zombie_debate_wait = 180; // 300
   $event_type = EVENT_NONE;
+  $energy_wait = 300;
+  $energy_wait_str = '5 minutes';
 
   global $game;
 
