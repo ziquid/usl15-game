@@ -797,7 +797,7 @@ EOF;
         // Upkeep.
         if ($loot->upkeep > 0) {
           $loot_html .=<<< EOF
-      <div class="quest-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
+      <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
 EOF;
         }
 
