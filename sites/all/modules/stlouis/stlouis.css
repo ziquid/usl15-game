@@ -201,7 +201,7 @@ li {
   color: #1ca443;
 }
 
-.wise_old_man_large {
+.wise_old_man_large, .wise_old_man {
   background-image: url('/sites/default/files/images/stlouis_wise_old_man_large.png');
   background-repeat: no-repeat;
   background-position: 0px 0px;
@@ -217,6 +217,17 @@ li {
   width: 65px;
   height: 80px;
   float: left;
+}
+
+.wise_old_man.sad {
+  background-image: url('/sites/default/files/images/stlouis_wise_old_man_sad.png');
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  width: 90px;
+  height: 90px;
+  float: left;
+  background-size: contain;
+  margin-right: 12px;
 }
 
 .username-error {
