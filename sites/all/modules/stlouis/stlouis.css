@@ -230,6 +230,17 @@ li {
   margin-right: 12px;
 }
 
+.wise_old_man.happy {
+  background-image: url('/sites/default/files/images/stlouis_wise_old_man_happy.png');
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+  width: 54px;
+  height: 72px;
+  float: left;
+  background-size: contain;
+  margin-right: 12px;
+}
+
 .username-error {
   color: #a41c43;
 }

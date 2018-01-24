@@ -1767,6 +1767,7 @@ function _stlouis_fetch_user() {
     if ($next_level == 0) $next_level = 99999999;
 
     $extra_messages .= '<div class="level-up">
+      <div class="wise_old_man happy"></div>
       <div class="level-up-header">Congratulations!</div>
       <div class="level-up-text">You have reached level ' .
     $game_user->level . '!</div>';
