@@ -320,97 +320,81 @@ firep($now, 'time now');
   return TRUE;
 }
 
-  function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target,
-    &$can_do_again) {
+function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
+  $can_do_again = FALSE;
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
-    $can_do_again = FALSE;
+  if (empty($game_user->fkey_clans_id)) { // not a member of a clan
 
-    if (empty($game_user->fkey_clans_id)) { // not a member of a clan
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not a member of a clan!') .
+      '</div><div class="action-effect">You don\'t belong to a clan.&nbsp;
+      You cannot leave it.</div>';
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not a member of a clan!') .
-        '</div><div class="action-effect">You don\'t belong to a clan.&nbsp;
-        You cannot leave it.</div>';
+    return FALSE;
+  }
 
-      return false;
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 
-    }
+  if ($item->is_clan_leader) { // clan leader? delete entire clan
 
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+    $sure = check_plain($_GET['sure']);
+    if ($sure != 'yes') {
 
-    if ($item->is_clan_leader) { // clan leader? delete entire clan
-
-      $sure = check_plain($_GET['sure']);
-
-      if ($sure != 'yes') {
-
-        $outcome_reason = '<div class="subtitle">Are you sure?</div>
-          <div class="subsubtitle">
-            This dissolves <strong>the entire clan</strong> and cannot be undone!
+      $outcome_reason = '<div class="subtitle">Are you sure?</div>
+        <div class="subsubtitle">
+          This dissolves <strong>the entire clan</strong> and cannot be undone!
+        </div>
+        <div class="try-an-election-wrapper">
+          <div class="try-an-election">
+            <a href="/' . $game . '/actions_do/' .
+            $phone_id . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
           </div>
-          <div class="try-an-election-wrapper">
-            <div class="try-an-election">
-              <a href="/' . $game . '/actions_do/' .
-              $phone_id . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
-            </div>
-            <div class="try-an-election">
-              <a href="/' . $game . '/actions/' . $phone_id .
-              '">No, I\'m not sure</a>
-            </div>
-          </div>';
+          <div class="try-an-election">
+            <a href="/' . $game . '/actions/' . $phone_id .
+            '">No, I\'m not sure</a>
+          </div>
+        </div>';
 
-          return false;
-
-      }
-
-      $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-      $result = db_query($sql, $game_user->fkey_clans_id);
-      $sql = 'delete from clan_members where fkey_clans_id = %d;';
-      $result = db_query($sql, $game_user->fkey_clans_id);
-      $sql = 'delete from clans where id = %d;';
-      $result = db_query($sql, $game_user->fkey_clans_id);
-      $outcome_reason .= '<div class="action-effect">' .
-        t('You have dissolved your clan') . '</div>';
-
-    } else {
-
-      $sql = 'delete from clan_members where fkey_users_id = %d;';
-      $result = db_query($sql, $game_user->id);
-      $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
-      $result = db_query($sql, $game_user->id);
-
-// tell the clan
-      $sql = 'insert into clan_messages (fkey_users_from_id,
-        fkey_neighborhoods_id, message) values (%d, %d, "%s");';
-      $message = $game_user->username . ' has left your clan.';
-      $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
-
-      $outcome_reason .= '<div class="action-effect">' .
-        t('You have left your clan') . '</div>';
-
+        return FALSE;
     }
 
-    return TRUE;
+    $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
+    $result = db_query($sql, $game_user->fkey_clans_id);
+    $sql = 'delete from clan_members where fkey_clans_id = %d;';
+    $result = db_query($sql, $game_user->fkey_clans_id);
+    $sql = 'delete from clans where id = %d;';
+    $result = db_query($sql, $game_user->fkey_clans_id);
+    $outcome_reason .= '<div class="action-effect">' .
+      t('You have dissolved your clan') . '</div>';
+  }
+  else {
 
+    $sql = 'delete from clan_members where fkey_users_id = %d;';
+    db_query($sql, $game_user->id);
+    $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
+    db_query($sql, $game_user->id);
+
+    // Tell the clan.
+    $sql = 'insert into clan_messages (fkey_users_from_id,
+      fkey_neighborhoods_id, message) values (%d, %d, "%s");';
+    $message = $game_user->username . ' has left your clan.';
+    db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
+
+    $outcome_reason .= '<div class="action-effect">' .
+      t('You have left your clan') . '</div>';
   }
 
-
-  function _celestial_glory_action_leave_your_clan_function(&$outcome_reason,
-    $target) {
-
-    return _stlouis_action_leave_your_clan_function($outcome_reason, $target);
-
-  }
-
+  return TRUE;
+}
 
   function _stlouis_action_remove_a_clan_member_function(&$outcome_reason,
     $target, &$can_do_again) {
@@ -935,16 +919,6 @@ EOF;
 
   }
 
-
-  function _celestial_glory_action_run_someone_out_of_the_region_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    return _stlouis_action_declare_someone_persona_non_grata_function($outcome_reason,
-      $target, $can_do_again);
-
-  }
-
-
   function _stlouis_action_roll_call_function(&$outcome_reason, $target) {
 
     global $game, $phone_id;
@@ -1059,14 +1033,6 @@ EOF;
     return true;
 
   }
-
-
-  function _celestial_glory_action_take_a_census_function(&$outcome_reason, $target) {
-
-    return _stlouis_action_roll_call_function($outcome_reason, $target);
-
-  }
-
 
   function _stlouis_action_ping_function(&$outcome_reason, $target) {
 
@@ -1369,27 +1335,25 @@ function _celestial_glory_action_bear_your_testimony_function(&$outcome_reason,
   }
 
 
-  function _celestial_glory_action_eat_some_food_function(&$outcome_reason,
-    $target) {
+function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+//  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
 
-    $sql = 'update equipment_ownership set quantity = quantity - 1
-      where fkey_users_id = %d and fkey_equipment_id = 1;';
-    $result = db_query($sql, $game_user->id);
+  $sql = 'update equipment_ownership set quantity = quantity - 1
+    where fkey_users_id = %d and fkey_equipment_id = 7;';
+  $result = db_query($sql, $game_user->id);
 
-    $sql = 'update users set energy = energy + 10 where id = %d;';
-    $result = db_query($sql, $game_user->id);
+  $sql = 'update users set energy = energy + 10 where id = %d;';
+  db_query($sql, $game_user->id);
 
-    $outcome_reason .= '<div class="action-effect">' .
-      t('You have eaten and feel more energetic') . '</div>';
+  $outcome_reason .= '<div class="action-effect">' .
+    t('You have eaten and feel more energetic') . '</div>';
 
-    return true;
-
-  }
+  return TRUE;
+}
 
 
   function _celestial_glory_action_fast_and_pray_function(&$outcome_reason,
