@@ -1344,7 +1344,9 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 
   $sql = 'update equipment_ownership set quantity = quantity - 1
     where fkey_users_id = %d and fkey_equipment_id = 7;';
-  $result = db_query($sql, $game_user->id);
+  // Chance of loss will decrease the food, so this db query is not run.
+  //  db_query($sql, $game_user->id);
+
 
   $sql = 'update users set energy = energy + 10 where id = %d;';
   db_query($sql, $game_user->id);
