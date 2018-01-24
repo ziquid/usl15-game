@@ -35,7 +35,7 @@ EOF;
   firep($action);
 
   $data = actionlist();
-  
+
   foreach ($data as $item) {
     $list_of_actions[] = $item->id ;
   }
@@ -66,7 +66,7 @@ Please select a target
 EOF;
 
     db_set_active('default');
-    return;  
+    return;
 
   }
 
@@ -98,7 +98,7 @@ EOF;
   $result = db_query($sql, $_GET['target']);
   $target = db_fetch_object($result);
   firep($target);
-  
+
   $name = str_replace('%value', $game_user->values, $action->name);
 
   $title = "$name $action->preposition $target->ep_name $target->username";
@@ -110,44 +110,44 @@ EOF;
 
 // check to see if prerequisites are met
   if ($game_user->actions < $action->cost) {
-   
+
     $action_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' . t('Out of Action!') .
       '</div>';
 
     if (substr($phone_id, 0, 3) == 'ai-')
       $ai_output = 'action-failed no-action';
-   
+
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
       $arg2 . '/action?destination=/' . $game . '/actions/' . $arg2 .
       '">Refill your Action (1&nbsp;Luck)</a></div></div>';
-   
+
   }
 
   if (($game_user->money < $action->values_cost) &&
     ($action->values_cost > 0)) {
-   
+
     $action_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' .
     t('Out of @value!', array('@value' => $game_user->values)) .
       '</div>';
-    
+
     if (substr($phone_id, 0, 3) == 'ai-')
       $ai_output = 'action-failed no-money';
-   
+
     $offer = ($game_user->income - $game_user->expenses) * 5;
     $offer = min($offer, $game_user->level * 1000);
     $offer = max($offer, $game_user->level * 100);
-  
+
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
       $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .
-      '">Receive ' . $offer . ' ' . $game_user->values . 
+      '">Receive ' . $offer . ' ' . $game_user->values .
       ' (1&nbsp;Luck)</a></div></div>';
-   
+
   }
-   
+
   $action_function = '_' . $game . '_action_' .
     strtolower(str_replace(
       array(' ', '%', "'", '.', '(', ')'),
@@ -167,13 +167,13 @@ if ($action_succeeded) {
   } else {
     $show_all = '';
   }
-    
+
 // special case for meet someone new in Fairground Park
   if (($action_function == '_stlouis_action_meet_someone_new_function') &&
     ($game_user->fkey_neighborhoods_id == 80)) {
     $show_all = '?want_jol=yes';
   }
-    
+
 // decrement available actions
   $sql = 'update users set actions = actions - %d where id = %d;';
   $result = db_query($sql, $action->cost,  $game_user->id);
@@ -194,27 +194,27 @@ if ($action_succeeded) {
     $inf_change = $action->influence_change;
 
     if ($action->target == 'none') { // no target - actions affect player
-        
+
       $target_name = 'Your';
       $target_id = $game_user->id;
-        
+
     } else { // there is a target involved
-        
+
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
       $target_id = $_GET['target'];
-        
+
     }
 
     $sql = 'update users set experience = greatest(experience + %d, 0)
       where id = %d;';
     $result = db_query($sql, $inf_change,  $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name .
-         ' ' . $experience . ' is ' . 
+         ' ' . $experience . ' is ' .
     (($inf_change > 0) ? 'increased' : 'decreased') .
         ' by ' . abs($inf_change) . '</div>';
-    
+
     // now save the record of what happened, if positive and not done to yourself
-    
+
     if (($game_user->id != $target_id) && ($inf_change > 0)) {
       $sql = 'insert into challenge_history 
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
@@ -222,7 +222,7 @@ if ($action_succeeded) {
         ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
       $result = db_query($sql, $game_user->id, $target_id,
         $game_user->fkey_neighborhoods_id, $target->ep_id, 0,
-        "$game_user->username gave a gift of $experience to " . 
+        "$game_user->username gave a gift of $experience to " .
         substr($target_name, 0, strlen($target_name) - 2) . '.',
         "$game_user->username gave a gift of $inf_change $experience " .
         'to ' . substr($target_name, 0, strlen($target_name) - 2) .
@@ -242,12 +242,12 @@ if ($action_succeeded) {
 
       $target_name = 'Your';
       $target_id = $game_user->id;
-        
+
     } else { // target, negative, or smaller positive ratings
-        
+
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
       $target_id = $_GET['target'];
-        
+
     }
 
     // affect rating
@@ -267,9 +267,9 @@ if ($action_succeeded) {
     $rat_change . '% (now at ' . $rating->approval_rating . '%)</div>';
 
   }
-  
+
 // change hood rating
-  
+
   if ($action->neighborhood_rating_change != 0) {
 
     $rat_change = $action->neighborhood_rating_change;
@@ -306,13 +306,13 @@ if ($action_succeeded) {
   // values CHANGE (ie, what target gets)
 
   if ($action->values_change != 0) {
-     
+
     $target_name = $target->ep_name . ' ' . $target->username . '\'s';
     $target_id = $_GET['target'];
-    
+
     $sql = 'select money from users where id = %d;';
     $result = db_query($sql, $target_id);
-    
+
     if ($action->values_change > 0) {
       $verb = 'increased';
       $money = $action->values_change;
@@ -327,26 +327,26 @@ if ($action_succeeded) {
     $result = db_query($sql, $money, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name . ' ' .
     $game_user->values . ' is ' . $verb . ' by ' . abs($money) . '</div>';
-    
+
     if ($action->values_change < 0) {
       $can_do_again = FALSE;
-      
+
       $sql = 'update users set money = money + %d where id = %d;';
       $result = db_query($sql, abs(floor($money / 2)), $game_user->id);
       $outcome_reason .= '<div class="action-effect">You gain half</div>';
-    
-    }      
+
+    }
 
   }
-  
+
   if ($action->actions_change != 0) {
-     
+
     $target_name = $target->ep_name . ' ' . $target->username . '\'s';
     $target_id = $_GET['target'];
-    
+
     $sql = 'select actions from users where id = %d;';
     $result = db_query($sql, $target_id);
-    
+
     if ($action->actions_change > 0) {
       $verb = 'increased';
       $act_change = $action->actions_change;
@@ -360,41 +360,41 @@ if ($action_succeeded) {
     $result = db_query($sql, $act_change, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name .
      ' Action is ' . $verb . ' by ' . abs($act_change) . '</div>';
-    
+
     if ($action->actions_change < 0) {
       $can_do_again = FALSE;
-      
+
       $sql = 'update users set actions = actions + %d where id = %d;';
       $result = db_query($sql, abs(floor($act_change / 2)), $game_user->id);
       $outcome_reason .= '<div class="action-effect">You gain half</div>';
-    
-    }      
+
+    }
 
   }
-  
-  // chance of loss - equipment
+
+  // Chance of loss - equipment.
   if ($action->fkey_equipment_id) { // any equipment for this action?
 
     $sql = 'select * from equipment where id = %d;';
     $result = db_query($sql, $action->fkey_equipment_id);
     $eq = db_fetch_object($result);
 firep($eq);
-  
-    if ($eq->chance_of_loss >= mt_rand(1,110)) { // did it wear out?
-      // 110 instead of 100% to give a little extra chance of having it work
-      
-firep($eq->name . ' wore out!');
+
+    // Did it wear out?
+    // 110 instead of 100% to give a little extra chance of having it work.
+    if ($eq->chance_of_loss >= mt_rand(1, 110)) {
+
+//firep($eq->name . ' wore out!');
       $sql = 'update equipment_ownership set quantity = quantity - 1
         where fkey_equipment_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $eq->id, $game_user->id);
-      
-// player expenses need resetting?
 
-      if ($eq->upkeep > 0) { // subtract upkeep from your expenses
+      // Do player expenses need resetting?
+      if ($eq->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $eq->upkeep, $game_user->id);
       } // FIXME: do this before _stlouis_header so that upkeep is accurate
-      
+
       $stuff = strtolower($eq->name);
       if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
 
@@ -405,90 +405,86 @@ firep($eq->name . ' wore out!');
       $failure = db_fetch_object($result);
 
       if ($failure->message != '') {
-
         $outcome_reason .= '<div class="subtitle">' . $failure->message .
           '</div>';
-
-      } else {
-        
+      }
+      else {
         $outcome_reason .= '<div class="subtitle">' .
           t('Your @stuff has/have worn out',
           array('@stuff' => $stuff)) . '</div>';
-
       }
-        
+
       $sql = 'select quantity from equipment_ownership
         where fkey_equipment_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $eq->id, $game_user->id);
       $eo = db_fetch_object($result);
-      
-      if ($eo->quantity == 0) $can_do_again = FALSE;
-      
-    } else {
-      
-      $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
-        
-firep($eq->name . ' did NOT wear out');
 
+      if ($eo->quantity == 0) $can_do_again = FALSE;
+
+    }
+    else {
+
+      $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
+//firep($eq->name . ' did NOT wear out');
     } // did anything wear out?
 
   } // any equipment?
 
-// chance of loss - aides
+  // Chance of loss - aides.
   if ($action->fkey_staff_id) { // any staff for this action?
 
     $sql = 'select * from staff where id = %d;';
     $result = db_query($sql, $action->fkey_staff_id);
     $st = db_fetch_object($result);
 firep($st);
-  
-    if ($st->chance_of_loss >= mt_rand(1,110)) { // did it wear out?
-      
+
+    if ($st->chance_of_loss >= mt_rand(1, 110)) { // did it wear out?
+
 firep($st->name . ' has run away!');
       $sql = 'update staff_ownership set quantity = quantity - 1
         where fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $st->id, $game_user->id);
-      
+
 // player expenses need resetting?
 
       if ($st->upkeep > 0) { // subtract upkeep from your expenses
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $st->upkeep, $game_user->id);
       } // FIXME: do this before _stlouis_header so that upkeep is accurate
-      
-      $outcome_reason .= '<div class="subtitle">' . 
+
+      $outcome_reason .= '<div class="subtitle">' .
         t('Your @staff has/have run away or been caught',
         array('@staff' => strtolower($st->name))) . '</div>';
-        
+
       $sql = 'select quantity from staff_ownership
         where fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $st->id, $game_user->id);
       $so = db_fetch_object($result);
-      
+
       if ($so->quantity == 0) $can_do_again = FALSE;
-      
+
     } else {
-      
+
       $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
-      
+
 firep($st->name . ' did NOT run away');
 
     } // did anything wear out?
 
   } // any equipment?
-  
+
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
-      href="/' . $game . '/user/' . $arg2 . '/' . $target->phone_id . 
+      href="/' . $game . '/user/' . $arg2 . '/' . $target->phone_id .
       $show_all .
-      '">View ' . $target->ep_name . ' ' . $target->username . 
+      '">View ' . $target->ep_name . ' ' . $target->username .
       '</a></div></div>';
-   
+
     if ($can_do_again) {
       $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
-      '?target=' . $_GET['target'] . 
+      '?target=' . $_GET['target'] .
       '">Do it again</a></div></div>';
     } else {
       $outcome_reason .= '<div class="try-an-election-wrapper"><div
@@ -499,18 +495,18 @@ firep($st->name . ' did NOT run away');
       class="try-an-election"><a
       href="/' . $game . '/actions/' . $arg2 .
       '">Perform a different action</a></div></div>';
-   
+
     $game_user = $fetch_user(); // reprocess user object
 
 } else { // failed - try a different action
-   
+
   $outcome_reason .= '<div class="try-an-election-wrapper"><div
     class="try-an-election"><a
     href="/' . $game . '/actions/' . $arg2 .
     '">Perform a different action</a></div></div>';
 
   $ai_output = 'action-failed';
-   
+
 } // action succeeded
 
   $fetch_header($game_user);
