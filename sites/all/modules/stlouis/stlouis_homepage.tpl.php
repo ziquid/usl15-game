@@ -81,6 +81,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
     $game_user = $fetch_user();
 
     $extra_bonus = '<div class="level-up">
+        <div class="wise_old_man happy"></div>
         <div class="level-up-header">Daily Bonus!</div>
         <div class="level-up-text">You have received a bonus of ' .
           $money . ' ' . $game_user->values . '!</div>' .
