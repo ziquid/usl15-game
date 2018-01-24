@@ -103,7 +103,7 @@ li {
 }
 
 .quests .quest-required_stuff.missing {
-  color: #a41c43;
+  color: #c4244f;
 }
 
 .quests .quest-loot {
@@ -112,7 +112,7 @@ li {
 
 .quests .quest-payout.negative,
 .land .land-payout.negative, .land-soon .land-payout.negative {
-  color: #a41c43;
+  color: #c4244f;
 }
 
 .quests .quest-description, .land .land-description {
@@ -138,7 +138,7 @@ li {
 }
 
 .quest-failed, .election-failed, .land-failed, .title.failed {
-  color: #a41c43;
+  color: #c4244f;
 }
 
 .quest-do-again, .land-buy-again {
@@ -242,7 +242,7 @@ li {
 }
 
 .username-error {
-  color: #a41c43;
+  color: #c4244f;
 }
 
 .elections-header {

@@ -794,6 +794,13 @@ EOF;
 
         } // elocution bonus?
 
+        // Upkeep.
+        if ($loot->upkeep > 0) {
+          $loot_html .=<<< EOF
+      <div class="quest-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
+EOF;
+        }
+
         $loot_html .=<<< EOF
       <p class="second">&nbsp;</p>
     </div>
