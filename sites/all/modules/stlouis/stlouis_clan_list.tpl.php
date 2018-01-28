@@ -22,12 +22,12 @@
 </div>
 <div class="title">Clan List</div>
 EOF;
-	
+
   $data = array();
   $sql = 'SELECT username, experience, initiative, endurance, 
   	elocution, debates_won, debates_lost, skill_points, luck,
   	debates_last_time, users.fkey_values_id, level, phone_id,
-  	`values`.clan_title, `values`.clan_icon,
+  	`values`.party_title, `values`.party_icon,
     `values`.name, users.id, users.fkey_neighborhoods_id,
     elected_positions.name as ep_name,
     elected_officials.approval_rating,
@@ -54,12 +54,12 @@ EOF;
 		
 		WHERE clan_members.fkey_clans_id = %d
 		ORDER by users.experience DESC;';
-  
+
   $result = db_query($sql, $clan_id);
   while ($item = db_fetch_object($result)) $data[] = $item;
 
   $num_members = count($data);
-  
+
     echo <<< EOF
 <div>{$data[0]->clan_name} ({$data[0]->clan_acronym}) ($num_members members) -
   {$data[0]->clan_rules}</div>
@@ -72,7 +72,7 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   foreach ($data as $item) {
 firep($item);
 
@@ -80,10 +80,10 @@ firep($item);
   	$action_class = '';
   	$official_link = $item->ep_name;
 		$clan_class = 'election-details';
-		
+
   	if ($item->can_broadcast_to_party)
   		$official_link .= '<div class="can-broadcast-to-party">*</div>';
-  		
+
    	$official_link .= '<br/><a href="/' . $game . '/user/' .
  		  $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
@@ -92,7 +92,7 @@ firep($item);
 
 	  if (!empty($item->clan_acronym))
 	  	$clan_acronym = "($item->clan_acronym)";
-	  	
+
 	  if ($item->is_clan_leader)
 	  	$clan_acronym .= '*';
 
@@ -104,8 +104,8 @@ firep($item);
 		Level $item->level</div>
 </div>
 EOF;
-  
+
   } // foreach position
-  
+
   db_set_active('default');
-  
+
