@@ -464,16 +464,6 @@ mail('joseph@cheek.com', $target_name . ' has been forcibly removed',
 
   }
 
-
-  function _celestial_glory_action_remove_a_clan_member_function(
-    &$outcome_reason, $target) {
-
-    return _stlouis_action_remove_a_clan_member_function($outcome_reason,
-      $target);
-
-  }
-
-
   function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
     $target) {
 
@@ -522,20 +512,11 @@ mail('joseph@cheek.com', $target_name . ' has been forcibly removed',
 
   }
 
-
-  function _celestial_glory_action_change_clan_leadership_function(&$outcome_reason, $target) {
-
-    return _stlouis_action_change_clan_leadership_function($outcome_reason, $target);
-
-  }
-
-
-  function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target) {
+  function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target, &$can_do_again) {
 
     global $game, $phone_id;
 
     $fetch_user = '_' . arg(0) . '_fetch_user';
-
     $game_user = $fetch_user();
     include(drupal_get_path('module', $game) . '/game_defs.inc');
     $action_id = arg(3);
@@ -543,10 +524,9 @@ mail('joseph@cheek.com', $target_name . ' has been forcibly removed',
     $clan_rules = check_plain($_GET['rules']);
 
     $sql = 'select * from clan_members where fkey_users_id = %d;';
-// limited to 1 in db
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
-firep($item);
+firep($item, 'clan member');
 
     if ($item->is_clan_leader != 1) { // not clan leader
 
@@ -555,11 +535,11 @@ firep($item);
         '</div><div class="action-effect">You are not the clan leader.&nbsp;
         You cannot perform this action.</div>';
 
-      return false;
-
+      return FALSE;
     }
 
-    if (empty($clan_rules)) { // ask for rules
+    // Ask for rules.
+    if (empty($clan_rules)) {
 
       $sql = 'select rules from clans where id = %d;';
 // limited to 1 in db
@@ -576,37 +556,25 @@ firep($item);
 </div>
 EOF;
 
-      return false;
-
-    } // no new rules
+      return FALSE;
+    }
 
     $sql = 'update clans set rules = "%s"
       where id = %d;';
-    $result = db_query($sql, $clan_rules, $game_user->fkey_clans_id);
+    db_query($sql, $clan_rules, $game_user->fkey_clans_id);
 
     $sql = 'insert into clan_messages (fkey_users_from_id,
       fkey_users_to_id, message) values
       (%d, (select id from clans where acronym = "%s"), "%s");';
     $message = 'The clan rules have changed.&nbsp; Please read them at your
       earliest convenience.';
-    $result = db_query($sql, $game_user->id, $clan_acronym, $message);
+    db_query($sql, $game_user->id, $clan_acronym, $message);
 
     $outcome_reason .= '<div class="action-effect">The clan rules have
       successfully been changed.';
 
-    return true;
-
+    return TRUE;
   }
-
-
-  function _celestial_glory_action_change_clan_rules_function(&$outcome_reason,
-    $target) {
-
-      return _stlouis_action_change_clan_rules_function($outcome_reason,
-        $target);
-
-  }
-
 
   function _stlouis_action_write_on_a_billboard_function(&$outcome_reason,
     $target) {
@@ -1316,8 +1284,10 @@ function _celestial_glory_action_bear_your_testimony_function(&$outcome_reason,
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
         fkey_elected_positions_id, won, desc_short, desc_long) values
         ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
-     $result = db_query($sql, $game_user->id, $target_id,$game_user->fkey_neighborhoods_id, $target->ep_id, 0,
-        "$game_user->username gave a gift of Luck to " .$target_name. '.',"$game_user->username gave a gift of 10 Luck to " . $target_name.
+     $result = db_query($sql, $game_user->id, $target_id,$game_user->fkey_neighborhoods_id,
+       $target->ep_id, 0,
+       "$game_user->username gave a gift of Luck to " .$target_name. '.',
+       "$game_user->username gave a gift of 10 Luck to " . $target_name.
         ' (currently ' . $target->luck . ').');
 
     $sql = 'update users set luck = luck - 10 where id = %d;';
@@ -2758,7 +2728,8 @@ EOF;
     $arg2 = check_plain(arg(2));
     $sure = check_plain($_GET['sure']);
 
-    $sql = 'SELECT id FROM {clan_members} c WHERE c.fkey_users_id = %d AND c.fkey_clans_id = %d AND c.is_clan_leader = 1';
+    $sql = 'SELECT id FROM {clan_members} c
+    WHERE c.fkey_users_id = %d AND c.fkey_clans_id = %d AND c.is_clan_leader = 1';
     $is_clan_leader = db_result(db_query($sql, (int)$game_user->id, (int)$game_user->fkey_clans_id));
 
     if (empty($is_clan_leader)) {
