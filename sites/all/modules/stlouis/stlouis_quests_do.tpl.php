@@ -764,7 +764,7 @@ EOF;
    src="/sites/default/files/images/equipment/$game-$loot->id.png" width="96"></div>
   <div class="quest-details">
     <div class="quest-name loot">$loot->name</div>
-    <div class="quest-description">$loot->description &nbsp;</div>
+    <div class="quest-description">$loot->description</div>
 EOF;
 
         if ($loot->initiative_bonus > 0) {
@@ -871,9 +871,46 @@ EOF;
    src="/sites/default/files/images/staff/$game-$loot->id.png" width="96"></div>
   <div class="quest-details">
     <div class="quest-name loot">$loot->name</div>
-    <div class="quest-description">$loot->description &nbsp;</div>
-    <p class="second">&nbsp;</p>
-  </div>
+    <div class="quest-description">$loot->description</div>
+EOF;
+
+        if ($loot->initiative_bonus > 0) {
+
+          $loot_html .=<<< EOF
+      <div class="quest-payout">$initiative: +$loot->initiative_bonus
+        </div>
+EOF;
+
+    } // initiative bonus?
+
+    if ($loot->endurance_bonus > 0) {
+
+      $loot_html .=<<< EOF
+    <div class="quest-payout">$endurance: +$loot->endurance_bonus
+      </div>
+EOF;
+
+    } // endurance bonus?
+
+    if ($loot->elocution_bonus > 0) {
+
+      $loot_html .=<<< EOF
+      <div class="quest-payout">$elocution: +$loot->elocution_bonus
+        </div>
+EOF;
+
+    } // elocution bonus?
+
+    // Upkeep.
+    if ($loot->upkeep > 0) {
+      $loot_html .=<<< EOF
+      <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
+EOF;
+    }
+
+    $loot_html .=<<< EOF
+      <p class="second">&nbsp;</p>
+    </div>
 EOF;
 
 // add/update db entry
