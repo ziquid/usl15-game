@@ -829,7 +829,8 @@ EOF;
           $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
             $game_user->id);
 
-        } else { // existing record - update it
+        }
+        else { // existing record - update it
 
           $sql = 'update equipment_ownership set quantity = quantity + 1 where
             fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -837,6 +838,10 @@ EOF;
             $game_user->id);
 
         } // add/update db entry
+
+        if ($loot->upkeep > 0) {
+          _recalc_income($game_user);
+        }
 
       } // check for income < expenses after loot
 
@@ -906,6 +911,7 @@ EOF;
       $loot_html .=<<< EOF
       <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
 EOF;
+      _recalc_income($game_user);
     }
 
     $loot_html .=<<< EOF
@@ -913,8 +919,7 @@ EOF;
     </div>
 EOF;
 
-// add/update db entry
-
+      // Add/update db entry.
       $sql = 'SELECT staff.*, staff_ownership.quantity
         FROM staff
 
@@ -934,7 +939,8 @@ EOF;
         $result = db_query($sql, $game_quest->fkey_loot_staff_id,
           $game_user->id);
 
-      } else { // existing record - update it
+      }
+      else { // existing record - update it
 
         $sql = 'update staff_ownership set quantity = quantity + 1 where
           fkey_staff_id = %d and fkey_users_id = %d;';
@@ -942,6 +948,10 @@ EOF;
           $game_user->id);
 
       } // add/update db entry
+
+      if ($loot->upkeep > 0) {
+        _recalc_income($game_user);
+      }
 
     } // check for loot - staff
 

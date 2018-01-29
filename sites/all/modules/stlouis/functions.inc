@@ -881,7 +881,7 @@ function _recalc_income(&$game_user) {
     on land_ownership.fkey_land_id = land.id and
     land_ownership.fkey_users_id = %d)
     where id = %d;';
-  $result = db_query($sql, $game_user->id, $game_user->id);
+  db_query($sql, $game_user->id, $game_user->id);
 
   $sql = 'SELECT sum(equipment.upkeep * equipment_ownership.quantity)
     as expenses from equipment
@@ -900,7 +900,7 @@ function _recalc_income(&$game_user) {
   $st = db_fetch_object($result);
 
   $sql = 'update users set expenses = %d where id = %d;';
-  $result = db_query($sql, $eq->expenses + $st->expenses, $game_user->id);
+  db_query($sql, $eq->expenses + $st->expenses, $game_user->id);
 
   $sql = 'select income, expenses from users
     where id = %d;';
@@ -908,17 +908,6 @@ function _recalc_income(&$game_user) {
   $item = db_fetch_object($result);
   $game_user->income = $item->income;
   $game_user->expenses = $item->expenses;
-
-// no income at all?  add entry for 'unemployed' job
-
-  if ($item->income == 0) {
-
-    $sql = 'insert into land_ownership
-      (fkey_land_id, fkey_users_id, quantity)
-      values (0, %d, 1);';
-    $result = db_query($sql, $game_user->id);
-
-  }
 
 }
 
