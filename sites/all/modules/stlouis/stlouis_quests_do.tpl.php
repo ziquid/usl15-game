@@ -14,10 +14,10 @@
   $data = db_fetch_object($result);
   $location = $data->name;
 
-  $sql = 'select clan_title from `values` where id = %d;';
+  $sql = 'select party_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
-  $clan_title = preg_replace('/^The /', '', $data->clan_title);
+  $party_title = preg_replace('/^The /', '', $data->party_title);
 
   $data = array();
   $sql = 'select quests.*, neighborhoods.name as hood from quests
@@ -969,7 +969,7 @@ EOF;
 
      }
 
-    $description = str_replace('%clan', "<em>$clan_title</em>",
+    $description = str_replace('%party', "<em>$party_title</em>",
       $game_quest->description);
 
     echo <<< EOF
@@ -1183,7 +1183,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $description = str_replace('%clan', "<em>$clan_title</em>",
+    $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
 
     if (empty($item->percent_complete)) $item->percent_complete = 0;
@@ -1434,7 +1434,7 @@ EOF;
 
     foreach ($data as $item) {
 
-      $description = str_replace('%clan', "<em>$clan_title</em>",
+      $description = str_replace('%party', "<em>$party_title</em>",
         $item->description);
 firep($description);
       echo <<< EOF
