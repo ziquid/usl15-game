@@ -17,6 +17,7 @@
   <p>January 3, 2018 Alpha release 0.0.1</p>
   <h4>Please note this release is for testing only</h4>
   <h4>Do not expect anything in this release to be permanent</h4>
+  <p>Jan 30: Fixed resetting your player</p>
   <p>Jan 27: Fixed clan list, added clan rules</p>
   <p>Jan 24: Fixed referral codes</p>
   <p>Jan 9: Some Galaxy S8 devices have the home page and map screen off a little.

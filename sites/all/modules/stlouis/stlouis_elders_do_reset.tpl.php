@@ -10,27 +10,27 @@
   $arg2 = check_plain(arg(2));
 
   $reset_me = check_plain(trim($_GET['reset_me']));
-  
+
   if (strtoupper($reset_me) == 'RESET ME') { // to prevent errant resets
-    
+
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'UPDATE bank_accounts SET active = 0 where fkey_users_id = %d';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'delete from equipment_ownership where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'delete from land_ownership where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'delete from staff_ownership where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-       
+
     $sql = 'delete from quest_completion where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'delete from quest_group_completion where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
 
@@ -39,60 +39,40 @@
 
     $sql = 'delete from challenge_messages where fkey_users_to_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
+
     $sql = 'select * from clan_members where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
-    
+
     if ($item->is_clan_leader) { // clan leader? delete entire clan
-      
+
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $game_user->fkey_clans_id);
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $item->id);
       $sql = 'delete from clans where id = %d;';
       $result = db_query($sql, $item->id);
-      
+
     } else {
-      
+
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $game_user->id);
-      
+
     }
 
     $sql = 'delete from quest_completion where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-    
-    if ($game == 'stlouis') {
-      $default_neighborhood = 81;
-      $default_value = 'Greenbacks';
-    }
 
-    if ($game == 'celestial_glory') {
-
-      $sql = 'SELECT count(users.id) as count,
-        fkey_neighborhoods_id from users
-        left join neighborhoods on neighborhoods.id = users.fkey_neighborhoods_id
-        group by fkey_neighborhoods_id
-        order by count asc
-        limit 1;';
-
-      $result = db_query($sql);
-      $item = db_fetch_object($result);
-      $default_neighborhood = $item->fkey_neighborhoods_id;
-      $default_value = 'Faith';
-    }
+    $default_neighborhood = 81;
+    $default_value = 'Greenbacks';
 
     if ($game_user->luck > 10) {
-
       $luck_in_sql = $game_user->luck;
-
-    } else {
-
-      $luck_in_sql = 10;
-
     }
-    
+    else {
+      $luck_in_sql = 10;
+    }
+
     $sql = "UPDATE users 
       SET username = '',
       password = '',
@@ -120,7 +100,6 @@
       debates_lost = 0,
       debates_last_time = '0000-00-00 00:00:00', 
       last_bonus_date = '0000-00-00', 
-      family_members_found = 0,
       skill_points = 0,
       luck = %d,
       seen_neighborhood_quests = 0,
@@ -128,12 +107,11 @@
       WHERE id = %d;";
     $result = db_query($sql, $default_neighborhood, $default_value,
       $luck_in_sql, $game_user->id);
-  
+
     drupal_goto($game . '/welcome/' . $arg2);
-  
-  } else {
-    
+
+  }
+  else {
     drupal_goto($game . '/elders_ask_reset/' . $arg2,'msg=error');
     //drupal_goto($game . '/user/' . $arg2);
-    
   }
