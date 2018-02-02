@@ -2862,7 +2862,7 @@ firep($eq->name . ' wore out!');
 
 
 function send_user_message($from, $to, $private = 0, $message) {
-
+return;
   $sql = 'insert into user_messages (fkey_users_from_id,
     fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
   db_query($sql, $from, $to, $private, $message);
