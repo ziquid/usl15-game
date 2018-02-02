@@ -54,7 +54,7 @@
 
     $options['land-sell-succeeded'] = 'failed not-enough-land';
     $ai_output = 'land-failed not-enough-land';
-    _karma($game_user,
+    karma($game_user,
       "trying to sell $quantity of $game_land->name but only has $game_land->quantity",
       $quantity * -10);
 
@@ -65,7 +65,7 @@
 
     $options['land-sell-succeeded'] = 'failed cant-sell';
     $ai_output = 'land-failed cant-sell';
-    _karma($game_user, "trying to sell unsalable $game_land->name", -100);
+    karma($game_user, "trying to sell unsalable $game_land->name", -100);
 
   }
 
@@ -74,7 +74,7 @@
 
     $options['land-sell-succeeded'] = 'failed cant-sell-job';
     $ai_output = 'land-failed cant-sell-job';
-    _karma($game_user, "trying to sell job $game_land->name", -100);
+    karma($game_user, "trying to sell job $game_land->name", -100);
 
   } // job?
 
@@ -82,30 +82,22 @@
 // success!
 
   if ($options['land-sell-succeeded'] == 'sell-success') {
-
-    if ($game_land->type == 'investment') { // investment?  add competency
-
-      competency_lose($game_user, 'investing', $quantity);
-
-    }
-
+//    if ($game_land->type == 'investment') { // investment?  add competency
+//      competency_lose($game_user, 'investing', $quantity);
+//    }
     land_lose($game_user, $land_id, $quantity, $land_price);
-
-  } else { // failed
-
+  }
+  else {
     $quantity = 0;
+  }
 
-  } // sell land succeeded?
-
-
-// time to show the stuff!
-
+  // Show the stuff.
   $fetch_header($game_user);
-  _show_aides_menu($game_user);
+  show_aides_menu($game_user);
 
   $game_land->quantity = $game_land->quantity - (int) $quantity;
 
-  _show_land($game_user, $game_land, $options);
+  show_land($game_user, $game_land, $options);
 
   echo <<< EOF
 <div class="title">
@@ -149,7 +141,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    _show_land($game_user, $item);
+    show_land($game_user, $item);
 
   }
 
@@ -183,6 +175,6 @@ EOF;
 
   $item = db_fetch_object($result);
 
-  if (!empty($item)) _show_land($game_user, $item, array('soon' => TRUE));
+  if (!empty($item)) show_land($game_user, $item, array('soon' => TRUE));
 
   db_set_active('default');

@@ -493,7 +493,7 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
 }
 
 
-function NO_show_land($game_user, $item, $options = array()) {
+function show_land($game_user, $item, $options = array()) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -940,7 +940,7 @@ EOF;
 
 }
 
-function _show_aides_menu($game_user) {
+function show_aides_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -2056,22 +2056,20 @@ function NO_action_use(&$game_user, $quantity = 1) {
 
 }
 
-
-function NO_karma($game_user, $text, $quantity) {
+function karma($game_user, $text, $quantity) {
 
   $sql = 'update users set karma = karma + %d
     where id = %d;';
-  $result = db_query($sql, $quantity, $game_user->id);
+  db_query($sql, $quantity, $game_user->id);
 
   $sql = 'insert into karma (fkey_users_id, text, amount) values
     (%d, "%s", %d);';
-  $result = db_query($sql, $game_user->id,
+  db_query($sql, $game_user->id,
     "$game_user->username gained/lost $quantity karma " .
     "(was: $game_user->karma) for: $text", $quantity);
 
   return TRUE;
 }
-
 
 function competency_level($game_user, $id) {
 // return the user's competency level [0..5] for a given competency

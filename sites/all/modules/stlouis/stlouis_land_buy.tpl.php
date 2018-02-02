@@ -66,7 +66,7 @@ firep($game_land);
 
     $options['land-buy-succeeded'] = 'failed not-required-level';
     $ai_output = 'land-failed not-required-level';
-    _karma($game_user,
+    karma($game_user,
       "trying to purchase $game_land->name at level $game_user->level", -100);
 
   }
@@ -94,7 +94,7 @@ firep($game_land);
 
     $options['land-buy-succeeded'] = 'failed not-required-hood';
     $ai_output = 'land-failed not-required-hood';
-    _karma($game_user,
+    karma($game_user,
       "trying to purchase $game_land->name in wrong hood", -50);
 
   }
@@ -106,7 +106,7 @@ firep($game_land);
 
     $options['land-buy-succeeded'] = 'failed not-required-party';
     $ai_output = 'land-failed not-required-value';
-    _karma($game_user,
+    karma($game_user,
       "trying to purchase $game_land->name in wrong party", -50);
 
   }
@@ -117,7 +117,7 @@ firep($game_land);
 
     $options['land-buy-succeeded'] = 'failed not-active';
     $ai_output = 'land-failed not-active';
-    _karma($game_user,
+    karma($game_user,
       "trying to purchase $game_land->name which is not active", -500);
 
   }
@@ -128,7 +128,7 @@ firep($game_land);
 
     $options['land-buy-succeeded'] = 'failed is-loot';
     $ai_output = 'land-failed is-loot';
-    _karma($game_user,
+    karma($game_user,
       "trying to purchase $game_land->name which is loot", -25);
 
   }
@@ -156,24 +156,21 @@ firep($game_land);
     } // job?
 
     if ($game_land->type == 'investment') { // investment?  add competency
-      competency_gain($game_user, 'investing', $quantity);
+      competency_gain($game_user, 'investing'/*, $quantity*/);
     }
-
     land_gain($game_user, $land_id, $quantity, $land_price);
-
-  } else { // failed
+  }
+  else {
     $quantity = 0;
-  } // buy land succeeded?
+  }
 
-
-// time to show the stuff!
-
+  // Show the stuff.
   $fetch_header($game_user);
-  _show_aides_menu($game_user);
+  show_aides_menu($game_user);
 
   $game_land->quantity = $game_land->quantity + (int) $quantity;
 
-  _show_land($game_user, $game_land, $options);
+  show_land($game_user, $game_land, $options);
 
   echo <<< EOF
 <div class="title">
@@ -217,7 +214,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    _show_land($game_user, $item);
+    show_land($game_user, $item);
 
   }
 
@@ -251,6 +248,6 @@ EOF;
 
   $item = db_fetch_object($result);
 
-  if (!empty($item)) _show_land($game_user, $item, array('soon' => TRUE));
+  if (!empty($item)) show_land($game_user, $item, array('soon' => TRUE));
 
   db_set_active('default');

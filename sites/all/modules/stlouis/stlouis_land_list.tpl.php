@@ -12,7 +12,7 @@
 
   _recalc_income($game_user);
   $fetch_header($game_user);
-  _show_aides_menu($game_user);
+  show_aides_menu($game_user);
 
   $sql_to_add = 'WHERE (((
       fkey_neighborhoods_id = 0
@@ -56,7 +56,7 @@
   foreach ($data as $item) {
 // firep($item);
 
-    _show_land($game_user, $item);
+    show_land($game_user, $item);
 
     $land_price = $item->price + ($item->quantity * $item->price_increase);
     $ai_output .= " $item->id=$land_price";
@@ -94,6 +94,6 @@
   $item = db_fetch_object($result);
 // firep($item);
 
-  if (!empty($item)) _show_land($game_user, $item, array('soon' => TRUE));
+  if (!empty($item)) show_land($game_user, $item, array('soon' => TRUE));
 
   db_set_active('default');
