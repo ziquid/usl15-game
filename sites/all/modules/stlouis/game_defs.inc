@@ -47,8 +47,8 @@
     $game_name_full = 'Uprising: St. Louis';
     $hood = 'Neighborhood';
     $initiative = 'Initiative';
-    $land = 'Business';
-    $land_plural = 'Businesses';
+    $land = 'Income';
+    $land_plural = 'Income';
     $luck = 'Luck';
     $party = 'Political Party';
     $party_small = 'Party';

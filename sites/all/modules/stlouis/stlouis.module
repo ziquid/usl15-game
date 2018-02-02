@@ -134,50 +134,31 @@ function stlouis_cron() {
     $sql = 'update users set meta = "" where meta = "frozen";';
     $result = db_query($sql);
 
-// move all hoods toward a 50 beauty rating
-
-// winter
+  // Move all hoods toward a 50 beauty rating.
   $sql = 'update neighborhoods set rating = 50
     where (rating >= 49.9 AND rating <= 50.1);';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update neighborhoods
     set rating = rating + 0.1
     where rating < 49.9;';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update neighborhoods
     set rating = rating - 0.1
     where rating > 50.1;';
-  $result = db_query($sql);
-/*
-// spring/fall
-  $sql = 'update neighborhoods set rating = 100
-    where (rating >= 99.75 AND rating <= 100.25);';
-  $result = db_query($sql);
+  db_query($sql);
 
-  $sql = 'update neighborhoods
-    set rating = rating + 0.25
-    where rating < 99.75;';
-  $result = db_query($sql);
-
-  $sql = 'update neighborhoods
-    set rating = rating - 0.25
-    where rating > 100.25;';
-  $result = db_query($sql);
-*/
-// no alder?  reset one hood to base
+  // No alder?  Reset one hood to base stats.
   $sql = 'SELECT id
     FROM neighborhoods
     WHERE id NOT IN (
-
       SELECT neighborhoods.id
       FROM neighborhoods
       RIGHT JOIN users ON users.fkey_neighborhoods_id = neighborhoods.id
       JOIN elected_officials ON elected_officials.fkey_users_id = users.id
       AND elected_officials.fkey_elected_positions_id =1
     )
-
     ORDER BY RAND()
     LIMIT 1;';
   $result = db_query($sql);
@@ -186,19 +167,19 @@ function stlouis_cron() {
   $sql = 'update neighborhoods set rating = 50, residents = 10,
     welcome_msg = "Unmaintained and unloved, this neighborhood has atrophied."
     where id = %d;';
-  $result = db_query($sql, $item->id);
+  db_query($sql, $item->id);
 
-  $addition = 0; // winter
-  $addition = 10; // spring / fall
+  // Add one resident for each calendar month.
+  $addition = (int) date('n');
 
-// give hoods residents to match - each rating / 5 plus $addition
+  // Give hoods residents to match - each rating / 5 plus $addition
   $sql = 'UPDATE `neighborhoods` SET residents = residents + 1
     WHERE floor(rating / 5) > (residents - %d) AND rand() > 0.9';
-  $result = db_query($sql, $addition);
+  db_query($sql, $addition);
 
   $sql = 'UPDATE `neighborhoods` SET residents = residents - 1
     WHERE floor(rating / 5) < (residents - %d) AND rand() > 0.9';
-  $result = db_query($sql, $addition);
+  db_query($sql, $addition);
 
 // april fools' 2013 -- move 100 people at random
 /*
@@ -226,10 +207,8 @@ function stlouis_cron() {
   }
 */
 
-// update maps
-
-  $map_large =
-    imagecreatefrompng('sites/default/files/images/stlouis_map_large.png');
+  // Update maps.
+  $map_large = imagecreatefrompng('sites/default/files/images/stlouis_map_large.png');
   $map_large_overlay =
     imagecreatefrompng('sites/default/files/images/stlouis_map_large_overlay.png');
 
@@ -240,16 +219,17 @@ function stlouis_cron() {
     left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
     WHERE fkey_elected_positions_id = 1 and (xcoor > 1 or ycoor > 1);';
   $result = db_query($sql);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-  foreach ($data as $item)
-
+  foreach ($data as $item) {
     imagefill($map_large, $item->xcoor, $item->ycoor,
       imagecolorallocate($map_large,
-      hexdec(substr($item->color, 0, 2)),
-      hexdec(substr($item->color, 2, 2)),
-      hexdec(substr($item->color, 4, 2))));
-
+        hexdec(substr($item->color, 0, 2)),
+        hexdec(substr($item->color, 2, 2)),
+        hexdec(substr($item->color, 4, 2))));
+  }
 /* st patrick's day
     imagefill($map_large, $item->xcoor, $item->ycoor,
       imagecolorallocate($map_large, 32, 224, 32));
@@ -269,22 +249,13 @@ function stlouis_cron() {
   imagecopy($map_top, $map_large, 0, 0, 100, 0, 690, 720);
   imagecopy($map_bottom, $map_large, 0, 0, 0, 900, 690, 720);
 
-// slice map_large
+  // Slice up the map.
   imagecopy($map_large_mid, $map_large, 0, 0, 0, 0, imagesx($map_large),
     imagesy($map_large) - 600);
   imagecopy($map_large_bottom, $map_large, 0, 0, 0, imagesy($map_large) - 600,
     imagesx($map_large), 600);
 
-/*
-  imagepng($map_large,
-    "sites/default/files/images/stlouis_map_large_colored.png");
-  imagepng($map_mid,
-    "sites/default/files/images/stlouis_map_mid.png");
-  imagepng($map_top,
-    "sites/default/files/images/stlouis_map_top.png");
-  imagepng($map_bottom,
-    "sites/default/files/images/stlouis_map_bottom.png");
-*/
+  // Write out the files.
   imagejpeg($map_large_mid,
     "sites/default/files/images/stlouis_map_large_colored.jpg");
   imagejpeg($map_large_bottom,
@@ -296,6 +267,7 @@ function stlouis_cron() {
   imagejpeg($map_bottom,
     "sites/default/files/images/stlouis_map_bottom.jpg", 85);
 
+  // Clean up, clean up, everybody, everywhere!
   imagedestroy($map_large);
   imagedestroy($map_large_overlay);
   imagedestroy($map_mid);
@@ -323,148 +295,6 @@ function stlouis_cron() {
   db_set_active('default');
 
 }
-
-
-function real_celestial_glory_cron() {
-
-  db_set_active('game_celestial_glory');
-
-// save old approval ratings
-
-  $sql = 'update elected_officials set approval_45 = approval_30,
-    approval_30 = approval_15, approval_15 = approval_rating;';
-  $result = db_query($sql);
-
-// move all elected officials toward a 60% approval rating
-
-  $sql = 'update elected_officials set approval_rating = 60
-    where (approval_rating >= 59.75 AND approval_rating <= 60.25);';
-  $result = db_query($sql);
-
-  $sql = 'update elected_officials
-    set approval_rating = approval_rating + 0.25
-    where approval_rating <= 59.75;';
-  $result = db_query($sql);
-
-  $sql = 'update elected_officials
-    set approval_rating = approval_rating - 0.25
-    where approval_rating >= 60.25;';
-  $result = db_query($sql);
-
-  $sql = 'update elected_officials
-    set approval_rating = 0 where approval_rating < 0;';
-  $result = db_query($sql);
-
-  $sql = 'update elected_officials
-    set approval_rating = 100 where approval_rating > 100;';
-  $result = db_query($sql);
-
-// move all hoods toward a 50 beauty rating
-
-  $sql = 'update neighborhoods set rating = 50
-    where (rating >= 49.9 AND rating <= 50.1);';
-  $result = db_query($sql);
-
-  $sql = 'update neighborhoods
-    set rating = rating + 0.1
-    where rating < 49.9;';
-  $result = db_query($sql);
-
-  $sql = 'update neighborhoods
-    set rating = rating - 0.1
-    where rating > 50.1;';
-  $result = db_query($sql);
-
-// give hoods residents to match - each gets 5 plus rating / 5
-  $sql = 'UPDATE `neighborhoods` SET residents = residents + 1
-    WHERE floor(rating / 5) > (residents - 5) AND rand() > 0.95';
-  $result = db_query($sql);
-
-  $sql = 'UPDATE `neighborhoods` SET residents = residents - 1
-    WHERE floor(rating / 5) < (residents - 5) AND rand() > 0.95';
-  $result = db_query($sql);
-
-
-// april fools' 2013 -- move 50 people at random
-/*
-  $sql = 'select users.id from users
-    left join elected_officials on users.id = elected_officials.fkey_users_id
-    where elected_officials.id IS NULL
-    and users.level >= 25
-    order by rand()
-    limit 50;';
-  $result = db_query($sql);
-  $data = array();
-  while ($item = db_fetch_object($result)) $data[] = $item;
-
-  foreach ($data as $item) {
-
-    $sql = 'select id from neighborhoods where xcoor > 0 and ycoor > 0
-      order by rand() limit 1;';
-    $result = db_query($sql);
-    $hood = db_fetch_object($result);
-
-    $sql = 'update users set fkey_neighborhoods_id = %d
-      where id = %d;';
-    $result = db_query($sql, $hood->id, $item->id);
-
-  }
-*/
-
-// update maps
-
-  $map_large =
-    imagecreatefromjpeg('sites/default/files/images/celestial_glory_map_large.jpg');
-  $map_mid = imagecreatetruecolor(530, 600);
-  $map_large_colored = imagecreatetruecolor(800, 500);
-  $map_bottom = imagecreatetruecolor(530, 300);
-  $map_bottom_colored = imagecreatetruecolor(800, 300);
-
-  $sql = 'SELECT xcoor, ycoor, clan_icon
-    FROM `elected_officials`
-    left join users on fkey_users_id = users.id
-    left join `values` on fkey_values_id = `values`.id
-    left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
-    WHERE fkey_elected_positions_id = 1 and (xcoor > 1 or ycoor > 1);';
-  $result = db_query($sql);
-  while ($item = db_fetch_object($result)) $data[] = $item;
-
-  foreach ($data as $item) {
-
-    $icon = imagecreatefrompng('sites/default/files/images/celestial_glory_clan_' .
-      $item->clan_icon . '.png');
-    imagecopy($map_large, $icon, $item->xcoor - 12, $item->ycoor, 0, 0,
-      imagesx($icon), imagesy($icon));
-    imagedestroy($icon);
-
-  }
-
-  imagecopy($map_large_colored, $map_large, 0, 0, 0, 0, 800, 500);
-  imagecopy($map_bottom_colored, $map_large, 0, 0, 0, 500, 800, 300);
-
-  imagejpeg($map_large_colored,
-    "sites/default/files/images/celestial_glory_map_large_colored.jpg");
-  imagejpeg($map_bottom_colored,
-    "sites/default/files/images/celestial_glory_map_large_bottom_colored.jpg");
-
-  imagecopy($map_mid, $map_large, 0, 0, 0, 0, 530, 600);
-  imagecopy($map_bottom, $map_large, 0, 0, 200, 500, 530, 300);
-
-  imagejpeg($map_mid,
-    "sites/default/files/images/celestial_glory_map_mid.jpg");
-  imagejpeg($map_bottom,
-    "sites/default/files/images/celestial_glory_map_bottom.jpg");
-
-  imagedestroy($map_large);
-  imagedestroy($map_mid);
-  imagedestroy($map_bottom);
-  imagedestroy($map_large_colored);
-  imagedestroy($map_bottom_colored);
-
-  db_set_active('default');
-
-}
-
 
 function stlouis_init() {
 
@@ -1114,12 +944,12 @@ function _stlouis_filter_profanity($message) {
   foreach ($profanity as $word) {
     $pattern = "/\b$word\b/i"; // Check word boundaries, ignoring case
 
-    if (preg_match($pattern, $msg) == 1) return "XXX: found $word XXX";
-
+    if (preg_match($pattern, $msg)) {
+      return "XXX: found $word XXX";
+    }
   }
 
   return $message;
-
 }
 
 
