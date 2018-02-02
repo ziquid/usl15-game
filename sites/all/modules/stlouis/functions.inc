@@ -258,7 +258,7 @@ function NO_required_competency($game_user, $id, $level, $name) {
   $arg2 = check_plain(arg(2));
 
   $check = competency_level($game_user, $id);
-  $comp_name = _competency_level_name($level, TRUE);
+  $comp_name = competency_level_name($level, TRUE);
 
   if ($check->level >= $level) {
 
@@ -783,11 +783,11 @@ EOF;
     $check = competency_level($game_user,
       (int) $item->fkey_required_competencies_id);
 firep($check);
-    $comp_name = _competency_level_name($item->required_competencies_level,
+    $comp_name = competency_level_name($item->required_competencies_level,
       TRUE);
 
     $reqs .= <<< EOF
-    <div class="land-cost">
+    <div class="land-cost initial-caps">
       $item->competency Competency:<br/>
       <span>$comp_name (Level $item->required_competencies_level)</span>
     </div>
@@ -2425,7 +2425,7 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
       '<span>@comp (Level @l)</span>',
       array(
         '@name' => $req_comp,
-        '@comp' => _competency_level_name($req_level),
+        '@comp' => competency_level_name($req_level),
         '@l' => $req_level,
       )
     );
