@@ -2177,31 +2177,27 @@ function competency_min_count($level, $comp_level) {
 function competency_level_name($id, $req = FALSE) {
 
   if ($req) {
-
-    $competencies = array(
-      'No Competency',
-      'Minimal Competency',
-      'Marginal Competency',
-      'Competency',
-      'More Competency',
-      'Masterful Competency',
-    );
-
-  } else {
-
-    $competencies = array(
-      'Not Competent',
-      'Minimally Competent',
-      'Marginally Competent',
-      'Competent',
-      'More Competent',
-      'Masterfully Competent',
-    );
-
+    $competencies = [
+      'No Comp\'cy',
+      'Minimal Comp\'cy',
+      'Marginal Comp\'cy',
+      'Normal Comp\'cy',
+      'More Comp\'cy',
+      'Masterful Comp\'cy',
+    ];
+  }
+  else {
+    $competencies = [
+      'Not Comp.',
+      'Minimally Comp.',
+      'Marginally Comp.',
+      'Normally Comp.',
+      'More Comp.',
+      'Masterfully Comp.',
+    ];
   }
 
   return $competencies[$id];
-
 }
 
 
