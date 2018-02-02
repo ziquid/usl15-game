@@ -410,7 +410,7 @@ EOF;
         if ($quest_group->completed == ($quest_group->total * 2)) {
 // woohoo!  user just completed an entire group the second time!
 
-          competency_gain($game_user, 'second-mile saint', 3);
+//          competency_gain($game_user, 'second-mile saint', 3);
 
           $sql = 'select * from quest_group_bonus
             where fkey_quest_groups_id = %d;';
