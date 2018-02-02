@@ -14,7 +14,7 @@
 </style>
 
   <p>Uprising: St. Louis Community Edition</p>
-  <p>January 3, 2018 Alpha release 0.0.1</p>
+  <p>February 1, 2018 Alpha release 0.1.0</p>
   <h4>Please note this release is for testing only</h4>
   <h4>Do not expect anything in this release to be permanent</h4>
   <p>Jan 30: Fixed resetting your player</p>

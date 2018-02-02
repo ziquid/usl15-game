@@ -1151,40 +1151,32 @@ function _stlouis_format_date($epoch) {
 }
 
 
-function _stlouis_ordinal($number) {
+function _stlouis_ordinal($num) {
 // lifted from http://php.net/manual/en/function.number-format.php
 
   if ( ($num / 10) % 10 != 1 ) { // Special case "teenth"
 
     switch( $num % 10 ) { // Handle 1st, 2nd, 3rd
-
       case 1: return $num . 'st';
       case 2: return $num . 'nd';
       case 3: return $num . 'rd';
-
     }
 
   }
 
-// Everything else is "nth"
+  // Everything else is "nth".
   return $num . 'th';
-
 }
 
-
 function _stlouis_scale_coords($scale, $n1, $n2, $n3, $n4) {
-// multiply each $n by $scale and return as a formatted string
-
+  // Multiply each $n by $scale and return as a formatted string.
   return ((int) ($n1 * $scale)) . ',' .
     ((int) ($n2 * $scale)) . ',' .
     ((int) ($n3 * $scale)) . ',' .
     ((int) ($n4 * $scale));
-
 }
 
-
 function _stlouis_save_user_agent($game_user) {
-// save the user agent
 
   global $purchasing_luck, $user;
 
@@ -1198,39 +1190,37 @@ function _stlouis_save_user_agent($game_user) {
     $user_agent = trim(substr($user_agent, 0, $extra_stuff_pos));
   }
 
-
   $sql = 'select id, `value` FROM user_attributes
     WHERE fkey_users_id = %d AND `key` = "user_agent";';
   $result = db_query($sql, $game_user->id);
   $user_list = db_fetch_object($result);
 
-  if (empty($user_list)) { // no entry?  create one!
-
+  if (empty($user_list)) {
+    // No entry?  Create one!
     _stlouis_set_value($game_user->id, 'user_agent', $user_agent);
     return TRUE;
+  }
+  else {
+    // Existing entry.
 
-  } else { // existing entry
-
+    // New User Agent!
     if ($user_list->value != $user_agent) {
-// egads! New User Agent!  save and warn me
 
-      if (empty($game_user->password)) { // no password?  update automatically
-
+      // No password?  Update automatically.
+      if (empty($game_user->password)) {
         _stlouis_set_value($game_user->id, 'user_agent', $user_agent);
-
-      } else { // new user_agent and a password -- gotta authenticate!
-
+      }
+      else {
+        // New user_agent and a password -- gotta authenticate!
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
         drupal_goto("$game/authenticate/$arg2");
+      }
 
-      } // no password
-
-    } // new user agent
-
+    }
     return TRUE;
 
-  } // if empty or not
+  }
 
 }
 

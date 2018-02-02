@@ -1,24 +1,39 @@
 <?php
 
+/**
+ * @file stlouis_userprofile.tpl.php
+ * Show a user's profile.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: no
+ */
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
   $game_user = $fetch_user();
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
   $fetch_header($game_user);
   $arg2 = check_plain(arg(2));
 
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
 
+  _show_profile_menu($game_user);
+
   $phone_id_to_check = $phone_id;
 
   if (arg(3) != '') $phone_id_to_check = check_plain(arg(3));
 
-  $show_all = FALSE;
+  if ($phone_id_to_check == $phone_id) {
+    competency_gain($game_user, 'introspective');
+  }
+  else {
+    competency_gain($game_user, 'people person');
+  }
 
+  $show_all = FALSE;
   if (($phone_id_to_check == $phone_id) ||
     ($_GET['show_all'] == 'yes'))
     $show_all = TRUE;
@@ -34,6 +49,7 @@
     echo '<div class="message-error">Your message must be at least 3
       characters long.</div>';
     $message = '';
+    competency_gain($game_user, 'silent cal');
   }
 
   if (substr($message, 0, 3) == 'XXX') {
@@ -41,6 +57,7 @@
     echo '<div class="message-error">Your message contains words that are not
       allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
     $message = '';
+    competency_gain($game_user, 'uncouth');
 
   }
 
@@ -132,7 +149,7 @@ firep($icon_path);
       fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
     $result = db_query($sql, $game_user->id, $item->id, $private, $message);
     $message_orig = '';
-
+    competency_gain($game_user, 'talkative');
   }
 
   if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lantern posting
@@ -256,11 +273,13 @@ EOF;
 
   }
 
+  $exp = number_format($item->experience);
+
   echo <<< EOF
   <div class="heading">Level:</div>
   <div class="clan-icon">$item->level</div><br/>
   <div class="heading">$experience:</div>
-  <div class="value">$item->experience</div><br/>
+  <div class="value">$exp</div><br/>
 EOF;
 
   if ($show_all) { // show more stats if it's you
@@ -296,9 +315,12 @@ EOF;
     $result = db_query($sql, $item->id);
     $vet_bonus = db_fetch_object($result);
 */
-    $extra_initiative = $staff_bonus->initiative + $equipment_bonus->initiative + 0;
-    $extra_endurance = $staff_bonus->endurance + $equipment_bonus->endurance + 0;
-    $extra_elocution = $staff_bonus->elocution + $equipment_bonus->elocution + 0;
+    $extra_initiative = number_format($staff_bonus->initiative
+    + $equipment_bonus->initiative);
+    $extra_endurance = number_format($staff_bonus->endurance
+    + $equipment_bonus->endurance);
+    $extra_elocution = number_format($staff_bonus->elocution
+    + $equipment_bonus->elocution);
     $extra_votes = $staff_bonus->extra_votes + 0;
     $extra_defending_votes = $staff_bonus->extra_defending_votes + 0;
 //    $extra_vet_votes = (int) ($vet_bonus->quantity / 250);
@@ -377,9 +399,7 @@ EOF;
     } // debateable?
 
   } else { // not debateable at all
-
-    echo '<br/>';
-
+    echo '<br>';
   }
 
   echo <<< EOF
@@ -616,11 +636,20 @@ EOF;
 
     echo <<< EOF
   <p>$item->message</p>
+EOF;
+
+    if ($item->username != 'USLCE Game') {
+      echo <<< EOF
   <div class="message-reply-wrapper"><div class="message-reply">
     <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
-  </div></div>
+ </div></div>
+EOF;
+    }
+
+    echo <<< EOF
 </div>
 EOF;
+
     $msg_shown = TRUE;
 
   }

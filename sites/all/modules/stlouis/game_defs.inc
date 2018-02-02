@@ -33,6 +33,7 @@
     $alders_short = 'Alders';
     $beauty = 'Beauty';
     $city = 'City';
+    $competencies = 'Competencies';
     $debate = 'Debate';
     $debate_tab = 'Debates';
     $elders = 'Elders';

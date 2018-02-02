@@ -1,6 +1,12 @@
 <?php
-// $Id$
 
+/**
+ * @file menu.inc
+ * Menu functions for Ziquid games.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
 
 function stlouis_menu() {
 
@@ -15,6 +21,14 @@ function stlouis_menu() {
   $items['stlouis/user/%'] = array(
     'title' => 'St. Louis User Profile Page',
     'page callback' => 'stlouis_userprofile_callback',
+    'page arguments' => array(2),
+    'access arguments' => array('access stlouis content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['stlouis/user_comp/%'] = array(
+    'title' => 'St. Louis User Competencies Page',
+    'page callback' => 'stlouis_user_competencies_callback',
     'page arguments' => array(2),
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
@@ -533,6 +547,14 @@ function stlouis_userprofile_callback($phone_id) {
 
 }
 
+function stlouis_user_competencies_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('stlouis_user_competencies', $phone_id);
+}
 
 function stlouis_clan_list_callback($phone_id, $clan_id) {
 
@@ -1221,6 +1243,13 @@ function stlouis_theme() {
 
     'stlouis_userprofile' => array(
       'template' => 'stlouis_userprofile',
+      'arguments' => array(
+        'phone_id' => null
+      )
+    ),
+
+    'stlouis_user_competencies' => array(
+      'template' => 'stlouis_user_competencies',
       'arguments' => array(
         'phone_id' => null
       )
