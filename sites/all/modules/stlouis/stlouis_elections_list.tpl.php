@@ -17,7 +17,7 @@
 
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
-    
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/debates/$arg2" class="button">{$debate_tab}</a>
@@ -35,11 +35,11 @@ EOF;
   $rating = $data->rating;
   $residents = $data->residents;
   $district = $data->district;
-  
+
   if (($rating * 100) == (ceil($rating) * 100)) $rating = ceil($rating);
-  
+
   if ($data->has_elections == 0) {
-    
+
     echo <<< EOF
 <div class="title">No Elections here!</div>
 <div class="subtitle">You're on vacation!&nbsp;
@@ -50,20 +50,20 @@ EOF;
   </a>
 </div>
 EOF;
-    
+
     db_set_active('default');
-    
+
     return;
-    
+
   }
-  
-  $sql = 'select clan_title from `values` where id = %d;';
+
+  $sql = 'select party_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
-  $clan_title = preg_replace('/^The /', '', $data->clan_title);
+  $party_title = preg_replace('/^The /', '', $data->party_title);
 
   if ($game_user->level < 15) {
-    
+
     echo <<< EOF
 <ul>
   <li>Win elections to give you more $game_user->values and Influence</li>
@@ -79,7 +79,7 @@ EOF;
     where min_level > %d;';
   $result = db_query($sql, $game_user->level);
   $item = db_fetch_object($result);
-  $see_more_offices_at = $item->next_level; 
+  $see_more_offices_at = $item->next_level;
 firep($see_more_offices_at);
 
   echo <<< EOF
@@ -92,7 +92,7 @@ EOF;
     and users.fkey_neighborhoods_id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
   $item = db_fetch_object($result);
-    
+
   echo <<< EOF
 <div class="subtitle">Your neighborhood $alderman is
   <a href="/$game/user/$arg2/$item->phone_id">$item->username</a>.</div>
@@ -101,21 +101,21 @@ EOF;
 EOF;
 
   if ($see_more_offices_at) {
-    
+
     echo <<< EOF
 <div class="subtitle">See more offices at level $see_more_offices_at</div>
 EOF;
 
   }
-  
+
   $data = array();
   $sql = 'SELECT elected_positions.id AS ep_id,
     elected_positions.group as ep_group,
     elected_positions.name AS ep_name, elected_positions.energy_bonus,
     elected_positions.can_broadcast_to_party,
     elected_positions.min_level, elected_positions.max_level,
-    blah.*, `values`.clan_icon,
-    `values`.clan_title, clan_members.is_clan_leader,
+    blah.*, `values`.party_icon,
+    `values`.party_title, clan_members.is_clan_leader,
     clans.acronym AS clan_acronym
     FROM elected_positions
     LEFT OUTER JOIN (
@@ -165,8 +165,8 @@ EOF;
     
     WHERE elected_positions.min_level <= %d
     ORDER BY elected_positions.energy_bonus DESC, elected_positions.id ASC;';
-  
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id, 
+
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $district, $game_user->level);
   while ($item = db_fetch_object($result)) $data[] = $item;
 
@@ -182,7 +182,7 @@ EOF;
 EOF;
 
   $last_group = $data[0]->ep_group;
-  
+
   foreach ($data as $item) {
 firep($item);
 
@@ -190,42 +190,42 @@ firep($item);
     $action_class = '';
     $official_link = $item->ep_name;
     $clan_class = 'election-details';
-    
+
     if ($item->can_broadcast_to_party)
       $official_link .= '<div class="can-broadcast-to-party">*</div>';
-    
+
     if (empty($item->id)) { // no existing officer
-      
+
       $official_link .= ' <em>Available</em></a>';
       $action = '<a href="/' . $game . '/elections_challenge/' . $arg2 .
         '/' . $item->ep_id . '">' . t('Run for office') . '</a>';
       $action_class = '';
 
     } else { // existing officer
-      
+
       $official_link .= '<br/><a href="/' . $game . '/user/' .
         $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
       $action = '<a href="/' . $game . '/elections_challenge/' . $arg2 .
         '/' . $item->ep_id . '">' . t('Challenge (%energy Action)',
         array('%energy' => $item->energy_bonus)) . '</a>';
       $action_class = '';
-          
-    }
-    
-    if ($game_user->level > $item->max_level) { // too high to challenge          
-      
-      $action = t('Too powerful to challenge');
-      $action_class = 'not-yet';
-      
+
     }
 
-    if ($game_user->actions < $item->energy_bonus) { // not enough action left          
-      
+    if ($game_user->level > $item->max_level) { // too high to challenge
+
+      $action = t('Too powerful to challenge');
+      $action_class = 'not-yet';
+
+    }
+
+    if ($game_user->actions < $item->energy_bonus) { // not enough action left
+
 //      $action = t('Not enough Action left');
 //      $action_class = 'not-yet';
-      
+
     }
-    
+
     if ($item->id == $game_user->id) { // can't challenge yourself
 
       $clan_class .= ' me';
@@ -233,17 +233,17 @@ firep($item);
       $action_class = 'not-yet';
 
     }
-    
-    if (empty($item->clan_icon)) {
+
+    if (empty($item->party_icon)) {
       $icon = $game . '_clan_none.png';
     } else {
-      $icon = $game . '_clan_' . $item->clan_icon . '.png';
+      $icon = $game . '_clan_' . $item->party_icon . '.png';
     }
-    
-    if (empty($item->clan_title)) {
-      $clan_title = t('Position Open');
+
+    if (empty($item->party_title)) {
+      $party_title = t('Position Open');
     } else {
-      $clan_title = $item->clan_title;
+      $party_title = $item->party_title;
     }
 
     if (empty($item->experience)) {
@@ -251,23 +251,23 @@ firep($item);
     } else {
       $experience = $item->experience;
     }
-    
+
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
 
     if ($last_group != $item->ep_group)
       echo '</div><div class="elections">';
-    
+
     echo <<< EOF
 <div class="$clan_class">
   <div class="clan-icon"><img
     src="/sites/default/files/images/$icon"/></div>
-  <div class="clan-title">$clan_title</div>
+  <div class="clan-title">$party_title</div>
   <div class="opponent-name">$official_link $clan_acronym</div>
   <div class="opponent-influence">+$item->energy_bonus every 5 mins</div>
   <div class="approval-rating">Approval rating:
@@ -275,9 +275,9 @@ firep($item);
   <div class="action-wrapper"><div class="action $action_class">$action</div></div>
 </div>
 EOF;
-    
+
   $last_group = $item->ep_group;
-  
+
   } // foreach position
-  
+
   db_set_active('default');
