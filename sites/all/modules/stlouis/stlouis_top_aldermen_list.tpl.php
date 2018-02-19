@@ -1,7 +1,7 @@
 <?php
 
   global $game, $phone_id;
-  
+
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
@@ -22,12 +22,12 @@
 </div>
 <div class="title">Top 20 $aldermen</div>
 EOF;
-  
+
   $data = array();
   $sql = 'SELECT username, experience, initiative, endurance, 
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
-    `values`.clan_title, `values`.clan_icon,
+    `values`.party_title, `values`.party_icon,
     `values`.name, users.id, users.fkey_neighborhoods_id,
     elected_positions.name as ep_name,
     elected_officials.timestamp,
@@ -54,7 +54,7 @@ EOF;
     WHERE elected_officials.fkey_elected_positions_id = 1
     ORDER by elected_officials.timestamp ASC
     LIMIT 20;';
-  
+
   $result = db_query($sql);
   while ($item = db_fetch_object($result)) $data[] = $item;
 
@@ -68,7 +68,7 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   foreach ($data as $item) {
 firep($item);
 
@@ -76,24 +76,24 @@ firep($item);
     $action_class = '';
     $official_link = $item->ep_name;
     $clan_class = 'election-details';
-    
+
     if ($item->can_broadcast_to_party)
       $official_link .= '<div class="can-broadcast-to-party">*</div>';
-      
+
      $official_link .= '<br/><a href="/' . $game . '/user/' .
        $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
-     $icon = $game . '_clan_' . $item->clan_icon . '.png';
-     $clan_title = $item->clan_title;
+     $icon = $game . '_clan_' . $item->party_icon . '.png';
+     $party_title = $item->party_title;
      $exp = $item->experience;
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
-      
+
     $time_len_function = '_' . $game . '_format_date';
     $time_len = $time_len_function(strtotime($item->timestamp));
 
@@ -101,13 +101,13 @@ firep($item);
 <div class="$clan_class">
   <div class="clan-icon"><img width="24"
     src="/sites/default/files/images/$icon"/></div>
-  <div class="clan-title">$clan_title</div>
+  <div class="clan-title">$party_title</div>
   <div class="opponent-name">$official_link $clan_acronym</div>
   <div class="opponent-influence">$time_len<br/>
     ($item->neighborhood)</div>
 </div>
 EOF;
-  
+
   } // foreach position
-  
+
   db_set_active('default');
