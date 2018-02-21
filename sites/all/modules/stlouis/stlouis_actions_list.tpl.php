@@ -7,13 +7,13 @@
 
   $game_user = $fetch_user();
   include_once(drupal_get_path('module', $game) . '/game_defs.inc');
-  include_once(drupal_get_path('module', $game) . '/' . $game . 
+  include_once(drupal_get_path('module', $game) . '/' . $game .
     '_actions.inc');
 
   $arg2 = check_plain(arg(2));
 
   if ($game_user->level < 6) {
-    
+
     echo <<< EOF
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
@@ -35,11 +35,11 @@ EOF;
 
     db_set_active('default');
     return;
-    
+
   }
-  
+
   $fetch_header($game_user);
-  
+
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
 
@@ -48,17 +48,17 @@ EOF;
   $data = db_fetch_object($result);
   $location = $data->name;
   $district = $data->district;
-  
-  $sql = 'select clan_title from `values` where id = %d;';
+
+  $sql = 'select party_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
-  $clan_title = preg_replace('/^The /', '', $data->clan_title);
-  
+  $party_title = preg_replace('/^The /', '', $data->party_title);
+
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
   if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
-    
+
     echo <<< EOF
 <div class="title">Frozen!</div>
 <div class="subtitle">You have been tagged and cannot perform any actions</div>
@@ -83,16 +83,16 @@ EOF;
     }
 
     echo <<< EOF
-<div class="news">
+<!--<div class="news">
   <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
   <a href="/$game/actions/$arg2/banking" class="button $banking_active">Banking</a>
-</div>
+</div>-->`
 EOF;
-  
+
   }
 
   if ($game_user->level < 20) {
-    
+
     echo <<< EOF
 <ul>
   <li>Use actions to affect your friends and opponents</li>
@@ -108,7 +108,7 @@ $actions_type Actions
 EOF;
 
  $data = actionlist();
- 
+
   if (count($data) == 0) {
 
     echo <<< EOF
@@ -122,55 +122,55 @@ EOF;
 
     db_set_active('default');
     return;
-    
+
   } // no actions available
-  
+
   foreach ($data as $item) {
 firep($item);
 
-    $description = str_replace(array('%clan', '%subclan', '%value'), 
-      array("<em>$clan_title</em>", "<em>$subclan_name</em>", $game_user->values),
+    $description = str_replace(array('%clan', '%subclan', '%value'),
+      array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
       $item->description);
-      
+
     if ((arg(3) != 'banking') && (stripos($description, 'account') !== FALSE))
       continue; // move banking to its own screen
-    
+
     if ((arg(3) == 'banking') && (stripos($description, 'account') === FALSE))
       continue; // move banking to its own screen
-    
+
     if ($item->cost > 0) {
       $cost = "Cost: $item->cost Action";
     } else {
       $cost = 'Cost: ';
     }
-    
+
     if ($item->values_cost > 0) {
-      
+
       if (substr($cost, -6) == 'Action') $cost .= ', ';
-      
+
       $cost .= "$item->values_cost $game_user->values";
-      
+
     }
-    
+
     if (!empty($item->fkey_equipment_id)) {
       $image = "/sites/default/files/images/equipment/$game-$item->fkey_equipment_id.png";
     } else {
       $image = "/sites/default/files/images/staff/$game-$item->fkey_staff_id.png";
     }
-    
-    if (is_file($_SERVER['DOCUMENT_ROOT'] . 
+
+    if (is_file($_SERVER['DOCUMENT_ROOT'] .
       "/sites/default/files/images/actions/$game-{$item->id}.png"))
       $image = "/sites/default/files/images/actions/$game-$item->id.png";
-    
+
     if ($item->target == 'none')
       $target = t('Your');
     else
       $target = t('Target\'s');
-      
-    $name = str_replace(array('%clan', '%subclan', '%value'), 
-      array("<em>$clan_title</em>", "<em>$subclan_name</em>", $game_user->values),
+
+    $name = str_replace(array('%clan', '%subclan', '%value'),
+      array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
       $item->name);
-    
+
     if ($item->active == 0) $name .= ' (inactive)';
 
     echo <<< EOF
@@ -181,82 +181,82 @@ firep($item);
     <div class="land-description">$description</div>
     <div class="land-action-cost">$cost</div>
 EOF;
-      
+
     if ($item->influence_change < 0) {
-      
+
       $inf_change = -$item->influence_change;
-      
+
       echo <<< EOF
     <div class="land-payout negative">Effect: $target $experience is
       reduced by $inf_change</div>
 EOF;
 
     } // if influence_change < 0
-    
+
     if ($item->influence_change > 0) {
-      
+
       $inf_change = $item->influence_change;
-      
+
       echo <<< EOF
     <div class="land-payout">Effect: $target $experience is
       increased by $inf_change</div>
 EOF;
 
     } // if influence_change < 0
-    
+
     if (($item->rating_change < 0.10) && ($item->rating_change != 0.0)) {
-        
+
       $rat_change = abs($item->rating_change);
-      
+
       if ($item->rating_change < 0.0) {
-        
+
         echo <<< EOF
     <div class="land-payout negative">Effect: $target approval rating is
       reduced by $rat_change%</div>
 EOF;
-      
+
       } else {
 
         echo <<< EOF
     <div class="land-payout">Effect: $target approval rating is
       increased by $rat_change%</div>
 EOF;
-        
+
       }
 
     } // if rating_change < 0
-    
+
     if ($item->rating_change >= 0.10) {
-        
+
       $rat_change = $item->rating_change;
-        
+
       echo <<< EOF
     <div class="land-payout">Effect: Your approval rating is
       increased by $rat_change%</div>
 EOF;
 
     } // if rating_change > 0
-    
+
     if ($item->values_change > 0) {
-                
+
       echo <<< EOF
     <div class="land-payout">Effect: $target $game_user->values is
       increased by $item->values_change</div>
 EOF;
 
     } // if values_change > 0
-    
+
     if ($item->values_change < 0) {
-                
+
       $val_change = -$item->values_change;
-      
+
       echo <<< EOF
     <div class="land-payout negative">Effect: $target $game_user->values is
       decreased by $val_change</div>
 EOF;
 
     } // if values_change < 0
-    
+
     if ($item->actions_change > 0) {
 
       echo <<< EOF
@@ -265,33 +265,33 @@ EOF;
 EOF;
 
     } // if actions_change > 0
-    
+
     if ($item->actions_change < 0) {
-                
+
       $val_change = -$item->actions_change;
-      
+
       echo <<< EOF
     <div class="land-payout negative">Effect: $target Action is
       decreased by $val_change</div>
 EOF;
 
     } // if actions_change < 0
-    
+
     if ($item->neighborhood_rating_change < 0.0) {
-        
+
       $rat_change = -$item->neighborhood_rating_change;
-        
+
       echo <<< EOF
     <div class="land-payout negative">Effect: Neighborhood $beauty_lower
       rating is reduced by $rat_change</div>
 EOF;
 
     } // if hood rating_change < 0
-    
+
     if ($item->neighborhood_rating_change > 0.0) {
-        
+
       $rat_change = $item->neighborhood_rating_change;
-        
+
       echo <<< EOF
     <div class="land-payout">Effect: Neighborhood $beauty_lower rating is
       increased by $rat_change</div>
@@ -307,7 +307,7 @@ EOF;
   $next_major_action_time = $get_value($game_user->id, 'next_major_action');
   $next_major_action_time_remaining = !empty($next_major_action_time) ?
     (int)$next_major_action_time - time() : NULL;
-            
+
   echo <<< EOF
   <form action="/$game/actions_do/$arg2/$item->id">
 EOF;
@@ -340,7 +340,7 @@ EOF;
 EOF;
 
     if ($item->target != 'none') {
-      
+
       echo <<< EOF
     <div class="target">
       <select name="target">
@@ -348,11 +348,11 @@ EOF;
 EOF;
 
       // which target?
-      
+
       // expensive query - goes to slave
 //      db_set_active('game_' . $game . '_slave1');
       switch ($item->target) {
-        
+
         case 'clan': // users in your clan
 
         case 'neighborhood': // users in your neighborhood
@@ -360,7 +360,7 @@ EOF;
         case 'neighborhood_higher_than_you_but_still_debateable':
 // people in your neighborhood who aren't on your wall nor in your clan
 // who are a higher level than you but are still debateable
-          
+
         case 'neighborhood_not_met':
 // people in your neighborhood who aren't on your wall nor in your clan
 
@@ -372,7 +372,7 @@ EOF;
 
           $data2 = _target_list($item->target, $game_user);
           break;
-          
+
         case 'officials':
 
 // elected officials only
@@ -428,11 +428,11 @@ EOF;
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
             ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
-    
+
           $result = db_query($sql, $game_user->fkey_neighborhoods_id,
             $game_user->fkey_values_id, $district);
           while ($official = db_fetch_object($result)) $data2[] = $official;
-          
+
           break;
 
         case 'officials_type_1':
@@ -462,13 +462,13 @@ EOF;
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
             ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
-    
+
           $result = db_query($sql, $game_user->fkey_neighborhoods_id,
             $game_user->fkey_values_id);
           while ($official = db_fetch_object($result)) $data2[] = $official;
-          
+
           break;
-          
+
         case 'officials_type_2':
 
 // type 2 elected officials only
@@ -493,15 +493,15 @@ EOF;
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
             ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
-    
+
           $result = db_query($sql, $game_user->fkey_values_id);
           while ($official = db_fetch_object($result)) $data2[] = $official;
-          
+
           break;
-          
+
         case 'party':
 // users in your political party
-          
+
           $data2 = array();
           $sql = 'SELECT users.username, users.id,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym,
@@ -513,15 +513,15 @@ EOF;
             AND users.id <> %d
             AND users.username <> ""
             ORDER BY username ASC;';
-    
+
           $result = db_query($sql, $game_user->fkey_values_id, $game_user->id);
           while ($user = db_fetch_object($result)) $data2[] = $user;
-          
+
           break;
-          
+
         case 'wall_no_official':
 // users on your wall who aren't officials
-          
+
           $data2 = array();
           $sql = 'SELECT DISTINCT user_messages.fkey_users_from_id AS id,
             users.username, clan_members.is_clan_leader,
@@ -545,12 +545,12 @@ EOF;
             AND elected_officials.id IS NULL
 
             ORDER BY username ASC ;';
-    
+
           $result = db_query($sql, $game_user->id, $game_user->id);
           while ($user = db_fetch_object($result)) $data2[] = $user;
-          
+
           break;
-          
+
       } // switch
       db_set_active('game_' . $game); // reset to master
 
@@ -568,7 +568,7 @@ EOF;
           echo '<option value="letter_' . $letter . '">' .
             $letter . '</option>';
 
-        } 
+        }
 
       } else { // full list foreach()
 
@@ -604,5 +604,5 @@ EOF;
 EOF;
 
   } // foreach action
- 
+
   db_set_active('default');
