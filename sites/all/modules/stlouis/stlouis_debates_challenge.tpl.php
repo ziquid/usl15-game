@@ -227,17 +227,14 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
     $result = db_query($sql, $money_change, date('Y-m-d H:i:s', time()), $item->id);
 
     if ($debate == 'Box') { // boxing day?  add boxing stats
-
       $sql = 'update users set meta_int = meta_int + %d where id = %d;';
       $result = db_query($sql, $money_change, $game_user->id);
       $sql = 'update users set meta_int = meta_int - %d where id = %d;';
       $result = db_query($sql, $money_change, $item->id);
       $gain_extra = ' and Boxing Points<br/>';
-
-    } else {
-
+    }
+    else {
       $gain_extra = '';
-
     }
 
 // start the actions clock if needed
@@ -317,12 +314,8 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
             $party->party_title . '.</div>';
 
           $points_to_add = 10;
-
-//          mail('joseph@cheek.com', "Zombie $item->id switched parties",
-//            "$item->username was beaten by super debater $game_user->username"
-//            . " and has switched to $party->party_title!");
-
-        } else if
+        }
+        else if
           (($clan_player->fkey_clans_id != $clan_zombie->fkey_clans_id) &&
           ($clan_player->fkey_clans_id > 0) && $phone_id != 'abc123') {
 // second -- join clan
@@ -342,10 +335,6 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
             $item->username . ' has now joined your clan.</div>';
 
           $points_to_add = 15;
-
-//          mail('joseph@cheek.com', "Zombie $item->id joined a clan",
-//            "$item->username was beaten by super debater $game_user->username"
-//            . " and has switched to $clan_name->name!");
 
 // already party and clan -- move them!
         } else if
@@ -395,16 +384,9 @@ EOF;
 
           $points_to_add = 10;
 
-//          mail('joseph@cheek.com', "Zombie conquered ($item->id)",
-//            "$item->username has five debate losses and has left!");
-
-      } else { // not 5 losses yet
-
+      }
+      else { // not 5 losses yet
         $points_to_add = ($item->debates_lost + 1) * 2;
-
-//        mail('joseph@cheek.com', "Zombie beaten but not conquered ($item->id)",
-//          "$item->username has less than five debate losses");
-
       } // # of losses
 
 // create entry for debater
@@ -462,7 +444,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 
     }
 */ // flag day
-  } else { // you lost
+  }
+  else { // you lost
 
     $experience_gained = mt_rand(floor($game_user->level / 3),
       ceil($game_user->level * 2 / 3));

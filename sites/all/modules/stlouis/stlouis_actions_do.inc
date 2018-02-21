@@ -596,18 +596,7 @@ firep('welcome message = ' . $welcome_msg);
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
 firep($item);
-/*
-    if ($item->fkey_elected_positions_id != 1) { // not Alderman // FIXME hardcoded ep_id
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not Alderman!') .
-        '</div><div class="action-effect">You are not the Alderman.&nbsp;
-        You cannot perform this action.</div>';
-
-      return false;
-
-    }
-*/
     $error = '';
     if (substr($welcome_msg, 0, 3) == 'XXX') {
 
@@ -724,168 +713,126 @@ EOF;
 
   }
 
+function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-  function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  global $game, $phone_id;
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $can_do_again = FALSE;
+  $target_id = $_GET['target'];
 
-    global $game, $phone_id;
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
-    $can_do_again = FALSE;
-
-    $target_id = $_GET['target'];
-
-    if (!_stlouis_check_for_friendly_hood()) {
-
-        $outcome_reason = '<div class="land-failed">' .
-        t('Not in a friendly @hood!',
-          array('@hood' => $hood_lower)) .
-        '</div><div class="action-effect">You must be in friendly territory to
-          perform this action.</div>';
-
-      return FALSE;
-
-    }
-
-    $sql = 'SELECT elected_positions.name as ep_name,
-      elected_positions.type as ep_type
-      FROM `users`
-
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-      WHERE users.id = %d';
-
-    $result = db_query($sql, $game_user->id);
-    $data = db_fetch_object($result);
-    $ep_name = $data->ep_name;
-    $ep_type = $data->ep_type;
-
-    $sql = 'select * from users where id = %d;';
-    $result = db_query($sql, $target_id);
-    $target_user = db_fetch_object($result);
-    $actions_required = ceil($target_user->level / 2);
-    $money_required = $target_user->level * 1000;
-
-    if ($ep_type == 1) $actions_required = min($actions_required, 35);
-// actions cap of 35 for alderman
-
-    if ($game_user->actions < $actions_required) { // not enough actions
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not enough Action!') .
-        '</div><div class="action-effect">You do not have enough Action to
-        declare this Level ' . $target_user->level .
-        ' player <em>persona non grata</em>.</div>';
-
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-        class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-        $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
-        '">Refill your Action (1&nbsp;Luck)</a></div></div>';
-
-      return FALSE;
-
-    }
-
-    if ($game_user->money < $money_required) { // not enough money
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not enough @value', array('@value' => $game_user->values)) .
-        '</div><div class="action-effect">You do not have enough ' .
-        $game_user->values . ' to declare this Level ' . $target_user->level .
-        ' player <em>persona non grata</em>.</div>';
-
-      $offer = ($game_user->income - $game_user->expenses) * 5;
-      $offer = min($offer, $game_user->level * 1000);
-      $offer = max($offer, $game_user->level * 100);
-
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-        class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-        $phone_id . '/money?destination=/' . $game . '/actions/' . $phone_id .
-        '">Receive ' . $offer . ' ' . $game_user->values .
-        ' (1&nbsp;Luck)</a></div></div>';
-
-      return FALSE;
-
-    }
-
-    $sql = "select name from neighborhoods where id = '%d';";
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $data = db_fetch_object($result);
-    $location = $data->name;
-
-// can't boot zombies
-
-    if ($target_user->meta == 'zombie') {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Action Failed!') .
-        '</div><div class="action-effect">Zombies do not respect political
-        borders.&nbsp; Have you tried debating them?</div>';
-
-      return FALSE;
-
-    }
-
-// add message to user
-    $sql = 'insert into user_messages (fkey_users_from_id,
-      fkey_users_to_id, message) values (%d, %d, "%s");';
-    $message = $ep_name . ' ' . $game_user->username . ' has declared you 
-      persona non grata.  You have been kicked out of ' . $location . '.';
-
-    if ($game == 'celestial_glory') {
-
-      if ($target_user->fkey_neighborhoods_id == 1 &&
-        $target_user->fkey_values_id == 4) {
-
-        $outcome_reason = '<div class="land-failed">' .
-          t('Action Failed!') .
-          '</div><div class="action-effect">You can not run a Babylonian
-          out of the region.</div>';
-
-        return FALSE;
-
-      } else {
-
-        $message = $ep_name . ' ' . $game_user->username . ' has run you
-          out of ' . $location . '.';
-
-      }
-
-    } // game is CG
-
-    $result = db_query($sql, $game_user->id, $target_id, $message);
-
-// move user, empty Action
-    $sql = 'update users set fkey_neighborhoods_id =
-      (select fkey_neighborhoods_id from `values` where id = %d),
-      actions = 0
-      where id = %d;';
-    $result = db_query($sql, $target_user->fkey_values_id, $target_id);
-
-// deduct your Action, money
-    $sql = 'update users
-      set actions = actions - %d, money = money - %d
-      where id = %d;';
-    $result = db_query($sql, $actions_required, $money_required,
-      $game_user->id);
-
-    if ($ep_type > 1) { // set major_action counter for three minutes
-      $set_value = '_' . arg(0) . '_set_value';
-      $set_value($game_user->id, 'next_major_action', time() + 180);
-    }
-
-    $outcome_reason .= '<div class="action-effect">' . $target_user->username .
-      ' has been returned to his or her home neighborhood.';
-
-    return TRUE;
-
+  if (!_stlouis_check_for_friendly_hood()) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not in a friendly @hood!',
+        array('@hood' => $hood_lower)) .
+      '</div><div class="action-effect">You must be in friendly territory to
+        perform this action.</div>';
+    return FALSE;
   }
+
+  $sql = 'SELECT elected_positions.name as ep_name,
+    elected_positions.type as ep_type
+    FROM `users`
+
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+
+    WHERE users.id = %d';
+
+  $result = db_query($sql, $game_user->id);
+  $data = db_fetch_object($result);
+  $ep_name = $data->ep_name;
+  $ep_type = $data->ep_type;
+
+  $sql = 'select * from users where id = %d;';
+  $result = db_query($sql, $target_id);
+  $target_user = db_fetch_object($result);
+  $actions_required = ceil($target_user->level / 2);
+  $money_required = $target_user->level * 1000;
+
+  // Actions cap of 50 for alderman.
+  if ($ep_type == 1) {
+    $actions_required = min($actions_required, 50);
+  }
+
+  if ($game_user->actions < $actions_required) { // not enough actions
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough Action!') .
+      '</div><div class="action-effect">You do not have enough Action to
+      declare this Level ' . $target_user->level .
+      ' player <em>persona non grata</em>.</div>
+      <div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+      $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
+      '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+    return FALSE;
+  }
+
+  if ($game_user->money < $money_required) { // not enough money
+    $offer = ($game_user->income - $game_user->expenses) * 5;
+    $offer = min($offer, $game_user->level * 1000);
+    $offer = max($offer, $game_user->level * 100);
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough @value', array('@value' => $game_user->values)) .
+      '</div><div class="action-effect">You do not have enough ' .
+      $game_user->values . ' to declare this Level ' . $target_user->level .
+      ' player <em>persona non grata</em>.</div>
+      <div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+      $phone_id . '/money?destination=/' . $game . '/actions/' . $phone_id .
+      '">Receive ' . $offer . ' ' . $game_user->values .
+      ' (1&nbsp;Luck)</a></div></div>';
+    return FALSE;
+  }
+
+  $sql = "select name from neighborhoods where id = '%d';";
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  $data = db_fetch_object($result);
+  $location = $data->name;
+
+  // Can't boot zombies.
+  if ($target_user->meta == 'zombie') {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Action Failed!') .
+      '</div><div class="action-effect">Zombies do not respect political
+      borders.&nbsp; Have you tried debating them?</div>';
+    return FALSE;
+  }
+
+  // Add message to user.
+  $sql = 'insert into user_messages (fkey_users_from_id,
+    fkey_users_to_id, message) values (%d, %d, "%s");';
+  $message = $ep_name . ' ' . $game_user->username . ' has declared you 
+    persona non grata.  You have been kicked out of ' . $location . '.';
+  db_query($sql, $game_user->id, $target_id, $message);
+
+  // Move user, empty Action.
+  $sql = 'update users set fkey_neighborhoods_id =
+    (select fkey_neighborhoods_id from `values` where id = %d),
+    actions = 0
+    where id = %d;';
+  db_query($sql, $target_user->fkey_values_id, $target_id);
+
+  // Deduct your Action, money.
+  $sql = 'update users
+    set actions = actions - %d, money = money - %d
+    where id = %d;';
+  db_query($sql, $actions_required, $money_required, $game_user->id);
+
+  if ($ep_type > 1) { // set major_action counter for three minutes
+    $set_value = '_' . arg(0) . '_set_value';
+    $set_value($game_user->id, 'next_major_action', time() + 180);
+  }
+
+  $outcome_reason .= '<div class="action-effect">' . $target_user->username .
+    ' has been returned to his or her home neighborhood.';
+  return TRUE;
+}
 
   function _stlouis_action_roll_call_function(&$outcome_reason, $target) {
 
@@ -2696,25 +2643,25 @@ EOF;
   }
 
 
-  function _stlouis_check_for_friendly_hood() {
+function _stlouis_check_for_friendly_hood() {
+  global $game, $phone_id;
 
-    global $game, $phone_id;
-
-    if ($phone_id == 'abc123') return TRUE;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    $sql = 'SELECT fkey_values_id from elected_officials
-      left join users on elected_officials.fkey_users_id = users.id
-      where users.fkey_neighborhoods_id = %d
-      and elected_officials.fkey_elected_positions_id = 1;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $item = db_fetch_object($result);
-
-    return ($item->fkey_values_id == $game_user->fkey_values_id);
-
+  if ($phone_id == 'abc123') {
+    return TRUE;
   }
+
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $sql = 'SELECT fkey_values_id from elected_officials
+    left join users on elected_officials.fkey_users_id = users.id
+    where users.fkey_neighborhoods_id = %d
+    and elected_officials.fkey_elected_positions_id = 1;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  $item = db_fetch_object($result);
+
+  return ($item->fkey_values_id == $game_user->fkey_values_id);
+}
 
   function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $target,
     &$can_do_again) {
