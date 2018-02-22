@@ -512,138 +512,119 @@ mail('joseph@cheek.com', $target_name . ' has been forcibly removed',
 
   }
 
-  function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target, &$can_do_again) {
+function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
 
-    $clan_rules = check_plain($_GET['rules']);
+  $clan_rules = check_plain($_GET['rules']);
 
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item, 'clan member');
 
-    if ($item->is_clan_leader != 1) { // not clan leader
+  // Ask for rules.
+  if (empty($clan_rules)) {
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not clan leader!') .
-        '</div><div class="action-effect">You are not the clan leader.&nbsp;
-        You cannot perform this action.</div>';
-
-      return FALSE;
-    }
-
-    // Ask for rules.
-    if (empty($clan_rules)) {
-
-      $sql = 'select rules from clans where id = %d;';
-// limited to 1 in db
+    $sql = 'select rules from clans where id = %d;';
     $result = db_query($sql, $game_user->fkey_clans_id);
     $item = db_fetch_object($result);
 
-      $outcome_reason =<<< EOF
+    $outcome_reason =<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$phone_id/$action_id">
-    <p>What are your clan rules?</p>
-    <textarea name="rules" cols="47" rows="12"/>$item->rules</textarea><br/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$phone_id/$action_id">
+  <p>What are your clan rules?</p>
+  <textarea name="rules" cols="47" rows="12"/>$item->rules</textarea><br/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
 
-      return FALSE;
-    }
-
-    $sql = 'update clans set rules = "%s"
-      where id = %d;';
-    db_query($sql, $clan_rules, $game_user->fkey_clans_id);
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_users_to_id, message) values
-      (%d, (select id from clans where acronym = "%s"), "%s");';
-    $message = 'The clan rules have changed.&nbsp; Please read them at your
-      earliest convenience.';
-    db_query($sql, $game_user->id, $clan_acronym, $message);
-
-    $outcome_reason .= '<div class="action-effect">The clan rules have
-      successfully been changed.';
-
-    return TRUE;
+    return FALSE;
   }
 
-  function _stlouis_action_write_on_a_billboard_function(&$outcome_reason,
-    $target) {
+  $sql = 'update clans set rules = "%s" where id = %d;';
+  db_query($sql, $clan_rules, $game_user->fkey_clans_id);
 
-    global $game, $phone_id;
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_users_to_id, message) values (%d, %d, "%s");';
+  $message = 'The clan rules have changed.&nbsp; Please read them at your
+    earliest convenience.';
+  db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $outcome_reason .= '<div class="action-effect">
+    The clan rules have been changed.
+  </div>';
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
+  return TRUE;
+}
 
-    $welcome_msg = check_plain($_GET['welcome_msg']);
-    $welcome_msg = _stlouis_filter_profanity($welcome_msg);
+function _stlouis_action_write_on_a_billboard_function(&$outcome_reason,
+  $target) {
+
+  global $game, $phone_id;
+
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
+
+  $welcome_msg = check_plain($_GET['welcome_msg']);
+  $welcome_msg = _stlouis_filter_profanity($welcome_msg);
 firep('welcome message = ' . $welcome_msg);
 
-    $sql = 'select * from elected_officials where fkey_users_id = %d;';
+  $sql = 'select * from elected_officials where fkey_users_id = %d;';
 // limited to 1 in db
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item);
 
-    $error = '';
-    if (substr($welcome_msg, 0, 3) == 'XXX') {
+  $error = '';
+  if (substr($welcome_msg, 0, 3) == 'XXX') {
+     $error = '<div class="message-error">Your message contains words that are not
+        allowed.&nbsp; Please rephrase.&nbsp; ' . $welcome_msg . '</div>';
+      $welcome_msg = '';
+  }
 
-       $error = '<div class="message-error">Your message contains words that are not
-          allowed.&nbsp; Please rephrase.&nbsp; ' . $welcome_msg . '</div>';
-        $welcome_msg = '';
+  // Ask for message.
+  if ($welcome_msg == '') {
 
-    }
+    $sql = 'select welcome_msg from neighborhoods where id = %d;';
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+    $item = db_fetch_object($result);
 
-    if ($welcome_msg == '') { // ask for message
-
-      $sql = 'select welcome_msg from neighborhoods where id = %d;';
-// limited to 1 in db
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-      $item = db_fetch_object($result);
-
-      $outcome_reason =<<< EOF
+    $outcome_reason =<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$phone_id/$action_id">
-    <p>What should the sign state?</p>
-    $error
-    <textarea name="welcome_msg" cols="32"
-      rows="8"/>$item->welcome_msg</textarea><br/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$phone_id/$action_id">
+  <p>What should the sign state?</p>
+  $error
+  <textarea name="welcome_msg" cols="32"
+    rows="8"/>$item->welcome_msg</textarea><br/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
 
-      return false;
-
-    } // no new msg
-
-    $sql = 'update neighborhoods set welcome_msg = "%s"
-      where id = %d;';
-    $result = db_query($sql, $welcome_msg, $game_user->fkey_neighborhoods_id);
-
-    $sql = 'insert into party_messages (fkey_users_from_id,
-      fkey_neighborhoods_id, message) values (%d, %d, "%s");';
-    $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
-      $welcome_msg);
-
-    $outcome_reason .= '<div class="action-effect">The sign has been
-      successfully created.';
-
-    return true;
-
+    return FALSE;
   }
+
+  $sql = 'update neighborhoods set welcome_msg = "%s" where id = %d;';
+  db_query($sql, $welcome_msg, $game_user->fkey_neighborhoods_id);
+
+  $sql = 'insert into party_messages (fkey_users_from_id,
+    fkey_neighborhoods_id, message) values (%d, %d, "%s");';
+  db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $welcome_msg);
+
+  $outcome_reason .= '<div class="action-effect">The sign has been created.</div>';
+  return TRUE;
+}
 
 function _stlouis_action_change_clan_password_function(&$outcome_reason,
   $target, &$can_do_again) {

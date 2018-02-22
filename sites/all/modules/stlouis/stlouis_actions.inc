@@ -12,8 +12,6 @@ function actionlist() {
   include_once(drupal_get_path('module', $game) . '/game_defs.inc');
   $arg2 = check_plain(arg(2));
 
-// firep('$game is ' . $game);
-
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
