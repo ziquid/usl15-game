@@ -645,73 +645,60 @@ EOF;
 
   }
 
+function _stlouis_action_change_clan_password_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-  function _stlouis_action_change_clan_password_function(&$outcome_reason,
-    $target) {
+  global $game, $phone_id;
+  $game_user = _stlouis_fetch_user();
+  $action_id = arg(3);
 
-    global $game, $phone_id;
-    $game_user = _stlouis_fetch_user();
-    $action_id = arg(3);
+  $clan_password = trim(check_plain($_GET['password']));
 
-    $clan_password = trim(check_plain($_GET['password']));
-
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-// limited to 1 in db
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 firep($item);
 
-    if ($item->is_clan_leader != 1) { // not clan leader
+  // Check to see if clan leader.
+  if ($item->is_clan_leader != 1) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not clan leader!') .
+      '</div><div class="action-effect">You are not the clan leader.&nbsp;
+      You cannot perform this action.</div>';
+    return FALSE;
+  }
 
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not clan leader!') .
-        '</div><div class="action-effect">You are not the clan leader.&nbsp;
-        You cannot perform this action.</div>';
-
-      return false;
-
-    }
-
-    if (empty($clan_password)) { // ask for password
-
-      $sql = 'select password from clans where id = %d;';
-// limited to 1 in db
-       $result = db_query($sql, $game_user->fkey_clans_id);
-      $item = db_fetch_object($result);
-
-      $outcome_reason =<<< EOF
+  // Ask for the new password.
+  if (empty($clan_password)) {
+    $outcome_reason =<<< EOF
 <div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$phone_id/$action_id">
-    <p>What is your clan password (6 characters)?</p>
-    <p class="second">Enter <strong>delete</strong> to remove the password</p>
-    <input type="text" name="password" size="6" maxlength="6"/>
-    <input type="submit" value="Submit"/>
-  </form>
+<form method=get action="/$game/actions_do/$phone_id/$action_id">
+  <p>What is your clan password (6 characters)?</p>
+  <p class="second">Enter <strong>delete</strong> to remove the password</p>
+  <input type="text" name="password" size="6" maxlength="6"/>
+  <input type="submit" value="Submit"/>
+</form>
 </div>
 EOF;
-
-      return false;
-
-    } // no new password
-
-    if (strtolower($clan_password) == 'delete') $clan_password = '';
-
-    $sql = 'update clans set password = "%s"
-      where id = %d;';
-    $result = db_query($sql, $clan_password, $game_user->fkey_clans_id);
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_users_to_id, message) values
-      (%d, (select id from clans where acronym = "%s"), "%s");';
-    $message = 'Notice: the clan password has changed.';
-    $result = db_query($sql, $game_user->id, $clan_acronym, $message);
-
-    $outcome_reason .= '<div class="action-effect">The clan password has
-      successfully been changed.';
-
-    return true;
-
+    return FALSE;
   }
+
+  if (strtolower($clan_password) == 'delete') {
+    $clan_password = '';
+  }
+
+  $sql = 'update clans set password = "%s" where id = %d;';
+  db_query($sql, $clan_password, $game_user->fkey_clans_id);
+
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_users_to_id, message) values (%d, %d, "%s");';
+  $message = 'Notice: the clan password has changed.';
+  db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
+
+  $outcome_reason .= '<div class="action-effect">The clan password has
+    been changed.';
+  return TRUE;
+}
 
 function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason,
   $target, &$can_do_again) {
