@@ -17,6 +17,7 @@
   <p>February 1, 2018 Alpha release 0.1.0</p>
   <h4>Please note this release is for testing only</h4>
   <h4>Do not expect anything in this release to be permanent</h4>
+  <p>Feb 22: Reworked PNG costs, Added Roll Call to actions</p>
   <p>Feb 21: Added PNG to actions</p>
   <p>Feb 19: Fixed top alder list</p>
   <p>Jan 30: Fixed resetting your player</p>

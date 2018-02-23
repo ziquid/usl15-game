@@ -890,7 +890,6 @@ firep($item);
     $official_link .= '<br/><a href="/' . $game . '/user/' .
       $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
-    $experience = $item->experience;
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym)) {
@@ -909,7 +908,7 @@ firep($item);
   src="/sites/default/files/images/$icon"/></div>
 <div class="clan-title">$item->party_title</div>
 <div class="opponent-name">$official_link $clan_acronym</div>
-<div class="opponent-influence">$experience Influence<br/>
+<div class="opponent-influence">$item->experience $experience<br/>
   Level $item->level</div>
 </div>
 EOF;
