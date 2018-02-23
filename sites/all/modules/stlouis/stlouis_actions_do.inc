@@ -859,13 +859,13 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
   $outcome_reason .=<<< EOF
 <div class="action-effect">These players are in $location:
   <div class="elections-header">
-<div class="election-details">
-<div class="clan-title">$politics</div>
-<div class="opponent-name">Name</div>
-<div class="opponent-influence">Stats</div>
-</div>
-</div>
-<div class="elections">
+    <div class="election-details">
+      <div class="clan-title">$politics</div>
+      <div class="opponent-name">Name</div>
+      <div class="opponent-influence">Stats</div>
+    </div>
+  </div>
+  <div class="elections">
 EOF;
 
   foreach ($data as $item) {
@@ -916,6 +916,7 @@ EOF;
 
   }
 
+  $outcome_reason .= '</div></div>';
   return TRUE;
 }
 
