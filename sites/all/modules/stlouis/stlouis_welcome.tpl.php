@@ -14,30 +14,8 @@
 
   db_set_active('game_' . $game);
 
-  if ($game == 'stlouis') {
-    $default_neighborhood = 81;
-    $default_value = 'Greenbacks';
-  }
-
-  if ($game == 'celestial_glory') {
-
-    $sql = 'SELECT count(users.id) as count,
-      fkey_neighborhoods_id from users
-      left join neighborhoods on neighborhoods.id = users.fkey_neighborhoods_id
-       group by fkey_neighborhoods_id
-      order by count asc
-      limit 1;';
-
-    $result = db_query($sql);
-    $item = db_fetch_object($result);
-    $default_neighborhood = $item->fkey_neighborhoods_id;
-    $default_value = 'Faith';
-  }
-
-  if ($game == 'robber_barons') {
-    $default_neighborhood = 1;
-    $default_value = 'Faith';
-  }
+  $default_neighborhood = 81;
+  $default_value = 'Greenbacks';
 
 // check to make sure not too many from the same IP address
   $sql = 'select count(`value`) as count from user_attributes
@@ -47,14 +25,9 @@
 
 // allow multiple from my IP
   if (($item->count > 5) && (ip_address() != '69.255.171.73') &&
-    (ip_address() != '69.64.69.86') &&
-    (ip_address() != '67.191.194.217') &&
-    (ip_address() != '64.150.187.146')) {
-    mail('joseph@cheek.com', 'too many users from IP ' . ip_address(),
-      'The system successfully blocked an attempt to register user number ' .
-      $item->count . ' (' . $arg2 . ').');
+    (ip_address() != '73.82.211.0')) {
     echo 'Error E-2242: ' . $arg2 .
-      '.  Please email <strong>support@cheek.com</strong>.';
+      '.  Please email <strong>zipport@ziquid.com</strong>.';
     exit();
   }
 
@@ -69,7 +42,7 @@
     remote_ip = "%s";';
   $result = db_query($sql, date('Y-m-d H:i:s'), $phone_id, ip_address());
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
   echo <<< EOF
