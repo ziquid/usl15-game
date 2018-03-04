@@ -360,19 +360,25 @@ function stlouis_init() {
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
 
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
-        // 411dip width display
-
+      }
+      // 414dip width display.
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width414.css');
+      }
+      // 411dip width display.
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width411.css');
-
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
-// 400dip width display
-
+      }
+      // 400dip width display.
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width400.css');
-
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
-// 360dip width display
-
+      }
+      // 375dip width display.
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=375') !== FALSE) {
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width375.css');
+      }
+      // 360dip width display.
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width360.css');
       } // width=### ?
 
@@ -1500,17 +1506,17 @@ function _stlouis_fetch_user() {
     elected_positions.can_broadcast_to_party, clan_members.fkey_clans_id,
     elected_positions.max_level as max_level_for_office,
     CURRENT_TIMESTAMP as time_now
-    
+
     from users
 
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members
     ON clan_members.fkey_users_id = users.id
-    
+
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
@@ -1521,12 +1527,12 @@ function _stlouis_fetch_user() {
     LEFT OUTER JOIN equipment_ownership
     ON equipment_ownership.fkey_equipment_id = equipment.id
     WHERE equipment_ownership.fkey_users_id = %d
-    
+
     union all
-    
+
     select sum(staff.energy_increase * staff_ownership.quantity)
     as energy_increase from staff
-        
+
     LEFT OUTER JOIN staff_ownership
     ON staff_ownership.fkey_staff_id = staff.id
     WHERE staff_ownership.fkey_users_id = %d;';
@@ -1987,7 +1993,7 @@ $extra_messages
   var energy_max = $game_user->energy_max;
   var energy_to_add = $energy_bonus;
   var energy_interval = 300;
-  
+
   var money_minutes = $money_minutes;
   var money_seconds = $money_seconds;
   var money = $game_user->money;
@@ -2002,21 +2008,21 @@ $extra_messages
   var actions_interval = 180;
 
   function display_energy() {
-  
+
     document.getElementById('energy-id').innerHTML = energy;
-    
+
     if ((energy < energy_max) && (energy_to_add > 0)) {
-      
+
       document.getElementById('energy-time').innerHTML =
         '+' + energy_to_add + ' in ' + energy_minutes + ':' +
         (energy_seconds < 10 ? '0' + energy_seconds : energy_seconds);
 
     } else {
-    
+
       document.getElementById('energy-time').innerHTML = '';
-    
+
     }
-      
+
   }
 
   function display_actions() {
@@ -2024,7 +2030,7 @@ $extra_messages
     document.getElementById('actions-id').innerHTML = actions;
 
     if (actions != actions_max) {
-    
+
       if (actions > actions_max) {
         var operand = '-';
       } else {
@@ -2036,15 +2042,15 @@ $extra_messages
         (actions_seconds < 10 ? '0' + actions_seconds : actions_seconds);
 
     } else {
-    
+
       document.getElementById('actions-time').innerHTML = '';
-    
+
     }
 
   }
 
   function display_money() {
-  
+
     if (money_to_add > 0) {
 
       if (money.toString().length > 8) {
@@ -2054,7 +2060,7 @@ $extra_messages
       } else {
         moneyStr = money.toString();
       }
-      
+
       if (money_to_add.toString().length > 5) {
         money_to_addStr =
           money_to_add.toString().substr(0,money_to_add.toString().length - 3) +
@@ -2065,34 +2071,34 @@ $extra_messages
         money_to_addStr = money_to_add.toString();
         money_secondsStr = ':' + (money_seconds < 10 ? '0' + money_seconds : money_seconds);
       }
-      
+
       document.getElementById('money-id').innerHTML = moneyStr;
-    
+
       document.getElementById('income-time').innerHTML =
         '+' + money_to_addStr + ' in ' + money_minutes + money_secondsStr;
-    
+
     }
-          
+
   }
-  
+
   function add_all_stuff() {
-  
+
     if ((energy_seconds == 0) && (energy_minutes > 0)) {
-    
+
       energy_seconds = 60;
       energy_minutes -= 1;
-          
+
     }
 
     if ((money_seconds == 0) && (money_minutes > 0)) {
-    
+
       money_seconds = 60;
       money_minutes -= 1;
-          
+
     }
 
     if ((actions_seconds == 0) && (actions_minutes > 0)) {
-    
+
       actions_seconds = 60;
       actions_minutes -= 1;
 
@@ -2101,53 +2107,53 @@ $extra_messages
     energy_seconds--;
     actions_seconds--;
     money_seconds--;
-    
+
     if ((energy_seconds == 0) && (energy_minutes == 0)) {
-    
+
       energy += energy_to_add;
       energy_seconds = energy_interval % 60;
       energy_minutes = Math.floor(energy_interval / 60);
-          
+
     }
 
     if ((money_seconds == 0) && (money_minutes == 0)) {
-    
+
       money += money_to_add;
       money_seconds = money_interval % 60;
       money_minutes = Math.floor(money_interval / 60);
-          
+
     }
 
     if ((actions_seconds == 0) && (actions_minutes == 0) &&
       (actions < actions_max)) {
-    
+
       actions += actions_to_add;
       actions_seconds = actions_interval % 60;
       actions_minutes = Math.floor(actions_interval / 60);
-          
+
     }
-    
+
     if ((actions_seconds == 0) && (actions_minutes == 0) &&
       (actions > actions_max)) {
-    
+
       actions -= actions_to_add;
       actions_seconds = actions_interval % 60;
       actions_minutes = Math.floor(actions_interval / 60);
-          
+
     }
-    
+
     if (energy >= energy_max) {
-    
+
       energy = energy_max;
-      
+
     }
-    
+
     display_energy();
     display_actions();
     display_money();
-    
+
   }
-  
+
   var interval_timer = setInterval('add_all_stuff()', 1000);
 
 </script>
