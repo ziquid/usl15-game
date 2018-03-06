@@ -17,6 +17,9 @@
   <p>March 6, 2018 Beta release 0.2.0</p>
   <h4>Please note this release is for testing only</h4>
   <h4>Some things may change</h4>
+  <h4>All accounts have been reset!</h4>
+  <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
+    to have our support staff re-credit it to your account</h4>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
