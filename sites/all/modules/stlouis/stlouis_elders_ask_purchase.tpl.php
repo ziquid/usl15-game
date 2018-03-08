@@ -31,27 +31,27 @@ EOF;
 
   }
 */
-  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== FALSE ) ||
-     (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== FALSE )) {
 
-    echo <<< EOF
-    
-  <div class="elders-menu big">
-    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/10">Buy
-      10 Luck (US $1.99)</a></div>
-    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/35">Buy
-      35 Luck (US $5.99)</a></div>
-    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/150">Buy
-      150 Luck (US $24.99)</a></div>
-  </div>
-  
-EOF;
-
-    db_set_active('default');
-
-    return;
-
-  }
+// Apple IAP -- uncomment when ready.
+//  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'iPhone') !== FALSE ) ||
+//     (strpos($_SERVER['HTTP_USER_AGENT'], 'iPad') !== FALSE )) {
+//
+//    echo <<< EOF
+//
+//  <div class="elders-menu big">
+//    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/10">Buy
+//      10 Luck (US $1.99)</a></div>
+//    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/35">Buy
+//      35 Luck (US $5.99)</a></div>
+//    <div class="menu-option"><a href="https://www.paypal.com/buy/luck/150">Buy
+//      150 Luck (US $24.99)</a></div>
+//  </div>
+//
+//EOF;
+//
+//    db_set_active('default');
+//    return;
+//  }
 
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
 
