@@ -20,6 +20,8 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
+<p>11 Mar: changed debate timeout to 15 minutes instead of 20.</p>
+<p>11 Mar: fixed an issue where some colors were not showing up on the map.</p>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
