@@ -6,11 +6,9 @@ function actionlist() {
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
 
   $game_user = $fetch_user();
   include_once(drupal_get_path('module', $game) . '/game_defs.inc');
-  $arg2 = check_plain(arg(2));
 
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
@@ -247,7 +245,7 @@ function _target_list($target, $game_user) {
         LIMIT 3;';
 
       $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->level, date('Y-m-d H:i:s', time() - 1200),
+        $game_user->level, date('Y-m-d H:i:s', time() - $debate_time),
         $game_user->id, $game_user->fkey_clans_id, $game_user->id,
         $game_user->id);
       while ($user = db_fetch_object($result)) $data2[] = $user;
