@@ -29,6 +29,7 @@ require_once(drupal_get_path('module', 'stlouis') . '/functions.inc');
 function stlouis_cron() {
 
   db_set_active('game_stlouis');
+  include_once(drupal_get_path('module', 'stlouis') . '/game_defs.inc');
 
 // save old approval ratings
 
@@ -219,7 +220,11 @@ function stlouis_cron() {
     left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
     WHERE fkey_elected_positions_id = 1 and (xcoor > 1 or ycoor > 1);';
   $result = db_query($sql);
+  $data = [];
   while ($item = db_fetch_object($result)) {
+    if ($event_type == EVENT_ST_PATTYS) {
+      $item->color = '20f020';
+    }
     $data[] = $item;
   }
 
@@ -230,10 +235,6 @@ function stlouis_cron() {
         hexdec(substr($item->color, 2, 2)),
         hexdec(substr($item->color, 4, 2))));
   }
-/* st patrick's day
-    imagefill($map_large, $item->xcoor, $item->ycoor,
-      imagecolorallocate($map_large, 32, 224, 32));
-*/
 
   imagecopy($map_large, $map_large_overlay, 0, 0, 0, 0,
     imagesx($map_large_overlay), imagesy($map_large_overlay));
