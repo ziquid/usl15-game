@@ -165,12 +165,12 @@ function _target_list($target, $game_user) {
 // expensive query - goes to slave
 //   db_set_active('game_' . $game . '_slave1');
 
+  $data2 = [];
   switch ($target) {
 
     case 'clan':
 // users in your clan
 
-      $data2 = array();
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -186,11 +186,9 @@ function _target_list($target, $game_user) {
 
       break;
 
-
     case 'neighborhood':
 // users in your neighborhood
 
-      $data2 = array();
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -208,12 +206,10 @@ function _target_list($target, $game_user) {
 
       break;
 
-
     case 'neighborhood_higher_than_you_but_still_debateable':
 // people in your neighborhood who aren't on your wall nor in your clan
 // who are a higher level than you but are still debateable
 
-      $data2 = array();
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -252,11 +248,9 @@ function _target_list($target, $game_user) {
 
       break;
 
-
     case 'neighborhood_not_met':
 // people in your neighborhood who aren't on your wall nor in your clan
 
-      $data2 = array();
       $sql = 'SELECT users.id, users.username,
          clan_members.is_clan_leader, clans.acronym AS clan_acronym,
          NULL as ep_name
@@ -312,7 +306,6 @@ firep('allowed not_met users: ' . $allowed_string);
     case 'neighborhood_no_official_not_home':
 // non-party users who aren't officials
 
-      $data2 = array();
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -340,47 +333,8 @@ firep('allowed not_met users: ' . $allowed_string);
 
       break;
 
-    case 'neighborhood_no_official_not_home_not_babylonian':
-// non-party users who aren't officials and aren't babylonian 8-)))
-
-      if ($game_user->fkey_neighborhoods_id == 1) { // Judea
-        $not_babylonian = 'AND users.fkey_values_id <> 4';
-      } else {
-        $not_babylonian = '';
-      }
-
-      $data2 = array();
-      $sql = 'SELECT users.id, users.username,
-        clan_members.is_clan_leader, clans.acronym AS clan_acronym,
-        NULL as ep_name
-        FROM users
-        LEFT OUTER JOIN clan_members
-          ON clan_members.fkey_users_id = users.id
-        LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
-        LEFT OUTER JOIN elected_officials
-          ON elected_officials.fkey_users_id = users.id
-        LEFT OUTER JOIN elected_positions
-          ON elected_officials.fkey_elected_positions_id =
-          elected_positions.id
-        LEFT OUTER JOIN `values` ON users.fkey_values_id = `values`.id
-        WHERE users.fkey_neighborhoods_id = %d
-          AND users.fkey_values_id <> %d ' . $not_babylonian . '
-          AND username <> ""
-          AND (elected_officials.fkey_elected_positions_id IS NULL
-            OR elected_positions.type = 2)
-          AND `values`.fkey_neighborhoods_id <> %d
-        ORDER BY username ASC ;';
-
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id);
-      while ($user = db_fetch_object($result)) $data2[] = $user;
-
-      break;
-
   } // switch
 
-  db_set_active('game_' . $game); // reset to master
-
+//  db_set_active('game_' . $game); // reset to master
   return $data2;
-
 }
