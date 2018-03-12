@@ -94,13 +94,10 @@ function actionlist() {
 
   }
 
-// for testing - exclude all exclusions (!) if I am abc123
-
+  // For testing - exclude all exclusions (!) if I am abc123.
   if ($phone_id == 'abc123') {
-
     $sql_to_add = '';
     $actions_active = 'and (actions.active = 1 or actions.active = 0)';
-
   }
 
 // actions that have staff associated with them
@@ -117,7 +114,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY ' . $order_by;
-  firep($sql);
+  firep($sql, 'actions with staff');
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
@@ -139,7 +136,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY actions.required_level DESC';
- firep($sql, 'actions sql 1');
+ firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
@@ -149,13 +146,14 @@ function actionlist() {
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY name ASC';
-  firep($sql, 'actions sql 2');
+  firep($sql, 'actions without staff or equipment');
   $result = db_query($sql, $game_user->id);
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   return $data;
-
 }
 
 

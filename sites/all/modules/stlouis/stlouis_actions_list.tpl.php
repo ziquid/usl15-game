@@ -70,35 +70,33 @@ EOF;
 
   }
 
-  if ($game == 'stlouis') {
+//  if ($game == 'stlouis') {
+//
+//    if (arg(3) == 'banking') {
+//      $banking_active = 'active';
+//      $actions_type = 'Banking';
+//      $order_by = 'actions.id ASC';
+//    } else {
+//      $normal_active = 'active';
+//      $actions_type = 'Normal';
+//      $order_by = 'required_level DESC';
+//    }
 
-    if (arg(3) == 'banking') {
-      $banking_active = 'active';
-      $actions_type = 'Banking';
-      $order_by = 'actions.id ASC';
-    } else {
-      $normal_active = 'active';
-      $actions_type = 'Normal';
-      $order_by = 'required_level DESC';
-    }
+//    echo <<< EOF
+//<!--<div class="news">
+//  <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
+//  <a href="/$game/actions/$arg2/banking" class="button $banking_active">Banking</a>
+//</div>-->`
+//EOF;
 
-    echo <<< EOF
-<!--<div class="news">
-  <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
-  <a href="/$game/actions/$arg2/banking" class="button $banking_active">Banking</a>
-</div>-->`
-EOF;
-
-  }
+//  }
 
   if ($game_user->level < 20) {
-
     echo <<< EOF
 <ul>
   <li>Use actions to affect your friends and opponents</li>
 </ul>
 EOF;
-
   }
 
   echo <<< EOF
@@ -132,24 +130,24 @@ firep($item);
       array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
       $item->description);
 
-    if ((arg(3) != 'banking') && (stripos($description, 'account') !== FALSE))
-      continue; // move banking to its own screen
+//    if ((arg(3) != 'banking') && (stripos($description, 'account') !== FALSE))
+//      continue; // move banking to its own screen
 
-    if ((arg(3) == 'banking') && (stripos($description, 'account') === FALSE))
-      continue; // move banking to its own screen
+//    if ((arg(3) == 'banking') && (stripos($description, 'account') === FALSE))
+//      continue; // move banking to its own screen
 
     if ($item->cost > 0) {
       $cost = "Cost: $item->cost Action";
-    } else {
+    }
+    else {
       $cost = 'Cost: ';
     }
 
     if ($item->values_cost > 0) {
-
-      if (substr($cost, -6) == 'Action') $cost .= ', ';
-
+      if (substr($cost, -6) == 'Action') {
+        $cost .= ', ';
+      }
       $cost .= "$item->values_cost $game_user->values";
-
     }
 
     if (!empty($item->fkey_equipment_id)) {
@@ -162,10 +160,12 @@ firep($item);
       "/sites/default/files/images/actions/$game-{$item->id}.png"))
       $image = "/sites/default/files/images/actions/$game-$item->id.png";
 
-    if ($item->target == 'none')
+    if ($item->target == 'none') {
       $target = t('Your');
-    else
+    }
+    else {
       $target = t('Target\'s');
+    }
 
     $name = str_replace(array('%clan', '%subclan', '%value'),
       array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
@@ -332,7 +332,8 @@ EOF;
 EOF;
 //     }
 
-  } else {
+  }
+  else {
     echo <<< EOF
     <div class="land-perform-button-wrapper">
       <input class="land-perform-button" type="submit" value="Do it"/>
@@ -552,7 +553,7 @@ EOF;
           break;
 
       } // switch
-      db_set_active('game_' . $game); // reset to master
+//      db_set_active('game_' . $game); // reset to master
 
 // too many to list?  separate by first letter
 
