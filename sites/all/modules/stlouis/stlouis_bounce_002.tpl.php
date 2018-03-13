@@ -20,7 +20,7 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
-<p>13 Mar: made the names of hoods easier to read.</p>
+<p>13 Mar: made the names of hoods on the map easier to read.</p>
 <p>12 Mar: opened two new hoods for elections.</p>
 <p>12 Mar: Fixed the Write on a Billboard action.</p>
 <p>11 Mar: changed debate timeout to 15 minutes instead of 20.</p>
