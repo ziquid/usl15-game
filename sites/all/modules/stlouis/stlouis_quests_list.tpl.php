@@ -165,15 +165,7 @@ EOF;
 
   }
 
-  if ($game == 'celestial_glory') {
-
-    $quests = '';
-
-  } else {
-
-    $quests = "{$quest}s";
-
-  }
+  $quests = "{$quest}s";
 
   echo <<< EOF
 <div class="title">
@@ -304,9 +296,10 @@ firep($sql);
   </div>
 EOF;
 
-    } else { // quest in my hood
+    }
+    else { // quest in my hood
 
-    echo <<< EOF
+      echo <<< EOF
 <div class="quests">
   <div class="quest-icon"><a href="/$game/quests_do/$arg2/$item->id"><img
     src="/sites/default/files/images/quests/$game-$item->id.png" border="0"
@@ -323,12 +316,21 @@ EOF;
     +$item->min_money to $item->max_money $game_user->values</div>
 EOF;
 
-    if ($item->chance_of_loot + $item->chance_of_loot_staff > 0) {
-      echo <<< EOF
-    <div class="quest-loot">Chance of Loot!</div>
-EOF;
+      $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
 
-    }
+      if ($chance_of_loot > 0) {
+
+        $chance_modifier = '';
+        if ($chance_of_loot <= 20) {
+          $chance_modifier = t('Low');
+        }
+        else if ($chance_of_loot >= 40) {
+          $chance_modifier = t('High');
+        }
+      echo <<< EOF
+    <div class="quest-loot">$chance_modifier Chance of Loot!</div>
+EOF;
+      }
 
     echo <<< EOF
     <div class="quest-required_energy">Requires $item->required_energy Energy</div>

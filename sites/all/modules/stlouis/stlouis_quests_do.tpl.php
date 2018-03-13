@@ -745,7 +745,7 @@ EOF;
 
     $limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
-    if ($game_quest->chance_of_loot >= mt_rand(1,100) &&
+    if ($game_quest->chance_of_loot >= mt_rand(1, 99) &&
     ($limit || $game_equipment->quantity_limit == 0)) {
 
       $sql = 'select * from equipment where id = %d;';
@@ -863,7 +863,7 @@ EOF;
 
     $limit = $game_staff->quantity_limit > (int) $game_staff->quantity;
 
-    if ($game_quest->chance_of_loot_staff >= mt_rand(1,100) &&
+    if ($game_quest->chance_of_loot_staff >= mt_rand(1, 99) &&
     ($limit || $game_staff->quantity_limit == 0)) {
 
       $sql = 'select * from staff where id = %d;';
@@ -1259,13 +1259,21 @@ EOF;
     +$item->min_money to $item->max_money $game_user->values</div>
 EOF;
 
-    if ($item->chance_of_loot + $item->chance_of_loot_staff > 0) {
+      $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
 
-      echo <<< EOF
-    <div class="quest-loot">Chance of Loot!</div>
+      if ($chance_of_loot > 0) {
+
+        $chance_modifier = '';
+        if ($chance_of_loot <= 20) {
+          $chance_modifier = t('Low');
+        }
+        else if ($chance_of_loot >= 40) {
+          $chance_modifier = t('High');
+        }
+        echo <<< EOF
+    <div class="quest-loot">$chance_modifier Chance of Loot!</div>
 EOF;
-
-    }
+      }
 
     echo <<< EOF
     <div class="quest-required_energy">Requires $item->required_energy Energy</div>
