@@ -20,6 +20,7 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
+<p>14 Mar: Wait for competencies to occur lowered to 3 minutes (from 5).</p>
 <p>13 Mar: Show chance of loot for quests.</p>
 <p>13 Mar: Made the names of hoods on the map easier to read.</p>
 <p>12 Mar: Opened two new hoods for elections.</p>
