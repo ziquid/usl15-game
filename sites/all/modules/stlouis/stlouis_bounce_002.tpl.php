@@ -20,6 +20,7 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
+<p>14 Mar: New job: Handy-person.</p>
 <p>14 Mar: Lowered max amount of currency to gain/lose per debate to 1/10 of hourly income.</p>
 <p>14 Mar: Wait for competencies to occur lowered to 3 minutes (from 5).</p>
 <p>13 Mar: Show chance of loot for quests.</p>
