@@ -199,16 +199,22 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
   $money_change = mt_rand(5 + $game_user->level,
     10 + ($game_user->level * 2)); // values changed
 
-// don't change more than net income / 6 for each user
+// don't change more than net income / 10 for each user
   $money_change = min($money_change,
-    floor(($game_user->income - $game_user->expenses) / 6));
+    floor(($game_user->income - $game_user->expenses) / 10));
   $money_change = min($money_change,
-    floor(($item->income - $item->expenses) / 6));
+    floor(($item->income - $item->expenses) / 10));
 
 // don't let money get negative or more than double
-  if ($money_change > $game_user->money) $money_change = $game_user->money;
-  if ($money_change > $item->money) $money_change = $item->money;
-  if ($money_change < 0) $money_change = 0;
+  if ($money_change > $game_user->money) {
+    $money_change = $game_user->money;
+  }
+  if ($money_change > $item->money) {
+    $money_change = $item->money;
+  }
+  if ($money_change < 0) {
+    $money_change = 0;
+  }
 
   if ($my_influence > $opp_influence) { // you won!  woohoo!
 
