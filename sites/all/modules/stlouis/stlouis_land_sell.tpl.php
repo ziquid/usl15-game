@@ -79,11 +79,10 @@
   } // job?
 
 
-// success!
-
+  // Success!
   if ($options['land-sell-succeeded'] == 'sell-success') {
 //    if ($game_land->type == 'investment') { // investment?  add competency
-//      competency_lose($game_user, 'investing', $quantity);
+//      competency_lose($game_user, 'investor', $quantity);
 //    }
     land_lose($game_user, $land_id, $quantity, $land_price);
   }
@@ -96,7 +95,6 @@
   show_aides_menu($game_user);
 
   $game_land->quantity = $game_land->quantity - (int) $quantity;
-
   show_land($game_user, $game_land, $options);
 
   echo <<< EOF

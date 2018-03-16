@@ -134,8 +134,7 @@ firep($game_land);
   }
 
 
-// success!
-
+  // Success!
   if ($options['land-buy-succeeded'] == 'buy-success') {
 
     if ($game_land->type == 'job') { // job?  delete other job(s)
@@ -156,7 +155,7 @@ firep($game_land);
     } // job?
 
     if ($game_land->type == 'investment') { // investment?  add competency
-      competency_gain($game_user, 'investing'/*, $quantity*/);
+      competency_gain($game_user, 'investor'/*, $quantity*/);
     }
     land_gain($game_user, $land_id, $quantity, $land_price);
   }
@@ -169,7 +168,6 @@ firep($game_land);
   show_aides_menu($game_user);
 
   $game_land->quantity = $game_land->quantity + (int) $quantity;
-
   show_land($game_user, $game_land, $options);
 
   echo <<< EOF
