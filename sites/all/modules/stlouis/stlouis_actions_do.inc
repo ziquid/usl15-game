@@ -416,7 +416,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $item = db_fetch_object($result);
 
   // Not a member of any or the same clan?
-  if (empty($item)) || ($item->fkey_clans_id != $game_user->fkey_clans_id)) {
+  if (empty($item) || ($item->fkey_clans_id != $game_user->fkey_clans_id)) {
     $outcome_reason = '<div class="land-failed">' .
       t('Not a member of your clan!') .
       '</div><div class="action-effect">' . $target_name .
@@ -424,7 +424,8 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
     return FALSE;
   }
 
-  if ($item->is_clan_leader) { // clan leader? must dissolve clan instead
+  // Clan leader? must dissolve clan instead.
+  if ($item->is_clan_leader) {
     $outcome_reason = '<div class="land-failed">' .
       t('Clan leader!') .
       '</div><div class="action-effect">' . $target_name .
