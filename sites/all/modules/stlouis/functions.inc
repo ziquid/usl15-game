@@ -1935,8 +1935,8 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
 }
 
 function competency_gain($game_user, $id, $level = 1) {
-
-  if (gettype($id) == 'string') { // find id from string
+  // If id is string, find numerical id.
+  if (gettype($id) == 'string') {
 
     $sql = 'select * from competencies where name = "%s";';
     $result = db_query($sql, $id);
@@ -1962,7 +1962,6 @@ function competency_gain($game_user, $id, $level = 1) {
     $sql = 'select * from competencies where id = %d;';
     $result = db_query($sql, $id);
     $item = db_fetch_object($result);
-
   }
 
   $sql = 'select use_count, timestamp from user_competencies

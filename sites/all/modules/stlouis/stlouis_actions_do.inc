@@ -396,73 +396,61 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
   return TRUE;
 }
 
-  function _stlouis_action_remove_a_clan_member_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $set_value = '_' . $game . '_set_value';
-    $fetch_user = '_' . $game . '_fetch_user';
+  $set_value = '_' . $game . '_set_value';
+  $fetch_user = '_' . $game . '_fetch_user';
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
-    $can_do_again = FALSE;
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $action_id = arg(3);
+  $can_do_again = FALSE;
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
 
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
 
-    if ((empty($item)) || ($item->fkey_clans_id != $game_user->fkey_clans_id)) {
-// not a member of any or the same clan
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not a member of your clan!') .
-        '</div><div class="action-effect">' . $target_name .
-        ' doesn\'t belong to your clan.&nbsp; You cannot remove him or her.</div>';
-
-      return FALSE;
-
-    }
-
-    if ($item->is_clan_leader) { // clan leader? must dissolve clan instead
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Clan leader!') .
-        '</div><div class="action-effect">' . $target_name .
-        ' is a clan leader and cannot be removed.</div>';
-
-      return FALSE;
-
-    }
-
-    $sql = 'delete from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $set_value($target_id, 'cant_join_clan', time() + 7200);
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_neighborhoods_id, message) values (%d, %d, "%s");';
-    $message = $target_name . ' has been forcibly removed from your clan.';
-    $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
-      $message);
-
-    $outcome_reason .= '<div class="action-effect">' .
-      t('@name has been removed from your clan',
-      array('@name' => $target_name)) . '</div>';
-
-mail('joseph@cheek.com', $target_name . ' has been forcibly removed',
-  'from the clan in which s/he was a member.');
-
-    return TRUE;
-
+  // Not a member of any or the same clan?
+  if (empty($item)) || ($item->fkey_clans_id != $game_user->fkey_clans_id)) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not a member of your clan!') .
+      '</div><div class="action-effect">' . $target_name .
+      ' doesn\'t belong to your clan.&nbsp; You cannot remove him or her.</div>';
+    return FALSE;
   }
+
+  if ($item->is_clan_leader) { // clan leader? must dissolve clan instead
+    $outcome_reason = '<div class="land-failed">' .
+      t('Clan leader!') .
+      '</div><div class="action-effect">' . $target_name .
+      ' is a clan leader and cannot be removed.</div>';
+    return FALSE;
+  }
+
+  $sql = 'delete from clan_members where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
+  db_query($sql, $target_id);
+
+  $set_value($target_id, 'cant_join_clan', time() + 7200);
+
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_neighborhoods_id, message) values (%d, %d, "%s");';
+  $message = $target_name . ' has been forcibly removed from your clan.';
+  db_query($sql, $game_user->id, $game_user->fkey_clans_id,
+    $message);
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('@name has been removed from your clan',
+    array('@name' => $target_name)) . '</div>';
+  return TRUE;
+}
 
   function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
     $target) {
@@ -565,8 +553,7 @@ EOF;
   return TRUE;
 }
 
-function _stlouis_action_write_on_a_billboard_function(&$outcome_reason,
-  $target, &$can_do_again) {
+function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
 
@@ -682,8 +669,7 @@ EOF;
   return TRUE;
 }
 
-function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason,
-  $target, &$can_do_again) {
+function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
   $fetch_user = '_' . arg(0) . '_fetch_user';
@@ -1029,55 +1015,6 @@ firep($item);
 EOF;
 
     } // foreach position
-
-    return true;
-
-  }
-
-
-  function _celestial_glory_action_fill_out_your_family_tree_function(&$outcome_reason,
-    $target) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-//    $fetch_header = '_' . arg(0) . '_header';
-
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-//    $action_id = arg(3);
-
-    $sql = 'update users set family_members_found = family_members_found + 1,
-      experience = experience + %d where id = %d;';
-    $result = db_query($sql, floor(sqrt($game_user->initiative)), $game_user->id);
-
-    $outcome_reason .= '<div class="action-effect">You have now found and recorded ' .
-      ($game_user->family_members_found + 1) . ' family members!';
-    $outcome_reason .= '<div class="action-effect">You gain a bonus of ' .
-      floor(sqrt($game_user->initiative)) . ' ' . $experience;
-
-    return true;
-
-  }
-
-
-function _celestial_glory_action_bear_your_testimony_function(&$outcome_reason,
-    $target) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-//    $action_id = arg(3);
-
-    $bonus = mt_rand(5,25);
-    $sql = 'update users set money = money + %d where id = %d;';
-    $result = db_query($sql, $bonus, $game_user->id);
-
-    $outcome_reason .= '<div class="action-effect">Your ' . $game_user->values .
-      ' is increased by ' . $bonus . '</div>';
 
     return true;
 
@@ -1479,115 +1416,87 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   }
 
 
-  function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id, $action;
+  global $game, $phone_id, $action;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $get_value = '_' . arg(0) . '_get_value';
-    $game_user = $fetch_user();
+  $fetch_user = '_' . $game . '_fetch_user';
+  $get_value = '_' . $game . '_get_value';
+  $game_user = $fetch_user();
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'] + 0;
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = (int) $_GET['target'];
 
-    if ((substr($phone_id, 0, 3) == 'sdk') ||
-      $get_value($game_user->id, 'sdk') == 1) {
-
-      $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
-        '</div><div class="action-effect">SDK users cannot give Actions.</div>';
-
-      return FALSE;
-
-    }
-
-// we need to make the target user's actions current
-
-    $sql = 'select actions, actions_max, actions_next_gain from users
-      where id = %d;';
-// limited to 1 in db
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
-
-    $actions_next_gain = strtotime($item->actions_next_gain);
-    $secs_until = $actions_next_gain - time();
-
-// make actions current -- if this didn't happen, you could give actions to a
-// user that would be swallowed up by time if he was low on actions and not
-// currently playing.
-
-    $text = 'User ' . $game_user->username . ' is sending actions to ' .
-      $target_name . ' (currently ' . $item->actions . ' of ' .
-      $item->actions_max . ' with a next_gain time of ' .
-      $item->actions_next_gain . ').';
-
-    while (($item->actions < $item->actions_max) &&
-      ($secs_until <= 0)) { // do we need actions?
-
-      $item->actions++; // add 1 action
-      $actions_next_gain += 180; // next add in 3 mins
-      $secs_until += 180; // ditto
-
-    }
-
-    while (($item->actions > $item->actions_max) &&
-      ($secs_until <= 0)) { // do we need actions?
-
-      $item->actions--; // delete 1 action
-      $actions_next_gain += 180; // next add in 3 mins
-      $secs_until += 180; // ditto
-
-    }
-
-// now current with actions?  bring the date current too.
-    if ($item->actions == $item->actions_max) $actions_next_gain = time();
-
-    $item->actions_next_gain = date('Y-m-d H:i:s', $actions_next_gain);
-    $sql = 'update users set actions = %d, actions_next_gain = "%s"
-      where id = %d;';
-    $result = db_query($sql, $item->actions, $item->actions_next_gain,
-      $target_id);
-
-// too many actions already?  fail.
-    if ($item->actions >= $item->actions_max * 50) {
-
-      $outcome_reason = '<div class="land-failed">' . t('Thanks for Sharing!') .
-        '</div><div class="action-effect">... but ' . $target_name .
-        ' has plenty of actions already.</div>';
-
-      return FALSE;
-
-    }
-
-
-// now save the record of what happened
-
-// if ($game == 'celestial_glory')
-//    mail('joseph@cheek.com', 'CG actions sent!', $text);
-
-    $sql = 'insert into challenge_history 
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $target_id,
-      $game_user->fkey_neighborhoods_id, 0, 0,
-      "$game_user->username gave a gift of Action points to $target_name.",
-      "$game_user->username gave a gift of $action->actions_change Action " .
-      "points to $target_name (currently $item->actions).");
-
-    return TRUE;
-
+  if ((substr($phone_id, 0, 3) == 'sdk') ||
+    $get_value($game_user->id, 'sdk') == 1) {
+    $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
+      '</div><div class="action-effect">SDK users cannot give Actions.</div>';
+    return FALSE;
   }
 
+  // Make the target user's actions current.
+  $sql = 'select actions, actions_max, actions_next_gain from users
+    where id = %d;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
 
-  function _celestial_glory_action_give_to_a_clan_member_function(
-    &$outcome_reason, $target, &$can_do_again) {
+  $actions_next_gain = strtotime($item->actions_next_gain);
+  $secs_until = $actions_next_gain - time();
 
-    return _stlouis_action_give_to_a_clan_member_function($outcome_reason,
-    $target, $can_do_again);
+  // Make actions current.  If this didn't happen, you could give actions to a
+  // user that would be swallowed up by time if s/he was low on actions and not
+  // currently playing.
+//    $text = 'User ' . $game_user->username . ' is sending actions to ' .
+//      $target_name . ' (currently ' . $item->actions . ' of ' .
+//      $item->actions_max . ' with a next_gain time of ' .
+//      $item->actions_next_gain . ').';
 
+  // Add actions if low.
+  while (($item->actions < $item->actions_max) && ($secs_until <= 0)) {
+    $item->actions++;
+    $actions_next_gain += 180;
+    $secs_until += 180;
   }
 
+  // Deduct actions if high.
+  while (($item->actions > $item->actions_max) && ($secs_until <= 0)) {
+    $item->actions--;
+    $actions_next_gain += 180;
+    $secs_until += 180;
+  }
+
+  // Now current with actions?  Bring the date current too.
+  if ($item->actions == $item->actions_max) {
+    $actions_next_gain = time();
+  }
+
+  // Save in db.
+  $item->actions_next_gain = date('Y-m-d H:i:s', $actions_next_gain);
+  $sql = 'update users set actions = %d, actions_next_gain = "%s"
+    where id = %d;';
+  db_query($sql, $item->actions, $item->actions_next_gain, $target_id);
+
+  // Too many actions already?  Fail.
+  if ($item->actions >= $item->actions_max * 50) {
+    $outcome_reason = '<div class="land-failed">' . t('Thanks for Sharing!') .
+      '</div><div class="action-effect">... but ' . $target_name .
+      ' has plenty of actions already.</div>';
+    return FALSE;
+  }
+
+  // Now save the record of what happened.
+  $sql = 'insert into challenge_history 
+    (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+    fkey_elected_positions_id, won, desc_short, desc_long) values
+    ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
+  $result = db_query($sql, $game_user->id, $target_id,
+    $game_user->fkey_neighborhoods_id, 0, 0,
+    "$game_user->username gave Actions to $target_name.",
+    "$game_user->username gave a gift of $action->actions_change Actions " .
+    "points to $target_name (currently $item->actions).");
+
+  return TRUE;
+}
 
   function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target) {
 

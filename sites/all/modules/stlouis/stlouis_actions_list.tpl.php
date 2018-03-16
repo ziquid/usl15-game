@@ -299,6 +299,18 @@ EOF;
 
     } // if hood rating_change > 0
 
+    // Competencies.
+    if ($item->competency_enhanced_1 != 0) {
+      echo <<< EOF
+    <div class="land-payout">Effect: Competency enhanced: $item->competency_name_1</div>
+EOF;
+    }
+    if ($item->competency_enhanced_2 != 0) {
+      echo <<< EOF
+    <div class="land-payout">Effect: Competency enhanced: $item->competency_name_2</div>
+EOF;
+    }
+
     echo <<< EOF
   </div>
 EOF;

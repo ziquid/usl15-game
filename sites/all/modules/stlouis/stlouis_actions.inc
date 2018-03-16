@@ -27,26 +27,21 @@ function actionlist() {
 
   }
 
-
-// part of a clan?
-
+  // Part of a clan?
   $sql = 'select * from {clan_members}
     left join clans on clans.id = clan_members.fkey_clans_id
     where fkey_users_id = %d;';
-// limited to 1 in db
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
   firep($item);
 
-  if (!empty($item)) { // part of a clan - exclude all those that need no clan
-
+  // Part of a clan - exclude all those that need no clan.
+  if (!empty($item)) {
     $sql_to_add .= ' and actions.need_no_clan <> 1 ';
     $subclan_name = "$item->name ($item->acronym)";
-
-  } else {
-
+  }
+  else {
     $sql_to_add .= ' and actions.need_clan <> 1 ';
-
   }
 
   if (!empty($item->is_clan_leader)) {
@@ -100,14 +95,17 @@ function actionlist() {
     $actions_active = 'and (actions.active = 1 or actions.active = 0)';
   }
 
-// actions that have staff associated with them
+  // Actions that require staff.
   $data = array();
-  $sql = 'SELECT staff_ownership.*, actions.*, staff.required_level
+  $sql = 'SELECT staff_ownership.*, actions.*, staff.required_level,
+  comp1.name as competency_name_1, comp2.name as competency_name_2
   from staff_ownership
 
   left join actions on staff_ownership.fkey_staff_id = actions.fkey_staff_id
   left join staff on staff_ownership.fkey_staff_id = staff.id
-
+  left join competencies as comp1 on competency_enhanced_1 = comp1.id
+  left join competencies as comp2 on competency_enhanced_2 = comp2.id
+  
   where
   (staff_ownership.fkey_users_id = %d OR staff_ownership.fkey_users_id = 0)
 
@@ -117,10 +115,13 @@ function actionlist() {
   firep($sql, 'actions with staff');
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-// actions that have equipment associated with them
-  $sql = 'SELECT equipment_ownership.*, actions.*, equipment.required_level
+  // Actions that require equipment.
+  $sql = 'SELECT equipment_ownership.*, actions.*, equipment.required_level,
+  comp1.name as competency_name_1, comp2.name as competency_name_2
   from equipment_ownership
 
   left join actions on
@@ -128,6 +129,9 @@ function actionlist() {
 
   left join equipment on
   equipment_ownership.fkey_equipment_id = equipment.id
+  
+  left join competencies as comp1 on competency_enhanced_1 = comp1.id
+  left join competencies as comp2 on competency_enhanced_2 = comp2.id
 
   where
   (equipment_ownership.fkey_users_id = %d
@@ -136,16 +140,23 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY actions.required_level DESC';
- firep($sql, 'actions with equipment');
+  firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
-
-// actions that are free
-  $sql = 'select * from {actions}
+  // Actions that require neither staff nor equipment.
+  $sql = 'select actions.*, 
+  comp1.name as competency_name_1, comp2.name as competency_name_2
+  from {actions}
+  
+  left join competencies as comp1 on competency_enhanced_1 = comp1.id
+  left join competencies as comp2 on competency_enhanced_2 = comp2.id
+  
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
-  ' ORDER BY name ASC';
+  ' ORDER BY actions.name ASC';
   firep($sql, 'actions without staff or equipment');
   $result = db_query($sql, $game_user->id);
 

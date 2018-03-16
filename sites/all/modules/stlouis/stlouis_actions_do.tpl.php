@@ -108,21 +108,18 @@ EOF;
     '</div>';
   $ai_output = 'action-succeeded';
 
-// check to see if prerequisites are met
+  // Check to see if prerequisites are met.
   if ($game_user->actions < $action->cost) {
-
     $action_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' . t('Out of Action!') .
       '</div>';
-
-    if (substr($phone_id, 0, 3) == 'ai-')
+    if (substr($phone_id, 0, 3) == 'ai-') {
       $ai_output = 'action-failed no-action';
-
+    }
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
       $arg2 . '/action?destination=/' . $game . '/actions/' . $arg2 .
       '">Refill your Action (1&nbsp;Luck)</a></div></div>';
-
   }
 
   if (($game_user->money < $action->values_cost) &&
@@ -145,7 +142,6 @@ EOF;
       $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .
       '">Receive ' . $offer . ' ' . $game_user->values .
       ' (1&nbsp;Luck)</a></div></div>';
-
   }
 
   $action_function = '_' . $game . '_action_' .
@@ -154,55 +150,59 @@ EOF;
       array('_', '', '', '', '', ''),
       $action->name)) .
     '_function';
-// firep("function is $action_function");
 
-  if ($action_succeeded && function_exists($action_function))
+  if ($action_succeeded && function_exists($action_function)) {
     $action_succeeded = $action_function($outcome_reason, $target, $can_do_again);
+  }
 
 if ($action_succeeded) {
 
-// special case for investigate someone
+  // Special case for investigate someone.
   if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
     $show_all = '?show_all=yes';
-  } else {
+  }
+  else {
     $show_all = '';
   }
 
-// special case for meet someone new in Fairground Park
+  // Special case for meet someone new in Fairground Park.
   if (($action_function == '_stlouis_action_meet_someone_new_function') &&
     ($game_user->fkey_neighborhoods_id == 80)) {
     $show_all = '?want_jol=yes';
   }
 
-// decrement available actions
+  // Decrement available actions.
   $sql = 'update users set actions = actions - %d where id = %d;';
   $result = db_query($sql, $action->cost,  $game_user->id);
 
-// start the actions clock if needed
+  // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
-
     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
     $game_user->id);
-
   }
 
-  // affect influence
+  // Affect competencies.
+  if ($action->competency_enhanced_1 != 0) {
+    competency_gain($game_user, $action->competency_enhanced_1);
+  }
+  if ($action->competency_enhanced_2 != 0) {
+    competency_gain($game_user, $action->competency_enhanced_2);
+  }
 
+  // Affect influence.
   if ($action->influence_change != 0) {
-
     $inf_change = $action->influence_change;
 
-    if ($action->target == 'none') { // no target - actions affect player
-
+    // No target - actions affect player.
+    if ($action->target == 'none') {
       $target_name = 'Your';
       $target_id = $game_user->id;
-
-    } else { // there is a target involved
-
+    }
+    // There is a target involved.
+    else {
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
       $target_id = $_GET['target'];
-
     }
 
     $sql = 'update users set experience = greatest(experience + %d, 0)
@@ -213,8 +213,7 @@ if ($action_succeeded) {
     (($inf_change > 0) ? 'increased' : 'decreased') .
         ' by ' . abs($inf_change) . '</div>';
 
-    // now save the record of what happened, if positive and not done to yourself
-
+    // Save the record of what happened, if positive and not done to yourself.
     if (($game_user->id != $target_id) && ($inf_change > 0)) {
       $sql = 'insert into challenge_history 
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
@@ -229,7 +228,7 @@ if ($action_succeeded) {
         ' (currently ' . $target->experience . ').');
     }
 
-  } // change influence
+  }
 
   // affect ratings
 
@@ -291,20 +290,16 @@ if ($action_succeeded) {
 
   } // change hood rating
 
-  // values COST (ie, what you pay)
-
+  // values COST (ie, what you pay).
   if ($action->values_cost != 0) {
-
     $sql = 'update users set money = money - %d where id = %d;';
     $result = db_query($sql, $action->values_cost, $game_user->id);
     $outcome_reason .= '<div class="action-effect">Your ' .
     $game_user->values . ' is decreased by ' . $action->values_cost .
         '</div>';
-
   }
 
-  // values CHANGE (ie, what target gets)
-
+  // values CHANGE (ie, what target gets).
   if ($action->values_change != 0) {
 
     $target_name = $target->ep_name . ' ' . $target->username . '\'s';
