@@ -302,12 +302,18 @@ EOF;
     // Competencies.
     if ($item->competency_enhanced_1 != 0) {
       echo <<< EOF
-    <div class="land-payout">Effect: Competency enhanced: $item->competency_name_1</div>
+    <div class="land-payout">
+      Effect: Competency enhanced: 
+      <span class="initial-caps">$item->competency_name_1</span>
+    </div>
 EOF;
     }
     if ($item->competency_enhanced_2 != 0) {
       echo <<< EOF
-    <div class="land-payout">Effect: Competency enhanced: $item->competency_name_2</div>
+    <div class="land-payout">
+      Effect: Competency enhanced: 
+      <span class="initial-caps">$item->competency_name_2</span>
+    </div>
 EOF;
     }
 
