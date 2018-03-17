@@ -20,6 +20,7 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
+<p>17 Mar: Happy St. Patrick's Day!</p>
 <p>16 Mar: New investment: Savings Account.</p>
 <p>14 Mar: New agent for loot: Art critic.</p>
 <p>14 Mar: New action: Give to a clan member.</p>

@@ -223,7 +223,7 @@ function stlouis_cron() {
   $data = [];
   while ($item = db_fetch_object($result)) {
     if ($event_type == EVENT_ST_PATTYS) {
-      $item->color = '20f020';
+      $item->color = '20b030';
     }
     $data[] = $item;
   }
