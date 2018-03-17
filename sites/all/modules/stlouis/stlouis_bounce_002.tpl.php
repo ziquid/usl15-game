@@ -22,6 +22,7 @@
     to have our support staff re-credit it to your account</h4>
 <p>17 Mar: Happy St. Patrick's Day!</p>
 <p>17 Mar: New equipment, Android phone, for purchase gives you 2 initiative.</p>
+<p>17 Mar: New equipment, Android tablet, for purchase gives you 3 endurance.</p>
 <p>16 Mar: New investment: Savings Account.</p>
 <p>14 Mar: New agent for loot: Art critic.</p>
 <p>14 Mar: New action: Give to a clan member.</p>
