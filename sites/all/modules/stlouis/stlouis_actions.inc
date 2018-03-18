@@ -13,19 +13,16 @@ function actionlist() {
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
-  if ($game == 'stlouis') {
-
-    if (arg(3) == 'banking') {
-      $banking_active = 'active';
-      $actions_type = 'Banking';
-      $order_by = 'actions.id ASC';
-    } else {
-      $normal_active = 'active';
-      $actions_type = 'Normal';
-      $order_by = 'required_level DESC';
-    }
-
-  }
+//  if (arg(3) == 'banking') {
+//    $banking_active = 'active';
+//    $actions_type = 'Banking';
+//    $order_by = 'actions.id ASC';
+//  }
+//  else {
+    $normal_active = 'active';
+    $actions_type = 'Normal';
+    $order_by = 'actions.required_level DESC';
+//  }
 
   // Part of a clan?
   $sql = 'select * from {clan_members}

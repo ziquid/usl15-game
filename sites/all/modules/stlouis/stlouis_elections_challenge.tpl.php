@@ -989,10 +989,10 @@ Extra defending votes: $extra_defending_votes
 
 $residents residents";
 
-  if (($item->ep_id == 1) && ($votes < 0)) // mail me hood tosses
-    mail('joseph@cheek.com', "election results" /* for $game_user->username " .
-      "[$my_influence] vs. $item->username [$opp_influence] in $location" */,
-      $message);
+//  if (($item->ep_id == 1) && ($votes < 0)) // mail me hood tosses
+//    mail('joseph@cheek.com', "election results" /* for $game_user->username " .
+//      "[$my_influence] vs. $item->username [$opp_influence] in $location" */,
+//      $message);
 
 //  if ($item->ep_id >= 28) // and house  challenges
 //    mail('joseph@cheek.com', "house seat results (district $district seat " .

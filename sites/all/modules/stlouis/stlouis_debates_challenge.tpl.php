@@ -161,8 +161,7 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
   $my_el_bonus = $elocution_bonus->elocution + $elocution_bonus_st->elocution +
     50;
 
-// opponent elocution
-
+  // Opponent's elocution.
   $sql = 'SELECT sum(equipment.elocution_bonus * equipment_ownership.quantity)
     as elocution from equipment
 
@@ -186,26 +185,25 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
   $opp_el_bonus = $elocution_bonus->elocution + $elocution_bonus_st->elocution +
     50;
 
-  $my_influence = sqrt(max(0, $game_user->experience)) + ($game_user->elocution *
-    $my_el_bonus);
-firep("your total influence: sqrt($game_user->experience) +
-  ($game_user->elocution * $my_el_bonus) = $my_influence");
+  $my_influence = floor(sqrt(max(0, $game_user->experience)) + ($game_user->elocution *
+    $my_el_bonus));
+  $opp_influence = floor(sqrt(max(0, $item->experience)) + ($item->elocution *
+    $opp_el_bonus));
+  $message = "Your total influence: $my_influence: sqrt($game_user->experience) +
+  ($game_user->elocution * $my_el_bonus).
+  <br>
+  Opponent's total influence: $opp_influence: sqrt($item->experience) + ($item->elocution *
+    $opp_el_bonus).";
 
-  $opp_influence = sqrt(max(0, $item->experience)) + ($item->elocution *
-    $opp_el_bonus);
-firep("opp total influence: sqrt($item->experience) + ($item->elocution *
-    $opp_el_bonus) = $opp_influence");
+  $money_change = mt_rand(5 + $game_user->level, 10 + ($game_user->level * 2));
 
-  $money_change = mt_rand(5 + $game_user->level,
-    10 + ($game_user->level * 2)); // values changed
-
-// don't change more than net income / 10 for each user
+  // Don't change more than net income / 10 for each user.
   $money_change = min($money_change,
     floor(($game_user->income - $game_user->expenses) / 10));
   $money_change = min($money_change,
     floor(($item->income - $item->expenses) / 10));
 
-// don't let money get negative or more than double
+  // Don't let money get negative or more than double.
   if ($money_change > $game_user->money) {
     $money_change = $game_user->money;
   }
@@ -216,13 +214,26 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
     $money_change = 0;
   }
 
-  if ($my_influence > $opp_influence) { // you won!  woohoo!
+  $won = $my_influence > $opp_influence;
+
+  // Log debate details.
+  $sql = 'insert into challenge_history
+    (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+    fkey_elected_positions_id, won, desc_short, desc_long) values
+    ("debate", %d, %d, %d, %d, %d, "%s", "%s");';
+  db_query($sql, $game_user->id, $item->id, 0, 0, ($won ? 1 : 0),
+    "$game_user->username debated $item->username and " . ($won ? 'won' : 'lost') .
+    " by a margin of " . abs($my_influence - $opp_influence) . '.',
+    $message);
+
+  // Did you win?
+  if ($won) {
 
     competency_gain($game_user, 'challenger');
 
+    // The experience you gain is based on their level.
     $experience_gained = mt_rand(floor($item->level / 3),
       ceil($item->level * 2 / 3));
-// the experience you gain is based on their level
 
     $sql = 'insert into challenge_messages
       (fkey_users_from_id, fkey_users_to_id, message)
@@ -263,13 +274,11 @@ firep("opp total influence: sqrt($item->experience) + ($item->elocution *
     $game_user = $fetch_user();
 
     if ($event_type == EVENT_DEBATE) {
-
       $bump = '_' . $game . '_bump_event_tags_con';
       $reset = '_' . $game . '_reset_event_tags_con';
       $row = $bump($game_user->id);
       $reset($item->id);
       firep($row);
-
     }
 
     $fetch_header($game_user);
@@ -531,7 +540,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 
     }
 */ // flag day
-  } else { // you lost
+  }
+  else { // you lost
 
     competency_gain($item, 'defender');
 
