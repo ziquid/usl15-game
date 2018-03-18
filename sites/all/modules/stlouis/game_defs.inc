@@ -4,6 +4,8 @@ define(EVENT_NONE, 0);
 define(EVENT_DONE, 1);
 define(EVENT_DEBATE, 2);
 define(EVENT_ST_PATTYS, 3);
+define(EVENT_APRIL_FOOLS, 4);
+define(EVENT_NEW_NAMES, 5);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
@@ -26,6 +28,14 @@ switch(date('Y-m-d', time() - 3600)) {
 
   case '2018-03-17':
     $event_type = EVENT_ST_PATTYS;
+    break;
+
+  case '2018-03-18':
+    $event_type = EVENT_NEW_NAMES;
+    break;
+
+  case '2018-04-01':
+    $event_type = EVENT_APRIL_FOOLS;
     break;
 
 }
@@ -60,6 +70,13 @@ $quest = 'Mission';
 $residence = 'Residence';
 $system = 'System';
 $top20 = 'Top 20';
+
+$game_settings['competencies'] = [];
+
+if ($event_type == EVENT_NEW_NAMES) {
+  $game_settings['competencies']['uncouth'] = 'joelene';
+  $game_settings['competencies']['talkative'] = 'cunning linguist';
+}
 
 /*
 // boxing day

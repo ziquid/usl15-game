@@ -182,31 +182,32 @@ function stlouis_cron() {
     WHERE floor(rating / 5) < (residents - %d) AND rand() > 0.9';
   db_query($sql, $addition);
 
-// april fools' 2013 -- move 100 people at random
-/*
-  $sql = 'select users.id from users
-    left join elected_officials on users.id = elected_officials.fkey_users_id
-    where elected_officials.id IS NULL
-    and users.level >= 25
-    order by rand()
-    limit 100;';
-  $result = db_query($sql);
-  $data = array();
-  while ($item = db_fetch_object($result)) $data[] = $item;
-
-  foreach ($data as $item) {
-
-    $sql = 'select id from neighborhoods where xcoor > 0 and ycoor > 0
-      order by rand() limit 1;';
+  // April fools' 2018 -- move 25 people at random.
+  if ($event_type == EVENT_APRIL_FOOLS) {
+    $sql = 'SELECT users.id FROM users
+    LEFT JOIN elected_officials ON users.id = elected_officials.fkey_users_id
+    WHERE elected_officials.id IS NULL
+    AND users.level >= 25
+    ORDER BY rand()
+    LIMIT 25;';
     $result = db_query($sql);
-    $hood = db_fetch_object($result);
+    $data = [];
+    while ($item = db_fetch_object($result)) {
+      $data[] = $item;
+    }
 
-    $sql = 'update users set fkey_neighborhoods_id = %d
-      where id = %d;';
-    $result = db_query($sql, $hood->id, $item->id);
+    foreach ($data as $item) {
+      $sql = 'SELECT id FROM neighborhoods WHERE xcoor > 0 AND ycoor > 0
+      ORDER BY rand() LIMIT 1;';
+      $result = db_query($sql);
+      $hood = db_fetch_object($result);
 
+      $sql = 'UPDATE users SET fkey_neighborhoods_id = %d
+      WHERE id = %d;';
+      db_dquery($sql, $hood->id, $item->id);
+
+    }
   }
-*/
 
   // Update maps.
   $map_large = imagecreatefrompng('sites/default/files/images/stlouis_map_large.png');

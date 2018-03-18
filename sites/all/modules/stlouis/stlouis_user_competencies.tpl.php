@@ -28,12 +28,10 @@
   if ($arg3 != '') $phone_id_to_check = $arg3;
 
   if (substr($arg3, 0, 3) == 'id:') {
-
     $sql = 'select phone_id from users where id = %d;';
     $result = db_query($sql, (int) substr($arg3, 3));
     $item = db_fetch_object($result);
     $phone_id_to_check = $item->phone_id;
-
   }
 
   $show_all = FALSE;
@@ -95,14 +93,19 @@ Wait a few minutes before increasing them</div>
 <div class="user-profile">
 EOF;
 
-  if ($phone_id_to_check == $phone_id) { // show more stats if it's you
-
+  // Show more stats if it's you.
+  if ($phone_id_to_check == $phone_id) {
     $sql = 'SELECT * FROM  `user_competencies`
       LEFT JOIN competencies ON fkey_competencies_id = competencies.id
       WHERE fkey_users_id = %d
       ORDER BY level DESC, name ASC;';
     $result = db_query($sql, $item->id);
-    while ($item = db_fetch_object($result)) $comps[] = $item;
+    while ($item = db_fetch_object($result)) {
+      if (array_key_exists($item->name, $game_settings['competencies'])) {
+        $item->name = $game_settings['competencies'][$item->name];
+      }
+      $comps[] = $item;
+    }
 
     $old_level = 0;
 
@@ -114,7 +117,6 @@ EOF;
         (array) competency_level($game_user,
           intval($comp->fkey_competencies_id))
       );
-// Quick-n-dirty: merge the two arrays
 // firep($comp, 'competency');
       $pip = '';
 
@@ -149,9 +151,7 @@ EOF;
 EOF;
 
       $old_level = $level;
-
     }
-
   }
 
   echo <<< EOF
