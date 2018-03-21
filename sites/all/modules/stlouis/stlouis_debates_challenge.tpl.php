@@ -179,7 +179,7 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
     on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d;';
 
-  $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $item->id);
   $elocution_bonus_st = db_fetch_object($result);
 
   $opp_el_bonus = $elocution_bonus->elocution + $elocution_bonus_st->elocution +

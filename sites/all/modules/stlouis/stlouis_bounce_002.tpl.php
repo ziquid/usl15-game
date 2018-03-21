@@ -20,6 +20,11 @@
   <h4>All accounts have been reset!</h4>
   <h4>If you bought Luck during the Alpha testing, email zipport@ziquid.com
     to have our support staff re-credit it to your account</h4>
+<form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
+  <input type="Submit" value="Continue to the game"/>
+</form>
+<p>21 Mar: Increased the drop percentage of loot for the Hood Missions.</p>
+<p>21 Mar: Fixed a bug in calculating debate influence.</p>
 <p>18 Mar: The new Debate Coach will critique your last three debates,
   giving insight into your debate performance.</p>
 <p>17 Mar: Happy St. Patrick's Day!</p>
