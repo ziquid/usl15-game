@@ -24,8 +24,8 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p>21 Mar: Opened Vandeventer for elections.</p>
-<p>21 Mar: Increased the drop percentage of loot for the Hood Missions.</p>
-<p>21 Mar: Fixed a bug in calculating debate influence.</p>
+<p>21 Mar: Increased the drop percentage of loot for the Hood Missions.&nbsp; Added another mission.</p>
+<p>21 Mar: Fixed a bug in calculating opponent's debate influence.</p>
 <p>18 Mar: The new Debate Coach will critique your last three debates,
   giving insight into your debate performance.</p>
 <p>17 Mar: Happy St. Patrick's Day!</p>
