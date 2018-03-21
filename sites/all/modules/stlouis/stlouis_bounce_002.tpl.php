@@ -23,6 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>21 Mar: Opened Vandeventer for elections.</p>
 <p>21 Mar: Increased the drop percentage of loot for the Hood Missions.</p>
 <p>21 Mar: Fixed a bug in calculating debate influence.</p>
 <p>18 Mar: The new Debate Coach will critique your last three debates,
