@@ -5,8 +5,6 @@
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
-// mail('joseph@cheek.com', 'testing 5', 'got here!');
-
   $purchasing_luck = TRUE;
   $game_user = $fetch_user();
 
@@ -71,6 +69,7 @@ ob_end_clean();
 
     $luck = 10;
 
+    // FIXME: replace with switch().
     if (arg(3) == '30') $luck = 30; // paypal
 
     if (arg(3) == '35') $luck = 35; // paypal
@@ -93,10 +92,10 @@ ob_end_clean();
     if (arg(3) == '320') $luck = 320; // paypal
     if (arg(3) == 'luck.320') $luck = 320; // google
 
+    if (arg(3) == '700') $luck = 700; // paypal
+
 // stop iOS luck hacking
     if (arg(4) == 'abc123') $luck = 0;
-
-// mail('joseph@cheek.com', 'testing 30', "luck is $luck");
 
     $sql = 'update users set luck = luck + %d
       where id = %d;';

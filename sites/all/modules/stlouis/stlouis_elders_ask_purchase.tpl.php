@@ -146,7 +146,8 @@ or purchase through PayPal
 </div>
 EOF;
 
-    } else { // *real* Android with GoogleIAP
+    }
+    else { // *real* Android with GoogleIAP
 
       echo <<< EOF
 <div class="title">Purchase through Google Checkout</div>
@@ -313,6 +314,28 @@ Purchase 320 $luck for US $49.99
     <input type="hidden" name="return"
       value="http://uslce.games.ziquid.com/$game/elders/$phone_id">
     <input type="hidden" name="hosted_button_id" value="33MQY96PK4246">
+    <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
+      border="0" name="submit" alt="Pay with PayPal">
+    <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif"
+    width="1" height="1">
+  </form>
+</div>
+
+<div class="title">
+Purchase 700 $luck for US $99.99
+</div>
+<div class="purchase">
+  <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+    <input type="hidden" name="cmd" value="_s-xclick">
+    <input type="hidden" name="cs" value="1">
+    <input type="hidden" name="cbt" value="Return to $game_name_full">
+    <input type="hidden" name="cancel_return"
+      value="http://uslce.games.ziquid.com/$game/elders/$phone_id">
+    <input type="hidden" name="notify_url"
+      value="http://uslce.games.ziquid.com/$game/elders_do_purchase/$phone_id/700/$nonce">
+    <input type="hidden" name="return"
+      value="http://uslce.games.ziquid.com/$game/elders/$phone_id">
+    <input type="hidden" name="hosted_button_id" value="63YXRLSGB9AYW">
     <input type="image" src="https://www.paypal.com/en_US/i/btn/btn_buynowCC_LG.gif"
       border="0" name="submit" alt="Pay with PayPal">
     <img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif"

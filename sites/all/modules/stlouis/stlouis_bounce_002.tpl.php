@@ -23,6 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>22 Mar: Added button for 700 Luck ($99.99).</p>
 <p>21 Mar: Opened Vandeventer for elections.</p>
 <p>21 Mar: Increased the drop percentage of loot for the Hood Missions.&nbsp; Added another mission.</p>
 <p>21 Mar: Fixed a bug in calculating opponent's debate influence.</p>
