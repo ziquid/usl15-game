@@ -23,6 +23,9 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>23 Mar: Added Bicycle for getting around faster.</p>
+<p>23 Mar: Added iPhone and iPad for initiative and endurance.</p>
+<p>23 Mar: Added levels 78 and 79.</p>
 <p>22 Mar: Added button for 700 Luck ($99.99).</p>
 <p>21 Mar: Opened Vandeventer for elections.</p>
 <p>21 Mar: Increased the drop percentage of loot for the Hood Missions.&nbsp; Added another mission.</p>
