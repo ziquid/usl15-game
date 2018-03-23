@@ -358,10 +358,8 @@ function stlouis_init() {
 
       } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
         (stripos($_SERVER['HTTP_USER_AGENT'], 'width=+480') !== FALSE)) {
-// 480dip width display
-
+      // 480dip width display
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
-
       }
       // 414dip width display.
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {

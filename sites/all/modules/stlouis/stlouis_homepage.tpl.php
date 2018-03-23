@@ -124,78 +124,62 @@ firep($referral_code);
   }
 
   if (substr(arg(2), 0, 4) == 'nkc ') {
-
     $coefficient = 1.875;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
     $coefficient = 1;
-
-  } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
+    $coefficient = 1;
+  }
+  else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
     (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4') !== FALSE)) {
-
     $coefficient = 1;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
     $coefficient = 2.5;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
     $coefficient = 1.875;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
     $coefficient = 1.66;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
     $coefficient = 1.5;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
     $coefficient = 1.25;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
     $coefficient = 1.25;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
     $coefficient = 1.2;
-
-  } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
-
+  }
+  else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
     $coefficient = 1.125;
-
-  } else {
-
+  }
+  else {
     $coefficient = 1;
-
   }
 
 /*
