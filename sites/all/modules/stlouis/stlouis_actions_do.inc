@@ -364,15 +364,15 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
           </div>
         </div>';
 
-        return FALSE;
+      return FALSE;
     }
 
     $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-    $result = db_query($sql, $game_user->fkey_clans_id);
+    db_query($sql, $game_user->fkey_clans_id);
     $sql = 'delete from clan_members where fkey_clans_id = %d;';
-    $result = db_query($sql, $game_user->fkey_clans_id);
+    db_query($sql, $game_user->fkey_clans_id);
     $sql = 'delete from clans where id = %d;';
-    $result = db_query($sql, $game_user->fkey_clans_id);
+    db_query($sql, $game_user->fkey_clans_id);
     $outcome_reason .= '<div class="action-effect">' .
       t('You have dissolved your clan') . '</div>';
   }
@@ -453,53 +453,48 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   return TRUE;
 }
 
-  function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
-    $target) {
+function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
 
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
 
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
-
-    if (empty($item)) { // not a member of a clan
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not a member of your clan!') .
-        '</div><div class="action-effect">' . $target_name .
-        ' doesn\'t belong to your clan.&nbsp; You cannot have him or her lead.</div>';
-
-      return false;
-
-    }
-
-    $sql = 'update clan_members set is_clan_leader = 0 where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-
-    $sql = 'update clan_members set is_clan_leader = 1 where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_users_to_id, message) values (%d, %d, "%s");';
-    $message = $target_name . ' has been named the new leader of the clan.';
-    $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
-
-    $outcome_reason .= '<div class="action-effect">' .
-      t('@name has made the leader of your clan',
-      array('@name' => $target_name)) . '</div>';
-
-    return true;
-
+  // Not a member of the clan?
+  if (empty($item)) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not a member of your clan!') .
+      '</div><div class="action-effect">' . $target_name .
+      ' doesn\'t belong to your clan.&nbsp; You cannot have him or her lead.</div>';
+    return FALSE;
   }
+
+  $sql = 'update clan_members set is_clan_leader = 0 where fkey_users_id = %d;';
+  db_query($sql, $game_user->id);
+
+  $sql = 'update clan_members set is_clan_leader = 1 where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_users_to_id, message) values (%d, %d, "%s");';
+  $message = $target_name . ' has been named the new leader of the clan.';
+  db_query($sql, $game_user->id, $game_user->fkey_clans_id, $message);
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('@name has been made the leader of your clan',
+    array('@name' => $target_name)) . '</div>';
+
+  return TRUE;
+}
 
 function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target,
   &$can_do_again) {
@@ -906,22 +901,16 @@ EOF;
   return TRUE;
 }
 
-  function _stlouis_action_ping_function(&$outcome_reason, $target) {
+function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again) {
 
     global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+    $fetch_user = '_' . $game . '_fetch_user';
 
     $game_user = $fetch_user();
     include(drupal_get_path('module', $game) . '/game_defs.inc');
-    $action_id = arg(3);
 
-    $sql = "select name from neighborhoods where id = '%d';";
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $data = db_fetch_object($result);
-    $location = $data->name;
-
-    $data = array();
+    $data = [];
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
@@ -975,32 +964,35 @@ EOF;
 firep($item);
 
       $username = $item->username;
-      if (empty($username)) $username = '<em>Anonymous</em>';
+      if (empty($username)) {
+        $username = '<em>Anonymous</em>';
+      }
 
       if ($item->id == $game_user->id) {
         $clan_class = 'election-details me';
-      } else {
+      }
+      else {
         $clan_class = 'election-details';
       }
 
-      $action_class = '';
       $official_link = $item->ep_name;
-      $clan_class = 'election-details';
 
-      if ($item->can_broadcast_to_party)
+      if ($item->can_broadcast_to_party) {
         $official_link .= '<div class="can-broadcast-to-party">*</div>';
+      }
 
-       $official_link .= '<br/><a href="/' . $game . '/user/' .
-         $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
+      $official_link .= '<br/><a href="/' . $game . '/user/' .
+        $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
-       $experience = $item->experience;
+      $exp = $item->experience;
       $clan_acronym = '';
 
       if (!empty($item->clan_acronym))
         $clan_acronym = "($item->clan_acronym)";
 
-      if ($item->is_clan_leader)
+      if ($item->is_clan_leader) {
         $clan_acronym .= '*';
+      }
 
       $icon = $game . '_clan_' . $item->party_icon . '.png';
 
@@ -1010,15 +1002,14 @@ firep($item);
     src="/sites/default/files/images/$icon"/></div>
   <div class="clan-title">$item->party_title</div>
   <div class="opponent-name">$official_link $clan_acronym</div>
-  <div class="opponent-influence">$experience Influence<br/>
+  <div class="opponent-influence">$exp $experience<br/>
     Level $item->level</div>
 </div>
 EOF;
 
-    } // foreach position
+    }
 
-    return true;
-
+    return TRUE;
   }
 
   function _stlouis_action_steal_some_value_function(&$outcome_reason,

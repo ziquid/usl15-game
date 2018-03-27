@@ -23,6 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>27 Mar: More clan actions.</p>
 <p>26 Mar: More quests.</p>
 <p>24 Mar: Support for Android 8.</p>
 <p>23 Mar: Added Bicycle for getting around faster.</p>
