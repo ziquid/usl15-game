@@ -10,19 +10,17 @@
   $arg2 = check_plain(arg(2));
 
   if (empty($game_user->username)) {
-
     db_set_active('default');
     drupal_goto($game . '/choose_name/' . $arg2);
-
   }
 
   if ($quantity === 'use-quantity') {
     $quantity = check_plain($_GET['quantity']);
   }
 
-  $data = array();
+  $data = [];
   $sql = 'SELECT land.*, land_ownership.quantity,
-    competencies.name as competency
+    competencies.name as competency, comp1.name as competency_name_1
     FROM land
 
     LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
@@ -30,22 +28,21 @@
 
     LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
       competencies.id
+    left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
     WHERE land.id = %d;';
   $result = db_query($sql, $game_user->id, $land_id);
-  $game_land = db_fetch_object($result); // limited to 1 in DB
+  $game_land = db_fetch_object($result);
   $orig_quantity = $count = $quantity;
   $land_price = 0;
 firep($game_land);
 
   while ($count--) {
-
     $land_price += $game_land->price + (($game_land->quantity + $count) *
       $game_land->price_increase);
-
   }
 
-  $options = array();
+  $options = [];
   $options['land-buy-succeeded'] = 'buy-success';
   $ai_output = 'land-succeeded';
 
@@ -179,12 +176,17 @@ EOF;
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
 
-  $data = array();
-  $sql = 'SELECT land.*, land_ownership.quantity
+  $data = [];
+  $sql = 'SELECT land.*, land_ownership.quantity,
+    competencies.name as competency, comp1.name as competency_name_1
     FROM land
 
     LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
     AND land_ownership.fkey_users_id = %d
+
+    LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
+      competencies.id
+    left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
     WHERE (((
       fkey_neighborhoods_id = 0
@@ -220,11 +222,16 @@ EOF;
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
 
 // show next one
-  $sql = 'SELECT land.*, land_ownership.quantity
+  $sql = 'SELECT land.*, land_ownership.quantity,
+    competencies.name as competency, comp1.name as competency_name_1
     FROM land
 
     LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
     AND land_ownership.fkey_users_id = %d
+
+    LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
+      competencies.id
+    left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
     WHERE ((
       fkey_neighborhoods_id = 0

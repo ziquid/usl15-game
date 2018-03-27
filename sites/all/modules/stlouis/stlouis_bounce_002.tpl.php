@@ -23,6 +23,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>27 Mar: Jobs now have competencies attached to them.  Every day you play you
+  will increase your competency for that job.</p>
 <p>27 Mar: More clan actions.</p>
 <p>26 Mar: More quests.</p>
 <p>24 Mar: Support for Android 8.</p>

@@ -57,23 +57,17 @@ EOF;
       $game_user->expenses;
     $extra_bonus = '';
 
-    if ($game == 'stlouis') {
-
-      $sql = 'select quantity from staff_ownership
-        where fkey_staff_id = 18 and fkey_users_id = %d;';
-      $result = db_query($sql, $game_user->id);
-      $item = db_fetch_object($result);
-
-      if ($item->quantity >= 1) {
-        $money *= 3;
-        $extra_text .= '<div class="level-up-text">
-          ~ Your private banker tripled your bonus ~
-        </div>';
-      }
-
-    }
-
-firep("adding $money money because last_bonus_date = $last_bonus_date");
+//      $sql = 'select quantity from staff_ownership
+//        where fkey_staff_id = 18 and fkey_users_id = %d;';
+//      $result = db_query($sql, $game_user->id);
+//      $item = db_fetch_object($result);
+//
+//      if ($item->quantity >= 1) {
+//        $money *= 3;
+//        $extra_text .= '<div class="level-up-text">
+//          ~ Your private banker tripled your bonus ~
+//        </div>';
+//      }
 
     $sql = 'update users set money = money + %d, last_bonus_date = "%s"
       where id = %d;';
@@ -89,6 +83,17 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
         '<div class="level-up-text">Come back tomorrow for another bonus</div>
       </div>';
 
+    // Add competency for work.
+    $sql = 'SELECT land.fkey_enhanced_competencies_id FROM `land`
+    left join land_ownership on land_ownership.fkey_land_id = land.id 
+    left join users on users.id = land_ownership.fkey_users_id 
+    WHERE users.id = %d and land.type = "job"';
+    $result = db_query($sql, $game_user->id);
+    $item = db_fetch_object($result);
+
+    if (isset($item->fkey_enhanced_competencies_id)) {
+      competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
+    }
   }
 
   $fetch_header($game_user);

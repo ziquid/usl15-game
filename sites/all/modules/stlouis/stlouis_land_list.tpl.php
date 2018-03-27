@@ -32,12 +32,13 @@
 
     OR land_ownership.quantity > 0 ';
 
-  if ($game_user->phone_id == 'abc123')
+  if ($game_user->phone_id == 'abc123') {
     $sql_to_add = '';
+  }
 
-  $data = array();
+  $data = [];
   $sql = 'SELECT land.*, land_ownership.quantity,
-    competencies.name as competency
+    competencies.name as competency, comp1.name as competency_name_1
     FROM land
 
     LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
@@ -45,13 +46,16 @@
 
     LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
       competencies.id
+    left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
     ' . $sql_to_add . '
     ORDER BY required_level ASC';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   foreach ($data as $item) {
 // firep($item);

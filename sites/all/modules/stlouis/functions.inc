@@ -658,7 +658,7 @@ function show_land($game_user, $item, $options = array()) {
   if ($item->quantity < 1)
     $can_sell = FALSE;
 
-  $current = ($item->type == 'job' && $item->quantity > 0) ? '◊ ' . t('Current') : '';
+  $current = ($item->type == 'job' && $item->quantity > 0) ? t('Current') : '';
   $inactive = ($item->active) ? '' : t('(Inactive)');
 
   if ($can_buy) {
@@ -801,16 +801,25 @@ EOF;
 EOF;
 
   echo <<< EOF
-    <!--<div class="land-disbursements">// Disbursements //</div>-->
+    <div class="land-disbursements">
     <div class="land-payout">
       Income: +$payout $game_user->values every 60 minutes
     </div>
-  </div>
 EOF;
 
+  // Competencies.
+  if (isset($item->competency_name_1)) {
+    echo <<< EOF
+    <div class="land-payout">
+      Competency enhanced: 
+      <span class="initial-caps">$item->competency_name_1</span>
+    </div>
+EOF;
+  }
 
-// BUY buttons
+  echo '</div></div>';
 
+  // BUY buttons.
   if ($soon) {
 
     echo <<< EOF
