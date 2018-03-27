@@ -360,7 +360,7 @@ EOF;
   have <span class="highlighted">$quest_group->completed</span> new skill points
   to spend</a></p>
 EOF;
-          competency_gain($game_user, 'quest groupie', 3);
+          competency_gain($game_user, 'quest groupie');
 
 // update user stats
           $sql = 'update users set skill_points = skill_points + %d

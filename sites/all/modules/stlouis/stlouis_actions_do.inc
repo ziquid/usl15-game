@@ -398,14 +398,13 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
 
 function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
 
-  global $game, $phone_id;
+  global $game;
 
   $set_value = '_' . $game . '_set_value';
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
   include(drupal_get_path('module', $game) . '/game_defs.inc');
-  $action_id = arg(3);
   $can_do_again = FALSE;
 
   $target_name = $target->ep_name . ' ' . $target->username;
@@ -450,6 +449,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $outcome_reason .= '<div class="action-effect">' .
     t('@name has been removed from your clan',
     array('@name' => $target_name)) . '</div>';
+
   return TRUE;
 }
 
@@ -1159,20 +1159,12 @@ EOF;
 
   }
 
-
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
-
-//  global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $game_user = $fetch_user();
 
-  $sql = 'update equipment_ownership set quantity = quantity - 1
-    where fkey_users_id = %d and fkey_equipment_id = 7;';
-  // Chance of loss will decrease the food, so this db query is not run.
-  //  db_query($sql, $game_user->id);
-
-
+  // FIXME: add same amount of energy that users get every 5 mins.
   $sql = 'update users set energy = energy + 10 where id = %d;';
   db_query($sql, $game_user->id);
 
@@ -1181,32 +1173,6 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 
   return TRUE;
 }
-
-
-  function _celestial_glory_action_fast_and_pray_function(&$outcome_reason,
-    $target) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    $sql = 'insert into challenge_history 
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("fasting", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $game_user->id,
-      $game_user->fkey_neighborhoods_id, 0, 0,
-      "$game_user->username fasted and prayed.",
-      "$game_user->username fasted and prayed.");
-
-    $outcome_reason .= '<div class="action-effect">' .
-      t('You feel closer to God.') . '</div>';
-
-    return true;
-
-  }
-
 
   function _stlouis_action_throw_eggs_function(&$outcome_reason,
     $target) {
@@ -1282,16 +1248,6 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
     return TRUE;
 
   }
-
-
-  function _celestial_glory_action_street_preaching_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    return _stlouis_action_meet_someone_new_function($outcome_reason,
-    $target, $can_do_again);
-
-  }
-
 
   function _celestial_glory_action_stone_an_official_function(&$outcome_reason,
     $target) {
