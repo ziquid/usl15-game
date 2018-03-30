@@ -230,8 +230,7 @@ if ($action_succeeded) {
 
   }
 
-  // affect ratings
-
+  // Affect ratings.
   if ($action->rating_change != 0) {
 
     $rat_change = $action->rating_change;
@@ -267,8 +266,7 @@ if ($action_succeeded) {
 
   }
 
-// change hood rating
-
+  // Change hood rating.
   if ($action->neighborhood_rating_change != 0) {
 
     $rat_change = $action->neighborhood_rating_change;
@@ -493,16 +491,17 @@ firep($st->name . ' did NOT run away');
 
     $game_user = $fetch_user(); // reprocess user object
 
-} else { // failed - try a different action
+  }
+  else { // failed - try a different action
 
-  $outcome_reason .= '<div class="try-an-election-wrapper"><div
-    class="try-an-election"><a
-    href="/' . $game . '/actions/' . $arg2 .
-    '">Perform a different action</a></div></div>';
+    $outcome_reason .= '<div class="try-an-election-wrapper"><div
+      class="try-an-election"><a
+      href="/' . $game . '/actions/' . $arg2 .
+      '">Perform a different action</a></div></div>';
 
-  $ai_output = 'action-failed';
+    $ai_output = 'action-failed';
 
-} // action succeeded
+  } // action succeeded
 
   $fetch_header($game_user);
 

@@ -319,16 +319,13 @@ EOF;
 
     echo <<< EOF
   </div>
+  <form action="/$game/actions_do/$arg2/$item->id">
 EOF;
 
   $get_value = '_' . $game . '_get_value';
   $next_major_action_time = $get_value($game_user->id, 'next_major_action');
   $next_major_action_time_remaining = !empty($next_major_action_time) ?
     (int)$next_major_action_time - time() : NULL;
-
-  echo <<< EOF
-  <form action="/$game/actions_do/$arg2/$item->id">
-EOF;
 
   if (($next_major_action_time_remaining > 0) && ($item->major_action > 0)) {
 
@@ -344,11 +341,9 @@ EOF;
       <input class="land-perform-button not-yet" type="button" value="Not Yet"/>
     </div>
 EOF;
-//     if ($item->target != 'none') {
        echo <<< EOF
        Available in $hours_remaining:$minutes_remaining:$seconds_remaining
 EOF;
-//     }
 
   }
   else {

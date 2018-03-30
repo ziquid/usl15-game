@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file stlouis_land_work.tpl.php
+ * Template for working a job.
+ */
 global $game, $phone_id;
 
 $fetch_user = '_' . arg(0) . '_fetch_user';
@@ -30,121 +34,68 @@ $sql = 'SELECT land.*, land_ownership.quantity,
     competencies.id
   left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
-  WHERE land.id = %d;';
+  WHERE land.id = %d
+  AND land.type = "job"
+  AND land.active = 1;';
 $result = db_query($sql, $game_user->id, $land_id);
 $game_land = db_fetch_object($result);
-$orig_quantity = $count = $quantity;
-$land_price = 0;
-firep($game_land);
-
-while ($count--) {
-  $land_price += $game_land->price + (($game_land->quantity + $count) *
-    $game_land->price_increase);
-}
+firep($game_land, 'job found: ');
 
 $options = [];
-$options['land-buy-succeeded'] = 'buy-success';
+$options['land-work-succeeded'] = 'work-success';
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
 
-// Not enough money.
-if ($game_user->money < $land_price) {
-  $options['land-buy-succeeded'] = 'failed no-money';
-  $ai_output = 'land-failed no-money';
-}
-
-// Not high enough level.
-if ($game_user->level < $game_land->required_level) {
-  $options['land-buy-succeeded'] = 'failed not-required-level';
-  $ai_output = 'land-failed not-required-level';
+// No job found.
+if (empty($game_land)) {
+  $options['land-work-succeeded'] = 'failed no-such-job';
+  $ai_output = 'land-failed no-such-job';
   karma($game_user,
-    "trying to purchase $game_land->name at level $game_user->level", -100);
+    "trying to work a non-existent job (id: $land_id)", -100);
 }
 
-// Not required competency.
-if ($game_land->fkey_required_competencies_id > 0) {
-  $check = competency_level($game_user,
-    (int) $game_land->fkey_required_competencies_id);
-// firep($check);
-  if ($check->level < $game_land->required_competencies_level) {
-    $options['land-buy-succeeded'] = 'failed not-required-competency';
-    $ai_output = 'land-failed not-required-competency';
-  }
-}
-
-// Not in right hood.
-if ($game_land->fkey_neighborhoods_id != 0 &&
-  $game_land->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
-  $options['land-buy-succeeded'] = 'failed not-required-hood';
-  $ai_output = 'land-failed not-required-hood';
+// Too soon to work again.
+$can_work_again = game_can_do_yet($game_user, 'can_work_again');
+firep($can_work_again, 'can work again');
+if (!$can_work_again->allowed) {
+  $options['land-work-succeeded'] = 'failed too-soon';
+  $ai_output = 'land-failed too-soon';
   karma($game_user,
-    "trying to purchase $game_land->name in wrong hood", -50);
-}
-
-// Not required party.
-if ($game_land->fkey_values_id != 0 &&
-  $game_land->fkey_values_id != $game_user->fkey_values_id) {
-  $options['land-buy-succeeded'] = 'failed not-required-party';
-  $ai_output = 'land-failed not-required-value';
-  karma($game_user,
-    "trying to purchase $game_land->name in wrong party", -50);
-}
-
-// Not active.
-if ($game_land->active != 1) {
-  $options['land-buy-succeeded'] = 'failed not-active';
-  $ai_output = 'land-failed not-active';
-  karma($game_user,
-    "trying to purchase $game_land->name which is not active", -500);
-}
-
-// Is loot.
-if ($game_land->is_loot != 0) {
-  $options['land-buy-succeeded'] = 'failed is-loot';
-  $ai_output = 'land-failed is-loot';
-  karma($game_user,
-    "trying to purchase $game_land->name which is loot", -25);
+    "trying to work too soon (time remaining: $can_work_again->time_remaining)", -10);
 }
 
 // Success!
-if ($options['land-buy-succeeded'] == 'buy-success') {
+if ($options['land-work-succeeded'] == 'work-success') {
 
-  // Job?  delete other job(s).
-  if ($game_land->type == 'job') {
+  // Add competency.
+  competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
 
-    $sql = 'DELETE FROM `land_ownership` WHERE id IN (
-      SELECT id FROM (
-        SELECT lo.id
-        FROM land_ownership AS lo
-        LEFT JOIN land ON lo.fkey_land_id = land.id
-        WHERE fkey_users_id = %d
-        AND land.type = "job"
-      ) x
-    );';
-    db_query($sql, $game_user->id);
+  // Set timer.  Can work again in 8 hours.
+  $set_value = '_' . $game . '_set_value';
+  $set_value($game_user->id, 'can_work_again', time() + 60*60*8);
 
-    $game_land->quantity = '';
-  }
+  // Gain the wage.
+  $sql = 'update users set income = income + %d where id = %d;';
+  $result = db_query($sql, $game_land->payout, $game_user->id);
+  $game_user->income += $game_land->payout;
 
-  // Investment?  Add competency.
-  if ($game_land->type == 'investment') {
-    competency_gain($game_user, 'investor');
-  }
-  land_gain($game_user, $land_id, $quantity, $land_price);
+  // Set output.
+  $title = t('Success!');
 }
 else {
-  $quantity = 0;
+  $title = t('Uhoh!');
 }
 
 // Show the stuff.
 $fetch_header($game_user);
 show_aides_menu($game_user);
 
-$game_land->quantity = $game_land->quantity + (int) $quantity;
-game_show_land($game_user, $game_land, $options);
-
 echo <<< EOF
+<div class="title">
+$title
+</div>
+$outcome_reason
 <div class="title">
 Available $land_plural
 </div>

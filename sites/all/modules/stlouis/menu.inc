@@ -354,6 +354,14 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['stlouis/land_work/%/%/%'] = array(
+    'title' => 'St. Louis Land Work',
+    'page callback' => 'stlouis_land_work_callback',
+    'page arguments' => array(2, 3, 4),
+    'access arguments' => array('access stlouis content'),
+    'type' => MENU_CALLBACK,
+  );
+
   $items['stlouis/staff/%'] = array(
     'title' => 'St. Louis Staff',
     'page callback' => 'stlouis_staff_list_callback',
@@ -466,9 +474,9 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/playbook_null'] = array(
+  $items['stlouis/playbook_NULL'] = array(
     'title' => 'St. Louis device unauthorized',
-    'page callback' => 'stlouis_playbook_null_callback',
+    'page callback' => 'stlouis_playbook_NULL_callback',
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
@@ -991,9 +999,7 @@ function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
   }
 
   return theme('stlouis_land_buy', $phone_id, $land_id, $quantity);
-
 }
-
 
 function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
 
@@ -1003,9 +1009,17 @@ function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
   }
 
   return theme('stlouis_land_sell', $phone_id, $land_id, $quantity);
-
 }
 
+function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
+
+  if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
+      ($quantity === 'use-quantity'))) {
+    return drupal_access_denied();
+  }
+
+  return theme('stlouis_land_work', $phone_id, $land_id, $quantity);
+}
 
 function stlouis_staff_list_callback($phone_id) {
 
@@ -1170,9 +1184,9 @@ function stlouis_authenticate_callback($phone_id) {
  * Used for playbooks that didn't authorize the app
  */
 
-function stlouis_playbook_null_callback() {
+function stlouis_playbook_NULL_callback() {
 
-  return theme('stlouis_playbook_null');
+  return theme('stlouis_playbook_NULL');
 
 }
 
@@ -1252,485 +1266,494 @@ function stlouis_theme() {
     'stlouis_homepage' => array(
       'template' => 'stlouis_homepage',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_userprofile' => array(
       'template' => 'stlouis_userprofile',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_user_competencies' => array(
       'template' => 'stlouis_user_competencies',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_clan_list' => array(
       'template' => 'stlouis_clan_list',
       'arguments' => array(
-        'phone_id' => null,
-        'clan_id' => null,
+        'phone_id' => NULL,
+        'clan_id' => NULL,
       )
     ),
 
     'stlouis_clan_list_available' => array(
       'template' => 'stlouis_clan_list_available',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_clan_msg' => array(
       'template' => 'stlouis_clan_msg',
       'arguments' => array(
-        'phone_id' => null,
-        'clan_id' => null,
+        'phone_id' => NULL,
+        'clan_id' => NULL,
       )
     ),
 
     'stlouis_clan_announcements' => array(
       'template' => 'stlouis_clan_announcements',
       'arguments' => array(
-        'phone_id' => null,
-        'clan_id' => null,
+        'phone_id' => NULL,
+        'clan_id' => NULL,
       )
     ),
 
     'stlouis_class_list' => array(
       'template' => 'stlouis_class_list',
       'arguments' => array(
-        'phone_id' => null,
-        'class_id' => null,
+        'phone_id' => NULL,
+        'class_id' => NULL,
       )
     ),
 
     'stlouis_block_user_toggle' => array(
       'template' => 'stlouis_block_user_toggle',
       'arguments' => array(
-        'phone_id' => null,
-        'phone_id_to_block' => null,
+        'phone_id' => NULL,
+        'phone_id_to_block' => NULL,
       )
     ),
 
     'stlouis_msg_delete' => array(
       'template' => 'stlouis_msg_delete',
       'arguments' => array(
-        'phone_id' => null,
-        'msg_id' => null,
+        'phone_id' => NULL,
+        'msg_id' => NULL,
       )
     ),
 
     'stlouis_party_msg' => array(
       'template' => 'stlouis_party_msg',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_increase_skills' => array(
       'template' => 'stlouis_increase_skills',
       'arguments' => array(
-        'phone_id' => null,
-        'skill' => null,
+        'phone_id' => NULL,
+        'skill' => NULL,
       )
     ),
 
     'stlouis_quests_list' => array(
       'template' => 'stlouis_quests_list',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_quests_do' => array(
       'template' => 'stlouis_quests_do',
       'arguments' => array(
-        'phone_id' => null,
-        'quest_id' => null,
+        'phone_id' => NULL,
+        'quest_id' => NULL,
       )
     ),
 
     'stlouis_elders' => array(
       'template' => 'stlouis_elders',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_elders_ask_reset' => array(
       'template' => 'stlouis_elders_ask_reset',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_elders_do_reset' => array(
       'template' => 'stlouis_elders_do_reset',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_elders_ask_reset_skills' => array(
       'template' => 'stlouis_elders_ask_reset_skills',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_elders_do_reset_skills' => array(
       'template' => 'stlouis_elders_do_reset_skills',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_elders_do_fill' => array(
       'template' => 'stlouis_elders_do_fill',
       'arguments' => array(
-        'phone_id' => null,
-        'fill_type' => null,
+        'phone_id' => NULL,
+        'fill_type' => NULL,
       )
     ),
 
     'stlouis_elders_rename' => array(
       'template' => 'stlouis_elders_rename',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elders_set_password' => array(
       'template' => 'stlouis_elders_set_password',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elders_ask_purchase' => array(
       'template' => 'stlouis_elders_ask_purchase',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elders_do_purchase' => array(
       'template' => 'stlouis_elders_do_purchase',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_check_receipt' => array(
       'template' => 'stlouis_elders_check_receipt',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_google_checkout' => array(
       'template' => 'stlouis_google_checkout',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_welcome' => array(
       'template' => 'stlouis_welcome',
       'arguments' => array(
-        'phone_id' => null
+        'phone_id' => NULL
       )
     ),
 
     'stlouis_choose_clan' => array(
       'template' => 'stlouis_choose_clan',
       'arguments' => array(
-        'phone_id' => null,
-        'clan_id' => null,
+        'phone_id' => NULL,
+        'clan_id' => NULL,
       )
     ),
 
     'stlouis_help' => array(
       'template' => 'stlouis_help',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elections_list' => array(
       'template' => 'stlouis_elections_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elections_challenge' => array(
       'template' => 'stlouis_elections_challenge',
       'arguments' => array(
-        'phone_id' => null,
-        'position_id' => null,
+        'phone_id' => NULL,
+        'position_id' => NULL,
       )
     ),
 
     'stlouis_debates_list' => array(
       'template' => 'stlouis_debates_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_debates_challenge' => array(
       'template' => 'stlouis_debates_challenge',
       'arguments' => array(
-        'phone_id' => null,
-        'position_id' => null,
+        'phone_id' => NULL,
+        'position_id' => NULL,
       )
     ),
 
     'stlouis_top20_list' => array(
       'template' => 'stlouis_top20_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_top_wards_list' => array(
       'template' => 'stlouis_top_wards_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_top_aldermen_list' => array(
       'template' => 'stlouis_top_aldermen_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_top_event_points' => array(
       'template' => 'stlouis_top_event_points',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_choose_name' => array(
       'template' => 'stlouis_choose_name',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_enter_referral_code' => array(
       'template' => 'stlouis_enter_referral_code',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_aides' => array(
       'template' => 'stlouis_aides',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_land_list' => array(
       'template' => 'stlouis_land_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_land_buy' => array(
       'template' => 'stlouis_land_buy',
       'arguments' => array(
-        'phone_id' => null,
-        'land_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'land_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_land_sell' => array(
       'template' => 'stlouis_land_sell',
       'arguments' => array(
-        'phone_id' => null,
-        'land_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'land_id' => NULL,
+        'quantity' => NULL,
+      )
+    ),
+
+    'stlouis_land_work' => array(
+      'template' => 'stlouis_land_work',
+      'arguments' => array(
+        'phone_id' => NULL,
+        'land_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_staff_list' => array(
       'template' => 'stlouis_staff_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_staff_hire' => array(
       'template' => 'stlouis_staff_hire',
       'arguments' => array(
-        'phone_id' => null,
-        'staff_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'staff_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_staff_fire' => array(
       'template' => 'stlouis_staff_fire',
       'arguments' => array(
-        'phone_id' => null,
-        'staff_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'staff_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_agents_list' => array(
       'template' => 'stlouis_agents_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_agents_hire' => array(
       'template' => 'stlouis_agents_hire',
       'arguments' => array(
-        'phone_id' => null,
-        'staff_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'staff_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_agents_fire' => array(
       'template' => 'stlouis_agents_fire',
       'arguments' => array(
-        'phone_id' => null,
-        'staff_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'staff_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_actions_list' => array(
       'template' => 'stlouis_actions_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_actions_do' => array(
       'template' => 'stlouis_actions_do',
       'arguments' => array(
-        'phone_id' => null,
-        'action_id' => null,
+        'phone_id' => NULL,
+        'action_id' => NULL,
       )
     ),
 
     'stlouis_equipment_list' => array(
       'template' => 'stlouis_equipment_list',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_equipment_buy' => array(
       'template' => 'stlouis_equipment_buy',
       'arguments' => array(
-        'phone_id' => null,
-        'equipment_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'equipment_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_equipment_sell' => array(
       'template' => 'stlouis_equipment_sell',
       'arguments' => array(
-        'phone_id' => null,
-        'equipment_id' => null,
-        'quantity' => null,
+        'phone_id' => NULL,
+        'equipment_id' => NULL,
+        'quantity' => NULL,
       )
     ),
 
     'stlouis_move' => array(
       'template' => 'stlouis_move',
       'arguments' => array(
-        'phone_id' => null,
-        'neighborhood_id' => null,
+        'phone_id' => NULL,
+        'neighborhood_id' => NULL,
       )
     ),
 
     'stlouis_move_do' => array(
       'template' => 'stlouis_move_do',
       'arguments' => array(
-        'phone_id' => null,
-        'neighborhood_id' => null,
+        'phone_id' => NULL,
+        'neighborhood_id' => NULL,
       )
     ),
 
     'stlouis_authenticate' => array(
       'template' => 'stlouis_authenticate',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
-    'stlouis_playbook_null' => array(
-      'template' => 'stlouis_playbook_null',
+    'stlouis_playbook_NULL' => array(
+      'template' => 'stlouis_playbook_NULL',
     ),
 
     'stlouis_bounce' => array(
       'template' => 'stlouis_bounce',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_bounce_001' => array(
       'template' => 'stlouis_bounce_001',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_bounce_002' => array(
       'template' => 'stlouis_bounce_002',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_elders_preferences' => array(
       'template' => 'stlouis_elders_preferences',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_zombie_move' => array(
       'template' => 'stlouis_zombie_move',
       'arguments' => array(
-        'phone_id' => null,
-        'zombie_id' => null,
-        'hood_id' => null,
+        'phone_id' => NULL,
+        'zombie_id' => NULL,
+        'hood_id' => NULL,
       )
     ),
 
     'stlouis_event_info' => array(
       'template' => 'stlouis_event_info',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 
     'stlouis_event_prizes' => array(
       'template' => 'stlouis_event_prizes',
       'arguments' => array(
-        'phone_id' => null,
+        'phone_id' => NULL,
       )
     ),
 

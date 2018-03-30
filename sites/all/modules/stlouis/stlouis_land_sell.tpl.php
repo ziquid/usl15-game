@@ -94,7 +94,7 @@
   show_aides_menu($game_user);
 
   $game_land->quantity = $game_land->quantity - (int) $quantity;
-  show_land($game_user, $game_land, $options);
+  game_show_land($game_user, $game_land, $options);
 
   echo <<< EOF
 <div class="title">
@@ -143,14 +143,15 @@ EOF;
 
   foreach ($data as $item) {
 
-    show_land($game_user, $item);
+    game_show_land($game_user, $item);
 
   }
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
+  }
 
-// show next one
+  // Show next one.
   $sql = 'SELECT land.*, land_ownership.quantity,
     competencies.name as competency, comp1.name as competency_name_1
     FROM land
@@ -168,7 +169,6 @@ EOF;
     )
 
     AND
-
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
@@ -179,9 +179,10 @@ EOF;
     ORDER BY required_level ASC LIMIT 1';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
-
   $item = db_fetch_object($result);
 
-  if (!empty($item)) show_land($game_user, $item, array('soon' => TRUE));
+  if (!empty($item)) {
+    game_show_land($game_user, $item, ['soon' => TRUE]);
+  }
 
   db_set_active('default');

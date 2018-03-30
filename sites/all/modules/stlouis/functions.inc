@@ -493,20 +493,18 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
 }
 
 
-function show_land($game_user, $item, $options = array()) {
+function game_show_land($game_user, $item, $options = []) {
 
-  global $game, $phone_id;
+  global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   static $party_title;
 
   if (empty($party_title)) {
-
     $sql = 'select party_title from `values` where id = %d;';
     $result = db_query($sql, $game_user->fkey_values_id);
     $data = db_fetch_object($result);
     $party_title = preg_replace('/^The /', '', $data->party_title);
-
   }
 
   $soon = ($options['soon']) ? 'soon' : '';
@@ -519,19 +517,21 @@ function show_land($game_user, $item, $options = array()) {
       if ($item->type == 'job') {
         $header = '<div class="land-succeeded">' . t('You got a job!') .
           '</div>';
-      } else {
+      }
+      else {
         $header = '<div class="land-succeeded">' .
           t('Investment Purchased') . '</div>';
       }
       break;
 
     case 'failed no-money':
-
+      // TODO refactor money offers
       $offer = ($game_user->income - $game_user->expenses) * 5;
       $offer = min($offer, $game_user->level * 1000);
       $offer = max($offer, $game_user->level * 100);
 
       $header = '<div class="title">' .
+        // FIXME remove special characters from text here
           t('∆ @value <span>Insufficient</span> ∆',
             array('@value' => $game_user->values)) . '
         </div>
@@ -550,7 +550,6 @@ function show_land($game_user, $item, $options = array()) {
         </div>';
 
       $failed = 'failed';
-
       break;
 
     case 'failed not-required-level':
@@ -560,27 +559,20 @@ function show_land($game_user, $item, $options = array()) {
         '</div>';
 
       $failed = 'failed';
-
       break;
 
     case 'failed not-enough-land':
-
       $header = '<div class="title">' .
         t('∆ Quantity <span>Insufficient</span> ∆') .
         '</div>';
-
       $failed = 'failed';
-
       break;
 
     case 'failed not-required-competency':
-
       $header = '<div class="title">' .
         t('∆ Competency <span>Insufficient</span> ∆') .
         '</div>';
-
       $failed = 'failed';
-
       break;
 
     case 'failed not-required-hood':
@@ -633,6 +625,7 @@ function show_land($game_user, $item, $options = array()) {
 
   $can_buy = $can_sell = TRUE;
 
+  // FIXME firep() all reason why can't buy nor sell
   if ($item->fkey_neighborhoods_id != 0 &&
     $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)
     $can_buy = FALSE;
@@ -683,14 +676,44 @@ EOF;
   </a>
 </div>
 EOF;
-    $apply_button = <<< EOF
+    // Current job?  Change 'Apply' button to 'Work' button
+    if (strlen($current) == 0) {
+      $apply_button = <<< EOF
 <div class="land-buy-button">
   <a href="/$game/land_buy/$arg2/$item->id/1">
     Apply
   </a>
 </div>
 EOF;
-  } else {
+    }
+    else {
+      $can_work_again = game_can_do_yet($game_user, 'can_work_again');
+      firep($can_work_again, 'can work again');
+      if ($can_work_again->allowed) {
+        $apply_button = <<< EOF
+<div class="land-buy-button">
+  <a href="/$game/land_work/$arg2/$item->id/1">
+    Work
+  </a>
+</div>
+EOF;
+      }
+      else {
+        $work_again = sprintf('%02d', $can_work_again->hours_remaining) .
+          ':' . sprintf('%02d', $can_work_again->minutes_remaining) .
+          ':' . sprintf('%02d', $can_work_again->seconds_remaining);
+        $apply_button = <<< EOF
+<div class="land-buy-button not-yet">
+  <!--<a href="/$game/land_work/$arg2/$item->id/1">-->
+    Can Work in $work_again
+  <!--</a>-->
+</div>
+EOF;
+      }
+    }
+  }
+  else {
+    // Can't buy.
     $icon_button = <<< EOF
   <img src="/sites/default/files/images/land/$game-$item->id.png?2" width="96"
     border="0">
@@ -721,16 +744,16 @@ EOF;
   </a>
 </div>
 EOF;
-  } else {
+  }
+  else {
     $sell_button = <<< EOF
-<div class="land-sell-button not-yet">
   Can't Sell
+<div class="land-sell-button not-yet">
 </div>
 EOF;
   }
 
   if ($soon) {
-
     echo <<< EOF
 <div class="land $soon $failed">
   <div class="land-icon">
@@ -744,9 +767,8 @@ EOF;
     </div>
     <div class="land-description">&laquo; $description &raquo;</div>
 EOF;
-
-  } else {
-
+  }
+  else {
     echo <<< EOF
 <div class="land $failed">
   $header
@@ -759,20 +781,16 @@ EOF;
     </div>
     <div class="land-description">$description</div>
 EOF;
-
-  } // soon?
+  }
 
   if ($item->type == 'investment') {
-
     echo <<< EOF
     <div class="land-owned">Owned: $quantity</div>
 EOF;
-
     $reqs .= <<< EOF
     <div class="land-cost">Cost: $land_price $game_user->values</div>
 EOF;
-
-  } // investment
+  }
 
   if ($game_user->level < $item->required_level) $reqs .= <<< EOF
     <div class="land-required_level">Player: Level $item->required_level</div>
@@ -833,7 +851,8 @@ EOF;
   </div>
 EOF;
 
-  } else if ($item->type == 'investment') {
+  }
+  else if ($item->type == 'investment') {
 
     if ($options['land-buy-succeeded']) { // attempt to buy
 
@@ -863,26 +882,26 @@ EOF;
 </div>
 EOF;
 
-    } else { // normal show
-
+    }
+    else { // normal show
       echo <<< EOF
   <div class="land-button-wrapper">
     $buy_button
     $sell_button
   </div>
 EOF;
-
     } // attempt to buy?
 
-  } else { // job -- apply only
+  }
+  else {
 
-    if (empty($current)) echo <<< EOF
+    // Job.
+      echo <<< EOF
   <div class="land-button-wrapper">
     $apply_button
   </div>
 EOF;
-
-  } // job or inv
+  }
 
   echo '</div>';
 
@@ -1877,12 +1896,11 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
 // pay for the land, if needed
   $sql = 'update users set money = money - %d
     where id = %d;';
-  $result = db_query($sql, $ex_price, $game_user->id);
+  db_query($sql, $ex_price, $game_user->id);
 
   _recalc_income($game_user);
   $game_user = $fetch_user(); // reprocess user object
   return TRUE;
-
 }
 
 function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
@@ -2903,4 +2921,41 @@ function game_zombie_name() {
   return 'Zombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 
+}
+
+/**
+ * Can I perform an action yet?
+ *
+ * @param \stdClass $game_user
+ *   The user object.
+ *
+ * @param string $key
+ *   The key to check.
+ *
+ * @return \stdClass
+ *   An object with whether the action can be performed; if FALSE, also the
+ *   hours, minutes, and seconds until action can be performed.
+ */
+function game_can_do_yet($game_user, $key) {
+  global $game;
+
+  $get_value = '_' . $game . '_get_value';
+  $can_do = new stdClass();
+  $can_do->time_ready = (int) $get_value($game_user->id, $key, time());
+  $can_do->time_remaining = $can_do->time_ready - time();
+
+  if ($can_do->time_remaining > 0) {
+
+    $can_do->allowed = FALSE;
+    $can_do->hours_remaining = floor($can_do->time_remaining / 3600);
+    $minutes_remaining_in_sec = $can_do->time_remaining % 3600;
+    $can_do->minutes_remaining = floor($minutes_remaining_in_sec / 60);
+    $can_do->seconds_remaining = floor($minutes_remaining_in_sec % 60);
+
+  }
+  else {
+    $can_do->allowed = TRUE;
+  }
+
+  return $can_do;
 }

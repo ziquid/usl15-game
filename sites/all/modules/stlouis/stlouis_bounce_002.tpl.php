@@ -23,6 +23,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>30 Mar: You can now &quot;work&quot; a job every 8 hours to gain extra
+  competency and income for that job.</p>
 <p>27 Mar: Jobs now have competencies attached to them.  Every day you play you
   will increase your competency for that job.</p>
 <p>27 Mar: More clan actions.</p>
