@@ -76,9 +76,9 @@ if ($options['land-work-succeeded'] == 'work-success') {
   $set_value($game_user->id, 'can_work_again', time() + 60*60*8);
 
   // Gain the wage.
-  $sql = 'update users set income = income + %d where id = %d;';
+  $sql = 'update users set money = money + %d where id = %d;';
   $result = db_query($sql, $game_land->payout, $game_user->id);
-  $game_user->income += $game_land->payout;
+  $game_user->money += $game_land->payout;
 
   // Set output.
   $title = t('Success!');
