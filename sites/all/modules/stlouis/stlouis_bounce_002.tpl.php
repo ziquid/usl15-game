@@ -23,7 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
-<p>3 Apr: Added Canadian Dollar to invest in.</p>
+<p>3 Apr: Added Canadian Dollar, Money Market Account to invest in.</p>
 <p>31 Mar: Added Carpenter and Lyft driver jobs.</p>
 <p>31 Mar: Security updates, bug fixes.</p>
 <p>30 Mar: You can now &quot;work&quot; a job every 8 hours to gain extra
