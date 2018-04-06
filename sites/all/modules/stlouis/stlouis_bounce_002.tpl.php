@@ -23,6 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>6 Apr: Fixed "Can't Sell" button, lowered PNG money req't to 25 per level.</p>
 <p>3 Apr: Added Canadian Dollar, Money Market Account to invest in.</p>
 <p>31 Mar: Added Carpenter and Lyft driver jobs.</p>
 <p>31 Mar: Security updates, bug fixes.</p>
