@@ -1146,8 +1146,7 @@ EOF;
       t('You have transferred 10 of your Luck to @name',
       array('@name' => $target_name)) . '</div>';
 
-    return true;
-
+    return TRUE;
   }
 
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
@@ -1165,53 +1164,44 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   return TRUE;
 }
 
-  function _stlouis_action_throw_eggs_function(&$outcome_reason,
-    $target) {
+function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+  $can_do_again = TRUE;
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'] + 0;
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = (int) $_GET['target'];
 
-// the player egging and the player being egged must be in the same hood
-    if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-
-      $outcome_reason .= '<div class="action-effect">' .
-        t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
-
-      return FALSE;
-
-    }
-
-// STL-236 -- no unaffiliated eggings
-    if ($game_user->fkey_values_id == 0) {
-
-      $outcome_reason .= '<div class="action-effect">' .
-        t('Sorry!&nbsp; You must join a political party first') . '</div>';
-
-      return FALSE;
-
-    }
-
-    $sql = 'insert into challenge_history 
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("egging", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $target_id,
-      $game_user->fkey_neighborhoods_id, 0, 0,
-      "$game_user->username egged $target_name.",
-      "$game_user->username egged $target_name.");
-
+  // The player egging and the player being egged must be in the same hood.
+  if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
     $outcome_reason .= '<div class="action-effect">' .
-      t('What a smell!') . '</div>';
-
-    return TRUE;
-
+      t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
+    return FALSE;
   }
 
+  // STL-236 -- no unaffiliated eggings
+  if ($game_user->fkey_values_id == 0) {
+    $outcome_reason .= '<div class="action-effect">' .
+      t('Sorry!&nbsp; You must join a political party first') . '</div>';
+    return FALSE;
+  }
+
+  $sql = 'insert into challenge_history 
+    (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+    fkey_elected_positions_id, won, desc_short, desc_long) values
+    ("egging", %d, %d, %d, %d, %d, "%s", "%s");';
+  db_query($sql, $game_user->id, $target_id,
+    $game_user->fkey_neighborhoods_id, 0, 0,
+    "$game_user->username egged $target_name.",
+    "$game_user->username egged $target_name.");
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('What a smell!') . '</div>';
+  return TRUE;
+}
 
   function _stlouis_action_meet_someone_new_function(&$outcome_reason,
     $target, &$can_do_again) {
