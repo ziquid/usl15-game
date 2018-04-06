@@ -704,7 +704,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   $result = db_query($sql, $target_id);
   $target_user = db_fetch_object($result);
   $actions_required = ceil($target_user->level / 4);
-  $money_required = $target_user->level * 100;
+  $money_required = $target_user->level * 25;
 
   // Actions cap of 50 for alderman.
   if ($ep_type == 1) {
