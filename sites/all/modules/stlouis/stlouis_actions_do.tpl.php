@@ -416,9 +416,7 @@ firep($eq);
 
     }
     else {
-
       $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
-//firep($eq->name . ' did NOT wear out');
     } // did anything wear out?
 
   } // any equipment?
@@ -445,24 +443,35 @@ firep($st->name . ' has run away!');
         $result = db_query($sql, $st->upkeep, $game_user->id);
       } // FIXME: do this before _stlouis_header so that upkeep is accurate
 
-      $outcome_reason .= '<div class="subtitle">' .
-        t('Your @staff has/have run away or been caught',
-        array('@staff' => strtolower($st->name))) . '</div>';
+      $sql = 'select message from staff_failure_reasons
+        where fkey_staff_id = %d
+        order by rand() limit 1;';
+      $result = db_query($sql, $st->id);
+      $failure = db_fetch_object($result);
+
+      if ($failure->message != '') {
+        $outcome_reason .= '<div class="subtitle">' . $failure->message .
+          '</div>';
+      }
+      else {
+        $outcome_reason .= '<div class="subtitle">' .
+          t('Your @staff has/have run away or been caught',
+            ['@staff' => strtolower($st->name)]) . '</div>';
+      }
 
       $sql = 'select quantity from staff_ownership
         where fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $st->id, $game_user->id);
       $so = db_fetch_object($result);
 
-      if ($so->quantity == 0) $can_do_again = FALSE;
+      if ($so->quantity == 0) {
+        $can_do_again = FALSE;
+      }
 
-    } else {
-
+    }
+    else {
       $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
-
-firep($st->name . ' did NOT run away');
-
-    } // did anything wear out?
+    }
 
   } // any equipment?
 
