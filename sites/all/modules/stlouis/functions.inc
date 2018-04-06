@@ -747,8 +747,8 @@ EOF;
   }
   else {
     $sell_button = <<< EOF
-  Can't Sell
 <div class="land-sell-button not-yet">
+  Can't Sell
 </div>
 EOF;
   }
@@ -839,7 +839,6 @@ EOF;
 
   // BUY buttons.
   if ($soon) {
-
     echo <<< EOF
   <div class="land-button-wrapper">
     <div class="land-buy-button not-yet">
@@ -850,30 +849,24 @@ EOF;
     </div>
   </div>
 EOF;
-
   }
   else if ($item->type == 'investment') {
-
     if ($options['land-buy-succeeded']) { // attempt to buy
-
       echo <<< EOF
 <div class="land-button-wrapper">
   <form action="/$game/land_buy/$arg2/$item->id/use-quantity">
     <div class="quantity">
       <select name="quantity">
 EOF;
-
       foreach (array(1, 5, 10, 25, 50, 100) as $option) {
-
         if ($option == $orig_quantity) {
           echo '<option selected="selected" value="' . $option . '">' .
             $option . '</option>';
-        } else {
+        }
+        else {
           echo '<option value="' . $option . '">' . $option . '</option>';
         }
-
       }
-
       echo <<< EOF
       </select>
     </div>
