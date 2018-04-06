@@ -1433,10 +1433,9 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
 
     global $game, $phone_id;
     $game_user = _stlouis_fetch_user();
-    $action_id = arg(3);
     $msg_shown = FALSE;
 
-    $data = array();
+    $data = [];
     $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
@@ -1461,7 +1460,9 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
       order by timestamp DESC;';
 
     $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
-    while ($item = db_fetch_object($result)) $data[] = $item;
+    while ($item = db_fetch_object($result)) {
+      $data[] = $item;
+    }
 
     $outcome_reason .=<<< EOF
 <div class="news">
@@ -1475,11 +1476,13 @@ EOF;
       $display_time = _stlouis_format_date(strtotime($item->timestamp));
       $clan_acronym = '';
 
-      if (!empty($item->clan_acronym))
+      if (!empty($item->clan_acronym)) {
         $clan_acronym = "($item->clan_acronym)";
+      }
 
-      if ($item->is_clan_leader)
+      if ($item->is_clan_leader) {
         $clan_acronym .= '*';
+      }
 
       $outcome_reason .=<<< EOF
 <div class="dateline">
@@ -1497,12 +1500,12 @@ EOF;
 
     }
 
-    if (!$msg_shown) $outcome_reason .= 'No eggings found!';
+    if (!$msg_shown) {
+      $outcome_reason .= 'No eggings found!';
+    }
 
     $outcome_reason .= '</div>';
-
-    return true;
-
+    return TRUE;
   }
 
 function _stlouis_action_critique_last_debates_function(&$outcome_reason, $target, &$can_do_again) {
