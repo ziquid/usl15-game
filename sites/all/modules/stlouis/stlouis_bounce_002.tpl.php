@@ -23,6 +23,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>9 Apr: Update to balance the Feel the Pulse of the City mission.</p>
 <p>6 Apr: Added Disaffected Youth and Egging.</p>
 <p>6 Apr: Fixed "Can't Sell" button and Savings Account, lowered PNG money req't to 25 per level.</p>
 <p>3 Apr: Added Canadian Dollar, Money Market Account to invest in.</p>

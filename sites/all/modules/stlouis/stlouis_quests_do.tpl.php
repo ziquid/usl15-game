@@ -270,24 +270,20 @@
 
     }
 
-// update percentage completion
-
+    // Update percentage completion.
     if (empty($pc->percent_complete)) { // no entry yet, add one
-
       $sql = 'insert into quest_completion (fkey_users_id, fkey_quests_id,
         percent_complete) values (%d, %d, %d);';
       $result = db_query($sql, $game_user->id, $quest_id,
        $game_quest->percent_complete);
-
-    } else {
-
+    }
+    else {
       $sql = 'update quest_completion set percent_complete = least(
         percent_complete + %d, %d) where fkey_users_id = %d and
         fkey_quests_id = %d;';
       $result = db_query($sql,
         floor($game_quest->percent_complete / $percentage_divisor),
         $percentage_target, $game_user->id, $quest_id);
-
     }
 
     $percent_complete = min($pc->percent_complete +
@@ -362,25 +358,22 @@ EOF;
 EOF;
           competency_gain($game_user, 'quest groupie');
 
-// update user stats
+          // Update user stats.
           $sql = 'update users set skill_points = skill_points + %d
             where id = %d;';
           $result = db_query($sql, $quest_group->completed, $game_user->id);
 
-// update quest_groups_completion
-          if (empty($qgc)) { // no record exists - insert one
-
+          // Update quest_groups_completion.
+          if (empty($qgc)) {
             $sql = 'insert into quest_group_completion (fkey_users_id,
               fkey_quest_groups_id, times_completed) values (%d, %d, 1);';
             $result = db_query($sql, $game_user->id, $game_quest->group);
-
-          } else { // existing record - update it
-
+          }
+          else {
             $sql = 'update quest_group_completion set times_completed = 1
               where fkey_users_id = %d and fkey_quest_groups_id = %d;';
             $result = db_query($sql, $game_user->id, $game_quest->group);
-
-          } // insert or update the qgc record
+          }
 
           $quest_group_completion->times_completed = 1;
           $percentage_target = 200;
@@ -410,7 +403,7 @@ EOF;
         if ($quest_group->completed == ($quest_group->total * 2)) {
 // woohoo!  user just completed an entire group the second time!
 
-//          competency_gain($game_user, 'second-mile saint', 3);
+//          competency_gain($game_user, 'second-mile saint');
 
           $sql = 'select * from quest_group_bonus
             where fkey_quest_groups_id = %d;';
@@ -708,26 +701,19 @@ EOF;
 
         } // if quest group completed
 
-      } // if one quest_group bonus has been given
-
-    } // if quest completed
-
-    if ($percent_complete > floor($percentage_target / 2)) {
-
-      $rgb = dechex(floor(($percentage_target - $percent_complete) /
-        (4 * $percentage_divisor))) . 'c0';
-
-    } else {
-
-      $rgb = 'c' . dechex(floor(($percent_complete) /
-        (4 * $percentage_divisor))) . '0';
+      }
 
     }
 
+    if ($percent_complete > floor($percentage_target / 2)) {
+      $rgb = dechex(floor(($percentage_target - $percent_complete) /
+        (4 * $percentage_divisor))) . 'c0';
+    }
+    else {
+      $rgb = 'c' . dechex(floor(($percent_complete) /
+        (4 * $percentage_divisor))) . '0';
+    }
     $width = floor($percent_complete * 94 / $percentage_target) + 2;
-
-//firep($rgb);
-//firep($width);
 
 // check for loot - equipment
 
@@ -741,11 +727,11 @@ EOF;
       WHERE equipment.id = %d;';
     $result = db_query($sql, $game_user->id,
       $game_quest->fkey_loot_equipment_id);
-    $game_equipment = db_fetch_object($result); // limited to 1 in DB
+    $game_equipment = db_fetch_object($result);
 
     $limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
-    if ($game_quest->chance_of_loot >= mt_rand(1, 99) &&
+    if (($game_user->level <= 6 || $game_quest->chance_of_loot >= mt_rand(1, 99)) &&
     ($limit || $game_equipment->quantity_limit == 0)) {
 
       $sql = 'select * from equipment where id = %d;';
