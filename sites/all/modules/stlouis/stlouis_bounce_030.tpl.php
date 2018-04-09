@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>9 Apr: Fixed: looting staff/agents doesn't trigger the Looter competency.</p>
 <p>9 Apr: Update to balance the Feel the Pulse of the City mission.</p>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>

@@ -904,6 +904,8 @@ EOF;
     </div>
 EOF;
 
+      competency_gain($game_user, 'looter');
+
       // Add/update db entry.
       $sql = 'SELECT staff.*, staff_ownership.quantity
         FROM staff
@@ -915,7 +917,7 @@ EOF;
         WHERE staff.id = %d;';
       $result = db_query($sql, $game_user->id,
         $game_quest->fkey_loot_staff_id);
-      $game_staff = db_fetch_object($result); // limited to 1 in DB
+      $game_staff = db_fetch_object($result);
 
       if ($game_staff->quantity == '') { // no record exists - insert one
 
