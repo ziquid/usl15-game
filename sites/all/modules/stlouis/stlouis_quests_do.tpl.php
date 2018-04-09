@@ -725,14 +725,13 @@ EOF;
       AND equipment_ownership.fkey_users_id = %d
 
       WHERE equipment.id = %d;';
-    $result = db_query($sql, $game_user->id,
-      $game_quest->fkey_loot_equipment_id);
+    $result = db_query($sql, $game_user->id, $game_quest->fkey_loot_equipment_id);
     $game_equipment = db_fetch_object($result);
-
     $limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
-    if (($game_user->level <= 6 || $game_quest->chance_of_loot >= mt_rand(1, 99)) &&
-    ($limit || $game_equipment->quantity_limit == 0)) {
+    if ((($game_user->level <= 6 && $game_quest->chance_of_loot > 0)
+        || $game_quest->chance_of_loot >= mt_rand(1, 99))
+      && ($limit || $game_equipment->quantity_limit == 0)) {
 
       $sql = 'select * from equipment where id = %d;';
       $result = db_query($sql, $game_quest->fkey_loot_equipment_id);
