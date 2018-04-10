@@ -139,7 +139,6 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $clan_acronym = check_plain($_GET['acronym']);
 
   $sql = 'select * from clan_members where fkey_users_id = %d;';
-// limited to 1 in db
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 firep($item);
@@ -169,15 +168,13 @@ EOF;
     return FALSE;
   } // no acronym
 
-// does clan exist?
-
+  // Does clan exist?
   $sql = 'select * from clans where acronym = "%s";';
   $result = db_query($sql, $clan_acronym);
   $item = db_fetch_object($result);
 firep($item);
 
   if (empty($item)) { // clan does not exist
-
     $outcome_reason = '<div class="land-failed">' .
       t('The %clan clan does not exist', array('%clan' => $clan_acronym)) .
       '</div><div class="action-effect">Please check that you entered the
@@ -203,17 +200,16 @@ firep($item);
 firep($item);
   $clan_leader_id = $item->id;
 
+  // Different political party?
   if ($item->fkey_values_id != $game_user->fkey_values_id) {
-// different political party
-
     $outcome_reason = '<div class="land-failed">' .
       t('Different political party') .
       '</div><div class="action-effect">' .
       t('That clan belongs to a different political party') . '</div>';
-
     return FALSE;
   }
 
+  // Enough room for all clan members?
   $sql = 'select sum(clan_size * quantity) as max_clan_size from users
     left join equipment_ownership
     on equipment_ownership.fkey_users_id = users.id
@@ -232,15 +228,13 @@ firep($item);
 firep($item);
   $current_clan_size = $item->current_clan_size;
 
-  if ($current_clan_size >= $max_clan_size) { // clan full!
-
+  if ($current_clan_size >= $max_clan_size) {
     $outcome_reason = '<div class="land-failed">' .
       t('The clan is full!') .
       '</div><div class="action-effect">' .
       t('There is no room for new members in this clan.  ' .
         'This clan can only hold @num members.',
         array('@num' => $max_clan_size)) . '</div>';
-
     return FALSE;
   }
 
@@ -465,8 +459,9 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = $_GET['target'];
 
-  $sql = 'select * from clan_members where fkey_users_id = %d;';
-  $result = db_query($sql, $target_id);
+  $sql = 'select * from clan_members where fkey_users_id = %d
+    AND fkey_clans_id = %d;';
+  $result = db_query($sql, $target_id, $game_user->fkey_clans_id);
   $item = db_fetch_object($result);
 
   // Not a member of the clan?
@@ -475,6 +470,35 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
       t('Not a member of your clan!') .
       '</div><div class="action-effect">' . $target_name .
       ' doesn\'t belong to your clan.&nbsp; You cannot have him or her lead.</div>';
+    return FALSE;
+  }
+
+  // Enough room for all clan members?
+  $sql = 'select sum(clan_size * quantity) as max_clan_size from users
+    left join equipment_ownership
+    on equipment_ownership.fkey_users_id = users.id
+    left join equipment
+    on equipment_ownership.fkey_equipment_id = equipment.id
+    where users.id = %d;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
+  firep($item, 'max clan size');
+  $max_clan_size = $item->max_clan_size;
+
+  $sql = 'select count(id) as current_clan_size from clan_members
+    where fkey_clans_id = %d;';
+  $result = db_query($sql, $game_user->fkey_clans_id);
+  $item = db_fetch_object($result);
+  firep($item, 'current clan size');
+  $current_clan_size = $item->current_clan_size;
+
+  if ($current_clan_size >= $max_clan_size) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough room!') .
+      '</div><div class="action-effect">' .
+      t('There is not enough room for the members of this clan.  ' .
+        '@player only has room for @num.',
+        ['@num' => $max_clan_size, '@player' => $target_name]) . '</div>';
     return FALSE;
   }
 

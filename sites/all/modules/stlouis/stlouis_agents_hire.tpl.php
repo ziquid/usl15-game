@@ -67,7 +67,7 @@ if ($game_user->money < $staff_price) {
       array('@value' => $game_user->values)) . '</div>
       <div class="try-an-election-wrapper"><div  class="try-an-election"><a
       href="/' . $game . '/elders_do_fill/' . $arg2 . '/money?destination=/' .
-    $game . '/staff/' . $arg2 . '">Receive ' . $offer . ' ' .
+    $game . '/agents/' . $arg2 . '">Receive ' . $offer . ' ' .
     $game_user->values . ' (1&nbsp;' . $luck . ')</a></div></div>';
 }
 
