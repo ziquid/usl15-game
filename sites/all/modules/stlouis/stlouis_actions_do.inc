@@ -1012,25 +1012,22 @@ EOF;
     return TRUE;
   }
 
-  function _stlouis_action_steal_some_value_function(&$outcome_reason,
-    $target) {
+function _stlouis_action_steal_some_value_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+  $can_do_again = FALSE;
 
-    $game_user = $fetch_user();
-//    include(drupal_get_path('module', $game) . '/game_defs.inc');
-//    $action_id = arg(3);
-    $sql = 'update users set karma = karma - 5 where id = %d;';
-    $result = db_query($sql, $game_user->id);
+  $sql = 'update users set karma = karma - 5 where id = %d;';
+  db_query($sql, $game_user->id);
 
-    $sql = 'update users set debates_last_time = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time()), $game_user->id);
-
-    return true;
-
-  }
+  $sql = 'update users set debates_last_time = "%s" where id = %d;';
+  db_query($sql, date('Y-m-d H:i:s', time()), $game_user->id);
+  return TRUE;
+}
 
 
   function _stlouis_action_erase_your_wall_function(&$outcome_reason,
