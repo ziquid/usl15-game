@@ -21,12 +21,12 @@
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
   $data = db_fetch_object($result);
   $location = $data->name;
-  
+
   $sql = 'select clan_title from `values` where id = %d;';
   $result = db_query($sql, $game_user->fkey_values_id);
   $data = db_fetch_object($result);
   $clan_title = preg_replace('/^The /', '', $data->clan_title);
-  
+
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
@@ -39,12 +39,12 @@
   $game_staff = db_fetch_object($result); // limited to 1 in DB
   $orig_quantity = $count = $quantity;
   $staff_price = 0;
-    
+
   while ($count--) {
 
     $staff_price += $game_staff->price + (($game_staff->quantity + $count) *
       $game_staff->price_increase);
-//firep("count is $count and staff_price is $staff_price");    
+//firep("count is $count and staff_price is $staff_price");
   }
 //firep($game_staff);
 //firep('price is ' . $staff_price);
@@ -52,23 +52,32 @@
   $staff_succeeded = TRUE;
   $outcome_reason = '<div class="land-succeeded">' . t('Success!') .
     '</div>';
-  
-// check to see if staff prerequisites are met
-  if ($game_user->money < $staff_price) {
-    
-    $staff_succeeded = FALSE;
-    $outcome_reason = '<div class="land-failed">' . t('Not enough @value!',
-      array('@value' => $game_user->values)) . '</div>';
-    
-  }
+
+// Check to see if staff prerequisites are met.
+
+// Not enough money?
+if ($game_user->money < $staff_price) {
+  $staff_succeeded = FALSE;
+
+  $offer = ($game_user->income - $game_user->expenses) * 5;
+  $offer = min($offer, $game_user->level * 1000);
+  $offer = max($offer, $game_user->level * 100);
+
+  $outcome_reason = '<div class="land-failed">' . t('Not enough @value!',
+      array('@value' => $game_user->values)) . '</div>
+      <div class="try-an-election-wrapper"><div  class="try-an-election"><a
+      href="/' . $game . '/elders_do_fill/' . $arg2 . '/money?destination=/' .
+    $game . '/staff/' . $arg2 . '">Receive ' . $offer . ' ' .
+    $game_user->values . ' (1&nbsp;' . $luck . ')</a></div></div>';
+}
 
   if ((($game_staff->quantity + $quantity) > $game_staff->quantity_limit) &&
     ($game_staff->quantity_limit >= 1)) {
-    
+
     $staff_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' . t('Limit reached!') .
       '</div>';
-    
+
   }
 
 // too little income to cover upkeep?
@@ -80,25 +89,25 @@
       '</div>';
 
   }
-  
+
   if ($staff_succeeded) {
-    
+
     if ($game_staff->quantity == '') { // no record exists - insert one
-      
+
       $sql = 'insert into staff_ownership (fkey_staff_id, fkey_users_id, quantity)
         values (%d, %d, %d);';
 firep("$sql, $staff_id, $game_user->id, $quantity");
       $result = db_query($sql, $staff_id, $game_user->id, $quantity);
-      
+
     } else { // existing record - update it
-      
+
       $sql = 'update staff_ownership set quantity = quantity + %d where
         fkey_staff_id = %d and fkey_users_id = %d;';
 firep("$sql, $quantity, $staff_id, $game_user->id");
       $result = db_query($sql, $quantity, $staff_id, $game_user->id);
-      
+
     } // insert or update record
-    
+
     $sql = 'update users set money = money - %d, income = income + %d,
       expenses = expenses + %d
       where id = %d;';
@@ -112,24 +121,24 @@ firep("$sql, $quantity, $staff_id, $game_user->id");
        $sql = 'update users set income_next_gain = "%s" where id = %d;';
       $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
          $game_user->id);
-      
+
     }
 
     $game_user = $fetch_user(); // reprocess user object
-    
+
   } else { // failed - add option to try an election
-    
+
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/elections/' . $arg2 . '">Run for
       office instead</a></div></div>';
 
     $quantity = 0;
-    
+
   } // hire staff succeeded
 
   $fetch_header($game_user);
-  
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/land/$arg2" class="button">Businesses</a>
@@ -138,9 +147,9 @@ firep("$sql, $quantity, $staff_id, $game_user->id");
   <a href="/$game/agents/$arg2" class="button active">Agents</a>
 </div>  
 EOF;
-  
+
   if ($game_user->level < 20) {
-  
+
     echo <<< EOF
 <ul>
   <li>Hire agents to help you win elections and stay elected</li>
@@ -150,18 +159,18 @@ EOF;
   } // user level < 20
 firep("game_staff->quantity: $game_staff->quantity");
 firep("quantity: $quantity");
-  
+
   $quantity = (int) $game_staff->quantity + (int) $quantity;
   $staff_price = $game_staff->price + ($quantity * $game_staff->price_increase);
-  
+
   if ($quantity == 0) $quantity = '<em>None</em>'; // gotta love PHP typecasting
-  
+
   if ($game_staff->quantity_limit > 0) {
     $quantity_limit = '<em>(Limited to ' . $game_staff->quantity_limit . ')</em>';
   } else {
     $quantity_limit = '';
   }
-    
+
   echo <<< EOF
 <div class="land">
   $outcome_reason
@@ -177,15 +186,15 @@ firep("quantity: $quantity");
 EOF;
 
     if ($game_staff->initiative_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Initiative: +$game_staff->initiative_bonus</div>
 EOF;
 
     }
-    
+
     if ($game_staff->endurance_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Endurance: +$game_staff->endurance_bonus</div>
 EOF;
@@ -193,13 +202,13 @@ EOF;
     }
 
     if ($game_staff->experience_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Experience: +$game_staff->experience_bonus</div>
 EOF;
 
     }
-    
+
     echo <<< EOF
   </div>
   <div class="land-button-wrapper">
@@ -231,7 +240,7 @@ EOF;
 Hire Agents
 </div>
 EOF;
-    
+
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity 
     FROM staff
@@ -260,13 +269,13 @@ EOF;
     $game_user->fkey_values_id, $game_user->level);
 
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
   foreach ($data as $item) {
 firep($item);
-    
+
     $description = str_replace('%clan', "<em>$clan_title</em>",
       $item->description);
-      
+
     $quantity = $item->quantity;
     if (empty($quantity)) $quantity = '<em>None</em>';
 
@@ -278,7 +287,7 @@ firep($item);
     } else {
       $quantity_limit = '';
     }
-    
+
     echo <<< EOF
 <div class="land">
   <div class="land-icon"><a href="/$game/agents_hire/$arg2/$item->id/1"><img
@@ -293,7 +302,7 @@ firep($item);
 EOF;
 
     if ($item->initiative_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">Initiative: +$item->initiative_bonus</div>
 EOF;
@@ -301,7 +310,7 @@ EOF;
     }
 
     if ($item->endurance_bonus > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout">$endurance: +$item->endurance_bonus</div>
 EOF;
@@ -309,15 +318,15 @@ EOF;
     }
 
     if ($item->upkeep > 0) {
-      
+
       echo <<< EOF
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
     } // upkeep
-    
+
     if ($item->chance_of_loss > 0) {
-      
+
       $lifetime = floor(100 / $item->chance_of_loss);
        $use = ($lifetime == 1) ? 'use' : 'uses';
       echo <<< EOF
@@ -333,94 +342,94 @@ EOF;
     $result = db_query($sql, $item->id);
 
     while ($action = db_fetch_object($result)) $data2[] = $action;
-  
+
     foreach ($data2 as $action) {
 firep($action);
 
       $name = str_replace('%value', $game_user->values, $action->name);
-    
+
       echo '<div class="land-action">Action: ' . $name . '</div>';
       echo '<div class="land-description">' . $action->description . '</div>';
-      echo '<div class="land-action-cost">Cost: ' . $action->cost . 
+      echo '<div class="land-action-cost">Cost: ' . $action->cost .
         ' Action</div>';
-      
+
       if ($action->influence_change < 0) {
-        
+
         $inf_change = -$action->influence_change;
-        
+
         echo <<< EOF
           <div class="land-payout negative">Effect: Target's influence is
             reduced by $inf_change</div>
 EOF;
 
       } // if influence_change < 0
-      
+
       if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
-        
+
         $rat_change = abs($action->rating_change);
-        
+
         if ($action->rating_change < 0.0) {
-          
+
           echo <<< EOF
       <div class="land-payout negative">Effect: $target approval rating is
         reduced by $rat_change%</div>
 EOF;
-        
+
         } else {
-  
+
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
         increased by $rat_change%</div>
 EOF;
-          
+
         }
-  
+
       } // if rating_change < 0.10
-      
+
       if ($action->rating_change >= 0.10) {
-          
+
         $rat_change = $action->rating_change;
-          
+
         echo <<< EOF
       <div class="land-payout">Effect: Your approval rating is
         increased by $rat_change%</div>
 EOF;
-  
+
       } // if rating_change >= 0.10
-      
+
       if ($action->neighborhood_rating_change < 0.0) {
-          
+
         $rat_change = -$action->neighborhood_rating_change;
-          
+
         echo <<< EOF
       <div class="land-payout negative">Effect: Neighborhood $beauty_lower rating is
         reduced by $rat_change</div>
 EOF;
-  
+
       } // if hood rating_change < 0
-      
+
       if ($action->neighborhood_rating_change > 0.0) {
-          
+
         $rat_change = $action->neighborhood_rating_change;
-          
+
         echo <<< EOF
       <div class="land-payout">Effect: Neighborhood $beauty_lower rating is
         increased by $rat_change</div>
 EOF;
-  
+
       } // if hood rating_change > 0
-      
+
       if ($action->values_change < 0) {
-        
+
         $val_change = -$action->values_change;
-        
+
         echo <<< EOF
           <div class="land-payout negative">Effect: Target's $game_user->values is
             reduced by $val_change</div>
 EOF;
 
       } // if values_change < 0
-    
+
     } // foreach action
 
     echo <<< EOF
@@ -433,7 +442,7 @@ EOF;
 EOF;
 
   }
-  
+
 // show next agent
 
   $sql = 'SELECT staff.*, staff_ownership.quantity 
@@ -463,13 +472,13 @@ EOF;
     $game_user->fkey_values_id, $game_user->level);
 
   $item = db_fetch_object($result);
-  
+
   if (!empty($item)) {
 firep($item);
-    
+
     $description = str_replace('%clan', "<em>$clan_title</em>",
       $item->description);
-      
+
     $quantity = $item->quantity;
     if (empty($quantity)) $quantity = '<em>None</em>';
 
@@ -481,7 +490,7 @@ firep($item);
     } else {
       $quantity_limit = '';
     }
-    
+
     echo <<< EOF
 <div class="land-soon">
   <div class="land-details">
@@ -498,61 +507,61 @@ EOF;
     $result = db_query($sql, $item->id);
 
     while ($action = db_fetch_object($result)) $data2[] = $action;
-  
+
     foreach ($data2 as $action) {
 firep($action);
 
       $name = str_replace('%value', $game_user->values, $action->name);
-    
+
       echo '<div class="land-action">Action: ' . $name . '</div>';
       echo '<div class="land-description">' . $action->description . '</div>';
-      echo '<div class="land-action-cost">Cost: ' . $action->cost . 
+      echo '<div class="land-action-cost">Cost: ' . $action->cost .
         ' Action</div>';
-      
+
       if ($action->influence_change < 0) {
-        
+
         $inf_change = -$action->influence_change;
-        
+
         echo <<< EOF
           <div class="land-payout negative">Effect: Target's influence is
             reduced by $inf_change</div>
 EOF;
 
       } // if influence_change < 0
-      
+
       if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
-        
+
         $rat_change = abs($action->rating_change);
-        
+
         if ($action->rating_change < 0.0) {
-          
+
           echo <<< EOF
       <div class="land-payout negative">Effect: $target approval rating is
         reduced by $rat_change%</div>
 EOF;
-        
+
         } else {
-  
+
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
         increased by $rat_change%</div>
 EOF;
-          
+
         }
-  
+
       } // if rating_change < 0.10
-      
+
       if ($action->rating_change >= 0.10) {
-          
+
         $rat_change = $action->rating_change;
-          
+
         echo <<< EOF
       <div class="land-payout">Effect: Your approval rating is
         increased by $rat_change%</div>
 EOF;
-  
+
       } // if rating_change >= 0.10
-    
+
     } // foreach action
 
     echo <<< EOF
@@ -561,5 +570,5 @@ EOF;
 EOF;
 
   } // if !empty($item)
-  
+
   db_set_active('default');

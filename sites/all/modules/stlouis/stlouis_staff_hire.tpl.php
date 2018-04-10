@@ -44,9 +44,10 @@
   $outcome_reason = '<div class="land-succeeded">' . t('Success!') .
     '</div>';
 
-// check to see if staff prerequisites are met
-  if ($game_user->money < $staff_price) {
+  // Check to see if staff prerequisites are met.
 
+  // Not enough money?
+  if ($game_user->money < $staff_price) {
     $staff_succeeded = FALSE;
 
     $offer = ($game_user->income - $game_user->expenses) * 5;
@@ -59,7 +60,6 @@
       href="/' . $game . '/elders_do_fill/' . $arg2 . '/money?destination=/' .
       $game . '/staff/' . $arg2 . '">Receive ' . $offer . ' ' .
       $game_user->values . ' (1&nbsp;' . $luck . ')</a></div></div>';
-
   }
 
   if ((($game_staff->quantity + $quantity) > $game_staff->quantity_limit) &&
