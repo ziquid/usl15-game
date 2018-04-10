@@ -2158,38 +2158,37 @@ function competency_min_count($level, $comp_level) {
 // return the minimum use count for a given level [0..5] and competency level
 // [1..3]
 
-  $min_count = array(
-    1 => array(
+  $min_count = [
+    1 => [
       0,
       20,
-      100,
-      350,
-      1000,
-      2500,
-      PHP_INT_MAX
-    ),
-    2 => array(
-      0,
-      10,
-      50,
-      175,
+      60,
+      150,
+      300,
       500,
-      1250,
       PHP_INT_MAX
-    ),
-    3 => array(
+    ],
+    2 => [
       0,
-      2,
       10,
-      35,
-      100,
+      30,
+      75,
+      150,
       250,
       PHP_INT_MAX
-    ),
-  );
+    ],
+    3 => [
+      0,
+      2,
+      6,
+      15,
+      30,
+      50,
+      PHP_INT_MAX
+    ],
+  ];
 
   return $min_count[$comp_level][$level];
-
 }
 
 

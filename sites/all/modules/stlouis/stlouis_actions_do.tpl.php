@@ -323,11 +323,9 @@ if ($action_succeeded) {
 
     if ($action->values_change < 0) {
       $can_do_again = FALSE;
-
       $sql = 'update users set money = money + %d where id = %d;';
-      $result = db_query($sql, abs(floor($money / 2)), $game_user->id);
+      db_query($sql, abs(floor($money / 2)), $game_user->id);
       $outcome_reason .= '<div class="action-effect">You gain half</div>';
-
     }
 
   }
@@ -366,7 +364,7 @@ if ($action_succeeded) {
   }
 
   // Chance of loss - equipment.
-  if ($action->fkey_equipment_id) { // any equipment for this action?
+  if ($action->fkey_equipment_id) {
 
     $sql = 'select * from equipment where id = %d;';
     $result = db_query($sql, $action->fkey_equipment_id);
@@ -438,7 +436,8 @@ firep($st->name . ' has run away!');
 
 // player expenses need resetting?
 
-      if ($st->upkeep > 0) { // subtract upkeep from your expenses
+      // Subtract upkeep from your expenses.
+      if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $st->upkeep, $game_user->id);
       } // FIXME: do this before _stlouis_header so that upkeep is accurate
