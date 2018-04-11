@@ -9,8 +9,7 @@ function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-
+  $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   include(drupal_get_path('module', $game) . '/game_defs.inc');
   $action_id = arg(3);
@@ -103,16 +102,14 @@ firep($item);
     return FALSE;
   }
 
-
-// doesn't exist - create it!
-
+  // Create it!
   $sql = 'insert into clans (name, acronym) values ("%s", "%s");';
-  $result = db_query($sql, $clan_name, $clan_acronym);
+  db_query($sql, $clan_name, $clan_acronym);
 
   $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
     is_clan_leader) values ((select id from clans where name = "%s"),
     %d, 1);';
-  $result = db_query($sql, $clan_name, $game_user->id);
+  db_query($sql, $clan_name, $game_user->id);
 
   $outcome_reason .= '<div class="action-effect">The clan ' .
     $clan_name . ' (' . $clan_acronym . ') has been created!';
@@ -126,7 +123,6 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   global $game, $phone_id;
 
   $get_value = '_' . $game . '_get_value';
-  $set_value = '_' . $game . '_set_value';
   $remove_value = '_' . $game . '_remove_value';
   $fetch_user = '_' . $game . '_fetch_user';
 
@@ -143,17 +139,15 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $item = db_fetch_object($result);
 firep($item);
 
-  if (!empty($item)) { // already a member of a clan
-
+  if (!empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
       t('Already a member of a clan!') .
       '</div><div class="action-effect">You already belong to a clan.&nbsp;
       You must leave it first.</div>';
-
     return FALSE;
   }
 
-  if (empty($clan_acronym)) { // ask for acronym
+  if (empty($clan_acronym)) {
 
     $outcome_reason =<<< EOF
 <div class="ask-clan-name">
@@ -166,7 +160,7 @@ firep($item);
 EOF;
 
     return FALSE;
-  } // no acronym
+  }
 
   // Does clan exist?
   $sql = 'select * from clans where acronym = "%s";';
@@ -1053,16 +1047,14 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   return TRUE;
 }
 
-
   function _stlouis_action_erase_your_wall_function(&$outcome_reason,
-    $target) {
+    $target, &$can_do_again) {
 
     global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+    $fetch_user = '_' . $game . '_fetch_user';
 
     $game_user = $fetch_user();
-//    include(drupal_get_path('module', $game) . '/game_defs.inc');
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
     $sure = check_plain($_GET['sure']);
@@ -1084,15 +1076,12 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
           </div>
         </div>';
 
-        return false;
-
+        return FALSE;
     }
 
     $sql = 'delete from user_messages where fkey_users_to_id = %d;';
-    $result = db_query($sql, $game_user->id);
-
-    return true;
-
+    db_query($sql, $game_user->id);
+    return TRUE;
   }
 
   function _stlouis_action_give_luck_to_a_clan_member_function(&$outcome_reason, $target) {
@@ -1251,52 +1240,12 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 
   }
 
-  function _celestial_glory_action_stone_an_official_function(&$outcome_reason,
-    $target) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
-
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'] + 0;
-
-    // the player stoning and the player being stoned (target) are in the same hood.
-    if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-
-      $outcome_reason .= '<div class="action-effect">' .
-        t('Sorry!&nbsp; You are no longer in this @hood',
-        array('@hood' => $hood_lower)) . '</div>';
-
-      return FALSE;
-
-    }
-
-    $sql = 'insert into challenge_history 
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("stoning", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $target_id,
-      $game_user->fkey_neighborhoods_id, 0, 0,
-      "$game_user->username stoned $target_name.",
-      "$game_user->username stoned $target_name.");
-
-    $outcome_reason .= '<div class="action-effect">' .
-      t('Ouch!') . '</div>';
-
-    return true;
-
-  }
-
-
   function _stlouis_action_spread_gossip_function(&$outcome_reason,
     $target, &$can_do_again) {
 
-    global $game, $phone_id;
+    global $game;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+    $fetch_user = '_' . $game . '_fetch_user';
     $game_user = $fetch_user();
 
     $target_name = $target->ep_name . ' ' . $target->username;
@@ -1327,15 +1276,6 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 //    $can_do_again = FALSE;
 
     return true;
-
-  }
-
-
-  function _celestial_glory_action_spread_gossip_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    return _stlouis_action_spread_gossip_function($outcome_reason,
-      $target, $can_do_again);
 
   }
 
@@ -1450,84 +1390,84 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   return TRUE;
 }
 
-  function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target) {
+function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
-    $game_user = _stlouis_fetch_user();
-    $msg_shown = FALSE;
+  global $game, $phone_id;
 
-    $data = [];
-    $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
-      elected_positions.name as ep_name,
-      clan_members.is_clan_leader,
-      clans.acronym as clan_acronym
-    
-      from challenge_history
-      
-      left join users on challenge_history.fkey_from_users_id = users.id
-      
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-    
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
-      LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-      challenge_history.fkey_from_users_id
-    
-      LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
-      where fkey_to_users_id = %d and challenge_history.type = "egging" and timestamp >= "%s"
-      order by timestamp DESC;';
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+  $msg_shown = FALSE;
 
-    $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
-    while ($item = db_fetch_object($result)) {
-      $data[] = $item;
+  $data = [];
+  $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    clans.acronym as clan_acronym
+  
+    from challenge_history
+    
+    left join users on challenge_history.fkey_from_users_id = users.id
+    
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
+  
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    challenge_history.fkey_from_users_id
+  
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  
+    where fkey_to_users_id = %d and challenge_history.type = "egging" and timestamp >= "%s"
+    order by timestamp DESC;';
+
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+
+  $outcome_reason .=<<< EOF
+<div class="news">
+<div class="messages-title">
+  Eggs that have been thrown at your office
+</div>
+EOF;
+
+  foreach ($data as $item) {
+    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $clan_acronym = '';
+
+    if (!empty($item->clan_acronym)) {
+      $clan_acronym = "($item->clan_acronym)";
+    }
+
+    if ($item->is_clan_leader) {
+      $clan_acronym .= '*';
     }
 
     $outcome_reason .=<<< EOF
-<div class="news">
-  <div class="messages-title">
-    Eggs that have been thrown at your office
-  </div>
-EOF;
-
-    foreach ($data as $item) {
-
-      $display_time = _stlouis_format_date(strtotime($item->timestamp));
-      $clan_acronym = '';
-
-      if (!empty($item->clan_acronym)) {
-        $clan_acronym = "($item->clan_acronym)";
-      }
-
-      if ($item->is_clan_leader) {
-        $clan_acronym .= '*';
-      }
-
-      $outcome_reason .=<<< EOF
 <div class="dateline">
-  $display_time from $item->ep_name $item->username $clan_acronym
+$display_time from $item->ep_name $item->username $clan_acronym
 </div>
 <div class="message-body">
-  <p>$item->desc_short</p>
-  <div class="message-reply-wrapper"><div class="message-reply">
-    <a href="/$game/user/$phone_id/$item->phone_id">View</a>
-  </div></div>
+<p>$item->desc_short</p>
+<div class="message-reply-wrapper"><div class="message-reply">
+  <a href="/$game/user/$phone_id/$item->phone_id">View</a>
+</div></div>
 </div>
 EOF;
 
-      $msg_shown = TRUE;
-
-    }
-
-    if (!$msg_shown) {
-      $outcome_reason .= 'No eggings found!';
-    }
-
-    $outcome_reason .= '</div>';
-    return TRUE;
+    $msg_shown = TRUE;
   }
+
+  if (!$msg_shown) {
+    $outcome_reason .= 'No eggings found!';
+  }
+
+  $outcome_reason .= '</div>';
+  return TRUE;
+}
 
 function _stlouis_action_critique_last_debates_function(&$outcome_reason, $target, &$can_do_again) {
 
