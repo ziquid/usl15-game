@@ -1213,32 +1213,25 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
   return TRUE;
 }
 
-  function _stlouis_action_meet_someone_new_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_meet_someone_new_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+  include(drupal_get_path('module', $game) . '/game_defs.inc');
 
-//    $target_name = $target->ep_name . ' ' . $target->username;
-//    $target_id = $_GET['target'] + 0;
-
-    // both players must be in the same hood
-    if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-
-      $outcome_reason .= '<div class="action-effect">' .
-        t('Sorry!&nbsp; You two are no longer in the same @hood',
-        array('@hood' => $hood_lower)) . '</div>';
-
-      return FALSE;
-
-    }
-
-    return TRUE;
-
+  // Both players must be in the same hood.
+  if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
+    $outcome_reason .= '<div class="action-effect">' .
+      t('Sorry!&nbsp; You two are no longer in the same @hood',
+      array('@hood' => $hood_lower)) . '</div>';
+    return FALSE;
   }
+
+  return TRUE;
+}
 
   function _stlouis_action_spread_gossip_function(&$outcome_reason,
     $target, &$can_do_again) {
@@ -1253,12 +1246,9 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 
 // been booted?  fail the gossip
     if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-
       $outcome_reason .= '<div class="action-effect">' .
         t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
-
-      return false;
-
+      return FALSE;
     }
 
     $sql = 'insert into challenge_history 
@@ -1272,11 +1262,7 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 
     $outcome_reason .= '<div class="action-effect">' .
       t('You wouldn\'t believe what I\'ve heard about ') . $target_name . '</div>';
-
-//    $can_do_again = FALSE;
-
-    return true;
-
+    return TRUE;
   }
 
 function _stlouis_action_plant_flowers_function(&$outcome_reason, $target, &$can_do_again) {
