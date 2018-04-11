@@ -305,7 +305,7 @@ EOF;
   
     AND required_level <= %d
     AND active = 1
-    AND is_loot = 0
+    AND (is_loot = 0 OR staff_ownership.quantity > 0)
     AND staff_or_agent = "s"
     ORDER BY required_level ASC';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
