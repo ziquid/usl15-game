@@ -1161,12 +1161,19 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
 
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
+  global $game;
+
+  $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
   // FIXME: add same amount of energy that users get every 5 mins.
   $sql = 'update users set energy = energy + 10 where id = %d;';
   db_query($sql, $game_user->id);
+  $game_user->energy += 10;
+
+  if ($game_user->energy > $game_user->energy_max) {
+    competency_gain($game_user, 'satiated');
+  }
 
   $outcome_reason .= '<div class="action-effect">' .
     t('You have eaten and feel more energetic') . '</div>';
