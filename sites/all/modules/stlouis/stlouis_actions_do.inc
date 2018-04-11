@@ -1419,8 +1419,10 @@ function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target,
   
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   
-    where fkey_to_users_id = %d and challenge_history.type = "egging" and timestamp >= "%s"
-    order by timestamp DESC;';
+    where fkey_to_users_id = %d and challenge_history.type = "egging" 
+    AND challenge_history.timestamp >= "%s"
+    
+    order by challenge_history.timestamp DESC;';
 
   $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
   while ($item = db_fetch_object($result)) {
