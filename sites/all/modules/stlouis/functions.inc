@@ -553,11 +553,9 @@ function game_show_land($game_user, $item, $options = []) {
       break;
 
     case 'failed not-required-level':
-
       $header = '<div class="title">' .
         t('∆ Player Level <span>Insufficient</span> ∆') .
         '</div>';
-
       $failed = 'failed';
       break;
 
@@ -570,16 +568,19 @@ function game_show_land($game_user, $item, $options = []) {
 
     case 'failed not-required-competency':
       $header = '<div class="title">' .
-        t('∆ Competency <span>Insufficient</span> ∆') .
+        t('Insufficient Competency') .
         '</div>';
       $failed = 'failed';
+      competency_gain($game_user, 'incompetent');
       break;
 
     case 'failed not-required-hood':
+      // FIXME: show land available in other hoods
       $header = '<div class="title">' .
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
+      competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':
