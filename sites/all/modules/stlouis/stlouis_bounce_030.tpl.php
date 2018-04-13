@@ -20,6 +20,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>13 Apr: Added IRA.</p>
+<p>12 Apr: Added the first Campaigning Mission.</p>
 <p>11 Apr: Added Metro Bus Pass, VW Bug for getting around town.</p>
 <p>10 Apr: Added Russian Hackers as bonus for second round of Basic Missions, Da.</p>
 <p>10 Apr: Added Cleaning Crew Member with associated action and competency.</p>
