@@ -1619,7 +1619,7 @@ EOF;
 
   $outcome_reason .= '</div>';
 
-  return true;
+  return TRUE;
 
 }
 
@@ -2224,7 +2224,7 @@ EOF;
 
     $outcome_reason .= '</div>';
 
-    return true;
+    return TRUE;
 
   }
 
@@ -2312,7 +2312,7 @@ EOF;
 
     $outcome_reason .= '</div>';
 
-    return true;
+    return TRUE;
 
   }
 
