@@ -39,7 +39,7 @@
 //	    ' Luck (currently ' . $game_user->luck . ') at URL ' . $_SERVER['REQUEST_URI'];
 //	  $result = db_query($sql, $game_user->id, $msg);
 
-    $msg = print_r($_POST, true);
+    $msg = print_r($_POST, TRUE);
 	  mail('joseph@ziquid.com', $game . ' Google Checkout Luck purchase', $msg);
 
 //  }
