@@ -28,7 +28,7 @@
       ));
 
       $ctx = stream_context_create($params);
-      $fp = fopen($appleURL, 'rb', false, $ctx);
+      $fp = fopen($appleURL, 'rb', FALSE, $ctx);
 
       if (!$fp)
 //        mail('joseph@cheek.com', 'unable to verify Apple receipt',
