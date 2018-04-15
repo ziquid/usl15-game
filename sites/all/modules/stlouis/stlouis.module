@@ -1342,7 +1342,7 @@ function _stlouis_get_fbid() {
 
   list($encoded_sig, $payload) = explode('.', $signed_request, 2);
 
-  $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), true);
+  $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
     echo '<a target="_top" href="' . $auth_url . '">Login to Facebook</a>';
