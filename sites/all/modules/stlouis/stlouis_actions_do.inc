@@ -1110,7 +1110,7 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
         t('Not enough Luck!') .
         '</div><div class="action-effect">You do not have 10 extra Luck to give</div>';
 
-      return false;
+      return FALSE;
 
     }
 
@@ -2380,7 +2380,7 @@ function _stlouis_check_for_friendly_hood() {
           </div>
         </div>';
 
-        return false;
+        return FALSE;
 
     }
 
