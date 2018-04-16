@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>16 Apr: Soulard's Market is now is Soulard!</p>
 <p>14 Apr: Added Private Eye agent and Investigate Public Official action.</p>
 <p>14 Apr: Added third Campaigning mission, changed Artistes to Anarchists.</p>
 <p>13 Apr: Added IRA Aide, second Campaigning mission.</p>
