@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>17 Apr: Updated downtown mission and loot.</p>
 <p>16 Apr: Added conference room for larger clans.</p>
 <p>16 Apr: Added levels 80-83, balanced level requirements for offices.</p>
 <p>16 Apr: Soulard's Market is now is Soulard!  Adopt a Pet is now in Cheltenham.</p>
