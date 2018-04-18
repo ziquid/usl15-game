@@ -1745,28 +1745,22 @@ function _stlouis_header($game_user) {
 
   global $game, $phone_id, $extra_messages, $next_level;
 
-  // energy
-
-  $energy_text = '';
+  // Calculate energy change.
   $energy_bonus = 10 + $game_user->ep_energy_bonus +
     $game_user->eq_energy_increase + $game_user->st_energy_increase;
-  if (!empty($game_user->fkey_clans_id)) $energy_bonus++; // bonus for joining a clan
-
+  if (!empty($game_user->fkey_clans_id)) {
+    $energy_bonus++;
+  }
   if ($game_user->energy != $game_user->energy_max) {
-
     $energy_secs_until = strtotime($game_user->energy_next_gain) - time();
-    //firep('secs_until now at ' . $secs_until);
-
     $energy_minutes = (string) (int) ($energy_secs_until / 60);
     $energy_seconds = sprintf('%02d', (int) ($energy_secs_until % 60));
-
-    $energy_text = '+' . $energy_bonus . ' in ' .
-      $energy_minutes . ':' . $energy_seconds;
-
-  } else {
-
+    $energy_text = ($game_user->energy > $game_user->energy_max ? '-' : '+') .
+      $energy_bonus . ' in ' . $energy_minutes . ':' . $energy_seconds;
+  }
+  else {
     $energy_minutes = $energy_seconds = 0;
-
+    $energy_text = '';
   }
 
   // actions
@@ -1966,13 +1960,9 @@ firep('a prize is deserved!');
   } // user has no points
 
 
-// show it!
+  // Show it!
 
   $hood = '';
-
-  if ($game == 'celestial_glory') $hood = 'hood' .
-    $game_user->fkey_neighborhoods_id;
-
   $arg2 = check_plain(arg(2));
 
   echo <<< EOF
