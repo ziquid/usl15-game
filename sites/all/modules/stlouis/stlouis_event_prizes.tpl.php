@@ -7,7 +7,7 @@
 
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   if ($phone_id != 'abc123') {
     db_set_active('default');

@@ -9,7 +9,7 @@
 
   $game_user = $fetch_user();
   $arg2 = check_plain(arg(2));
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $message = check_plain($_GET['message']);
 
