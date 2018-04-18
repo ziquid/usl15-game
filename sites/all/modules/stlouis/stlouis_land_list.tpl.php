@@ -6,7 +6,7 @@ $fetch_user = '_' . arg(0) . '_fetch_user';
 $fetch_header = '_' . arg(0) . '_header';
 
 $game_user = $fetch_user();
-include(drupal_get_path('module', $game) . '/game_defs.inc');
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 $ai_output = 'land-prices';
 
