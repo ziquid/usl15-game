@@ -6,11 +6,11 @@
   $fetch_header = '_' . arg(0) . '_header';
 
   $game_user = $fetch_user();
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
-  include_once(drupal_get_path('module', $game) . '/' . $game .
-    '_actions.inc');
-  include_once(drupal_get_path('module', $game) . '/' . $game .
-    '_actions_do.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', $game) . '/' . $game .
+    '_actions.inc';
+  include drupal_get_path('module', $game) . '/' . $game .
+    '_actions_do.inc';
   $arg2 = check_plain(arg(2));
 
   if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
