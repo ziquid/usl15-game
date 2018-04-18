@@ -11,7 +11,7 @@ function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can
 
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = arg(3);
   $can_do_again = FALSE;
 
@@ -127,7 +127,7 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
   $can_do_again = FALSE;
@@ -314,7 +314,7 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = arg(3);
   $can_do_again = FALSE;
 
@@ -392,7 +392,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $can_do_again = FALSE;
 
   $target_name = $target->ep_name . ' ' . $target->username;
@@ -448,7 +448,7 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
 
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = $_GET['target'];
@@ -521,7 +521,7 @@ function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = arg(3);
 
   $clan_rules = check_plain($_GET['rules']);
@@ -574,7 +574,7 @@ function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = arg(3);
 
   $welcome_msg = check_plain($_GET['welcome_msg']);
@@ -688,7 +688,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   global $game, $phone_id;
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $can_do_again = FALSE;
   $target_id = $_GET['target'];
 
@@ -809,7 +809,7 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
 
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = "select name from neighborhoods where id = '%d';";
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -926,7 +926,7 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
     $fetch_user = '_' . $game . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
 
     $data = [];
     $sql = 'SELECT username, experience, initiative, endurance, 
@@ -1226,7 +1226,7 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
 
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   // Both players must be in the same hood.
   if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
@@ -1712,7 +1712,7 @@ EOF;
     global $game, $phone_id;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $msg_shown = FALSE;
 
@@ -2148,7 +2148,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $msg_shown = FALSE;
     $can_do_again = FALSE;
@@ -2236,7 +2236,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $msg_shown = FALSE;
     $can_do_again = FALSE;
@@ -2476,7 +2476,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
     $can_do_again = FALSE;
@@ -2564,7 +2564,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -2609,7 +2609,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -2691,7 +2691,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -2875,7 +2875,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -4133,7 +4133,7 @@ firep($target);
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
 //    $can_do_again = FALSE;
 
@@ -4193,7 +4193,7 @@ firep($target);
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $arg2 = check_plain(arg(2));
     $action_id = arg(3);
     $can_do_again = FALSE;
@@ -4360,7 +4360,7 @@ EOF;
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $arg2 = check_plain(arg(2));
     $action_id = arg(3);
     $can_do_again = FALSE;
