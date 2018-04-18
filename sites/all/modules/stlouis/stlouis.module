@@ -2021,10 +2021,16 @@ $extra_messages
 
     document.getElementById('energy-id').innerHTML = energy;
 
-    if ((energy < energy_max) && (energy_to_add > 0)) {
+    if ((energy != energy_max) && (energy_to_add > 0)) {
+
+      if (energy > energy_max) {
+        var operand = '-';
+      } else {
+        var operand = '+';
+      }
 
       document.getElementById('energy-time').innerHTML =
-        '+' + energy_to_add + ' in ' + energy_minutes + ':' +
+        operand + energy_to_add + ' in ' + energy_minutes + ':' +
         (energy_seconds < 10 ? '0' + energy_seconds : energy_seconds);
 
     } else {
@@ -2152,10 +2158,8 @@ $extra_messages
 
     }
 
-    if (energy >= energy_max) {
-
-      energy = energy_max;
-
+    if (energy >= (energy_max * 2)) {
+      energy = energy_max * 2;
     }
 
     display_energy();
