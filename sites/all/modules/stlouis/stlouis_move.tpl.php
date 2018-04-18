@@ -7,7 +7,7 @@
 
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $arg2 = check_plain(arg(2));
 
   $sql = 'select name from neighborhoods where id = %d;';
