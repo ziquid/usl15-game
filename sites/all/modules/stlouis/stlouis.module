@@ -1629,17 +1629,27 @@ function _stlouis_fetch_user() {
   if (!empty($game_user->fkey_clans_id)) $energy_bonus++; // bonus for joining a clan
   $secs_until = $energy_next_gain - time();
 
-  while (($game_user->energy < $game_user->energy_max) &&
+  while (($game_user->energy != $game_user->energy_max) &&
   ($secs_until <= 0)) { // do we need energy?
 
     $changes_made = TRUE;
-    $game_user->energy += $energy_bonus; // add 10 energy
+    if ($game_user->energy < $game_user->energy_max) {
+      $game_user->energy += $energy_bonus;
+      if ($game_user->energy > $game_user->energy_max) {
+        $game_user->energy = $game_user->energy_max;
+      }
+    }
+    else {
+      $game_user->energy -= $energy_bonus;
+      if ($game_user->energy < $game_user->energy_max) {
+        $game_user->energy = $game_user->energy_max;
+      }
+    }
     $energy_next_gain += 300; // next add in 5 mins
     $secs_until += 300; // ditto
-
   }
 
-  if ($game_user->energy > $game_user->energy_max) {
+  if ($game_user->energy > ($game_user->energy_max * 2)) {
     $changes_made = TRUE; // just in case
     $game_user->energy = $game_user->energy_max; // can't go beyond max
   }
