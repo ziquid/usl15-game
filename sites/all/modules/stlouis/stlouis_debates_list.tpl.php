@@ -11,7 +11,7 @@
   $arg2 = check_plain(arg(2));
 
 // do AI moves from this page!!!
-  include_once(drupal_get_path('module', $game) . '/' . $game . '_ai.inc');
+  include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
   ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
     _move_ai();
 

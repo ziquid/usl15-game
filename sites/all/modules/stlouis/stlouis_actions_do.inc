@@ -2398,7 +2398,7 @@ function _stlouis_check_for_friendly_hood() {
     $fetch_user = '_' . arg(0) . '_fetch_user';
 
     $game_user = $fetch_user();
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
     $action_id = arg(3);
     $arg2 = check_plain(arg(2));
     $can_do_again = FALSE;
