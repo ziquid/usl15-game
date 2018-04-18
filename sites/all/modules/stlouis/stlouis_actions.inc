@@ -8,7 +8,7 @@ function actionlist() {
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include_once(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';

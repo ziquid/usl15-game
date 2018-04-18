@@ -29,7 +29,7 @@ require_once(drupal_get_path('module', 'stlouis') . '/functions.inc');
 function stlouis_cron() {
 
   db_set_active('game_stlouis');
-  include_once(drupal_get_path('module', 'stlouis') . '/game_defs.inc');
+  include drupal_get_path('module', 'stlouis') . '/game_defs.inc';
 
 // save old approval ratings
 

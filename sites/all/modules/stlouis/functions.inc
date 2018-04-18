@@ -146,7 +146,7 @@ function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
   $arg2 = check_plain(arg(2));
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'select quantity from clan_equipment_ownership
     where fkey_equipment_id = %d and fkey_clans_id = %d;';
@@ -945,7 +945,7 @@ function _recalc_income(&$game_user) {
 function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
   if (arg(3) == '') $normal_active = 'active';
@@ -1007,7 +1007,7 @@ EOF;
 function NO_show_elections_menu($game_user) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
   if (substr(arg(1), 0, 6) == 'favors') $favors_active = 'active';
@@ -1136,7 +1136,7 @@ EOF;
 function _show_profile_menu($game_user) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
@@ -1166,7 +1166,7 @@ EOF;
 function NO_show_clan_menu($game_user) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
@@ -1200,7 +1200,7 @@ function _show_quest($game_user, $item, $percentage_target,
   $quest_completion_html = '') {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
   static $location;
@@ -1477,7 +1477,7 @@ EOF;
 function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
   static $location, $party_title;
@@ -2093,7 +2093,7 @@ function karma($game_user, $text, $quantity) {
 
 function competency_level($game_user, $id) {
 // return the user's competency level [0..5] for a given competency
-  include(drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc');
+  include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
 
   if (gettype($id) == 'string') { // find id from string
 
@@ -2297,7 +2297,7 @@ firep($item);
 function NO_hierarchy_status($game_user, $level) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $ret = new StdClass();
 
@@ -2466,7 +2466,7 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 function show_equipment($game_user, $item, $options = array()) {
 
   global $game, $phone_id;
-  include(drupal_get_path('module', $game) . '/game_defs.inc');
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   static $party_title;
 
