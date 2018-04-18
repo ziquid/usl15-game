@@ -8,7 +8,7 @@ define('CONSERVE_MONEY', 2);
     global $game, $ai_output, $bt_skip;
 
     $game = check_plain(arg(0));
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
 
 
 // no AI moves if load is too high
@@ -977,7 +977,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
     global $game;
 
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
 
     $ai_user = _ai_fetch_user($ai_id);
     _ai_out("Trying to boost experience of $ai_id");
@@ -1646,7 +1646,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
     global $game;
 
-    include(drupal_get_path('module', $game) . '/game_defs.inc');
+    include drupal_get_path('module', $game) . '/game_defs.inc';
 
     $ai_user = _ai_fetch_user($ai_id);
 
