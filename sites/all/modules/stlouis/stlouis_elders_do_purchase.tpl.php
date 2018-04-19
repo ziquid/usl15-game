@@ -65,7 +65,7 @@ ob_end_clean();
         exit;
       }
 
-    } // check iOS receipt data
+    }
 
     $luck = 10;
 

@@ -117,7 +117,7 @@ EOF;
 
     return;
 
-  } // nook
+  }
 
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') !== FALSE) {
 // support for Google IAPs
@@ -227,7 +227,7 @@ EOF;
     db_set_active('default');
     return;
 
-  } // Win8/RT
+  }
 
 
   $nonce = date('Y-m-d-H-i-s-') . mt_rand();
@@ -407,6 +407,6 @@ TESTING Google Checkout - Purchase <strong>320</strong> $luck for US $49.99
 </div>
 EOF;
 
-  } // google IAP?
+  }
 */
   db_set_active('default');

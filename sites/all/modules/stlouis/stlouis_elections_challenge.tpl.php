@@ -407,9 +407,9 @@ mail('joseph@cheek.com',
       db_set_active('default');
       return;
 
-    } // influence over 100000
+    }
 
-  } // training hood and challenging for alder
+  }
 
 // get voters
 
@@ -536,7 +536,7 @@ $ip_array[$ip_key]++;
 */
       continue; // vote doesn't count!
 
-    } // more than 5 IPs
+    }
 
     if ($voter->id == $game_user->id) {
 
@@ -749,11 +749,11 @@ firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->user
         $election_polls[] = 'I voted for your opponent because of his or her ' . $experience . '.';
         $votes_opp_influence++;
 
-      } // undecided voter
+      }
 
-    } // if voter is not in election
+    }
 
-  } // foreach voter
+  }
 
 // resident voters for type 1 (hood) elections
   $count = ($item->type == 1) ? $residents : 0;
@@ -773,9 +773,9 @@ firep('resident votes for you');
 firep('resident votes for incumbent');
       $votes_opp_influence++;
 
-    } // for whom to vote
+    }
 
-  } // foreach voter
+  }
 firep('total votes are ' . $votes);
 firep('voter IP array:');
 firep($ip_array);
@@ -836,7 +836,7 @@ firep($ip_array);
       $result = db_query($sql, $game_user->fkey_neighborhoods_id);
       $all_officials_in = $location; // set a flag
 
-    } // you beat the Alderman
+    }
 
     $sql = 'delete from elected_officials where fkey_users_id = %d or
       fkey_users_id = %d;';
@@ -947,7 +947,7 @@ EOF;
         '@influence' => $experience_lower)) .
       '</div>';
 
-  } // did you win or lose?
+  }
 
   echo '<div class="election-continue"><a href="/' . $game . '/elections/' .
     $arg2 . '">' . t('Continue') . '</a></div>';
