@@ -514,6 +514,6 @@ EOF;
 
     $last_weight = $item->weight;
 
-  } // foreach position
+  }
 
   db_set_active('default');
