@@ -394,7 +394,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($item->chance_of_loss > 0) {
 

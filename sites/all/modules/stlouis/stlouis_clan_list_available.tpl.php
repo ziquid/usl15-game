@@ -50,7 +50,7 @@ firep($item);
 Rules: $item->rules
 EOF;
 
-  } // foreach clan
+  }
   
   echo '</div>';
   

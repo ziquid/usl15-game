@@ -395,11 +395,11 @@ EOF;
 $hood->name</a></div>
 EOF;
 
-          } // foreach hood
+          }
 
           $points_to_add = 20;
 
-        } // in super debater's party / clan?
+        }
 
 // not beaten by a super debater
       } else if ($item->debates_lost > 4) { // lost 5 debates
@@ -424,9 +424,9 @@ EOF;
         slack_send_message("Unconquered zombie $item->id ($item->username)"
         . " has less than five debate losses", $slack_channel);
 
-      } // # of losses
+      }
 
-    } // a zombie?
+    }
 
     // Create entry for debater.
     $sql = 'select * from event_points where fkey_users_id = %d;';
