@@ -290,7 +290,7 @@ EOF;
         increased by $rat_change%</div>
 EOF;
   
-      } // if rating_change > 0
+      }
       
     if ($action->neighborhood_rating_change < 0.0) {
         
@@ -301,7 +301,7 @@ EOF;
       rating is reduced by $rat_change</div>
 EOF;
 
-    } // if hood rating_change < 0
+    }
     
     if ($action->neighborhood_rating_change > 0.0) {
         
