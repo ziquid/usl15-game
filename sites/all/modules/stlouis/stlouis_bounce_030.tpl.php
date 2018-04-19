@@ -23,6 +23,7 @@
 <p>19 Apr: Updating the iOS client creates a new account.  Send an email to
   <strong>zipport@ziquid.com</strong> with your old and new referral codes if
   this happens.</p>
+<p>19 Apr: New missions and staff to loot.</p>
 <p>18 Apr: Eating food now gives 30 energy.</p>
 <p>17 Apr: Updated downtown mission and loot.</p>
 <p>16 Apr: Added conference room for larger clans.</p>
