@@ -21,10 +21,10 @@
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
-    
+
     WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
   $game_staff = db_fetch_object($result); // limited to 1 in DB
@@ -112,7 +112,7 @@
 //firep("$sql, $quantity, $staff_id, $game_user->id");
       $result = db_query($sql, $quantity, $staff_id, $game_user->id);
 
-    } // insert or update record
+    }
 
     $sql = 'update users set money = money - %d, income = income + %d,
       expenses = expenses + %d
@@ -140,7 +140,7 @@
 
     $quantity = 0;
 
-  } // hire staff succeeded
+  }
 
   $fetch_header($game_user);
 
@@ -150,7 +150,7 @@
   <a href="/$game/equipment/$arg2" class="button">Equipment</a>
   <a href="/$game/staff/$arg2" class="button active">Staff</a>
   <a href="/$game/agents/$arg2" class="button">Agents</a>
-</div>  
+</div>
 EOF;
 
   if ($game_user->level < 15) {
@@ -161,7 +161,7 @@ EOF;
 </ul>
 EOF;
 
-  } // user level < 15
+  }
 //firep("game_staff->quantity: $game_staff->quantity");
 //firep("quantity: $quantity");
 
@@ -232,7 +232,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($game_staff->upkeep > 0) {
 
@@ -240,7 +240,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($game_staff->chance_of_loss > 0) {
 
@@ -250,7 +250,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
     echo <<< EOF
   </div>
@@ -287,22 +287,22 @@ EOF;
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level <= %d
     AND active = 1
     AND (is_loot = 0 OR staff_ownership.quantity > 0)
@@ -421,22 +421,22 @@ EOF;
 
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level > %d
     AND active = 1
     AND is_loot = 0
