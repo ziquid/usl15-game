@@ -157,7 +157,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy bonus?
+    }
     
     if ($item->energy_increase > 0) {
       
@@ -166,7 +166,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($item->initiative_bonus > 0) {
       
@@ -175,7 +175,7 @@ EOF;
       </div>
 EOF;
 
-    } // initiative bonus?
+    }
     
     if ($item->endurance_bonus > 0) {
       
@@ -184,7 +184,7 @@ EOF;
       </div>
 EOF;
 
-    } // endurance bonus?
+    }
     
     if ($item->elocution_bonus > 0) {
       
@@ -195,7 +195,7 @@ EOF;
 
     if (!$item->is_loot) $ai_output .= "/+elo:$item->elocution_bonus";
 
-    } // elocution bonus?
+    }
     
     if ($item->speed_increase > 0) {
       
@@ -208,7 +208,7 @@ EOF;
     if ((!$item->is_loot) && ($item->quantity == 0))
       $ai_output .= "/+spd:$item->speed_increase";
 
-    } // speed increase?
+    }
     
     if ($item->upkeep > 0) {
       
@@ -216,7 +216,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
     
     if ($item->chance_of_loss > 0) {
       
@@ -226,7 +226,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
     
 // grab each action for the equipment
     $data2 = array();
@@ -257,7 +257,7 @@ firep($action);
             {$experience_lower} is reduced by $inf_change</div>
 EOF;
 
-      } // if influence_change < 0
+      }
       
       if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
         
@@ -279,7 +279,7 @@ EOF;
           
         }
   
-      } // if rating_change < 0
+      }
       
       if ($action->rating_change >= 0.10) {
           
@@ -312,7 +312,7 @@ EOF;
       increased by $rat_change</div>
 EOF;
 
-    } // if hood rating_change > 0
+    }
       
       if ($action->values_change < 0) {
         
@@ -323,9 +323,9 @@ EOF;
             reduced by $val_change</div>
 EOF;
 
-      } // if values_change < 0
+      }
     
-    } // foreach action
+    }
     
     echo '</div>';
     
@@ -422,7 +422,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy bonus?
+    }
     
     if ($item->energy_increase > 0) {
       
@@ -431,7 +431,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
     
     if ($item->elocution_bonus > 0) {
       
@@ -440,7 +440,7 @@ EOF;
       </div>
 EOF;
 
-    } // elocution bonus?
+    }
     
     if ($item->speed_increase > 0) {
       
@@ -450,7 +450,7 @@ EOF;
       </div>
 EOF;
 
-    } // speed increase?
+    }
     
     echo <<< EOF
   </div>
