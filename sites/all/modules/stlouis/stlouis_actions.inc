@@ -339,7 +339,7 @@ firep('allowed not_met users: ' . $allowed_string);
 
       break;
 
-  } // switch
+  }
 
 //  db_set_active('game_' . $game); // reset to master
   return $data2;
