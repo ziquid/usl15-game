@@ -66,7 +66,7 @@
           $game_user->fkey_neighborhoods_id, $message);
         break;
         
-    } // switch $target
+    }
     
     drupal_goto($game . '/home/' . $arg2);
 

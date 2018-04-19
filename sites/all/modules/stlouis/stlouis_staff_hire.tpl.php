@@ -386,7 +386,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($item->upkeep > 0) {
 
@@ -404,7 +404,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
     echo <<< EOF
   </div>
@@ -504,7 +504,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($item->upkeep > 0) {
 
@@ -512,7 +512,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($item->chance_of_loss > 0) {
 
@@ -522,9 +522,9 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
-  } // if !empty($item)
+  }
 
   db_set_active('default');
 

@@ -75,7 +75,7 @@
     $ai_output = 'land-failed cant-sell-job';
     karma($game_user, "trying to sell job $game_land->name", -100);
 
-  } // job?
+  }
 
 
   // Success!

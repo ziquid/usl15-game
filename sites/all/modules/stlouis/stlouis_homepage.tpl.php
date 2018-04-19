@@ -316,7 +316,7 @@ EOF;
       href="/$game/clan_list_available/$arg2" />
 EOF;
 
-  } // in a clan?
+  }
 
     $coords = _stlouis_scale_coords($coefficient, 162, 192, 200, 210);
 
@@ -793,7 +793,7 @@ EOF;
 </div>
 EOF;
 
-  } // send a msg to your party
+  }
 
   $sql = '
     (

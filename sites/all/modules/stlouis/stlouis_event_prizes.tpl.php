@@ -94,10 +94,10 @@ echo '<div class="subsubtitle">updating record for ' . $user->username .
   '</div>';
 
 
-      } // create or update record
+      }
 
-    } // foreach user
+    }
 
-  } // foreach prize
+  }
 
   db_set_active('default');
