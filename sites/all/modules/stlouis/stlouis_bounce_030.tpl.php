@@ -20,6 +20,9 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>19 Apr: Updating the iOS client creates a new account.  Send an email to
+  <strong>zipport@ziquid.com</strong> with your old and new referral codes if
+  this happend.</p>
 <p>18 Apr: Eating food now gives 30 energy.</p>
 <p>17 Apr: Updated downtown mission and loot.</p>
 <p>16 Apr: Added conference room for larger clans.</p>
