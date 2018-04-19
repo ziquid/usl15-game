@@ -60,7 +60,7 @@ firep($item);
       '</div><div class="action-effect">Please give both a name and three
         letters for your clan.</div>';
 
-  } // didn't fill out both fields
+  }
 
   if (empty($clan_name) || empty($clan_acronym)) { // ask for name, acronym
 
@@ -79,7 +79,7 @@ EOF;
 
     return FALSE;
 
-  } // no name nor acronym
+  }
 
 // see if the clan already exists
 
@@ -1872,7 +1872,7 @@ EOF;
 </div>
 EOF;
 
-      	} // old item exists?
+       }
 
 // now display current item
 //        $outcome_reason .=<<< EOF
@@ -1896,7 +1896,7 @@ EOF;
 
       	$instance_count++;
 
-      } // new or existing item?
+      }
 
       $msg_shown = TRUE;
 
@@ -2421,7 +2421,7 @@ EOF;
 
       return FALSE;
 
-    } // need password
+    }
 
 // generate an account number
 
@@ -2440,7 +2440,7 @@ firep($item);
         $account_num = 0;
       }
 
-    } // generate an account number
+    }
 
 // doesn't exist - create it!
 
@@ -2502,7 +2502,7 @@ EOF;
 
       return FALSE;
 
-    } // need account number and password
+    }
 
 // validate the info
 
@@ -2524,7 +2524,7 @@ firep($item);
 
       return FALSE;
 
-    } // account info not correct
+    }
 
 // close the account
 
@@ -2635,7 +2635,7 @@ EOF;
 
       return FALSE;
 
-    } // need account number and password
+    }
 
 // validate the info
 
@@ -2656,7 +2656,7 @@ firep($item);
 
       return FALSE;
 
-    } // account info not correct
+    }
 
 // update the password
 
@@ -2722,7 +2722,7 @@ EOF;
 
       return FALSE;
 
-    } // need account number and password
+    }
 
 // validate the info -- first, check that the account exists
 
@@ -2743,7 +2743,7 @@ firep($item);
 
       return FALSE;
 
-    } // account info not correct
+    }
 
 // set transaction_lock and then reprocess user object
 // spin 10 times for 1 second waiting for a lock, if necessary
@@ -2770,7 +2770,7 @@ firep($item);
         sleep(1);
       }
 
-    } // try to get a lock
+    }
 
     if ($lock_try > 0) { // unable to get a lock
 
@@ -2781,7 +2781,7 @@ firep($item);
 
       return FALSE;
 
-    } // cannot get lock after 10 tries
+    }
 
     $game_user = $fetch_user();
 
@@ -2798,7 +2798,7 @@ firep($item);
         where id = %d;', $item->id);
       return FALSE;
 
-    } // not enough moolah
+    }
 
 // next, check account
 
@@ -2905,7 +2905,7 @@ EOF;
 
       return FALSE;
 
-    } // need account number and password
+    }
 
 // validate the info -- first, check that the account exists
 
@@ -2926,7 +2926,7 @@ firep($item);
 
       return FALSE;
 
-    } // account info not correct
+    }
 
 // set transaction_lock and then reprocess user object
 // spin 10 times for 1 second waiting for a lock, if necessary
@@ -2953,7 +2953,7 @@ firep($item);
         sleep(1);
       }
 
-    } // try to get a lock
+    }
 
     if ($lock_try > 0) { // unable to get a lock
 
@@ -2964,7 +2964,7 @@ firep($item);
 
       return FALSE;
 
-    } // cannot get lock after 10 tries
+    }
 
     $game_user = $fetch_user();
 
@@ -2981,7 +2981,7 @@ firep($item);
         where id = %d;', $item->id);
       return FALSE;
 
-    } // not enough moolah
+    }
 
 // make the withdrawal and add to the user
 
@@ -4211,7 +4211,7 @@ firep($target);
 
       return FALSE;
 
-    } // in a taggable hood
+    }
 */
 // out of ammo?
 
@@ -4227,7 +4227,7 @@ firep($target);
 
       return FALSE;
 
-    } // no ammo!
+    }
 
     if ($target_id == '') { // no target specified
 
@@ -4262,7 +4262,7 @@ EOF;
 
       return FALSE;
 
-    } // show list of players to tag
+    }
 
 
 // camouflage?
@@ -4285,9 +4285,9 @@ EOF;
 
         return FALSE;
 
-      } // camouflage caused miss
+      }
 
-    } // any camouflage?
+    }
 
 
 // tag the player!
@@ -4378,7 +4378,7 @@ EOF;
 
       return FALSE;
 
-    } // in a taggable hood
+    }
 */
 
 // no target specified
@@ -4460,7 +4460,7 @@ EOF;
 
       return FALSE;
 
-    } // show list of players to tag
+    }
 
 
 // not in same hood

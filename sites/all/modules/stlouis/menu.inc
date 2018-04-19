@@ -1781,5 +1781,5 @@ function stlouis_theme() {
 
   );
 
-} // stlouis_theme()
+}
 

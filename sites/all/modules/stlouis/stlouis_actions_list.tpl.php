@@ -121,7 +121,7 @@ EOF;
     db_set_active('default');
     return;
 
-  } // no actions available
+  }
 
   foreach ($data as $item) {
 firep($item);
@@ -191,7 +191,7 @@ EOF;
       reduced by $inf_change</div>
 EOF;
 
-    } // if influence_change < 0
+    }
 
     if ($item->influence_change > 0) {
 
@@ -202,7 +202,7 @@ EOF;
       increased by $inf_change</div>
 EOF;
 
-    } // if influence_change < 0
+    }
 
     if (($item->rating_change < 0.10) && ($item->rating_change != 0.0)) {
 
@@ -224,7 +224,7 @@ EOF;
 
       }
 
-    } // if rating_change < 0
+    }
 
     if ($item->rating_change >= 0.10) {
 
@@ -235,7 +235,7 @@ EOF;
       increased by $rat_change%</div>
 EOF;
 
-    } // if rating_change > 0
+    }
 
     if ($item->values_change > 0) {
 
@@ -244,7 +244,7 @@ EOF;
       increased by $item->values_change</div>
 EOF;
 
-    } // if values_change > 0
+    }
 
     if ($item->values_change < 0) {
 
@@ -255,7 +255,7 @@ EOF;
       decreased by $val_change</div>
 EOF;
 
-    } // if values_change < 0
+    }
 
     if ($item->actions_change > 0) {
 
@@ -264,7 +264,7 @@ EOF;
       increased by $item->actions_change</div>
 EOF;
 
-    } // if actions_change > 0
+    }
 
     if ($item->actions_change < 0) {
 
@@ -275,7 +275,7 @@ EOF;
       decreased by $val_change</div>
 EOF;
 
-    } // if actions_change < 0
+    }
 
     if ($item->neighborhood_rating_change < 0.0) {
 
@@ -286,7 +286,7 @@ EOF;
       rating is reduced by $rat_change</div>
 EOF;
 
-    } // if hood rating_change < 0
+    }
 
     if ($item->neighborhood_rating_change > 0.0) {
 
@@ -297,7 +297,7 @@ EOF;
       increased by $rat_change</div>
 EOF;
 
-    } // if hood rating_change > 0
+    }
 
     // Competencies.
     if ($item->competency_enhanced_1 != 0) {
@@ -565,7 +565,7 @@ EOF;
 
           break;
 
-      } // switch
+      }
 //      db_set_active('game_' . $game); // reset to master
 
 // too many to list?  separate by first letter
@@ -601,22 +601,22 @@ EOF;
             substr($user->ep_name . ' ' . $user->username . ' ' . $clan_acronym,
             0, 30) . '</option>';
 
-        } // full list foreach()
+        }
 
-      } // too many to list?
+      }
 
       echo <<< EOF
       </select>
     </div>
 EOF;
 
-    } // if target != none
+    }
   }// if next_action_time_remaining < 0
     echo <<< EOF
   </form>
 </div>
 EOF;
 
-  } // foreach action
+  }
 
   db_set_active('default');
