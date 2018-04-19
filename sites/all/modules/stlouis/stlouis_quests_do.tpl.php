@@ -49,7 +49,7 @@
 
     competency_gain($game_user, 'too tired');
 
-  } // not enough energy
+  }
 
   if ($game_quest->equipment_1_required_quantity > 0) {
 
@@ -79,7 +79,7 @@
       competency_gain($game_user, 'hole in pockets');
     }
 
-  } // no required equipment_1
+  }
 
   if ($game_quest->equipment_2_required_quantity > 0) {
 
@@ -108,7 +108,7 @@
 
     }
 
-  } // no required equipment_2
+  }
 
     if ($game_quest->equipment_3_required_quantity > 0) {
 
@@ -137,7 +137,7 @@
 
     }
 
-  } // no required equipment_3
+  }
 
   if ($game_quest->staff_required_quantity > 0) {
 
@@ -164,7 +164,7 @@
 
     }
 
-  } // no required staff
+  }
 
     if ($game_quest->land_required_quantity > 0) {
 
@@ -193,7 +193,7 @@
 
     }
 
-  } // no required land
+  }
 
 
 // wrong hood
@@ -220,7 +220,7 @@
 
     competency_gain($game_user, 'lost');
 
-  } // wrong hood
+  }
 
 
   $sql = 'select percent_complete, bonus_given from quest_completion
@@ -316,7 +316,7 @@
     all ${quest_lower}s in this group for an extra reward.</p>
 EOF;
 
-      } // did they get the mission completion bonus?
+      }
 
 // did they complete all quests in the group?
 
@@ -379,9 +379,9 @@ EOF;
           $percentage_target = 200;
           $percentage_divisor = 2;
 
-        } // if quest group completed
+        }
 
-      } // if no quest_group bonus has been given
+      }
 
       if ($qgc->times_completed == 1) { // what?  they've completed a 2nd time?
 
@@ -445,7 +445,7 @@ EOF;
                   where fkey_equipment_id = %d and fkey_users_id = %d;';
                 $result = db_query($sql, $eq_id, $game_user->id);
 
-              } // insert or update record
+              }
 
 // tell the user about it
               $quest_completion_html .=<<< EOF
@@ -466,7 +466,7 @@ EOF;
       </div>
 EOF;
 
-              } // energy bonus?
+              }
 
               if ($game_equipment->energy_increase > 0) {
 
@@ -475,7 +475,7 @@ EOF;
       </div>
 EOF;
 
-              } // energy increase?
+              }
 
               if ($game_equipment->initiative_bonus > 0) {
 
@@ -484,7 +484,7 @@ EOF;
       </div>
 EOF;
 
-              } // initiative bonus?
+              }
 
               if ($game_equipment->endurance_bonus > 0) {
 
@@ -493,7 +493,7 @@ EOF;
       </div>
 EOF;
 
-              } // endurance bonus?
+              }
 
               if ($game_equipment->elocution_bonus > 0) {
 
@@ -502,7 +502,7 @@ EOF;
       </div>
 EOF;
 
-              } // elocution bonus?
+              }
 
               if ($game_equipment->speed_increase > 0) {
 
@@ -512,7 +512,7 @@ EOF;
       </div>
 EOF;
 
-              } // speed increase?
+              }
 
               if ($game_equipment->upkeep > 0) {
 
@@ -520,7 +520,7 @@ EOF;
     <div class="quest-payout negative">Upkeep: $game_equipment->upkeep every 60 minutes</div>
 EOF;
 
-              } // upkeep
+              }
 
               if ($game_equipment->chance_of_loss > 0) {
 
@@ -530,11 +530,11 @@ EOF;
     <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-              } // expected lifetime
+              }
 
               $quest_completion_html .= '</div>';
 
-            } // equipment bonus
+            }
 
             // FIXME: land bonus here
 
@@ -567,7 +567,7 @@ EOF;
                   fkey_staff_id = %d and fkey_users_id = %d;';
                 $result = db_query($sql, $st_id, $game_user->id);
 
-              } // insert or update record
+              }
 
 // tell the user about it
               $quest_completion_html .=<<< EOF
@@ -588,7 +588,7 @@ EOF;
       </div>
 EOF;
 
-              } // energy bonus?
+              }
 
               if ($game_staff->energy_increase > 0) {
 
@@ -597,7 +597,7 @@ EOF;
       </div>
 EOF;
 
-              } // energy increase?
+              }
 
               if ($game_staff->initiative_bonus > 0) {
 
@@ -606,7 +606,7 @@ EOF;
       </div>
 EOF;
 
-              } // initiative bonus?
+              }
 
               if ($game_staff->endurance_bonus > 0) {
 
@@ -615,7 +615,7 @@ EOF;
       </div>
 EOF;
 
-              } // endurance bonus?
+              }
 
               if ($game_staff->elocution_bonus > 0) {
 
@@ -624,7 +624,7 @@ EOF;
       </div>
 EOF;
 
-              } // elocution bonus?
+              }
 
               if ($game_staff->speed_increase > 0) {
 
@@ -634,7 +634,7 @@ EOF;
       </div>
 EOF;
 
-              } // speed increase?
+              }
 
               if ($game_staff->extra_votes > 0) {
 
@@ -642,7 +642,7 @@ EOF;
     <div class="quest-payout">Extra Votes: $game_staff->extra_votes</div>
 EOF;
 
-              } // extra votes
+              }
 
               if ($game_staff->extra_defending_votes > 0) {
 
@@ -650,7 +650,7 @@ EOF;
     <div class="quest-payout">Extra Defending Votes: $game_staff->extra_defending_votes</div>
 EOF;
 
-              } // extra defending votes
+              }
 
               if ($game_staff->upkeep > 0) {
 
@@ -658,7 +658,7 @@ EOF;
     <div class="quest-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
 EOF;
 
-              } // upkeep
+              }
 
               if ($game_staff->chance_of_loss > 0) {
 
@@ -668,11 +668,11 @@ EOF;
     <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-              } // expected lifetime
+              }
 
               $quest_completion_html .= '</div>';
 
-            } // staff bonus
+            }
 
 // update quest_groups_completion
           $sql = 'update quest_group_completion set times_completed = 2
@@ -697,9 +697,9 @@ EOF;
   <p class="second">&nbsp;</p>
 </div>
 EOF;
-          } // if we actually have a bonus to give
+          }
 
-        } // if quest group completed
+        }
 
       }
 
@@ -759,7 +759,7 @@ EOF;
         </div>
 EOF;
 
-        } // initiative bonus?
+        }
 
         if ($loot->endurance_bonus > 0) {
 
@@ -768,7 +768,7 @@ EOF;
       </div>
 EOF;
 
-        } // endurance bonus?
+        }
 
         if ($loot->elocution_bonus > 0) {
 
@@ -777,7 +777,7 @@ EOF;
         </div>
 EOF;
 
-        } // elocution bonus?
+        }
 
         // Upkeep.
         if ($loot->upkeep > 0) {
@@ -822,13 +822,13 @@ EOF;
           $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
             $game_user->id);
 
-        } // add/update db entry
+        }
 
         if ($loot->upkeep > 0) {
           _recalc_income($game_user);
         }
 
-      } // check for income < expenses after loot
+      }
 
     }
 
@@ -871,7 +871,7 @@ EOF;
         </div>
 EOF;
 
-    } // initiative bonus?
+    }
 
     if ($loot->endurance_bonus > 0) {
 
@@ -880,7 +880,7 @@ EOF;
       </div>
 EOF;
 
-    } // endurance bonus?
+    }
 
     if ($loot->elocution_bonus > 0) {
 
@@ -889,7 +889,7 @@ EOF;
         </div>
 EOF;
 
-    } // elocution bonus?
+    }
 
     // Upkeep.
     if ($loot->upkeep > 0) {
@@ -934,13 +934,13 @@ EOF;
         $result = db_query($sql, $game_quest->fkey_loot_staff_id,
           $game_user->id);
 
-      } // add/update db entry
+      }
 
       if ($loot->upkeep > 0) {
         _recalc_income($game_user);
       }
 
-    } // check for loot - staff
+    }
 
     $game_user = $fetch_user();
     $fetch_header($game_user);
@@ -1058,7 +1058,7 @@ EOF;
 </div>
 EOF;
 
-  } // quest succeeded or failed
+  }
 
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
@@ -1293,7 +1293,7 @@ EOF;
     </div>
 EOF;
 
-    } // required land
+    }
 
 // required equipment
     if ($item->equipment_1_required_quantity > 0) {
@@ -1376,11 +1376,11 @@ EOF;
         </div>
 EOF;
 
-        } // more more required equipment
+        }
 
-      } // more required equipment
+      }
 
-    } // required equipment
+    }
 
     if ($item->staff_required_quantity > 0) {
 
@@ -1404,7 +1404,7 @@ EOF;
     </div>
 EOF;
 
-    } // required staff
+    }
 
     echo <<< EOF
     </div>
@@ -1412,9 +1412,9 @@ EOF;
 </div>
 EOF;
 
-    } // show quests in other hoods?
+    }
 
-  } // foreach item
+  }
 
 //  if ($game_user->level > 1) { // don't show extra quests at first
 

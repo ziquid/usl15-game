@@ -90,7 +90,7 @@ EOF;
 </div>
 
 EOF;
-  } // experience = 0
+  }
 
   if ($game_user->fkey_values_id == 0 && $game_user->level >= 6 &&
     $game_user->level <= 25)
@@ -117,7 +117,7 @@ EOF;
     $sql = 'update users set seen_neighborhood_quests = 1 where id = %d;';
     $result = db_query($sql, $game_user->id);
 
-  } // haven't seen quests intro
+  }
 
   if ($game_user->level < 6) $location = ''; // keep location from user
 
@@ -364,7 +364,7 @@ EOF;
     </div>
 EOF;
 
-    } // required land
+    }
 
     // required equipment
     if ($item->equipment_1_required_quantity > 0) {
@@ -450,11 +450,11 @@ EOF;
         </div>
 EOF;
 
-        } // more more required equipment
+        }
 
-      } // more required equipment
+      }
 
-    } // required equipment
+    }
 
     // required staff
     if ($item->staff_required_quantity > 0) {
@@ -480,7 +480,7 @@ EOF;
     </div>
 EOF;
 
-    } // required staff
+    }
 
     echo <<< EOF
     </div>
@@ -488,9 +488,9 @@ EOF;
 </div>
 EOF;
 
-    } // show quests in other hoods?
+    }
 
-  } // foreach item
+  }
 
 //  if ($game_user->level > 1) { // don't show extra quests at first
 
