@@ -286,7 +286,7 @@ if ($action_succeeded) {
         '\'s neighborhood ' . $beauty_lower . ' rating is changed by ' .
     $rat_change . ' (now at ' . $hood->rating . ')</div>';
 
-  } // change hood rating
+  }
 
   // values COST (ie, what you pay).
   if ($action->values_cost != 0) {
@@ -384,7 +384,7 @@ firep($eq);
       if ($eq->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $eq->upkeep, $game_user->id);
-      } // FIXME: do this before _stlouis_header so that upkeep is accurate
+      }
 
       $stuff = strtolower($eq->name);
       if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
@@ -415,9 +415,9 @@ firep($eq);
     }
     else {
       $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
-    } // did anything wear out?
+    }
 
-  } // any equipment?
+  }
 
   // Chance of loss - aides.
   if ($action->fkey_staff_id) { // any staff for this action?
@@ -440,7 +440,7 @@ firep($st->name . ' has run away!');
       if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $st->upkeep, $game_user->id);
-      } // FIXME: do this before _stlouis_header so that upkeep is accurate
+      }
 
       $sql = 'select message from staff_failure_reasons
         where fkey_staff_id = %d
@@ -472,7 +472,7 @@ firep($st->name . ' has run away!');
       $outcome_reason .= '<div class="subtitle">&nbsp;</div>';
     }
 
-  } // any equipment?
+  }
 
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
@@ -509,7 +509,7 @@ firep($st->name . ' has run away!');
 
     $ai_output = 'action-failed';
 
-  } // action succeeded
+  }
 
   $fetch_header($game_user);
 

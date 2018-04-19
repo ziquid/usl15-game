@@ -884,7 +884,7 @@ EOF;
     $sell_button
   </div>
 EOF;
-    } // attempt to buy?
+    }
 
   }
   else {
@@ -1410,7 +1410,7 @@ EOF;
     </div>
 EOF;
 
-    } // requirement
+    }
 
     echo <<< EOF
     <div class="quest-disbursements">
@@ -1464,7 +1464,7 @@ EOF;
     </div>
 EOF;
 
-  } // quest performed or not?
+  }
 
   echo <<< EOF
   </div>
@@ -1626,7 +1626,7 @@ EOF;
 
     }
 
-  } // not 'perform' view
+  }
 
   echo <<< EOF
     <div class="quest-requisites">
@@ -2512,7 +2512,7 @@ function show_equipment($game_user, $item, $options = array()) {
     $icon = "$game-$item->id.png";
     $a_start = "<a href=\"/$game/{$link}_buy/$arg2/$item->id/1\">";
     $a_end = '</a>';
-  } // soon?
+  }
 
   if ($clan | $item->is_loot) { // cannot buy
     $a_start = $a_end = '';
@@ -2569,7 +2569,7 @@ EOF;
     </div>
 EOF;
 
-  } // energy bonus?
+  }
 
   if ($item->energy_increase > 0) {
 
@@ -2579,7 +2579,7 @@ EOF;
     </div>
 EOF;
 
-  } // energy increase?
+  }
 
   if ($item->initiative_bonus > 0) {
 
@@ -2589,7 +2589,7 @@ EOF;
     </div>
 EOF;
 
-  } // initiative bonus?
+  }
 
   if ($item->endurance_bonus > 0) {
 
@@ -2599,7 +2599,7 @@ EOF;
     </div>
 EOF;
 
-  } // endurance bonus?
+  }
 
   if ($item->endurance_bonus < 0) {
 
@@ -2609,7 +2609,7 @@ EOF;
     </div>
 EOF;
 
-  } // endurance bonus?
+  }
 
   if ($item->elocution_bonus > 0) {
 
@@ -2621,7 +2621,7 @@ EOF;
 
   if (!$item->is_loot) $ai_output .= "/+elo:$item->elocution_bonus";
 
-  } // elocution bonus?
+  }
 
   if ($item->speed_increase > 0) {
 
@@ -2635,7 +2635,7 @@ EOF;
   if ((!$item->is_loot) && ($item->quantity == 0))
     $ai_output .= "/+spd:$item->speed_increase";
 
-  } // speed increase?
+  }
 
   if ($item->upkeep > 0) {
 
@@ -2645,7 +2645,7 @@ EOF;
     </div>
 EOF;
 
-  } // upkeep
+  }
 
   if ($item->chance_of_loss > 0) {
 
@@ -2657,7 +2657,7 @@ EOF;
     </div>
 EOF;
 
-  } // expected lifetime
+  }
 
 // grab each action for the equipment
   $data2 = array();
@@ -2697,7 +2697,7 @@ EOF;
     </div>
 EOF;
 
-    } // if influence_change < 0
+    }
 
     if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
 
@@ -2721,7 +2721,7 @@ EOF;
 
       }
 
-    } // if rating_change < 0
+    }
 
     if ($action->rating_change >= 0.10) {
 
@@ -2733,7 +2733,7 @@ EOF;
     </div>
 EOF;
 
-    } // if rating_change > 0
+    }
 
     if ($action->neighborhood_rating_change < 0.0) {
 
@@ -2745,7 +2745,7 @@ EOF;
     </div>
 EOF;
 
-    } // if hood rating_change < 0
+    }
 
     if ($action->neighborhood_rating_change > 0.0) {
 
@@ -2757,7 +2757,7 @@ EOF;
     </div>
 EOF;
 
-    } // if hood rating_change > 0
+    }
 
     if ($action->values_change < 0) {
 
@@ -2769,9 +2769,9 @@ EOF;
     </div>
 EOF;
 
-    } // if values_change < 0
+    }
 
-  } // foreach action
+  }
 
   echo '</div>';
 
@@ -2821,7 +2821,7 @@ EOF;
 
     }
 
-  } // not soon or a clan item
+  }
 
   echo '</div>';
 
@@ -2862,7 +2862,7 @@ firep($eq->name . ' wore out!');
 
     }
 
-  } // did anything wear out?
+  }
 
   $sql = 'select quantity from equipment_ownership
     where fkey_equipment_id = %d and fkey_users_id = %d;';

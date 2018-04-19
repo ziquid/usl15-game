@@ -14,14 +14,14 @@ function stlouis_help($path, $arg) {
 
   return $output;
 
-} // stlouis_help()
+}
 
 
 function stlouis_perm() {
 
   return array('access stlouis content');
 
-} // stlouis_perm()
+}
 
 require_once(drupal_get_path('module', 'stlouis') . '/menu.inc');
 require_once(drupal_get_path('module', 'stlouis') . '/functions.inc');
@@ -127,7 +127,7 @@ function stlouis_cron() {
         $levels[$a + 1]->experience - 1);
     }
 
-  } // any zombies?
+  }
 
 
 // unfreeze players
@@ -380,13 +380,13 @@ function stlouis_init() {
       // 360dip width display.
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width360.css');
-      } // width=### ?
+      }
 
-    } // width= ?
+    }
 
-  } // game name?
+  }
 
-} // stlouis_init()
+}
 
 
 function _stlouis_filter_profanity($message) {
@@ -1115,13 +1115,13 @@ to
         $arg2 = check_plain(arg(2));
         drupal_goto("$game/authenticate/$arg2");
 
-      } // no password
+      }
 
-    } // new IP address
+    }
 
     return TRUE;
 
-  } // if empty or not
+  }
 
 }
 
@@ -1150,7 +1150,7 @@ function _stlouis_check_authKey($game_user) {
 
     }
 
-  } // where is the authkey?
+  }
 
   if ($authKey != '') { // an authKey sent
 
@@ -1194,7 +1194,7 @@ function _stlouis_check_authKey($game_user) {
             www.cheek.com/Celestial%20Glory.apk.';
           exit;
 
-        } // not ms,
+        }
 
       } else {
 
@@ -1211,9 +1211,9 @@ function _stlouis_check_authKey($game_user) {
             www.cheek.com/StLouis.apk.';
           exit;
 
-        } // not ms
+        }
 
-      } // cg or usl
+      }
 
       return; // no key sent, no key saved -- all is good in USL.
 
@@ -1223,7 +1223,7 @@ function _stlouis_check_authKey($game_user) {
     echo 'Error E-0922: ' . $game_user->referral_code; // no authkey
     exit;
 
-  } // browser sent us an authKey
+  }
 
 }
 
@@ -1619,7 +1619,7 @@ function _stlouis_fetch_user() {
 
     $extra_messages .= '</div>';
 
-  } // leveled up!
+  }
 
 // calculate energy
 
@@ -1914,7 +1914,7 @@ firep('a prize is deserved!');
 // if ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
-      } // create or update record
+      }
 
 // update record of user getting this present
       $sql = 'update event_points set last_goal_achieved = %d
@@ -1955,9 +1955,9 @@ firep('a prize is deserved!');
         $goal_obj->points . ' points
       </div>';
 
-    } // does user get a prize?
+    }
 
-  } // user has no points
+  }
 
 
   // Show it!

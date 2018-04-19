@@ -139,7 +139,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($item->chance_of_loss > 0) {
 
@@ -149,7 +149,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
 // grab each action for an agent
     $data2 = array();
@@ -180,7 +180,7 @@ firep($action);
             reduced by $inf_change</div>
 EOF;
 
-      } // if influence_change < 0
+      }
 
       if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
 
@@ -202,7 +202,7 @@ EOF;
 
         }
 
-      } // if rating_change < 0
+      }
 
       if ($action->rating_change >= 0.10) {
 
@@ -213,7 +213,7 @@ EOF;
         increased by $rat_change%</div>
 EOF;
 
-      } // if rating_change > 0
+      }
 
     if ($action->neighborhood_rating_change < 0.0) {
 
@@ -224,7 +224,7 @@ EOF;
       reduced by $rat_change</div>
 EOF;
 
-    } // if hood rating_change < 0
+    }
 
     if ($action->neighborhood_rating_change > 0.0) {
 
@@ -235,7 +235,7 @@ EOF;
       increased by $rat_change</div>
 EOF;
 
-    } // if hood rating_change > 0
+    }
 
       if ($action->values_change < 0) {
 
@@ -246,9 +246,9 @@ EOF;
             reduced by $val_change</div>
 EOF;
 
-      } // if values_change < 0
+      }
 
-    } // foreach action
+    }
 
     echo <<< EOF
   </div>
@@ -346,7 +346,7 @@ firep($action);
             reduced by $inf_change</div>
 EOF;
 
-      } // if influence_change < 0
+      }
 
       if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
 
@@ -368,7 +368,7 @@ EOF;
 
         }
 
-      } // if rating_change < 0
+      }
 
       if ($action->rating_change >= 0.10) {
 
@@ -379,15 +379,15 @@ EOF;
         increased by $rat_change%</div>
 EOF;
 
-      } // if rating_change > 0
+      }
 
-    } // foreach action
+    }
 
     echo <<< EOF
   </div>
 </div>
 EOF;
 
-  } // if !empty($item)
+  }
 
   db_set_active('default');

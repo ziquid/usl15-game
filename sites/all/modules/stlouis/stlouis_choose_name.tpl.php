@@ -88,11 +88,11 @@ firep('$isdupusername = ' . $isdupusername);
         $sql = 'update users set luck = luck - 10 where id = %d;';
         $result = db_query($sql, $game_user->id);
 
-      } // did they choose a new name?
+      }
 
       drupal_goto($game . '/user/' . $arg2);
 
-    } // first timer?
+    }
     
   } else { // haven't chosen a username on this screen, or chose a duplicate
 
@@ -106,7 +106,7 @@ EOF;
 
     } else {
       $msgUserDuplicate = '<p>&nbsp;</p>';
-    } // set an error message is a dup
+    }
 
   if (empty($game_user->username)) {
 
@@ -131,7 +131,7 @@ EOF;
 
       db_set_active('default');
 
-    } // out of luck
+    }
 
   }
 
