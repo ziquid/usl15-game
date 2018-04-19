@@ -102,7 +102,7 @@
 
     $quantity = 0;
 
-  } // fire staff succeeded
+  }
 
   $fetch_header($game_user);
 
@@ -123,7 +123,7 @@ EOF;
 </ul>
 EOF;
 
-  } // user level < 15
+  }
 //firep("game_staff->quantity: $game_staff->quantity");
 //firep("quantity: $quantity");
 
@@ -194,7 +194,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($game_staff->upkeep > 0) {
 
@@ -202,7 +202,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($game_staff->chance_of_loss > 0) {
 
@@ -212,7 +212,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
     echo <<< EOF
   </div>
@@ -348,7 +348,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($item->upkeep > 0) {
 
@@ -356,7 +356,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($item->chance_of_loss > 0) {
 
@@ -366,7 +366,7 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
     echo <<< EOF
   </div>
@@ -466,7 +466,7 @@ EOF;
       </div>
 EOF;
 
-    } // energy increase?
+    }
 
     if ($item->upkeep > 0) {
 
@@ -474,7 +474,7 @@ EOF;
     <div class="land-payout negative">Upkeep: $item->upkeep every 60 minutes</div>
 EOF;
 
-    } // upkeep
+    }
 
     if ($item->chance_of_loss > 0) {
 
@@ -484,9 +484,9 @@ EOF;
     <div class="land-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
 
-    } // expected lifetime
+    }
 
-  } // if !empty($item)
+  }
 
   db_set_active('default');
 
