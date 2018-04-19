@@ -197,7 +197,7 @@ firep($eq->name . ' wore out!');
       if ($eq->upkeep > 0) { // subtract upkeep from your expenses
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $eq->upkeep, $game_user->id);
-      } // FIXME: do this before _stlouis_header so that upkeep is accurate
+      }
       
       echo '<div class="subtitle">' . t('Your @stuff has worn out',
         array('@stuff' => strtolower($eq->name))) . '</div>';
