@@ -21,7 +21,7 @@ define('CONSERVE_MONEY', 2);
 
     }
 
-    db_set_active('default');  
+    db_set_active('default');
     lock_init();
 
     if (!lock_acquire('ai_move', 1.0)) {
@@ -49,7 +49,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     mail('joseph@cheek.com', 'performing AI moves for ' .
       $game_name_full, $ai_output);
 
-    db_set_active('default');  
+    db_set_active('default');
     lock_release('ai_move');
     db_set_active('game_' . $game);
 
@@ -189,10 +189,10 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           if ($worked) return FALSE;
 // this quest may have succeeded, but goal failed
 
-        } // quest to loot item
+        }
 
 // next, check to see if we can purchase item
-        
+
         _ai_out("Ok, seeing if we can purchase Staff #$staff_to_get");
         _ai_do('purchase staff', $ai_id, $staff_to_get);
         return FALSE;
@@ -219,17 +219,17 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           if ($worked) return FALSE;
 // this quest may have succeeded, but goal failed
 
-        } // quest to loot item
+        }
 
 // next, check to see if we can purchase item
-        
+
         _ai_out("Ok, seeing if we can purchase Equipment #$eq_to_get");
         _ai_do('purchase equipment', $ai_id, $eq_to_get);
         return FALSE;
 
-      } // test response
+      }
 
-    } // foreach response
+    }
 
     _ai_out('FIXME: Not doing anything -- giving up!!!');
     return FALSE;
@@ -385,9 +385,9 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           _ai_out('I don\'t have one... trying to get it!');
           _ai_web_request($ai_user->phone_id, 'equipment_buy', "$equip_id/1");
 
-        } // if high enough level
+        }
 
-      } // foreach thing
+      }
 
       $digit = mt_rand(0, 9);
       $name = 'ToxiCorp%20' . $digit;
@@ -569,7 +569,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     _ai_out("*FIXME*: we have $num_alders alder-capable players now.
       What do I do?");
 
-    return TRUE;    
+    return TRUE;
 
   }
 
@@ -779,9 +779,9 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
         return FALSE;
 
-      } // found a minion to specialize
+      }
 
-    } // if we aren't searching for a minion
+    }
 
 // no $type player found of appropriate level, none lower that we can boost,
 // no minions that can be told to specialize.  creating new minion
@@ -803,10 +803,10 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $ai_user = db_fetch_object($result);
-    
+
     _ai_out("bumping Elocution up (now: $ai_user->elocution)");
     $ai_response = _ai_web_request($ai_id, 'increase_skills', 'elocution');
- 
+
     if ($ai_response == 'increase-skill-succeeded') {
       _ai_out('Woohoo!  Elocution increase succeeded!');
       return TRUE;
@@ -825,7 +825,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $ai_user = db_fetch_object($result);
-    
+
     _ai_out("bumping Actions up (now: $ai_user->actions_max)");
     $ai_response = _ai_web_request($ai_id, 'increase_skills', 'actions');
 
@@ -847,7 +847,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $ai_user = db_fetch_object($result);
-    
+
     _ai_out("bumping Energy up (now: $ai_user->energy_max)");
     $ai_response = _ai_web_request($ai_id, 'increase_skills', 'energy_max');
 
@@ -869,7 +869,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $ai_user = db_fetch_object($result);
-    
+
     _ai_out("bumping Initiative up (now: $ai_user->initiative)");
     $ai_response = _ai_web_request($ai_id, 'increase_skills', 'initiative');
 
@@ -891,7 +891,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $ai_user = db_fetch_object($result);
-    
+
     _ai_out("bumping Endurance up (now: $ai_user->endurance)");
     $ai_response = _ai_web_request($ai_id, 'increase_skills', 'endurance');
 
@@ -914,7 +914,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $sql = 'select * from users where phone_id = "%s";';
     $result = db_query($sql, $ai_id);
     $item = db_fetch_object($result);
-    
+
     _ai_out("$ai_id is an $item->meta; allocating skill points based on that");
 
     if ($item->elocution < 3) return _ai_allocate_skill_for_elocution($ai_id);
@@ -946,14 +946,14 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
             case 'ai_scout':
               return _ai_allocate_skill_for_action($ai_id);
 
-          } // switch specialty
+          }
 
         case 3: // elocution
           return _ai_allocate_skill_for_elocution($ai_id);
 
-      } // switch 0 - 3
+      }
 
-    } // level 25 or less
+    }
 
 // above level 25: pure specialty
     switch($item->meta) {
@@ -967,7 +967,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       case 'ai_scout':
         return _ai_allocate_skill_for_action($ai_id);
 
-    } // switch specialty
+    }
 
   }
 
@@ -1020,7 +1020,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       _ai_out("Seeing if I can exploit my seat... " .
         "(actions: $ai_user->actions/$ai_user->actions_max)");
-    
+
       if (!empty($seat)) {
 
         _ai_out('Woohoo!  I\'m an elected official!');
@@ -1033,15 +1033,15 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           _ai_web_request($ai_id, 'actions_do', 58);
           _ai_do('open presents', $ai_id);
 
-        } // more than 5 actions
+        }
 
       } else {
 
         _ai_out('I\'m not an elected official 8-(');
 
-      } // in a seat
+      }
 
-    } // conserve actions?
+    }
 
     if (empty($seat)) {
 // only do missions if i'm not in a seat
@@ -1061,7 +1061,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       $item = db_fetch_object($result);
 
       if (!empty($item)) {
-  
+
 //        _ai_out("Highest quest I can do is #$item->id, $item->name");
         if (_ai_do('do quest', $ai_id, $item->id)) return TRUE;
 
@@ -1086,7 +1086,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         _ai_out('Trying boosting by debating');
         if (_ai_do('debate players', $ai_id)) return TRUE;
 // if I won debates, call it good
-      } 
+      }
 
 
     } else { // in a seat
@@ -1130,9 +1130,9 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           $attempt_to_get_one = TRUE;
           _ai_web_request($ai_id, 'equipment_buy', "$equip_id/1");
 
-        } // if high enough level
+        }
 
-      } // foreach thing
+      }
 
       if ($attempt_to_get_one) return FALSE;
 // don't buy land if we need(ed) these
@@ -1167,9 +1167,9 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           $attempt_to_get_one = TRUE;
           _ai_web_request($ai_id, 'staff_hire', "$staff_id/1");
 
-        } // if high enough level
+        }
 
-      } // foreach thing
+      }
 
       if ($attempt_to_get_one) return FALSE;
 // don't buy land if we need(ed) these
@@ -1181,7 +1181,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       _ai_out('Not buying any aides (conserving money)');
 
-    } // conserve money?
+    }
 
     return FALSE;
 
@@ -1191,7 +1191,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
   function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
 // challenge for a hood seat in a specified range
 
-    $ai_user = _ai_fetch_user($ai_id);   
+    $ai_user = _ai_fetch_user($ai_id);
 
     _ai_out('Trying to get more seats...');
     _ai_out("looking for empty seats in hood #$ai_user->fkey_neighborhoods_id "
@@ -1223,7 +1223,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       limit 1;';
     $result = db_query($sql, $ai_user->fkey_neighborhoods_id,
       $seat_min, $seat_max, $ai_user->actions);
-    $item = db_fetch_object($result);   
+    $item = db_fetch_object($result);
 
     if (!empty($item)) {
 
@@ -1260,7 +1260,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
 //      _ai_out('Found no empty seats... 8-(((');
 
-    } // challenge for an empty seat
+    }
 
     _ai_out('Looking for occupied seats to challenge... *FIXME* -- stub @ '
       . __LINE__);
@@ -1418,13 +1418,13 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       from neighborhoods
       where id = %d;';
     $result = db_query($sql, $ai_user->fkey_neighborhoods_id);
-    $here = db_fetch_object($result);   
+    $here = db_fetch_object($result);
 
     $sql = 'select xcoor, ycoor, name
       from neighborhoods
       where id = %d;';
     $result = db_query($sql, $hood);
-    $there = db_fetch_object($result);   
+    $there = db_fetch_object($result);
 
     $distance_now = _ai_distance($here->xcoor, $here->ycoor,
       $there->xcoor, $there->ycoor);
@@ -1462,9 +1462,9 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
           $winning_name = $item->name;
         }
 
-      } // closer to dest?
+      }
 
-    } // check each hood
+    }
 
     if ($winning_hood > 0) {
 
@@ -1499,7 +1499,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       _ai_out('What?  *No* hoods can get me there?');
 
     }
-  
+
     _ai_out('Move failed!  Settling for boosting of my experience...');
     _ai_do('boost experience', $ai_id, $boost_flags);
     return FALSE;
@@ -1680,7 +1680,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       " people to debate ($ai_user->actions actions)");
 
     foreach ($data as $item) {
-  
+
       _ai_out("Can debate $item->username");
       $ai_response = _ai_web_request($ai_id, 'debates_challenge', $item->id);
 
@@ -1705,7 +1705,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         continue;
       }
 
-    } // foreach player to debate
+    }
 
     return ($successful_debate);
 
@@ -1781,7 +1781,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         _ai_web_request($ai_id, 'actions_do', $action);
       }
 
-    } // foreach array
+    }
 
   }
 
