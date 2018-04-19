@@ -108,6 +108,6 @@ firep($item);
 </div>
 EOF;
 
-  } // foreach position
+  }
 
   db_set_active('default');

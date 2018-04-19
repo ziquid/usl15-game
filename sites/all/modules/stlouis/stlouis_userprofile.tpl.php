@@ -343,9 +343,9 @@ EOF;
   <div class="value">$extra_defending_votes<!-- + $extra_vet_votes--></div><br/>
 EOF;
 
-    } // stlouis only
+    }
 
-  } // show_all
+  }
 
   if ($item->debates_won >= $item->level * 100) {
     $super_debater = '<strong>(** Super **)</strong>';
@@ -396,7 +396,7 @@ EOF;
 </div></div>
 EOF;
 
-    } // debateable?
+    }
 
   } else { // not debateable at all
     echo '<br>';
