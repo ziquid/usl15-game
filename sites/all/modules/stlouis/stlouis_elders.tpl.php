@@ -105,9 +105,9 @@ EOF;
 <div class="menu-option not-yet">Receive $offer $game_user->values (1&nbsp;$luck)</div>
 EOF;
   		
-    } // luck?
+    }
 
-  } // level >= 6?
+  }
 
   echo <<< EOF
 <div class="menu-option"><a href="/$game/elders_set_password/$arg2">Set a

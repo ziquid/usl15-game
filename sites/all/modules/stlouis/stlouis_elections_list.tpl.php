@@ -278,6 +278,6 @@ EOF;
 
   $last_group = $item->ep_group;
 
-  } // foreach position
+  }
 
   db_set_active('default');
