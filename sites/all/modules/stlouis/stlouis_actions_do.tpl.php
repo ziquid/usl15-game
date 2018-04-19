@@ -384,7 +384,7 @@ firep($eq);
       if ($eq->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $eq->upkeep, $game_user->id);
-      }
+      }// FIXME: do this before _stlouis_header so that upkeep is accurate
 
       $stuff = strtolower($eq->name);
       if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
@@ -440,7 +440,7 @@ firep($st->name . ' has run away!');
       if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $st->upkeep, $game_user->id);
-      }
+      } // FIXME: do this before _stlouis_header so that upkeep is accurate
 
       $sql = 'select message from staff_failure_reasons
         where fkey_staff_id = %d
