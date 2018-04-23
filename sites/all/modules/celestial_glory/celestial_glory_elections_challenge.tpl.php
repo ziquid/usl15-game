@@ -1,1 +1,0 @@
-../stlouis/stlouis_elections_challenge.tpl.php

@@ -1,1 +1,0 @@
-../stlouis/stlouis_increase_skills.tpl.php

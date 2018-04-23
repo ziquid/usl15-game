@@ -1,1 +1,0 @@
-../stlouis/stlouis_block_user_toggle.tpl.php

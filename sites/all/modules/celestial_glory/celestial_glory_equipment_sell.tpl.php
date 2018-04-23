@@ -1,1 +1,0 @@
-../stlouis/stlouis_equipment_sell.tpl.php

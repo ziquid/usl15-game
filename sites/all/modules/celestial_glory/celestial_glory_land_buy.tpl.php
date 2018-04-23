@@ -1,1 +1,0 @@
-../stlouis/stlouis_land_buy.tpl.php

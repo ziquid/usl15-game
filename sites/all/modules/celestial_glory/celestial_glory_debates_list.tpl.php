@@ -1,1 +1,0 @@
-../stlouis/stlouis_debates_list.tpl.php

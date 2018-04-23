@@ -1,1 +1,0 @@
-../stlouis/stlouis_top20_list.tpl.php

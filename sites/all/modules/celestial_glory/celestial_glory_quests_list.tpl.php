@@ -1,1 +1,0 @@
-../stlouis/stlouis_quests_list.tpl.php

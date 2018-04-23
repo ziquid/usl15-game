@@ -1,1 +1,0 @@
-../stlouis/stlouis_authenticate.tpl.php

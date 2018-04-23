@@ -1,1 +1,0 @@
-../stlouis/stlouis_clan_list.tpl.php

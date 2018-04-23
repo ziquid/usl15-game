@@ -1,1 +1,0 @@
-../stlouis/stlouis_elders_ask_reset.tpl.php

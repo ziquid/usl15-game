@@ -1,1 +1,0 @@
-../stlouis/stlouis_debates_challenge.tpl.php
