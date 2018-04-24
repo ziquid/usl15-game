@@ -764,6 +764,7 @@ a.crafting-submit-button {
   border-bottom: 1px solid #343;
   margin-bottom: 4px;
   min-height: 4.5em;
+  position: relative;
 }
 
 .elections .election-details .opponent-name,
@@ -795,6 +796,13 @@ a.crafting-submit-button {
 .elections .me {
   font-style: italic;
   color: #ffd;
+}
+
+.elections .election-details .rank {
+  position: absolute;
+  left: 2px;
+  top: 26px;
+  font-size: 12px;
 }
 
 .elections .election-details .clan-icon {

@@ -282,9 +282,9 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/top_wards/%'] = array(
-    'title' => 'St. Louis Top Wards List',
-    'page callback' => 'stlouis_top_wards_list_callback',
+  $items['stlouis/top20_2114/%'] = array(
+    'title' => 'St. Louis Top 20 2114',
+    'page callback' => 'stlouis_top20_2114_callback',
     'page arguments' => array(2),
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
@@ -910,28 +910,19 @@ function stlouis_elections_challenge_callback($phone_id, $position_id) {
 
 }
 
-
 function stlouis_top20_list_callback($phone_id) {
-
   if (empty($phone_id)) {
     return drupal_access_denied();
   }
-
   return theme('stlouis_top20_list', $phone_id);
-
 }
 
-
-function stlouis_top_wards_list_callback($phone_id) {
-
+function stlouis_top20_2114_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
   }
-
-  return theme('stlouis_top_wards_list', $phone_id);
-
+  return theme('stlouis_top20_2114', $phone_id);
 }
-
 
 function stlouis_top_aldermen_list_callback($phone_id) {
 
@@ -1528,8 +1519,8 @@ function stlouis_theme() {
       )
     ),
 
-    'stlouis_top_wards_list' => array(
-      'template' => 'stlouis_top_wards_list',
+    'stlouis_top20_2114' => array(
+      'template' => 'stlouis_top20_2114',
       'arguments' => array(
         'phone_id' => NULL,
       )

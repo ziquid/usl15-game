@@ -17,6 +17,7 @@ $game_user = $fetch_user();
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $fetch_header($game_user);
 $arg2 = check_plain(arg(2));
+$arg3 = check_plain(arg(3));
 
 if (empty($game_user->username))
   drupal_goto($game . '/choose_name/' . $arg2);
@@ -24,8 +25,16 @@ if (empty($game_user->username))
 _show_profile_menu($game_user);
 
 $phone_id_to_check = $phone_id;
+if ($arg3 != '') {
+  $phone_id_to_check = $arg3;
+}
 
-if (arg(3) != '') $phone_id_to_check = check_plain(arg(3));
+if (substr($arg3, 0, 3) == 'id:') {
+  $sql = 'select phone_id from users where id = %d;';
+  $result = db_query($sql, (int) substr($arg3, 3));
+  $item = db_fetch_object($result);
+  $phone_id_to_check = $item->phone_id;
+}
 
 if ($phone_id_to_check == $phone_id) {
   competency_gain($game_user, 'introspective');
@@ -246,7 +255,7 @@ if (($game_user->fkey_clans_id) &&
 
 echo <<< EOF
 <div class="title">
-$item->ep_name $item->username $clan_acronym
+$item->ep_name <span class="username">$item->username</span> $clan_acronym
 </div>
 <div class="user-profile">
 <div class="heading">$politics:</div>
@@ -303,7 +312,8 @@ if ($show_all) { // show more stats if it's you
     SUM( equipment.endurance_bonus * equipment_ownership.quantity ) AS endurance,
     SUM( equipment.elocution_bonus * equipment_ownership.quantity ) AS elocution
     FROM equipment
-    LEFT JOIN equipment_ownership ON equipment_ownership.fkey_equipment_id = equipment.id
+    LEFT JOIN equipment_ownership
+    ON equipment_ownership.fkey_equipment_id = equipment.id
     AND equipment_ownership.fkey_users_id = %d;';
   $result = db_query($sql, $item->id);
   $equipment_bonus = db_fetch_object($result);
@@ -372,15 +382,20 @@ if (($phone_id_to_check != $phone_id) &&
     ((time() - strtotime($item->debates_last_time)) > $zombie_debate_wait)))) {
 // debateable and enough time has passed
     echo <<< EOF
-<div class="news"><div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/debates_challenge/$arg2/$item->id">$debate</a>
-</div></div></div>
+<div class="news relative">
+<div class="message-reply-wrapper">
+  <div class="message-reply">
+    <a href="/$game/debates_challenge/$arg2/$item->id">$debate</a>
+  </div>
+</div>
+</div>
 EOF;
 
   } else { // debateable but not enough time has passed
 
     if ($item->meta == 'zombie') {
-      $time_left = $zombie_debate_wait - (time() - strtotime($item->debates_last_time));
+      $time_left = $zombie_debate_wait -
+        (time() - strtotime($item->debates_last_time));
     } else {
       $time_left = $debate_time -
         (time() - strtotime($item->debates_last_time));
@@ -390,11 +405,13 @@ EOF;
     $time_sec = sprintf('%02d', $time_left % 60);
 
     echo <<< EOF
-<div class="news"><div class="message-reply-wrapper">
-<div class="message-reply not-yet">
-  $debate in $time_min:$time_sec
+<div class="news relative">
+<div class="message-reply-wrapper">
+  <div class="message-reply not-yet">
+    $debate in $time_min:$time_sec
+  </div>
 </div>
-</div></div>
+</div>
 EOF;
 
   }
@@ -452,16 +469,6 @@ EOF;
 
 }
 
-/*
-if ($game == 'celestial_glory') {
-
-echo <<< EOF
-<div class="heading">Ancestors Found:</div>
-<div class="value">$item->family_members_found</div><br/>
-EOF;
-
-}
-*/
 echo <<< EOF
 <div class="heading">$residence:</div>
 <div class="value">$location</div><br/>
@@ -501,7 +508,7 @@ EOF;
 }
 
 $block_this_user = '<div class="block-user"><a href="/' . $game .
-  '/block_user_toggle/' . $arg2 . '/' . $phone_id_to_check .
+  '/block_user_toggle/' . $arg2 . '/' . $arg3 .
   '">Block this user</a></div>';
 
 $sql = 'select * from message_blocks where fkey_blocked_users_id = %d
@@ -516,7 +523,7 @@ $is_blocked = db_fetch_object($result);
 
 if (!empty($block))
   $block_this_user = '<div class="block-user"><a href="/' . $game .
-  '/block_user_toggle/' . $arg2 . '/' . $phone_id_to_check .
+  '/block_user_toggle/' . $arg2 . '/' . $arg3 .
   '">Unblock this user</a></div>';
 
 if ($phone_id == $phone_id_to_check) $block_this_user = '';
@@ -538,7 +545,7 @@ EOF;
    echo <<< EOF
 <div class="message-title">Send a message</div>
 <div class="send-message">
-<form method=get action="/$game/user/$arg2/$phone_id_to_check$want_jol">
+<form method=get action="/$game/user/$arg2/$arg3$want_jol">
   <textarea class="message-textarea" name="message" rows="2">$message_orig</textarea>
   <br/>
   $private_message
@@ -642,7 +649,7 @@ EOF;
   if ($item->username != 'USLCE Game') {
     echo <<< EOF
 <div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
+  <a href="/$game/user/$arg2/id:$item->fkey_users_from_id">View / Respond</a>
 </div></div>
 EOF;
   }
@@ -650,7 +657,6 @@ EOF;
   echo <<< EOF
 </div>
 EOF;
-
   $msg_shown = TRUE;
 
 }

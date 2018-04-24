@@ -1,11 +1,8 @@
 <?php
 
 /**
- * @file stlouis_top20_list.tpl.php
- * Show the top 20 players.
- *
- * Synced with CG: yes
- * Synced with 2114: yes
+ * @file stlouis_top20_2114.tpl.php
+ * Show the top 20 players (2114-style).
  */
 
 global $game, $phone_id;
@@ -34,7 +31,7 @@ else {
 
 game_show_elections_menu($game_user);
 
-$data = [];
+$data2 = $data = [];
 
 //if ($event_type == EVENT_GATHER_AMETHYST  || $event_type == EVENT_AMETHYST_DONE) {
 //
@@ -460,14 +457,13 @@ $data = [];
 }
 else { // normal
 
-  // Base SQL statement.
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
     `values`.party_title, `values`.party_icon,
     `values`.name, users.id, users.fkey_neighborhoods_id,
     elected_positions.name as ep_name,
-    -- elected_positions.id as ep_level,
+    elected_positions.id as ep_level,
     elected_officials.approval_rating,
     clan_members.is_clan_leader,
     clans.name as clan_name, clans.acronym as clan_acronym,
@@ -490,33 +486,218 @@ else { // normal
     LEFT OUTER JOIN neighborhoods
     ON users.fkey_neighborhoods_id = neighborhoods.id';
 
-  // Order by.
-  $sql .= '
-    ORDER BY users.experience DESC
+  $sql3 = $sql2 = $sql . '
+    WHERE users.fkey_neighborhoods_id = %d
     ';
 
-  $result = db_query($sql . ' LIMIT 20;');
-  $count = 0;
-  while ($item = db_fetch_object($result)) {
-    $data[++$count] = $item;
-  }
+  $sql .= '
+    ORDER by ep_level DESC, users.experience DESC
+    LIMIT 20;';
 
-  // Player rank.
-  $sql2 = 'select count(*) as count from users
-    WHERE experience > %d;';
-  $result = db_query($sql2, $game_user->experience);
+  $sql2 .= '
+    ORDER by ep_level DESC, users.experience DESC
+    LIMIT 6;';
+
+  $sql3 .= '
+    ORDER by ep_level DESC, users.experience DESC
+    LIMIT %d, 11;';
+
+  $result = db_query($sql);
+  while ($item = db_fetch_object($result)) $data[] = $item;
+
+  $result = db_query($sql2, $game_user->fkey_neighborhoods_id);
+  while ($item = db_fetch_object($result)) $data2[] = $item;
+
+  $sql = 'select count(*) as count from users
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    WHERE
+    ((experience > %d AND elected_officials.fkey_elected_positions_id = %d)
+    OR
+    (elected_officials.fkey_elected_positions_id > %d));';
+  $result = db_query($sql, $game_user->experience, $game_user->ep_level,
+    $game_user->experience);
   $game_rank = db_fetch_object($result);
   $game_rank = $game_rank->count + 1;
 
-  $count = max($game_rank - 5, 0);
-  $result = db_query($sql . ' LIMIT %d, 9;', $count);
-  while ($item = db_fetch_object($result)) {
-    $data[++$count] = $item;
-  }
+  $result = db_query($sql3, $game_user->fkey_neighborhoods_id,
+    max($game_rank - 6, 0));
+  while ($item = db_fetch_object($result)) $data3[] = $item;
+
+  $sql = 'select count(*) as count from users
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    where fkey_neighborhoods_id = %d AND
+    ((experience > %d AND elected_officials.fkey_elected_positions_id = %d)
+    OR
+    (elected_officials.fkey_elected_positions_id > %d));';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $game_user->experience,
+    $game_user->ep_level,
+    $game_user->ep_level);
+  $hood_rank = db_fetch_object($result);
+  $hood_rank = $hood_rank->count + 1;
 
 }
 
 echo <<< EOF
+<div class="title">Top 6 in $game_user->location</div>
+<div class="subsubtitle">(Your rank: $hood_rank)</div>
+<div class="elections-header">
+<div class="election-details">
+<div class="clan-title">$party</div>
+<div class="opponent-name">Name</div>
+<div class="opponent-influence">Stats</div>
+</div>
+</div>
+<div class="elections">
+EOF;
+
+foreach ($data2 as $item) {
+firep($item);
+
+  if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+
+  $username = $item->username;
+  $action_class = '';
+  $official_link = $item->ep_name;
+  if ($debate == 'Box') $official_link = $item->weight;
+  $clan_class = 'election-details';
+
+  if ($item->id == $game_user->id) $clan_class .= ' me';
+
+  if ($item->can_broadcast_to_party)
+    $official_link .= '<div class="can-broadcast-to-party">*</div>';
+
+  $official_link .= '<br/><a href="/' . $game . '/user/' .
+     $arg2 . '/id:' . $item->id . '"><em>' . $username . '</em></a>';
+
+  $icon = $game . '_clan_' . $item->party_icon . '.png';
+  $party_title = $item->party_title;
+  $exp = $item->experience;
+  $clan_acronym = '';
+
+  if (!empty($item->clan_acronym))
+    $clan_acronym = "($item->clan_acronym)";
+
+  if ($item->is_clan_leader)
+    $clan_acronym .= '*';
+
+  $sql = 'select count(*) as count from users
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    where fkey_neighborhoods_id = %d AND
+    ((experience > %d AND elected_officials.fkey_elected_positions_id = %d)
+    OR
+    (elected_officials.fkey_elected_positions_id > %d));';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $exp, $item->ep_level, $item->ep_level);
+  $user_rank = db_fetch_object($result);
+  $user_rank = $user_rank->count + 1;
+
+  if ($debate == 'Box') {
+    $exp = $item->meta_int;
+    $experience = 'Boxing Points';
+  }
+
+  if (($item->weight != $last_weight) && $last_weight != '')
+    echo '</div><div class="elections">';
+
+  echo <<< EOF
+<div class="$clan_class">
+<div class="clan-icon"><img width="24"
+  src="/sites/default/files/images/$icon"/></div>
+<div class="clan-title">$party_title</div>
+<div class="rank">$user_rank</div>
+<div class="opponent-name">$official_link $clan_acronym</div>
+<div class="opponent-influence">$exp $experience<br/>
+  (Level $item->level)</div>
+</div>
+EOF;
+
+  $last_weight = $item->weight;
+
+} // foreach position
+
+echo <<< EOF
+<div class="election-details">
+<div class="clan-icon">&nbsp;</div>
+<div class="clan-title">&nbsp;</div>
+<div class="opponent-name">. . .</div>
+<div class="opponent-influence">&nbsp;</div>
+</div>
+EOF;
+
+foreach ($data3 as $item) {
+firep($item);
+
+  if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+
+  $username = $item->username;
+  $action_class = '';
+  $official_link = $item->ep_name;
+  if ($debate == 'Box') $official_link = $item->weight;
+  $clan_class = 'election-details';
+
+  if ($item->id == $game_user->id) $clan_class .= ' me';
+
+  if ($item->can_broadcast_to_party)
+    $official_link .= '<div class="can-broadcast-to-party">*</div>';
+
+  $official_link .= '<br/><a href="/' . $game . '/user/' .
+     $arg2 . '/id:' . $item->id . '"><em>' . $username . '</em></a>';
+
+  $icon = $game . '_clan_' . $item->party_icon . '.png';
+  $party_title = $item->party_title;
+  $exp = $item->experience;
+  $clan_acronym = '';
+
+  if (!empty($item->clan_acronym))
+    $clan_acronym = "($item->clan_acronym)";
+
+  if ($item->is_clan_leader)
+    $clan_acronym .= '*';
+
+  $sql = 'select count(*) as count from users
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    where fkey_neighborhoods_id = %d AND
+    ((experience > %d AND elected_officials.fkey_elected_positions_id = %d)
+    OR
+    (elected_officials.fkey_elected_positions_id > %d));';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $exp, $item->ep_level, $item->ep_level);
+  $user_rank = db_fetch_object($result);
+  $user_rank = $user_rank->count + 1;
+
+  if ($debate == 'Box') {
+    $exp = $item->meta_int;
+    $experience = 'Boxing Points';
+  }
+
+  if (($item->weight != $last_weight) && $last_weight != '')
+    echo '</div><div class="elections">';
+
+  echo <<< EOF
+<div class="$clan_class">
+<div class="clan-icon"><img width="24"
+  src="/sites/default/files/images/$icon"/></div>
+<div class="clan-title">$party_title</div>
+<div class="rank">$user_rank</div>
+<div class="opponent-name">$official_link $clan_acronym</div>
+<div class="opponent-influence">$exp $experience<br/>
+  (Level $item->level)</div>
+</div>
+EOF;
+
+  $last_weight = $item->weight;
+
+} // foreach position
+
+// GAME-WIDE TOP 20
+
+echo <<< EOF
+</div>
 <div class="title">$title Game-Wide</div>
 <div class="subsubtitle">(Your rank: $game_rank)</div>
 <div class="elections-header">
@@ -529,45 +710,37 @@ echo <<< EOF
 <div class="elections">
 EOF;
 
-$last_weight = '';
-$last_rank = 0;
+$rank = 1;
 
-foreach ($data as $rank => $item) {
-firep($item, 'rank ' . $rank);
+foreach ($data as $item) {
+firep($item);
 
-//  if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+  if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
 
+  $count++;
   $username = $item->username;
   $action_class = '';
   $official_link = $item->ep_name;
-  if ($debate == 'Box') {
-    $official_link = $item->weight;
-  }
+  if ($debate == 'Box') $official_link = $item->weight;
   $clan_class = 'election-details';
+  $last_weight = '';
 
-  if ($item->phone_id == $phone_id) {
-    $clan_class .= ' me';
-  }
-
-  if ($item->can_broadcast_to_party) {
+  if ($item->can_broadcast_to_party)
     $official_link .= '<div class="can-broadcast-to-party">*</div>';
-  }
 
   $official_link .= '<br/><a href="/' . $game . '/user/' .
-    $arg2 . '/id:' . $item->id . '"><em>' . $username . '</em></a>';
+     $arg2 . '/id:' . $item->id . '"><em>' . $username . '</em></a>';
 
   $icon = $game . '_clan_' . $item->party_icon . '.png';
   $party_title = $item->party_title;
   $exp = $item->experience;
   $clan_acronym = '';
 
-  if (!empty($item->clan_acronym)) {
+  if (!empty($item->clan_acronym))
     $clan_acronym = "($item->clan_acronym)";
-  }
 
-  if ($item->is_clan_leader) {
+  if ($item->is_clan_leader)
     $clan_acronym .= '*';
-  }
 
   if ($debate == 'Box') {
     $exp = $item->meta_int;
@@ -579,29 +752,20 @@ firep($item, 'rank ' . $rank);
 //    $experience = 'Raw Amethyst';
 //  }
 
-  if (($item->weight != $last_weight) && $last_weight != '') {
+  if (($item->weight != $last_weight) && $last_weight != '')
     echo '</div><div class="elections">';
-  }
 
 //  if (($event_type == EVENT_GATHER_AMETHYST
 //  || $event_type == EVENT_AMETHYST_DONE)
 //  && $count == 20)
 //    echo '</div><div class="title">The Rest</div><div class="elections">';
 
-  if ($rank != $last_rank + 1) {
-    echo <<< EOF
-<div class="$clan_class"><br>
-<div class="subsubtitle">. . .</div>
-</div>
-EOF;
-  }
-
   echo <<< EOF
 <div class="$clan_class">
 <div class="clan-icon"><img width="24"
   src="/sites/default/files/images/$icon"/></div>
 <div class="clan-title">$party_title</div>
-<div class="rank">#$rank</div>
+<div class="rank">$rank</div>
 <div class="opponent-name">$official_link $clan_acronym</div>
 <div class="opponent-influence">$exp $experience<br/>
   (Level $item->level)</div>
@@ -609,7 +773,8 @@ EOF;
 EOF;
 
   $last_weight = $item->weight;
-  $last_rank = $rank;
+  $rank++;
+
 }
 
 echo '</div>';

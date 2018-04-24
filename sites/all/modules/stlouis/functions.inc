@@ -8,34 +8,27 @@
  * Synced with 2114: no
  */
 
-function NO_button($link = 'home', $type = 'continue', $extra_link = '') {
+function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
   global $game, $phone_id;
-
   $arg2 = check_plain(arg(2));
-
   $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
 
   switch ($type) {
 
     case 'continue':
-
       echo <<< EOF
-
 <div class="subtitle">
   <a href="/$link">
     <img src="/sites/default/files/images/{$game}_continue.png" width=266/>
   </a>
 </div>
-
 EOF;
-
     break;
 
   }
 
 }
-
 
 function NO_sound($name) {
 
@@ -1004,129 +997,36 @@ EOF;
 }
 
 
-function NO_show_elections_menu($game_user) {
+function game_show_elections_menu($game_user) {
 
-  global $game, $phone_id;
+  global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-  if (substr(arg(1), 0, 6) == 'favors') $favors_active = 'active';
-  if (substr(arg(1), 0, 7) == 'debates') $debates_active = 'active';
-  if (substr(arg(1), 0, 9) == 'elections') $elections_active = 'active';
-  if (substr(arg(1), 0, 8) == 'hierarch') $elections_active = 'active';
-  if (substr(arg(1), 0, 3) == 'top') $top_active = 'active';
+  if (substr(arg(1), 0, 7) == 'debates') {
+    $debates_active = 'active';
+  }
+  if (substr(arg(1), 0, 9) == 'elections') {
+    $elections_active = 'active';
+  }
+  if (substr(arg(1), 0, 3) == 'top') {
+    $top_active = 'active';
+  }
+  if (substr(arg(1), 0, 5) == 'top20') {
+    $top20_active = 'active';
+  }
+  if (substr(arg(1), 0, 12) == 'top_alderman') {
+    $topalders_active = 'active';
+  }
 
   echo <<< EOF
 <div class="news">
-  <a href="/$game/favors/$arg2" class="button $favors_active">$favors_tab</a>
-  <a href="/$game/debates/$arg2" class="button $debates_active">$debate_tab</a>
-  <a href="/$game/hierarchies/$arg2" class="button $elections_active"
-    >$election_tab</a>
-  <a href="/$game/top20/$arg2" class="button $top_active">Leaderboards</a>
+<a href="/$game/debates/$arg2" class="button $debates_active">{$debate_tab}</a>
+<a href="/$game/elections/$arg2" class="button $elections_active">{$election_tab}</a>
+<a href="/$game/top20/$arg2" class="button $top20_active">$top20</a>
+<a href="/$game/top_aldermen/$arg2" class="button $topalders_active">Top $alders_short</a>
 </div>
 EOF;
-
-  if (isset($debates_active)) {
-    echo <<< EOF
-<div class="news small">
-  <a href="/$game/debates/$arg2" class="button $debates_active">
-    Personal $debate_tab
-  </a>
-  <a href="/$game/debates/$arg2" class="button not-yet">
-    Clan $debate_tab
-  </a>
-</div>
-
-EOF;
-  }
-
-  if (isset($top_active)) {
-
-    if (substr(arg(1), 0, 5) == 'top20') $top20_active = 'active';
-    if (substr(arg(1), 0, 12) == 'top_debaters') $topdebaters_active = 'active';
-    if (substr(arg(1), 0, 10) == 'top_income') $topincome_active = 'active';
-    if (substr(arg(1), 0, 11) == 'top_masters') $topmasters_active = 'active';
-    if (substr(arg(1), 0, 11) == 'top_minions') $topminions_active = 'active';
-
-    $sql = 'select count(*) as count from users
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-      where fkey_neighborhoods_id = %d AND
-      ((experience > %d AND elected_officials.fkey_elected_positions_id = %d)
-      OR
-      (elected_officials.fkey_elected_positions_id > %d));';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      $game_user->experience,
-      $game_user->ep_level,
-      $game_user->ep_level);
-    $player_rank = db_fetch_object($result);
-    $player_rank = $player_rank->count + 1;
-
-    $sql = 'select count(*) as count from users
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-      where fkey_neighborhoods_id = %d AND
-      (debates_won > %d);';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      $game_user->debates_won);
-    $debaters_rank = db_fetch_object($result);
-    $debaters_rank = $debaters_rank->count + 1;
-
-    $sql = 'select count(*) as count from users
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-      where fkey_neighborhoods_id = %d AND
-      (income - expenses) > %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      $game_user->income - $game_user->expenses);
-    $income_rank = db_fetch_object($result);
-    $income_rank = $income_rank->count + 1;
-
-    $sql = 'select count(*) as count from users
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-      where fkey_neighborhoods_id = %d AND
-      (favors_asked_completed > %d);';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      $game_user->favors_asked_completed);
-    $master_rank = db_fetch_object($result);
-    $master_rank = $master_rank->count + 1;
-
-    $sql = 'select count(*) as count from users
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-      where fkey_neighborhoods_id = %d AND
-      (favors_completed > %d);';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      $game_user->favors_completed);
-    $minion_rank = db_fetch_object($result);
-    $minion_rank = $minion_rank->count + 1;
-
-    echo <<< EOF
-<div class="news small">
-  <a href="/$game/top20/$arg2" class="button $top20_active">
-    Players ($player_rank)
-  </a>
-  <a href="/$game/top_debaters/$arg2"
-    class="button $topdebaters_active">
-    $debaters ($debaters_rank)
-  </a>
-  <a href="/$game/top_income/$arg2"
-    class="button $topincome_active">
-    Income ($income_rank)
-  </a>
-  <a href="/$game/top_masters/$arg2"
-    class="button $topmasters_active">
-    Initiators ($master_rank)
-  </a>
-  <a href="/$game/top_minions/$arg2"
-    class="button $topminions_active">
-    Runners ($minion_rank)
-  </a>
-</div>
-
-EOF;
-  }
 
   _show_goal($game_user);
 

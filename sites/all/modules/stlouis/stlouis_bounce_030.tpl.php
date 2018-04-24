@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>24 Apr: Redid the Top 20 page.  Please check it and user profile pages for bugs.</p>
 <p>19 Apr: Updating the iOS client creates a new account.  Send an email to
   <strong>zipport@ziquid.com</strong> with your old and new referral codes if
   this happens.</p>
