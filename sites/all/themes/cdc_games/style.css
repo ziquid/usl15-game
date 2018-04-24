@@ -665,7 +665,7 @@ a.crafting-submit-button {
 .news .button, .news button {
   display: inline-block;
 /*   float: left; */
-  margin-right: 8px;
+  margin-right: 6px;
   margin-bottom: 4px;
   padding: 4px 7px;
   border: 1px solid #999;
