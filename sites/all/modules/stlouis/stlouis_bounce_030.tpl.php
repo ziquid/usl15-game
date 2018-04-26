@@ -6,7 +6,7 @@
 <style>
   body {
     margin: 6px auto;
-    width: 100%;
+    width: 80%;
   }
   p {
     margin: 6px;

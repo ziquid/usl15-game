@@ -505,13 +505,21 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/bounce_030/%'] = array(
+  $items['stlouis/bounce_030/%'] = [
     'title' => 'St. Louis bounce',
     'page callback' => 'stlouis_bounce_030_callback',
     'page arguments' => [2],
     'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
-  );
+  ];
+
+  $items['stlouis/bounce_040/%'] = [
+    'title' => 'St. Louis bounce',
+    'page callback' => 'stlouis_bounce_040_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access stlouis content'],
+    'type' => MENU_CALLBACK,
+  ];
 
   $items['stlouis/elders_preferences/%'] = array(
     'title' => 'St. Louis Preferences Page',
@@ -1217,6 +1225,13 @@ function stlouis_bounce_030_callback($phone_id) {
   return theme('stlouis_bounce_030', $phone_id);
 }
 
+function stlouis_bounce_040_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+  return theme('stlouis_bounce_040', $phone_id);
+}
+
 function stlouis_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1733,12 +1748,19 @@ function stlouis_theme() {
       )
     ),
 
-    'stlouis_bounce_030' => array(
+    'stlouis_bounce_030' => [
       'template' => 'stlouis_bounce_030',
-      'arguments' => array(
+      'arguments' => [
         'phone_id' => NULL,
-      )
-    ),
+      ]
+    ],
+
+    'stlouis_bounce_040' => [
+      'template' => 'stlouis_bounce_040',
+      'arguments' => [
+        'phone_id' => NULL,
+      ]
+    ],
 
     'stlouis_elders_preferences' => array(
       'template' => 'stlouis_elders_preferences',
