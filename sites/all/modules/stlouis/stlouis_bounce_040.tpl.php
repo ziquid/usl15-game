@@ -6,7 +6,7 @@
 <style>
   body {
     margin: 6px auto;
-    width: 80%;
+    width: 88%;
   }
   p {
     margin: 6px;
@@ -21,6 +21,7 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p><a href="http://www.ziquid.com/" target="_blank">External link test</a></p>
+<p><a href="/<?php echo $game; ?>/bounce_040/<?php echo $arg2;?>">Local link test</a></p>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
