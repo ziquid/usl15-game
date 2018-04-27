@@ -20,7 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
-<p>27 Apr: Added first Forest Park mission, removed Forum link from home page.</p>
+<p>27 Apr: Added some Forest Park missions, removed Forum link from home page, and added level 86.</p>
 <p>24 Apr: Campaigning mission has a second-round bonus and associated action.</p>
 <p>23 Apr: Redid the Top 20 page.  Please check it and user profile pages for bugs.</p>
 <p>19 Apr: Updating the iOS client creates a new account.  Send an email to
