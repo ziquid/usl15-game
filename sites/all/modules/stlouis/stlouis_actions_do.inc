@@ -1047,42 +1047,40 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   return TRUE;
 }
 
-  function _stlouis_action_erase_your_wall_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_erase_your_wall_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . $game . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
 
-    $game_user = $fetch_user();
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-    $sure = check_plain($_GET['sure']);
+  $game_user = $fetch_user();
+  $action_id = arg(3);
+  $arg2 = check_plain(arg(2));
+  $sure = check_plain($_GET['sure']);
 
-    if ($sure != 'yes') {
-
-      $outcome_reason = '<div class="subtitle">Are you sure?</div>
-        <div class="subsubtitle">
-          This deletes <strong>all messages</strong> and cannot be undone!
+  if ($sure != 'yes') {
+    $outcome_reason = '<div class="subtitle">Are you sure?</div>
+      <div class="subsubtitle">
+        This deletes <strong>all messages</strong> and cannot be undone!
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions_do/' .
+          $arg2 . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
         </div>
-        <div class="try-an-election-wrapper">
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions_do/' .
-            $arg2 . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
-          </div>
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions/' . $phone_id .
-            '">No, I\'m not sure</a>
-          </div>
-        </div>';
-
-        return FALSE;
-    }
-
-    $sql = 'delete from user_messages where fkey_users_to_id = %d;';
-    db_query($sql, $game_user->id);
-    return TRUE;
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions/' . $phone_id .
+          '">No, I\'m not sure</a>
+        </div>
+      </div>';
+      return FALSE;
   }
+
+  $sql = 'delete from user_messages where fkey_users_to_id = %d;';
+  db_query($sql, $game_user->id);
+  return TRUE;
+}
 
   function _stlouis_action_give_luck_to_a_clan_member_function(&$outcome_reason, $target) {
 
@@ -1239,37 +1237,37 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
   return TRUE;
 }
 
-  function _stlouis_action_spread_gossip_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_spread_gossip_function(&$outcome_reason,
+  $target, &$can_do_again) {
 
-    global $game;
+  global $game;
 
-    $fetch_user = '_' . $game . '_fetch_user';
-    $game_user = $fetch_user();
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = check_plain($_GET['target']) + 0;
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = check_plain($_GET['target']) + 0;
 
-// been booted?  fail the gossip
-    if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-      $outcome_reason .= '<div class="action-effect">' .
-        t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
-      return FALSE;
-    }
-
-    $sql = 'insert into challenge_history 
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("gossip", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $target_id,
-      $game_user->fkey_neighborhoods_id, 0, 0,
-      "$game_user->username gossiped about $target_name.",
-      "$game_user->username gossiped about $target_name.");
-
+  // Been booted?  fail the gossip.
+  if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
     $outcome_reason .= '<div class="action-effect">' .
-      t('You wouldn\'t believe what I\'ve heard about ') . $target_name . '</div>';
-    return TRUE;
+      t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
+    return FALSE;
   }
+
+  $sql = 'insert into challenge_history 
+    (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+    fkey_elected_positions_id, won, desc_short, desc_long) values
+    ("gossip", %d, %d, %d, %d, %d, "%s", "%s");';
+  db_query($sql, $game_user->id, $target_id,
+    $game_user->fkey_neighborhoods_id, 0, 0,
+    "$game_user->username gossiped about $target_name.",
+    "$game_user->username gossiped about $target_name.");
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('You wouldn\'t believe what I\'ve heard about ') . $target_name . '</div>';
+  return TRUE;
+}
 
 function _stlouis_action_plant_flowers_function(&$outcome_reason, $target, &$can_do_again) {
 
@@ -2338,58 +2336,52 @@ function _stlouis_check_for_friendly_hood() {
   return ($item->fkey_values_id == $game_user->fkey_values_id);
 }
 
-  function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $target,
-    &$can_do_again) {
+function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $target,
+  &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
 
-    $game_user = $fetch_user();
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-    $sure = check_plain($_GET['sure']);
+  $game_user = $fetch_user();
+  $action_id = arg(3);
+  $arg2 = check_plain(arg(2));
+  $sure = check_plain($_GET['sure']);
 
-    $sql = 'SELECT id FROM {clan_members} c
-    WHERE c.fkey_users_id = %d AND c.fkey_clans_id = %d AND c.is_clan_leader = 1';
-    $is_clan_leader = db_result(db_query($sql, (int)$game_user->id, (int)$game_user->fkey_clans_id));
+  $sql = 'SELECT id FROM {clan_members} c
+  WHERE c.fkey_users_id = %d AND c.fkey_clans_id = %d AND c.is_clan_leader = 1';
+  $is_clan_leader = db_result(db_query($sql, (int)$game_user->id, (int)$game_user->fkey_clans_id));
 
-    if (empty($is_clan_leader)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not clan leader!') .
-        '</div><div class="action-effect">You are not the clan leader.&nbsp;
-        You cannot perform this action.</div>';
-
-      return FALSE;
-    }
-
-    if ($sure != 'yes') {
-
-      $outcome_reason = '<div class="subtitle">Are you sure?</div>
-        <div class="subsubtitle">
-          This deletes <strong>all announcements</strong> and cannot be undone!
-        </div>
-        <div class="try-an-election-wrapper">
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions_do/' .
-            $arg2 . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
-          </div>
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions/' . $phone_id .
-            '">No, I\'m not sure</a>
-          </div>
-        </div>';
-
-        return FALSE;
-
-    }
-
-    $sql = 'DELETE FROM clan_messages WHERE fkey_neighborhoods_id = %d AND is_announcement = 1';
-    $result = db_query($sql, (int)$game_user->fkey_clans_id);
-
-    return !empty($result) ? TRUE : FALSE;
+  if (empty($is_clan_leader)) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not clan leader!') .
+      '</div><div class="action-effect">You are not the clan leader.&nbsp;
+      You cannot perform this action.</div>';
+    return FALSE;
   }
+
+  if ($sure != 'yes') {
+    $outcome_reason = '<div class="subtitle">Are you sure?</div>
+      <div class="subsubtitle">
+        This deletes <strong>all announcements</strong> and cannot be undone!
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions_do/' .
+          $arg2 . '/' . $action_id . '?sure=yes">Yes,  I\'m sure</a>
+        </div>
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions/' . $phone_id .
+          '">No, I\'m not sure</a>
+        </div>
+      </div>';
+      return FALSE;
+  }
+
+  $sql = 'DELETE FROM clan_messages WHERE fkey_neighborhoods_id = %d AND is_announcement = 1';
+  $result = db_query($sql, (int)$game_user->fkey_clans_id);
+  return !empty($result) ? TRUE : FALSE;
+}
 
 
   function _stlouis_action_open_a_bank_account_function(&$outcome_reason,
