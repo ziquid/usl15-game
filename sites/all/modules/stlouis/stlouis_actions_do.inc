@@ -1239,7 +1239,7 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
 
 function _stlouis_action_spread_gossip_function(&$outcome_reason,
   $target, &$can_do_again, &$action) {
-firep($action, 'action given to gossip');
+
   global $game;
 
   $fetch_user = '_' . $game . '_fetch_user';
@@ -1248,7 +1248,7 @@ firep($action, 'action given to gossip');
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = check_plain($_GET['target']) + 0;
 
-  // Been booted?  fail the gossip.
+  // Been booted?  Fail the gossip.
   if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
     $outcome_reason .= '<div class="action-effect">' .
       t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
@@ -3046,7 +3046,7 @@ EOF;
 
 
   function _stlouis_action_support_your_party_official_function(
-    &$outcome_reason, $target, &$can_do_again){
+    &$outcome_reason, $target, &$can_do_again) {
 
     global $game, $phone_id;
     $game_user = _stlouis_fetch_user();
@@ -3061,33 +3061,19 @@ EOF;
       AND elected_positions.type = 2 
       AND users.id = %d";
 
-    $result = db_query($sql, $game_user->fkey_values_id, (int)$target_id);
+    $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
     $item = db_fetch_object($result);
 
     if ($item) {
-
       return TRUE;
-
-    } else {
-
+    }
+    else {
       $outcome_reason = '<div class="land-failed">' .
         t('Target is not a party official!') .
         '</div>';
       return FALSE;
-
     }
-
   }
-
-
-  function _celestial_glory_action_support_your_party_official_function(
-    &$outcome_reason, $target, &$can_do_again) {
-
-    return _stlouis_action_support_your_party_official_function(
-      $outcome_reason, $target, $can_do_again);
-
-  }
-
 
   function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
     $target, &$can_do_again) {
