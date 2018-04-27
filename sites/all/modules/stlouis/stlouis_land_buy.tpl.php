@@ -64,7 +64,7 @@ if ($game_user->level < $game_land->required_level) {
 
 // Not required competency.
 if ($game_land->fkey_required_competencies_id > 0) {
-  $check = competency_level($game_user,
+  $check = game_competency_level($game_user,
     (int) $game_land->fkey_required_competencies_id);
 // firep($check);
   if ($check->level < $game_land->required_competencies_level) {

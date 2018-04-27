@@ -114,7 +114,7 @@ EOF;
       $level = $comp->level;
       $comp = (object) array_merge(
         (array) $comp,
-        (array) competency_level($game_user,
+        (array) game_competency_level($game_user,
           intval($comp->fkey_competencies_id))
       );
 // firep($comp, 'competency');

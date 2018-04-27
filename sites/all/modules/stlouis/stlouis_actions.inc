@@ -30,7 +30,7 @@ function actionlist() {
     where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-  firep($item);
+//  firep($item);
 
   // Part of a clan - exclude all those that need no clan.
   if (!empty($item)) {
@@ -47,10 +47,9 @@ function actionlist() {
 // we don't have any actions that need no clan leader, so line commented out below
 //    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';
 
-  } else {
-
+  }
+  else {
     $sql_to_add .= ' and actions.need_clan_leader <> 1 ';
-
   }
 
 // elected official?
@@ -65,7 +64,7 @@ function actionlist() {
 // limited to 1 in db
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-  firep($item);
+//  firep($item);
 
   if (!empty($item)) {
 // an elected official - exclude all those that need no elected official
@@ -78,12 +77,11 @@ function actionlist() {
       actions.need_specific_official_group = ' .
       $item->group . ')';
 
-  } else {
-
+  }
+  else {
     $sql_to_add .= ' and actions.need_elected_official <> 1
       and actions.need_specific_elected_official = 0
       and actions.need_specific_official_group = 0';
-
   }
 
   // For testing - exclude all exclusions (!) if I am abc123.
@@ -93,7 +91,7 @@ function actionlist() {
   }
 
   // Actions that require staff.
-  $data = array();
+  $data = [];
   $sql = 'SELECT staff_ownership.*, actions.*, staff.required_level,
   comp1.name as competency_name_1, comp2.name as competency_name_2
   from staff_ownership
@@ -109,7 +107,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY ' . $order_by;
-  firep($sql, 'actions with staff');
+//  firep($sql, 'actions with staff');
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
   while ($item = db_fetch_object($result)) {
@@ -137,7 +135,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY actions.required_level DESC';
-  firep($sql, 'actions with equipment');
+//  firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
@@ -154,11 +152,24 @@ function actionlist() {
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY actions.name ASC';
-  firep($sql, 'actions without staff or equipment');
+//  firep($sql, 'actions without staff or equipment');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
+  }
+
+  foreach ($data as &$action) {
+    $action_function = 'game_preaction_' .
+      strtolower(str_replace(
+        [' ', '%', "'", '.', '(', ')'],
+        ['_', '', '', '', '', ''],
+        $action->name));
+
+    if (function_exists($action_function)) {
+      $action_function($action);
+      firep($action, 'action after game_preaction');
+    }
   }
 
   return $data;
@@ -343,4 +354,15 @@ firep('allowed not_met users: ' . $allowed_string);
 
 //  db_set_active('game_' . $game); // reset to master
   return $data2;
+}
+
+function game_preaction_spread_gossip(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $gossip_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+//  firep($gossip_level, 'gossip level for user');
+
+  $action->rating_change -= ($gossip_level->level * 0.03);
 }

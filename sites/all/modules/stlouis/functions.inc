@@ -250,7 +250,7 @@ function NO_required_competency($game_user, $id, $level, $name) {
   global $game;
   $arg2 = check_plain(arg(2));
 
-  $check = competency_level($game_user, $id);
+  $check = game_competency_level($game_user, $id);
   $comp_name = competency_level_name($level, TRUE);
 
   if ($check->level >= $level) {
@@ -792,7 +792,7 @@ EOF;
 
   if ($item->fkey_required_competencies_id > 0) {
 
-    $check = competency_level($game_user,
+    $check = game_competency_level($game_user,
       (int) $item->fkey_required_competencies_id);
 firep($check);
     $comp_name = competency_level_name($item->required_competencies_level,
@@ -1897,11 +1897,11 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
 
   if (!empty($data)) { // already there
 
-    $comp_before = competency_level($game_user, $id);
+    $comp_before = game_competency_level($game_user, $id);
     $sql = 'update user_competencies set use_count = use_count + 1
       where fkey_competencies_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, $id, $game_user->id);
-    $comp_after = competency_level($game_user, $id);
+    $comp_after = game_competency_level($game_user, $id);
 
     if ($comp_after->level > $comp_before->level) { // leveled up!
 
@@ -1991,7 +1991,7 @@ function karma($game_user, $text, $quantity) {
   return TRUE;
 }
 
-function competency_level($game_user, $id) {
+function game_competency_level($game_user, $id) {
 // return the user's competency level [0..5] for a given competency
   include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
 
@@ -2338,7 +2338,7 @@ function NO_hierarchy_status($game_user, $level) {
 
 function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 
-  $check = competency_level($game_user, $req_comp);
+  $check = game_competency_level($game_user, $req_comp);
   $target =
     t('@name Competency:<br/>' .
       '<span>@comp (Level @l)</span>',

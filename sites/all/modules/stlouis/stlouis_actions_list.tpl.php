@@ -124,7 +124,6 @@ EOF;
   }
 
   foreach ($data as $item) {
-firep($item);
 
     $description = str_replace(array('%clan', '%subclan', '%value'),
       array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),

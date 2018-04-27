@@ -28,30 +28,25 @@ EOF;
 
   }
 
-  $sql = 'SELECT * from actions where id = %d;';
-
-  $result = db_query($sql, $action_id);
-  $action = db_fetch_object($result);
-  firep($action);
-
   $data = actionlist();
+  $action_found = FALSE;
 
   foreach ($data as $item) {
-    $list_of_actions[] = $item->id ;
+    if ($item->id == $action_id) {
+      $action = $item;
+      $action_found = TRUE;
+    }
   }
 
-  if ((!in_array($action->id, $list_of_actions)) &&
+  if ((!$action_found) &&
     (substr($arg2, 0, 3) != 'ai-')) { // hacking!
 
     $sql = 'update users set karma = karma - 20
       where id = %d;';
-    $result = db_query($sql, $game_user->id);
-
-    sleep(15);
+    db_query($sql, $game_user->id);
 
     db_set_active('default');
     drupal_goto($game . '/home/' . $arg2);
-
   }
 
   if (substr($_GET['target'], 0, 7) == 'letter_') { // show list
