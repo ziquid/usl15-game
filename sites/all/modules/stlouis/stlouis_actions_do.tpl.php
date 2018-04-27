@@ -152,7 +152,7 @@ EOF;
     '_function';
 
   if ($action_succeeded && function_exists($action_function)) {
-    $action_succeeded = $action_function($outcome_reason, $target, $can_do_again);
+    $action_succeeded = $action_function($outcome_reason, $target, $can_do_again, $action);
   }
 
 if ($action_succeeded) {

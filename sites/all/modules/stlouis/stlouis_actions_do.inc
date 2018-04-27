@@ -1238,8 +1238,8 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
 }
 
 function _stlouis_action_spread_gossip_function(&$outcome_reason,
-  $target, &$can_do_again) {
-
+  $target, &$can_do_again, &$action) {
+firep($action, 'action given to gossip');
   global $game;
 
   $fetch_user = '_' . $game . '_fetch_user';
