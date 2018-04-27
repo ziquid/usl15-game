@@ -20,7 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
-<p>27 Apr: Added Petty Thief with associated action and competency.</p>
+<p>27 Apr: Added Teenage Girls with associated action and competency.</p>
 <p>27 Apr: Added some Forest Park missions, removed Forum link from home page, and added level 86.</p>
 <p>24 Apr: Campaigning mission has a second-round bonus and associated action.</p>
 <p>23 Apr: Redid the Top 20 page.  Please check it and user profile pages for bugs.</p>
