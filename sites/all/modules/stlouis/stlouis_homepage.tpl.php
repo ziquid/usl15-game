@@ -230,24 +230,23 @@ switch($event_type) {
 }
 
 // dead presidents event
-if (FALSE)
-if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
-'/top_event_points/' . $arg2 . '">-->
-<div class="event">
-  <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
-  width="160">
-</div>
-<div class="event-text">
-    New&nbsp;Event <!--Starts&nbsp;Feb&nbsp;28th-->DELAYED
-</div>
-<div class="event-tagline small">
-  Turning St. Louis into an industrial wasteland
-</div>
-<div class="event-tagline">
-  &mdash; one &mdash; hood &mdash; at &mdash; a &mdash; time &mdash;
-</div>
-</div>
-<!--</a>-->';
+//if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
+//'/top_event_points/' . $arg2 . '">-->
+//<div class="event">
+//  <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
+//  width="160">
+//</div>
+//<div class="event-text">
+//    New&nbsp;Event <!--Starts&nbsp;Feb&nbsp;28th-->DELAYED
+//</div>
+//<div class="event-tagline small">
+//  Turning St. Louis into an industrial wasteland
+//</div>
+//<div class="event-tagline">
+//  &mdash; one &mdash; hood &mdash; at &mdash; a &mdash; time &mdash;
+//</div>
+//</div>
+//<!--</a>-->';
 
 echo <<< EOF
 $extra_bonus
@@ -334,21 +333,18 @@ EOF;
 
   $coords = _stlouis_scale_coords($coefficient, 214, 192, 265, 210);
 
-  if ($game == 'stlouis') {
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Forum"
-    href="http://forum.cheek.com/forum/2" />
-EOF;
-
-  } else {
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Forum"
-    href="http://forum.cheek.com/forum/12" />
-EOF;
-
-  }
+//if ($game == 'stlouis') {
+//  echo <<< EOF
+//  <area shape="rect" coords="$coords" alt="Forum"
+//    href="http://forum.cheek.com/forum/2" />
+//EOF;
+//}
+//else {
+//  echo <<< EOF
+//  <area shape="rect" coords="$coords" alt="Forum"
+//    href="http://forum.cheek.com/forum/12" />
+//EOF;
+//}
 
   echo <<< EOF
 </map>
