@@ -219,7 +219,6 @@
     $ai_output = 'quest-failed wrong-hood';
 
     competency_gain($game_user, 'lost');
-
   }
 
 
@@ -249,6 +248,11 @@
   if ($quest_succeeded) {
 
     competency_gain($game_user, 'quester');
+
+    // Quest-specific competency to add?
+    if ($game_quest->fkey_enhanced_competencies_id > 0) {
+      competency_gain($game_user, (int) $game_quest->fkey_enhanced_competencies_id);
+    }
 
     $old_energy = $game_user->energy;
     $game_user->energy -= $game_quest->required_energy;
