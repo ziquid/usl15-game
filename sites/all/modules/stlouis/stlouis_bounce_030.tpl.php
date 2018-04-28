@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>27 Apr: Added lots of new competencies and the Support your Local Official action.</p>
 <p>27 Apr: Some missions will now increase competencies, and some actions have
   enhanced effects with higher competencies.</p>
 <p>27 Apr: Added Clear Clan Announcements and Erase Your Wall actions.</p>
