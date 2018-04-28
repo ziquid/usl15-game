@@ -92,7 +92,8 @@ EOF;
 
   $result = db_query($sql, $_GET['target']);
   $target = db_fetch_object($result);
-  firep($target);
+  $target->id = (int) $_GET['target'];
+  firep($target, 'Target of Action');
 
   $name = str_replace('%value', $game_user->values, $action->name);
 

@@ -53,7 +53,7 @@
 
     $options['land-sell-succeeded'] = 'failed not-enough-land';
     $ai_output = 'land-failed not-enough-land';
-    karma($game_user,
+    game_karma($game_user,
       "trying to sell $quantity of $game_land->name but only has $game_land->quantity",
       $quantity * -10);
 
@@ -64,7 +64,7 @@
 
     $options['land-sell-succeeded'] = 'failed cant-sell';
     $ai_output = 'land-failed cant-sell';
-    karma($game_user, "trying to sell unsalable $game_land->name", -100);
+    game_karma($game_user, "trying to sell unsalable $game_land->name", -100);
 
   }
 
@@ -73,7 +73,7 @@
 
     $options['land-sell-succeeded'] = 'failed cant-sell-job';
     $ai_output = 'land-failed cant-sell-job';
-    karma($game_user, "trying to sell job $game_land->name", -100);
+    game_karma($game_user, "trying to sell job $game_land->name", -100);
 
   }
 

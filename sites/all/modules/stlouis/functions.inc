@@ -1900,7 +1900,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     $comp_before = game_competency_level($game_user, $id);
     $sql = 'update user_competencies set use_count = use_count + 1
       where fkey_competencies_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $id, $game_user->id);
+    db_query($sql, $id, $game_user->id);
     $comp_after = game_competency_level($game_user, $id);
 
     if ($comp_after->level > $comp_before->level) { // leveled up!
@@ -1912,7 +1912,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       . $comp_after->level . ' luck.');
 
       $sql = 'update users set luck = luck + %d where id = %d;';
-      $result = db_query($sql, $comp_after->level, $game_user->id);
+      db_query($sql, $comp_after->level, $game_user->id);
 
     }
 
@@ -1922,7 +1922,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     $sql = 'insert into user_competencies
       (fkey_users_id, fkey_competencies_id, use_count) values
       (%d, %d, 1);';
-    $result = db_query($sql, $game_user->id, $id);
+    db_query($sql, $game_user->id, $id);
 
     send_user_message(1, $game_user->id, 1,
       'You have started learning a new competency, &quot;<span
@@ -1976,10 +1976,9 @@ function NO_action_use(&$game_user, $quantity = 1) {
 
 }
 
-function karma($game_user, $text, $quantity) {
+function game_karma($game_user, $text, $quantity) {
 
-  $sql = 'update users set karma = karma + %d
-    where id = %d;';
+  $sql = 'update users set karma = karma + %d where id = %d;';
   db_query($sql, $quantity, $game_user->id);
 
   $sql = 'insert into karma (fkey_users_id, text, amount) values
@@ -2051,9 +2050,7 @@ function game_competency_level($game_user, $id) {
   $comp->level_name = competency_level_name($comp->level, TRUE);
   $comp->level_name_2 = competency_level_name($comp->level);
   return $comp;
-
 }
-
 
 function competency_min_count($level, $comp_level) {
 // return the minimum use count for a given level [0..5] and competency level

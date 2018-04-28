@@ -3044,22 +3044,52 @@ EOF;
 
   }
 
+function _stlouis_action_support_your_local_official_function(&$outcome_reason,
+  $target, &$can_do_again) {
+
+  global $game;
+  $game_user = _stlouis_fetch_user();
+
+  $sql = 'SELECT elected_officials.id
+      FROM elected_officials 
+      LEFT JOIN users ON elected_officials.fkey_users_id = users.id 
+      LEFT JOIN elected_positions 
+      ON elected_positions.id = elected_officials.fkey_elected_positions_id 
+      WHERE users.fkey_neighborhoods_id = %d 
+      AND elected_positions.type = 1
+      AND users.id = %d';
+
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id, $target->id);
+  $item = db_fetch_object($result);
+
+  if ($item) {
+    competency_gain($target, 'trustworthy');
+    return TRUE;
+  }
+  else {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Target is not a local official!') .
+      '</div>';
+    game_karma($game_user, "Target {$target->username} is not a local official", -20);
+    return FALSE;
+  }
+}
 
   function _stlouis_action_support_your_party_official_function(
     &$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+    global $game;
     $game_user = _stlouis_fetch_user();
     $target_id = $_GET['target'];
 
-    $sql = "SELECT elected_officials.id
+    $sql = 'SELECT elected_officials.id
       FROM elected_officials 
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id 
       LEFT JOIN elected_positions 
       ON elected_positions.id = elected_officials.fkey_elected_positions_id 
       WHERE users.fkey_values_id = %d 
       AND elected_positions.type = 2 
-      AND users.id = %d";
+      AND users.id = %d';
 
     $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
     $item = db_fetch_object($result);

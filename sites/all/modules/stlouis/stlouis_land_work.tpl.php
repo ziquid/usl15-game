@@ -51,7 +51,7 @@ $ai_output = 'land-succeeded';
 if (empty($game_land)) {
   $options['land-work-succeeded'] = 'failed no-such-job';
   $ai_output = 'land-failed no-such-job';
-  karma($game_user,
+  game_karma($game_user,
     "trying to work a non-existent job (id: $land_id)", -100);
 }
 
@@ -61,7 +61,7 @@ firep($can_work_again, 'can work again');
 if (!$can_work_again->allowed) {
   $options['land-work-succeeded'] = 'failed too-soon';
   $ai_output = 'land-failed too-soon';
-  karma($game_user,
+  game_karma($game_user,
     "trying to work too soon (time remaining: $can_work_again->time_remaining)", -10);
 }
 

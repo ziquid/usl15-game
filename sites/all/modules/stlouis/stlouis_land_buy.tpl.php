@@ -58,7 +58,7 @@ if ($game_user->money < $land_price) {
 if ($game_user->level < $game_land->required_level) {
   $options['land-buy-succeeded'] = 'failed not-required-level';
   $ai_output = 'land-failed not-required-level';
-  karma($game_user,
+  game_karma($game_user,
     "trying to purchase $game_land->name at level $game_user->level", -100);
 }
 
@@ -78,7 +78,7 @@ if ($game_land->fkey_neighborhoods_id != 0 &&
   $game_land->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
   $options['land-buy-succeeded'] = 'failed not-required-hood';
   $ai_output = 'land-failed not-required-hood';
-  karma($game_user,
+  game_karma($game_user,
     "trying to purchase $game_land->name in wrong hood", -50);
 }
 
@@ -87,7 +87,7 @@ if ($game_land->fkey_values_id != 0 &&
   $game_land->fkey_values_id != $game_user->fkey_values_id) {
   $options['land-buy-succeeded'] = 'failed not-required-party';
   $ai_output = 'land-failed not-required-value';
-  karma($game_user,
+  game_karma($game_user,
     "trying to purchase $game_land->name in wrong party", -50);
 }
 
@@ -95,7 +95,7 @@ if ($game_land->fkey_values_id != 0 &&
 if ($game_land->active != 1) {
   $options['land-buy-succeeded'] = 'failed not-active';
   $ai_output = 'land-failed not-active';
-  karma($game_user,
+  game_karma($game_user,
     "trying to purchase $game_land->name which is not active", -500);
 }
 
@@ -103,7 +103,7 @@ if ($game_land->active != 1) {
 if ($game_land->is_loot != 0) {
   $options['land-buy-succeeded'] = 'failed is-loot';
   $ai_output = 'land-failed is-loot';
-  karma($game_user,
+  game_karma($game_user,
     "trying to purchase $game_land->name which is loot", -25);
 }
 
