@@ -245,8 +245,9 @@
 
     }
 
-  if ($quest_succeeded) {
+  $quest_completion_html = '';
 
+  if ($quest_succeeded) {
     competency_gain($game_user, 'quester');
 
     // Quest-specific competency to add?
@@ -313,7 +314,7 @@
           where fkey_users_id = %d and fkey_quests_id = %d;';
         $result = db_query($sql, $game_user->id, $quest_id);
 
-        $quest_completion_html =<<< EOF
+        $quest_completion_html .=<<< EOF
   <div class="title loot">$quest Completed!</div>
   <p>You have completed this $quest_lower and gained an extra $money_added
     $game_user->values and $game_quest->experience $experience!&nbsp; Complete

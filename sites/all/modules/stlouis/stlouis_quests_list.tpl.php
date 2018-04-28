@@ -216,14 +216,16 @@ firep($quest_group);
 EOF;
 
   // Show each quest.
-  $data = array();
+  $data = [];
   $sql = 'select quests.*, quest_completion.percent_complete,
-    neighborhoods.name as hood from quests
+    neighborhoods.name as hood, comp1.name as competency_name_1
+    from quests
     LEFT OUTER JOIN neighborhoods
     ON quests.fkey_neighborhoods_id = neighborhoods.id
     LEFT OUTER JOIN quest_completion
     ON quest_completion.fkey_quests_id = quests.id
     AND quest_completion.fkey_users_id = %d
+    left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
     ' . $sql_quest_neighborhood .
     ' and required_level <= %d ' . $active_quests .
     ' order by required_level ASC;';
