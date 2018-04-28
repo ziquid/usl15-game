@@ -175,7 +175,6 @@ function actionlist() {
   return $data;
 }
 
-
 function _target_list($target, $game_user) {
 // return a list of valid targets
 
@@ -356,13 +355,22 @@ firep('allowed not_met users: ' . $allowed_string);
   return $data2;
 }
 
+// GAME PREACTION FUNCTIONS //
+
 function game_preaction_spread_gossip(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
-  $gossip_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
-//  firep($gossip_level, 'gossip level for user');
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->rating_change -= ($comp_level->level * 0.03);
+}
 
-  $action->rating_change -= ($gossip_level->level * 0.03);
+function game_preaction_steal_some_value(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->values_change -= ($comp_level->level * 20);
 }
