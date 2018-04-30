@@ -246,6 +246,26 @@ switch($event_type) {
 
 }
 
+// Monthly quests.
+$month = date('m', time() - 3600);
+if ($month == '5' || $game_user->meta == 'admin') {
+  $event_text .= '<div class="event">
+<div class="event-title">
+        May\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect gift for Mother\'s Day ~
+      </div>
+      <div class="event-text">
+        <a href="/' . $game . '/quests/' . $arg2 .
+          '/1005">Start Here</a>
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+    '">Leaderboard</a>
+      </div>-->
+      </div>';
+}
 // dead presidents event
 //if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 //'/top_event_points/' . $arg2 . '">-->
