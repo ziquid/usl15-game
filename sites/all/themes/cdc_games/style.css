@@ -996,9 +996,9 @@ a.try-an-election, input.try-an-election {
 }
 
 .event {
-  margin: 16px 0 6px 12px;
+  margin: 16px 0 6px 4px;
   text-align: center;
-  color: #aa6;
+  color: #aa6666;
 }
 
 .event a {
@@ -1019,7 +1019,7 @@ a.try-an-election, input.try-an-election {
 }
 
 .event-text {
-  padding: 22px 12px 0 192px;
+  padding: 22px 12px 0;
   font-weight: bold;
 }
 
@@ -1027,7 +1027,7 @@ a.try-an-election, input.try-an-election {
   clear: both;
   font-weight: bold;
   text-align: center;
-  font-size: 15px;
+  font-size: 14px;
   font-family: georgia, times new roman, times, serif;
 }
 

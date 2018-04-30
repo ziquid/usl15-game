@@ -6,6 +6,9 @@ define(EVENT_DEBATE, 2);
 define(EVENT_ST_PATTYS, 3);
 define(EVENT_APRIL_FOOLS, 4);
 define(EVENT_NEW_NAMES, 5);
+define(EVENT_PRE_MAY, 6);
+
+define(EVENT_MAY, 1005);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
@@ -38,6 +41,9 @@ switch(date('Y-m-d', time() - 3600)) {
     $event_type = EVENT_APRIL_FOOLS;
     break;
 
+  case '2018-04-30':
+    $event_type = EVENT_PRE_MAY;
+    break;
 }
 
 $alderman = 'Alderman';

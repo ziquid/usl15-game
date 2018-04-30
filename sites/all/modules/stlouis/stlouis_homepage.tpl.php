@@ -212,7 +212,6 @@ switch($event_type) {
         <a href="/' . $game . '/top_event_points/' . $arg2 .
           '">Leaderboard</a>
       </div>';
-
     break;
 
   case EVENT_DEBATE:
@@ -224,7 +223,25 @@ switch($event_type) {
         <a href="/' . $game . '/top_event_points/' . $arg2 .
           '">Leaderboard</a>
       </div>';
+    break;
 
+  case EVENT_PRE_MAY:
+
+    $event_text = '<div class="event">
+<div class="event-title">
+        May\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect gift for Mother\'s Day ~
+      </div>
+      <div class="event-text">
+        Starts May 1
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+      '">Leaderboard</a>
+      </div>-->
+      </div>';
     break;
 
 }
