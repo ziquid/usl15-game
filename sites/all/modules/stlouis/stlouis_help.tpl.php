@@ -1,172 +1,122 @@
 <?php
 
-  global $game, $phone_id;
+/**
+ * @file stlouis_help.tpl.php
+ * Help screen.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
+global $game, $phone_id;
 
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+$fetch_user = '_' . arg(0) . '_fetch_user';
+$fetch_header = '_' . arg(0) . '_header';
 
-  echo <<< EOF
+$game_user = $fetch_user();
+$fetch_header($game_user);
+include drupal_get_path('module', $game) . '/game_defs.inc';
+
+echo <<< EOF
 <div class="help">
 <div class="title">
 Help / FAQ
 </div>
+
 <div class="subtitle">
-	Terms of Service
+Terms of Service
 </div>
 <p>Since this product includes user-generated content (ie, you can choose
-  your own usernames and send each other messages and post forum messages),
-  we need to tell you that we moderate these for appropriateness.&nbsp;
-  We have a filter in place for profanity on user messages; you can block
-  users from sending you messages at all; and you can post forum messages
-  or send e-mail to us at support@cheek.com if you have complaints or
-  need assistance.&nbsp; We occasionally lock or delete harassing forum
-  threads and delete user accounts for abuse.</p>
+your own usernames and send each other messages and post forum messages),
+we need to tell you that we moderate these for appropriateness.&nbsp;
+We have a filter in place for profanity on user messages; you can block
+users from sending you messages at all; and you can post forum messages
+or send e-mail to us at zipport@zipport.com if you have complaints or
+need assistance.&nbsp; We occasionally lock or delete harassing forum
+threads and delete user accounts for abuse.</p>
+
 <div class="subtitle">
-	Goal of the Game
+Goal of the Game
 </div>
 <p>Your goal is to build your character to as high a level as you can.&nbsp;
-  Gain experience by completing {$quest_lower}s and participating in
-  {$debate_lower}s.</p>
+Gain experience by completing {$quest_lower}s and participating in
+{$debate_lower}s.</p>
+
 <div class="subtitle">
-	{$quest}s
+{$quest}s
 </div>
 <p>{$quest}s help you become more experienced, both in $game_user->values
-  and in $experience.</p>
+and in $experience.</p>
+
 <div class="subtitle">
-	{$debate}s
+{$debate}s
 </div>
 <p>{$debate}s match your wits against other players across the game.&nbsp; Those
-  players with the highest $experience and $elocution win the most {$debate_lower}s.</p>
-EOF;
+players with the highest $experience and $elocution win the most {$debate_lower}s.</p>
 
-  if ($game != 'celestial_glory') {
-
-    echo <<< EOF
 <div class="subtitle">
-	Elections
+Elections
 </div>
 <p>Once you become influential enough you can participate in elections to
-  gain even more experience.&nbsp; If you become elected to a position, you
-  get in-game bonuses.&nbsp; You also get bonuses if you belong to the
-  same political party as the elected officials in your neighborhood.</p>
-EOF;
+gain even more experience.&nbsp; If you become elected to a position, you
+get in-game bonuses.&nbsp; You also get bonuses if you belong to the
+same political party as the elected officials in your neighborhood.</p>
 
-  }
-
-  echo <<< EOF
 <div class="subtitle">
-	Aides
+Aides
 </div>
 <p>Aides are non-playing characters and other items that help you attain your
-  goals.&nbsp; They could be {$land_plural_lower} who generate income for you or people
-  who allow you to perform more actions.</p>
-EOF;
+goals.&nbsp; They could be {$land_plural_lower} who generate income for you or people
+who allow you to perform more actions.</p>
 
-  if ($game != 'celestial_glory') {
-
-    echo <<< EOF
 <div class="subtitle">
-	Staff
+Staff
 </div>
 <p>Staff are aides who help you in public, legitimate ways.&nbsp; They may
-	provide $initiative_lower or endurance bonuses or make new actions available.</p>
+provide $initiative_lower or endurance bonuses or make new actions available.</p>
+
 <div class="subtitle">
-	Agents
+Agents
 </div>
 <p>Agents are aides who help you in covert, clandestine, or illegal ways.&nbsp;
-  They also may provide $initiative_lower or endurance bonuses or make new actions
-  available.</p>
-EOF;
+They also may provide $initiative_lower or endurance bonuses or make new actions
+available.</p>
 
-  }
-
-  echo <<< EOF
 <div class="subtitle">
-	Values
+Values
 </div>
 <p>Values, such as <em>$game_user->values</em>, are shown in the top-left corner
-  of the screen.&nbsp; Use them to win and purchase Aides whom will help you
-  throughout the game.</p>
+of the screen.&nbsp; Use them to win and purchase Aides whom will help you
+throughout the game.</p>
+
 <div class="subtitle">
-	$experience
+$experience
 </div>
-EOF;
-
-  if ($game != 'celestial_glory') {
-
-  echo <<< EOF
 <p>$experience is a measure of how popular you are.&nbsp; The higher your
-  $experience_lower, the better chance you have of winning elections, whether you
-  are the challenger or the incumbent.</p>
-EOF;
+$experience_lower, the better chance you have of winning elections, whether you
+are the challenger or the incumbent.</p>
 
-  } else {
-
-  echo <<< EOF
-<p>$experience is a measure of how far you have progressed in the game.&nbsp;
-  The higher your $experience, the more actions will be available to you.</p>
-EOF;
-
-  }
-
-  echo <<< EOF
 <div class="subtitle">
-  $initiative
+$initiative
 </div>
-EOF;
-
-  if ($game != 'celestial_glory') {
-
-  echo <<< EOF
 <p>$initiative is a measure of how well you conquer new projects.&nbsp; The
-  higher your $initiative, the better chance you have of winning elections
-  when you are the challenger.</p>
-EOF;
+higher your $initiative, the better chance you have of winning elections
+when you are the challenger.</p>
 
-  } else {
-
-  echo <<< EOF
-<p>$initiative is a measure of how well you conquer new projects.&nbsp; The
-  higher your $initiative, the better chance you have of finding out about
-  your ancestors.</p>
-EOF;
-
-  }
-
-  echo <<< EOF
 <div class="subtitle">
-  $endurance
+$endurance
 </div>
 <p>$endurance is a measure of how well you complete existing projects.&nbsp; The
-  higher your $endurance, the better chance you have of winning elections
-  when you are the incumbent.</p>
+higher your $endurance, the better chance you have of winning elections
+when you are the incumbent.</p>
+
 <div class="subtitle">
-	$elocution
+$elocution
 </div>
-EOF;
-
-  if ($game != 'celestial_glory') {
-
-    echo <<< EOF
 <p>$elocution is a measure of your public speaking ability.&nbsp; The higher your
-  $elocution, the better chance you have of winning {$debate_lower}s, whether you
-  or another player initiates them.</p>
+$elocution, the better chance you have of winning {$debate_lower}s, whether you
+or another player initiates them.</p>
 </div>
+
 EOF;
-
-  } else {
-
-    echo <<< EOF
-<p>$elocution is a measure of your wits and intellect.&nbsp; The higher your
-  $elocution, the better chance you have of winning {$debate_lower}s, whether you
-  or another player initiates them.</p>
-</div>
-EOF;
-
-  }
-
-  db_set_active('default');
+db_set_active('default');

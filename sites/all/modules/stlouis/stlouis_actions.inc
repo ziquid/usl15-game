@@ -1,6 +1,5 @@
 <?php
 
-
 function actionlist() {
 
   global $game, $phone_id;
