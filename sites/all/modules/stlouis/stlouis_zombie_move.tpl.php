@@ -55,7 +55,8 @@ EOF;
 //      mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",
 //        "due to action from $game_user->username.");
 
-  } else {
+  } 
+  else {
 
       echo <<< EOF
 <div class="subtitle">$zombie->username cannot move to $location.</div>
@@ -67,8 +68,8 @@ EOF;
 </div>
 EOF;
 
-      mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",
-        "due to action from $game_user->username.");
+//      mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",
+//        "due to action from $game_user->username.");
 
   }
   

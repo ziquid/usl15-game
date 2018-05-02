@@ -47,7 +47,8 @@
   if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
     $clan_link = $item->clan_name;
-  } else {
+  } 
+  else {
     $clan_link = t('None');
   }
 
