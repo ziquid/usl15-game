@@ -23,8 +23,8 @@ function stlouis_perm() {
 
 }
 
-require_once(drupal_get_path('module', 'stlouis') . '/menu.inc');
-require_once(drupal_get_path('module', 'stlouis') . '/functions.inc');
+require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
+require_once drupal_get_path('module', 'stlouis') . '/functions.inc';
 
 function stlouis_cron() {
 
@@ -92,8 +92,6 @@ function stlouis_cron() {
 
   if ($zombie_count > 0) {
 
-//    mail('joseph@cheek.com', "$zombie_count zombies", 'fyi');
-
 // move them, enhance experience
     $sql = 'update users set experience = floor(rand() * 1500000) + 1
       where meta = "zombie" order by rand() limit %d;';
@@ -115,7 +113,7 @@ function stlouis_cron() {
 
     $sql = 'select * from levels;';
     $result = db_query($sql);
-    $levels = array();
+    $levels = [];
     while ($level = db_fetch_object($result)) $levels[] = $level;
 
     for ($a = 0; $a < count($levels) - 1 ; $a++) {
