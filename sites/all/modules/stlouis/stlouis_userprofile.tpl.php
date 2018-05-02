@@ -236,7 +236,8 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
 if (!empty($item->clan_acronym)) {
   $clan_acronym = "($item->clan_acronym)";
   $clan_link = $item->clan_name;
-} else {
+} 
+else {
   $clan_link = t('None');
 }
 
@@ -360,7 +361,8 @@ EOF;
 
 if ($item->debates_won >= $item->level * 100) {
   $super_debater = '<strong>(** Super **)</strong>';
-} else {
+} 
+else {
   $super_debater = '';
 }
 
@@ -391,12 +393,14 @@ if (($phone_id_to_check != $phone_id) &&
 </div>
 EOF;
 
-  } else { // debateable but not enough time has passed
+  } 
+  else { // debateable but not enough time has passed
 
     if ($item->meta == 'zombie') {
       $time_left = $zombie_debate_wait -
         (time() - strtotime($item->debates_last_time));
-    } else {
+    } 
+	else {
       $time_left = $debate_time -
         (time() - strtotime($item->debates_last_time));
     }
@@ -416,7 +420,8 @@ EOF;
 
   }
 
-} else { // not debateable at all
+} 
+else { // not debateable at all
   echo '<br>';
 }
 
@@ -429,21 +434,29 @@ if ($debate == 'Box') {
 
   if ($item->level <= 20) {
     $boxing_weight = 'Minimumweight';
-  } else if ($item->level <= 35) {
+  } 
+  else if ($item->level <= 35) {
     $boxing_weight = 'Flyweight';
-  } else if ($item->level <= 50) {
+  } 
+  else if ($item->level <= 50) {
     $boxing_weight = 'Bantamweight';
-  } else if ($item->level <= 65) {
+  } 
+  else if ($item->level <= 65) {
     $boxing_weight = 'Featherweight';
-  } else if ($item->level <= 80) {
+  } 
+  else if ($item->level <= 80) {
     $boxing_weight = 'Lightweight';
-  } else if ($item->level <= 95) {
+  } 
+  else if ($item->level <= 95) {
     $boxing_weight = 'Welterweight';
-  } else if ($item->level <= 110) {
+  } 
+  else if ($item->level <= 110) {
     $boxing_weight = 'Middleweight';
-  } else if ($item->level <= 125) {
+  } 
+  else if ($item->level <= 125) {
     $boxing_weight = 'Cruiserweight';
-  } else {
+  } 
+  else {
     $boxing_weight = 'Heavyweight';
   }
 
@@ -489,7 +502,8 @@ if ($phone_id_to_check == $phone_id) { // show more stats if it's you
 
     $skill_button = '<div class="action not-yet">Can\'t increase skills</div>';
 
-  } else {
+  } 
+  else {
 
     $skill_button = '<div class="action"><a href="/' . $game . '/increase_skills/' .
       $arg2 . '/none">Increase skills</a></div>';
@@ -533,7 +547,8 @@ if (($phone_id == 'abc123') || ($game_user->username == 'New iPad test')) {
     <input type="checkbox" name="private" id="private" value="1"/>
     <label for="private">Send as private message</label>
     </div>';
-} else {
+} 
+else {
   $private_message = '';
 }
 
@@ -556,7 +571,8 @@ EOF;
 </form>
 </div>
 EOF;
- } else { // you can't send to them but you can still block them
+ } 
+ else { // you can't send to them but you can still block them
 
    echo '<div class="send-message">' . $block_this_user . '</div>';
 
@@ -620,7 +636,8 @@ if ($item->is_clan_leader)
 if ($item->private) {
   $private_css = 'private';
   $private_text = '(private)';
-} else {
+} 
+else {
   $private_css = $private_text = '';
 }
 
