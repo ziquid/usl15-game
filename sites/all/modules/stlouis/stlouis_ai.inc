@@ -71,7 +71,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
     if ($bt[1]['function'] == '_ai_do') {
       $ai_output .= $spaces . "$output\n";
-    } else {
+    }
+    else {
       $ai_output .= $spaces . $bt[1]['function'] . "$args: $output\n";
     }
 
@@ -119,7 +120,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         order by (energy + (actions * 40)) desc
         limit 1;';
 
-    } else { // random player
+    }
+    else { // random player
 
       $sql = 'select phone_id from users
         where meta like "ai_%"
@@ -167,7 +169,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
         continue;
 
-      } else if (strpos($response, 'need-staff-') === 0) {
+      }
+      else if (strpos($response, 'need-staff-') === 0) {
 
         $staff_to_get = substr($response, 11);
         _ai_out("Trying to get Staff #$staff_to_get");
@@ -197,7 +200,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         _ai_do('purchase staff', $ai_id, $staff_to_get);
         return FALSE;
 
-      } else if (strpos($response, 'need-equipment-') === 0) {
+      }
+      else if (strpos($response, 'need-equipment-') === 0) {
 
         $eq_to_get = substr($response, 15);
         _ai_out("Trying to get Equipment #$eq_to_get");
@@ -259,7 +263,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       $ai_response_end = strpos($response, "/>\n", $ai_response_start);
       $ai_response = trim(substr($response, $ai_response_start,
         $ai_response_end - $ai_response_start));
-    } else {
+    }
+    else {
       $ai_response = $response;
     }
 
@@ -560,7 +565,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       _ai_out("Found a free breacher, $ai_user->phone_id " .
         "(level $ai_user->level)");
 
-    } else {
+    }
+    else {
 
       _ai_out('*FIXME*  Egads!  No free breachers found!');
 
@@ -1035,7 +1041,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
         }
 
-      } else {
+      }
+      else {
 
         _ai_out('I\'m not an elected official 8-(');
 
@@ -1049,7 +1056,7 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       _ai_out("Trying boosting by doing a quest (energy: $ai_user->energy)");
 
 // find the highest level quest we can do
-      $sql = 'select id, name from quests 
+      $sql = 'select id, name from quests
         where active = 1
         and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = %d)
         and required_level <= %d
@@ -1065,7 +1072,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 //        _ai_out("Highest quest I can do is #$item->id, $item->name");
         if (_ai_do('do quest', $ai_id, $item->id)) return TRUE;
 
-      } else {
+      }
+      else {
 
         _ai_out('No quests found!');
 
@@ -1081,7 +1089,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
         _ai_out('Not going to debate (I am a scout)');
 
-      } else {
+      }
+      else {
 
         _ai_out('Trying boosting by debating');
         if (_ai_do('debate players', $ai_id)) return TRUE;
@@ -1089,7 +1098,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       }
 
 
-    } else { // in a seat
+    }
+    else { // in a seat
 
       _ai_out('Not going to mission or debate (I am in a seat)');
 
@@ -1177,7 +1187,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       _ai_out("Ok, trying to get a business...");
       _ai_do('buy land', $ai_id);
 
-    } else {
+    }
+    else {
 
       _ai_out('Not buying any aides (conserving money)');
 
@@ -1256,7 +1267,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       }
 
-    } else {
+    }
+    else {
 
 //      _ai_out('Found no empty seats... 8-(((');
 
@@ -1494,7 +1506,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       }
 
-    } else {
+    }
+    else {
 
       _ai_out('What?  *No* hoods can get me there?');
 
@@ -1545,7 +1558,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 //        "so I can buy aide #$can_buy...");
       $ai_response = _ai_web_request($ai_id, 'equipment_buy', "$can_buy/1");
 
-    } else {
+    }
+    else {
 
 //      _ai_out("I have $ai_user->money money, " .
 //        "so I can't buy any elocution aides!");
@@ -1584,7 +1598,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
         "so I can buy aide #$can_buy...");
       $ai_response = _ai_web_request($ai_id, 'equipment_buy', "$can_buy/1");
 
-    } else {
+    }
+    else {
 
 //      _ai_out("I have $ai_user->money money, " .
 //        "so I can't buy any speed aides!");
@@ -1629,7 +1644,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       return $did_buy;
 
-    } else {
+    }
+    else {
 
 //      _ai_out("I have $ai_user->money money, " .
 //        "so I can't buy any businesses!");

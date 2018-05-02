@@ -402,7 +402,8 @@ EOF;
         }
 
 // not beaten by a super debater
-      } else if ($item->debates_lost > 4) { // lost 5 debates
+      }
+      else if ($item->debates_lost > 4) { // lost 5 debates
 
           $sql = 'delete from users where id = %d;';
           $result = db_query($sql, $item->id);
@@ -417,7 +418,8 @@ EOF;
           slack_send_message("Conquered zombie $item->id ($item->username)"
           . " has five debate losses and has left!", $slack_channel);
 
-      } else { // not 5 losses yet
+      }
+      else { // not 5 losses yet
 
         $points_to_add = ($item->debates_lost + 1) * 2;
 
@@ -576,7 +578,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
       $result = db_query($sql, $money_change, $item->id);
       $gain_extra = ' and Boxing Points<br/>';
 
-    } else {
+    }
+    else {
 
       $gain_extra = '';
 

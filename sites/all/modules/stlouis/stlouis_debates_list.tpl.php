@@ -42,7 +42,7 @@ EOF;
   <p class="second">&quot;The more $elocution you have, the better you
   will do in these challenges.</p>
   <p></p>
-</div>    
+</div>
 EOF;
 
       $sql = 'update users set seen_neighborhood_quests = 1 where id = %d;';
@@ -151,7 +151,8 @@ firep($item);
 
     if ($item->id == $game_user->id) {
       $clan_class = 'election-details me';
-    } else {
+    }
+    else {
       $clan_class = 'election-details';
     }
 
