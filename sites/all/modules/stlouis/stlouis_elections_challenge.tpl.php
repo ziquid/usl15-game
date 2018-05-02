@@ -47,16 +47,16 @@ EOF;
   }
 
   $sql = 'SELECT elected_positions.id AS ep_id, elected_positions.energy_bonus,
-    elected_positions.name AS ep_name, elected_positions.type,  
+    elected_positions.name AS ep_name, elected_positions.type,
     blah.*, `values`.party_icon,
     `values`.party_title, clan_members.fkey_clans_id
-    
+
     FROM elected_positions
-    
+
     LEFT OUTER JOIN (
 
 -- type 1: neighborhood positions
-      
+
     SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating,
         elected_officials.approval_15,
@@ -64,15 +64,15 @@ EOF;
         elected_officials.approval_45, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_neighborhoods_id = %d
       AND elected_positions.type = 1
 
       UNION
-      
+
 -- type 2: party positions
-      
+
       SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating,
         elected_officials.approval_15,
@@ -80,15 +80,15 @@ EOF;
         elected_officials.approval_45, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_values_id = %d
       AND elected_positions.type = 2
 
       UNION
-      
+
 -- type 3: house positions
-      
+
       SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating,
         elected_officials.approval_15,
@@ -96,17 +96,17 @@ EOF;
         elected_officials.approval_45, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_neighborhoods_id IN
         (SELECT id from neighborhoods where district = %d)
       AND elected_positions.type = 3
     ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
-    
+
     LEFT JOIN `values` ON blah.fkey_values_id = `values`.id
-    
+
     LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = blah.id
-    
+
     WHERE elected_positions.id = %d;';
 
   $result = db_query($sql, $game_user->fkey_neighborhoods_id,
@@ -123,7 +123,8 @@ EOF;
 
     $title = "Run for the office of $item->ep_name";
 
-  } else {
+  }
+  else {
 
     $title = "Challenge $item->ep_name $username";
 
@@ -190,7 +191,7 @@ EOF;
       fkey_elected_positions_id = %d;';
     $result = db_query($sql, $game_user->id, $position_id);
 
-    $sql = 'insert into challenge_history 
+    $sql = 'insert into challenge_history
       (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
       fkey_elected_positions_id, won, desc_short, desc_long) values
       ("election", %d, 0, %d, %d, 1, "' . $game_user->username .
@@ -257,14 +258,14 @@ EOF;
 // CHALLENGER's initiative
 
   $sql = 'SELECT sum(staff.initiative_bonus * staff_ownership.quantity)
-    as initiative from staff 
+    as initiative from staff
     left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $st_initiative_bonus = db_fetch_object($result);
 
   $sql = 'SELECT sum(equipment.initiative_bonus * equipment_ownership.quantity)
-    as initiative from equipment 
+    as initiative from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d;';
@@ -276,14 +277,14 @@ EOF;
 firep("Initiative bonus = " . $in_bonus);
 
   $sql = 'SELECT sum(staff.extra_votes * staff_ownership.quantity)
-    as extra_votes from staff 
+    as extra_votes from staff
     left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $st_extra_votes = db_fetch_object($result);
 
   $sql = 'SELECT sum(equipment.extra_votes * equipment_ownership.quantity)
-    as extra_votes from equipment 
+    as extra_votes from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d;';
@@ -307,14 +308,14 @@ firep('Extra Votes = ' . $extra_votes . ' + ' . $extra_vet_votes);
 // INCUMBENT's endurance
 
   $sql = 'SELECT sum(staff.endurance_bonus * staff_ownership.quantity)
-    as endurance from staff 
+    as endurance from staff
     left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d;';
   $result = db_query($sql, $item->id);
   $st_endurance_bonus = db_fetch_object($result);
 
   $sql = 'SELECT sum(equipment.endurance_bonus * equipment_ownership.quantity)
-    as endurance from equipment 
+    as endurance from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d;';
@@ -326,14 +327,14 @@ firep('Extra Votes = ' . $extra_votes . ' + ' . $extra_vet_votes);
 firep("Endurance bonus = $en_bonus");
 
   $sql = 'SELECT sum(staff.extra_defending_votes * staff_ownership.quantity)
-    as votes from staff 
+    as votes from staff
     left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d;';
   $result = db_query($sql, $item->id);
   $st_extra_defending_votes = db_fetch_object($result);
 
   $sql = 'SELECT sum(equipment.extra_defending_votes * equipment_ownership.quantity)
-    as votes from equipment 
+    as votes from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d;';
@@ -389,7 +390,8 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
 mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
   "$item->username [$opp_influence] in $location is voted out of office");
 
-    } else if ($my_influence > 100000) { // challenger has too much influence
+    }
+    else if ($my_influence > 100000) { // challenger has too much influence
 // do not allow him/her to challenge
 
 mail('joseph@cheek.com',
@@ -437,13 +439,14 @@ mail('joseph@cheek.com',
 
       AND fkey_neighborhoods_id = %d
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
-      AND ua_sdk.`value` IS NULL 
+      AND ua_sdk.`value` IS NULL
       AND username <>  "";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000),
       $game_user->fkey_neighborhoods_id);
 
-  } else if ($item->type == 2) { // party
+  }
+  else if ($item->type == 2) { // party
 
     $sql = 'SELECT users.*, clan_members.fkey_clans_id,
       ua_ip.`value` AS last_IP, ua_sdk.`value` AS sdk
@@ -465,12 +468,13 @@ mail('joseph@cheek.com',
 
       AND fkey_values_id = %d
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
-      AND ua_sdk.`value` IS NULL 
+      AND ua_sdk.`value` IS NULL
       AND username <>  "";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000), $game_user->fkey_values_id);
 
-  } else if ($item->type == 3) { // district
+  }
+  else if ($item->type == 3) { // district
 
     $sql = 'SELECT users.*, clan_members.fkey_clans_id,
       ua_ip.`value` AS last_IP, ua_sdk.`value` AS sdk
@@ -493,7 +497,7 @@ mail('joseph@cheek.com',
       AND fkey_neighborhoods_id IN
         (SELECT id from neighborhoods where district = %d)
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
-      AND ua_sdk.`value` IS NULL 
+      AND ua_sdk.`value` IS NULL
       AND username <>  "";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000), $district);
@@ -518,7 +522,8 @@ $ip_array[$ip_key]++;
         $sql = 'update users set fkey_neighborhoods_id = 81, actions = 0,
           actions_next_gain = "%s", karma = karma - 100
           where id = %d;';
-      } else { // CG -- move to zagros
+      }
+      else { // CG -- move to zagros
         $sql = 'update users set fkey_neighborhoods_id = 11, actions = 0,
           actions_next_gain = "%s", karma = karma - 100
           where id = %d;';
@@ -542,11 +547,13 @@ $ip_array[$ip_key]++;
 
       $votes--; // you vote for yourself
 firep('you vote for yourself');
-    } elseif ($voter->id == $item->id) {
+    }
+    elseif ($voter->id == $item->id) {
 
       $votes++; // s/he votes for her/himself
 firep($item->username . ' votes for her/himself');
-    } else { // other voters
+    }
+    else { // other voters
 
 /* 4th of July - check wall postings
       $sql = 'select * from user_messages
@@ -742,7 +749,8 @@ firep($voter->username . ' level ' . $voter->level . ' votes for you');
         $election_polls[] = 'I voted for you because of your ' . $experience . '.';
         $votes_you_influence++;
 
-      } else {
+      }
+      else {
 
         $votes++; // voter votes for incumbent
 firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->username);
@@ -767,7 +775,8 @@ firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->user
 firep('resident votes for you');
       $votes_you_influence++;
 
-    } else {
+    }
+    else {
 
       $votes++; // votes for incumbent
 firep('resident votes for incumbent');
@@ -899,7 +908,8 @@ EOF;
         t('All officials in @place lose their seats',
           array('@place' => $all_officials_in)) . '</div>';
 
-  } else { // you lost
+  }
+  else { // you lost
 
     if (substr($phone_id, 0, 3) == 'ai-')
       echo "<!--\n<ai \"election-lost\"/>\n-->";
@@ -980,7 +990,7 @@ total influence: (ceil($item->experience influence / 5) [" .
   "] approval rating * 0.017) [" .
   $opp_approval * 0.017 .
   "] = $opp_influence
-  
+
 Clan votes: $votes_opp_same_clan
 Party votes: $votes_opp_same_party
 Influence votes: $votes_opp_influence

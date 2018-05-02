@@ -53,7 +53,8 @@
       $sql = 'delete from clans where id = %d;';
       $result = db_query($sql, $item->id);
 
-    } else {
+    }
+    else {
 
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $game_user->id);
