@@ -26,7 +26,7 @@
   <a href="/$game/equipment/$arg2" class="button">Equipment</a>
   <a href="/$game/staff/$arg2" class="button">Staff</a>
   <a href="/$game/agents/$arg2" class="button active">Agents</a>
-</div>  
+</div>
 EOF;
 
   if ($game_user->level < 20) {
@@ -53,29 +53,29 @@ EOF;
   }
 
   $data = [];
-  $sql = 'SELECT staff.*, staff_ownership.quantity 
+  $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level <= %d
     ' . $land_active . '
-    
+
     AND (is_loot = 0 OR staff_ownership.quantity > 0)
-    
+
     AND staff_or_agent = "a"
     ORDER BY required_level ASC';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
@@ -100,7 +100,8 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
@@ -193,7 +194,8 @@ EOF;
         reduced by $rat_change%</div>
 EOF;
 
-        } else {
+        }
+        else {
 
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
@@ -263,24 +265,24 @@ EOF;
 
 // show next agent
 
-  $sql = 'SELECT staff.*, staff_ownership.quantity 
+  $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level > %d
     AND active = 1
     AND is_loot = 0
@@ -305,7 +307,8 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
@@ -359,7 +362,8 @@ EOF;
         reduced by $rat_change%</div>
 EOF;
 
-        } else {
+        }
+        else {
 
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is

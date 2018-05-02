@@ -30,11 +30,11 @@
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership
       ON staff_ownership.fkey_staff_id = staff.id
       AND staff_ownership.fkey_users_id = %d
-    
+
     WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
   $game_staff = db_fetch_object($result); // limited to 1 in DB
@@ -78,7 +78,7 @@
       fkey_staff_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, $quantity, $staff_id, $game_user->id);
 
-    $sql = 'update users set money = money + %d, income = income - %d, 
+    $sql = 'update users set money = money + %d, income = income - %d,
       expenses = expenses - %d
       where id = %d;';
     $result = db_query($sql, $staff_price,
@@ -96,7 +96,8 @@
 
     $game_user = $fetch_user(); // reprocess user object
 
-  } else { // failed - add option to try an election
+  }
+  else { // failed - add option to try an election
 
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
@@ -115,7 +116,7 @@
   <a href="/$game/equipment/$arg2" class="button">Equipment</a>
   <a href="/$game/staff/$arg2" class="button">Staff</a>
   <a href="/$game/agents/$arg2" class="button active">Agents</a>
-</div>  
+</div>
 EOF;
 
   if ($game_user->level < 20) {
@@ -137,7 +138,8 @@ EOF;
 
   if ($game_staff->quantity_limit > 0) {
     $quantity_limit = '<em>(Limited to ' . $game_staff->quantity_limit . ')</em>';
-  } else {
+  }
+  else {
     $quantity_limit = '';
   }
 
@@ -192,7 +194,8 @@ EOF;
     if ($option == $orig_quantity) {
       echo '<option selected="selected" value="' . $option . '">' .
         $option . '</option>';
-    } else {
+    }
+    else {
       echo '<option value="' . $option . '">' . $option . '</option>';
     }
 
@@ -212,24 +215,24 @@ Hire Agents
 EOF;
 
   $data = array();
-  $sql = 'SELECT staff.*, staff_ownership.quantity 
+  $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level <= %d
     AND active = 1
     AND (is_loot = 0 OR staff_ownership.quantity > 0)
@@ -254,7 +257,8 @@ EOF;
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
@@ -345,7 +349,8 @@ EOF;
         reduced by $rat_change%</div>
 EOF;
 
-        } else {
+        }
+        else {
 
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
@@ -415,24 +420,24 @@ EOF;
 
 // show next agent
 
-  $sql = 'SELECT staff.*, staff_ownership.quantity 
+  $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level > %d
     AND active = 1
     AND (is_loot = 0 OR staff_ownership.quantity > 0)
@@ -457,7 +462,8 @@ EOF;
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
@@ -510,7 +516,8 @@ EOF;
         reduced by $rat_change%</div>
 EOF;
 
-        } else {
+        }
+        else {
 
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
