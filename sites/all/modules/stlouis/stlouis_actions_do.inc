@@ -5912,7 +5912,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values

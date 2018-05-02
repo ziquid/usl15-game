@@ -1375,7 +1375,8 @@ function _stlouis_get_fbid() {
     echo '<a target="_top" href="' . $auth_url . '">Login to Facebook</a>';
     exit;
 //    echo("<script> top.location.href='" . $auth_url . "'</script>");
-  } else {
+  }
+  else {
 //    echo ("Welcome User: " . $data["user_id"]);
     return 'fb=' . $data['user_id'];
   }
@@ -2077,7 +2078,8 @@ $extra_messages
 
       if (actions > actions_max) {
         var operand = '-';
-      } else {
+      }
+      else {
         var operand = '+';
       }
 
