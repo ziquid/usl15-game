@@ -290,7 +290,8 @@ if ($quest_succeeded) {
     $result = db_query($sql, $game_quest->required_energy,
       $game_quest->experience, $money_added, $game_user->id);
 
-  } else { // save all
+  }
+  else { // save all
 
     $sql = 'update users set energy = energy - %d,
       experience = experience + %d, money = money + %d,
@@ -478,7 +479,8 @@ EOF;
                 values (%d, %d, %d);';
               $result = db_query($sql, $eq_id, $game_user->id, 1);
 
-            } else { // existing record - update it
+            }
+            else { // existing record - update it
 
               $sql = 'update equipment_ownership set quantity = quantity + 1
                 where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -600,7 +602,8 @@ EOF;
                 values (%d, %d, %d);';
               $result = db_query($sql, $st_id, $game_user->id, 1);
 
-            } else { // existing record - update it
+            }
+            else { // existing record - update it
 
               $sql = 'update staff_ownership set quantity = 1 where
                 fkey_staff_id = %d and fkey_users_id = %d;';
@@ -722,7 +725,8 @@ EOF;
 //          $percentage_target = 200;
 //          $percentage_divisor = 2;
 
-        } else { // we don't have a bonus yet
+        }
+        else { // we don't have a bonus yet
 
           $quest_completion_html .=<<< EOF
 <div class="title loot">Congratulations!</div>
@@ -1027,7 +1031,8 @@ $outcome_reason
 </div>
 EOF;
 
-} else { // failed!
+}
+else { // failed!
 
       $fetch_header($game_user);
 
@@ -1064,7 +1069,8 @@ EOF;
     $rgb = dechex(floor(($percentage_target - $percent_complete) /
       (4 * $percentage_divisor))) . 'c0';
 
-  } else {
+  }
+  else {
 
     $rgb = 'c' . dechex(floor(($percent_complete) /
       (4 * $percentage_divisor))) . '0';
@@ -1114,7 +1120,8 @@ if ($game_user->level < 6) { // show beginning quests, keep location from user
   $location = $older_missions_html = $newer_missions_html = '';
   $sql_quest_neighborhood = 'where fkey_neighborhoods_id = 0';
 
-} else { // show location-specific quests
+}
+else { // show location-specific quests
 
   $sql_quest_neighborhood = 'where ((fkey_neighborhoods_id = 0 and
     required_level >= 6) or fkey_neighborhoods_id = ' .
@@ -1155,7 +1162,8 @@ if ($game == 'celestial_glory') {
 
   $quests = '';
 
-} else {
+}
+else {
 
   $quests = "{$quest}s";
 
@@ -1227,7 +1235,8 @@ foreach ($data as $item) {
     $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
       (4 * $percentage_divisor))) . 'c0';
 
-  } else {
+  }
+  else {
 
     $rgb = 'c' . dechex(floor(($item->percent_complete) /
       (4 * $percentage_divisor))) . '0';
@@ -1274,7 +1283,8 @@ foreach ($data as $item) {
 </div>
 EOF;
 
-  } else { // quest in my hood
+  }
+  else { // quest in my hood
 
   echo <<< EOF
 <div class="quests">
@@ -1324,7 +1334,8 @@ EOF;
 
     if ($quantity->quantity >= $item->land_required_quantity) {
       $not_yet = $a_start = $a_end = '';
-    } else {
+    }
+    else {
       $not_yet = 'not-yet';
       $a_start = '<a href="/' . $game . '/land_buy/' .
         $arg2 . '/' . $item->fkey_land_required_id . '/' .
@@ -1353,7 +1364,8 @@ EOF;
 
     if ($quantity->quantity >= $item->equipment_1_required_quantity) {
       $not_yet = $a_start = $a_end = '';
-    } else {
+    }
+    else {
       $not_yet = 'not-yet';
       $a_start = '<a href="/' . $game . '/equipment_buy/' .
         $arg2 . '/' . $item->fkey_equipment_1_required_id . '/' .
@@ -1380,7 +1392,8 @@ EOF;
 
       if ($quantity->quantity >= $item->equipment_2_required_quantity) {
         $not_yet = $a_start = $a_end = '';
-      } else {
+      }
+      else {
         $not_yet = 'not-yet';
         $a_start = '<a href="/' . $game . '/equipment_buy/' .
           $arg2 . '/' . $item->fkey_equipment_2_required_id . '/' .
@@ -1407,7 +1420,8 @@ EOF;
 
         if ($quantity->quantity >= $item->equipment_3_required_quantity) {
           $not_yet = $a_start = $a_end = '';
-        } else {
+        }
+        else {
           $not_yet = 'not-yet';
           $a_start = '<a href="/' . $game . '/equipment_buy/' .
             $arg2 . '/' . $item->fkey_equipment_3_required_id . '/' .
@@ -1439,7 +1453,8 @@ EOF;
 
     if ($quantity->quantity >= $item->staff_required_quantity) {
       $not_yet = '';
-    } else {
+    }
+    else {
       $not_yet = 'not-yet';
     }
 
