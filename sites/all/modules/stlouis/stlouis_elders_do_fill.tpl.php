@@ -46,7 +46,7 @@ $quest_lower = strtolower($quest);
 $experience_lower = strtolower($experience);
 $amount_filled = 0;
 $luck_remaining = $game_user->luck;
-$sql = 'insert into luck_use (fkey_users_id, use_type, amount_filled, luck_remaining)
+$sql_log = 'insert into luck_use (fkey_users_id, use_type, amount_filled, luck_remaining)
   values (%d, "%s", %d, %d);';
 
 switch ($fill_type) {
@@ -83,7 +83,7 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
-      db_query($sql, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+      db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
@@ -109,7 +109,7 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
-      db_query($sql, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+      db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
@@ -135,7 +135,7 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
-      db_query($sql, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+      db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
@@ -153,5 +153,6 @@ switch ($fill_type) {
 
 }
 
-db_query($sql, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+db_set_active('default');
 drupal_goto($game . '/user/' . $phone_id);
