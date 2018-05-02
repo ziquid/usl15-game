@@ -70,7 +70,8 @@ function NO_required_staff($game_user, $staff_id, $req_quantity) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/staff_buy/' .
@@ -109,7 +110,8 @@ function NO_required_equipment($game_user, $equipment_id, $req_quantity) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/equipment_buy/' .
@@ -150,7 +152,8 @@ function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $a_start = $a_end = '';
     $not_yet = 'not-yet';
@@ -189,7 +192,8 @@ function NO_required_land($game_user, $land_id, $req_quantity) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/land_buy/' .
@@ -223,7 +227,8 @@ function NO_required_elected_position($game_user, $id, $name) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/hierarchies/' .
@@ -257,7 +262,8 @@ function NO_required_competency($game_user, $id, $level, $name) {
 
     $not_yet = $a_start = $a_end = '';
 
-  } else {
+  }
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/user_comp/' .
@@ -344,7 +350,8 @@ EOF;
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
 
-  } else {
+  }
+  else {
 
     $extra_title = '';
     $next = t('Current Goal');
@@ -389,7 +396,8 @@ Element.prototype.removeClass = function(className) {
     var d = document.getElementById('goal-desc');
     if (d.hasClass('show')) {
       d.removeClass('show');
-    } else {
+    }
+    else {
       d.className = d.className + ' show';
     }
   }
@@ -823,7 +831,7 @@ EOF;
   if (isset($item->competency_name_1)) {
     echo <<< EOF
     <div class="land-payout">
-      Competency enhanced: 
+      Competency enhanced:
       <span class="initial-caps">$item->competency_name_1</span>
     </div>
 EOF;
@@ -1146,7 +1154,8 @@ function _show_quest($game_user, $item, $percentage_target,
     $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
       (4 * $percentage_divisor))) . 'c0';
 
-  } else {
+  }
+  else {
 
     $rgb = 'c' . dechex(floor(($item->percent_complete) /
       (4 * $percentage_divisor))) . '0';
@@ -1168,7 +1177,8 @@ function _show_quest($game_user, $item, $percentage_target,
 
     $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
 
-  } else {
+  }
+  else {
 
     $img = '/sites/default/files/images/quests/' . "$game-$item->id.png?3";
 
@@ -1334,7 +1344,8 @@ EOF;
     </div>
 EOF;
 
-  } else { // quest performed -- show accomplishments
+  }
+  else { // quest performed -- show accomplishments
 
     echo <<< EOF
     <div class="quest-requisites">
@@ -1609,7 +1620,8 @@ function equipment_gain(&$game_user, $id, $quantity) {
       where fkey_equipment_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, $quantity, $id, $game_user->id);
 
-  } else {
+  }
+  else {
 
     if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
       return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
@@ -1654,7 +1666,8 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
       where fkey_equipment_id = %d and fkey_clans_id = %d;';
     $result = db_query($sql, $quantity, $id, $game_user->fkey_clans_id);
 
-  } else {
+  }
+  else {
 
     if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
       return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
@@ -1691,7 +1704,8 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
       where fkey_users_id = %d and fkey_equipment_id = %d;';
     $result = db_query($sql, $game_user->id, $id);
 
-  } else {
+  }
+  else {
 
     $sql = 'update equipment_ownership set quantity = quantity - %d
       where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -1731,7 +1745,8 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
       where fkey_clans_id = %d and fkey_equipment_id = %d;';
     $result = db_query($sql, $game_user->fkey_clans_id, $id);
 
-  } else {
+  }
+  else {
 
     $sql = 'update clan_equipment_ownership set quantity = quantity - %d
       where fkey_equipment_id = %d and fkey_clans_id = %d;';
@@ -1764,7 +1779,8 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
       where fkey_land_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, $quantity, $id, $game_user->id);
 
-  } else {
+  }
+  else {
 
     $sql = 'insert into land_ownership
       (fkey_users_id, fkey_land_id, quantity) values
@@ -1822,7 +1838,8 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
       where fkey_users_id = %d and fkey_land_id = %d;';
     $result = db_query($sql, $game_user->id, $id);
 
-  } else {
+  }
+  else {
 
     $sql = 'update land_ownership set quantity = quantity - %d
       where fkey_land_id = %d and fkey_users_id = %d;';
@@ -2132,7 +2149,8 @@ function fetch_user_by_id($id) {
 
     $where = 'WHERE users.phone_id = "%s"';
 
-  } else {
+  }
+  else {
 
     $where = 'WHERE users.id = %d';
 
@@ -2383,19 +2401,22 @@ function show_equipment($game_user, $item, $options = array()) {
 
   if ($equipment_price === '0K') {
     $equipment_price = 'Free';
-  } else {
+  }
+  else {
     $equipment_price .= ' ' . $game_user->values;
   }
 
   if ($item->quantity_limit > 0) {
     $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-  } else {
+  }
+  else {
     $quantity_limit = '';
   }
 
   if (strpos($_SERVER['REQUEST_URI'], 'equipment') !== FALSE) {
     $link = 'equipment';
-  } else {
+  }
+  else {
     $link = 'weapons';
   }
 
@@ -2405,7 +2426,8 @@ function show_equipment($game_user, $item, $options = array()) {
   if ($soon) {
     $icon = "$game-soon.png";
     $a_start = $a_end = '';
-  } else {
+  }
+  else {
     $icon = "$game-$item->id.png";
     $a_start = "<a href=\"/$game/{$link}_buy/$arg2/$item->id/1\">";
     $a_end = '</a>';
@@ -2608,7 +2630,8 @@ EOF;
     </div>
 EOF;
 
-      } else {
+      }
+      else {
 
         echo <<< EOF
     <div class="land-payout">
@@ -2685,7 +2708,8 @@ EOF;
     </div>
 EOF;
 
-    } else {
+    }
+    else {
 
       echo <<< EOF
   <div class="land-button-wrapper">
@@ -2707,7 +2731,8 @@ EOF;
   </div>
 EOF;
 
-    } else {
+    }
+    else {
 
       echo <<< EOF
     <div class="land-sell-button not-yet">
@@ -2752,7 +2777,8 @@ firep($eq->name . ' wore out!');
 
       $failure_reason = $failure->message;
 
-    } else {
+    }
+    else {
 
       $failure_reason = t('Your @stuff has/have worn out',
         array('@stuff' => $stuff));
