@@ -71,7 +71,8 @@ EOF;
     db_set_active('default');
     return;
     
-  } else { // haven't chosen a password on this screen yet
+  }
+  else { // haven't chosen a password on this screen yet
 
   if (empty($game_user->password)) {
 
@@ -80,7 +81,8 @@ EOF;
 
     $quote2 = '&nbsp;';
 
-  } else {
+  }
+  else {
 
     $fetch_header($game_user); // allow them to navigate out of this
     $quote = "Hello, <em>$game_user->username</em>!&nbsp; What would you like

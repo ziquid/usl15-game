@@ -86,7 +86,7 @@ firep($see_more_offices_at);
 <div class="title">$location Elected Officials</div>
 EOF;
 
-  $sql = 'SELECT users.username, users.phone_id FROM elected_officials 
+  $sql = 'SELECT users.username, users.phone_id FROM elected_officials
     left join users on elected_officials.fkey_users_id = users.id
     WHERE fkey_elected_positions_id = 1
     and users.fkey_neighborhoods_id = %d;';
@@ -121,38 +121,38 @@ EOF;
     LEFT OUTER JOIN (
 
 -- type 1: neighborhood positions
-      
+
     SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_neighborhoods_id = %d
       AND elected_positions.type = 1
 
       UNION
-      
+
 -- type 2: party positions
-      
+
       SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_values_id = %d
       AND elected_positions.type = 2
 
       UNION
-      
+
 -- type 3: house positions
-      
+
       SELECT elected_officials.fkey_elected_positions_id,
         elected_officials.approval_rating, users.*
       FROM elected_officials
       LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions 
+      LEFT JOIN elected_positions
         ON elected_positions.id = elected_officials.fkey_elected_positions_id
       WHERE users.fkey_neighborhoods_id IN
         (SELECT id from neighborhoods where district = %d)
@@ -162,7 +162,7 @@ EOF;
     LEFT JOIN `values` ON blah.fkey_values_id = `values`.id
     LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = blah.id
     LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
-    
+
     WHERE elected_positions.min_level <= %d
     ORDER BY elected_positions.energy_bonus DESC, elected_positions.id ASC;';
 
@@ -201,7 +201,8 @@ firep($item);
         '/' . $item->ep_id . '">' . t('Run for office') . '</a>';
       $action_class = '';
 
-    } else { // existing officer
+    }
+    else { // existing officer
 
       $official_link .= '<br/><a href="/' . $game . '/user/' .
         $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
@@ -236,19 +237,22 @@ firep($item);
 
     if (empty($item->party_icon)) {
       $icon = $game . '_clan_none.png';
-    } else {
+    }
+    else {
       $icon = $game . '_clan_' . $item->party_icon . '.png';
     }
 
     if (empty($item->party_title)) {
       $party_title = t('Position Open');
-    } else {
+    }
+    else {
       $party_title = $item->party_title;
     }
 
     if (empty($item->experience)) {
       $experience = 0;
-    } else {
+    }
+    else {
       $experience = $item->experience;
     }
 
