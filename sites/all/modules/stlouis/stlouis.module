@@ -63,9 +63,11 @@ function stlouis_cron() {
 /*
   if (date('H') < 9) { // < 9AM -- 10 carolers every 15 mins
     $carolers_wanted = 20;
-  } elseif (date('H') < 17) { // < 5PM -- 25 carolers
+  }
+  elseif (date('H') < 17) { // < 5PM -- 25 carolers
     $carolers_wanted = 35;
-  } else { // >= 5PM -- 50 carolers
+  }
+  else { // >= 5PM -- 50 carolers
     $carolers_wanted = 55;
   }
 
@@ -311,45 +313,54 @@ function stlouis_init() {
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
 
-    } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) { // playbook CSS
+    }
+    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) { // playbook CSS
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
-    } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) { // iPad CSS
+    }
+    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) { // iPad CSS
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
 
-    } else if (substr(arg(2), 0, 4) == 'nkc ') { // nook css
+    }
+    else if (substr(arg(2), 0, 4) == 'nkc ') { // nook css
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
-    } else if (substr(arg(2), 0, 8) == 'facebook') { // facebook
+    }
+    else if (substr(arg(2), 0, 8) == 'facebook') { // facebook
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
 
-    } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
+    }
+    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
 
       if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=853') !== FALSE) {
 // 853dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width853.css');
 
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
 // 800dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width800.css');
 
-      } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
+      }
+      else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
         || (substr(arg(2), 0, 3) === 'ms=')) { // 768dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width768.css');
 
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
 // 600dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width600.css');
 
-      } else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
 // 533dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width533.css');
@@ -964,21 +975,29 @@ function _stlouis_format_date($epoch) {
 
   if ($time_diff < 10) {
     return t('A few seconds ago');
-  } else if ($time_diff < 60) {
+  }
+  else if ($time_diff < 60) {
     return t('@time seconds ago', array('@time' => $time_diff));
-  } else if ($time_diff < 120) {
+  }
+  else if ($time_diff < 120) {
     return t('1 minute ago');
-  } else if ($time_diff < 3600) {
+  }
+  else if ($time_diff < 3600) {
     return t('@time minutes ago', array('@time' => floor($time_diff / 60)));
-  } else if ($time_diff < 7200) {
+  }
+  else if ($time_diff < 7200) {
     return t('1 hour ago');
-  } else if ($time_diff < 86400) {
+  }
+  else if ($time_diff < 86400) {
     return t('@time hours ago', array('@time' => floor($time_diff / 3600)));
-  } else if ($time_diff < 172800) {
+  }
+  else if ($time_diff < 172800) {
     return t('A day ago');
-  } else if ($time_diff < 1728000) {
+  }
+  else if ($time_diff < 1728000) {
     return t('@time days ago', array('@time' => floor($time_diff / 86400)));
-  } else {
+  }
+  else {
     return date('d M Y', $epoch);
   }
 
@@ -1076,7 +1095,8 @@ function _stlouis_save_user_IP($game_user) {
     _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
     return TRUE;
 
-  } else { // existing entry
+  }
+  else { // existing entry
 
     $old_ip = substr($last_ip, 0, 6);
     $new_ip = substr($ip_addr, 0, 6);
@@ -1097,7 +1117,8 @@ to
 
 ' . $ip_addr);
 */
-      } else { // new ip address and a password -- gotta authenticate!
+      }
+      else { // new ip address and a password -- gotta authenticate!
 /*
           mail('joseph@cheek.com', 'new IP address hacking attempt?',
             'The IP address of PASSWORDED player ' .
@@ -1137,7 +1158,8 @@ function _stlouis_check_authKey($game_user) {
 
     $authKey = substr(arg(2), 21);
 
-  } else { // authkey in user agent
+  }
+  else { // authkey in user agent
 
     $agentBits = explode(' ', $_SERVER['HTTP_USER_AGENT']);
 
@@ -1173,7 +1195,8 @@ function _stlouis_check_authKey($game_user) {
 
     }
 
-  } else { // no authkey sent
+  }
+  else { // no authkey sent
 
     if ($game_user->authKey == $authKey) { // no key sent
 
@@ -1194,7 +1217,8 @@ function _stlouis_check_authKey($game_user) {
 
         }
 
-      } else {
+      }
+      else {
 
         if ((stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') === FALSE) &&
           (substr(arg(2), 0, 3) != 'ai-') &&
@@ -1276,11 +1300,14 @@ function _stlouis_get_phoneid() {
 
   if (arg(2) == 'facebook') {
     return (_stlouis_get_fbid());
-  } else if (arg(2) === 'null') {
+  }
+  else if (arg(2) === 'null') {
     drupal_goto('stlouis/playbook_null');
-  } else if (substr(arg(2), 0, 3) === 'ms=') {
+  }
+  else if (substr(arg(2), 0, 3) === 'ms=') {
     return (_stlouis_get_msid());
-  } else {
+  }
+  else {
     return check_plain(arg(2));
   }
 
@@ -1306,13 +1333,15 @@ function _stlouis_get_fbid() {
     $secret = '0b631d36aaba590fe31b2f1b9392aad7';
     $canvas_page = 'https://apps.facebook.com/uprisingstlouis/';
 
-  } else if (arg(0) == 'celestial_glory') {
+  }
+  else if (arg(0) == 'celestial_glory') {
 
     $app_id = '315942001775829';
     $secret = '648a1945d57bdad144677f5cfd045f62';
     $canvas_page = 'https://apps.facebook.com/celestial_glory/';
 
-  } else {
+  }
+  else {
     echo 'uhoh!  which game am i?'; exit;
   }
 
@@ -1715,7 +1744,8 @@ function _stlouis_fetch_user() {
     $game_user->actions, $game_user->actions_next_gain,
     $game_user->money, $game_user->skill_points, $game_user->id);
 
-  } else { // only save last_access
+  }
+  else { // only save last_access
 
     $sql = 'update users set last_access = CURRENT_TIMESTAMP
       where id = %d;';
@@ -1776,7 +1806,8 @@ function _stlouis_header($game_user) {
     $actions_text = ($game_user->actions > $game_user->actions_max ? '-' : '+') .
       '1 in ' . $actions_minutes . ':' . $actions_seconds;
 
-  } else {
+  }
+  else {
 
     $actions_minutes = $actions_seconds = 0;
 
@@ -1806,7 +1837,8 @@ function _stlouis_header($game_user) {
     $income_text = '+' . $income_str . ' in ' . $money_minutes .
       $money_secondsStr;
 
-  } else {
+  }
+  else {
 
     $money_minutes = $money_seconds = 0;
 
@@ -1816,7 +1848,8 @@ function _stlouis_header($game_user) {
 
   if (strlen($money_str) > 8) {
     $money_str = substr($money_str, 0, strlen($money_str) - 6) . 'M';
-  } elseif (strlen($money_str) > 5) {
+  }
+  elseif (strlen($money_str) > 5) {
     $money_str = substr($money_str, 0, strlen($money_str) - 3) . 'K';
   }
 
@@ -1829,7 +1862,8 @@ function _stlouis_header($game_user) {
       '/increase_skills/' . check_plain(arg(2)) . '/none">' . $game_user->level .
       '!</a></strong><div class="level-text">Level</div></div>';
 
-  } else {
+  }
+  else {
 
     $level_text = '<div class="level"><strong>' . $game_user->level .
       '</strong><div class="level-text">Level</div></div>';
@@ -1881,9 +1915,11 @@ firep('a prize is deserved!');
 // which prize should be given?
       if ($goal_obj->points >= 50000) {
         $prize_id = 37; // large gift
-      } else if ($goal_obj->points >= 5000) {
+      }
+      else if ($goal_obj->points >= 5000) {
         $prize_id = 36; // med gift
-      } else {
+      }
+      else {
         $prize_id = 35; // small gift
       }
 
@@ -1903,7 +1939,8 @@ firep('a prize is deserved!');
 // if ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
-      } else { // update record
+      }
+      else { // update record
 
         $sql = 'update equipment_ownership
           set quantity = quantity + 1
@@ -1945,7 +1982,8 @@ firep('a prize is deserved!');
           $new_goal_obj->points . '&nbsp;points.</div>
       </div>';
 
-    } else { // user doesn't get a prize
+    }
+    else { // user doesn't get a prize
 
 // if ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
@@ -2013,7 +2051,8 @@ $extra_messages
 
       if (energy > energy_max) {
         var operand = '-';
-      } else {
+      }
+      else {
         var operand = '+';
       }
 
@@ -2021,7 +2060,8 @@ $extra_messages
         operand + energy_to_add + ' in ' + energy_minutes + ':' +
         (energy_seconds < 10 ? '0' + energy_seconds : energy_seconds);
 
-    } else {
+    }
+    else {
 
       document.getElementById('energy-time').innerHTML = '';
 
@@ -2045,7 +2085,8 @@ $extra_messages
         operand + actions_to_add + ' in ' + actions_minutes + ':' +
         (actions_seconds < 10 ? '0' + actions_seconds : actions_seconds);
 
-    } else {
+    }
+    else {
 
       document.getElementById('actions-time').innerHTML = '';
 
@@ -2059,9 +2100,11 @@ $extra_messages
 
       if (money.toString().length > 8) {
         moneyStr = money.toString().substr(0,money.toString().length - 6) + "M";
-      } else if (money.toString().length > 5) {
+      }
+      else if (money.toString().length > 5) {
         moneyStr = money.toString().substr(0,money.toString().length - 3) + "K";
-      } else {
+      }
+      else {
         moneyStr = money.toString();
       }
 
@@ -2071,7 +2114,8 @@ $extra_messages
             "K";
         // money_secondsStr = "m";
         money_secondsStr = ':' + (money_seconds < 10 ? '0' + money_seconds : money_seconds);
-      } else {
+      }
+      else {
         money_to_addStr = money_to_add.toString();
         money_secondsStr = ':' + (money_seconds < 10 ? '0' + money_seconds : money_seconds);
       }
