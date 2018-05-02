@@ -105,7 +105,8 @@
 //firep("$sql, $staff_id, $game_user->id, $quantity");
       $result = db_query($sql, $staff_id, $game_user->id, $quantity);
 
-    } else { // existing record - update it
+    }
+    else { // existing record - update it
 
       $sql = 'update staff_ownership set quantity = quantity + %d where
         fkey_staff_id = %d and fkey_users_id = %d;';
@@ -131,7 +132,8 @@
 
     $game_user = $fetch_user(); // reprocess user object
 
-  } else { // failed - add option to try an election
+  }
+  else { // failed - add option to try an election
 
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
@@ -175,7 +177,8 @@ EOF;
 
   if ($game_staff->quantity_limit > 0) {
     $quantity_limit = '<em>(Limited to ' . $game_staff->quantity_limit . ')</em>';
-  } else {
+  }
+  else {
     $quantity_limit = '';
   }
 
@@ -264,15 +267,16 @@ EOF;
 
     if ($option == $orig_quantity) {
       echo '<option selected="selected" value="' . $option . '">' .
-       	$option . '</option>';
-    } else {
+        $option . '</option>';
+    }
+    else {
       echo '<option value="' . $option . '">' . $option . '</option>';
     }
 
   }
 
   echo <<< EOF
-       	</select>
+        </select>
       </div>
       <input class="land-buy-button" type="submit" Value="Hire"/>
     </form>
@@ -330,7 +334,8 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
@@ -460,7 +465,8 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 

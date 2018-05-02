@@ -14,19 +14,19 @@
   $sql = 'update users set expenses =
 
     ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
-    as expenses from equipment 
+    as expenses from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d)
-    
+
     +
-    
+
     (SELECT sum(staff.upkeep * staff_ownership.quantity)
-    as expenses from staff 
+    as expenses from staff
     left join staff_ownership
     on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d))
-    
+
     where id = %d;';
   $result = db_query($sql, $game_user->id, $game_user->id, $game_user->id);
 
@@ -49,7 +49,7 @@
   <a href="/$game/equipment/$arg2" class="button">Equipment</a>
   <a href="/$game/staff/$arg2" class="button active">Staff</a>
   <a href="/$game/agents/$arg2" class="button">Agents</a>
-</div>  
+</div>
 EOF;
 
   if ($game_user->level < 15) {
@@ -78,22 +78,22 @@ EOF;
   $data = array();
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND ((required_level <= %d
       ' . $land_active . '
       AND is_loot = 0)
@@ -122,14 +122,15 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
     echo <<< EOF
 <div class="land">
   <div class="land-icon"><a href="/$game/staff_hire/$arg2/$item->id/1"><img
-    src="/sites/default/files/images/staff/$game-$item->id.png" 
+    src="/sites/default/files/images/staff/$game-$item->id.png"
     width="96" border="0"></a></div>
   <div class="land-details">
     <div class="land-name"><a
@@ -240,7 +241,8 @@ EOF;
         reduced by $rat_change%</div>
 EOF;
 
-        } else {
+        }
+        else {
 
           echo <<< EOF
       <div class="land-payout">Effect: $target approval rating is
@@ -290,22 +292,22 @@ EOF;
 
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
-    
+
     LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
     AND staff_ownership.fkey_users_id = %d
 
     WHERE ((
       fkey_neighborhoods_id = 0
       OR fkey_neighborhoods_id = %d
-    ) 
-    
+    )
+
     AND
-    
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
     AND required_level > %d
     AND active = 1
     AND is_loot = 0
@@ -329,7 +331,8 @@ firep($item);
 
     if ($item->quantity_limit > 0) {
       $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
-    } else {
+    }
+    else {
       $quantity_limit = '';
     }
 
