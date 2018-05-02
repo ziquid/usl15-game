@@ -1,28 +1,28 @@
 <?php
 
   global $game, $phone_id;
-  
+
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
   $game_user = $fetch_user();
   $arg2 = check_plain(arg(2));
 
-/*  
+/*
   if ($game == 'celestial_glory') {
-    
+
     $error_msg =<<< EOF
 <p>Bishop Danielson returns.</p>
 <p class="second">&quot;Your family won't be here for a few more
   minutes.&nbsp; I'll take you to play with some other members of our ward.&nbsp;
   They like to scripture chase.&nbsp; You might find it fun!
-</p>    
+</p>
 EOF;
 
   }
 */
   if ($game_user->level < 6) {
-    
+
   echo <<< EOF
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
@@ -39,16 +39,16 @@ EOF;
 </div>
 <div class="subtitle"><a
   href="/$game/quests/$arg2"><img
-  src="/sites/default/files/images/{$game}_continue.png"/></a></div>  
+  src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
     db_set_active('default');
     return;
-    
+
   }
 
   $username = trim(check_plain($_GET['username']));
-  
+
   if (strlen($username) > 0 and strlen($username) < 3) {
     $error_msg .= '<div class="username-error">Your name must be at least 3
       characters long.</div>';
@@ -65,15 +65,16 @@ firep('$isdupusername = ' . $isdupusername);
   }
 
 // if they have chosen a username and it's not a dupe
-  if ($username != '' && !$isdupusername) {    
+  if ($username != '' && !$isdupusername) {
     $sql = 'update users set username = "%s" where id = %d;';
     $result = db_query($sql, $username, $game_user->id);
-      
+
     if (empty($game_user->username)) { // first timer
 
       drupal_goto($game . '/debates/' . $arg2);
 
-    } else { // changing existing name
+    }
+    else { // changing existing name
 
       if ($game_user->username != $username) {
 // only do this if they chose something new
@@ -93,8 +94,9 @@ firep('$isdupusername = ' . $isdupusername);
       drupal_goto($game . '/user/' . $arg2);
 
     }
-    
-  } else { // haven't chosen a username on this screen, or chose a duplicate
+
+  }
+  else { // haven't chosen a username on this screen, or chose a duplicate
 
     if ($isdupusername) { // set an error message if a dup
 
@@ -104,7 +106,8 @@ firep('$isdupusername = ' . $isdupusername);
   <p class="second">Please choose a different name and try again.</p>
 EOF;
 
-    } else {
+    }
+    else {
       $msgUserDuplicate = '<p>&nbsp;</p>';
     }
 
@@ -112,7 +115,8 @@ EOF;
 
     $quote = "By the way, what's your name?";
 
-  } else {
+  }
+  else {
 
     $fetch_header($game_user); // allow them to navigate out of this
     $quote = "Hello, <em>$game_user->username</em>!&nbsp; What would you like
