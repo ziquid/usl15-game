@@ -29,12 +29,14 @@ if (is_numeric($group_to_show)) {
 
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
 
-} elseif ($game_user->level < 6) { // show beginning quests
+}
+elseif ($game_user->level < 6) { // show beginning quests
 
   $group_to_show = '0';
   $sql_quest_neighborhood = 'where `group` = 0';
 
-} else { // show the group for which the player last successfully completed a quest
+}
+else { // show the group for which the player last successfully completed a quest
 
   $group_to_show = $game_user->fkey_last_played_quest_groups_id;
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;

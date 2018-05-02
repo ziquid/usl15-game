@@ -201,7 +201,8 @@ firep($eq->name . ' wore out!');
       
       echo '<div class="subtitle">' . t('Your @stuff has worn out',
         array('@stuff' => strtolower($eq->name))) . '</div>';
-    } else {
+    }
+    else {
 firep($eq->name . ' did NOT wear out');
     }
     
