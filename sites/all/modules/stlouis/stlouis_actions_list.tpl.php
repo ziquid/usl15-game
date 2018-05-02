@@ -30,7 +30,7 @@
 </div>
 <div class="subtitle"><a
   href="/$game/quests/$arg2"><img
-    src="/sites/default/files/images/{$game}_continue.png"/></a></div>  
+    src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
     db_set_active('default');
@@ -151,7 +151,8 @@ EOF;
 
     if (!empty($item->fkey_equipment_id)) {
       $image = "/sites/default/files/images/equipment/$game-$item->fkey_equipment_id.png";
-    } else {
+    }
+    else {
       $image = "/sites/default/files/images/staff/$game-$item->fkey_staff_id.png";
     }
 
@@ -214,7 +215,8 @@ EOF;
       reduced by $rat_change%</div>
 EOF;
 
-      } else {
+      }
+      else {
 
         echo <<< EOF
     <div class="land-payout">Effect: $target approval rating is
@@ -302,7 +304,7 @@ EOF;
     if ($item->competency_enhanced_1 != 0) {
       echo <<< EOF
     <div class="land-payout">
-      Effect: Competency enhanced: 
+      Effect: Competency enhanced:
       <span class="initial-caps">$item->competency_name_1</span>
     </div>
 EOF;
@@ -310,7 +312,7 @@ EOF;
     if ($item->competency_enhanced_2 != 0) {
       echo <<< EOF
     <div class="land-payout">
-      Effect: Competency enhanced: 
+      Effect: Competency enhanced:
       <span class="initial-caps">$item->competency_name_2</span>
     </div>
 EOF;
@@ -396,47 +398,47 @@ EOF;
             clan_members.is_clan_leader, clans.acronym AS clan_acronym
             FROM elected_positions
             RIGHT JOIN (
-            
+
 -- type 1: neighborhood positions
-            
+
             SELECT elected_officials.fkey_elected_positions_id,
               elected_officials.approval_rating, users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions 
+            LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_neighborhoods_id = %d
             AND elected_positions.type = 1
-      
+
             UNION
-            
+
 -- type 2: party positions
-            
+
             SELECT elected_officials.fkey_elected_positions_id,
               elected_officials.approval_rating, users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions 
+            LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_values_id = %d
             AND elected_positions.type = 2
 
             UNION
-            
+
 -- type 3: district positions
-            
+
             SELECT elected_officials.fkey_elected_positions_id,
               elected_officials.approval_rating, users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions 
+            LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_neighborhoods_id IN
               (SELECT id from neighborhoods where district = %d)
             AND elected_positions.type = 3
 
             ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
-            
+
             LEFT OUTER JOIN clan_members
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
@@ -458,19 +460,19 @@ EOF;
             clan_members.is_clan_leader, clans.acronym AS clan_acronym
             FROM elected_positions
             RIGHT JOIN (
-            
+
 -- type 1: neighborhood positions
-            
+
             SELECT elected_officials.fkey_elected_positions_id,
               elected_officials.approval_rating, users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions 
+            LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_neighborhoods_id = %d
             AND elected_positions.type = 1
             ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
-            
+
             LEFT OUTER JOIN clan_members
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
@@ -496,12 +498,12 @@ EOF;
               elected_officials.approval_rating, users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions 
+            LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_values_id = %d
             AND elected_positions.type = 2
             ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
-            
+
             LEFT OUTER JOIN clan_members
               ON clan_members.fkey_users_id = blah.id
             LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
@@ -583,7 +585,8 @@ EOF;
 
         }
 
-      } else { // full list foreach()
+      }
+      else { // full list foreach()
 
         foreach ($data2 as $user) {
 // firep($user);

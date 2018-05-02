@@ -18,7 +18,7 @@
     $fetch_header($game_user);
 
     echo <<< EOF
-<div class="title">Frozen!</div> 
+<div class="title">Frozen!</div>
 <div class="subtitle">You have been tagged and cannot perform any actions</div>
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
@@ -82,12 +82,12 @@ EOF;
   $sql = 'SELECT username, phone_id, elected_positions.name as ep_name,
     elected_positions.id as ep_id, experience, fkey_neighborhoods_id, luck,
     level from users
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     where users.id = %d';
 
   $result = db_query($sql, $_GET['target']);
@@ -211,7 +211,7 @@ if ($action_succeeded) {
 
     // Save the record of what happened, if positive and not done to yourself.
     if (($game_user->id != $target_id) && ($inf_change > 0)) {
-      $sql = 'insert into challenge_history 
+      $sql = 'insert into challenge_history
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
         fkey_elected_positions_id, won, desc_short, desc_long) values
         ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -237,7 +237,8 @@ if ($action_succeeded) {
       $target_name = 'Your';
       $target_id = $game_user->id;
 
-    } else { // target, negative, or smaller positive ratings
+    }
+    else { // target, negative, or smaller positive ratings
 
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
       $target_id = $_GET['target'];
@@ -305,7 +306,8 @@ if ($action_succeeded) {
     if ($action->values_change > 0) {
       $verb = 'increased';
       $money = $action->values_change;
-    } else {
+    }
+    else {
       $verb = 'decreased';
       $item = db_fetch_object($result);
       $money = -min(-$action->values_change, $item->money);
@@ -337,7 +339,8 @@ if ($action_succeeded) {
     if ($action->actions_change > 0) {
       $verb = 'increased';
       $act_change = $action->actions_change;
-    } else {
+    }
+    else {
       $verb = 'decreased';
       $item = db_fetch_object($result);
       $act_change = -min(-$action->actions_change, $item->actions);
@@ -483,7 +486,8 @@ firep($st->name . ' has run away!');
       href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
       '?target=' . $_GET['target'] .
       '">Do it again</a></div></div>';
-    } else {
+    }
+    else {
       $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election not-yet">Can\'t do it again</div></div>';
     }
