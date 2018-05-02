@@ -387,17 +387,17 @@ firep("His/her $extra_defending_votes voters vote for him/her");
 
       $extra_votes += 10000;
 firep('10000 extra voters spontaneously arrive to vote for you!');
-mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
-  "$item->username [$opp_influence] in $location is voted out of office");
+//mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
+//  "$item->username [$opp_influence] in $location is voted out of office");
 
     }
     else if ($my_influence > 100000) { // challenger has too much influence
 // do not allow him/her to challenge
 
-mail('joseph@cheek.com',
-  'Challenger for Alder in training hood has too much influence!',
-  "$game_user->username [$my_influence] in $location " .
-  'is not allowed to challenge.');
+//mail('joseph@cheek.com',
+//  'Challenger for Alder in training hood has too much influence!',
+//  "$game_user->username [$my_influence] in $location " .
+//  'is not allowed to challenge.');
 
       echo '<div class="election-failed">' . t('Sorry!') . '</div>';
       echo '<div class="subtitle">' .
@@ -413,9 +413,8 @@ mail('joseph@cheek.com',
 
   }
 
-// get voters
-
-  $data = array();
+  // Get voters.
+  $data = [];
 
   if ($item->type == 1) { // neighborhood
 
