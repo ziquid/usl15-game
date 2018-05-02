@@ -776,7 +776,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   // Add message to user.
   $sql = 'insert into user_messages (fkey_users_from_id,
     fkey_users_to_id, message) values (%d, %d, "%s");';
-  $message = $ep_name . ' ' . $game_user->username . ' has declared you 
+  $message = $ep_name . ' ' . $game_user->username . ' has declared you
     persona non grata.  You have been kicked out of ' . $location . '.';
   db_query($sql, $game_user->id, $target_id, $message);
 
@@ -817,7 +817,7 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
   $location = $data->name;
 
   $data = array();
-  $sql = 'SELECT username, experience, initiative, endurance, 
+  $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
     `values`.party_title, `values`.party_icon,
@@ -828,24 +828,24 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
     clans.name as clan_name, clans.acronym as clan_acronym,
     clans.rules as clan_rules,
     neighborhoods.name as location
-    
+
     FROM `users`
-    
+
     LEFT JOIN `values` ON users.fkey_values_id = `values`.id
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
-    
+
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id = users.id
-    
+
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
-    
-    where ( users.actions_next_gain > "%s" OR users.energy_next_gain > "%s" ) 
+
+    where ( users.actions_next_gain > "%s" OR users.energy_next_gain > "%s" )
     and users.fkey_neighborhoods_id = %d
     and username <> ""
     ORDER by users.experience DESC;';
@@ -929,7 +929,7 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
     include drupal_get_path('module', $game) . '/game_defs.inc';
 
     $data = [];
-    $sql = 'SELECT username, experience, initiative, endurance, 
+    $sql = 'SELECT username, experience, initiative, endurance,
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
       `values`.party_title, `values`.party_icon,
@@ -940,24 +940,24 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
       clans.name as clan_name, clans.acronym as clan_acronym,
       clans.rules as clan_rules,
       neighborhoods.name as location
-      
+
       FROM `users`
-      
+
       LEFT JOIN `values` ON users.fkey_values_id = `values`.id
-      
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = users.id
-      
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id = users.id
-      
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-      
+
       LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
-      
-      where ( users.actions_next_gain > "%s" OR users.energy_next_gain > "%s" ) 
+
+      where ( users.actions_next_gain > "%s" OR users.energy_next_gain > "%s" )
       and users.fkey_values_id = %d
       and username <> ""
       ORDER by users.experience DESC;';
@@ -1134,7 +1134,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
 
     }
 
-    $sql = 'insert into challenge_history 
+    $sql = 'insert into challenge_history
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
         fkey_elected_positions_id, won, desc_short, desc_long) values
         ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -1203,7 +1203,7 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
     return FALSE;
   }
 
-  $sql = 'insert into challenge_history 
+  $sql = 'insert into challenge_history
     (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
     fkey_elected_positions_id, won, desc_short, desc_long) values
     ("egging", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -1255,7 +1255,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
     return FALSE;
   }
 
-  $sql = 'insert into challenge_history 
+  $sql = 'insert into challenge_history
     (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
     fkey_elected_positions_id, won, desc_short, desc_long) values
     ("gossip", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -1284,7 +1284,7 @@ function _stlouis_action_plant_flowers_function(&$outcome_reason, $target, &$can
     return FALSE;
   }
 
-  $sql = 'insert into challenge_history 
+  $sql = 'insert into challenge_history
     (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
     fkey_elected_positions_id, won, desc_short, desc_long) values
     ("planting", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -1367,7 +1367,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   }
 
   // Now save the record of what happened.
-  $sql = 'insert into challenge_history 
+  $sql = 'insert into challenge_history
     (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
     fkey_elected_positions_id, won, desc_short, desc_long) values
     ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -1393,25 +1393,25 @@ function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target,
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
     clans.acronym as clan_acronym
-  
+
     from challenge_history
-    
+
     left join users on challenge_history.fkey_from_users_id = users.id
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
-    where fkey_to_users_id = %d and challenge_history.type = "egging" 
+
+    where fkey_to_users_id = %d and challenge_history.type = "egging"
     AND challenge_history.timestamp >= "%s"
-    
+
     order by challenge_history.timestamp DESC;';
 
   $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
@@ -1473,22 +1473,22 @@ function _stlouis_action_critique_last_debates_function(&$outcome_reason, $targe
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
     clans.acronym as clan_acronym
-  
+
     from challenge_history
-    
+
     left join users on challenge_history.fkey_from_users_id = users.id
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
     where (fkey_from_users_id = %d OR fkey_to_users_id = %d)
     and challenge_history.type = "debate"
     order by challenge_history.timestamp DESC
@@ -1554,22 +1554,22 @@ EOF;
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
       clans.acronym as clan_acronym
-    
+
       from challenge_history
-      
+
       left join users on challenge_history.fkey_from_users_id = users.id
-      
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
       where fkey_to_users_id = %d and challenge_history.type = "gossip"
       and challenge_history.timestamp >= "%s"
       order by challenge_history.timestamp DESC;';
@@ -1638,22 +1638,22 @@ EOF;
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
       clans.acronym as clan_acronym
-    
+
       from challenge_history
-      
+
       left join users on challenge_history.fkey_from_users_id = users.id
-      
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
       where fkey_to_users_id = %d and challenge_history.type = "gift" and
       challenge_history.timestamp >= "%s"
       order by timestamp DESC;';
@@ -1738,22 +1738,22 @@ EOF;
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
       clans.acronym as clan_acronym
-    
+
       from challenge_history
-      
+
       left join users on challenge_history.fkey_from_users_id = users.id
-      
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       challenge_history.fkey_from_users_id
-    
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
       where challenge_history.fkey_neighborhoods_id = %d
       and challenge_history.timestamp >= "%s"
       and challenge_history.timestamp <= "%s"
@@ -1769,7 +1769,8 @@ EOF;
 
     if ($hour_to_show == 1) {
     	$hours = 'hour';
-    } else {
+    }
+    else {
     	$hours = 'hours';
     }
 
@@ -1787,7 +1788,8 @@ EOF;
 </div>
 EOF;
 
-    } else {
+    }
+    else {
 
     	$outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
@@ -1813,7 +1815,8 @@ EOF;
 </div>
 EOF;
 
-    } else {
+    }
+    else {
 
       $outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
@@ -1854,7 +1857,8 @@ EOF;
       		if ($instance_count > 1) {
       			$instance_text = "($instance_count times) ";
       			$time_prefix = 'Starting ';
-      		} else {
+          }
+          else {
       			$instance_text = $time_prefix = '';
       		}
 
@@ -1890,7 +1894,8 @@ EOF;
         $old_clan_acronym = $clan_acronym;
         $old_display_time = $display_time;
 
-      } else { // dup of existing item... abbreviate
+      }
+      else { // dup of existing item... abbreviate
 
       	$instance_count++;
 
@@ -2011,7 +2016,7 @@ EOF;
       fkey_users_to_id, message) values (%d, %d, "%s");';
     $message = $ep_name . ' ' . $game_user->username .
     ' has expelled you from the ' .
-    $data->party_title . ' ' . $party . '. &nbsp; You have been stripped 
+    $data->party_title . ' ' . $party . '. &nbsp; You have been stripped
       of 10% of your influence and of your aides.';
     $result = db_query($sql, $game_user->id, $target_id, $message);
 
@@ -2076,7 +2081,8 @@ EOF;
       $sql = 'delete from clans where id = %d;';
       $result = db_query($sql, $item->id);
 
-    } else {
+    }
+    else {
 
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $target_id);
@@ -2087,7 +2093,7 @@ EOF;
 
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
-    as income from land 
+    as income from land
     left join land_ownership
     on land_ownership.fkey_land_id = land.id and
     land_ownership.fkey_users_id = %d)
@@ -2099,19 +2105,19 @@ EOF;
   $sql = 'update users set expenses =
 
     ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
-    as expenses from equipment 
+    as expenses from equipment
     left join equipment_ownership
     on equipment_ownership.fkey_equipment_id = equipment.id and
     equipment_ownership.fkey_users_id = %d)
-    
+
     +
-    
+
     (SELECT sum(staff.upkeep * staff_ownership.quantity)
-    as expenses from staff 
+    as expenses from staff
     left join staff_ownership
     on staff_ownership.fkey_staff_id = staff.id and
     staff_ownership.fkey_users_id = %d))
-    
+
     where id = %d;';
   $result = db_query($sql, $target_id, $target_id, $target_id);
 
@@ -2156,22 +2162,22 @@ EOF;
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
       clans.acronym as clan_acronym
-    
+
       from challenge_history
-      
+
       left join users on challenge_history.fkey_to_users_id = users.id
-      
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = challenge_history.fkey_to_users_id
-    
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       challenge_history.fkey_to_users_id
-    
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
       where fkey_from_users_id = %d and challenge_history.type = "election"
       order by timestamp DESC limit 1;';
 
@@ -2243,22 +2249,22 @@ function _stlouis_action_get_challenge_results_function(&$outcome_reason, $targe
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
     clans.acronym as clan_acronym
-  
+
     from challenge_history
-    
+
     left join users on challenge_history.fkey_from_users_id = users.id
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     challenge_history.fkey_from_users_id
-  
+
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
     where fkey_to_users_id = %d and challenge_history.type = "election"
     order by timestamp DESC limit 5;';
 
@@ -2759,7 +2765,8 @@ firep($item);
           where id = %d;', $item->id);
         $lock_acquired = TRUE;
         $lock_try = 0;
-      } else {
+      }
+      else {
         $lock_try++;
         sleep(1);
       }
@@ -2819,7 +2826,7 @@ firep($item);
 
       values ($game_user->id, %d, "deposit", %d,
         (SELECT users.fkey_values_id
-        FROM  `bank_accounts` 
+        FROM  `bank_accounts`
         LEFT JOIN users ON users.id = bank_accounts.fkey_users_id
         WHERE bank_accounts.account_number = %d),
       %d, %d, 1.00, 1.00, %d, 20, %d, %d, %d);';
@@ -2942,7 +2949,8 @@ firep($item);
           where id = %d;', $item->id);
         $lock_acquired = TRUE;
         $lock_try = 0;
-      } else {
+      }
+      else {
         $lock_try++;
         sleep(1);
       }
@@ -3000,7 +3008,7 @@ firep($item);
 
       values ($game_user->id, %d, "withdrawal", %d,
         (SELECT users.fkey_values_id
-        FROM  `bank_accounts` 
+        FROM  `bank_accounts`
         LEFT JOIN users ON users.id = bank_accounts.fkey_users_id
         WHERE bank_accounts.account_number = %d),
       %d, %d, 1.00, 1.00, %d, 0, 0, %d, %d);';
@@ -3051,11 +3059,11 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   $game_user = _stlouis_fetch_user();
 
   $sql = 'SELECT elected_officials.id
-      FROM elected_officials 
-      LEFT JOIN users ON elected_officials.fkey_users_id = users.id 
-      LEFT JOIN elected_positions 
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id 
-      WHERE users.fkey_neighborhoods_id = %d 
+      FROM elected_officials
+      LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+      LEFT JOIN elected_positions
+      ON elected_positions.id = elected_officials.fkey_elected_positions_id
+      WHERE users.fkey_neighborhoods_id = %d
       AND elected_positions.type = 1
       AND users.id = %d';
 
@@ -3083,12 +3091,12 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $target_id = $_GET['target'];
 
     $sql = 'SELECT elected_officials.id
-      FROM elected_officials 
-      LEFT JOIN users ON elected_officials.fkey_users_id = users.id 
-      LEFT JOIN elected_positions 
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id 
-      WHERE users.fkey_values_id = %d 
-      AND elected_positions.type = 2 
+      FROM elected_officials
+      LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+      LEFT JOIN elected_positions
+      ON elected_positions.id = elected_officials.fkey_elected_positions_id
+      WHERE users.fkey_values_id = %d
+      AND elected_positions.type = 2
       AND users.id = %d';
 
     $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
@@ -3167,7 +3175,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
 
       return TRUE;
 
-    } else {
+    }
+    else {
 
       switch(mt_rand(0, 1)) {
 
@@ -3449,7 +3458,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           $outcome_reason .= '<div class="title">You already have one, but you
             thank him anyway</div>';
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
@@ -3535,7 +3545,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           by talking with them</div>
         <div class="title">So go meet someone new!</div>';
 
-    } else if ($data->quantity >= 10) { // already have ten
+    }
+    else if ($data->quantity >= 10) { // already have ten
 
       $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
@@ -3546,7 +3557,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
 
       $can_do_again = FALSE;
 
-    } else { // need one more
+    }
+    else { // need one more
 
       $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
@@ -3683,7 +3695,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           where id = %d;';
         $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 
-      } else {
+      }
+      else {
 
         $outcome_reason = '<div class="title">Oh no!</div>
           <div class="subtitle">The Grinch has visited ' .
@@ -3981,7 +3994,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
             where fkey_equipment_id = 29 and fkey_users_id = %d;';
           $result = db_query($sql, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
@@ -4020,7 +4034,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
             where fkey_equipment_id = 30 and fkey_users_id = %d;';
           $result = db_query($sql, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
@@ -4059,7 +4074,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
             where fkey_equipment_id = 31 and fkey_users_id = %d;';
           $result = db_query($sql, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
@@ -4181,7 +4197,7 @@ firep($target);
       $game_user->values . ' is increased by ' . $money . ' (' .
       $item->count . ' players here)</div>';
 
-    $sql = 'insert into challenge_history 
+    $sql = 'insert into challenge_history
       (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
       fkey_elected_positions_id, won, desc_short, desc_long) values
       ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
@@ -4650,7 +4666,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -4690,7 +4707,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -4730,7 +4748,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -4769,7 +4788,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_equipment_id, fkey_users_id, quantity) values
@@ -4808,7 +4828,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_equipment_id, fkey_users_id, quantity) values
@@ -4847,7 +4868,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_eqiupment_id, fkey_users_id, quantity) values
@@ -4878,7 +4900,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -4909,7 +4932,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -4940,7 +4964,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5107,7 +5132,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5147,7 +5173,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5187,7 +5214,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5226,7 +5254,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_equipment_id, fkey_users_id, quantity) values
@@ -5266,7 +5295,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -5306,7 +5336,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -5338,7 +5369,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5370,7 +5402,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5402,7 +5435,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5568,7 +5602,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5608,7 +5643,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5648,7 +5684,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5688,7 +5725,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_equipment_id, fkey_users_id, quantity) values
@@ -5728,7 +5766,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -5768,7 +5807,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -5802,7 +5842,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -5836,7 +5877,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -6036,7 +6078,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -6076,7 +6119,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -6116,7 +6160,8 @@ EOF;
             where fkey_land_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $land, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into land_ownership
             (fkey_land_id, fkey_users_id, quantity) values
@@ -6156,7 +6201,8 @@ EOF;
             where fkey_equipment_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $equipment, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into equipment_ownership
             (fkey_equipment_id, fkey_users_id, quantity) values
@@ -6196,7 +6242,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -6236,7 +6283,8 @@ EOF;
             where fkey_staff_id = %d and fkey_users_id = %d;';
           $result = db_query($sql, $staff, $game_user->id);
 
-        } else {
+        }
+        else {
 
           $sql = 'insert into staff_ownership
             (fkey_staff_id, fkey_users_id, quantity) values
@@ -6293,7 +6341,7 @@ EOF;
 
     if (mt_rand(0, 9) == 0) { // time waster
 
-      $outcome_reason .= '<div class="title">But... your time 
+      $outcome_reason .= '<div class="title">But... your time
         was completely wasted</div>
         <div class="title"><img
           src="/sites/default/files/images/stlouis-frustrated-official.png"/>
@@ -6311,10 +6359,12 @@ EOF;
     if ($game_user->level > 100) {
       $equipment = 37;
       $major_action_timer = 900; // secs for major action
-    } else if ($game_user->level > 50) {
+    }
+    else if ($game_user->level > 50) {
       $equipment = 36;
       $major_action_timer = 600; // secs for major action
-    } else {
+    }
+    else {
       $equipment = 35;
       $major_action_timer = 360; // secs for major action
     }
@@ -6336,7 +6386,8 @@ EOF;
         where fkey_equipment_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $equipment, $game_user->id);
 
-    } else {
+    }
+    else {
 
       $sql = 'insert into equipment_ownership
         (fkey_equipment_id, fkey_users_id, quantity) values
