@@ -39,7 +39,7 @@ Come back at level 6.&quot;</p>
 </div>
 <div class="subtitle"><a
 href="/$game/quests/$arg2"><img
-  src="/sites/default/files/images/{$game}_continue.png"/></a></div>  
+  src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
 if (substr($phone_id, 0, 3) == 'ai-')
@@ -93,8 +93,8 @@ if ($game_user->last_bonus_date != $today) {
 
   // Add competency for work.
   $sql = 'SELECT land.fkey_enhanced_competencies_id FROM `land`
-  left join land_ownership on land_ownership.fkey_land_id = land.id 
-  left join users on users.id = land_ownership.fkey_users_id 
+  left join land_ownership on land_ownership.fkey_land_id = land.id
+  left join users on users.id = land_ownership.fkey_users_id
   WHERE users.id = %d and land.type = "job"';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
@@ -353,7 +353,8 @@ if ($game_user->fkey_clans_id > 0) {
     href="/$game/clan_list/$arg2/{$game_user->fkey_clans_id}" />
 EOF;
 
-} else {
+}
+else {
 
   echo <<< EOF
   <area shape="rect" coords="$coords" alt="Clan"
@@ -431,7 +432,8 @@ if ($elected_official_type == 2) { // if a party official
 //firep($clan_id_to_use);
   $limit = 50;
 
-} else {
+}
+else {
 
   $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
   $clan_id_to_use = $game_user->fkey_clans_id;
@@ -460,9 +462,9 @@ $sql = '
   where fkey_users_to_id = %d
   order by timestamp DESC limit %d
   )
-  
+
   union
-  
+
   (
   select challenge_messages.timestamp, challenge_messages.message,
   users.username, users.phone_id,
@@ -494,8 +496,8 @@ $sql = '
   clans.acronym as clan_acronym,
   0 AS private,
   "party" as type
-  from party_messages 
-  left join users on party_messages.fkey_neighborhoods_id = 
+  from party_messages
+  left join users on party_messages.fkey_neighborhoods_id =
     users.fkey_neighborhoods_id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
@@ -508,9 +510,9 @@ $sql = '
   and party_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
-  
+
   union
-  
+
   (
   select clan_messages.timestamp, clan_messages.message,
   users.username, users.phone_id,
@@ -519,7 +521,7 @@ $sql = '
   clans.acronym as clan_acronym,
   0 AS private,
   "clan" as type
-  from clan_messages 
+  from clan_messages
   left join users on clan_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
@@ -531,9 +533,9 @@ $sql = '
   ' . $clan_sql . '
   order by timestamp DESC limit %d
   )
-      
+
   union
-  
+
   (
   select values_messages.timestamp, values_messages.message,
   users.username, users.phone_id,
@@ -542,7 +544,7 @@ $sql = '
   clans.acronym as clan_acronym,
   0 AS private,
   "values" as type
-  from values_messages 
+  from values_messages
   left join users on values_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
@@ -555,9 +557,9 @@ $sql = '
 --    AND values_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
-  
+
   union
-  
+
   (
   select system_messages.timestamp, system_messages.message,
   NULL AS username, NULL as phone_id,
@@ -566,7 +568,7 @@ $sql = '
   NULL AS clan_acronym,
   0 AS private,
   "system" as type
-  from system_messages 
+  from system_messages
   left join users on system_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
@@ -577,7 +579,7 @@ $sql = '
 --    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   order by timestamp DESC limit %d
   )
-  
+
   order by timestamp DESC limit %d;';
 //firep($sql);
 
@@ -616,7 +618,8 @@ foreach ($data as $item) {
 
   if ($item->private) {
     $private_css = 'private';
-  } else {
+  }
+  else {
     $private_css = '';
   }
 
@@ -627,7 +630,8 @@ foreach ($data as $item) {
     $username = '';
     $reply = '';
 
-  } else {
+  }
+  else {
 
     $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
       $clan_acronym;
@@ -660,21 +664,21 @@ $sql = 'select user_messages.*, users.username, users.phone_id,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym
 
-  from user_messages 
-  
+  from user_messages
+
   left join users on user_messages.fkey_users_from_id = users.id
-  
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
-  
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     user_messages.fkey_users_from_id
-  
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
   where fkey_users_to_id = %d
   order by timestamp DESC limit 20;';
 $result = db_query($sql, $game_user->id);
@@ -696,7 +700,8 @@ foreach ($data as $item) {
 
   if ($item->private) {
     $private_css = 'private';
-  } else {
+  }
+  else {
     $private_css = '';
   }
 
@@ -729,22 +734,22 @@ $sql = 'select challenge_messages.*, users.username, users.phone_id,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym
-  
-  from challenge_messages 
-  
+
+  from challenge_messages
+
   left join users on challenge_messages.fkey_users_from_id = users.id
-  
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
-  
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     challenge_messages.fkey_users_from_id
-  
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
   where fkey_users_to_id = %d
   order by timestamp DESC limit 20;';
 $result = db_query($sql, $game_user->id);
@@ -798,7 +803,8 @@ if ($game_user->can_broadcast_to_party || $game_user->fkey_clans_id ||
 <div class="message-title">Send a message to your clan</div>
 EOF;
 
-  } else {
+  }
+  else {
 
     echo <<< EOF
 <div class="message-title">Send a message to your constituents or clan</div>
@@ -844,30 +850,30 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   "party" as type
-  
-  from party_messages 
-  
-  left join users on party_messages.fkey_neighborhoods_id = 
+
+  from party_messages
+
+  left join users on party_messages.fkey_neighborhoods_id =
     users.fkey_neighborhoods_id
-  
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
-  
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     party_messages.fkey_users_from_id
-  
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
   where elected_officials.fkey_users_id = fkey_users_from_id
     and party_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
-  
+
   union
-  
+
   (
   select clan_messages.timestamp, clan_messages.message,
   users.username, users.phone_id,
@@ -875,28 +881,28 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   "clan" as type
-  
-  from clan_messages 
-  
+
+  from clan_messages
+
   left join users on clan_messages.fkey_users_from_id = users.id
-  
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
-  
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     clan_messages.fkey_users_from_id
-  
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
   ' . $clan_sql . '
   order by timestamp DESC limit %d
   )
-  
+
   union
-  
+
   (
   select values_messages.timestamp, values_messages.message,
   users.username, users.phone_id,
@@ -904,27 +910,27 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   "values" as type
-  
-  from values_messages 
-  
+
+  from values_messages
+
   left join users on values_messages.fkey_users_from_id = users.id
-  
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
-  
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     values_messages.fkey_users_from_id
-  
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
+
   where values_messages.fkey_values_id = %d
 --    AND values_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
-  
+
   order by timestamp DESC limit %d;';
 
 if (TRUE) {
@@ -978,9 +984,9 @@ echo <<< EOF
 EOF;
 
   $sql = 'select system_messages.*, users.username, users.phone_id
-  from system_messages 
+  from system_messages
   left join users on system_messages.fkey_users_from_id = users.id
-  
+
   order by timestamp DESC limit 20;';
 $result = db_query($sql, $game_user->id);
 $msg_shown = FALSE;
@@ -1102,7 +1108,7 @@ echo <<< EOF
   document.getElementById('election-button').className = 'button';
   document.getElementById('clan-button').className = 'button active';
   document.getElementById('system-button').className = 'button';
-  
+
 EOF;
 
 }

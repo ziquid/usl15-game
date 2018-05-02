@@ -81,7 +81,8 @@ EOF;
 echo '<div class="subsubtitle">creating record for ' . $user->username .
   '</div>';
 
-      } else { // update record
+      }
+      else { // update record
 
         $sql = 'update equipment_ownership
           set quantity = quantity + %d
