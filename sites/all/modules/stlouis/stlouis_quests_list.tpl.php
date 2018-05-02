@@ -220,8 +220,8 @@ while ($item = db_fetch_object($result)) $data[] = $item;
 
 foreach ($data as $item) {
 
-  if ($event_type == EVENT_QUESTS_100)
-    $item->required_energy = min($item->required_energy, 100);
+//  if ($event_type == EVENT_QUESTS_100)
+//    $item->required_energy = min($item->required_energy, 100);
 
   $description = str_replace('%party', "<em>$party_title</em>",
     $item->description);
@@ -493,8 +493,8 @@ EOF;
 
   foreach ($data as $item) {
 
-    if ($event_type == EVENT_QUESTS_100)
-      $item->required_energy = min($item->required_energy, 100);
+//    if ($event_type == EVENT_QUESTS_100)
+//      $item->required_energy = min($item->required_energy, 100);
 
     $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
