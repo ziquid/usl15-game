@@ -46,7 +46,7 @@ $quest_lower = strtolower($quest);
 $experience_lower = strtolower($experience);
 $amount_filled = 0;
 $luck_remaining = $game_user->luck;
-$sql = 'insert into {luck_use} (fkey_users_id, use_type, amount_filled, luck_remaining)
+$sql = 'insert into luck_use (fkey_users_id, use_type, amount_filled, luck_remaining)
   values (%d, "%s", %d, %d);';
 
 switch ($fill_type) {
