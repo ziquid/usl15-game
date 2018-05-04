@@ -102,6 +102,20 @@ if ($game_equipment->is_loot) {
 
 }
 
+// Need a specific hood?
+if ($game_equipment->fkey_neighborhoods_id > 0 &&
+  $game_equipment->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
+
+  $equipment_succeeded = FALSE;
+  $ai_output = 'equipment-failed wrong-hood';
+  $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
+    '</div><div class="subtitle">' .
+    t('This item cannot be purchased here!') .
+    '</div><br/>';
+  competency_gain($game_user, 'lost');
+
+}
+
 if ($equipment_succeeded) {
 
   if ($game_equipment->quantity == '') { // no record exists - insert one
