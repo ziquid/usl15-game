@@ -459,7 +459,7 @@ EOF;
 
           if ($eq_id > 0) { // equipment bonus
 
-            $data = array();
+            $data = [];
             $sql = 'SELECT equipment.*, equipment_ownership.quantity
               FROM equipment
 
@@ -473,19 +473,15 @@ EOF;
 
 // give the stuff
             if ($game_equipment->quantity == '') { // no record exists - insert one
-
               $sql = 'insert into equipment_ownership
                 (fkey_equipment_id, fkey_users_id, quantity)
                 values (%d, %d, %d);';
               $result = db_query($sql, $eq_id, $game_user->id, 1);
-
             }
             else { // existing record - update it
-
               $sql = 'update equipment_ownership set quantity = quantity + 1
                 where fkey_equipment_id = %d and fkey_users_id = %d;';
               $result = db_query($sql, $eq_id, $game_user->id);
-
             }
 
 // tell the user about it
@@ -556,11 +552,10 @@ EOF;
             }
 
             if ($game_equipment->upkeep > 0) {
-
               $quest_completion_html .=<<< EOF
   <div class="quest-payout negative">Upkeep: $game_equipment->upkeep every 60 minutes</div>
 EOF;
-
+              game_recalc_income($game_user);
             }
 
             if ($game_equipment->chance_of_loss > 0) {
@@ -596,19 +591,15 @@ EOF;
 
 // give the stuff
             if ($game_staff->quantity == '') { // no record exists - insert one
-
               $sql = 'insert into staff_ownership
                 (fkey_staff_id, fkey_users_id, quantity)
                 values (%d, %d, %d);';
               $result = db_query($sql, $st_id, $game_user->id, 1);
-
             }
             else { // existing record - update it
-
               $sql = 'update staff_ownership set quantity = 1 where
                 fkey_staff_id = %d and fkey_users_id = %d;';
               $result = db_query($sql, $st_id, $game_user->id);
-
             }
 
 // tell the user about it
@@ -695,11 +686,10 @@ EOF;
             }
 
             if ($game_staff->upkeep > 0) {
-
               $quest_completion_html .=<<< EOF
   <div class="quest-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
 EOF;
-
+              game_recalc_income($game_user);
             }
 
             if ($game_staff->chance_of_loss > 0) {
@@ -781,10 +771,7 @@ EOF;
     $loot = db_fetch_object($result);
 
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
-    if((int)$game_user->income >= $cumulative_expenses) {
-      $game_user->expenses = $cumulative_expenses;
-      $sql = 'UPDATE users SET expenses = %d WHERE id = %d';
-      $result = db_query($sql, $game_user->expenses, $game_user->id);
+    if ((int) $game_user->income >= $cumulative_expenses) {
 
       $loot_html =<<< EOF
 <div class="title loot">You Found</div>
@@ -851,20 +838,16 @@ EOF;
       $game_equipment = db_fetch_object($result); // limited to 1 in DB
 
       if ($game_equipment->quantity == '') { // no record exists - insert one
-
         $sql = 'insert into equipment_ownership (fkey_equipment_id,
           fkey_users_id, quantity) values (%d, %d, 1);';
         $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
           $game_user->id);
-
       }
       else { // existing record - update it
-
         $sql = 'update equipment_ownership set quantity = quantity + 1 where
           fkey_equipment_id = %d and fkey_users_id = %d;';
         $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
           $game_user->id);
-
       }
 
       if ($loot->upkeep > 0) {
@@ -939,7 +922,6 @@ EOF;
     $loot_html .=<<< EOF
     <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
 EOF;
-    game_recalc_income($game_user);
   }
 
   $loot_html .=<<< EOF
@@ -963,20 +945,16 @@ EOF;
     $game_staff = db_fetch_object($result);
 
     if ($game_staff->quantity == '') { // no record exists - insert one
-
       $sql = 'insert into staff_ownership (fkey_staff_id,
         fkey_users_id, quantity) values (%d, %d, 1);';
       $result = db_query($sql, $game_quest->fkey_loot_staff_id,
         $game_user->id);
-
     }
     else { // existing record - update it
-
       $sql = 'update staff_ownership set quantity = quantity + 1 where
         fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $game_quest->fkey_loot_staff_id,
         $game_user->id);
-
     }
 
     if ($loot->upkeep > 0) {
