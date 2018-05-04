@@ -20,7 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
-<p>3 May: Added Chevy Cruze, BMW M3.</p>
+<p>3 May: Added Chevy Cruze, BMW M3.  Opened a few more neighborhoods.</p>
 <p>1 May: May Quests!  Opened Lindenwood Park.</p>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
