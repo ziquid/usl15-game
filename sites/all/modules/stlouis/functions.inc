@@ -899,11 +899,10 @@ EOF;
   }
 
   echo '</div>';
-
 }
 
 // Sometimes the income gets hacked -- fix here.
-function _recalc_income(&$game_user) {
+function game_recalc_income(&$game_user) {
 
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
@@ -1808,7 +1807,7 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
     where id = %d;';
   db_query($sql, $ex_price, $game_user->id);
 
-  _recalc_income($game_user);
+  game_recalc_income($game_user);
   $game_user = $fetch_user(); // reprocess user object
   return TRUE;
 }
@@ -1866,7 +1865,7 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
     where id = %d;';
   $result = db_query($sql, $ex_price, $game_user->id);
 
-  _recalc_income($game_user);
+  game_recalc_income($game_user);
   $game_user = $fetch_user(); // reprocess user object
   return TRUE;
 

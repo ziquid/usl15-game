@@ -10,7 +10,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 $ai_output = 'land-prices';
 
-_recalc_income($game_user);
+game_recalc_income($game_user);
 $fetch_header($game_user);
 show_aides_menu($game_user);
 

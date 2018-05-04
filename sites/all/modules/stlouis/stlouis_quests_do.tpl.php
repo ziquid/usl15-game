@@ -868,7 +868,7 @@ EOF;
       }
 
       if ($loot->upkeep > 0) {
-        _recalc_income($game_user);
+        game_recalc_income($game_user);
       }
 
     }
@@ -939,7 +939,7 @@ EOF;
     $loot_html .=<<< EOF
     <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
 EOF;
-    _recalc_income($game_user);
+    game_recalc_income($game_user);
   }
 
   $loot_html .=<<< EOF
@@ -980,7 +980,7 @@ EOF;
     }
 
     if ($loot->upkeep > 0) {
-      _recalc_income($game_user);
+      game_recalc_income($game_user);
     }
 
   }
