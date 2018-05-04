@@ -247,14 +247,21 @@ switch($event_type) {
 }
 
 // Monthly quests.
-$month = date('m', time() - 3600);
-if ($month == '5' || $game_user->meta == 'admin') {
-  $event_text .= '<div class="event">
+switch ($month_mission) {
+
+  case MISSION_MAY:
+    $event_text .= '<div class="event">
 <div class="event-title">
         May\'s Quest
       </div>
       <div class="event-tagline">
-        ~ Find the perfect gift for Mother\'s Day ~
+        ~ Find the perfect gift for your wife ~
+      </div>
+      <div class="event-tagline">
+        to celebrate Mother\'s Day
+      </div>
+      <div class="event-text">
+        Ends May 13
       </div>
       <div class="event-text">
         <a href="/' . $game . '/quests/' . $arg2 .

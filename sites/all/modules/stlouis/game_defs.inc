@@ -8,17 +8,19 @@ define(EVENT_APRIL_FOOLS, 4);
 define(EVENT_NEW_NAMES, 5);
 define(EVENT_PRE_MAY, 6);
 
-define(EVENT_MAY, 1005);
+define(MISSION_MAY, 1005);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
 $event_type = EVENT_NONE;
+$month_mission = MISSION_MAY;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
 
 global $game;
 
-switch(date('Y-m-d', time() - 3600)) {
+$today = date('Y-m-d', time() - 3600);
+switch($today) {
 
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
@@ -43,6 +45,22 @@ switch(date('Y-m-d', time() - 3600)) {
 
   case '2018-04-30':
     $event_type = EVENT_PRE_MAY;
+    break;
+
+  case '2018-05-01':
+  case '2018-05-02':
+  case '2018-05-03':
+  case '2018-05-04':
+  case '2018-05-05':
+  case '2018-05-06':
+  case '2018-05-07':
+  case '2018-05-08':
+  case '2018-05-09':
+  case '2018-05-10':
+  case '2018-05-11':
+  case '2018-05-12':
+  case '2018-05-13':
+    $month_mission = MISSION_MAY;
     break;
 }
 
