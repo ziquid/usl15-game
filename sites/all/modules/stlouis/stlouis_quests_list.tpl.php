@@ -33,7 +33,7 @@ else if ($game_user->level < 6) { // show beginning quests
   $sql_quest_neighborhood = 'where `group` = 0';
 }
 // Cinco De Mayo Quests.
-else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id = 30) {
+else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id == 30) {
   $group_to_show = '1100';
   $sql_quest_neighborhood = 'where `group` = 1100';
 }
