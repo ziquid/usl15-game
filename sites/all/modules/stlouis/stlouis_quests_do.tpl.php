@@ -27,7 +27,7 @@ $result = db_query($sql, $game_user->fkey_values_id);
 $data = db_fetch_object($result);
 $party_title = preg_replace('/^The /', '', $data->party_title);
 
-$data = array();
+$data = [];
 $sql = 'select quests.*, neighborhoods.name as hood from quests
   LEFT OUTER JOIN neighborhoods
   ON quests.fkey_neighborhoods_id = neighborhoods.id
@@ -54,7 +54,7 @@ $outcome_reason = '<div class="quest-succeeded">' . t('Success!') .
   '</div>';
 $ai_output = 'quest-succeeded';
 
-// check to see if quest prerequisites are met
+// Check to see if quest prerequisites are met.
 if (($game_user->energy < $game_quest->required_energy) &&
   ($game_user->level >= 6)) { // unlimited quests below level 6
 
@@ -69,7 +69,16 @@ if (($game_user->energy < $game_quest->required_energy) &&
   $ai_output = 'quest-failed not-enough-energy';
 
   competency_gain($game_user, 'too tired');
+}
 
+// Need to be sober for quest 45!
+if ($quest_id == 45 && game_competency_level($game_user, 'sober')->level == 0) {
+  $quest_succeeded = FALSE;
+  $outcome_reason = '<div class="quest-failed">' . t('Not sober enough!') .
+    '</div>';
+  $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
+  $ai_output = 'quest-failed not-sober-enough';
+  competency_gain($game_user, 'drunk');
 }
 
 if ($game_quest->equipment_1_required_quantity > 0) {
