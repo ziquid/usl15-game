@@ -120,12 +120,16 @@ EOF;
   }
 
   if ($item->initiative_bonus > 0) {
-
     echo <<< EOF
   <div class="land-payout">$initiative: +$item->initiative_bonus
     </div>
 EOF;
-
+  }
+  else if ($item->initiative_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">$initiative: $item->initiative_bonus
+    </div>
+EOF;
   }
 
   if ($item->endurance_bonus > 0) {

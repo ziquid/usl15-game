@@ -807,10 +807,22 @@ EOF;
     </div>
 EOF;
       }
+      else if ($loot->endurance_bonus < 0) {
+        $loot_html .=<<< EOF
+  <div class="quest-payout negative">$endurance: $loot->endurance_bonus
+    </div>
+EOF;
+      }
 
       if ($loot->elocution_bonus > 0) {
         $loot_html .=<<< EOF
     <div class="quest-payout">$elocution: +$loot->elocution_bonus
+      </div>
+EOF;
+      }
+      else if ($loot->elocution_bonus < 0) {
+        $loot_html .=<<< EOF
+    <div class="quest-payout negative">$elocution: $loot->elocution_bonus
       </div>
 EOF;
       }
