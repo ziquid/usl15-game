@@ -71,8 +71,8 @@ if (($game_user->energy < $game_quest->required_energy) &&
   competency_gain($game_user, 'too tired');
 }
 
-// Need to be sober for quest 45!
-if ($quest_id == 45 && game_competency_level($game_user, 'sober')->level == 0) {
+// Need to be sober for quest 46!
+if ($quest_id == 46 && game_competency_level($game_user, 'sober')->level == 0) {
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not sober enough!') .
     '</div>';
