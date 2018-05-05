@@ -762,6 +762,12 @@ EOF;
   $game_equipment = db_fetch_object($result);
   $limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
+  // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
+  if ($game_quest->chance_of_loot > 0 && $game_quest->chance_of_loot < 30
+    && $game_equipment->quantity == 0) {
+    $game_quest->chance_of_loot = 30;
+  }
+
   if ((($game_user->level <= 6 && $game_quest->chance_of_loot > 0)
       || $game_quest->chance_of_loot >= mt_rand(1, 99))
     && ($limit || $game_equipment->quantity_limit == 0)) {
