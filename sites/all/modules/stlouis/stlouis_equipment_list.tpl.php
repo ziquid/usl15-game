@@ -133,23 +133,33 @@ EOF;
   }
 
   if ($item->endurance_bonus > 0) {
-
     echo <<< EOF
   <div class="land-payout">$endurance: +$item->endurance_bonus
     </div>
 EOF;
-
+  }
+  else if ($item->endurance_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">$endurance: $item->endurance_bonus
+    </div>
+EOF;
   }
 
   if ($item->elocution_bonus > 0) {
-
     echo <<< EOF
   <div class="land-payout">$elocution: +$item->elocution_bonus
     </div>
 EOF;
 
   if (!$item->is_loot) $ai_output .= "/+elo:$item->elocution_bonus";
+  }
+  else if ($item->elocution_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">$elocution: $item->elocution_bonus
+    </div>
+EOF;
 
+    if (!$item->is_loot) $ai_output .= "/+elo:$item->elocution_bonus";
   }
 
   if ($item->speed_increase > 0) {
