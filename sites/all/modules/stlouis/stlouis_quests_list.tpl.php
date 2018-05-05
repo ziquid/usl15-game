@@ -26,21 +26,20 @@ include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
 if (is_numeric(arg(3))) $group_to_show = arg(3);
 
 if (is_numeric($group_to_show)) {
-
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
-
 }
-elseif ($game_user->level < 6) { // show beginning quests
-
+else if ($game_user->level < 6) { // show beginning quests
   $group_to_show = '0';
   $sql_quest_neighborhood = 'where `group` = 0';
-
+}
+// Cinco De Mayo Quests.
+else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id = 30) {
+  $group_to_show = '1100';
+  $sql_quest_neighborhood = 'where `group` = 1100';
 }
 else { // show the group for which the player last successfully completed a quest
-
   $group_to_show = $game_user->fkey_last_played_quest_groups_id;
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
-
 }
 
 $sql = 'select name from neighborhoods where id = %d;';
