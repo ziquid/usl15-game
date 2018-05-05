@@ -789,30 +789,30 @@ EOF;
 EOF;
 
       if ($loot->initiative_bonus > 0) {
-
         $loot_html .=<<< EOF
     <div class="quest-payout">$initiative: +$loot->initiative_bonus
       </div>
 EOF;
-
+      }
+      else if ($loot->initiative_bonus < 0) {
+        $loot_html .=<<< EOF
+    <div class="quest-payout negative">$initiative: $loot->initiative_bonus
+      </div>
+EOF;
       }
 
       if ($loot->endurance_bonus > 0) {
-
         $loot_html .=<<< EOF
   <div class="quest-payout">$endurance: +$loot->endurance_bonus
     </div>
 EOF;
-
       }
 
       if ($loot->elocution_bonus > 0) {
-
         $loot_html .=<<< EOF
     <div class="quest-payout">$elocution: +$loot->elocution_bonus
       </div>
 EOF;
-
       }
 
       // Upkeep.
