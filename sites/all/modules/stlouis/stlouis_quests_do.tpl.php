@@ -779,6 +779,11 @@ EOF;
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
+      // Special case for Drunken Stupor.
+      if ($game_quest->fkey_loot_equipment_id == 36) {
+        competency_gain($game_user, 'drunk');
+      }
+
       $loot_html =<<< EOF
 <div class="title loot">You Found</div>
 <div class="quest-icon"><img
