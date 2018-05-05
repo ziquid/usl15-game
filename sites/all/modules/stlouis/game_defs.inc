@@ -7,6 +7,7 @@ define(EVENT_ST_PATTYS, 3);
 define(EVENT_APRIL_FOOLS, 4);
 define(EVENT_NEW_NAMES, 5);
 define(EVENT_PRE_MAY, 6);
+define(EVENT_CINCO_DE_MAYO, 7);
 
 define(MISSION_MAY, 1005);
 
@@ -51,7 +52,14 @@ switch($today) {
   case '2018-05-02':
   case '2018-05-03':
   case '2018-05-04':
+    $month_mission = MISSION_MAY;
+    break;
+
   case '2018-05-05':
+    $month_mission = MISSION_MAY;
+    $event_type = EVENT_CINCO_DE_MAYO;
+    break;
+
   case '2018-05-06':
   case '2018-05-07':
   case '2018-05-08':

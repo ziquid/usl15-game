@@ -244,6 +244,18 @@ switch($event_type) {
       </div>';
     break;
 
+  case EVENT_CINCO_DE_MAYO:
+
+    $event_text = '<div class="event">
+      <div class="event-tagline">
+        Are you going to the Cinco De Mayo party in Benton Park West?
+      </div>
+      <div class="event-text">
+        I hear it\'s going to be fun!
+      </div>
+      </div>';
+    break;
+
 }
 
 // Monthly quests.
