@@ -71,6 +71,16 @@ if (($game_user->energy < $game_quest->required_energy) &&
   competency_gain($game_user, 'too tired');
 }
 
+// Need to be drunk for quest 45!
+if ($quest_id == 45 && game_competency_level($game_user, 'drunk')->level == 0) {
+  $quest_succeeded = FALSE;
+  $outcome_reason = '<div class="quest-failed">' . t('Not drunk enough!') .
+    '</div>';
+  $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
+  $ai_output = 'quest-failed not-drunk-enough';
+//  competency_gain($game_user, 'sober');
+}
+
 // Need to be sober for quest 46!
 if ($quest_id == 46 && game_competency_level($game_user, 'sober')->level == 0) {
   $quest_succeeded = FALSE;
@@ -78,7 +88,7 @@ if ($quest_id == 46 && game_competency_level($game_user, 'sober')->level == 0) {
     '</div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-sober-enough';
-  competency_gain($game_user, 'drunk');
+//  competency_gain($game_user, 'drunk');
 }
 
 if ($game_quest->equipment_1_required_quantity > 0) {
