@@ -56,11 +56,11 @@ switch($today) {
     break;
 
   case '2018-05-05':
+  case '2018-05-06':
     $month_mission = MISSION_MAY;
     $event_type = EVENT_CINCO_DE_MAYO;
     break;
 
-  case '2018-05-06':
   case '2018-05-07':
   case '2018-05-08':
   case '2018-05-09':
