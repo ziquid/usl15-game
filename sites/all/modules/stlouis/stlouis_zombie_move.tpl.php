@@ -29,12 +29,13 @@
   $item = db_fetch_object($result);
   $location = $item->name;
 
+  // Move them!
   if (($game_user->debates_won >= ($game_user->level * 100) &&
     ($clan_player->fkey_clans_id == $clan_zombie->fkey_clans_id) &&
     ($clan_player->fkey_clans_id > 0) &&
     ($zombie->fkey_values_id == $game_user->fkey_values_id) &&
     ($zombie->meta == 'zombie'))
-    || $phone_id == 'abc1234') { // move them!
+    || $phone_id == 'abc1234') {
 
       $sql = 'update users set fkey_neighborhoods_id = %d
         where id = %d;';
@@ -55,7 +56,7 @@ EOF;
 //      mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",
 //        "due to action from $game_user->username.");
 
-  } 
+  }
   else {
 
       echo <<< EOF
@@ -72,5 +73,5 @@ EOF;
 //        "due to action from $game_user->username.");
 
   }
-  
+
   db_set_active('default');
