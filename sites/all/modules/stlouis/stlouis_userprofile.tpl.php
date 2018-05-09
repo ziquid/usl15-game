@@ -162,11 +162,13 @@ if (!empty($message)) {
   competency_gain($game_user, 'talkative');
 }
 
-if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lantern posting
+// Halloween Jack-o-lantern posting.
+if (($want_jol == '/want_jol') && !empty($message)) {
 
   $get_jol = TRUE;
 
-  if ($game_user->username == $game_user->real_username) { // no costume!
+  // No costume!
+  if ($game_user->username == $game_user->real_username) {
 
     echo '<div class="title">Huh?</div>
       <div class="subtitle">You can\'t get a Jack-O\'-Lantern
@@ -180,7 +182,8 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
   $result = db_query($sql, $game_user->id);
   $data = db_fetch_object($result);
 
-  if ($data->quantity < 1) { // no ticket!
+  // No ticket!
+  if ($data->quantity < 1) {
 
     echo '<div class="title">Huh?</div>
       <div class="subtitle">You can\'t party without a ticket!</div>';
@@ -192,8 +195,8 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
     where fkey_equipment_id = 27 and fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $data = db_fetch_object($result);
-
-  if ($data->quantity < 1) { // no JoLs yet!
+  // No JoLs yet!
+  if ($data->quantity < 1) {
 
     echo '<div class="title">Sorry</div>
       <div class="subtitle">You must check out all the people first</div>';
@@ -205,8 +208,8 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
     where fkey_users_from_id = %d and fkey_users_to_id = %d;';
   $result = db_query($sql, $game_user->id, $item->id);
   $data = db_fetch_object($result);
-
-  if (!empty($data)) { // already gotten a JoLs for this user!
+  // Already gotten a JoLs for this user!
+  if (!empty($data)) {
 
     echo '<div class="title">Remember</div>
       <div class="subtitle">You can only get one Jack-O\'-Lantern<br/>
@@ -215,7 +218,8 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
 
   }
 
-  if ($get_jol) { // they get one!
+  // They get one!
+  if ($get_jol) {
 /*
     $sql = 'insert into jols (fkey_users_from_id, fkey_users_to_id)
       values (%d, %d);';
@@ -236,7 +240,7 @@ if (($want_jol == '/want_jol') && !empty($message)) { // halloween Jack-o-lanter
 if (!empty($item->clan_acronym)) {
   $clan_acronym = "($item->clan_acronym)";
   $clan_link = $item->clan_name;
-} 
+}
 else {
   $clan_link = t('None');
 }
@@ -275,7 +279,8 @@ EOF;
 
 }
 
-if ($phone_id_to_check == $phone_id) { // show more stats if it's you
+ // Show more stats if it's you.
+if ($phone_id_to_check == $phone_id) {
 
   echo <<< EOF
 <div class="heading">Referral Code:</div>
@@ -293,7 +298,8 @@ echo <<< EOF
 <div class="value">$exp</div><br/>
 EOF;
 
-if ($show_all) { // show more stats if it's you
+// Show more stats if it's you.
+if ($show_all) {
 
   $sql = 'SELECT
     SUM( staff.extra_votes * staff_ownership.quantity ) AS extra_votes,
@@ -361,7 +367,7 @@ EOF;
 
 if ($item->debates_won >= $item->level * 100) {
   $super_debater = '<strong>(** Super **)</strong>';
-} 
+}
 else {
   $super_debater = '';
 }
@@ -393,13 +399,13 @@ if (($phone_id_to_check != $phone_id) &&
 </div>
 EOF;
 
-  } 
+  }
   else { // debateable but not enough time has passed
 
     if ($item->meta == 'zombie') {
       $time_left = $zombie_debate_wait -
         (time() - strtotime($item->debates_last_time));
-    } 
+    }
 	else {
       $time_left = $debate_time -
         (time() - strtotime($item->debates_last_time));
@@ -420,7 +426,7 @@ EOF;
 
   }
 
-} 
+}
 else { // not debateable at all
   echo '<br>';
 }
@@ -434,28 +440,28 @@ if ($debate == 'Box') {
 
   if ($item->level <= 20) {
     $boxing_weight = 'Minimumweight';
-  } 
+  }
   else if ($item->level <= 35) {
     $boxing_weight = 'Flyweight';
-  } 
+  }
   else if ($item->level <= 50) {
     $boxing_weight = 'Bantamweight';
-  } 
+  }
   else if ($item->level <= 65) {
     $boxing_weight = 'Featherweight';
-  } 
+  }
   else if ($item->level <= 80) {
     $boxing_weight = 'Lightweight';
-  } 
+  }
   else if ($item->level <= 95) {
     $boxing_weight = 'Welterweight';
-  } 
+  }
   else if ($item->level <= 110) {
     $boxing_weight = 'Middleweight';
-  } 
+  }
   else if ($item->level <= 125) {
     $boxing_weight = 'Cruiserweight';
-  } 
+  }
   else {
     $boxing_weight = 'Heavyweight';
   }
@@ -469,7 +475,8 @@ EOF;
 
 }
 
-if ($show_all && $game == 'stlouis') { // valentine's day massacre
+// Valentine's day massacre.
+if ($show_all && $game == 'stlouis') {
 
   echo <<< EOF
 <span class="event-status">
@@ -487,7 +494,8 @@ echo <<< EOF
 <div class="value">$location</div><br/>
 EOF;
 
-if (!empty($item->ep_name)) { // elected?  give approval rating!
+// Elected?  give approval rating!
+if (!empty($item->ep_name)) {
 
   echo <<< EOF
 <div class="heading">Approval Rating:</div>
@@ -496,13 +504,14 @@ EOF;
 
 }
 
-if ($phone_id_to_check == $phone_id) { // show more stats if it's you
+// Show more stats if it's you.
+if ($phone_id_to_check == $phone_id) {
 
   if ($item->skill_points == 0) {
 
     $skill_button = '<div class="action not-yet">Can\'t increase skills</div>';
 
-  } 
+  }
   else {
 
     $skill_button = '<div class="action"><a href="/' . $game . '/increase_skills/' .
@@ -547,7 +556,7 @@ if (($phone_id == 'abc123') || ($game_user->username == 'New iPad test')) {
     <input type="checkbox" name="private" id="private" value="1"/>
     <label for="private">Send as private message</label>
     </div>';
-} 
+}
 else {
   $private_message = '';
 }
@@ -556,7 +565,8 @@ echo <<< EOF
 </div>
 EOF;
 
- if (empty($is_blocked)) { // it's ok to send to this user
+  // It's ok to send to this user.
+ if (empty($is_blocked)) {
    echo <<< EOF
 <div class="message-title">Send a message</div>
 <div class="send-message">
@@ -571,7 +581,7 @@ EOF;
 </form>
 </div>
 EOF;
- } 
+ }
  else { // you can't send to them but you can still block them
 
    echo '<div class="send-message">' . $block_this_user . '</div>';
@@ -636,7 +646,7 @@ if ($item->is_clan_leader)
 if ($item->private) {
   $private_css = 'private';
   $private_text = '(private)';
-} 
+}
 else {
   $private_css = $private_text = '';
 }
@@ -650,7 +660,8 @@ $display_time from $item->ep_name $item->username $clan_acronym $private_text
 <div class="message-body $private_css">
 EOF;
 
-  if ($phone_id_to_check == $phone_id) { // allow user to delete own messages
+  // Allow user to delete own messages.
+  if ($phone_id_to_check == $phone_id) {
 
     echo <<< EOF
       <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id"><img
