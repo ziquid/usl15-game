@@ -20,6 +20,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>6 May: Extended Cinco De Mayo event one more day.</p>
+<p>5 May: Added Cinco De Mayo event with prize and two new competencies.</p>
 <p>3 May: Added Chevy Cruze, BMW M3.  Opened a few more neighborhoods.</p>
 <p>1 May: May Quests!  Opened Lindenwood Park.</p>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
