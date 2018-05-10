@@ -61,13 +61,13 @@ firep($new_hood);
 
   $actions_to_move = floor($distance / 8);
 
-  $sql = 'SELECT equipment.speed_increase as speed_increase, 
-    action_verb, chance_of_loss, equipment.id, name, upkeep from equipment 
+  $sql = 'SELECT equipment.speed_increase as speed_increase,
+    action_verb, chance_of_loss, equipment.id, name, upkeep from equipment
 
     left join equipment_ownership
       on equipment_ownership.fkey_equipment_id = equipment.id
       and equipment_ownership.fkey_users_id = %d
-      
+
     where equipment_ownership.quantity > 0
     order by equipment.speed_increase DESC limit 1;';
 
@@ -177,7 +177,7 @@ EOF;
 
     echo <<< EOF
 <p class="second">You see a billboard when you enter the $hood_lower.&nbsp; It states:</p>
-<p class="second">$new_hood->welcome_msg</p>    	
+<p class="second">$new_hood->welcome_msg</p>
 EOF;
 
   }
@@ -185,7 +185,9 @@ EOF;
   echo $unfrozen_msg;
 
   // chance of loss
-  if ($eq->chance_of_loss >= mt_rand(1,110)) { // give them a little extra chance
+
+  // give them a little extra chance
+  if ($eq->chance_of_loss >= mt_rand(1,110)) {
 
 firep($eq->name . ' wore out!');
     $sql = 'update equipment_ownership set quantity = quantity - 1
@@ -194,7 +196,8 @@ firep($eq->name . ' wore out!');
 
 // player expenses need resetting?
 
-    if ($eq->upkeep > 0) { // subtract upkeep from your expenses
+    // Subtract upkeep from your expenses.
+    if ($eq->upkeep > 0) {
       $sql = 'update users set expenses = expenses - %d where id = %d;';
       $result = db_query($sql, $eq->upkeep, $game_user->id);
     } // FIXME: do this before _stlouis_header so that upkeep is accurate
