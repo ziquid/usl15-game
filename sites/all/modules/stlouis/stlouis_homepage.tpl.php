@@ -1114,7 +1114,8 @@ document.getElementById('system-button').onclick = function() {
 
 EOF;
 
-if (!empty($message)) { // message?  show the clan tab already
+// Message?  Show the clan tab already.
+if (!empty($message)) {
 
 echo <<< EOF
   document.getElementById('all-text').style.display = 'none';

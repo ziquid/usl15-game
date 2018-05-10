@@ -301,36 +301,34 @@ if ($quest_succeeded) {
   $money_added += mt_rand($game_quest->min_money, $game_quest->max_money);
   $game_user->money += $money_added;
 
-  if ($game_quest->group > 1000) { // don't save quests group
-
+  // Don't save quests group if 1000 or over.
+  if ($game_quest->group >= 1000) {
     $sql = 'update users set energy = energy - %d,
       experience = experience + %d, money = money + %d
       where id = %d;';
-    $result = db_query($sql, $game_quest->required_energy,
+    db_query($sql, $game_quest->required_energy,
       $game_quest->experience, $money_added, $game_user->id);
-
   }
-  else { // save all
-
+  else {
+    // Save all updated stats.
     $sql = 'update users set energy = energy - %d,
       experience = experience + %d, money = money + %d,
       fkey_last_played_quest_groups_id = %d
       where id = %d;';
-    $result = db_query($sql, $game_quest->required_energy,
+    db_query($sql, $game_quest->required_energy,
       $game_quest->experience, $money_added, $game_quest->group,
       $game_user->id);
-
   }
 
-  if ($old_energy == $game_user->energy_max) { // start the energy clock again
-
+  // Start the energy clock again.
+  if ($old_energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', time() + $energy_wait), $game_user->id);
-
   }
 
   // Update percentage completion.
-  if (empty($pc->percent_complete)) { // no entry yet, add one
+  // No entry yet, add one.
+  if (empty($pc->percent_complete)) {
     $sql = 'insert into quest_completion (fkey_users_id, fkey_quests_id,
       percent_complete) values (%d, %d, %d);';
     $result = db_query($sql, $game_user->id, $quest_id,
@@ -442,7 +440,8 @@ EOF;
 
     }
 
-    if ($qgc->times_completed == 1) { // what?  they've completed a 2nd time?
+    // what?  They've completed a 2nd time?
+    if ($qgc->times_completed == 1) {
 
 // get quest group stats
       $sql = 'SELECT sum( bonus_given ) AS completed,
@@ -476,7 +475,8 @@ EOF;
         if (($eq_id + $land_id + $st_id) > 0) {
 // anything to give him/her?
 
-          if ($eq_id > 0) { // equipment bonus
+          // Equipment bonus.
+          if ($eq_id > 0) {
 
             $data = [];
             $sql = 'SELECT equipment.*, equipment_ownership.quantity
@@ -491,7 +491,8 @@ EOF;
             $game_equipment = db_fetch_object($result); // limited to 1 in DB
 
 // give the stuff
-            if ($game_equipment->quantity == '') { // no record exists - insert one
+            // No record exists - insert one.
+            if ($game_equipment->quantity == '') {
               $sql = 'insert into equipment_ownership
                 (fkey_equipment_id, fkey_users_id, quantity)
                 values (%d, %d, %d);';
@@ -594,7 +595,8 @@ EOF;
           // FIXME: land bonus here
 
 
-          if ($st_id > 0) { // staff bonus
+          // Staff bonus.
+          if ($st_id > 0) {
 
             $data = array();
             $sql = 'SELECT staff.*, staff_ownership.quantity
@@ -609,7 +611,8 @@ EOF;
             $game_staff = db_fetch_object($result); // limited to 1 in DB
 
 // give the stuff
-            if ($game_staff->quantity == '') { // no record exists - insert one
+            // No record exists - insert one.
+            if ($game_staff->quantity == '') {
               $sql = 'insert into staff_ownership
                 (fkey_staff_id, fkey_users_id, quantity)
                 values (%d, %d, %d);';
@@ -879,7 +882,8 @@ EOF;
         $game_quest->fkey_loot_equipment_id);
       $game_equipment = db_fetch_object($result); // limited to 1 in DB
 
-      if ($game_equipment->quantity == '') { // no record exists - insert one
+      // No record exists - insert one.
+      if ($game_equipment->quantity == '') {
         $sql = 'insert into equipment_ownership (fkey_equipment_id,
           fkey_users_id, quantity) values (%d, %d, 1);';
         $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
@@ -986,7 +990,8 @@ EOF;
       $game_quest->fkey_loot_staff_id);
     $game_staff = db_fetch_object($result);
 
-    if ($game_staff->quantity == '') { // no record exists - insert one
+    // No record exists - insert one.
+    if ($game_staff->quantity == '') {
       $sql = 'insert into staff_ownership (fkey_staff_id,
         fkey_users_id, quantity) values (%d, %d, 1);';
       $result = db_query($sql, $game_quest->fkey_loot_staff_id,
@@ -1135,7 +1140,8 @@ firep($qg);
 
 $location = str_replace('%location', $location, $qg->name);
 
-if ($game_user->level < 6) { // show beginning quests, keep location from user
+// Show beginning quests, keep location from user.
+if ($game_user->level < 6) {
 
   $location = $older_missions_html = $newer_missions_html = '';
   $sql_quest_neighborhood = 'where fkey_neighborhoods_id = 0';
@@ -1498,7 +1504,8 @@ EOF;
 
 }
 
-//  if ($game_user->level > 1) { // don't show extra quests at first
+// Don't show extra quests at first.
+//  if ($game_user->level > 1) {
 
   $data = array();
   $sql = 'select * from quests where `group` = %d and required_level = %d

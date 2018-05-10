@@ -77,10 +77,11 @@
 
   }
 
-
   // Success!
   if ($options['land-sell-succeeded'] == 'sell-success') {
-//    if ($game_land->type == 'investment') { // investment?  add competency
+
+      // Investment?  Add competency.
+//    if ($game_land->type == 'investment') {
 //      competency_lose($game_user, 'investor', $quantity);
 //    }
     land_lose($game_user, $land_id, $quantity, $land_price);
