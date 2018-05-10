@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p><a href="http://www.ziquid.com/" target="_blank">External Link Test</a></p>
 <p>6 May: Extended Cinco De Mayo event one more day.</p>
 <p>5 May: Added Cinco De Mayo event with prize and two new competencies.</p>
 <p>3 May: Added Chevy Cruze, BMW M3.  Opened a few more neighborhoods.</p>
