@@ -57,7 +57,8 @@ EOF;
 
   $isdupusername = FALSE;
 
-  if ($username != "") { // check for duplicate usernames
+  // Check for duplicate usernames.
+  if ($username != "") {
     $sql = 'SELECT * FROM users WHERE username = "%s"';
     $result = db_query($sql, $username);
     $isdupusername = ($result->num_rows > 0);
@@ -69,7 +70,8 @@ firep('$isdupusername = ' . $isdupusername);
     $sql = 'update users set username = "%s" where id = %d;';
     $result = db_query($sql, $username, $game_user->id);
 
-    if (empty($game_user->username)) { // first timer
+    // First timer.
+    if (empty($game_user->username)) {
 
       drupal_goto($game . '/debates/' . $arg2);
 
@@ -98,7 +100,8 @@ firep('$isdupusername = ' . $isdupusername);
   }
   else { // haven't chosen a username on this screen, or chose a duplicate
 
-    if ($isdupusername) { // set an error message if a dup
+    // Set an error message if a dup.
+    if ($isdupusername) {
 
       $msgUserDuplicate =<<< EOF
 <div class="message-error big">Sorry!</div>

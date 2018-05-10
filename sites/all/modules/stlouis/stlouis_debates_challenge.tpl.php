@@ -251,7 +251,8 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
       debates_last_time = "%s" where id = %d;';
     $result = db_query($sql, $money_change, date('Y-m-d H:i:s', time()), $item->id);
 
-    if ($debate == 'Box') { // boxing day?  add boxing stats
+    // Boxing day? Add boxing stats.
+    if ($debate == 'Box') {
       $sql = 'update users set meta_int = meta_int + %d where id = %d;';
       $result = db_query($sql, $money_change, $game_user->id);
       $sql = 'update users set meta_int = meta_int - %d where id = %d;';
@@ -518,7 +519,8 @@ EOF;
     $result = db_query($sql, $item->id);
     $flag = db_fetch_object($result);
 
-    if ($flag->quantity > 0) { // they had a flag -- you get it!
+    // They had a flag -- you get it!
+    if ($flag->quantity > 0) {
 
       echo '<div class="election-succeeded">You found a flag!</div>';
       echo '<div class="subtitle"><img
@@ -570,7 +572,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
     $result = db_query($sql, $money_change, $experience_gained,
       date('Y-m-d H:i:s', time()), $item->id);
 
-    if ($debate == 'Box') { // boxing day?  add boxing stats
+    // Boxing day?  Add boxing stats.
+    if ($debate == 'Box') {
 
       $sql = 'update users set meta_int = meta_int - %d where id = %d;';
       $result = db_query($sql, $money_change, $game_user->id);
@@ -646,7 +649,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
     $result = db_query($sql, $item->id);
     $flag = db_fetch_object($result);
 
-    if ($flag->quantity > 0) { // they had a flag, but you don't get it
+    // They had a flag, but you don't get it.
+    if ($flag->quantity > 0) {
 
       echo '<div class="subtitle">He or she had a flag,
         but you don\'t get it</div>';
