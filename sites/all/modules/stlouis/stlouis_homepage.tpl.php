@@ -123,7 +123,8 @@ firep($referral_code);
     $result = db_query($sql, $referral_code);
     $item = db_fetch_object($result);
 
-    if (empty($item->referral_code)) { // code not already in use - use it!
+    // Code not already in use - use it!
+    if (empty($item->referral_code)) {
 
       $good_code = TRUE;
       $sql = 'update users set referral_code = "%s" where id = %d;';
@@ -419,7 +420,8 @@ $event_text
 <div id="all-text">
 EOF;
 
-if (substr($phone_id, 0, 3) == 'ai-') { // no reason to spend cycles on msgs
+// No reason to spend cycles on msgs.
+if (substr($phone_id, 0, 3) == 'ai-') {
   db_set_active('default');
   return;
 }
@@ -434,7 +436,8 @@ $item = db_fetch_object($result);
 
 $elected_official_type = $item->type;
 
-if ($elected_official_type == 2) { // if a party official
+// If a party official.
+if ($elected_official_type == 2) {
 
   $data = array();
   $sql = 'SELECT fkey_clans_id FROM clan_members
