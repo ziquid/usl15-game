@@ -69,7 +69,8 @@ EOF;
       $result = db_query($sql, $user->id, $prize_id);
       $equip_quantity = db_fetch_object($result);
 
-      if (empty($equip_quantity)) { // create record
+      // Create record.
+      if (empty($equip_quantity)) {
 
         $sql = 'insert into equipment_ownership
           (fkey_users_id, fkey_equipment_id, quantity)

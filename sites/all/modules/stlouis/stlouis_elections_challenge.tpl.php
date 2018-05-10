@@ -152,7 +152,8 @@ EOF;
 
   }
 
-  if ($game_user->actions < $item->energy_bonus) { // not enough action left
+  // Not enough action left.
+  if ($game_user->actions < $item->energy_bonus) {
 
     $fetch_header($game_user);
 
@@ -178,7 +179,8 @@ EOF;
   if (empty($item->id)) {
 // if you are running without an opponent, you automatically win
 
-    if ($item->type == 2) { // party office
+    // Party office.
+    if ($item->type == 2) {
 // make it so s/he can't perform a major action for a day
       $set_value = '_' . arg(0) . '_set_value';
       $set_value($game_user->id, 'next_major_action', time() + 86400);
@@ -382,7 +384,8 @@ firep("His/her $extra_defending_votes voters vote for him/her");
 
   if (($is_limited) && ($item->ep_id == 1)) {
 
-    if ($opp_influence > 100000) { // opponent has too much influence!
+    // Opponent has too much influence!
+    if ($opp_influence > 100000) {
 // stack the votes so you automatically win
 
       $extra_votes += 10000;
@@ -416,7 +419,8 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
   // Get voters.
   $data = [];
 
-  if ($item->type == 1) { // neighborhood
+  // Neighborhood.
+  if ($item->type == 1) {
 
     $sql = 'SELECT users.*, clan_members.fkey_clans_id,
       ua_ip.`value` AS last_IP, ua_sdk.`value` AS sdk
@@ -517,7 +521,8 @@ $ip_array[$ip_key]++;
 // only allow first five players from same IP address to vote
    if (($ip_array[$ip_key] > 6) && (substr($voter->meta, 0, 3) != 'ai_')) {
 
-      if ($game == 'stlouis') { // move to FP, zero actions
+      // Move to FP, zero actions.
+      if ($game == 'stlouis') {
         $sql = 'update users set fkey_neighborhoods_id = 81, actions = 0,
           actions_next_gain = "%s", karma = karma - 100
           where id = %d;';
@@ -742,7 +747,8 @@ firep($voter->username . ' votes for ' . $item->username .
 
       $vote_rand = mt_rand(0, $total_influence);
 
-      if ($vote_rand < $my_influence) { // vote for me!
+      // Vote for me!
+      if ($vote_rand < $my_influence) {
         $votes--; // voter votes for you
 firep($voter->username . ' level ' . $voter->level . ' votes for you');
         $election_polls[] = 'I voted for you because of your ' . $experience . '.';
@@ -768,7 +774,8 @@ firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->user
 
     $vote_rand = mt_rand(0, $total_influence);
 
-    if ($vote_rand < $my_influence) { // vote for me!
+    // Vote for me!
+    if ($vote_rand < $my_influence) {
 
       $votes--; // voter votes for you
 firep('resident votes for you');
@@ -800,15 +807,18 @@ firep($ip_array);
   $result = db_query($sql, $game_user->id, $item->id, date('Y-m-d H:i:s', time() - 3600));
   $challenge_history = db_fetch_object($result);
 
-  if ($challenge_history->count > 5) $experience_change = 0; // sorry!  no experience!
+  // Sorry!  No experience!
+  if ($challenge_history->count > 5) $experience_change = 0;
 
 
-  if ($votes < 0) { // you won!  woohoo!
+  // You won!  Woohoo!
+  if ($votes < 0) {
 
     if (substr($phone_id, 0, 3) == 'ai-')
       echo "<!--\n<ai \"election-won\"/>\n-->";
 
-    if ($item->type == 2) { // party office
+    // Party office.
+    if ($item->type == 2) {
 // make it so s/he can't perform a major action for a day
       $set_value = '_' . arg(0) . '_set_value';
       $set_value($game_user->id, 'next_major_action', time() + 86400);
@@ -998,12 +1008,14 @@ Extra defending votes: $extra_defending_votes
 
 $residents residents";
 
-//  if (($item->ep_id == 1) && ($votes < 0)) // mail me hood tosses
+    // Mail me hood tosses.
+//  if (($item->ep_id == 1) && ($votes < 0))
 //    mail('joseph@cheek.com', "election results" /* for $game_user->username " .
 //      "[$my_influence] vs. $item->username [$opp_influence] in $location" */,
 //      $message);
 
-//  if ($item->ep_id >= 28) // and house  challenges
+    // And house challenges.
+//  if ($item->ep_id >= 28)
 //    mail('joseph@cheek.com', "house seat results (district $district seat " .
 //    "$item->ep_id)", $message);
 

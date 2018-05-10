@@ -194,7 +194,8 @@ firep($item);
     if ($item->can_broadcast_to_party)
       $official_link .= '<div class="can-broadcast-to-party">*</div>';
 
-    if (empty($item->id)) { // no existing officer
+    // No existing officer.
+    if (empty($item->id)) {
 
       $official_link .= ' <em>Available</em></a>';
       $action = '<a href="/' . $game . '/elections_challenge/' . $arg2 .
@@ -213,14 +214,16 @@ firep($item);
 
     }
 
-    if ($game_user->level > $item->max_level) { // too high to challenge
+    // Too high to challenge.
+    if ($game_user->level > $item->max_level) {
 
       $action = t('Too powerful to challenge');
       $action_class = 'not-yet';
 
     }
 
-    if ($game_user->actions < $item->energy_bonus) { // not enough action left
+    // Not enough action left.
+    if ($game_user->actions < $item->energy_bonus) {
 
 //      $action = t('Not enough Action left');
 //      $action_class = 'not-yet';
