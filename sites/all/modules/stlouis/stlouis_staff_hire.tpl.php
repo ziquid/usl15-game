@@ -97,7 +97,8 @@
 
   if ($staff_succeeded) {
 
-    if ($game_staff->quantity == '') { // no record exists - insert one
+    // No record exists - insert one.
+    if ($game_staff->quantity == '') {
 
       $sql = 'insert into staff_ownership
         (fkey_staff_id, fkey_users_id, quantity)
@@ -122,7 +123,8 @@
       $game_staff->income * $quantity,
       $game_staff->upkeep * $quantity, $game_user->id);
 
-    if (substr($game_user->income_next_gain, 0, 4) == '0000') { // start the income clock if needed
+    // Start the income clock if needed.
+    if (substr($game_user->income_next_gain, 0, 4) == '0000') {
 
        $sql = 'update users set income_next_gain = "%s" where id = %d;';
       $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
@@ -170,7 +172,8 @@ EOF;
   $quantity = (int) $game_staff->quantity + (int) $quantity;
   $staff_price = $game_staff->price + ($quantity * $game_staff->price_increase);
 
-  if ($quantity == 0) $quantity = '<em>None</em>'; // gotta love PHP typecasting
+  // Gotta love PHP typecasting.
+  if ($quantity == 0) $quantity = '<em>None</em>';
 
   if (($staff_price % 1000) == 0)
     $staff_price = ($staff_price / 1000) . 'K';

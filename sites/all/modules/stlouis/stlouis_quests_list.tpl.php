@@ -52,7 +52,8 @@ $result = db_query($sql, $game_user->fkey_values_id);
 $data = db_fetch_object($result);
 $party_title = preg_replace('/^The /', '', $data->party_title);
 
-if ($game_user->experience == 0) { // show more welcome text for new user
+// Show more welcome text for new user.
+if ($game_user->experience == 0) {
 
   echo <<< EOF
 <div class="welcome">
@@ -99,7 +100,8 @@ EOF;
 
 }
 
-if ($game_user->level < 6) $location = ''; // keep location from user
+// Keep location from user.
+if ($game_user->level < 6) $location = '';
 
 if ($game_user->level < 6 and $game_user->experience > 0) {
 
@@ -482,7 +484,8 @@ EOF;
 
 }
 
-//  if ($game_user->level > 1) { // don't show extra quests at first
+// Don't show extra quests at first.
+//  if ($game_user->level > 1) {
 
   $data = array();
   $sql = 'select * from quests ' . $sql_quest_neighborhood .
