@@ -22,6 +22,8 @@
 </form>
 <p><a href="http://www.ziquid.com/" target="_blank">External Link Test (iOS)</a></p>
 <p><a href="external://www.ziquid.com/">External Link Test (android)</a></p>
+<p>11 May: Support your Local Official now gives more support based on Loyal comp.</p>
+<p>9 May: Released Android and iOS clients v 0.4.0.</p>
 <p>6 May: Extended Cinco De Mayo event one more day.</p>
 <p>5 May: Added Cinco De Mayo event with prize and two new competencies.</p>
 <p>3 May: Added Chevy Cruze, BMW M3.  Opened a few more neighborhoods.</p>

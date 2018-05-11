@@ -363,6 +363,7 @@ function game_preaction_spread_gossip(&$action) {
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->rating_change -= ($comp_level->level * 0.03);
+  $action->values_cost += ($comp_level->level);
 }
 
 function game_preaction_steal_some_value(&$action) {
@@ -372,4 +373,14 @@ function game_preaction_steal_some_value(&$action) {
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->values_change -= ($comp_level->level * 20);
+}
+
+function game_preaction_support_your_local_official(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->influence_change += ($comp_level->level * 3);
+  $action->values_cost += ($comp_level->level);
 }
