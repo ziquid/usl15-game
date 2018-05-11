@@ -552,6 +552,10 @@ $what = [
   'endurance' => $endurance . ' (2 Actions)',
   'elocution' => $elocution . ' (2 Actions)',
   'income' => $land . ' (3 Actions)',
+  'cash' => $land . ' (3 Actions)',
+  'init_aides' => 'Init Aides (5 Actions)',
+  'end_aides' => 'End Aides (5 Actions)',
+  'eloc_aides' => 'Eloc Aides (5 Actions)',
 ];
 
 echo <<< EOF
