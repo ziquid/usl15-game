@@ -53,7 +53,8 @@ ob_end_clean();
 //response_json is: ' . $response_json . '
 //response status is: ' . $response->status);
 
-      if ($response->status !== 0) { // uhoh!  receipt not validated!
+      // Uhoh! Receipt not validated!
+      if ($response->status !== 0) {
         echo 'NO';
         exit;
       }
@@ -70,31 +71,59 @@ ob_end_clean();
     $luck = 10;
 
     // FIXME: replace with switch().
-    if (arg(3) == '30') $luck = 30; // paypal
 
-    if (arg(3) == '35') $luck = 35; // paypal
-    if (arg(3) == 'luck_35') $luck = 35; // google
-    if (arg(3) == 'buy_luck_35') $luck = 35; // blackberry
-    if (arg(3) == 'com.ziquid.uslce.luck.35') $luck = 35; // apple
-    if (arg(3) == 'com.ziquid.celestialglory.luck.35') $luck = 35; // apple
-    if (arg(3) == 'com.ziquid.celestial_glory.luck.35') $luck = 35; // apple
+    // Paypal.
+    if (arg(3) == '30') $luck = 30;
 
-    if (arg(3) == 'buy_luck_120') $luck = 120; // blackberry
+    // Paypal.
+    if (arg(3) == '35') $luck = 35;
 
-    if (arg(3) == '130') $luck = 130; // paypal
+    // Google.
+    if (arg(3) == 'luck_35') $luck = 35;
 
-    if (arg(3) == '150') $luck = 150; // paypal
-    if (arg(3) == 'luck.150') $luck = 150; // google
-    if (arg(3) == 'com.ziquid.uslce.luck.150') $luck = 150; // apple
-    if (arg(3) == 'com.ziquid.celestialglory.luck.150') $luck = 150; // apple
-    if (arg(3) == 'com.ziquid.celestial_glory.luck.150') $luck = 150; // apple
+    // Blackberry.
+    if (arg(3) == 'buy_luck_35') $luck = 35;
 
-    if (arg(3) == '320') $luck = 320; // paypal
-    if (arg(3) == 'luck.320') $luck = 320; // google
+    // Apple.
+    if (arg(3) == 'com.ziquid.uslce.luck.35') $luck = 35;
 
-    if (arg(3) == '700') $luck = 700; // paypal
+    // Apple.
+    if (arg(3) == 'com.ziquid.celestialglory.luck.35') $luck = 35;
 
-// stop iOS luck hacking
+    // Apple.
+    if (arg(3) == 'com.ziquid.celestial_glory.luck.35') $luck = 35;
+
+    // Blackberry.
+    if (arg(3) == 'buy_luck_120') $luck = 120;
+
+    // Paypal.
+    if (arg(3) == '130') $luck = 130;
+
+    // Paypal.
+    if (arg(3) == '150') $luck = 150;
+
+    // Google.
+    if (arg(3) == 'luck.150') $luck = 150;
+
+    // Apple.
+    if (arg(3) == 'com.ziquid.uslce.luck.150') $luck = 150;
+
+    // Apple.
+    if (arg(3) == 'com.ziquid.celestialglory.luck.150') $luck = 150;
+
+    // Apple.
+    if (arg(3) == 'com.ziquid.celestial_glory.luck.150') $luck = 150;
+
+    // Paypal.
+    if (arg(3) == '320') $luck = 320;
+
+    // Google.
+    if (arg(3) == 'luck.320') $luck = 320;
+
+    // Paypal.
+    if (arg(3) == '700') $luck = 700;
+
+    // Stop iOS luck hacking.
     if (arg(4) == 'abc123') $luck = 0;
 
     $sql = 'update users set luck = luck + %d

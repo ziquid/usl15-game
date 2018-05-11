@@ -11,7 +11,8 @@
 
   $reset_me = check_plain(trim($_GET['reset_me']));
 
-  if (strtoupper($reset_me) == 'RESET ME') { // to prevent errant resets
+  // To prevent errant resets.
+  if (strtoupper($reset_me) == 'RESET ME') {
 
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
@@ -44,7 +45,8 @@
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
 
-    if ($item->is_clan_leader) { // clan leader? delete entire clan
+    // Clan leader? Delete entire clan.
+    if ($item->is_clan_leader) {
 
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $game_user->fkey_clans_id);
@@ -74,33 +76,33 @@
       $luck_in_sql = 10;
     }
 
-    $sql = "UPDATE users 
+    $sql = "UPDATE users
       SET username = '',
       password = '',
-      referral_code = '', 
-      referred_by = '', 
-      experience = 0, 
+      referral_code = '',
+      referred_by = '',
+      experience = 0,
       level = 1,
-      fkey_neighborhoods_id = %d, 
-      fkey_values_id = 0, 
-      `values` = '%s', 
-      money = 500, 
-      energy = 200, 
-      energy_max = 200, 
-      energy_next_gain = CURRENT_TIMESTAMP, 
-      income = 0, 
-      expenses = 0, 
-      income_next_gain = '0000-00-00 00:00:00', 
+      fkey_neighborhoods_id = %d,
+      fkey_values_id = 0,
+      `values` = '%s',
+      money = 500,
+      energy = 200,
+      energy_max = 200,
+      energy_next_gain = CURRENT_TIMESTAMP,
+      income = 0,
+      expenses = 0,
+      income_next_gain = '0000-00-00 00:00:00',
       actions = 3,
-      actions_max = 3, 
-      actions_next_gain = '0000-00-00 00:00:00', 
-      initiative = 1, 
-      endurance = 1, 
-      elocution = 1, 
-      debates_won = 0, 
+      actions_max = 3,
+      actions_next_gain = '0000-00-00 00:00:00',
+      initiative = 1,
+      endurance = 1,
+      elocution = 1,
+      debates_won = 0,
       debates_lost = 0,
-      debates_last_time = '0000-00-00 00:00:00', 
-      last_bonus_date = '0000-00-00', 
+      debates_last_time = '0000-00-00 00:00:00',
+      last_bonus_date = '0000-00-00',
       skill_points = 0,
       luck = %d,
       seen_neighborhood_quests = 0,

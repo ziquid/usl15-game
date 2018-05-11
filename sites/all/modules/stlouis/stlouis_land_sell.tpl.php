@@ -69,7 +69,7 @@
   }
 
 // job?
-  if ($game_land->type == 'job') { // job?
+  if ($game_land->type == 'job') {
 
     $options['land-sell-succeeded'] = 'failed cant-sell-job';
     $ai_output = 'land-failed cant-sell-job';
