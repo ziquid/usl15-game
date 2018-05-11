@@ -64,14 +64,16 @@ EOF;
 
   }
 
-  if ($debate == 'Box') { // boxing day?  check for gloves
+  // Boxing day?  Check for gloves.
+  if ($debate == 'Box') {
 
     $sql = 'select quantity from equipment_ownership
       where fkey_equipment_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, 32, $game_user->id);
     $item = db_fetch_object($result);
 
-    if ($item->quantity < 1) { // no boxing gloves!
+    // No boxing gloves!
+    if ($item->quantity < 1) {
 
       echo <<< EOF
 <div class="title">

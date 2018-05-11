@@ -31,7 +31,8 @@ EOF;
   if ($game_user->level >= 6) {
 // only allow users to change parties if they can join one
 
-    if ($game_user->luck > 9) { // AT LEAST 10 LUCK
+    // AT LEAST 10 LUCK.
+    if ($game_user->luck > 9) {
 
       echo <<< EOF
 <div class="menu-option"><a href="/$game/choose_name/$arg2">Change your

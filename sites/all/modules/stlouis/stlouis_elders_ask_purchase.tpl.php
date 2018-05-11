@@ -56,7 +56,7 @@ EOF;
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
 
     echo <<< EOF
-    
+
   <div class="elders-menu big">
     <div class="menu-option"><a
       href="javascript:qnx.callExtensionMethod('buy_luck_10');">Buy
@@ -68,7 +68,7 @@ EOF;
        href="javascript:qnx.callExtensionMethod('buy_luck_120');">Buy
       120 Luck (US $19.99)</a></div>
   </div>
-  
+
 EOF;
 
     db_set_active('default');
@@ -77,10 +77,11 @@ EOF;
 
   }
 
-  if (substr(arg(2), 0, 4) == 'nkc ') { // nook color - no in app purchases!
+  // Nook color - no in app purchases!
+  if (substr(arg(2), 0, 4) == 'nkc ') {
 
     echo <<< EOF
-    
+
 <div class="title">
 Sorry!
 </div>
@@ -344,7 +345,8 @@ Purchase 700 $luck for US $99.99
 </div>
 EOF;
 
-  if (ip_address() == '72.177.116.233') { // 2000 luck for kenny
+  // 2000 luck for kenny.
+  if (ip_address() == '72.177.116.233') {
 
     echo <<< EOF
 <div class="title">
