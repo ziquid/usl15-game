@@ -40,7 +40,8 @@ EOF;
 
   if (!empty($referral_code)) {
 
-    if ($referral_code == $game_user->referral_code) // no change?  just show stats
+    // No change?  Just show stats.
+    if ($referral_code == $game_user->referral_code)
       drupal_goto($game . '/user/' . $arg2);
 
 // have they already used that code?
@@ -87,7 +88,7 @@ EOF;
 
     }
 
-    $sql = 'SELECT username, experience, initiative, endurance, 
+    $sql = 'SELECT username, experience, initiative, endurance,
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, referral_code,
       `values`.party_title, `values`.party_icon,
@@ -98,23 +99,23 @@ EOF;
       clans.name as clan_name, clans.acronym as clan_acronym,
       clans.id as fkey_clans_id,
       neighborhoods.name as neighborhood
-    
+
       FROM `users`
-    
+
       LEFT JOIN `values` ON users.fkey_values_id = `values`.id
-    
+
       LEFT OUTER JOIN elected_officials
       ON elected_officials.fkey_users_id = users.id
-    
+
       LEFT OUTER JOIN elected_positions
       ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
       LEFT OUTER JOIN clan_members on clan_members.fkey_users_id = users.id
-    
+
       LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-      
+
       LEFT OUTER JOIN neighborhoods on neighborhoods.id = users.fkey_neighborhoods_id
-    
+
       WHERE users.referral_code = "%s"';
     $result = db_query($sql, $referral_code);
     $mentor = db_fetch_object($result);
@@ -172,7 +173,7 @@ EOF;
 
 // update his/her user entry
     $sql = 'update users set fkey_neighborhoods_id = %d, referred_by = "%s",
-      fkey_values_id = %d, `values` = "%s", money = money + 1000 
+      fkey_values_id = %d, `values` = "%s", money = money + 1000
       where id = %d;';
     $result = db_query($sql, $mentor->fkey_neighborhoods_id, $referral_code,
       $mentor->fkey_values_id, $mentor->name, $game_user->id);

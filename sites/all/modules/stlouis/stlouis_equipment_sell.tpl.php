@@ -77,7 +77,9 @@ if ($equipment_succeeded) {
   $result = db_query($sql, $equipment_price, $game_user->id);
 
 // update upkeep, if needed
-  if ($game_equipment->upkeep > 0) { // FIXME: do at the same time as money
+
+  // FIXME: Do at the same time as money.
+  if ($game_equipment->upkeep > 0) {
     $sql = 'update users set expenses = expenses - %d where id = %d;';
     $result = db_query($sql, $game_equipment->upkeep * $quantity,  $game_user->id);
   }
@@ -118,7 +120,8 @@ firep("quantity: $quantity");
 $quantity = (int) $game_equipment->quantity - (int) $quantity;
 $equipment_price = $game_equipment->price + ($quantity * $game_equipment->price_increase);
 
-if ($quantity == 0) $quantity = '<em>None</em>'; // gotta love PHP typecasting
+// Gotta love PHP typecasting.
+if ($quantity == 0) $quantity = '<em>None</em>';
 
 if ($game_equipment->quantity_limit > 0) {
   $quantity_limit = '<em>(Limited to ' . $game_equipment->quantity_limit . ')</em>';
