@@ -4830,7 +4830,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that equipment
+        // Already that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = %d and fkey_users_id = %d;';

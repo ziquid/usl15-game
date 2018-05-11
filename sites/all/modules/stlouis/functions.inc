@@ -1593,7 +1593,8 @@ EOF;
 
 function equipment_gain(&$game_user, $id, $quantity) {
 
-  if ($id == 0) { // BUG?  how do these get here?
+  // BUG?  How do these get here?
+  if ($id == 0) {
     mail('joseph@ziquid.com', $game_user->name . ' trying to get equipment 0!',
       $game_user->phone_id);
     return array(FALSE, 'bad-id', 0);
