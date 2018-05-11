@@ -358,7 +358,8 @@ EOF;
 
   }
 
-  if (empty($item->title) && empty($extra_title)) return; // no goal
+  // No goal.
+  if (empty($item->title) && empty($extra_title)) return;
 
   if (empty($item->title)) $item->title = t('None');
 
@@ -853,7 +854,9 @@ EOF;
 EOF;
   }
   else if ($item->type == 'investment') {
-    if ($options['land-buy-succeeded']) { // attempt to buy
+
+    // Attempt to buy.
+    if ($options['land-buy-succeeded']) {
       echo <<< EOF
 <div class="land-button-wrapper">
   <form action="/$game/land_buy/$arg2/$item->id/use-quantity">
@@ -1213,7 +1216,8 @@ $outcome
     </div>
 EOF;
 
-  if (empty($exp_added_str)) { // quest performed?
+  // Quest performed?
+  if (empty($exp_added_str)) {
 // no quest performed -- show requirements
 
     echo <<< EOF
@@ -1609,7 +1613,8 @@ function equipment_gain(&$game_user, $id, $quantity) {
     $game_user->expenses + ($eq->upkeep * $quantity))
       return array(FALSE, 'not-enough-income', ($eq->upkeep * $quantity));
 
-  if (!empty($eo)) { // eo entry already there
+  // Eo entry already there.
+  if (!empty($eo)) {
 
     if (($eq->quantity_limit > 0) &&
       (($eo->quantity + $quantity) > $eq->quantity_limit))
@@ -1633,7 +1638,9 @@ function equipment_gain(&$game_user, $id, $quantity) {
   }
 
 // process upkeep
-  if ($eq->upkeep > 0) { // add upkeep to user expenses
+
+  // Add upkeep to user expenses.
+  if ($eq->upkeep > 0) {
     $sql = 'update users set expenses = expenses + %d where id = %d;';
     $result = db_query($sql, ($eq->upkeep * $quantity), $game_user->id);
     $game_user->expenses += ($eq->upkeep * $quantity);
@@ -1655,7 +1662,8 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   $result = db_query($sql, $id, $game_user->fkey_clans_id);
   $eo = db_fetch_object($result);
 
-  if (!empty($eo)) { // eo entry already there
+  // Eo entry already there.
+  if (!empty($eo)) {
 
     if (($eq->quantity_limit > 0) &&
       (($eo->quantity + $quantity) > $eq->quantity_limit))
@@ -1694,10 +1702,14 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
   $result = db_query($sql, $id, $game_user->id);
   $eo = db_fetch_object($result);
 
-  if (empty($eo)) return FALSE; // nothing there?
-  if ($eo->quantity < $quantity) return FALSE; // not enough?
+  // Nothing there?
+  if (empty($eo)) return FALSE;
 
-  if ($eo->quantity == $quantity) { // using all?  remove entry
+  // Not enough?
+  if ($eo->quantity < $quantity) return FALSE;
+
+  // Using all?  Remove entry.
+  if ($eo->quantity == $quantity) {
 
     $sql = 'delete from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = %d;';
@@ -1713,7 +1725,9 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
   }
 
 // check for upkeep
-  if ($eq->upkeep > 0) { // subtract upkeep from user expenses
+
+  // Subtract upkeep from user expenses.
+  if ($eq->upkeep > 0) {
     $sql = 'update users set expenses = expenses - %d where id = %d;';
     $result = db_query($sql, ($eq->upkeep * $quantity), $game_user->id);
     $game_user->expenses -= ($eq->upkeep * $quantity);
@@ -1735,10 +1749,14 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
   $result = db_query($sql, $id, $game_user->fkey_clans_id);
   $eo = db_fetch_object($result);
 
-  if (empty($eo)) return FALSE; // nothing there?
-  if ($eo->quantity < $quantity) return FALSE; // not enough?
+  // Nothing there?
+  if (empty($eo)) return FALSE;
 
-  if ($eo->quantity == $quantity) { // using all?  remove entry
+  // Not enough?
+  if ($eo->quantity < $quantity) return FALSE;
+
+  // Using all?  Remove entry.
+  if ($eo->quantity == $quantity) {
 
     $sql = 'delete from clan_equipment_ownership
       where fkey_clans_id = %d and fkey_equipment_id = %d;';
@@ -1772,7 +1790,8 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   $result = db_query($sql, $id, $game_user->id);
   $lo = db_fetch_object($result);
 
-  if (!empty($lo)) { // lo entry already there
+  // Lo entry already there.
+  if (!empty($lo)) {
 
     $sql = 'update land_ownership set quantity = quantity + %d
       where fkey_land_id = %d and fkey_users_id = %d;';
@@ -1828,10 +1847,14 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   $lo = db_fetch_object($result);
 
 
-  if (empty($lo)) return FALSE; // nothing there?
-  if ($lo->quantity < $quantity) return FALSE; // not enough?
+  // Nothing there?
+  if (empty($lo)) return FALSE;
 
-  if ($lo->quantity == $quantity) { // using all?  remove entry
+  // Not enough?
+  if ($lo->quantity < $quantity) return FALSE;
+
+  // Using all?  Remove entry.
+  if ($lo->quantity == $quantity) {
 
     $sql = 'delete from land_ownership
       where fkey_users_id = %d and fkey_land_id = %d;';
@@ -1911,7 +1934,8 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
   }
 
-  if (!empty($data)) { // already there
+  // Already there.
+  if (!empty($data)) {
 
     $comp_before = game_competency_level($game_user, $id);
     $sql = 'update user_competencies set use_count = use_count + 1
@@ -1919,7 +1943,8 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     db_query($sql, $id, $game_user->id);
     $comp_after = game_competency_level($game_user, $id);
 
-    if ($comp_after->level > $comp_before->level) { // leveled up!
+    // Leveled up!
+    if ($comp_after->level > $comp_before->level) {
 
       send_user_message(1, $game_user->id, 1,
         'You have increased your competency &quot;<span class="initial-caps">'
@@ -2010,7 +2035,8 @@ function game_competency_level($game_user, $id) {
 // return the user's competency level [0..5] for a given competency
   include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
 
-  if (gettype($id) == 'string') { // find id from string
+  // Find id from string.
+  if (gettype($id) == 'string') {
 
     $sql = 'select * from competencies where name = "%s";';
     $result = db_query($sql, $id);
@@ -2144,7 +2170,8 @@ function fetch_user_by_id($id) {
 //    return $user_cache[$id];
   }
 
-  if (gettype($id) == 'string') { // find id from phone_id
+  // Find id from phone_id.
+  if (gettype($id) == 'string') {
 
     $where = 'WHERE users.phone_id = "%s"';
 
@@ -2432,7 +2459,8 @@ function show_equipment($game_user, $item, $options = array()) {
     $a_end = '</a>';
   }
 
-  if ($clan | $item->is_loot) { // cannot buy
+  // Cannot buy.
+  if ($clan | $item->is_loot) {
     $a_start = $a_end = '';
   }
 
@@ -2757,7 +2785,8 @@ function NO_equipment_check_wear_out(&$game_user, $id) {
   $failure_reason = '&nbsp;';
   $lost = FALSE;
 
-  if ($eq->chance_of_loss >= mt_rand(1,110)) { // did it wear out?
+  // Did it wear out?
+  if ($eq->chance_of_loss >= mt_rand(1,110)) {
 // 110 instead of 100% to give a little extra chance of having it work
 
 firep($eq->name . ' wore out!');
