@@ -78,7 +78,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
 // failsafe hack
 
-    if (strlen($ai_output) > 25000) { // too long -- kill script
+    // Too long -- kill script.
+    if (strlen($ai_output) > 25000) {
 //      mail('joseph@cheek.com', 'ai output too long!', $ai_output);
       db_set_active('default');
       return;
@@ -113,7 +114,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
     _ai_out('figuring out what is the best building course of action');
 
-    if (mt_rand(0,2) > 0) { // find most available player
+    // Find most available player.
+    if (mt_rand(0,2) > 0) {
 
       $sql = 'select phone_id from users
         where meta like "ai_%"
@@ -639,7 +641,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $result = db_query($sql, "ai_$type", $level_min);
     while ($item = db_fetch_object($result)) $data[] = $item;
 
-    if (!empty($data)) { // found one!
+    // Found one!
+    if (!empty($data)) {
 
       $item = $data[mt_rand(0, 9)];
 
@@ -753,7 +756,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
     $result = db_query($sql, "ai_$type", $level_min);
     $item = db_fetch_object($result);
 
-    if ($item->phone_id) { // found one!
+    // Found one!
+    if ($item->phone_id) {
       _ai_out("found level $item->level $type player ($item->phone_id), " .
         'commencing boosting');
 
@@ -765,7 +769,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 // if not: do we have an extra minion that isn't higher than $level_max?
 // if so, tell that player to specialize
 
-    if ($type != 'minion') { // wasted effort if we just want a minion
+    // Wasted effort if we just want a minion.
+    if ($type != 'minion') {
 
       $sql = 'select phone_id, level from users
         where meta like "ai_minion"
@@ -775,7 +780,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
       $result = db_query($sql, $level_max);
       $item = db_fetch_object($result);
 
-      if ($item->phone_id) { // found one!
+      // Found one!
+      if ($item->phone_id) {
         _ai_out("found level $item->level minion ($item->phone_id), " .
           "telling to specialize as $type");
 
@@ -1031,7 +1037,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
         _ai_out('Woohoo!  I\'m an elected official!');
 
-        if ($ai_user->actions >= 5) { // need to have 5 actions to exploit
+        // Need to have 5 actions to exploit.
+        if ($ai_user->actions >= 5) {
 
           _ai_out('Woohoo!  I\'m an elected official with 5 action -- ' .
             'I\'m going to exploit my seat!');
@@ -1348,7 +1355,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
     $ai_user = _ai_fetch_user($ai_id);
 
-    if ($ai_user->actions < 6) { // not enough actions to move!
+    // Not enough actions to move!
+    if ($ai_user->actions < 6) {
 
       _ai_out('The controller wants me to move but I don\'t have enough '.
         "Actions ($ai_user->actions/$ai_user->actions_max)!  What shall I do?");
@@ -1409,7 +1417,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 // are we already here?
     if ($ai_user->fkey_neighborhoods_id == $hood) return TRUE;
 
-    if ($ai_user->actions < 6) { // not enough actions to move!
+    // Not enough actions to move!
+    if ($ai_user->actions < 6) {
 
       _ai_out("What?  I don't have enough actions " .
         "($ai_user->actions/$ai_user->actions_max) " .
@@ -1486,7 +1495,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
       $ai_response = _ai_web_request($ai_id, 'move_do', $winning_hood);
 
-      if ($ai_response == 'move-succeeded') { // succeeded?  try again!
+      // Succeeded?  Try again!
+      if ($ai_response == 'move-succeeded') {
         $ai_user = _ai_fetch_user($ai_id);
 
 // are already here?
