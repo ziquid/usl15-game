@@ -9,10 +9,11 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-// if they have chosen a clan
+// If they have chosen a clan.
   if ($clan_id != 0) {
 
-    if ($clan_id == $game_user->fkey_values_id) // no change?  just show stats
+    // No change?  Just show stats.
+    if ($clan_id == $game_user->fkey_values_id)
       drupal_goto($game . '/user/' . $arg2);
 
 // changing clans?  dock experience, bring level down to match
@@ -47,7 +48,8 @@
       $item->name, $new_level, $new_experience, $new_skill_points,
       $game_user->id);
 
-    if ($game_user->fkey_values_id != 0) { // remove Luck if changing clans
+    // Remove Luck if changing clans.
+    if ($game_user->fkey_values_id != 0) {
 
       $sql = 'update users set luck = luck - 5 where id = %d;';
       $result = db_query($sql, $game_user->id);
@@ -63,7 +65,8 @@
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
 
-    if ($item->is_clan_leader) { // clan leader? delete entire clan
+    // Clan leader? Delete entire clan.
+    if ($item->is_clan_leader) {
 
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $game_user->fkey_clans_id);
@@ -84,7 +87,8 @@
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 86400);
 
-    if ($game_user->fkey_values_id == 0) // first time choosing?  go to debates
+    // First time choosing?  Go to debates.
+    if ($game_user->fkey_values_id == 0)
       drupal_goto($game . '/debates/' . $arg2);
 
 // otherwise show your character profile
@@ -94,7 +98,8 @@
 
 // otherwise they have not chosen a clan or are rechoosing one
 
-  if ($game_user->level <= 6) { // new clan
+  // New clan.
+  if ($game_user->level <= 6) {
 
   $elder = 'You are met by the city elder again';
 

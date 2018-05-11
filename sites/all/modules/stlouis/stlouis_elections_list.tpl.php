@@ -230,7 +230,8 @@ firep($item);
 
     }
 
-    if ($item->id == $game_user->id) { // can't challenge yourself
+    // Can't challenge yourself.
+    if ($item->id == $game_user->id) {
 
       $clan_class .= ' me';
       $action = t('This is you');

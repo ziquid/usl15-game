@@ -24,7 +24,8 @@ function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can
   $item = db_fetch_object($result);
 firep($item);
 
-  if (!empty($item)) { // already a member of a clan
+  // Already a member of a clan.
+  if (!empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
       t('Already a member of a clan!') .
       '</div><div class="action-effect">You already belong to a clan.&nbsp;
@@ -44,7 +45,8 @@ firep($item);
 firep($item);
   $max_clan_size = $item->max_clan_size;
 
-  if ($max_clan_size <= 0) { // no aides to create a clan
+  // No aides to create a clan.
+  if ($max_clan_size <= 0) {
     $outcome_reason = '<div class="land-failed">' .
       t('No place to hold meetings!') .
       '</div><div class="action-effect">You need a place to hold
@@ -53,7 +55,8 @@ firep($item);
   }
 
 
-  if (empty($clan_name) XOR empty($clan_acronym)) { // didn't fill both out
+  // Didn't fill both out.
+  if (empty($clan_name) XOR empty($clan_acronym)) {
 
     $form_reminder = '<div class="land-failed">' .
       t('Both fields are required') .
@@ -62,7 +65,8 @@ firep($item);
 
   }
 
-  if (empty($clan_name) || empty($clan_acronym)) { // ask for name, acronym
+  // Ask for name, acronym.
+  if (empty($clan_name) || empty($clan_acronym)) {
 
     $outcome_reason = $form_reminder;
     $outcome_reason .=<<< EOF
@@ -88,7 +92,8 @@ EOF;
   $item = db_fetch_object($result);
 firep($item);
 
-  if (!empty($item)) { // clan does exist
+  // Clan does exist.
+  if (!empty($item)) {
 
     $outcome_reason = '<div class="land-failed">' .
       t('You have chosen an existing clan name or set of three letters') .
@@ -167,8 +172,8 @@ EOF;
   $result = db_query($sql, $clan_acronym);
   $item = db_fetch_object($result);
 firep($item);
-
-  if (empty($item)) { // clan does not exist
+  // Clan does not exist.
+  if (empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
       t('The %clan clan does not exist', array('%clan' => $clan_acronym)) .
       '</div><div class="action-effect">Please check that you entered the
@@ -272,7 +277,8 @@ EOF;
 firep($join_allowed_time, 'allowed time');
 firep($now, 'time now');
 
-  if ($now < $join_allowed_time) { // can't join yet!
+  // Can't join yet!
+  if ($now < $join_allowed_time) {
 
     $min = floor(($join_allowed_time - $now) / 60);
     $sec = ($join_allowed_time - $now) % 60;
@@ -318,7 +324,8 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
   $action_id = arg(3);
   $can_do_again = FALSE;
 
-  if (empty($game_user->fkey_clans_id)) { // not a member of a clan
+  // Not a member of a clan.
+  if (empty($game_user->fkey_clans_id)) {
 
     $outcome_reason = '<div class="land-failed">' .
       t('Not a member of a clan!') .
@@ -332,7 +339,8 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
-  if ($item->is_clan_leader) { // clan leader? delete entire clan
+  // Clan leader? Delete entire clan.
+  if ($item->is_clan_leader) {
 
     $sure = check_plain($_GET['sure']);
     if ($sure != 'yes') {
@@ -729,7 +737,8 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
     $actions_required = min($actions_required, 50);
   }
 
-  if ($game_user->actions < $actions_required) { // not enough actions
+  // Not enough actions.
+  if ($game_user->actions < $actions_required) {
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough Action!') .
       '</div><div class="action-effect">You do not have enough Action to
@@ -742,7 +751,8 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
     return FALSE;
   }
 
-  if ($game_user->money < $money_required) { // not enough money
+  // Not enough money.
+  if ($game_user->money < $money_required) {
     $offer = ($game_user->income - $game_user->expenses) * 5;
     $offer = min($offer, $game_user->level * 1000);
     $offer = max($offer, $game_user->level * 100);
@@ -793,7 +803,8 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
     where id = %d;';
   db_query($sql, $actions_required, $money_required, $game_user->id);
 
-  if ($ep_type > 1) { // set major_action counter for three minutes
+  // Set major_action counter for three minutes.
+  if ($ep_type > 1) {
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 180);
   }
@@ -1102,7 +1113,8 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
 
     }
 
-    if ($game_user->luck < 20) { // not enough luck
+    // Not enough luck.
+    if ($game_user->luck < 20) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Not enough Luck!') .
@@ -1852,7 +1864,8 @@ EOF;
       if ($item->desc_short !== $old_item->desc_short) {
 // new item to display... show it and reset counters
 
-      	if ($old_item) { // anything to display?
+       // Anything to display?
+       if ($old_item) {
 
       		if ($instance_count > 1) {
       			$instance_text = "($instance_count times) ";
@@ -1956,7 +1969,8 @@ EOF;
     $target_user = db_fetch_object($result);
     $actions_required = $target_user->level;
 
-    if ($target_user->fkey_values_id == 0) { // user is already expelled
+    // User is already expelled.
+    if ($target_user->fkey_values_id == 0) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Already expelled!') .
@@ -1967,7 +1981,8 @@ EOF;
 
     }
 
-    if ($game_user->actions < $actions_required) { // not enough actions
+    // Not enough actions.
+    if ($game_user->actions < $actions_required) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Not enough Action!') .
@@ -2072,7 +2087,8 @@ EOF;
     $result = db_query($sql, $target_id);
     $item = db_fetch_object($result);
 
-    if ($item->is_clan_leader) { // clan leader? delete entire clan
+    // Clan leader? Delete entire clan.
+    if ($item->is_clan_leader) {
 
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $item->fkey_clans_id);
@@ -2405,7 +2421,8 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
 
     $password = trim(check_plain($_GET['password']));
 
-    if (empty($password)) { // need a password
+    // Need a password.
+    if (empty($password)) {
 
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
@@ -2436,7 +2453,8 @@ EOF;
       $item = db_fetch_object($result);
 firep($item);
 
-      if (!empty($item)) { // account number already exists
+      // Account number already exists.
+      if (!empty($item)) {
         $account_num = 0;
       }
 
@@ -2515,7 +2533,8 @@ EOF;
     $item = db_fetch_object($result);
 firep($item);
 
-    if (empty($item)) { // account info not correct
+    // Account info not correct.
+    if (empty($item)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2647,7 +2666,8 @@ EOF;
     $item = db_fetch_object($result);
 firep($item);
 
-    if (empty($item)) { // account info not correct
+    // Account info not correct.
+    if (empty($item)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2734,7 +2754,8 @@ EOF;
     $item = db_fetch_object($result);
 firep($item);
 
-    if (empty($item)) { // account info not correct
+    // Account info not correct.
+    if (empty($item)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2773,7 +2794,8 @@ firep($item);
 
     }
 
-    if ($lock_try > 0) { // unable to get a lock
+    // Unable to get a lock.
+    if ($lock_try > 0) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2788,7 +2810,8 @@ firep($item);
 
 // check moolah
 
-    if (($amount > $game_user->money) || ($amount < 0)) { // not enough moolah
+    // Not enough moolah.
+    if (($amount > $game_user->money) || ($amount < 0)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2848,7 +2871,8 @@ firep($item);
 </div>
 EOF;
 
-    if ($game_user->id == $item->fkey_users_id) { // show balance if you own it
+    // Show balance if you own it.
+    if ($game_user->id == $item->fkey_users_id) {
 
     $outcome_reason .=<<< EOF
 <div class="action-effect">
@@ -2918,7 +2942,8 @@ EOF;
     $item = db_fetch_object($result);
 firep($item);
 
-    if (empty($item)) { // account info not correct
+    // Account info not correct.
+    if (empty($item)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2957,7 +2982,8 @@ firep($item);
 
     }
 
-    if ($lock_try > 0) { // unable to get a lock
+    // Unable to get a lock.
+    if ($lock_try > 0) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -2972,7 +2998,8 @@ firep($item);
 
 // check moolah
 
-    if (($amount > $item->balance) || ($amount < 0)) { // not enough moolah
+    // Not enough moolah.
+    if (($amount > $item->balance) || ($amount < 0)) {
 
       $outcome_reason = '<div class="land-failed">' .
         t('Sorry!') .
@@ -3016,7 +3043,8 @@ firep($item);
       $amount, $game_user->fkey_values_id, $amount,
       $amount, $item->balance - $amount);
 
-    if ($game_user->id != $item->fkey_users_id) { // not owned by you?
+    // Not owned by you?
+    if ($game_user->id != $item->fkey_users_id) {
       $not_owner = 'The withdrawer is not the account owner!';
     }
 
@@ -3033,7 +3061,8 @@ firep($item);
 </div>
 EOF;
 
-    if ($game_user->id == $item->fkey_users_id) { // show balance if you own it
+    // Show balance if you own it.
+    if ($game_user->id == $item->fkey_users_id) {
 
     $outcome_reason .=<<< EOF
 <div class="action-effect">
@@ -3207,7 +3236,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $old_username = $game_user->username;
 //    $can_do_again = FALSE;
 
-    if ($game_user->username == $game_user->real_username) { // no costume!
+    // No costume!
+    if ($game_user->username == $game_user->real_username) {
 
       $outcome_reason = '<div class="title">Huh?</div>
         <div class="subtitle">You can\'t go out without a costume!</div>';
@@ -3219,7 +3249,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $result = db_query($sql, $game_user->fkey_neighborhoods_id);
     $item = db_fetch_object($result); // limited to 1 in db;
 
-    if ($item->special_int < 1) { // out of candy
+    // Out of candy.
+    if ($item->special_int < 1) {
 
       $outcome_reason = '<div class="title">' . $item->name . '</div>
         <div class="subtitle">is out of treats -- try another neighborhood</div>';
@@ -3449,7 +3480,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already a ticket
+        // Already a ticket.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = 1
             where fkey_equipment_id = 26 and fkey_users_id = %d;';
@@ -3512,7 +3544,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     return FALSE;
 
 // real function below
-    if ($game_user->username == $game_user->real_username) { // no costume!
+
+    // No costume!
+    if ($game_user->username == $game_user->real_username) {
 
       $outcome_reason = '<div class="title">Huh?</div>
         <div class="subtitle">You can\'t party without a costume!</div>';
@@ -3530,7 +3564,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $result = db_query($sql, $game_user->id);
     $data = db_fetch_object($result);
 
-    if (empty($data)) { // none yet -- give one
+    // None yet -- give one.
+    if (empty($data)) {
 
       $sql = 'insert into equipment_ownership
         (fkey_users_id, fkey_equipment_id, quantity) values
@@ -3585,11 +3620,13 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 
-// not in Fountain Park?  act as normal
+    // Not in Fountain Park?  Act as normal.
     if ($game_user->fkey_neighborhoods_id != 80) return TRUE;
 
 // otherwise, we are in Fountain Park
-    if ($game_user->username == $game_user->real_username) { // no costume!
+
+    // No costume!
+    if ($game_user->username == $game_user->real_username) {
 
       $outcome_reason = '<div class="title">Huh?</div>
         <div class="subtitle">You\'re not getting a Jack-O\'-Lantern
@@ -3680,7 +3717,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $result = db_query($sql, $game_user->fkey_neighborhoods_id);
     $item = db_fetch_object($result); // limited to 1 in db;
 
-    if ($item->special_int < 0) { // Grinch!
+    // Grinch!
+    if ($item->special_int < 0) {
 
       if ($item->special_int == -1) {
 
@@ -3718,7 +3756,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
 
     }
 
-    if ($item->special_int == 0) { // tired of carols
+    // Tired of carols.
+    if ($item->special_int == 0) {
 
       $outcome_reason = '<div class="subtitle">The people of ' .
         $item->name . '</div>
@@ -3988,7 +4027,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already a cookie
+        // Already a cookie.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 29 and fkey_users_id = %d;';
@@ -4028,7 +4068,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already a mug
+        // Already a mug.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 30 and fkey_users_id = %d;';
@@ -4068,7 +4109,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already a candy cane
+        // Already a candy cane.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 31 and fkey_users_id = %d;';
@@ -4174,7 +4216,8 @@ firep($target);
     $result = db_query($sql, $game_user->id, $target_id, date('Y-m-d%'));
     $item = db_fetch_object($result);
 
-    if ($item->count >= 6) { // can only do it six times per day
+    // Can only do it six times per day.
+    if ($item->count >= 6) {
 
       $outcome_reason = '<div class="action-effect">' . $target_name .
         ' has received too many funds today.&nbsp; Please try again another
@@ -4255,7 +4298,8 @@ firep($target);
 
     }
 
-    if ($target_id == '') { // no target specified
+    // No target specified.
+    if ($target_id == '') {
 
       $data = array();
       $sql = 'SELECT users.username, users.id,
@@ -4304,7 +4348,8 @@ EOF;
         where fkey_users_id = %d and fkey_equipment_id = 42;';
       $result = db_query($sql, $target_id);
 
-      if (mt_rand(1, 3) < 3) { // miss
+      // Miss.
+      if (mt_rand(1, 3) < 3) {
 
         $outcome_reason = '<div class="subsubtitle">You had ' . $target_name .
           ' in your sights, but lost him or her in the camouflage.</div>';
@@ -4660,7 +4705,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -4701,7 +4747,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -4742,7 +4789,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -4822,7 +4870,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that equipment
+        // Already that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -4862,7 +4911,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that equipment
+        // Already that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -4894,7 +4944,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -4926,7 +4977,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -4958,7 +5010,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5126,7 +5179,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5167,7 +5221,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5208,7 +5263,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5248,7 +5304,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that equipment
+        // Already have that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 10
             where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -5289,7 +5346,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 10
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -5330,7 +5388,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 10
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -5363,7 +5422,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5396,7 +5456,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5429,7 +5490,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5596,7 +5658,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5637,7 +5700,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5678,7 +5742,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that business
+        // Already have that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5719,7 +5784,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that equipment
+        // Already have that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 100
             where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -5760,7 +5826,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 100
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -5801,7 +5868,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 100
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -5836,7 +5904,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5871,7 +5940,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -5906,7 +5976,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already own that business
+        // Already own that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -6073,7 +6144,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -6114,7 +6186,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already that business
+        // Already that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -6155,7 +6228,8 @@ EOF;
         $result = db_query($sql, $land, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that business
+        // Already have that business.
+        if (!empty($data)) {
 
           $sql = 'update land_ownership set quantity = quantity + 1
             where fkey_land_id = %d and fkey_users_id = %d;';
@@ -6196,7 +6270,8 @@ EOF;
         $result = db_query($sql, $equipment, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that equipment
+        // Already have that equipment.
+        if (!empty($data)) {
 
           $sql = 'update equipment_ownership set quantity = quantity + 250
             where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -6237,7 +6312,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 250
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -6278,7 +6354,8 @@ EOF;
         $result = db_query($sql, $staff, $game_user->id);
         $data = db_fetch_object($result);
 
-        if (!empty($data)) { // already have that staff member
+        // Already have that staff member.
+        if (!empty($data)) {
 
           $sql = 'update staff_ownership set quantity = quantity + 250
             where fkey_staff_id = %d and fkey_users_id = %d;';
@@ -6329,7 +6406,8 @@ EOF;
     $next_major_action_time =
       $get_value($game_user->id, 'next_major_action', 0);
 
-    if ($next_major_action_time > time()) { // egads!  hacking!
+    // Egads! Hacking!
+    if ($next_major_action_time > time()) {
 
       $sql = 'update users set karma = karma - 50 where id = %d;';
       $result = db_query($sql, $game_user->id);
@@ -6340,7 +6418,8 @@ EOF;
 
     }
 
-    if (mt_rand(0, 9) == 0) { // time waster
+    // Time waster.
+    if (mt_rand(0, 9) == 0) {
 
       $outcome_reason .= '<div class="title">But... your time
         was completely wasted</div>
@@ -6381,7 +6460,8 @@ EOF;
     $result = db_query($sql, $equipment, $game_user->id);
     $data = db_fetch_object($result);
 
-    if (!empty($data)) { // already have that equipment
+    // Already have that equipment.
+    if (!empty($data)) {
 
       $sql = 'update equipment_ownership set quantity = quantity + 1
         where fkey_equipment_id = %d and fkey_users_id = %d;';
