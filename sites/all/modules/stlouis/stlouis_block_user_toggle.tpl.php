@@ -23,7 +23,8 @@ if (empty($game_user->username)) {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-if (substr($arg3, 0, 3) == 'id:') { // user id
+ // User id.
+if (substr($arg3, 0, 3) == 'id:') {
   $sql = 'select username from users where id = %d;';
   $result = db_query($sql, (int) substr($arg3, 3));
   $item = db_fetch_object($result);
@@ -41,7 +42,8 @@ $sql = 'select * from message_blocks where fkey_blocked_users_id = %d
 $result = db_query($sql, $target_id, $game_user->id);
 $block = db_fetch_object($result);
 
-if (empty($block)) { // block doesn't exist - create one
+// Block doesn't exist - create one.
+if (empty($block)) {
   $sql = 'delete from user_messages where fkey_users_from_id = %d
     and fkey_users_to_id = %d;';
   db_query($sql, $target_id, $game_user->id);

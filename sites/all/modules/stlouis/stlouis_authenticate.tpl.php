@@ -49,7 +49,9 @@ if ($password == $game_user->password) {
   $ip_addr = ip_address();
 
   $extra_stuff_pos = stripos($user_agent, '(com.ziquid');
-  if ($extra_stuff_pos !== FALSE) { // remove our added stuff, if present
+
+  // Remove our added stuff, if present.
+  if ($extra_stuff_pos !== FALSE) {
     $user_agent = trim(substr($user_agent, 0, $extra_stuff_pos));
   }
 

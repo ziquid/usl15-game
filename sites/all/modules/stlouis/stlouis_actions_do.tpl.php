@@ -49,7 +49,8 @@ EOF;
     drupal_goto($game . '/home/' . $arg2);
   }
 
-  if (substr($_GET['target'], 0, 7) == 'letter_') { // show list
+  // Show list.
+  if (substr($_GET['target'], 0, 7) == 'letter_') {
 
     echo <<< EOF
 <div class="title">
@@ -419,14 +420,17 @@ firep($eq);
   }
 
   // Chance of loss - aides.
-  if ($action->fkey_staff_id) { // any staff for this action?
+
+  // Any staff for this action?
+  if ($action->fkey_staff_id) {
 
     $sql = 'select * from staff where id = %d;';
     $result = db_query($sql, $action->fkey_staff_id);
     $st = db_fetch_object($result);
 firep($st);
 
-    if ($st->chance_of_loss >= mt_rand(1, 110)) { // did it wear out?
+    // Did it wear out?
+    if ($st->chance_of_loss >= mt_rand(1, 110)) {
 
 firep($st->name . ' has run away!');
       $sql = 'update staff_ownership set quantity = quantity - 1
