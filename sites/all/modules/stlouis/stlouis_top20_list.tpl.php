@@ -17,9 +17,12 @@ $game_user = $fetch_user();
 $fetch_header($game_user);
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
+$show_where = check_plain($_GET['where']);
+$show_what = check_plain($_GET['what']);
 
-if (empty($game_user->username))
+if (empty($game_user->username)) {
   drupal_goto($game . '/choose_name/' . $arg2);
+}
 
 if ($debate == 'Box') {
   $title = 'Top Boxers';
@@ -491,9 +494,28 @@ else { // normal
     ON users.fkey_neighborhoods_id = neighborhoods.id';
 
   // Order by.
-  $sql .= '
-    ORDER BY users.experience DESC
-    ';
+  switch ($show_what) {
+    case '':
+    case 'experience':
+      $show_what = 'experience';
+      $subtitle = $experience;
+      $sql .= '
+        ORDER BY users.experience DESC
+      ';
+      $sql2_what = 'experience';
+      $sql2_limit = $game_user->experience;
+      break;
+
+    case 'debates':
+      $subtitle = $debate . 's won';
+      $sql .= '
+        ORDER BY users.debates_won DESC
+      ';
+      $sql2_what = 'debates_won';
+      $sql2_limit = $game_user->debates_won;
+      break;
+
+  }
 
   $result = db_query($sql . ' LIMIT 20;');
   $count = 0;
@@ -503,8 +525,8 @@ else { // normal
 
   // Player rank.
   $sql2 = 'select count(*) as count from users
-    WHERE experience > %d;';
-  $result = db_query($sql2, $game_user->experience);
+    WHERE %s > %d;';
+  $result = db_query($sql2, $sql2_what, $sql2_limit);
   $game_rank = db_fetch_object($result);
   $game_rank = $game_rank->count + 1;
 
@@ -516,8 +538,52 @@ else { // normal
 
 }
 
+$where = [
+  'game' => t('Game-Wide (Free)'),
+  'clan' => $clan . ' (2 Actions)',
+  'party' => $party . ' (3 Actions)',
+  'hood' => $hood . ' (5 Actions)',
+];
+
+$what = [
+  'experience' => $experience . ' (Free)',
+  'debates' => $debate . 's won (1 Action)',
+  'initiative' => $initiative . ' (2 Actions)',
+  'endurance' => $endurance . ' (2 Actions)',
+  'elocution' => $elocution . ' (2 Actions)',
+  'income' => $land . ' (3 Actions)',
+];
+
 echo <<< EOF
-<div class="title">$title Game-Wide</div>
+<form action="/$game/top20/$arg2">
+  <div class="title">$title 
+    <select name="where">
+EOF;
+
+foreach ($where as $where_name => $where_title) {
+  $where_selected = ($where_name == $show_where) ? 'selected' : '';
+  $disabled = ($where_name == 'game' || $game_user->meta == 'admin') ? '' : 'disabled';
+  echo "<option value=\"$where_name\" $where_selected $disabled>$where_title</option>";
+}
+
+echo <<< EOF
+    </select>
+  </div>
+  <div class="subtitle">Based on 
+    <select name="what">
+EOF;
+
+foreach ($what as $what_name => $what_title) {
+  $what_selected = ($what_name == $show_what) ? 'selected' : '';
+  $disabled = ($what_name == 'experience' || $game_user->meta == 'admin') ? '' : 'disabled';
+  echo "<option value=\"$what_name\" $what_selected $disabled>$what_title</option>";
+}
+
+echo <<< EOF
+    </select>
+    <input class="land-buy-button" type="submit" Value="Go"/>
+  </div>
+</form>
 <div class="subsubtitle">(Your rank: $game_rank)</div>
 <div class="elections-header">
 <div class="election-details">
@@ -558,7 +624,7 @@ firep($item, 'rank ' . $rank);
 
   $icon = $game . '_clan_' . $item->party_icon . '.png';
   $party_title = $item->party_title;
-  $exp = $item->experience;
+  $exp = number_format($item->experience);
   $clan_acronym = '';
 
   if (!empty($item->clan_acronym)) {
@@ -578,6 +644,19 @@ firep($item, 'rank ' . $rank);
 //    $exp = $item->meta_int;
 //    $experience = 'Raw Amethyst';
 //  }
+
+  // What to show.
+  switch ($show_what) {
+    case '':
+    case 'experience':
+      $data_point = "$exp $experience<br>(Level $item->level)";
+      break;
+
+    case 'debates':
+      $data_point = number_format($item->debates_won) . " ${debate}s&nbsp;won";
+      break;
+
+  }
 
   if (($item->weight != $last_weight) && $last_weight != '') {
     echo '</div><div class="elections">';
@@ -603,8 +682,7 @@ EOF;
 <div class="clan-title">$party_title</div>
 <div class="rank">#$rank</div>
 <div class="opponent-name">$official_link $clan_acronym</div>
-<div class="opponent-influence">$exp $experience<br/>
-  (Level $item->level)</div>
+<div class="opponent-influence">$data_point</div>
 </div>
 EOF;
 

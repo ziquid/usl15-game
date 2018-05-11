@@ -78,6 +78,7 @@ $alder_short = 'Alder';
 $alders_short = 'Alders';
 $beauty = 'Beauty';
 $city = 'City';
+$clan = 'Clan';
 $competencies = 'Competencies';
 $debate = 'Debate';
 $debate_tab = 'Debates';
