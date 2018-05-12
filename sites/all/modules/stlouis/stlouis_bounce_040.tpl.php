@@ -22,6 +22,7 @@
 </form>
 <p><a href="http://www.ziquid.com/" target="_blank">External Link Test (iOS)</a></p>
 <p><a href="external://www.ziquid.com/">External Link Test (android)</a></p>
+<p>12 May: Added fitness club membership.</p>
 <p>11 May: Support your Local Official now gives more support based on Loyal comp.</p>
 <p>9 May: Released Android and iOS clients v 0.4.0.</p>
 <p>6 May: Extended Cinco De Mayo event one more day.</p>
