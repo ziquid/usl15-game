@@ -753,9 +753,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Not enough money.
   if ($game_user->money < $money_required) {
-    $offer = ($game_user->income - $game_user->expenses) * 5;
-    $offer = min($offer, $game_user->level * 1000);
-    $offer = max($offer, $game_user->level * 100);
+    $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough @value', array('@value' => $game_user->values)) .
       '</div><div class="action-effect">You do not have enough ' .

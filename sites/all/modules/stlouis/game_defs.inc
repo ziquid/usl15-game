@@ -8,13 +8,15 @@ define(EVENT_APRIL_FOOLS, 4);
 define(EVENT_NEW_NAMES, 5);
 define(EVENT_PRE_MAY, 6);
 define(EVENT_CINCO_DE_MAYO, 7);
+define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
+define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
 define(MISSION_MAY, 1005);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
 $event_type = EVENT_NONE;
-$month_mission = MISSION_MAY;
+//$month_mission = MISSION_MAY;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
 
@@ -69,6 +71,11 @@ switch($today) {
   case '2018-05-12':
   case '2018-05-13':
     $month_mission = MISSION_MAY;
+    break;
+
+  case '2018-05-14':
+  case '2018-05-15':
+    $event_type = EVENT_DOUBLE_LUCK_MONEY;
     break;
 }
 

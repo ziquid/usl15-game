@@ -58,11 +58,7 @@
 // Not enough money?
 if ($game_user->money < $staff_price) {
   $staff_succeeded = FALSE;
-
-  $offer = ($game_user->income - $game_user->expenses) * 5;
-  $offer = min($offer, $game_user->level * 1000);
-  $offer = max($offer, $game_user->level * 100);
-
+  $offer = game_luck_money_offer($game_user);
   $outcome_reason = '<div class="land-failed">' . t('Not enough @value!',
       array('@value' => $game_user->values)) . '</div>
       <div class="try-an-election-wrapper"><div  class="try-an-election"><a

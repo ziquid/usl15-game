@@ -140,10 +140,7 @@ switch ($fill_type) {
       return;
     }
 
-    $offer = ($game_user->income - $game_user->expenses) * 5;
-    $offer = min($offer, $game_user->level * 1000);
-    $offer = max($offer, $game_user->level * 100);
-
+    $offer = game_luck_money_offer($game_user);
     $sql = 'update users set money = money + %d, luck = luck - 1
       where id = %d;';
     db_query($sql, $offer, $game_user->id);

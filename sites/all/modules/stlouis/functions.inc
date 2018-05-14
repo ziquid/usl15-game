@@ -527,11 +527,7 @@ function game_show_land($game_user, $item, $options = []) {
       break;
 
     case 'failed no-money':
-      // TODO refactor money offers
-      $offer = ($game_user->income - $game_user->expenses) * 5;
-      $offer = min($offer, $game_user->level * 1000);
-      $offer = max($offer, $game_user->level * 100);
-
+      $offer = game_luck_money_offer($game_user);
       $header = '<div class="title">' .
         // FIXME remove special characters from text here
           t('∆ @value <span>Insufficient</span> ∆',
@@ -2903,4 +2899,28 @@ function game_can_do_yet($game_user, $key) {
   }
 
   return $can_do;
+}
+
+/**
+ * Return the amount of money the game offers for one Luck.
+ *
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return int
+ *   The offer.
+ */
+function game_luck_money_offer($game_user) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  $offer = ($game_user->income - $game_user->expenses) * 5;
+  $offer = min($offer, $game_user->level * 1000);
+  $offer = max($offer, $game_user->level * 100);
+
+  if ($event_type == EVENT_DOUBLE_LUCK_MONEY) {
+    $offer *= 2;
+  }
+
+  return $offer;
 }

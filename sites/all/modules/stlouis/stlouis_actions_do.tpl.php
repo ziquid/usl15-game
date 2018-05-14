@@ -129,11 +129,7 @@ EOF;
 
     if (substr($phone_id, 0, 3) == 'ai-')
       $ai_output = 'action-failed no-money';
-
-    $offer = ($game_user->income - $game_user->expenses) * 5;
-    $offer = min($offer, $game_user->level * 1000);
-    $offer = max($offer, $game_user->level * 100);
-
+    $offer = game_luck_money_offer($game_user);
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
       $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .

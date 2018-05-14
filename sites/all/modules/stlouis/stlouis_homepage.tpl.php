@@ -257,6 +257,29 @@ switch($event_type) {
       </div>';
     break;
 
+  case EVENT_DOUBLE_LUCK_MONEY:
+    $event_text = '<div class="event">
+      <div class="event-tagline">
+        DOUBLE YOUR MONEY EVENT
+      </div>
+      <div class="event-text">
+        May 14 and 15 only, get 2x the normal amount of money for 1 ' . $luck . '!
+      </div>
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/elders_do_fill/' . $arg2 .
+            '/money?destination=/' . $game . '/home/' . $arg2 . '">' .
+            t('Receive @offer @values NOW (1&nbsp;@luck',
+              array(
+                '@offer' => game_luck_money_offer($game_user),
+                '@values' => $game_user->values,
+                '@luck' => $luck,
+              )) . ')
+          </a>
+        </div>
+      </div>';
+    break;
 }
 
 // Monthly quests.

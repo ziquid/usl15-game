@@ -21,6 +21,7 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p><a href="external://www.ziquid.com/">External Link Test</a></p>
+<p>14 May: Added Double Your Money event.</p>
 <p>12 May: Added fitness club membership.</p>
 <p>11 May: Support your Local Official now gives more support based on Loyal comp.</p>
 <p>9 May: Released Android and iOS clients v 0.4.0.</p>
