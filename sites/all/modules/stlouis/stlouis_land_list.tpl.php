@@ -32,7 +32,7 @@ $sql_to_add = 'WHERE (((
 
   OR land_ownership.quantity > 0 ';
 
-if ($game_user->phone_id == 'abc123') {
+if ($game_user->meta == 'admin') {
   $sql_to_add = '';
 }
 
