@@ -1498,7 +1498,7 @@ EOF;
     </div>
 EOF;
 
-  // Due date.
+    // Due date.
     if (!empty($item->time_due)) {
 
     $time_due = _stlouis_format_date(strtotime($item->time_due));
@@ -1511,7 +1511,7 @@ EOF;
 
     }
 
-  // Required elected position.
+    // Required elected position.
     if ($item->fkey_required_elected_positions_id > 0) {
 
       _required_elected_position($game_user,
@@ -1519,7 +1519,7 @@ EOF;
 
     }
 
-  // Required competencies.
+    // Required competencies.
     if ($item->fkey_required_competencies_id > 0 &&
       $item->required_competencies_level > 0) {
 
