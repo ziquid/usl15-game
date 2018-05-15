@@ -53,9 +53,8 @@
 </div>
 EOF;
 
-//      mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",
-//        "due to action from $game_user->username.");
-
+  //      Mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",.
+  //        "Due to action from $game_user->username.");.
   }
   else {
 
@@ -69,9 +68,8 @@ EOF;
 </div>
 EOF;
 
-//      mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",
-//        "due to action from $game_user->username.");
-
+  //      Mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",.
+  //        "Due to action from $game_user->username.");.
   }
 
   db_set_active('default');
