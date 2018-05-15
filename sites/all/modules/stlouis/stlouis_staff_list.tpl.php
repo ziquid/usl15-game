@@ -9,8 +9,7 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-// fix expenses in case they are out of whack
-
+  // Fix expenses in case they are out of whack.
   $sql = 'update users set expenses =
 
     ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
@@ -64,7 +63,7 @@ EOF;
 
   $land_active = ' AND active = 1 ';
 
-// for testing - exclude all exclusions (!) if I am abc123
+  // For testing - exclude all exclusions (!) if I am abc123.
   if ($game_user->phone_id == 'abc123') {
     $land_active = ' AND (active = 1 OR active = 0) ';
   }
@@ -199,7 +198,7 @@ EOF;
 
     }
 
-    // grab each action for an agent
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
@@ -288,8 +287,7 @@ EOF;
 
   }
 
-// show next one
-
+  // Show next one.
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
 
