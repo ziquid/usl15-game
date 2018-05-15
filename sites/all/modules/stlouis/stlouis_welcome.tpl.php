@@ -2,7 +2,7 @@
 
   global $game, $phone_id;
 
-// we won't have gone through fetch_user() yet, so set these here
+  // We won't have gone through fetch_user() yet, so set these here.
   $game = check_plain(arg(0));
   $get_phoneid = '_' . $game . '_get_phoneid';
   $phone_id = $get_phoneid();
@@ -17,13 +17,13 @@
   $default_neighborhood = 81;
   $default_value = 'Greenbacks';
 
-// check to make sure not too many from the same IP address
+  // Check to make sure not too many from the same IP address.
   $sql = 'select count(`value`) as count from user_attributes
     where `key` = "last_IP" and `value` = "%s";';
   $result = db_query($sql, ip_address());
   $item = db_fetch_object($result);
 
-// allow multiple from my IP
+  // Allow multiple from my IP.
   if (($item->count > 5) && (ip_address() != '69.255.171.73') &&
     (ip_address() != '73.82.211.0')) {
     echo 'Error E-2242: ' . $arg2 .
