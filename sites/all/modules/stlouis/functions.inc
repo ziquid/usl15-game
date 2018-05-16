@@ -320,15 +320,13 @@ return;
 
   if ($finished) {
 
-// save an entry showing that this goal has been achieved
-
+    // Save an entry showing that this goal has been achieved.
     $sql = 'insert into goals_achieved
       (fkey_users_id, fkey_goals_id)
       values (%d, %d);';
     $result = db_query($sql, $game_user->id, $item->id);
 
-// congratulate user
-
+    // Congratulate user.
     $extra_title =<<< EOF
 <div class="title goal-achieved">
   Goal Achievement
@@ -340,8 +338,7 @@ EOF;
     $next = t('Next Goal');
     $current = 'current';
 
-// find next goal
-
+    // Find next goal.
     $sql = 'select goals.* from goals
       left join goals_achieved on fkey_goals_id = goals.id
       and fkey_users_id = %d
@@ -529,7 +526,8 @@ function game_show_land($game_user, $item, $options = []) {
     case 'failed no-money':
       $offer = game_luck_money_offer($game_user);
       $header = '<div class="title">' .
-        // FIXME remove special characters from text here
+
+          // FIXME remove special characters from text here.
           t('∆ @value <span>Insufficient</span> ∆',
             array('@value' => $game_user->values)) . '
         </div>
@@ -573,7 +571,8 @@ function game_show_land($game_user, $item, $options = []) {
       break;
 
     case 'failed not-required-hood':
-      // FIXME: show land available in other hoods
+
+      // FIXME: show land available in other hoods.
       $header = '<div class="title">' .
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
@@ -624,7 +623,7 @@ function game_show_land($game_user, $item, $options = []) {
 
   $can_buy = $can_sell = TRUE;
 
-  // FIXME firep() all reason why can't buy nor sell
+  // FIXME firep() all reason why can't buy nor sell.
   if ($item->fkey_neighborhoods_id != 0 &&
     $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)
     $can_buy = FALSE;
@@ -675,7 +674,7 @@ EOF;
   </a>
 </div>
 EOF;
-    // Current job?  Change 'Apply' button to 'Work' button
+    // Current job?  Change 'Apply' button to 'Work' button.
     if (strlen($current) == 0) {
       $apply_button = <<< EOF
 <div class="land-buy-button">
@@ -889,7 +888,7 @@ EOF;
   }
   else {
 
-    // Job.
+      // Job.
       echo <<< EOF
   <div class="land-button-wrapper">
     $apply_button
@@ -1250,14 +1249,12 @@ EOF;
     </div>
 EOF;
 
-  // required land
-
+      // Required land.
       if ($item->land_required_quantity > 0)
         _required_land($game_user, $item->fkey_land_required_id,
           $item->land_required_quantity);
 
-  // required equipment
-
+      // Required equipment.
       if ($item->equipment_1_required_quantity +
         $item->equipment_2_required_quantity +
         $item->equipment_3_required_quantity +
@@ -1286,14 +1283,12 @@ EOF;
 
       }
 
-  // required staff
-
+      // Required staff.
       if ($item->staff_required_quantity > 0)
         _required_staff($game_user, $item->fkey_staff_required_id,
           $item->staff_required_quantity);
 
-  // required party
-
+      // Required party.
       if ($item->need_party > 0)
         echo <<< EOF
     <div class="quest-required_energy">
@@ -1301,8 +1296,7 @@ EOF;
     </div>
 EOF;
 
-  // required clan
-
+      // Required clan.
       if ($item->need_clan > 0)
         echo <<< EOF
     <div class="quest-required_energy">
@@ -1310,8 +1304,7 @@ EOF;
     </div>
 EOF;
 
-  // required job
-
+      // Required job.
       if ($item->need_job > 0)
         echo <<< EOF
     <div class="quest-required_energy">
@@ -1344,7 +1337,9 @@ EOF;
 EOF;
 
   }
-  else { // quest performed -- show accomplishments
+
+  // Quest performed -- show accomplishments.
+  else {
 
     echo <<< EOF
     <div class="quest-requisites">
@@ -1503,8 +1498,7 @@ EOF;
     </div>
 EOF;
 
-// due date
-
+    // Due date.
     if (!empty($item->time_due)) {
 
     $time_due = _stlouis_format_date(strtotime($item->time_due));
@@ -1517,8 +1511,7 @@ EOF;
 
     }
 
-// required elected position
-
+    // Required elected position.
     if ($item->fkey_required_elected_positions_id > 0) {
 
       _required_elected_position($game_user,
@@ -1526,8 +1519,7 @@ EOF;
 
     }
 
-// required competencies
-
+    // Required competencies.
     if ($item->fkey_required_competencies_id > 0 &&
       $item->required_competencies_level > 0) {
 
@@ -1544,8 +1536,7 @@ EOF;
     </div>
 EOF;
 
-// enhanced competencies
-
+  // Enhanced competencies.
   if ($item->fkey_enhanced_competencies_id > 0) {
 
     _enhanced_competency($game_user, $item->fkey_enhanced_competencies_id,
@@ -1605,7 +1596,7 @@ function equipment_gain(&$game_user, $id, $quantity) {
   $result = db_query($sql, $id, $game_user->id);
   $eo = db_fetch_object($result);
 
-// check for enough income to cover upkeep
+  // Check for enough income to cover upkeep.
   if ($game_user->income <
     $game_user->expenses + ($eq->upkeep * $quantity))
       return array(FALSE, 'not-enough-income', ($eq->upkeep * $quantity));
@@ -1634,8 +1625,7 @@ function equipment_gain(&$game_user, $id, $quantity) {
 
   }
 
-// process upkeep
-
+  // Process upkeep.
   // Add upkeep to user expenses.
   if ($eq->upkeep > 0) {
     $sql = 'update users set expenses = expenses + %d where id = %d;';
@@ -1721,8 +1711,7 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
 
   }
 
-// check for upkeep
-
+  // Check for upkeep.
   // Subtract upkeep from user expenses.
   if ($eq->upkeep > 0) {
     $sql = 'update users set expenses = expenses - %d where id = %d;';
@@ -1804,12 +1793,12 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
 
   }
 
-// process income
+  // Process income.
   $sql = 'update users set income = income + %d where id = %d;';
   $result = db_query($sql, ($land->payout * $quantity), $game_user->id);
   $game_user->income += ($land->payout * $quantity);
 
-// start the income clock, if needed
+  // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
 
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
@@ -1818,13 +1807,14 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
 
   }
 
-// pay for the land, if needed
+  // Pay for the land, if needed.
   $sql = 'update users set money = money - %d
     where id = %d;';
   db_query($sql, $ex_price, $game_user->id);
 
+  // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = $fetch_user(); // reprocess user object
+  $game_user = $fetch_user();
   return TRUE;
 }
 
@@ -1866,12 +1856,12 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
 
   }
 
-// process income
+  // Process income.
   $sql = 'update users set income = income - %d where id = %d;';
   $result = db_query($sql, ($land->payout * $quantity), $game_user->id);
   $game_user->income -= ($land->payout * $quantity);
 
-// start the income clock, if needed
+  // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
 
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
@@ -1880,7 +1870,7 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
 
   }
 
-// receive pay for the land, if needed
+  // Receive pay for the land, if needed.
   $sql = 'update users set money = money + %d
     where id = %d;';
   $result = db_query($sql, $ex_price, $game_user->id);
@@ -1955,7 +1945,9 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     }
 
   }
-  else { // new competency
+
+  // New competency.
+  else {
 
     $sql = 'insert into user_competencies
       (fkey_users_id, fkey_competencies_id, use_count) values
@@ -2000,7 +1992,7 @@ function NO_action_use(&$game_user, $quantity = 1) {
     where id = %d;';
   $result = db_query($sql, $quantity, $game_user->id);
 
-// start the actions clock, if needed
+  // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {
 
     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -2009,7 +2001,8 @@ function NO_action_use(&$game_user, $quantity = 1) {
 
   }
 
-  $game_user = $fetch_user(); // reprocess user object
+  // Reprocess user object.
+  $game_user = $fetch_user();
   return TRUE;
 
 }
@@ -2029,7 +2022,8 @@ function game_karma($game_user, $text, $quantity) {
 }
 
 function game_competency_level($game_user, $id) {
-// return the user's competency level [0..5] for a given competency
+
+  // Return the user's competency level [0..5] for a given competency.
   include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
 
   // Find id from string.
@@ -2075,8 +2069,9 @@ function game_competency_level($game_user, $id) {
       $comp->max = $max;
       $comp->next = $max;
 
+      // Cannot attain next level.
       if ($level == 5) {
-        $comp->next = $comp->use_count; // cannot attain next level
+        $comp->next = $comp->use_count;
       }
 
       break;
@@ -2092,9 +2087,9 @@ function game_competency_level($game_user, $id) {
 }
 
 function competency_min_count($level, $comp_level) {
-// return the minimum use count for a given level [0..5] and competency level
-// [1..3]
 
+  // Return the minimum use count for a given level [0..5] and competency level.
+  // [1..3].
   $min_count = [
     1 => [
       0,
@@ -2158,12 +2153,13 @@ function competency_level_name($id, $req = FALSE) {
 
 function fetch_user_by_id($id) {
 
-  static $user_cache; // simple per-page cache
+  // Simple per-page cache.
+  static $user_cache;
 
   if (!empty($user_cache[$id])) {
     firep("query for user $id resulted in cached object");
-// jwc 05Jul2013 -- don't return cached results
-// until we can reliably invalidate the cache
+    // Jwc 05Jul2013 -- don't return cached results.
+    // Until we can reliably invalidate the cache.
 //    return $user_cache[$id];
   }
 
@@ -2602,7 +2598,7 @@ EOF;
 
   }
 
-// grab each action for the equipment
+  // Grab each action for the equipment.
   $data2 = array();
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
@@ -2784,8 +2780,7 @@ function NO_equipment_check_wear_out(&$game_user, $id) {
 
   // Did it wear out?
   if ($eq->chance_of_loss >= mt_rand(1,110)) {
-// 110 instead of 100% to give a little extra chance of having it work
-
+    // 110 instead of 100% to give a little extra chance of having it work.
 firep($eq->name . ' wore out!');
     $lost = equipment_lose($game_user, $id, 1);
 
