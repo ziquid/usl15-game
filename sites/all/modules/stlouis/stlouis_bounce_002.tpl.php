@@ -15,5 +15,5 @@
 
   <p>Uprising: St. Louis, Community Edition</p>
   <p>March 6, 2018 Beta release 0.2.0</p>
-<h4>The game has now reached been updated</h4>
+<h4>The game has now been updated</h4>
 <h4>Please update your client</h4>
