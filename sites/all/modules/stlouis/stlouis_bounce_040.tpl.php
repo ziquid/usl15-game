@@ -21,6 +21,7 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p><a href="external://www.ziquid.com/">External Link Test</a></p>
+<p>18 May: Added 2nd-round bonus for FP missions.</p>
 <p>18 May: Changed Work to Work Overtime.</p>
 <p>18 May: Try the Cinco De Mayo party again this weekend!</p>
 <p>14 May: Added Double Your Money event, Mutual Fund aide.</p>
