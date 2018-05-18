@@ -691,7 +691,7 @@ EOF;
         $apply_button = <<< EOF
 <div class="land-buy-button">
   <a href="/$game/land_work/$arg2/$item->id/1">
-    Work
+    Work Overtime
   </a>
 </div>
 EOF;
@@ -703,7 +703,7 @@ EOF;
         $apply_button = <<< EOF
 <div class="land-buy-button not-yet">
   <!--<a href="/$game/land_work/$arg2/$item->id/1">-->
-    Can Work in $work_again
+    Can Work Overtime in $work_again
   <!--</a>-->
 </div>
 EOF;
