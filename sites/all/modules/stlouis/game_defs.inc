@@ -77,6 +77,12 @@ switch($today) {
   case '2018-05-15':
     $event_type = EVENT_DOUBLE_LUCK_MONEY;
     break;
+
+  case '2018-05-18':
+  case '2018-05-19':
+  case '2018-05-20':
+    $event_type = EVENT_CINCO_DE_MAYO;
+    break;
 }
 
 $alderman = 'Alderman';

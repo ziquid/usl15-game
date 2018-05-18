@@ -21,6 +21,7 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p><a href="external://www.ziquid.com/">External Link Test</a></p>
+<p>18 May: Try the Cinco De Mayo party again this weekend!</p>
 <p>14 May: Added Double Your Money event, Mutual Fund aide.</p>
 <p>12 May: Added fitness club membership.</p>
 <p>11 May: Support your Local Official now gives more support based on Loyal comp.</p>

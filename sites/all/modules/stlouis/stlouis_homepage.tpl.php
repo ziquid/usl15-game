@@ -249,10 +249,12 @@ switch($event_type) {
 
     $event_text = '<div class="event">
       <div class="event-tagline">
-        Are you going to the Cinco De Mayo party in Benton Park West?
+        <!--Are you going to the Cinco De Mayo party in Benton Park West?-->
+        Didn\'t finish the Cinco De Mayo event in Benton Park West?
       </div>
       <div class="event-text">
-        I hear it\'s going to be fun!
+        <!--I hear it\'s going to be fun!-->
+        Try it again this weekend! (Fri, Sat, Sun)
       </div>
       </div>';
     break;
