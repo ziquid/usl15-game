@@ -732,7 +732,7 @@ foreach ($data as $item) {
 
     $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
       $clan_acronym;
-    if ($item->username != 'Celestial Glory Game') {
+    if ($item->username != 'USLCE Game') {
       $reply = '<div class="message-reply-wrapper"><div class="message-reply">
         <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
         '">View / Respond</a></div></div>';
