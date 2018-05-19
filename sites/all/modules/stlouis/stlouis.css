@@ -360,11 +360,11 @@ a.version {
   top: 97px;
   left: 45px;
   text-decoration: none;
-  color: rgba(255, 85, 85, 0.97);
+  color: rgba(255, 85, 85, 0.01);
   font-size: 15px;
   font-family: Georgia, "times new roman", serif;
   font-weight: bold;
-  text-shadow: 0 0 8px yellow;
+  text-shadow: 0 0 8px rgba(255, 255, 0, 0.01);
 }
 
 .competency-pip {
