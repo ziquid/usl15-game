@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-//  set_time_limit(10); // this page must not bog down server
+$version = 'v0.4.0, 19 May 2018';
 
 global $game, $phone_id;
 
@@ -20,6 +20,8 @@ $arg2 = check_plain(arg(2));
 include drupal_get_path('module', $game) . '/game_defs.inc';
 
 $message = check_plain($_GET['message']);
+
+competency_gain($game_user, 'where the heart is');
 
 if ($game_user->level < 6) {
 
@@ -64,18 +66,39 @@ if ($game_user->last_bonus_date != $today) {
   $money = ($game_user->level * $item->residents) + $game_user->income -
     $game_user->expenses;
   $extra_bonus = '';
+/*
+  if ($game == 'stlouis') {
 
-//      $sql = 'select quantity from staff_ownership
-//        where fkey_staff_id = 18 and fkey_users_id = %d;';
-//      $result = db_query($sql, $game_user->id);
-//      $item = db_fetch_object($result);
-//
-//      if ($item->quantity >= 1) {
-//        $money *= 3;
-//        $extra_text .= '<div class="level-up-text">
-//          ~ Your private banker tripled your bonus ~
-//        </div>';
-//      }
+    $sql = 'select quantity from staff_ownership
+      where fkey_staff_id = 18 and fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+    $item = db_fetch_object($result);
+
+    if ($item->quantity >= 1) {
+      $money *= 3;
+      $extra_text .= '<div class="level-up-text">
+        ~ Your private banker tripled your bonus ~
+      </div>';
+    }
+
+  }
+
+  if ($game == 'celestial_glory') {
+
+    if ($game_user->fkey_values_id == 5) {
+      $money *= 1.01;
+      $extra_text .= '<div class="level-up-text">
+        ~ As a Merchant, you gained an extra 1% ~
+      </div>';
+    }
+
+  }
+*/
+  $money = ceil($money);
+
+//  competency_gain($game_user, 'daily bonus');
+
+firep("adding $money money because last_bonus_date = $last_bonus_date");
 
   $sql = 'update users set money = money + %d, last_bonus_date = "%s"
     where id = %d;';
@@ -86,7 +109,7 @@ if ($game_user->last_bonus_date != $today) {
       <div class="wise_old_man happy"></div>
       <div class="level-up-header">Daily Bonus!</div>
       <div class="level-up-text">You have received a bonus of ' .
-        $money . ' ' . $game_user->values . '!</div>' .
+        number_format($money) . ' ' . $game_user->values . '!</div>' .
         $extra_text .
       '<div class="level-up-text">Come back tomorrow for another bonus</div>
     </div>';
@@ -281,6 +304,7 @@ switch($event_type) {
           </a>
         </div>
       </div>';
+
     break;
 }
 
@@ -310,34 +334,46 @@ switch ($month_mission) {
     '">Leaderboard</a>
       </div>-->
       </div>';
-}
-// dead presidents event
-//if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
-//'/top_event_points/' . $arg2 . '">-->
-//<div class="event">
-//  <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
-//  width="160">
-//</div>
-//<div class="event-text">
-//    New&nbsp;Event <!--Starts&nbsp;Feb&nbsp;28th-->DELAYED
-//</div>
-//<div class="event-tagline small">
-//  Turning St. Louis into an industrial wasteland
-//</div>
-//<div class="event-tagline">
-//  &mdash; one &mdash; hood &mdash; at &mdash; a &mdash; time &mdash;
-//</div>
-//</div>
-//<!--</a>-->';
 
+    break;
+}
+
+// dead presidents event
+/*
+if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
+'/top_event_points/' . $arg2 . '">-->
+<div class="event">
+  <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
+  width="160">
+</div>
+<div class="event-text">
+    New&nbsp;Event <!--Starts&nbsp;Feb&nbsp;28th-->DELAYED
+</div>
+<div class="event-tagline small">
+  Turning St. Louis into an industrial wasteland
+</div>
+<div class="event-tagline">
+  &mdash; one &mdash; hood &mdash; at &mdash; a &mdash; time &mdash;
+</div>
+</div>
+<!--</a>-->';
+*/
 echo <<< EOF
 $extra_bonus
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
+<!--<a class="version" href="/$game/changelog/$arg2">-->
+<a class="version" href="/$game/bounce_040/$arg2">
+  $version
+</a>
 </div>
 <div class="new-main-menu">
 <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
 usemap="#new_main_menu"/>
+<a class="elections-menu" href="/$game/elections/$arg2">
+  $election_tab
+</a>
+
 <map name="new_main_menu">
 EOF;
 
@@ -352,16 +388,6 @@ EOF;
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Debates" href="/$game/debates/$arg2" />
 EOF;
-
-//  if ($game != 'celestial_glory') {
-
-  $coords = _stlouis_scale_coords($coefficient, 32, 93, 127, 115);
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Elections" href="/$game/elections/$arg2" />
-EOF;
-
-//  }
 
 $coords = _stlouis_scale_coords($coefficient, 197, 72, 257, 92);
 $coords2 = _stlouis_scale_coords($coefficient, 187, 93, 267, 115);
@@ -416,32 +442,26 @@ EOF;
 
   $coords = _stlouis_scale_coords($coefficient, 214, 192, 265, 210);
 
-//if ($game == 'stlouis') {
-//  echo <<< EOF
-//  <area shape="rect" coords="$coords" alt="Forum"
-//    href="http://forum.cheek.com/forum/2" />
-//EOF;
-//}
-//else {
-//  echo <<< EOF
-//  <area shape="rect" coords="$coords" alt="Forum"
-//    href="http://forum.cheek.com/forum/12" />
-//EOF;
-//}
-
   echo <<< EOF
+  <area shape="rect" coords="$coords" alt="Forum"
+    href="external://discord.gg/cFyt7w9" />
 </map>
+</div>
+<div class="location">
+$game_user->location
 </div>
 $event_text
 <div class="news">
 <div class="title">
   News
 </div>
-<a class="button active" href="#" id="all-button">All</a>
-<a class="button" href="#" id="personal-button">Personal</a>
-<a class="button" href="#" id="election-button">{$election_tab}</a>
-<a class="button" href="#" id="clan-button">$party_small</a>
-<a class="button" href="#" id="system-button">$system</a>
+<div class="news-buttons">
+  <button id="news-all" class="active">All</button>
+  <button id="news-user">Personal</button>
+  <button id="news-challenge">{$election_tab}</button>
+  <button id="news-clan">$party_small</button>
+  <button id="news-system">$system</button>
+</div>
 <div id="all-text">
 EOF;
 
@@ -643,13 +663,43 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
     $game_user->fkey_neighborhoods_id, $limit,
     $clan_id_to_use, $limit,
     $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
-    $limit,
-    $limit);
+    $limit, 75);
   while ($item = db_fetch_object($result)) $data[] = $item;
   db_set_active('game_' . $game); // reset to master
 }
 
 $msg_shown = FALSE;
+
+echo <<< EOF
+<div class="news-item clan clan-msg">
+<div class="message-title">Send a message to your clan</div>
+<div class="send-message">
+  <form method=get action="/$game/party_msg/$arg2">
+    <textarea class="message-textarea" name="message"
+    rows="2">$message</textarea>
+  <br/>
+  <div class="send-message-target">
+    <select name="target">
+EOF;
+
+if ($game_user->fkey_clans_id)
+  echo ('<option value="clan">Clan</option>');
+
+if ($game_user->can_broadcast_to_party)
+  echo ('<option value="neighborhood">' . $hood . '</option>');
+
+echo ('<option value="values">' . $party . '</option>');
+
+echo <<< EOF
+      </select>
+    </div>
+    <div class="send-message-send-wrapper">
+      <input class="send-message-send" type="submit" value="Send"/>
+    </div>
+  </form>
+</div>
+</div>
+EOF;
 
 foreach ($data as $item) {
 // firep($item);
@@ -682,17 +732,24 @@ foreach ($data as $item) {
 
     $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
       $clan_acronym;
-    $reply = '<div class="message-reply-wrapper"><div class="message-reply">
-      <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
-      '">View / Respond</a></div></div>';
+    if ($item->username != 'Celestial Glory Game') {
+      $reply = '<div class="message-reply-wrapper"><div class="message-reply">
+        <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
+        '">View / Respond</a></div></div>';
+    }
+    else {
+      $reply = '';
+    }
   }
 
   echo <<< EOF
+<div class="news-item $item->type">
 <div class="dateline">
-$display_time $username
+  $display_time $username
 </div>
 <div class="message-body $private_css">
-<p>$item->message</p>$reply
+  <p>$item->message</p>$reply
+</div>
 </div>
 EOF;
   $msg_shown = TRUE;
@@ -701,8 +758,48 @@ EOF;
 
 echo <<< EOF
 </div>
-<div id="personal-text">
+</div>
+<script type="text/javascript">
+var isoNews = $('#all-text').isotope({
+itemSelector: '.news-item',
+layoutMode: 'fitRows'
+});
+
+$("#news-all").bind("click", function() {
+isoNews.isotope({ filter: "*:not(.clan-msg)" });
+$(".news-buttons button").removeClass("active");
+$("#news-all").addClass("active");
+});
+
+$('#news-user').bind('click', function() {
+isoNews.isotope({ filter: ".user" });
+$(".news-buttons button").removeClass("active");
+$("#news-user").addClass("active");
+});
+
+$('#news-challenge').bind('click', function() {
+isoNews.isotope({ filter: ".challenge" });
+$(".news-buttons button").removeClass("active");
+$("#news-challenge").addClass("active");
+});
+
+$('#news-clan').bind('click', function() {
+isoNews.isotope({ filter: ".party, .clan, .values" });
+$(".news-buttons button").removeClass("active");
+$("#news-clan").addClass("active");
+});
+
+$('#news-system').bind('click', function() {
+isoNews.isotope({ filter: ".system" });
+$(".news-buttons button").removeClass("active");
+$("#news-system").addClass("active");
+});
+</script>
+<!--  <div id="personal-text">-->
 EOF;
+
+db_set_active('default');
+return;
 
 // PERSONAL messages
 

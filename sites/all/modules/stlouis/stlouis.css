@@ -355,16 +355,14 @@ a.version {
   text-decoration: none;
 }
 
-
 .new-main-menu .elections-menu {
   position: absolute;
   top: 97px;
-  left: 53px;
+  left: 45px;
   text-decoration: none;
-  color: rgba(255, 255, 170, 0.7);
+  color: rgba(255, 85, 85, 0.97);
   font-size: 15px;
   font-family: Georgia, "times new roman", serif;
-  font-style: italic;
   font-weight: bold;
   text-shadow: 0 0 8px yellow;
 }

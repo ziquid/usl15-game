@@ -996,9 +996,9 @@ a.try-an-election, input.try-an-election {
 }
 
 .event {
-  margin: 16px 0 6px 4px;
+  margin: 14px 0 6px 4px;
   text-align: center;
-  color: #aa6666;
+  color: #a55;
 }
 
 .event a {
@@ -1055,7 +1055,6 @@ a .event-text {
 .location {
   color: #888;
   font: 10px Helvetica, Arial, sans-serif;
-  margin-top: -24px;
   text-align: center;
 }
 

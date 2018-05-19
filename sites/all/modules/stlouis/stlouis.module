@@ -1,26 +1,19 @@
 <?php
 
 function stlouis_help($path, $arg) {
-
   $output = '';
 
   switch ($path) {
-
     case "admin/help#stlouis":
       $output = '<p>'.  t('Back end for <em>Uprising: St. Louis</em> game') .'</p>';
       break;
-
   }
 
   return $output;
-
 }
 
-
 function stlouis_perm() {
-
-  return array('access stlouis content');
-
+  return ['access stlouis content'];
 }
 
 require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
@@ -304,6 +297,9 @@ function stlouis_init() {
 
   global $custom_theme, $conf;
   $conf['cache'] = FALSE; // don't cache anything
+
+  drupal_add_js(drupal_get_path('module', 'stlouis')
+    . '/isotope.pkgd.min.js');
 
   if ((arg(0) == 'stlouis') || (arg(0) == 'celestial_glory') ||
     (arg(0) == 'robber_barons')) {
@@ -1556,7 +1552,7 @@ function _stlouis_fetch_user() {
   $sql = 'select users.*, elected_positions.energy_bonus as ep_energy_bonus,
     elected_positions.can_broadcast_to_party, clan_members.fkey_clans_id,
     elected_positions.max_level as max_level_for_office,
-    CURRENT_TIMESTAMP as time_now
+    CURRENT_TIMESTAMP as time_now, neighborhoods.name as location
 
     from users
 
@@ -1567,6 +1563,9 @@ function _stlouis_fetch_user() {
 
     LEFT OUTER JOIN clan_members
     ON clan_members.fkey_users_id = users.id
+    
+    LEFT OUTER JOIN neighborhoods
+    ON users.fkey_neighborhoods_id = neighborhoods.id
 
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);

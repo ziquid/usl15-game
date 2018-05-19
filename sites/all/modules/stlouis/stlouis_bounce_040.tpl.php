@@ -21,7 +21,8 @@
   <input type="Submit" value="Continue to the game"/>
 </form>
 <p><a href="external://www.ziquid.com/">External Link Test</a></p>
-<p>19 May: New EA logo, added level 89.</p>
+<p>19 May: Updated home page with forum link to Discord, game version, and current hood.</p>
+<p>19 May: New EA logo, added level 89,  new competency!</p>
 <p>18 May: Added 2nd-round bonus for FP missions.</p>
 <p>18 May: Changed Work to Work Overtime.</p>
 <p>18 May: Try the Cinco De Mayo party again this weekend!</p>
