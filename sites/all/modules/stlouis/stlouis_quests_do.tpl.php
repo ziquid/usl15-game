@@ -619,7 +619,7 @@ EOF;
               $result = db_query($sql, $st_id, $game_user->id, 1);
             }
             else { // existing record - update it
-              $sql = 'update staff_ownership set quantity = 1 where
+              $sql = 'update staff_ownership set quantity = quantity + 1 where
                 fkey_staff_id = %d and fkey_users_id = %d;';
               $result = db_query($sql, $st_id, $game_user->id);
             }
