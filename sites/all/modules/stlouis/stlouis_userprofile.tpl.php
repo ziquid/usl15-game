@@ -74,7 +74,7 @@ if (substr($message, 0, 3) == 'XXX') {
 $sql = 'SELECT username, experience, initiative, endurance,
   elocution, debates_won, debates_lost, skill_points, luck,
   debates_last_time, users.fkey_values_id, level, referral_code,
-  users.meta,
+  users.meta, users.income, users.expenses,
   user_creations.datetime as startdate, users.meta_int,
   `values`.party_title, `values`.party_icon,
   `values`.name, users.id, users.fkey_neighborhoods_id,
@@ -476,7 +476,7 @@ EOF;
 }
 
 // Valentine's day massacre.
-if ($show_all && $game == 'stlouis') {
+if (FALSE && $show_all) {
 
   echo <<< EOF
 <span class="event-status">
@@ -508,24 +508,20 @@ EOF;
 if ($phone_id_to_check == $phone_id) {
 
   if ($item->skill_points == 0) {
-
     $skill_button = '<div class="action not-yet">Can\'t increase skills</div>';
-
   }
   else {
-
     $skill_button = '<div class="action"><a href="/' . $game . '/increase_skills/' .
       $arg2 . '/none">Increase skills</a></div>';
-
   }
 
   echo <<< EOF
 <div class="heading">Luck:</div>
-<div class="value">$item->luck</div><br/>
+<div class="value">$item->luck</div><br>
+<div class="heading">Net Income:</div>
+<div class="value">$item->income - $item->expenses</div><br>
 <div class="heading">Skill Points:</div>
 <div class="value">$item->skill_points</div>$skill_button<br/>
-<!--  <div class="heading">Creation Date:</div>
-<div class="value">$item->startdate</div><br/>-->
 EOF;
 
 }

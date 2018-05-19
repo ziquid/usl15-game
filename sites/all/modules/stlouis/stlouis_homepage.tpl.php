@@ -4,7 +4,7 @@
  * @file stlouis_homepage.tpl.php
  * The game's main screen.
  *
- * Synced with CG: no
+ * Synced with CG: yes
  * Synced with 2114: no
  */
 
