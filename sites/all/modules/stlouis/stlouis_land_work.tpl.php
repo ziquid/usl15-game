@@ -71,9 +71,9 @@ if ($options['land-work-succeeded'] == 'work-success') {
   // Add competency.
   competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
 
-  // Set timer.  Can work again in 8 hours.
+  // Set timer.  Can work again in 4 hours.
   $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'can_work_again', time() + 60*60*8);
+  $set_value($game_user->id, 'can_work_again', time() + 60*60*4);
 
   // Gain the wage.
   $sql = 'update users set money = money + %d where id = %d;';
@@ -81,7 +81,7 @@ if ($options['land-work-succeeded'] == 'work-success') {
   $game_user->money += $game_land->payout;
 
   // Set output.
-  $title = t('Success!');
+  $title = t('Success!  You feel tired!');
 }
 else {
   $title = t('Uhoh!');
