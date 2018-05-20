@@ -380,7 +380,7 @@ li {
 
 .land .land-perform-button-wrapper, .send-message-send-wrapper {
   margin: 3px;
-  float: right;
+  text-align: right;
 }
 
 .quests .quests-perform-button-wrapper {
@@ -429,8 +429,8 @@ a.crafting-submit-button {
 }
 
 .land .target {
-  float: right;
-  margin: 5px -8px 0 0;
+  text-align: right;
+  margin: 3px 3px 0 0;
 }
 
 .land .quantity {

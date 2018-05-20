@@ -20,7 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
-<p><a href="external://www.ziquid.com/">External Link Test</a></p>
+<p>19 May: Added buttons on Income screen to filter jobs and investments.</p>
 <p>19 May: Changed Work Overtime to be allowed every four hours.</p>
 <p>19 May: Updated user profile page with net income.</p>
 <p>19 May: Updated home page with forum link to Discord, game version, and current hood.</p>
