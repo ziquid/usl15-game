@@ -2903,13 +2903,11 @@ function game_can_do_yet($game_user, $key) {
   $can_do->time_remaining = $can_do->time_ready - time();
 
   if ($can_do->time_remaining > 0) {
-
     $can_do->allowed = FALSE;
     $can_do->hours_remaining = floor($can_do->time_remaining / 3600);
     $minutes_remaining_in_sec = $can_do->time_remaining % 3600;
     $can_do->minutes_remaining = floor($minutes_remaining_in_sec / 60);
     $can_do->seconds_remaining = floor($minutes_remaining_in_sec % 60);
-
   }
   else {
     $can_do->allowed = TRUE;

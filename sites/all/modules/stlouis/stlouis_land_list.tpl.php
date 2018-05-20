@@ -81,8 +81,6 @@ $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $game_user->level);
 $next = db_fetch_object($result);
 
-db_set_active('default');
-
 // ------ VIEW ------
 $fetch_header($game_user);
 game_show_aides_menu($game_user);
@@ -106,3 +104,4 @@ if (!empty($next)) {
 }
 
 echo '</div>';
+db_set_active('default');
