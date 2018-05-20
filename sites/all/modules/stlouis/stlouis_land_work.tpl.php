@@ -134,7 +134,7 @@ $sql = 'SELECT land.*, land_ownership.quantity,
 
   OR land_ownership.quantity > 0
 
-  ORDER BY required_level ASC';
+  ORDER BY fkey_enhanced_competencies_id, required_level ASC';
 $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $game_user->level);
 

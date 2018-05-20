@@ -48,7 +48,7 @@ $sql = 'SELECT land.*, land_ownership.quantity,
   left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
 
   ' . $sql_to_add . '
-  ORDER BY required_level ASC';
+  ORDER BY fkey_enhanced_competencies_id, required_level ASC';
 $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $game_user->level);
 

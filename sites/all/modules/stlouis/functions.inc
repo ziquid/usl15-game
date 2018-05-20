@@ -826,9 +826,12 @@ EOF;
   // Competencies.
   if (isset($item->competency_name_1)) {
     echo <<< EOF
-    <div class="land-payout">
+    <!--<div class="land-payout">
       Competency enhanced:
       <span class="initial-caps">$item->competency_name_1</span>
+    </div>-->
+    <div class="competency-tag">
+      $item->competency_name_1
     </div>
 EOF;
   }
