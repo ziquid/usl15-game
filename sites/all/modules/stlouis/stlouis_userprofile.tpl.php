@@ -18,6 +18,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $fetch_header($game_user);
 $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
+$q = $_GET['q'];
 
 if (empty($game_user->username))
   drupal_goto($game . '/choose_name/' . $arg2);
@@ -63,12 +64,10 @@ if (strlen($message) > 0 and strlen($message) < 3) {
 }
 
 if (substr($message, 0, 3) == 'XXX') {
-
   echo '<div class="message-error">Your message contains words that are not
     allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
   $message = '';
   competency_gain($game_user, 'uncouth');
-
 }
 
 $sql = 'SELECT username, experience, initiative, endurance,
@@ -339,8 +338,8 @@ if ($show_all) {
   + $equipment_bonus->endurance);
   $extra_elocution = number_format($staff_bonus->elocution
   + $equipment_bonus->elocution);
-  $extra_votes = $staff_bonus->extra_votes + 0;
-  $extra_defending_votes = $staff_bonus->extra_defending_votes + 0;
+  $extra_votes = (int) $staff_bonus->extra_votes;
+  $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
 //    $extra_vet_votes = (int) ($vet_bonus->quantity / 250);
 
   echo <<< EOF
@@ -350,18 +349,11 @@ if ($show_all) {
 <div class="value">$item->endurance ($extra_endurance)</div><br/>
 <div class="heading">$elocution:</div>
 <div class="value">$item->elocution ($extra_elocution)</div><br/>
-EOF;
-
-  if ($game == 'stlouis') {
-
-    echo <<< EOF
 <div class="heading">Extra Votes:</div>
 <div class="value">$extra_votes<!-- + $extra_vet_votes--></div><br/>
 <div class="heading">Extra Def. Votes:</div>
 <div class="value">$extra_defending_votes<!-- + $extra_vet_votes--></div><br/>
 EOF;
-
-  }
 
 }
 
@@ -657,17 +649,14 @@ $display_time from $item->ep_name $item->username $clan_acronym $private_text
 EOF;
 
   // Allow user to delete own messages.
-  if ($phone_id_to_check == $phone_id) {
-
+  if ($phone_id_to_check == $phone_id || $item->fkey_users_from_id == $game_user->id) {
     echo <<< EOF
-      <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id"><img
+      <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id?destination=$q"><img
         src="/sites/default/files/images/delete.png" width="16" height="16"/></a></div>
 EOF;
-
   }
 
-  echo <<< EOF
-<p>$item->message</p>
+  echo '<p>' . nl2br($item->message) . '</p>';
 EOF;
 
   if ($item->username != 'USLCE Game') {

@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>20 May: Newlines are preserved in user messages, you can delete messages sent, and prettier delete button.</p>
 <p>20 May: Added number of actions necessary to run for an office uncontested.</p>
 <p>20 May: Fixed display of necessary money, actions for PNG.</p>
 <p>20 May: Fixed not being able to get back to the game after sending a short message on the home page.</p>

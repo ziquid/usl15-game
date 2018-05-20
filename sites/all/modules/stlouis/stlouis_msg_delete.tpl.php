@@ -17,14 +17,14 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 
 // Check permissions.
-$sql = 'select fkey_users_to_id
+$sql = 'select fkey_users_from_id, fkey_users_to_id
   from user_messages
   where id = %d;';
 $result = db_query($sql, $msg_id);
 $msg = db_fetch_object($result);
 
-// Not recipient of msg?
-if ($msg->fkey_users_to_id != $game_user->id) {
+// Not origin or recipient of msg?
+if ($msg->fkey_users_to_id != $game_user->id && $msg->fkey_users_from_id != $game_user->id) {
 // FIXME jwc 10Apr2014 -- deduct karma
   db_set_active('default');
   drupal_goto($game . '/home/' . $arg2);
