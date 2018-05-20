@@ -483,29 +483,30 @@ $elected_official_type = $item->type;
 
 // If a party official.
 if ($elected_official_type == 2) {
-
+  // Grab the list of all clans in the user's party.
+  // We need to do this separately to keep the db from locking.
+  // Wish mysql had a select with nolock feature - JWC.
   $data = [];
   $sql = 'SELECT fkey_clans_id FROM clan_members
     left join users on fkey_users_id = users.id
     WHERE fkey_values_id = %d
     and is_clan_leader = 1;';
   $result = db_query($sql, $game_user->fkey_values_id);
-  while ($item = db_fetch_object($result)) $data[] = $item->fkey_clans_id;
-  // we need to do this separately to keep the db from locking
-  // wish mysql had a select with nolock feature - jwc
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item->fkey_clans_id;
+  }
 
   $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
   $clan_id_to_use = implode(',', $data);
 //firep($clan_id_to_use);
   $limit = 50;
-
+  $all_limit = 150;
 }
 else {
-
   $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
   $clan_id_to_use = $game_user->fkey_clans_id;
   $limit = 20;
-
+  $all_limit = 100;
 }
 
 $sql = '
@@ -663,8 +664,10 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
     $game_user->fkey_neighborhoods_id, $limit,
     $clan_id_to_use, $limit,
     $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
-    $limit, 75);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+    $limit, $all_limit);
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
   db_set_active('game_' . $game); // reset to master
 }
 
