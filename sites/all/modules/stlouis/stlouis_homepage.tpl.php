@@ -557,25 +557,25 @@ $sql = '
   union
 
   (
-  select party_messages.timestamp, party_messages.message,
+  select neighborhood_messages.timestamp, neighborhood_messages.message,
   users.username, users.phone_id,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private,
-  "party" as type
-  from party_messages
-  left join users on party_messages.fkey_neighborhoods_id =
+  "hood" as type
+  from neighborhood_messages
+  left join users on neighborhood_messages.fkey_neighborhoods_id =
     users.fkey_neighborhoods_id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-  party_messages.fkey_users_from_id
+  neighborhood_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   where elected_officials.fkey_users_id = fkey_users_from_id
-  and party_messages.fkey_neighborhoods_id = %d
+  and neighborhood_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
 
@@ -660,7 +660,7 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
 // expensive query - goes to slave
 //   db_set_active('game_' . $game . '_slave1');
   $result = db_query($sql, $game_user->id, $limit,
-    $game_user->id, 3, // challenge limit of 3
+    $game_user->id, 10, // challenge limit of 10
     $game_user->fkey_neighborhoods_id, $limit,
     $clan_id_to_use, $limit,
     $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
@@ -685,15 +685,15 @@ echo <<< EOF
     <select name="target">
 EOF;
 
-if ($game_user->fkey_clans_id)
-  echo ('<option value="clan">Clan</option>');
-
-if ($game_user->can_broadcast_to_party)
-  echo ('<option value="neighborhood">' . $hood . '</option>');
-
-echo ('<option value="values">' . $party . '</option>');
+if ($game_user->fkey_clans_id) {
+  echo '<option value="clan">Clan</option>';
+}
+if ($game_user->can_broadcast_to_party || $game_user->meta == 'admin') {
+  echo '<option value="neighborhood">' . $hood . '</option>';
+}
 
 echo <<< EOF
+        <option value="values">$party</option>
       </select>
     </div>
     <div class="send-message-send-wrapper">
@@ -726,10 +726,8 @@ foreach ($data as $item) {
   $private_css .= ' ' . $item->type;
 
   if (empty($item->username)) {
-
     $username = '';
     $reply = '';
-
   }
   else {
 
@@ -799,472 +797,6 @@ $("#news-system").addClass("active");
 });
 </script>
 <!--  <div id="personal-text">-->
-EOF;
-
-db_set_active('default');
-return;
-
-// PERSONAL messages
-
-$sql = 'select user_messages.*, users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym
-
-  from user_messages
-
-  left join users on user_messages.fkey_users_from_id = users.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    user_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  where fkey_users_to_id = %d
-  order by timestamp DESC limit 20;';
-$result = db_query($sql, $game_user->id);
-$msg_shown = FALSE;
-
-$data = array();
-while ($item = db_fetch_object($result)) $data[] = $item;
-
-foreach ($data as $item) {
-
-  $display_time = _stlouis_format_date(strtotime($item->timestamp));
-  $clan_acronym = '';
-
-  if (!empty($item->clan_acronym))
-    $clan_acronym = "($item->clan_acronym)";
-
-  if ($item->is_clan_leader)
-    $clan_acronym .= '*';
-
-  if ($item->private) {
-    $private_css = 'private';
-  }
-  else {
-    $private_css = '';
-  }
-
-  echo <<< EOF
-<div class="dateline">
-$display_time from $item->ep_name $item->username $clan_acronym
-</div>
-<div class="message-body user $private_css">
-<p>$item->message</p>
-<div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
-</div></div>
-</div>
-EOF;
-  $msg_shown = TRUE;
-
-}
-
-if (!$msg_shown) echo '<div class="dateline">Now</div>' .
-  '<p>No Personal messages yet.</p>';
-
-// ELECTION messages
-
-echo <<< EOF
-</div>
-<div id="election-text">
-EOF;
-
-$sql = 'select challenge_messages.*, users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym
-
-  from challenge_messages
-
-  left join users on challenge_messages.fkey_users_from_id = users.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    challenge_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  where fkey_users_to_id = %d
-  order by timestamp DESC limit 20;';
-$result = db_query($sql, $game_user->id);
-$msg_shown = FALSE;
-
-$data = array();
-while ($item = db_fetch_object($result)) $data[] = $item;
-
-foreach ($data as $item) {
-
-  $display_time = _stlouis_format_date(strtotime($item->timestamp));
-  $clan_acronym = '';
-
-  if (!empty($item->clan_acronym))
-    $clan_acronym = "($item->clan_acronym)";
-
-  if ($item->is_clan_leader)
-    $clan_acronym .= '*';
-
-  echo <<< EOF
-<div class="dateline">
-$display_time from $item->ep_name $item->username $clan_acronym
-</div>
-<div class="message-body challenge">
-<p>$item->message</p>
-<div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
-</div></div>
-</div>
-EOF;
-  $msg_shown = TRUE;
-
-}
-
-if (!$msg_shown) echo '<div class="dateline">Now</div>' .
-  '<p>No ' . $election . ' messages yet.</p>';
-
-// CLAN and PARTY messages
-
-echo <<< EOF
-</div>
-<div id="clan-text">
-EOF;
-
-if ($game_user->can_broadcast_to_party || $game_user->fkey_clans_id ||
-  $game == 'celestial_glory') {
-
-  if ($game == 'celestial_glory') {
-
-    echo <<< EOF
-<div class="message-title">Send a message to your clan</div>
-EOF;
-
-  }
-  else {
-
-    echo <<< EOF
-<div class="message-title">Send a message to your constituents or clan</div>
-EOF;
-
-  }
-
-  echo <<< EOF
-<div class="send-message">
-<form method=get action="/$game/party_msg/$arg2">
-  <textarea class="message-textarea" name="message" rows="2">$message</textarea>
-  <br/>
-  <div class="send-message-target">
-    <select name="target">
-EOF;
-
-  if ($game_user->fkey_clans_id)
-    echo ('<option value="clan">Clan</option>');
-
-  if ($game_user->can_broadcast_to_party)
-    echo ('<option value="neighborhood">' . $hood . '</option>');
-
-  if ($elected_official_type == 2 || $game == 'celestial_glory')
-// if a party official
-    echo ('<option value="values">' . $party . '</option>');
-
-    echo <<< EOF
-    </select>
-  </div>
-  <div class="send-message-send-wrapper">
-    <input class="send-message-send" type="submit" value="Send"/></div>
-</form>
-</div>
-EOF;
-
-}
-
-$sql = '
-  (
-  select party_messages.timestamp, party_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  "party" as type
-
-  from party_messages
-
-  left join users on party_messages.fkey_neighborhoods_id =
-    users.fkey_neighborhoods_id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    party_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  where elected_officials.fkey_users_id = fkey_users_from_id
-    and party_messages.fkey_neighborhoods_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select clan_messages.timestamp, clan_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  "clan" as type
-
-  from clan_messages
-
-  left join users on clan_messages.fkey_users_from_id = users.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    clan_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  ' . $clan_sql . '
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select values_messages.timestamp, values_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  "values" as type
-
-  from values_messages
-
-  left join users on values_messages.fkey_users_from_id = users.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    values_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  where values_messages.fkey_values_id = %d
---    AND values_messages.fkey_neighborhoods_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  order by timestamp DESC limit %d;';
-
-if (TRUE) {
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id, $limit,
-    $clan_id_to_use, $limit,
-    $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
-    $limit);
-}
-// clan messages use fkey_neigh_id as clans_id
-$msg_shown = FALSE;
-
-$data = array();
-while ($item = db_fetch_object($result)) $data[] = $item;
-
-foreach ($data as $item) {
-
-  $display_time = _stlouis_format_date(strtotime($item->timestamp));
-  $clan_acronym = '';
-
-  if (!empty($item->clan_acronym))
-    $clan_acronym = "($item->clan_acronym)";
-
-  if ($item->is_clan_leader)
-    $clan_acronym .= '*';
-
-  $private_css = ' ' . $item->type;
-
-  echo <<< EOF
-<div class="dateline">
-$display_time from $item->ep_name $item->username $clan_acronym
-</div>
-<div class="message-body $private_css">
-<p>$item->message</p>
-<div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
-</div></div>
-</div>
-EOF;
-  $msg_shown = TRUE;
-
-}
-
-if (!$msg_shown) echo '<div class="dateline">Now</div>' .
-  '<p>No ' . $party . ' messages yet.</p>';
-
-// SYSTEM messages
-
-echo <<< EOF
-</div>
-<div id="system-text">
-EOF;
-
-  $sql = 'select system_messages.*, users.username, users.phone_id
-  from system_messages
-  left join users on system_messages.fkey_users_from_id = users.id
-
-  order by timestamp DESC limit 20;';
-$result = db_query($sql, $game_user->id);
-$msg_shown = FALSE;
-
-$data = array();
-while ($item = db_fetch_object($result)) $data[] = $item;
-
-foreach ($data as $item) {
-
-  $display_time = _stlouis_format_date(strtotime($item->timestamp));
-
-  echo <<< EOF
-<div class="dateline">
-$display_time
-</div>
-<div class="message-body system">
-<p>$item->message</p>
-</div>
-EOF;
-  $msg_shown = TRUE;
-
-}
-
-echo <<< EOF
-</div>
-</div>
-
-<script type="text/javascript">
-
-window.onload = function() {
-
-document.getElementById('personal-text').style.display = 'none';
-document.getElementById('election-text').style.display = 'none';
-document.getElementById('clan-text').style.display = 'none';
-document.getElementById('system-text').style.display = 'none';
-
-document.getElementById('all-button').onclick = function() {
-  document.getElementById('all-text').style.display = 'block';
-  document.getElementById('personal-text').style.display = 'none';
-  document.getElementById('election-text').style.display = 'none';
-  document.getElementById('clan-text').style.display = 'none';
-  document.getElementById('system-text').style.display = 'none';
-  document.getElementById('all-button').className = 'button active';
-  document.getElementById('personal-button').className = 'button';
-  document.getElementById('election-button').className = 'button';
-  document.getElementById('clan-button').className = 'button';
-  document.getElementById('system-button').className = 'button';
-  return false;
-};
-
-document.getElementById('personal-button').onclick = function() {
-  document.getElementById('all-text').style.display = 'none';
-  document.getElementById('personal-text').style.display = 'block';
-  document.getElementById('election-text').style.display = 'none';
-  document.getElementById('clan-text').style.display = 'none';
-  document.getElementById('system-text').style.display = 'none';
-  document.getElementById('all-button').className = 'button';
-  document.getElementById('personal-button').className = 'button active';
-  document.getElementById('election-button').className = 'button';
-  document.getElementById('clan-button').className = 'button';
-  document.getElementById('system-button').className = 'button';
-  return false;
-};
-
-document.getElementById('election-button').onclick = function() {
-  document.getElementById('all-text').style.display = 'none';
-  document.getElementById('personal-text').style.display = 'none';
-  document.getElementById('election-text').style.display = 'block';
-  document.getElementById('clan-text').style.display = 'none';
-  document.getElementById('system-text').style.display = 'none';
-  document.getElementById('all-button').className = 'button';
-  document.getElementById('personal-button').className = 'button';
-  document.getElementById('election-button').className = 'button active';
-  document.getElementById('clan-button').className = 'button';
-  document.getElementById('system-button').className = 'button';
-  return false;
-};
-
-document.getElementById('clan-button').onclick = function() {
-  document.getElementById('all-text').style.display = 'none';
-  document.getElementById('personal-text').style.display = 'none';
-  document.getElementById('election-text').style.display = 'none';
-  document.getElementById('clan-text').style.display = 'block';
-  document.getElementById('system-text').style.display = 'none';
-  document.getElementById('all-button').className = 'button';
-  document.getElementById('personal-button').className = 'button';
-  document.getElementById('election-button').className = 'button';
-  document.getElementById('clan-button').className = 'button active';
-  document.getElementById('system-button').className = 'button';
-  return false;
-};
-
-document.getElementById('system-button').onclick = function() {
-  document.getElementById('all-text').style.display = 'none';
-  document.getElementById('personal-text').style.display = 'none';
-  document.getElementById('election-text').style.display = 'none';
-  document.getElementById('clan-text').style.display = 'none';
-  document.getElementById('system-text').style.display = 'block';
-  document.getElementById('all-button').className = 'button';
-  document.getElementById('personal-button').className = 'button';
-  document.getElementById('election-button').className = 'button';
-  document.getElementById('clan-button').className = 'button';
-  document.getElementById('system-button').className = 'button active';
-  return false;
-};
-
-EOF;
-
-// Message?  Show the clan tab already.
-if (!empty($message)) {
-
-echo <<< EOF
-  document.getElementById('all-text').style.display = 'none';
-  document.getElementById('personal-text').style.display = 'none';
-  document.getElementById('election-text').style.display = 'none';
-  document.getElementById('clan-text').style.display = 'block';
-  document.getElementById('system-text').style.display = 'none';
-  document.getElementById('all-button').className = 'button';
-  document.getElementById('personal-button').className = 'button';
-  document.getElementById('election-button').className = 'button';
-  document.getElementById('clan-button').className = 'button active';
-  document.getElementById('system-button').className = 'button';
-
-EOF;
-
-}
-
-echo <<< EOF
-}
-
-</script>
 EOF;
 
 db_set_active('default');

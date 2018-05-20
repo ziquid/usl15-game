@@ -627,7 +627,7 @@ EOF;
   $sql = 'update neighborhoods set welcome_msg = "%s" where id = %d;';
   db_query($sql, $welcome_msg, $game_user->fkey_neighborhoods_id);
 
-  $sql = 'insert into party_messages (fkey_users_from_id,
+  $sql = 'insert into neighborhood_messages (fkey_users_from_id,
     fkey_neighborhoods_id, message) values (%d, %d, "%s");';
   db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $welcome_msg);
