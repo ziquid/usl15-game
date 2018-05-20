@@ -20,6 +20,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>20 May: Added number of actions necessary to run for an office uncontested.</p>
+<p>20 May: Fixed display of necessary money, actions for PNG.</p>
 <p>20 May: Fixed not being able to get back to the game after sending a short message on the home page.</p>
 <p>20 May: Bumped up the number of messages shown on the home page.</p>
 <p>20 May: Level 91 and darker textareas.</p>
