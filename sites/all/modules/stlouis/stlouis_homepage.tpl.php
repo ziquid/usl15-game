@@ -565,8 +565,8 @@ $sql = '
   0 AS private,
   "hood" as type
   from neighborhood_messages
-  left join users on neighborhood_messages.fkey_neighborhoods_id =
-    users.fkey_neighborhoods_id
+  left join users on neighborhood_messages.fkey_users_from_id =
+    users.id
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
   LEFT OUTER JOIN elected_positions
@@ -574,8 +574,7 @@ $sql = '
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   neighborhood_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  where elected_officials.fkey_users_id = fkey_users_from_id
-  and neighborhood_messages.fkey_neighborhoods_id = %d
+  where neighborhood_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
 
