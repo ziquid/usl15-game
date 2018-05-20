@@ -163,7 +163,7 @@ else { // failed - add option to try an election
 }
 
 $fetch_header($game_user);
-show_aides_menu($game_user);
+game_show_aides_menu($game_user);
 
 if ($game_user->level < 15) {
 

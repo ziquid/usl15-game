@@ -139,7 +139,7 @@ else {
 
 // Show the stuff.
 $fetch_header($game_user);
-show_aides_menu($game_user);
+game_show_aides_menu($game_user);
 
 $game_land->quantity = $game_land->quantity + (int) $quantity;
 game_show_land($game_user, $game_land, $options);
@@ -191,6 +191,8 @@ while ($item = db_fetch_object($result)) {
   $data[] = $item;
 }
 
+echo '<div id="all-land">';
+
 foreach ($data as $item) {
 firep($item, 'Item: ' . $item->name);
   game_show_land($game_user, $item);
@@ -234,5 +236,7 @@ if (!empty($item)) {
   firep($item, 'Soon Item: ' . $item->name);
   game_show_land($game_user, $item, ['soon' => TRUE]);
 }
+
+echo '</div>';
 
 db_set_active('default');

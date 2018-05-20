@@ -321,10 +321,11 @@ li {
 .land {
   margin: 12px 3px -4px;
   border: 1px solid white;
-  padding: 3px 3px 42px;
+  padding: 3px 3px 3px;
   border-radius: 4px;
   -moz-border-radius: 4px;
   clear: both;
+  width: 306px;
 }
 
 .land .land-icon {
@@ -374,7 +375,7 @@ li {
 
 .land .land-button-wrapper {
   margin: 3px;
-  float: right;
+  text-align: right;
 }
 
 .land .land-perform-button-wrapper, .send-message-send-wrapper {

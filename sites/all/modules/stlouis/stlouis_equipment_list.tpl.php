@@ -13,7 +13,7 @@ $ai_output = 'equipment-prices';
 // Fix expenses in case they are out of whack.
 game_recalc_income($game_user);
 $fetch_header($game_user);
-show_aides_menu($game_user);
+game_show_aides_menu($game_user);
 
 if ($game_user->level < 15) {
   echo <<< EOF

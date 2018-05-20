@@ -484,7 +484,7 @@ $elected_official_type = $item->type;
 // If a party official.
 if ($elected_official_type == 2) {
 
-  $data = array();
+  $data = [];
   $sql = 'SELECT fkey_clans_id FROM clan_members
     left join users on fkey_users_id = users.id
     WHERE fkey_values_id = %d
@@ -653,7 +653,7 @@ $sql = '
 // don't show if load avg too high
 
 //  $load_avg = sys_getloadavg(); // FIXME: get load avg of db server
-$data = array();
+$data = [];
 
 if (TRUE/*$load_avg[0] <= 2.0*/) {
 // expensive query - goes to slave

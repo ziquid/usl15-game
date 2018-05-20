@@ -674,7 +674,7 @@ EOF;
   </a>
 </div>
 EOF;
-    // Current job?  Change 'Apply' button to 'Work' button.
+    // Current job?  Change 'Apply' button to 'Work Overtime' button.
     if (strlen($current) == 0) {
       $apply_button = <<< EOF
 <div class="land-buy-button">
@@ -768,7 +768,7 @@ EOF;
   }
   else {
     echo <<< EOF
-<div class="land $failed">
+<div class="land land-$item->type $failed">
   $header
   <div class="land-icon">
     $icon_button
@@ -960,7 +960,7 @@ EOF;
 
 }
 
-function show_aides_menu($game_user) {
+function game_show_aides_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -981,15 +981,37 @@ function show_aides_menu($game_user) {
     $title = t('Purchase @equip', ['@equip' => $equipment]);
   }
 
+  if (substr(arg(1), 0, 5) == 'staff') {
+    $staff_active = 'active';
+  }
+  if (arg(1) == 'staff') {
+    $title = t('Hire @staff', ['@staff' => $game_text['staff']]);
+  }
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/land/$arg2" class="button $land_active">$land_plural</a>
   <a href="/$game/equipment/$arg2" class="button $equip_active">$equipment</a>
   <!--<a href="/$game/weapons/$arg2" class="button $weapons_active">$weapons</a>-->
-  <a href="/$game/staff/$arg2" class="button">Staff</a>
+  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']}</a>
   <a href="/$game/agents/$arg2" class="button">Agents</a>
 </div>
 EOF;
+
+  if ($land_active) {
+    echo <<< EOF
+<div class="news secondary">
+  <div class="news-buttons">
+    <button id="news-all" class="active">All</button>
+    <button id="news-jobs">{$game_text['job_plural']}</button>
+    <button id="news-investments">{$game_text['investment_plural']}</button>
+  </div>
+</div>
+EOF;
+
+    drupal_add_js(drupal_get_path('module', 'stlouis')
+      . '/game_show_aides_menu.js', 'module', 'footer');
+  }
 
   _show_goal($game_user);
 

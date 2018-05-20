@@ -117,7 +117,17 @@ $residence = 'Residence';
 $system = 'System';
 $top20 = 'Top 20';
 
-$game_settings['competencies'] = [];
+$game_settings = [
+  'competencies' => [],
+];
+
+$game_text = [
+  'investment' => 'Investment',
+  'investment_plural' => 'Investments',
+  'job' => 'Job',
+  'job_plural' => 'Jobs',
+  'staff' => 'Staff',
+];
 
 if ($event_type == EVENT_NEW_NAMES) {
   $game_settings['competencies']['uncouth'] = 'joelene';

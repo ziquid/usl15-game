@@ -2,6 +2,7 @@
 
 global $game, $phone_id;
 
+// ------ CONTROLLER ------
 $fetch_user = '_' . arg(0) . '_fetch_user';
 $fetch_header = '_' . arg(0) . '_header';
 
@@ -11,8 +12,6 @@ $arg2 = check_plain(arg(2));
 $ai_output = 'land-prices';
 
 game_recalc_income($game_user);
-$fetch_header($game_user);
-show_aides_menu($game_user);
 
 $sql_to_add = 'WHERE (((
     fkey_neighborhoods_id = 0
@@ -57,19 +56,7 @@ while ($item = db_fetch_object($result)) {
   $data[] = $item;
 }
 
-foreach ($data as $item) {
-firep($item, 'Item: ' . $item->name);
-  game_show_land($game_user, $item);
-
-  $land_price = $item->price + ($item->quantity * $item->price_increase);
-  $ai_output .= " $item->id=$land_price";
-}
-
-if (substr($phone_id, 0, 3) == 'ai-') {
-  echo "<!--\n<ai \"$ai_output\"/>\n-->";
-}
-
-// Show next one.
+// Fetch next one.
 $sql = 'SELECT land.*, land_ownership.quantity
   FROM land
 
@@ -92,11 +79,30 @@ $sql = 'SELECT land.*, land_ownership.quantity
   ORDER BY required_level ASC LIMIT 1';
 $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $game_user->level);
-$item = db_fetch_object($result);
-
-if (!empty($item)) {
-  firep($item, 'Soon Item: ' . $item->name);
-  game_show_land($game_user, $item, ['soon' => TRUE]);
-}
+$next = db_fetch_object($result);
 
 db_set_active('default');
+
+// ------ VIEW ------
+$fetch_header($game_user);
+game_show_aides_menu($game_user);
+echo '<div id="all-land">';
+
+foreach ($data as $item) {
+firep($item, 'Item: ' . $item->name);
+  game_show_land($game_user, $item);
+
+  $land_price = $item->price + ($item->quantity * $item->price_increase);
+  $ai_output .= " $item->id=$land_price";
+}
+
+if (substr($phone_id, 0, 3) == 'ai-') {
+  echo "<!--\n<ai \"$ai_output\"/>\n-->";
+}
+
+if (!empty($next)) {
+  firep($next, 'Soon Item: ' . $next->name);
+  game_show_land($game_user, $next, ['soon' => TRUE]);
+}
+
+echo '</div>';
