@@ -518,8 +518,8 @@ if ($phone_id_to_check == $phone_id) {
   echo <<< EOF
 <div class="heading">Luck:</div>
 <div class="value">$item->luck</div><br>
-<div class="heading">Net Income:</div>
-<div class="value">$item->income - $item->expenses</div><br>
+<div class="heading">Expenses:</div>
+<div class="value">$item->expenses</div><br>
 <div class="heading">Skill Points:</div>
 <div class="value">$item->skill_points</div>$skill_button<br/>
 EOF;
