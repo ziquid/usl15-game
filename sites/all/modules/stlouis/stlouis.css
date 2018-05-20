@@ -392,3 +392,7 @@ a.version {
   border-radius: 4px;
   font-family: "times new roman", Roman, Serif;
 }
+
+textarea {
+  background-color: lightgrey;
+}

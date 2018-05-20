@@ -20,6 +20,7 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>20 May: Level 91 and darker textareas.</p>
 <p>19 May: Added buttons on Income screen to filter jobs and investments.</p>
 <p>19 May: Changed Work Overtime to be allowed every four hours.</p>
 <p>19 May: Updated user profile page with net income.</p>
