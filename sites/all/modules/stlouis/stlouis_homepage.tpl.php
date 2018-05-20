@@ -785,7 +785,7 @@ $("#news-challenge").addClass("active");
 });
 
 $('#news-clan').bind('click', function() {
-isoNews.isotope({ filter: ".party, .clan, .values" });
+isoNews.isotope({ filter: ".hood, .clan, .values" });
 $(".news-buttons button").removeClass("active");
 $("#news-clan").addClass("active");
 });
