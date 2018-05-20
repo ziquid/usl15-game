@@ -16,7 +16,7 @@
   <p>Uprising: St. Louis, Community Edition</p>
   <p>May 1, 2018 Beta release 0.4.0</p>
   <h4>Please note this release is for testing only</h4>
-  <h4>Some things may change</h4>
+  <h4>Many things may change</h4>
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>

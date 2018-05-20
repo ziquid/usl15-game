@@ -300,12 +300,12 @@ li {
   background-color: #111811 !important;
 }
 
-.news .button {
+.news .button, .news button {
   background-color: #0e5221 !important;
   border: 1px solid #0e5221 !important;
 }
 
-.news .button.active {
+.news .button.active, .news button.active {
   background-color: #188433 !important;
   border: 1px solid #fff !important;
 }
