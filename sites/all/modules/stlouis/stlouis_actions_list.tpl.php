@@ -105,7 +105,7 @@ $actions_type Actions
 </div>
 EOF;
 
- $data = actionlist();
+  $data = actionlist();
 
   if (count($data) == 0) {
 
@@ -120,26 +120,19 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   foreach ($data as $item) {
 
-    $description = str_replace(array('%clan', '%subclan', '%value'),
-      array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
+    $description = str_replace(['%clan', '%subclan', '%value'],
+      ["<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values],
       $item->description);
-
-//    if ((arg(3) != 'banking') && (stripos($description, 'account') !== FALSE))
-//      continue; // move banking to its own screen
-
-//    if ((arg(3) == 'banking') && (stripos($description, 'account') === FALSE))
-//      continue; // move banking to its own screen
 
     if ($item->cost > 0) {
       $cost = "Cost: $item->cost Action";
     }
     else {
-      $cost = 'Cost: ';
+      $cost = '';
     }
 
     if ($item->values_cost > 0) {
