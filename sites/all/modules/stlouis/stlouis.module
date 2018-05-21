@@ -28,7 +28,7 @@ function stlouis_cron() {
 
   $sql = 'update elected_officials set approval_45 = approval_30,
     approval_30 = approval_15, approval_15 = approval_rating;';
-  $result = db_query($sql);
+  db_query($sql);
 
 // move all elected officials toward a 60% approval rating
 
