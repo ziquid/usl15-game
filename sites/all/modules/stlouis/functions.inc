@@ -2923,3 +2923,34 @@ function game_luck_money_offer($game_user) {
 
   return $offer;
 }
+
+/**
+ * Alter the game based on e.g. an event.
+ *
+ * All parameters after $hook are passed straight to the event's hook
+ * function.  Traditionally $game_user is the first parameter passed.
+ *
+ * @param string $hook
+ *   Which hook to call.
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return bool
+ *   TRUE if the hook exists and returned TRUE.  FALSE otherwise.
+ */
+function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  $retval = FALSE;
+
+  // Find and call hook.
+  if ($event_type !== EVENT_NONE) {
+    $function_name = 'game_' . $event_type . '_' . $hook;
+    if (function_exists($function_name)) {
+      $retval = $function_name($game_user, $garg2, $garg3, $garg4);
+    }
+  }
+
+  return $retval;
+}

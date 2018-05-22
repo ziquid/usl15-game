@@ -1,13 +1,8 @@
 <?php
 
 global $game, $phone_id;
-
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
-$game_user = $fetch_user();
 include drupal_get_path('module', $game) . '/game_defs.inc';
-$arg2 = check_plain(arg(2));
+$game_user = $fetch_user();
 
 // random hood -- april fools 2013
 /*
@@ -22,17 +17,9 @@ if (mt_rand(0, 1) > 0) {
 }
 */
 if ($neighborhood_id == $game_user->fkey_neighborhoods_id) {
-
-  $sql = 'select name from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $data = db_fetch_object($result);
-  $location = $data->name;
-
-  $game_user = $fetch_user();
   $fetch_header($game_user);
-
   echo <<< EOF
-<div class="title">You are already in $location</div>
+<div class="title">You are already in $game_user->location</div>
 <div class="election-continue"><a href="/$game/move/$arg2/0">Try again</a></div>
 EOF;
 
@@ -41,7 +28,6 @@ EOF;
 
   db_set_active('default');
   return;
-
 }
 
 if ($neighborhood_id > 0) {
@@ -49,12 +35,12 @@ if ($neighborhood_id > 0) {
   $sql = 'select * from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
   $cur_hood = db_fetch_object($result);
-firep($cur_hood);
+firep($cur_hood, 'current hood');
 
   $sql = 'select * from neighborhoods where id = %d;';
   $result = db_query($sql, $neighborhood_id);
   $new_hood = db_fetch_object($result);
-firep($new_hood);
+firep($new_hood, 'new hood');
 
   $distance = floor(sqrt(pow($cur_hood->xcoor - $new_hood->xcoor, 2) +
     pow($cur_hood->ycoor - $new_hood->ycoor, 2)));
@@ -73,13 +59,13 @@ firep($new_hood);
 
   $result = db_query($sql, $game_user->id);
   $eq = db_fetch_object($result);
-firep($eq);
 
   if ($eq->speed_increase > 0)
     $actions_to_move -= $eq->speed_increase;
 
   $actions_to_move = max($actions_to_move, 6);
-firep($actions_to_move);
+
+  game_alter('actions_to_move', $game_user, $actions_to_move);
 
 // april fools 2013
 //    $actions_to_move = 1;
@@ -107,7 +93,6 @@ firep($actions_to_move);
 
     db_set_active('default');
     return;
-
   }
 
   $resigned_text = '';
@@ -133,7 +118,6 @@ firep($actions_to_move);
     $result = db_query($sql, $game_user->id);
 
     $resigned_text = 'and resigned your current position';
-
   }
 
 // update neighborhood and actions

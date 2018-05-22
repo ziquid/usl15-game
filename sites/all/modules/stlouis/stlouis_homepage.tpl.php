@@ -304,7 +304,6 @@ switch($event_type) {
           </a>
         </div>
       </div>';
-
     break;
 }
 
@@ -334,7 +333,6 @@ switch ($month_mission) {
     '">Leaderboard</a>
       </div>-->
       </div>';
-
     break;
 }
 
@@ -358,6 +356,10 @@ if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 </div>
 <!--</a>-->';
 */
+
+// Add event text, if any.
+game_alter('homepage_event_notice', $game_user,$event_text);
+
 echo <<< EOF
 $extra_bonus
 <div class="title">

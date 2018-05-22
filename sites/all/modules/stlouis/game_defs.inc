@@ -10,6 +10,7 @@ define(EVENT_PRE_MAY, 6);
 define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
+define(EVENT_MOVE_3, 'event_move_3');
 
 define(MISSION_MAY, 1005);
 
@@ -82,6 +83,10 @@ switch($today) {
   case '2018-05-19':
   case '2018-05-20':
     $event_type = EVENT_CINCO_DE_MAYO;
+    break;
+
+  case '2018-05-22':
+    $event_type = EVENT_MOVE_3;
     break;
 }
 
@@ -163,3 +168,9 @@ $quest_lower = strtolower($quest);
 $residence_lower = strtolower($residence);
 $system_lower = strtolower($system);
 
+// Function-wide defs.
+$game = check_plain(arg(0));
+$arg2 = check_plain(arg(2));
+$arg3 = check_plain(arg(3));
+$fetch_user = '_' . $game . '_fetch_user';
+$fetch_header = '_' . $game . '_header';
