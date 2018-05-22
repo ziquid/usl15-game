@@ -314,29 +314,37 @@ function stlouis_init() {
 
     }
 
-    // Playbook CSS.
+
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
+
+      // Playbook CSS.
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
     }
 
-    // IPad CSS.
+
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
+
+      // IPad CSS.
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
 
     }
 
-    // Nook css.
+
     else if (substr(arg(2), 0, 4) == 'nkc ') {
+
+      // Nook css.
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
     }
 
-    // Facebook.
+
     else if (substr(arg(2), 0, 8) == 'facebook') {
+
+      // Facebook.
 
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
 
@@ -344,13 +352,15 @@ function stlouis_init() {
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
 
       if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=853') !== FALSE) {
-// 853dip width display
+
+        // 853dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width853.css');
 
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
-// 800dip width display
+
+        // 800dip width display
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width800.css');
 
@@ -379,32 +389,42 @@ function stlouis_init() {
       } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
         (stripos($_SERVER['HTTP_USER_AGENT'], 'width=+480') !== FALSE)) {
 
-      // 480dip width display.
+        // 480dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
       }
 
-      // 414dip width display.
+
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
+
+        // 414dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width414.css');
       }
 
-      // 411dip width display.
+
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
+
+        // 411dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width411.css');
       }
 
-      // 400dip width display.
+
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
+
+        // 400dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width400.css');
       }
 
-      // 375dip width display.
+
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=375') !== FALSE) {
+
+        // 375dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width375.css');
       }
 
-      // 360dip width display.
+
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
+
+        // 360dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width360.css');
       }
 
@@ -1133,8 +1153,9 @@ function _stlouis_save_user_IP($game_user) {
 
   }
 
-  // Existing entry.
+
   else {
+  // Existing entry.
 
     $old_ip = substr($last_ip, 0, 6);
     $new_ip = substr($ip_addr, 0, 6);
@@ -1159,8 +1180,8 @@ to
 */
       }
 
-      // New ip address and a password -- gotta authenticate!
       else {
+      // New ip address and a password -- gotta authenticate!
 /*
           mail('joseph@cheek.com', 'new IP address hacking attempt?',
             'The IP address of PASSWORDED player ' .
@@ -1297,7 +1318,7 @@ function _stlouis_check_authKey($game_user) {
 
     }
 
-    // otherwise, client doesn't have an authkey... someone is hacking!
+    // Otherwise, client doesn't have an authkey... someone is hacking!
     echo 'Error E-0922: ' . $game_user->referral_code; // no authkey
     exit;
 
@@ -2024,7 +2045,7 @@ firep('points for next prize: ' . $goal_obj->points);
 
 firep('a prize is deserved!');
 
-      // what's goal after this?
+      // What's goal after this?
       $sql = 'select points from event_milestones where points > %d
         order by points asc limit 1;';
       $result = db_query($sql, $goal_obj->points);
@@ -2032,7 +2053,7 @@ firep('a prize is deserved!');
 
       if ($new_goal_obj->points == 0) $new_goal_obj->points = 99999999;
 
-      // which prize should be given?
+      // Which prize should be given?
       if ($goal_obj->points >= 50000) {
 
         // Large gift.
@@ -2125,7 +2146,6 @@ firep('a prize is deserved!');
     }
 
   }
-
 
   // Show it!
   $hood = '';
