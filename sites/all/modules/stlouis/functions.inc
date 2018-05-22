@@ -1957,8 +1957,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
 
     // Leveled up!
     if ($comp_after->level > $comp_before->level) {
-
-      send_user_message(1, $game_user->id, 1,
+      game_send_user_message(1, $game_user->id, 1,
         'You have increased your competency &quot;<span class="initial-caps">'
       . $item->name . '</span>&quot;!&nbsp; You are now '
       . $comp_after->level_name_2 . ' and have gained '
@@ -1966,43 +1965,35 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
 
       $sql = 'update users set luck = luck + %d where id = %d;';
       db_query($sql, $comp_after->level, $game_user->id);
-
     }
 
   }
 
   // New competency.
   else {
-
     $sql = 'insert into user_competencies
       (fkey_users_id, fkey_competencies_id, use_count) values
       (%d, %d, 1);';
     db_query($sql, $game_user->id, $id);
-
-    send_user_message(1, $game_user->id, 1,
-      'You have started learning a new competency, &quot;<span
-      class="initial-caps">'
+    game_send_user_message(1, $game_user->id, 1,
+      'You have started learning a new competency, &quot;<span class="initial-caps">'
     . $item->name . '</span>&quot;!');
-
   }
 
   return TRUE;
-
 }
 
 
 function NO_election_won($game_user, $id) {
-
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
+  db_query($sql, $game_user->id);
 
   $sql = 'insert into elected_officials
     (fkey_users_id, fkey_elected_positions_id) values
       (%d, %d);';
-  $result = db_query($sql, $game_user->id, $id);
+  db_query($sql, $game_user->id, $id);
 
   return TRUE;
-
 }
 
 
@@ -2029,7 +2020,6 @@ function NO_action_use(&$game_user, $quantity = 1) {
   // Reprocess user object.
   $game_user = $fetch_user();
   return TRUE;
-
 }
 
 function game_karma($game_user, $text, $quantity) {
@@ -2819,17 +2809,12 @@ firep($eq->name . ' wore out!');
     $failure = db_fetch_object($result);
 
     if ($failure->message != '') {
-
       $failure_reason = $failure->message;
-
     }
     else {
-
       $failure_reason = t('Your @stuff has/have worn out',
         array('@stuff' => $stuff));
-
     }
-
   }
 
   $sql = 'select quantity from equipment_ownership
@@ -2837,17 +2822,13 @@ firep($eq->name . ' wore out!');
   $result = db_query($sql, $id, $game_user->id);
   $eo = db_fetch_object($result);
 
-  return(array($lost, $failure_reason, $eo->quantity));
-
+  return [$lost, $failure_reason, $eo->quantity];
 }
 
-
-function send_user_message($from, $to, $private = 0, $message) {
-
+function game_send_user_message($from, $to, $private = 0, $message) {
   $sql = 'insert into user_messages (fkey_users_from_id,
     fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
   db_query($sql, $from, $to, $private, $message);
-
 }
 
 function game_zombie_name() {
