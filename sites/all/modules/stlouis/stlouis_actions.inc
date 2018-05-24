@@ -52,8 +52,7 @@ function actionlist() {
     $sql_to_add .= ' and actions.need_clan_leader <> 1 ';
   }
 
-// Elected official?
-
+  // Elected official?
   $sql = 'select *, elected_positions.type, elected_positions.group
     from elected_officials
 
@@ -68,8 +67,8 @@ function actionlist() {
 //  firep($item);
 
   if (!empty($item)) {
-// an elected official - exclude all those that need no elected official
 
+    // An elected official - exclude all those that need no elected official.
     $sql_to_add .= ' and actions.need_no_elected_official <> 1
       and (actions.need_specific_elected_official = 0 or
       actions.need_specific_elected_official = ' .
@@ -181,7 +180,6 @@ function _target_list($target, $game_user) {
 // Return a list of valid targets.
 
 // Expensive query - goes to slave.
-
 //   db_set_active('game_' . $game . '_slave1');
 
   $data2 = [];
@@ -190,7 +188,6 @@ function _target_list($target, $game_user) {
     case 'clan':
 
       // Users in your clan.
-
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -209,7 +206,6 @@ function _target_list($target, $game_user) {
     case 'neighborhood':
 
       // Users in your neighborhood.
-
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -229,10 +225,8 @@ function _target_list($target, $game_user) {
 
     case 'neighborhood_higher_than_you_but_still_debateable':
 
-      // People in your neighborhood who aren't on your wall nor in your clan.
-
-      // Who are a higher level than you but are still debateable.
-
+      // People in your neighborhood who aren't on your wall nor in your clan
+      // who are a higher level than you but are still debateable.
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -274,7 +268,6 @@ function _target_list($target, $game_user) {
     case 'neighborhood_not_met':
 
       // People in your neighborhood who aren't on your wall nor in your clan.
-
       $sql = 'SELECT users.id, users.username,
          clan_members.is_clan_leader, clans.acronym AS clan_acronym,
          NULL as ep_name
@@ -330,7 +323,6 @@ firep('allowed not_met users: ' . $allowed_string);
     case 'neighborhood_no_official_not_home':
 
       // Non-party users who aren't officials.
-
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -361,7 +353,6 @@ firep('allowed not_met users: ' . $allowed_string);
   }
 
 // Reset to master.
-
 //  db_set_active('game_' . $game);
   return $data2;
 }

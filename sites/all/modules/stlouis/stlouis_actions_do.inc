@@ -87,7 +87,6 @@ EOF;
   }
 
   // See if the clan already exists.
-
   $sql = 'select * from clans where acronym = "%s" or name = "%s" limit 1;';
   $result = db_query($sql, $clan_acronym, $clan_name);
   $item = db_fetch_object($result);
@@ -2004,7 +2003,6 @@ EOF;
     }
 
     // Expel succeeds! Save as major action.
-
     $sql = 'SELECT elected_positions.name as ep_name,
       elected_positions.type as ep_type
       FROM `users`
@@ -2113,7 +2111,6 @@ EOF;
     }
 
   // Update income.
-
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -2124,7 +2121,6 @@ EOF;
   $result = db_query($sql, $target_id, $target_id);
 
   // Update expenses.
-
   $sql = 'update users set expenses =
 
     ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
@@ -2448,7 +2444,6 @@ EOF;
     }
 
     // Generate an account number.
-
     $account_num = 0;
 
     while ($account_num == 0) {
@@ -2468,7 +2463,6 @@ firep($item);
     }
 
     // Doesn't exist - create it!
-
     $sql = 'insert into bank_accounts (fkey_users_id, account_number, password)
       values (%d, %d, "%s");';
     $result = db_query($sql, $game_user->id, $account_num, $password);
@@ -2531,7 +2525,6 @@ EOF;
     }
 
     // Validate the info.
-
     $sql = 'select * from bank_accounts
       where account_number = %d
       and password = "%s"
@@ -2554,7 +2547,6 @@ firep($item);
     }
 
     // Close the account.
-
     $sql = 'update bank_accounts
       set timestamp_closed = CURRENT_TIMESTAMP, active = 0, balance = 0
       where id = %d;';
@@ -2666,7 +2658,6 @@ EOF;
     }
 
     // Validate the info.
-
     $sql = 'select * from bank_accounts
       where account_number = %d
       and fkey_users_id = %d
@@ -2688,7 +2679,6 @@ firep($item);
     }
 
     // Update the password.
-
     $sql = 'update bank_accounts
       set password = "%s"
       where id = %d;';
@@ -2733,7 +2723,6 @@ EOF;
     if (empty($account_num) || empty($amount)) {
 
       // Need an account number and password and amount.
-
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
   <form method=get action="/$game/actions_do/$arg2/$action_id">
@@ -2755,7 +2744,6 @@ EOF;
     }
 
     // Validate the info -- first, check that the account exists.
-
     $sql = 'select * from bank_accounts
       where account_number = %d
 --      and password = "%s"
@@ -2779,7 +2767,6 @@ firep($item);
     // Set transaction_lock and then reprocess user object.
 
     // Spin 10 times for 1 second waiting for a lock, if necessary.
-
     $lock_acquired = FALSE;
     $lock_try = 0;
 
@@ -2838,7 +2825,6 @@ firep($item);
     // Next, check account.
 
     // Make the deposit and subtract from the user.
-
     $sql = 'update bank_accounts
       set balance = balance + %d
       where id = %d;';
@@ -2945,7 +2931,6 @@ EOF;
     }
 
     // Validate the info -- first, check that the account exists.
-
     $sql = 'select * from bank_accounts
       where account_number = %d
       and password = "%s"
@@ -2969,7 +2954,6 @@ firep($item);
     // Set transaction_lock and then reprocess user object.
 
     // Spin 10 times for 1 second waiting for a lock, if necessary.
-
     $lock_acquired = FALSE;
     $lock_try = 0;
 
@@ -3026,7 +3010,6 @@ firep($item);
     }
 
     // Make the withdrawal and add to the user.
-
     $sql = 'update bank_accounts
       set balance = balance - %d
       where id = %d;';
@@ -4222,7 +4205,6 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     $result = db_query($sql, $game_user->id);
 
     // Save as major action.
-
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 600);
 
@@ -4324,7 +4306,6 @@ firep($target);
 */
 
     // Out of ammo?
-
     $sql = 'select quantity from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = 40;';
     $result = db_query($sql, $game_user->id);
@@ -4376,7 +4357,6 @@ EOF;
     }
 
     // Camouflage?
-
     $sql = 'select quantity from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = 42;';
     $result = db_query($sql, $target_id);
@@ -4403,7 +4383,6 @@ EOF;
     // Tag the player!
 
     // Create entry for tagger, taggee, if needed.
-
     $sql = 'select id from event_points where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
     $row = db_fetch_object($result);
@@ -4575,7 +4554,6 @@ EOF;
 
 
     // Not in same hood.
-
     if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
 
       $outcome_reason = '<div class="title">Not in same neighborhood!</div>
@@ -4594,7 +4572,6 @@ EOF;
     // Unfreeze the player.
 
     // Create entry for tagger, taggee, if needed.
-
     $sql = 'select id from event_points where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
     $row = db_fetch_object($result);
