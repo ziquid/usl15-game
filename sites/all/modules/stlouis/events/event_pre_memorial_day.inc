@@ -25,7 +25,9 @@ function game_event_pre_memorial_day_homepage_event_notice($game_user, &$event_t
     ~ Remember your Veterans this Memorial Day weekend ~
   </div>
   <div class="event-text">
-    Starting now, talking to disabled veterans only requires 100 Energy
+    Starting now, talking to disabled veterans only requires 100 Energy<br>
+    Friday: Every 100 Disabled American Veterans<br>
+    counts as an extra vote
   </div>
 </div>';
 }
