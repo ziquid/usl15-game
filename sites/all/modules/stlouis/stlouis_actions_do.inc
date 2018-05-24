@@ -737,6 +737,8 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
     $actions_required = min($actions_required, 50);
   }
 
+  game_alter('png_cost', $game_user, $money_required, $actions_required);
+
   // Not enough actions.
   if ($game_user->actions < $actions_required) {
     $outcome_reason = '<div class="land-failed">' .
@@ -767,10 +769,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
     return FALSE;
   }
 
-  $sql = "select name from neighborhoods where id = '%d';";
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $data = db_fetch_object($result);
-  $location = $data->name;
+  $location = $game_user->location;
 
   // Can't boot zombies.
   if ($target_user->meta == 'zombie') {
