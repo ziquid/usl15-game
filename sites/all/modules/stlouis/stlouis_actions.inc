@@ -348,6 +348,102 @@ firep('allowed not_met users: ' . $allowed_string);
 
       break;
 
+    case 'neighborhood_officials':
+
+      // All elected officials in your hood.
+      $data2 = [];
+      $sql = 'SELECT elected_positions.id AS ep_id,
+            elected_positions.group as ep_group,
+            elected_positions.name AS ep_name, blah.*,
+            clan_members.is_clan_leader, clans.acronym AS clan_acronym
+            FROM elected_positions
+            
+            RIGHT JOIN (
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id = %d
+
+            ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
+
+            LEFT OUTER JOIN clan_members
+              ON clan_members.fkey_users_id = blah.id
+            LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
+            ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
+
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+      while ($official = db_fetch_object($result)) {
+        $data2[] = $official;
+      }
+
+      break;
+
+    case 'officials':
+
+      // Elected officials only.
+      $data2 = [];
+      $sql = 'SELECT elected_positions.id AS ep_id,
+            elected_positions.group as ep_group,
+            elected_positions.name AS ep_name, blah.*,
+            clan_members.is_clan_leader, clans.acronym AS clan_acronym
+            FROM elected_positions
+            RIGHT JOIN (
+
+-- type 1: neighborhood positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id = %d
+            AND elected_positions.type = 1
+
+            UNION
+
+-- type 2: party positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_values_id = %d
+            AND elected_positions.type = 2
+
+            UNION
+
+-- type 3: district positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id IN
+              (SELECT id from neighborhoods where district = %d)
+            AND elected_positions.type = 3
+
+            ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
+
+            LEFT OUTER JOIN clan_members
+              ON clan_members.fkey_users_id = blah.id
+            LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
+            ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
+
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+        $game_user->fkey_values_id, $district);
+      while ($official = db_fetch_object($result)) $data2[] = $official;
+
+      break;
+
   }
 
 //  db_set_active('game_' . $game); // reset to master

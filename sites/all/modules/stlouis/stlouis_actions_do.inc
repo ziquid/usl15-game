@@ -1201,14 +1201,14 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 
   // The player egging and the player being egged must be in the same hood.
   if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-    $outcome_reason .= '<div class="action-effect">' .
+    $outcome_reason = '<div class="action-effect">' .
       t('Sorry!&nbsp; You are no longer in this neighborhood') . '</div>';
     return FALSE;
   }
 
   // STL-236 -- no unaffiliated eggings
   if ($game_user->fkey_values_id == 0) {
-    $outcome_reason .= '<div class="action-effect">' .
+    $outcome_reason = '<div class="action-effect">' .
       t('Sorry!&nbsp; You must join a political party first') . '</div>';
     return FALSE;
   }

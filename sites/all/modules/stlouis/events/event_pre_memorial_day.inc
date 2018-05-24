@@ -26,11 +26,13 @@ function game_event_pre_memorial_day_homepage_event_notice($game_user, &$event_t
   </div>
   <div class="event-text">
     Starting now, talking to disabled veterans only requires 100 Energy
-</div>
+  </div>
 </div>';
 }
 
 function game_event_pre_memorial_day_quest_item($game_user, $quest_item) {
+
+  // Talk to disabled vets mission, 100 energy.
   if ($quest_item->id == 24) {
     $quest_item->required_energy = 100;
   }

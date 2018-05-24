@@ -105,9 +105,9 @@ switch($today) {
     break;
 }
 
-//if (arg(2) == 'abc123') {
-//  $event_type = EVENT_MEMORIAL_DAY_1;
-//}
+if (arg(2) == 'abc123') {
+  $event_type = EVENT_MEMORIAL_DAY_1;
+}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
