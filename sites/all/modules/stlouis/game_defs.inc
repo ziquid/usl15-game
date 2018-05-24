@@ -151,7 +151,7 @@ if ($event_type == EVENT_NEW_NAMES) {
 }
 
 /*
-// boxing day
+// Boxing day.
 if ((date('Y-m-d') == '2012-12-26') || arg(2) == 'abc123') {
   $debate = 'Box';
   $debate_tab = 'Boxing';
