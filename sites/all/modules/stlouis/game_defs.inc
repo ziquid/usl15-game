@@ -99,7 +99,15 @@ switch($today) {
   case '2018-05-24':
     $event_type = EVENT_PRE_MEMORIAL_DAY;
     break;
+
+  case '2018-05-25':
+    $event_type = EVENT_MEMORIAL_DAY_1;
+    break;
 }
+
+//if (arg(2) == 'abc123') {
+//  $event_type = EVENT_MEMORIAL_DAY_1;
+//}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';

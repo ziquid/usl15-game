@@ -10,11 +10,8 @@
 
 global $game, $phone_id;
 
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', arg(0)) . '/game_defs.inc';
 $game_user = $fetch_user();
-include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 
 $sql = 'select name from neighborhoods where id = %d;';
@@ -49,6 +46,9 @@ $game_quest = db_fetch_object($result); // limited to 1 in DB
 //     $loot_april_fools = db_fetch_object($result);
 //     $game_quest->fkey_loot_equipment_id = $loot_april_fools->fkey_equipment_id;
 //   }
+
+game_alter('quest_item', $game_user, $game_quest);
+
 $quest_succeeded = TRUE;
 $outcome_reason = '<div class="quest-succeeded">' . t('Success!') .
   '</div>';
@@ -150,7 +150,7 @@ if ($game_quest->equipment_2_required_quantity > 0) {
 
 }
 
-  if ($game_quest->equipment_3_required_quantity > 0) {
+if ($game_quest->equipment_3_required_quantity > 0) {
 
   $sql = 'select quantity from equipment_ownership
     where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -206,7 +206,7 @@ if ($game_quest->staff_required_quantity > 0) {
 
 }
 
-  if ($game_quest->land_required_quantity > 0) {
+if ($game_quest->land_required_quantity > 0) {
 
   $sql = 'select quantity from land_ownership
     where fkey_land_id = %d and fkey_users_id = %d;';
@@ -235,8 +235,7 @@ if ($game_quest->staff_required_quantity > 0) {
 
 }
 
-
-// wrong hood
+// Wrong hood.
 if (($game_quest->group > 0) && ($game_quest->fkey_neighborhoods_id != 0) &&
   ($game_quest->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
 
@@ -1184,16 +1183,7 @@ EOF;
 
 }
 
-if ($game == 'celestial_glory') {
-
-  $quests = '';
-
-}
-else {
-
-  $quests = "{$quest}s";
-
-}
+$quests = "{$quest}s";
 
 echo <<< EOF
 <div class="title">
@@ -1211,7 +1201,7 @@ $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
 $result = db_query($sql, $game_user->id, $game_quest->group);
 
 $quest_group = db_fetch_object($result);
-firep($quest_group);
+//firep($quest_group);
 
 $quest_group->completed += 0; // haha!  typecasting!
 
@@ -1270,6 +1260,7 @@ foreach ($data as $item) {
   }
 
   $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
+  game_alter('quest_item', $game_user, $item);
 
 // firep($rgb);
 
@@ -1524,6 +1515,8 @@ EOF;
     $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
 firep($description);
+    game_alter('quest_item', $game_user, $item);
+
     echo <<< EOF
 <div class="quests-soon">
 <div class="quest-name">$item->name</div>
