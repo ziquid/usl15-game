@@ -355,35 +355,38 @@ EOF;
         <option value="0">Select one</option>
 EOF;
 
-      // which target?
+        // Which target?
 
-      // expensive query - goes to slave
+        // Expensive query - goes to slave.
 //      db_set_active('game_' . $game . '_slave1');
       switch ($item->target) {
 
-        case 'clan': // users in your clan
+        // Users in your clan.
+        case 'clan':
 
-        case 'neighborhood': // users in your neighborhood
+        // Users in your neighborhood.
+        case 'neighborhood':
 
         case 'neighborhood_higher_than_you_but_still_debateable':
-// people in your neighborhood who aren't on your wall nor in your clan
-// who are a higher level than you but are still debateable
 
+        // People in your neighborhood who aren't on your wall nor in your clan.
+
+        // Who are a higher level than you but are still debateable.
         case 'neighborhood_not_met':
-// people in your neighborhood who aren't on your wall nor in your clan
 
+        // People in your neighborhood who aren't on your wall nor in your clan.
         case 'neighborhood_no_official_not_home':
-// non-party users who aren't officials
 
+        // Non-party users who aren't officials.
         case 'neighborhood_no_official_not_home_not_babylonian':
-// non-party users who aren't officials and aren't babylonian 8-)))
 
+          // Non-party users who aren't officials and aren't babylonian 8-))).
           $data2 = _target_list($item->target, $game_user);
           break;
 
         case 'officials':
 
-// elected officials only
+          // Elected officials only.
           $data2 = array();
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
@@ -445,7 +448,7 @@ EOF;
 
         case 'officials_type_1':
 
-// type 1 elected officials only
+          // Type 1 elected officials only.
           $data2 = array();
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
@@ -479,7 +482,7 @@ EOF;
 
         case 'officials_type_2':
 
-// type 2 elected officials only
+          // Type 2 elected officials only.
           $data2 = array();
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
@@ -508,8 +511,8 @@ EOF;
           break;
 
         case 'party':
-// users in your political party
 
+          // Users in your political party.
           $data2 = array();
           $sql = 'SELECT users.username, users.id,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym,
@@ -528,8 +531,8 @@ EOF;
           break;
 
         case 'wall_no_official':
-// users on your wall who aren't officials
 
+          // Users on your wall who aren't officials.
           $data2 = array();
           $sql = 'SELECT DISTINCT user_messages.fkey_users_from_id AS id,
             users.username, clan_members.is_clan_leader,
@@ -560,10 +563,11 @@ EOF;
           break;
 
       }
-//      db_set_active('game_' . $game); // reset to master
 
-// too many to list?  separate by first letter
+// Reset to master.
+//      db_set_active('game_' . $game);
 
+      // Too many to list?  Separate by first letter.
       if ($phone_id == 'abc123' &&
         count($data2) > 250) {
 
@@ -571,7 +575,8 @@ EOF;
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
           'X', 'Y', 'Z', 'Others');
 
-        foreach ($letters as $letter) { // show mini list
+        // Show mini list.
+        foreach ($letters as $letter) {
 
           echo '<option value="letter_' . $letter . '">' .
             $letter . '</option>';
@@ -579,8 +584,9 @@ EOF;
         }
 
       }
-      else { // full list foreach()
+      else {
 
+        // Full list foreach().
         foreach ($data2 as $user) {
 // firep($user);
 
