@@ -20,6 +20,8 @@
 <form method=post action="/<?php echo $game; ?>/home/<?php echo $arg2;?>">
   <input type="Submit" value="Continue to the game"/>
 </form>
+<p>24 May: Memorial Day teaser.</p>
+<p>22 May: Taxi subsidies.</p>
 <p>20 May: Newlines are preserved in user messages, you can delete messages sent, and prettier delete button.</p>
 <p>20 May: Added number of actions necessary to run for an office uncontested.</p>
 <p>20 May: Fixed display of necessary money, actions for PNG.</p>

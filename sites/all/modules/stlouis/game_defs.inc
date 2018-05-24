@@ -11,13 +11,20 @@ define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
 define(EVENT_MOVE_3, 'event_move_3');
+define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
+define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
+define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
+define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
+define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 
+define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
+define(MISSION_JUN, 1006);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
 $event_type = EVENT_NONE;
-//$month_mission = MISSION_MAY;
+$month_mission = MISSION_NONE;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
 
@@ -87,6 +94,10 @@ switch($today) {
 
   case '2018-05-22':
     $event_type = EVENT_MOVE_3;
+    break;
+
+  case '2018-05-24':
+    $event_type = EVENT_PRE_MEMORIAL_DAY;
     break;
 }
 
