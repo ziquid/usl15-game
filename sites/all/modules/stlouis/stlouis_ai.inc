@@ -717,7 +717,7 @@ function _ai_create_new_player() {
 //    _ai_out($response);
 
   _ai_out('updating record to make this a ToxiCorp Employee');
-  $sql = 'update users set username = "%s", fkey_neighborhoods_id = 15,
+  $sql = 'update users set username = "%s", fkey_neighborhoods_id = 75,
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   $result = db_query($sql, "TC Emp $num", $id_to_check);
