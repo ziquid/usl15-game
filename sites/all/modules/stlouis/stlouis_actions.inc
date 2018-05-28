@@ -41,9 +41,10 @@ function actionlist() {
   }
 
   if (!empty($item->is_clan_leader)) {
-// clan leader - exclude all those that need no clan leader
 
-// we don't have any actions that need no clan leader, so line commented out below
+  // Clan leader - exclude all those that need no clan leader.
+
+// We don't have any actions that need no clan leader, so line commented out below.
 //    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';
 
   }
@@ -51,8 +52,7 @@ function actionlist() {
     $sql_to_add .= ' and actions.need_clan_leader <> 1 ';
   }
 
-// elected official?
-
+  // Elected official?
   $sql = 'select *, elected_positions.type, elected_positions.group
     from elected_officials
 
@@ -60,14 +60,15 @@ function actionlist() {
     on elected_officials.fkey_elected_positions_id = elected_positions.id
 
     where fkey_users_id = %d;';
-// limited to 1 in db
+
+  // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 //  firep($item);
 
   if (!empty($item)) {
-// an elected official - exclude all those that need no elected official
 
+    // An elected official - exclude all those that need no elected official.
     $sql_to_add .= ' and actions.need_no_elected_official <> 1
       and (actions.need_specific_elected_official = 0 or
       actions.need_specific_elected_official = ' .
@@ -99,7 +100,7 @@ function actionlist() {
   left join staff on staff_ownership.fkey_staff_id = staff.id
   left join competencies as comp1 on competency_enhanced_1 = comp1.id
   left join competencies as comp2 on competency_enhanced_2 = comp2.id
-  
+
   where
   (staff_ownership.fkey_users_id = %d OR staff_ownership.fkey_users_id = 0)
 
@@ -123,7 +124,7 @@ function actionlist() {
 
   left join equipment on
   equipment_ownership.fkey_equipment_id = equipment.id
-  
+
   left join competencies as comp1 on competency_enhanced_1 = comp1.id
   left join competencies as comp2 on competency_enhanced_2 = comp2.id
 
@@ -141,13 +142,13 @@ function actionlist() {
   }
 
   // Actions that require neither staff nor equipment.
-  $sql = 'select actions.*, 
+  $sql = 'select actions.*,
   comp1.name as competency_name_1, comp2.name as competency_name_2
   from {actions}
-  
+
   left join competencies as comp1 on competency_enhanced_1 = comp1.id
   left join competencies as comp2 on competency_enhanced_2 = comp2.id
-  
+
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY actions.name ASC';
@@ -175,17 +176,18 @@ function actionlist() {
 }
 
 function _target_list($target, $game_user) {
-// return a list of valid targets
 
-// expensive query - goes to slave
+// Return a list of valid targets.
+
+// Expensive query - goes to slave.
 //   db_set_active('game_' . $game . '_slave1');
 
   $data2 = [];
   switch ($target) {
 
     case 'clan':
-// users in your clan
 
+      // Users in your clan.
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -202,8 +204,8 @@ function _target_list($target, $game_user) {
       break;
 
     case 'neighborhood':
-// users in your neighborhood
 
+      // Users in your neighborhood.
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -222,9 +224,9 @@ function _target_list($target, $game_user) {
       break;
 
     case 'neighborhood_higher_than_you_but_still_debateable':
-// people in your neighborhood who aren't on your wall nor in your clan
-// who are a higher level than you but are still debateable
 
+      // People in your neighborhood who aren't on your wall nor in your clan
+      // who are a higher level than you but are still debateable.
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -264,8 +266,8 @@ function _target_list($target, $game_user) {
       break;
 
     case 'neighborhood_not_met':
-// people in your neighborhood who aren't on your wall nor in your clan
 
+      // People in your neighborhood who aren't on your wall nor in your clan.
       $sql = 'SELECT users.id, users.username,
          clan_members.is_clan_leader, clans.acronym AS clan_acronym,
          NULL as ep_name
@@ -319,8 +321,8 @@ firep('allowed not_met users: ' . $allowed_string);
 
 
     case 'neighborhood_no_official_not_home':
-// non-party users who aren't officials
 
+      // Non-party users who aren't officials.
       $sql = 'SELECT users.id, users.username,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -348,9 +350,106 @@ firep('allowed not_met users: ' . $allowed_string);
 
       break;
 
+    case 'neighborhood_officials':
+
+      // All elected officials in your hood.
+      $data2 = [];
+      $sql = 'SELECT elected_positions.id AS ep_id,
+            elected_positions.group as ep_group,
+            elected_positions.name AS ep_name, blah.*,
+            clan_members.is_clan_leader, clans.acronym AS clan_acronym
+            FROM elected_positions
+            
+            RIGHT JOIN (
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id = %d
+
+            ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
+
+            LEFT OUTER JOIN clan_members
+              ON clan_members.fkey_users_id = blah.id
+            LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
+            ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
+
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+      while ($official = db_fetch_object($result)) {
+        $data2[] = $official;
+      }
+
+      break;
+
+    case 'officials':
+
+      // Elected officials only.
+      $data2 = [];
+      $sql = 'SELECT elected_positions.id AS ep_id,
+            elected_positions.group as ep_group,
+            elected_positions.name AS ep_name, blah.*,
+            clan_members.is_clan_leader, clans.acronym AS clan_acronym
+            FROM elected_positions
+            RIGHT JOIN (
+
+-- type 1: neighborhood positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id = %d
+            AND elected_positions.type = 1
+
+            UNION
+
+-- type 2: party positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_values_id = %d
+            AND elected_positions.type = 2
+
+            UNION
+
+-- type 3: district positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE users.fkey_neighborhoods_id IN
+              (SELECT id from neighborhoods where district = %d)
+            AND elected_positions.type = 3
+
+            ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
+
+            LEFT OUTER JOIN clan_members
+              ON clan_members.fkey_users_id = blah.id
+            LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
+            ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
+
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+        $game_user->fkey_values_id, $district);
+      while ($official = db_fetch_object($result)) $data2[] = $official;
+
+      break;
+
   }
 
-//  db_set_active('game_' . $game); // reset to master
+// Reset to master.
+//  db_set_active('game_' . $game);
   return $data2;
 }
 

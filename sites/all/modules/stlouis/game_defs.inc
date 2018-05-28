@@ -10,13 +10,21 @@ define(EVENT_PRE_MAY, 6);
 define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
+define(EVENT_MOVE_3, 'event_move_3');
+define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
+define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
+define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
+define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
+define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 
+define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
+define(MISSION_JUN, 1006);
 
 $debate_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
 $event_type = EVENT_NONE;
-//$month_mission = MISSION_MAY;
+$month_mission = MISSION_NONE;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
 
@@ -83,7 +91,35 @@ switch($today) {
   case '2018-05-20':
     $event_type = EVENT_CINCO_DE_MAYO;
     break;
+
+  case '2018-05-22':
+    $event_type = EVENT_MOVE_3;
+    break;
+
+  case '2018-05-24':
+    $event_type = EVENT_PRE_MEMORIAL_DAY;
+    break;
+
+  case '2018-05-25':
+    $event_type = EVENT_MEMORIAL_DAY_1;
+    break;
+
+  case '2018-05-26':
+    $event_type = EVENT_MEMORIAL_DAY_2;
+    break;
+
+  case '2018-05-27':
+    $event_type = EVENT_MEMORIAL_DAY_3;
+    break;
+
+  case '2018-05-28':
+    $event_type = EVENT_MEMORIAL_DAY_4;
+    break;
 }
+
+//if (arg(2) == 'abc123') {
+//  $event_type = EVENT_MEMORIAL_DAY_4;
+//}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
@@ -135,7 +171,7 @@ if ($event_type == EVENT_NEW_NAMES) {
 }
 
 /*
-// boxing day
+// Boxing day.
 if ((date('Y-m-d') == '2012-12-26') || arg(2) == 'abc123') {
   $debate = 'Box';
   $debate_tab = 'Boxing';
@@ -163,3 +199,9 @@ $quest_lower = strtolower($quest);
 $residence_lower = strtolower($residence);
 $system_lower = strtolower($system);
 
+// Function-wide defs.
+$game = check_plain(arg(0));
+$arg2 = check_plain(arg(2));
+$arg3 = check_plain(arg(3));
+$fetch_user = '_' . $game . '_fetch_user';
+$fetch_header = '_' . $game . '_header';

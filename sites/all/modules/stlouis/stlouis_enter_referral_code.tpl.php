@@ -186,25 +186,22 @@ EOF;
     $sql = 'update users set experience = experience + 1000 where id = %d;';
     $result = db_query($sql, $mentor->id);
 
-// tell them about each other
+    // Tell them about each other.
     $sql = 'insert into user_messages (fkey_users_from_id, fkey_users_to_id,
       message) values (%d, %d, "%s");';
-    $message = 'Hi!&nbsp; I am a new user who used your referral code to join
-      the game!&nbsp; You have gained
-      1000 ' . $experience_lower . '.&nbsp; Please welcome me to ' .
-      $mentor->party_title . '.';
+    $message = 'Hi!&nbsp; I am a new user who used your referral code to join ' .
+      'the game!&nbsp; You have gained 1000 ' . $experience_lower .
+      '.&nbsp; Please welcome me to ' . $mentor->party_title . '.';
     $result = db_query($sql, $game_user->id, $mentor->id, $message);
 
-    $message = 'Welcome to the game!&nbsp; I am your mentor and will gladly
-      answer any questions you have about the game.&nbsp; Touch the
-      <strong>View / Respond</strong> button next to this message to send me a
-      message back.';
+    $message = 'Welcome to the game!&nbsp; I am your mentor and will gladly ' .
+      'answer any questions you have about the game.&nbsp; Touch the ' .
+      '<strong>View / Respond</strong> button next to this message to send me a ' .
+      'message back.';
     $result = db_query($sql, $mentor->id, $game_user->id, $message);
 
     db_set_active('default');
-
     return;
-
   }
 
 // otherwise they have not chosen a clan or are rechoosing one

@@ -60,10 +60,9 @@ if ($neighborhood_id > 0) {
   $eq = db_fetch_object($result);
 
   if ($eq->speed_increase > 0) {
-
-    $actions_to_move -= $eq->speed_increase;
     $verb = t($eq->action_verb);
-
+    game_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
+    $actions_to_move -= $eq->speed_increase;
   }
 
   $actions_to_move = max($actions_to_move, 6);
@@ -83,13 +82,13 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
+  game_alter('actions_to_move', $game_user, $actions_to_move);
 
   echo <<< EOF
 <div class="title">$verb from $cur_hood->name to $new_hood->name</div>
-<div class="subtitle">It will cost $actions_to_move Action to move</div>
+<div class="subtitle">It will cost $actions_to_move Actions to move</div>
 <div class="try-an-election-wrapper"><div
 class="try-an-election"><a href="/$game/move_do/$arg2/$neighborhood_id">Yes,
 I want to go</a></div></div>

@@ -44,10 +44,13 @@ else {
   competency_gain($game_user, 'people person');
 }
 
-$show_all = FALSE;
 if (($phone_id_to_check == $phone_id) ||
-  ($_GET['show_all'] == 'yes'))
+  ($_GET['show_all'] == 'yes') || $game_user->meta == 'admin') {
   $show_all = TRUE;
+}
+else {
+  $show_all = FALSE;
+}
 
 $want_jol = ($_GET['want_jol'] == 'yes') ? '/want_jol' : '';
 if (arg(4) == 'want_jol') $want_jol = '/want_jol';
@@ -109,7 +112,7 @@ $sql = 'SELECT username, experience, initiative, endurance,
 
 $result = db_query($sql, $phone_id_to_check);
 $item = db_fetch_object($result);
-firep($item);
+firep($item, 'user profile to view');
 
 $points = $item->points + 0;
 
@@ -266,17 +269,10 @@ $item->ep_name <span class="username">$item->username</span> $clan_acronym
 <div class="clan-icon"><img width="24"
   src="/sites/default/files/images/$icon"/></div>
 <div class="value">$clan_title</div><br/>
-EOF;
-
-if ($game != 'celestial_glory') {
-
-echo <<< EOF
 <div class="heading">Clan:</div>
 $clan_icon_html
 <div class="value">$clan_link</div><br/>
 EOF;
-
-}
 
  // Show more stats if it's you.
 if ($phone_id_to_check == $phone_id) {
@@ -297,7 +293,7 @@ echo <<< EOF
 <div class="value">$exp</div><br/>
 EOF;
 
-// Show more stats if it's you.
+// Show more stats if it's show all.
 if ($show_all) {
 
   $sql = 'SELECT
@@ -324,14 +320,6 @@ if ($show_all) {
   $result = db_query($sql, $item->id);
   $equipment_bonus = db_fetch_object($result);
 
-/*
-// memorial day promo -- every 250 vets = extra vote
-  $sql = 'SELECT quantity
-    FROM staff_ownership
-    WHERE fkey_users_id = %d AND fkey_staff_id = 7;';
-  $result = db_query($sql, $item->id);
-  $vet_bonus = db_fetch_object($result);
-*/
   $extra_initiative = number_format($staff_bonus->initiative
   + $equipment_bonus->initiative);
   $extra_endurance = number_format($staff_bonus->endurance
@@ -340,7 +328,8 @@ if ($show_all) {
   + $equipment_bonus->elocution);
   $extra_votes = (int) $staff_bonus->extra_votes;
   $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
-//    $extra_vet_votes = (int) ($vet_bonus->quantity / 250);
+
+  game_alter('extra_votes', $item, $extra_votes, $extra_defending_votes);
 
   echo <<< EOF
 <div class="heading">$initiative:</div>
@@ -350,9 +339,9 @@ if ($show_all) {
 <div class="heading">$elocution:</div>
 <div class="value">$item->elocution ($extra_elocution)</div><br/>
 <div class="heading">Extra Votes:</div>
-<div class="value">$extra_votes<!-- + $extra_vet_votes--></div><br/>
+<div class="value">$extra_votes</div><br/>
 <div class="heading">Extra Def. Votes:</div>
-<div class="value">$extra_defending_votes<!-- + $extra_vet_votes--></div><br/>
+<div class="value">$extra_defending_votes</div><br/>
 EOF;
 
 }
@@ -656,7 +645,7 @@ EOF;
 EOF;
   }
 
-  echo '<p>' . nl2br($item->message) . '</p>';
+  echo '<p>' . $item->message . '</p>';
 EOF;
 
   if ($item->username != 'USLCE Game') {

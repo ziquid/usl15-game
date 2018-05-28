@@ -378,69 +378,13 @@ EOF;
         case 'neighborhood_no_official_not_home_not_babylonian':
 // non-party users who aren't officials and aren't babylonian 8-)))
 
-          $data2 = _target_list($item->target, $game_user);
-          break;
+        // All officials in your hood.
+        case 'neighborhood_officials':
 
+        // Type 1 in your hood, type 2 in your party, and all type 3.
         case 'officials':
 
-// elected officials only
-          $data2 = array();
-          $sql = 'SELECT elected_positions.id AS ep_id,
-            elected_positions.group as ep_group,
-            elected_positions.name AS ep_name, blah.*,
-            clan_members.is_clan_leader, clans.acronym AS clan_acronym
-            FROM elected_positions
-            RIGHT JOIN (
-
--- type 1: neighborhood positions
-
-            SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
-            FROM elected_officials
-            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions
-              ON elected_positions.id = elected_officials.fkey_elected_positions_id
-            WHERE users.fkey_neighborhoods_id = %d
-            AND elected_positions.type = 1
-
-            UNION
-
--- type 2: party positions
-
-            SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
-            FROM elected_officials
-            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions
-              ON elected_positions.id = elected_officials.fkey_elected_positions_id
-            WHERE users.fkey_values_id = %d
-            AND elected_positions.type = 2
-
-            UNION
-
--- type 3: district positions
-
-            SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
-            FROM elected_officials
-            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-            LEFT JOIN elected_positions
-              ON elected_positions.id = elected_officials.fkey_elected_positions_id
-            WHERE users.fkey_neighborhoods_id IN
-              (SELECT id from neighborhoods where district = %d)
-            AND elected_positions.type = 3
-
-            ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
-
-            LEFT OUTER JOIN clan_members
-              ON clan_members.fkey_users_id = blah.id
-            LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
-            ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
-
-          $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-            $game_user->fkey_values_id, $district);
-          while ($official = db_fetch_object($result)) $data2[] = $official;
-
+        $data2 = _target_list($item->target, $game_user);
           break;
 
         case 'officials_type_1':

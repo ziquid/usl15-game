@@ -122,6 +122,8 @@ ob_end_clean();
 
     // Paypal.
     if (arg(3) == '700') $luck = 700;
+    if (arg(3) == '1000') $luck = 1000;
+    if (arg(3) == '4500') $luck = 4500;
 
     // Stop iOS luck hacking.
     if (arg(4) == 'abc123') $luck = 0;

@@ -294,19 +294,8 @@ firep("Initiative bonus = " . $in_bonus);
   $eq_extra_votes = db_fetch_object($result);
 
   $extra_votes = $st_extra_votes->extra_votes + $eq_extra_votes->extra_votes;
+  game_alter('extra_votes', $game_user, $extra_votes, $extra_defending_votes);
 
-// memorial day promo -- every 250 vets = extra vote
-/*
-    $sql = 'SELECT quantity
-      FROM staff_ownership
-      WHERE fkey_users_id = %d AND fkey_staff_id = 7;';
-    $result = db_query($sql, $game_user->id);
-    $vet_bonus = db_fetch_object($result);
-
-    $extra_vet_votes = (int) ($vet_bonus->quantity / 250);
-firep('Extra Votes = ' . $extra_votes . ' + ' . $extra_vet_votes);
-    $extra_votes += $extra_vet_votes;
-*/
 // INCUMBENT's endurance
 
   $sql = 'SELECT sum(staff.endurance_bonus * staff_ownership.quantity)
@@ -345,20 +334,8 @@ firep("Endurance bonus = $en_bonus");
 
   $extra_defending_votes = $st_extra_defending_votes->votes +
     $eq_extra_defending_votes->votes;
+  game_alter('extra_votes', $item, $extra_votes, $extra_defending_votes);
 
-// memorial day promo -- every 250 vets = extra vote
-/*
-    $sql = 'SELECT quantity
-      FROM staff_ownership
-      WHERE fkey_users_id = %d AND fkey_staff_id = 7;';
-    $result = db_query($sql, $item->id);
-    $vet_bonus = db_fetch_object($result);
-
-    $extra_vet_votes = (int) ($vet_bonus->quantity / 250);
-firep('Extra Defending Votes = ' . $extra_defending_votes . ' + ' .
-  $extra_vet_votes);
-    $extra_defending_votes += $extra_vet_votes;
-*/
   $my_influence = ceil($game_user->experience / 5) + ($game_user->initiative *
     $in_bonus);
 firep("your total influence: $my_influence");
