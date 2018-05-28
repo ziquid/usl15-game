@@ -57,10 +57,14 @@ function stlouis_cron() {
   if (date('H') < 9) {
     $carolers_wanted = 20;
   }
-  elseif (date('H') < 17) { // < 5PM -- 25 carolers
+  elseif (date('H') < 17) {
+
+    // < 5PM -- 25 carolers.
     $carolers_wanted = 35;
   }
-  else { // >= 5PM -- 50 carolers
+  else {
+
+    // >= 5PM -- 50 carolers.
     $carolers_wanted = 55;
   }
 
@@ -124,7 +128,6 @@ function stlouis_cron() {
 
 
     // Unfreeze players.
-
     $sql = 'update users set meta = "" where meta = "frozen";';
     $result = db_query($sql);
 
@@ -298,7 +301,8 @@ function stlouis_init() {
   if ((arg(0) == 'stlouis') || (arg(0) == 'celestial_glory') ||
     (arg(0) == 'robber_barons')) {
 
-    $conf['cache'] = FALSE; // don't cache anything
+    // Don't cache anything.
+    $conf['cache'] = FALSE;
 
     drupal_add_js(drupal_get_path('module', 'stlouis')
       . '/isotope.pkgd.min.js');
@@ -331,7 +335,6 @@ function stlouis_init() {
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
 
       // Playbook CSS.
-
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
     }
@@ -340,7 +343,6 @@ function stlouis_init() {
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
 
       // IPad CSS.
-
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
 
     }
@@ -349,7 +351,6 @@ function stlouis_init() {
     else if (substr(arg(2), 0, 4) == 'nkc ') {
 
       // Nook css.
-
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
 
     }
@@ -358,7 +359,6 @@ function stlouis_init() {
     else if (substr(arg(2), 0, 8) == 'facebook') {
 
       // Facebook.
-
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
 
     }
@@ -367,14 +367,12 @@ function stlouis_init() {
       if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=853') !== FALSE) {
 
         // 853dip width display
-
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width853.css');
 
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
 
         // 800dip width display
-
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width800.css');
 
       }
@@ -389,14 +387,12 @@ function stlouis_init() {
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
 
         // 600dip width display.
-
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width600.css');
 
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
 
         // 533dip width display.
-
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width533.css');
 
       } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
@@ -1094,7 +1090,7 @@ function _stlouis_save_user_agent($game_user) {
   // Loading luck doesn't count.
   if ($purchasing_luck) return;
 
-// Admin access.
+   // Admin access.
 //  if ($user->roles[4] == 'web game access') return;
 
   $extra_stuff_pos = stripos($user_agent, '(com.ziquid');
@@ -1145,7 +1141,6 @@ function _stlouis_save_user_agent($game_user) {
 function _stlouis_save_user_IP($game_user) {
 
   // Save the user IP.
-
   global $purchasing_luck, $user;
 
   $ip_addr = ip_address();
@@ -1153,7 +1148,7 @@ function _stlouis_save_user_IP($game_user) {
   // Loading luck doesn't count.
   if ($purchasing_luck) return;
 
-// Admin access.
+  // Admin access.
 //  if ($user->roles[4] == 'web game access') return;
 
   $last_ip = _stlouis_get_value($game_user->id, 'last_IP', '');
@@ -1168,8 +1163,8 @@ function _stlouis_save_user_IP($game_user) {
 
 
   else {
-  // Existing entry.
 
+    // Existing entry.
     $old_ip = substr($last_ip, 0, 6);
     $new_ip = substr($ip_addr, 0, 6);
 
@@ -1194,7 +1189,8 @@ to
       }
 
       else {
-      // New ip address and a password -- gotta authenticate!
+
+// New ip address and a password -- gotta authenticate!
 /*
           mail('joseph@cheek.com', 'new IP address hacking attempt?',
             'The IP address of PASSWORDED player ' .
@@ -1258,7 +1254,7 @@ function _stlouis_check_authKey($game_user) {
 
     if ($game_user->authKey == $authKey) return;
 
-    // keys match, all is good in the world.
+    // Keys match, all is good in the world.
 
     // New authKey -- save it.
     if ($game_user->authKey == '') {
@@ -1332,7 +1328,9 @@ function _stlouis_check_authKey($game_user) {
     }
 
     // Otherwise, client doesn't have an authkey... someone is hacking!
-    echo 'Error E-0922: ' . $game_user->referral_code; // no authkey
+
+    // No authkey.
+    echo 'Error E-0922: ' . $game_user->referral_code;
     exit;
 
   }
@@ -1343,7 +1341,6 @@ function _stlouis_check_authKey($game_user) {
 function _stlouis_get_value($fkey_users_id, $key, $default = NULL) {
 
   // Return the value in the db if found, or $default if not found.
-
   $sql = 'SELECT `value` FROM {user_attributes}
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
 
@@ -1358,7 +1355,6 @@ firep($result);
 function _stlouis_set_value($fkey_users_id, $key, $value = NULL) {
 
   // Set a value in the db; updates it if it already exists.
-
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
@@ -1371,7 +1367,6 @@ function _stlouis_set_value($fkey_users_id, $key, $value = NULL) {
 function _stlouis_remove_value($fkey_users_id, $key) {
 
   // Remove a value in the db.
-
   $sql = 'delete from {user_attributes}
     where `fkey_users_id` = %d and `key` = "%s";';
 
@@ -1419,7 +1414,6 @@ function _stlouis_get_fbid() {
   require_once ('fb/facebook.php');
 
   // Facebook configuration.
-
   if (arg(0) == 'stlouis') {
 
     $app_id = '234564386596716';
@@ -1439,7 +1433,6 @@ function _stlouis_get_fbid() {
   }
 
   // First, try normal facebook getUser().  If that works, awesome.
-
   $facebook = new Facebook(array(
     'appId'  => $app_id,
     'secret' => $secret,
@@ -1454,9 +1447,9 @@ function _stlouis_get_fbid() {
   $user = $facebook->getUser();
   if ($user != '0') return 'fb=' . $user;
 
-// getUser() didn't work.  Try oAuth.  Maybe user needs to log in or
-  // Authorize the game?
+  // GetUser() didn't work.  Try oAuth.  Maybe user needs to log in or
 
+  // authorize the game?
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
@@ -1579,7 +1572,9 @@ function _stlouis_fetch_user() {
     // AI player -- only allow from certain IPs.
     if ((ip_address() != $_SERVER['SERVER_ADDR']) &&
     ($user->roles[4] != 'web game access')) {
-      echo 'Error E-4713'; // ai access from a different host
+
+      // Ai access from a different host.
+      echo 'Error E-4713';
       exit;
     }
   }
@@ -1624,8 +1619,7 @@ function _stlouis_fetch_user() {
     exit;
   }
 
-// Nook Color 1.4.1 removes the 'nkc+' prefix -- fix our db
-
+  // Nook Color 1.4.1 removes the 'nkc+' prefix -- fix our db.
   if (strpos($_SERVER['HTTP_USER_AGENT'], 'BNRV200') !== FALSE) {
 
     $sql = 'select * from users where phone_id = "%s";';
@@ -2276,6 +2270,7 @@ $extra_messages
         money_to_addStr =
           money_to_add.toString().substr(0,money_to_add.toString().length - 3) +
             "K";
+
         // money_secondsStr = "m";
         money_secondsStr = ':' + (money_seconds < 10 ? '0' + money_seconds : money_seconds);
       }
