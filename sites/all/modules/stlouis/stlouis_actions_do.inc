@@ -2909,7 +2909,6 @@ EOF;
     if (empty($password) || empty($account_num) || empty($amount)) {
 
       // Need an account number and password and amount.
-
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
   <form method=get action="/$game/actions_do/$arg2/$action_id">
@@ -4292,7 +4291,7 @@ firep($target);
     $target_name = $target->ep_name . ' ' . $target->username;
     $target_id = $_GET['target'];
 
-// In a taggable hood?
+    // In a taggable hood?
 /* nowhere is safe
     if ($game_user->fkey_neighborhoods_id == 37 ||
       $game_user->fkey_neighborhoods_id > 79) {
@@ -4459,7 +4458,6 @@ EOF;
 /*
 
     // In a taggable hood?
-
     if ($game_user->fkey_neighborhoods_id == 37 ||
       $game_user->fkey_neighborhoods_id > 79) {
 
@@ -4552,7 +4550,6 @@ EOF;
 
     }
 
-
     // Not in same hood.
     if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
 
@@ -4567,7 +4564,6 @@ EOF;
       return FALSE;
 
     }
-
 
     // Unfreeze the player.
 
