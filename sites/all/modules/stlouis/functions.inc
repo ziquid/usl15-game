@@ -879,7 +879,9 @@ EOF;
 EOF;
 
     }
-    else { // normal show
+
+    // Normal show.
+    else {
       echo <<< EOF
   <div class="land-button-wrapper">
     $buy_button
@@ -1238,8 +1240,8 @@ EOF;
 
   // Quest performed?
   if (empty($exp_added_str)) {
-// no quest performed -- show requirements
 
+    // No quest performed -- show requirements.
     echo <<< EOF
     <div class="quest-requisites">
       // Consumptions //
@@ -1901,12 +1903,15 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   $result = db_query($sql, $ex_price, $game_user->id);
 
   game_recalc_income($game_user);
-  $game_user = $fetch_user(); // reprocess user object
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
   return TRUE;
 
 }
 
 function competency_gain($game_user, $id, $level = 1) {
+
   // If id is string, find numerical id.
   if (gettype($id) == 'string') {
 
@@ -1917,7 +1922,9 @@ function competency_gain($game_user, $id, $level = 1) {
     if (!empty($item)) {
       $id = (int) $item->id;
     }
-    else { // not found! create it
+
+    // Not found! Create it!
+    else {
 
       $sql = 'insert into competencies (name, level) values ("%s", %d);';
       $result = db_query($sql, $id, $level);

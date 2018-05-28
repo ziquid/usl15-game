@@ -216,7 +216,7 @@ $sql = 'select quests.*, quest_completion.percent_complete,
   ' . $sql_quest_neighborhood .
   ' and required_level <= %d ' . $active_quests .
   ' order by required_level ASC;';
-firep($sql);
+//firep($sql);
 $result = db_query($sql, $game_user->id, $game_user->level);
 
 while ($item = db_fetch_object($result)) $data[] = $item;
@@ -250,6 +250,8 @@ foreach ($data as $item) {
 // firep($rgb);
 
   $active = ($item->active) ? '' : ' (inactive)';
+
+  game_alter('quest_item', $game_user, $item);
   firep($item, 'quest item');
 
   if (($group_to_show > 0) &&
@@ -504,6 +506,7 @@ EOF;
       $item->description);
 
     $active = ($item->active) ? '' : ' (inactive)';
+    game_alter('quest_item', $game_user, $item);
 
     echo <<< EOF
 <div class="quests-soon">

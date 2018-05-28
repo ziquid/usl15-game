@@ -99,7 +99,27 @@ switch($today) {
   case '2018-05-24':
     $event_type = EVENT_PRE_MEMORIAL_DAY;
     break;
+
+  case '2018-05-25':
+    $event_type = EVENT_MEMORIAL_DAY_1;
+    break;
+
+  case '2018-05-26':
+    $event_type = EVENT_MEMORIAL_DAY_2;
+    break;
+
+  case '2018-05-27':
+    $event_type = EVENT_MEMORIAL_DAY_3;
+    break;
+
+  case '2018-05-28':
+    $event_type = EVENT_MEMORIAL_DAY_4;
+    break;
 }
+
+//if (arg(2) == 'abc123') {
+//  $event_type = EVENT_MEMORIAL_DAY_4;
+//}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
@@ -151,7 +171,7 @@ if ($event_type == EVENT_NEW_NAMES) {
 }
 
 /*
-// boxing day
+// Boxing day.
 if ((date('Y-m-d') == '2012-12-26') || arg(2) == 'abc123') {
   $debate = 'Box';
   $debate_tab = 'Boxing';
