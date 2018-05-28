@@ -19,7 +19,8 @@ function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can
   $clan_acronym = trim(check_plain($_GET['acronym']));
 
   $sql = 'select * from clan_members where fkey_users_id = %d;';
-// limited to 1 in db
+
+  // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 firep($item);
@@ -33,7 +34,7 @@ firep($item);
     return FALSE;
   }
 
-// Do they have the appropriate aides?
+  // Do they have the appropriate aides?
   $sql = 'select sum(clan_size * quantity) as max_clan_size from users
     left join equipment_ownership
     on equipment_ownership.fkey_users_id = users.id
@@ -85,8 +86,7 @@ EOF;
 
   }
 
-// see if the clan already exists
-
+  // See if the clan already exists.
   $sql = 'select * from clans where acronym = "%s" or name = "%s" limit 1;';
   $result = db_query($sql, $clan_acronym, $clan_name);
   $item = db_fetch_object($result);
@@ -172,6 +172,7 @@ EOF;
   $result = db_query($sql, $clan_acronym);
   $item = db_fetch_object($result);
 firep($item);
+
   // Clan does not exist.
   if (empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
@@ -590,7 +591,8 @@ function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target
 firep('welcome message = ' . $welcome_msg);
 
   $sql = 'select * from elected_officials where fkey_users_id = %d;';
-// limited to 1 in db
+
+  // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 firep($item);
@@ -1205,7 +1207,7 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
     return FALSE;
   }
 
-  // STL-236 -- no unaffiliated eggings
+  // STL-236 -- no unaffiliated eggings.
   if ($game_user->fkey_values_id == 0) {
     $outcome_reason = '<div class="action-effect">' .
       t('Sorry!&nbsp; You must join a political party first') . '</div>';
@@ -1774,7 +1776,9 @@ EOF;
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     $item->desc_short = 'end';
-    $data[] = $item; // hack to force last item to show
+
+    // Hack to force last item to show.
+    $data[] = $item;
 
     if ($hour_to_show == 1) {
     	$hours = 'hour';
@@ -1783,7 +1787,7 @@ EOF;
     	$hours = 'hours';
     }
 
-// previous hour
+    // Previous hour.
     if ($hour_to_show > 0) {
 
     	$previous_hour = $hour_to_show - 1;
@@ -1810,7 +1814,7 @@ EOF;
 
     }
 
-// next hour
+    // Next hour.
     if ($hour_to_show < ($num_cameras->quantity - 1)) {
 
       $next_hour = $hour_to_show + 1;
@@ -1859,7 +1863,8 @@ EOF;
         $clan_acronym .= '*';
 
       if ($item->desc_short !== $old_item->desc_short) {
-// new item to display... show it and reset counters
+
+       // New item to display... show it and reset counters.
 
        // Anything to display?
        if ($old_item) {
@@ -1886,7 +1891,7 @@ EOF;
 
        }
 
-// now display current item
+// Now display current item.
 //        $outcome_reason .=<<< EOF
 //<div class="dateline">
 //  $display_time from $item->ep_name $item->username $clan_acronym
@@ -1905,8 +1910,9 @@ EOF;
         $old_display_time = $display_time;
 
       }
-      else { // dup of existing item... abbreviate
+      else {
 
+        // Dup of existing item... abbreviate.
       	$instance_count++;
 
       }
@@ -1995,8 +2001,7 @@ EOF;
 
     }
 
-// expel succeeds!  save as major action
-
+    // Expel succeeds! Save as major action.
     $sql = 'SELECT elected_positions.name as ep_name,
       elected_positions.type as ep_type
       FROM `users`
@@ -2023,7 +2028,7 @@ EOF;
 
     $party = ($game == 'stlouis') ? 'party' : 'family';
 
-// add message to user
+    // Add message to user.
     $sql = 'insert into user_messages (fkey_users_from_id,
       fkey_users_to_id, message) values (%d, %d, "%s");';
     $message = $ep_name . ' ' . $game_user->username .
@@ -2032,7 +2037,7 @@ EOF;
       of 10% of your influence and of your aides.';
     $result = db_query($sql, $game_user->id, $target_id, $message);
 
-// update aides
+    // Update aides.
     $sql = 'update equipment_ownership
       set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
@@ -2045,7 +2050,7 @@ EOF;
       set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
 
-// update levels, skill points
+    // Update levels, skill points.
     $sql = 'select experience from users where id = %d;';
     $result = db_query($sql, $target_id);
     $item = db_fetch_object($result);
@@ -2061,12 +2066,14 @@ EOF;
       on quest_group_completion.fkey_quest_groups_id = quests.group
       WHERE fkey_users_id = %d and quests.active = 1;';
     $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result); // limited to 1 in db
+
+    // Limited to 1 in db.
+    $item = db_fetch_object($result);
     $new_skill_points = ($new_level * 4) + $item->bonus - 20;
 
     $values = ($game == 'stlouis') ? 'Greenbacks' : 'No Values';
 
-// update his/her user entry
+    // Update his/her user entry.
     $sql = 'update users set fkey_values_id = 0,
       `values` = "%s", level = %d, experience = %d, energy_max = 200,
       skill_points = %d, initiative = 1, endurance = 1, actions = 3,
@@ -2075,11 +2082,11 @@ EOF;
     $result = db_query($sql, $values, $new_level, $new_experience,
       $new_skill_points, $target_id);
 
-// also delete any offices s/he held
+    // Also delete any offices s/he held.
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
 
-// and any clan memberships s/he had (disband the clan if s/he was the leader)
+    // And any clan memberships s/he had (disband the clan if s/he was the leader).
     $sql = 'select * from clan_members where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
     $item = db_fetch_object($result);
@@ -2102,8 +2109,7 @@ EOF;
 
     }
 
-// update income
-
+  // Update income.
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -2113,8 +2119,7 @@ EOF;
     where id = %d;';
   $result = db_query($sql, $target_id, $target_id);
 
-// update expenses
-
+  // Update expenses.
   $sql = 'update users set expenses =
 
     ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
@@ -2134,7 +2139,7 @@ EOF;
     where id = %d;';
   $result = db_query($sql, $target_id, $target_id, $target_id);
 
-// deduct your Action
+    // Deduct your Action.
     $sql = 'update users set actions = actions - %d where id = %d;';
     $result = db_query($sql, $actions_required, $game_user->id);
 
@@ -2437,8 +2442,7 @@ EOF;
 
     }
 
-// generate an account number
-
+    // Generate an account number.
     $account_num = 0;
 
     while ($account_num == 0) {
@@ -2457,8 +2461,7 @@ firep($item);
 
     }
 
-// doesn't exist - create it!
-
+    // Doesn't exist - create it!
     $sql = 'insert into bank_accounts (fkey_users_id, account_number, password)
       values (%d, %d, "%s");';
     $result = db_query($sql, $game_user->id, $account_num, $password);
@@ -2500,7 +2503,8 @@ EOF;
     $password = trim(check_plain($_GET['password']));
 
     if (empty($password) || empty($account_num)) {
-// need an account number and password
+
+      // Need an account number and password.
 
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
@@ -2519,8 +2523,7 @@ EOF;
 
     }
 
-// validate the info
-
+    // Validate the info.
     $sql = 'select * from bank_accounts
       where account_number = %d
       and password = "%s"
@@ -2542,8 +2545,7 @@ firep($item);
 
     }
 
-// close the account
-
+    // Close the account.
     $sql = 'update bank_accounts
       set timestamp_closed = CURRENT_TIMESTAMP, active = 0, balance = 0
       where id = %d;';
@@ -2553,7 +2555,8 @@ firep($item);
       where id = %d;';
     $result = db_query($sql, $item->balance, $game_user->id);
     $game_user->money += $item->balance;
-// no need to reprocess; automatically
+
+    // No need to reprocess; automatically.
     $balance = number_format($item->balance);
 
     mail('joseph@cheek.com', 'bank account ' . $account_num . ' closed',
@@ -2634,8 +2637,8 @@ EOF;
     $password = trim(check_plain($_GET['password']));
 
     if (empty($password) || empty($account_num)) {
-// need an account number and password
 
+    // Need an account number and password.
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
   <form method=get action="/$game/actions_do/$arg2/$action_id">
@@ -2653,8 +2656,7 @@ EOF;
 
     }
 
-// validate the info
-
+    // Validate the info.
     $sql = 'select * from bank_accounts
       where account_number = %d
       and fkey_users_id = %d
@@ -2675,8 +2677,7 @@ firep($item);
 
     }
 
-// update the password
-
+    // Update the password.
     $sql = 'update bank_accounts
       set password = "%s"
       where id = %d;';
@@ -2719,8 +2720,8 @@ EOF;
 
 //    if (empty($password) || empty($account_num) || empty($amount)) {
     if (empty($account_num) || empty($amount)) {
-// need an account number and password and amount
 
+      // Need an account number and password and amount.
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
   <form method=get action="/$game/actions_do/$arg2/$action_id">
@@ -2741,8 +2742,7 @@ EOF;
 
     }
 
-// validate the info -- first, check that the account exists
-
+    // Validate the info -- first, check that the account exists.
     $sql = 'select * from bank_accounts
       where account_number = %d
 --      and password = "%s"
@@ -2763,9 +2763,9 @@ firep($item);
 
     }
 
-// set transaction_lock and then reprocess user object
-// spin 10 times for 1 second waiting for a lock, if necessary
+    // Set transaction_lock and then reprocess user object.
 
+    // Spin 10 times for 1 second waiting for a lock, if necessary.
     $lock_acquired = FALSE;
     $lock_try = 0;
 
@@ -2805,7 +2805,7 @@ firep($item);
 
     $game_user = $fetch_user();
 
-// check moolah
+    // Check moolah.
 
     // Not enough moolah.
     if (($amount > $game_user->money) || ($amount < 0)) {
@@ -2821,10 +2821,9 @@ firep($item);
 
     }
 
-// next, check account
+    // Next, check account.
 
-// make the deposit and subtract from the user
-
+    // Make the deposit and subtract from the user.
     $sql = 'update bank_accounts
       set balance = balance + %d
       where id = %d;';
@@ -2879,7 +2878,7 @@ EOF;
 
     }
 
-// reprocess user object and then clear transaction_lock
+      // Reprocess user object and then clear transaction_lock.
       db_query('update bank_accounts set transaction_lock = 0
         where id = %d;', $item->id);
 
@@ -2907,8 +2906,8 @@ EOF;
     $amount = trim(check_plain($_GET['amount']));
 
     if (empty($password) || empty($account_num) || empty($amount)) {
-// need an account number and password and amount
 
+      // Need an account number and password and amount.
       $outcome_reason =<<< EOF
 <div class="ask-clan-name">
   <form method=get action="/$game/actions_do/$arg2/$action_id">
@@ -2929,8 +2928,7 @@ EOF;
 
     }
 
-// validate the info -- first, check that the account exists
-
+    // Validate the info -- first, check that the account exists.
     $sql = 'select * from bank_accounts
       where account_number = %d
       and password = "%s"
@@ -2951,9 +2949,9 @@ firep($item);
 
     }
 
-// set transaction_lock and then reprocess user object
-// spin 10 times for 1 second waiting for a lock, if necessary
+    // Set transaction_lock and then reprocess user object.
 
+    // Spin 10 times for 1 second waiting for a lock, if necessary.
     $lock_acquired = FALSE;
     $lock_try = 0;
 
@@ -2993,7 +2991,7 @@ firep($item);
 
     $game_user = $fetch_user();
 
-// check moolah
+    // Check moolah.
 
     // Not enough moolah.
     if (($amount > $item->balance) || ($amount < 0)) {
@@ -3009,8 +3007,7 @@ firep($item);
 
     }
 
-// make the withdrawal and add to the user
-
+    // Make the withdrawal and add to the user.
     $sql = 'update bank_accounts
       set balance = balance - %d
       where id = %d;';
@@ -3069,7 +3066,7 @@ EOF;
 
     }
 
-// reprocess user object and then clear transaction_lock
+      // Reprocess user object and then clear transaction_lock.
       db_query('update bank_accounts set transaction_lock = 0
         where id = %d;', $item->id);
 
@@ -3142,7 +3139,8 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
     $target, &$can_do_again) {
 
-    $st_time = date('g:i:s A', time() - 3600); // one hour ago, since we are ET
+    // One hour ago, since we are ET.
+    $st_time = date('g:i:s A', time() - 3600);
     $outcome_reason .= '<div class="title">Current Time in St. Louis</div>
       <div class="subtitle">' . $st_time . '</div>';
 
@@ -3279,7 +3277,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           <div class="subtitle">A scary dog chases you away</div>';
 
         return TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 5:
       case 6:
@@ -3290,7 +3290,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           <div class="subtitle">No one is home 8-(</div>';
 
         return TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 10:
       case 11:
@@ -3310,7 +3312,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 20:
       case 21:
@@ -3330,7 +3334,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 30:
       case 31:
@@ -3353,7 +3359,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $money, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 40:
       case 41:
@@ -3373,7 +3381,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 50:
       case 51:
@@ -3393,7 +3403,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 60:
       case 61:
@@ -3408,7 +3420,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 65:
       case 66:
@@ -3425,7 +3439,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $can_do_again = FALSE;
 
         return TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
       case 70:
       case 71:
@@ -3452,7 +3468,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
           <div class="subtitle">Try another</div>';
 
         return TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
 /*
       case 90:
@@ -3501,7 +3519,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         }
 
         return TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 */
       default:
         $outcome_reason .=
@@ -3512,7 +3532,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         $result = db_query($sql, $game_user->id);
 
         $candy_used = TRUE;
-        break; // just for form
+
+        // Just for form.
+        break;
 
 
     }
@@ -3540,7 +3562,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
       <div class="subtitle">They\'ve all gone home</div>';
     return FALSE;
 
-// real function below
+    // Real function below.
 
     // No costume!
     if ($game_user->username == $game_user->real_username) {
@@ -3578,8 +3600,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
         <div class="title">So go meet someone new!</div>';
 
     }
-    else if ($data->quantity >= 10) { // already have ten
+    else if ($data->quantity >= 10) {
 
+      // Already have ten.
       $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
         <div class="subtitle"><img
@@ -3590,8 +3613,9 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
       $can_do_again = FALSE;
 
     }
-    else { // need one more
+    else {
 
+      // Need one more.
       $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
         <div class="subtitle"><img
@@ -3620,7 +3644,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
     // Not in Fountain Park?  Act as normal.
     if ($game_user->fkey_neighborhoods_id != 80) return TRUE;
 
-// otherwise, we are in Fountain Park
+    // Otherwise, we are in Fountain Park.
 
     // No costume!
     if ($game_user->username == $game_user->real_username) {
@@ -4178,8 +4202,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
       where id = %d';
     $result = db_query($sql, $game_user->id);
 
-// save as major action
-
+    // Save as major action.
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 600);
 
@@ -4267,7 +4290,7 @@ firep($target);
     $target_name = $target->ep_name . ' ' . $target->username;
     $target_id = $_GET['target'];
 
-// in a taggable hood?
+    // In a taggable hood?
 /* nowhere is safe
     if ($game_user->fkey_neighborhoods_id == 37 ||
       $game_user->fkey_neighborhoods_id > 79) {
@@ -4279,8 +4302,8 @@ firep($target);
 
     }
 */
-// out of ammo?
 
+    // Out of ammo?
     $sql = 'select quantity from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = 40;';
     $result = db_query($sql, $game_user->id);
@@ -4331,9 +4354,7 @@ EOF;
 
     }
 
-
-// camouflage?
-
+    // Camouflage?
     $sql = 'select quantity from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = 42;';
     $result = db_query($sql, $target_id);
@@ -4357,11 +4378,9 @@ EOF;
 
     }
 
+    // Tag the player!
 
-// tag the player!
-
-// create entry for tagger, taggee, if needed
-
+    // Create entry for tagger, taggee, if needed.
     $sql = 'select id from event_points where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
     $row = db_fetch_object($result);
@@ -4384,7 +4403,7 @@ EOF;
 
     }
 
-// mark as frozen, reset tags_con and heals_con
+    // Mark as frozen, reset tags_con and heals_con.
     $sql = 'update users set meta = "frozen" where id = %d;';
     $result = db_query($sql, $target_id);
 
@@ -4392,7 +4411,7 @@ EOF;
       where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
 
-// update points
+    // Update points.
     $tags_con = $row->tags_con + 1;
     $points = $row->points + min($tags_con, 20);
 
@@ -4403,12 +4422,12 @@ EOF;
     $outcome_reason .= '<div class="subsubtitle">You have ' . $tags_con .
       ' consecutive tag(s) and ' . $points . ' point(s)</div>';
 
-// use up ammo
+    // Use up ammo.
     $sql = 'update equipment_ownership set quantity = quantity - 1
       where fkey_users_id = %d and fkey_equipment_id = 40;';
     $result = db_query($sql, $game_user->id);
 
-// add tag message
+    // Add tag message.
     $sql = 'insert into challenge_messages
       (fkey_users_from_id, fkey_users_to_id, message)
       values (%d, %d, "%s");';
@@ -4436,8 +4455,8 @@ EOF;
     $target_name = $target->ep_name . ' ' . $target->username;
     $target_id = $_GET['target'];
 /*
-// in a taggable hood?
 
+    // In a taggable hood?
     if ($game_user->fkey_neighborhoods_id == 37 ||
       $game_user->fkey_neighborhoods_id > 79) {
 
@@ -4449,7 +4468,7 @@ EOF;
     }
 */
 
-// no target specified
+    // No target specified.
     if ($target_id == '') {
 
       $data = array();
@@ -4530,9 +4549,7 @@ EOF;
 
     }
 
-
-// not in same hood
-
+    // Not in same hood.
     if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
 
       $outcome_reason = '<div class="title">Not in same neighborhood!</div>
@@ -4547,11 +4564,9 @@ EOF;
 
     }
 
+    // Unfreeze the player.
 
-// unfreeze the player
-
-// create entry for tagger, taggee, if needed
-
+    // Create entry for tagger, taggee, if needed.
     $sql = 'select id from event_points where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
     $row = db_fetch_object($result);
@@ -4574,11 +4589,11 @@ EOF;
 
     }
 
-// mark as unfrozen
+    // Mark as unfrozen.
     $sql = 'update users set meta = "" where id = %d;';
     $result = db_query($sql, $target_id);
 
-// update points
+    // Update points.
     $heals_con = $row->heals_con + 1;
     $points = $row->points + min($heals_con, 20) + 1;
 
@@ -4589,7 +4604,7 @@ EOF;
     $outcome_reason .= '<div class="subsubtitle">You have ' . $heals_con .
       ' consecutive heal(s) and ' . $points . ' point(s)</div>';
 
-// add unfreeze message
+    // Add unfreeze message.
     $sql = 'insert into challenge_messages
       (fkey_users_from_id, fkey_users_to_id, message)
       values (%d, %d, "%s");';
@@ -6436,15 +6451,21 @@ EOF;
 
     if ($game_user->level > 100) {
       $equipment = 37;
-      $major_action_timer = 900; // secs for major action
+
+      // secs for major action
+      $major_action_timer = 900;
     }
     else if ($game_user->level > 50) {
       $equipment = 36;
-      $major_action_timer = 600; // secs for major action
+
+      // Secs for major action.
+      $major_action_timer = 600;
     }
     else {
       $equipment = 35;
-      $major_action_timer = 360; // secs for major action
+
+      // Secs for major action.
+      $major_action_timer = 360;
     }
 
 
