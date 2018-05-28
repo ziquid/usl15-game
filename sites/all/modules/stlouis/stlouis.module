@@ -126,7 +126,6 @@ function stlouis_cron() {
 
   }
 
-
     // Unfreeze players.
     $sql = 'update users set meta = "" where meta = "frozen";';
     $result = db_query($sql);
@@ -1168,7 +1167,7 @@ function _stlouis_save_user_IP($game_user) {
     $old_ip = substr($last_ip, 0, 6);
     $new_ip = substr($ip_addr, 0, 6);
 
-    // Egads! New IP address!  Save and warn me!
+    // Egads! New IP address! Save and warn me!
     if ($new_ip != $old_ip) {
 
       // No password?  Update automatically.
@@ -1190,7 +1189,7 @@ to
 
       else {
 
-// New ip address and a password -- gotta authenticate!
+          // New ip address and a password -- gotta authenticate!
 /*
           mail('joseph@cheek.com', 'new IP address hacking attempt?',
             'The IP address of PASSWORDED player ' .
@@ -1235,9 +1234,10 @@ function _stlouis_check_authKey($game_user) {
 
   }
 
-  // Authkey in user agent.
+
   else {
 
+    // Authkey in user agent.
     $agentBits = explode(' ', $_SERVER['HTTP_USER_AGENT']);
 
     foreach ($agentBits as $agentBit) {
@@ -1279,10 +1279,12 @@ function _stlouis_check_authKey($game_user) {
 
   }
 
-  // No authkey sent.
+
   else {
 
-    // No key sent.
+   // No authkey sent.
+
+   // No key sent.
     if ($game_user->authKey == $authKey) {
 
       if (arg(0) == 'celestial_glory') {
@@ -1895,9 +1897,10 @@ function _stlouis_fetch_user() {
     $game_user->money, $game_user->skill_points, $game_user->id);
 
   }
-  // Only save last_access.
+
   else {
 
+    // Only save last_access.
     $sql = 'update users set last_access = CURRENT_TIMESTAMP
       where id = %d;';
     $result = db_query($sql, $game_user->id);
@@ -2141,9 +2144,10 @@ firep('a prize is deserved!');
 
     }
 
-    // User doesn't get a prize.
+
     else {
 
+      // User doesn't get a prize.
 // if ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
