@@ -39,7 +39,9 @@ EOF;
   }
 
   if ((!$action_found) &&
-    (substr($arg2, 0, 3) != 'ai-')) { // hacking!
+
+    // Hacking!
+    (substr($arg2, 0, 3) != 'ai-')) {
 
     $sql = 'update users set karma = karma - 20
       where id = %d;';
@@ -192,6 +194,7 @@ if ($action_succeeded) {
       $target_name = 'Your';
       $target_id = $game_user->id;
     }
+
     // There is a target involved.
     else {
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
@@ -229,26 +232,28 @@ if ($action_succeeded) {
     $rat_change = $action->rating_change;
 
     if (($action->target == 'none') || ($action->rating_change >= 0.10)) {
-      // no target or larger positive ratings - actions affect player
+
+      // No target or larger positive ratings - actions affect player.
 
       $target_name = 'Your';
       $target_id = $game_user->id;
 
     }
-    else { // target, negative, or smaller positive ratings
+    else {
 
+      // Target, negative, or smaller positive ratings.
       $target_name = $target->ep_name . ' ' . $target->username . '\'s';
       $target_id = $_GET['target'];
 
     }
 
-    // affect rating
+    // Affect rating.
     $sql = 'update elected_officials
       set approval_rating = greatest(least(approval_rating + %f, 100), 0)
       where fkey_users_id = %d;';
     $result = db_query($sql, $rat_change,  $target_id);
 
-    // get new rating
+    // Get new rating.
     $sql = 'select approval_rating from elected_officials
         where fkey_users_id = %d;';
     $result = db_query($sql, $target_id);
@@ -265,12 +270,12 @@ if ($action_succeeded) {
 
     $rat_change = $action->neighborhood_rating_change;
 
-    // affect rating
+    // Affect rating.
     $sql = 'update neighborhoods
         set rating = greatest(0, rating + %f) where id = %d;';
     $result = db_query($sql, $rat_change,  $game_user->fkey_neighborhoods_id);
 
-    // get new rating
+    // Get new rating.
     $sql = 'select name, rating from neighborhoods
         where id = %d;';
     $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -282,7 +287,7 @@ if ($action_succeeded) {
 
   }
 
-  // values COST (ie, what you pay).
+  // Values COST (ie, what you pay).
   if ($action->values_cost != 0) {
     $sql = 'update users set money = money - %d where id = %d;';
     $result = db_query($sql, $action->values_cost, $game_user->id);
@@ -291,7 +296,7 @@ if ($action_succeeded) {
         '</div>';
   }
 
-  // values CHANGE (ie, what target gets).
+  // Values CHANGE (ie, what target gets).
   if ($action->values_change != 0) {
 
     $target_name = $target->ep_name . ' ' . $target->username . '\'s';
@@ -380,7 +385,9 @@ firep($eq);
       if ($eq->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $eq->upkeep, $game_user->id);
-      }// FIXME: do this before _stlouis_header so that upkeep is accurate
+
+      // FIXME: do this before _stlouis_header so that upkeep is accurate.
+      }
 
       $stuff = strtolower($eq->name);
       if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
@@ -433,13 +440,15 @@ firep($st->name . ' has run away!');
         where fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $st->id, $game_user->id);
 
-// player expenses need resetting?
+      // Player expenses need resetting?
 
       // Subtract upkeep from your expenses.
       if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
         $result = db_query($sql, $st->upkeep, $game_user->id);
-      } // FIXME: do this before _stlouis_header so that upkeep is accurate
+
+      // FIXME: do this before _stlouis_header so that upkeep is accurate.
+      }
 
       $sql = 'select message from staff_failure_reasons
         where fkey_staff_id = %d
@@ -497,11 +506,13 @@ firep($st->name . ' has run away!');
       href="/' . $game . '/actions/' . $arg2 .
       '">Perform a different action</a></div></div>';
 
-    $game_user = $fetch_user(); // reprocess user object
+    // Reprocess user object.
+    $game_user = $fetch_user();
 
   }
-  else { // failed - try a different action
+  else {
 
+    // Failed - try a different action.
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/actions/' . $arg2 .

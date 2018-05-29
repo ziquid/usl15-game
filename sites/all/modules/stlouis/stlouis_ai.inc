@@ -57,8 +57,8 @@ if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
 
 
 function _ai_out($output) {
-// add output to $ai_output
 
+  // Add output to $ai_output.
   global $ai_output, $bt_skip;
 
   $bt = debug_backtrace();
@@ -76,7 +76,7 @@ function _ai_out($output) {
     $ai_output .= $spaces . $bt[1]['function'] . "$args: $output\n";
   }
 
-// failsafe hack
+  // Failsafe hack.
 
   // Too long -- kill script.
   if (strlen($ai_output) > 25000) {
@@ -89,8 +89,8 @@ function _ai_out($output) {
 
 
 function _ai_do($goal) {
-// work toward a specific goal, if not already accomplished
 
+  // Work toward a specific goal, if not already accomplished.
   $goal_function = '_ai_' . str_replace(' ', '_', $goal);
   $args = func_get_args();
   $args = array_slice($args, 1);
@@ -108,8 +108,8 @@ function _ai_do($goal) {
 
 
 function _ai_build() {
-// generic function for building a random ai player
 
+  // Generic function for building a random ai player.
   global $game;
 
   _ai_out('figuring out what is the best building course of action');
@@ -123,8 +123,9 @@ function _ai_build() {
       limit 1;';
 
   }
-  else { // random player
+  else {
 
+    // Random player.
     $sql = 'select phone_id from users
       where meta like "ai_%"
       order by RAND()
@@ -153,8 +154,8 @@ function _ai_build() {
 
 
 function _ai_do_quest($ai_id, $quest) {
-// perform quest $quest as player $ai_id
 
+  // Perform quest $quest as player $ai_id.
   $ai_response = _ai_web_request($ai_id, 'quests_do', $quest);
 
   if ($ai_response == 'quest-succeeded') {
@@ -177,7 +178,7 @@ function _ai_do_quest($ai_id, $quest) {
       $staff_to_get = substr($response, 11);
       _ai_out("Trying to get Staff #$staff_to_get");
 
-// see if there is a quest that will loot that staff
+      // See if there is a quest that will loot that staff.
       $sql = 'select id, name from quests
         where fkey_loot_staff_id = %d
         order by rand() limit 1;';
@@ -220,15 +221,14 @@ function _ai_do_quest($ai_id, $quest) {
         _ai_out("Quest #$item->id, $item->name has Equipment #$eq_to_get; " .
           'doing it!');
         $worked = _ai_do('do quest', $ai_id, $item->id);
-// yes, call recursively
 
+        // Yes, call recursively.
         if ($worked) return FALSE;
-// this quest may have succeeded, but goal failed
 
+      // This quest may have succeeded, but goal failed.
       }
 
-// next, check to see if we can purchase item
-
+      // Next, check to see if we can purchase item.
       _ai_out("Ok, seeing if we can purchase Equipment #$eq_to_get");
       _ai_do('purchase equipment', $ai_id, $eq_to_get);
       return FALSE;
@@ -244,7 +244,8 @@ function _ai_do_quest($ai_id, $quest) {
 
 
 function _ai_web_request($ai_id, $screen, $arg1 = '') {
-// call a web request for player $ai_id to screen $screen with optional
+
+  // Call a web request for player $ai_id to screen $screen with optional.
 // arg $arg1
 
   global $game;
@@ -280,8 +281,8 @@ function _ai_web_request($ai_id, $screen, $arg1 = '') {
 
 
 function _ai_have_num_interns($num_interns) {
-// goal: $num interns across the game
 
+  // Goal: $num interns across the game.
   $sql = 'select count(users.id) as count from users
     left join elected_officials
     on elected_officials.fkey_users_id = users.id
@@ -298,19 +299,20 @@ function _ai_have_num_interns($num_interns) {
     return TRUE;
   }
 
-  $extra_accts = 1; // have an extra account
+  // Have an extra account.
+  $extra_accts = 1;
 
-// can't have $num interns if we don't have $num breachers.  do that first.
+  // Can't have $num interns if we don't have $num breachers. Do that first.
   if (!_ai_do('have num type level min max players',
     $num_interns + $extra_accts,
     'breacher', 6, 30)) return FALSE;
 
-// can't have $num interns if we don't have $num holders.  do that next.
+  // Can't have $num interns if we don't have $num holders. Do that next.
   if (!_ai_do('have num type level min max players',
     $num_interns + $extra_accts,
     'holder', 6, 30)) return FALSE;
 
-// need some scouts to look for free seats, too
+  // Need some scouts to look for free seats, too.
   if (!_ai_do('have num type level min max players',
     ceil(($num_interns + $extra_accts) / 4),
     'scout', 12, 130)) return FALSE;
@@ -338,8 +340,8 @@ function _ai_have_num_interns($num_interns) {
 
 
 function _ai_have_num_clan_leaders($num_leaders) {
-// goal: $num clan leaders across the game
 
+  // Goal: $num clan leaders across the game.
   $sql = 'SELECT COUNT( users.id ) AS count
     FROM users
     LEFT JOIN clan_members ON clan_members.fkey_users_id = users.id
@@ -355,7 +357,7 @@ function _ai_have_num_clan_leaders($num_leaders) {
     return TRUE;
   }
 
-// find a free player.  make it a holder, just cause they don't do much.
+  // Find a free player. Make it a holder, just cause they don't do much.
   $ai_user = _ai_find_free_player('holder', 20, 150, 5);
 
   if (!empty($ai_user)) {
@@ -365,7 +367,8 @@ function _ai_have_num_clan_leaders($num_leaders) {
 
     _ai_out('Checking for necessary equipment ' . "(money: $ai_user->money)");
 
-    $stuff_to_get = array( // equip_id => level
+    // equip_id => level
+    $stuff_to_get = array(
        2 => 20,
        7 => 40,
       12 => 60,
@@ -416,8 +419,8 @@ function _ai_have_num_clan_leaders($num_leaders) {
 
 
 function _ai_have_num_members($num_members) {
-// goal: $num members across the game
 
+  // Goal: $num members across the game.
   $sql = 'select count(users.id) as count from users
     left join elected_officials
     on elected_officials.fkey_users_id = users.id
@@ -434,19 +437,20 @@ function _ai_have_num_members($num_members) {
     return TRUE;
   }
 
-  $extra_accts = 1; // have an extra account
+  // Have an extra account.
+  $extra_accts = 1;
 
-// can't have $num interns if we don't have $num breachers.  do that first.
+  // Can't have $num interns if we don't have $num breachers. Do that first.
   if (!_ai_do('have num type level min max players',
     $num_members + $extra_accts,
     'breacher', 20, 45)) return FALSE;
 
-// can't have $num interns if we don't have $num holders.  do that next.
+  // Can't have $num interns if we don't have $num holders. Do that next.
   if (!_ai_do('have num type level min max players',
     $num_members + $extra_accts,
     'holder', 20, 45)) return FALSE;
 
-// need some scouts to look for free seats, too
+  // Need some scouts to look for free seats, too.
   if (!_ai_do('have num type level min max players',
     ceil(($num_members + $extra_accts) / 4),
     'scout', 12, 130)) return FALSE;
@@ -474,8 +478,8 @@ function _ai_have_num_members($num_members) {
 
 
 function _ai_have_num_treasurers($num) {
-// goal: $num treasurers across the game
 
+  // Goal: $num treasurers across the game.
   $sql = 'select count(users.id) as count from users
     left join elected_officials
     on elected_officials.fkey_users_id = users.id
@@ -491,19 +495,20 @@ function _ai_have_num_treasurers($num) {
     return TRUE;
   }
 
-  $extra_accts = 1; // have an extra account
+  // Have an extra account.
+  $extra_accts = 1;
 
-// can't have $num treasurers if we don't have $num breachers.  do that first.
+  // Can't have $num treasurers if we don't have $num breachers. Do that first.
   if (!_ai_do('have num type level min max players',
     $num + $extra_accts,
     'breacher', 35, 55)) return FALSE;
 
-// can't have $num treasurers if we don't have $num holders.  do that next.
+  // Can't have $num treasurers if we don't have $num holders. Do that next.
   if (!_ai_do('have num type level min max players',
     $num + $extra_accts,
     'holder', 35, 55)) return FALSE;
 
-// need some scouts to look for free seats, too
+  // Need some scouts to look for free seats, too.
   if (!_ai_do('have num type level min max players',
     ceil(($num + $extra_accts) / 4),
     'scout', 12, 130)) return FALSE;
@@ -531,8 +536,8 @@ function _ai_have_num_treasurers($num) {
 
 
 function _ai_have_num_alders($num_alders) {
-// goal: $num alders across the game
 
+  // Goal: $num alders across the game.
   $sql = 'select count(users.id) as count from users
     left join elected_officials
     on elected_officials.fkey_users_id = users.id
@@ -548,15 +553,15 @@ function _ai_have_num_alders($num_alders) {
     return TRUE;
   }
 
-// can't have $num alders if we don't have $num breachers.  do that first.
+  // Can't have $num alders if we don't have $num breachers.  Do that first.
   if (!_ai_do('have num type level min max players', $num_alders,
     'breacher', 50, 70)) return FALSE;
 
-// can't have $num alders if we don't have $num holders.  do that next.
+  // Can't have $num alders if we don't have $num holders. Do that next.
   if (!_ai_do('have num type level min max players', $num_alders,
     'holder', 50, 70)) return FALSE;
 
-// need some scouts to look for free seats, too
+  // Need some scouts to look for free seats, too.
   if (!_ai_do('have num type level min max players', floor($num_alders / 4),
     'scout', 12, 130)) return FALSE;
 
@@ -627,9 +632,8 @@ function _ai_find_free_player($type, $level_min, $level_max,
 
   }
 
-// if not: do we have a player of $type that is a lower level?
-// if so, we can just boost
-
+  // If not: do we have a player of $type that is a lower level?
+  // If so, we can just boost.
   _ai_out("Still no free $type ... boosting one");
   $data = array();
 
@@ -646,7 +650,7 @@ function _ai_find_free_player($type, $level_min, $level_max,
 
     $item = $data[mt_rand(0, 9)];
 
-// out of actions and energy?  Maybe we need another one...
+    // Out of actions and energy?  Maybe we need another one...
     if (($item->energy <= 0) && ($item->actions <= 0)) {
 
       _ai_out("Maybe we need another $type!");
@@ -667,9 +671,8 @@ function _ai_find_free_player($type, $level_min, $level_max,
 
 
 function _ai_have_num_players($num_players) {
-// goal: $num players across the game
 
-
+  // Goal: $num players across the game.
   $sql = 'select count(id) as count from users
     where meta like "ai_%";';
   $result = db_query($sql);
@@ -689,8 +692,8 @@ function _ai_have_num_players($num_players) {
 
 
 function _ai_create_new_player() {
-// create a new player
 
+  // Create a new player.
   global $game;
 
   while (TRUE) {
@@ -729,8 +732,8 @@ function _ai_create_new_player() {
 
 function _ai_have_num_type_level_min_max_players($num_players, $type,
   $level_min, $level_max) {
-// goal: $num players across the game
 
+  // Goal: $num players across the game.
   $sql = 'select count(id) as count from users
     where meta like "%s"
     and level >= %d
@@ -745,9 +748,8 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
     return TRUE;
   }
 
-// if not: do we have a player of $type that is a lower level?
-// if so, we can just boost
-
+  // If not: do we have a player of $type that is a lower level?
+  // If so, we can just boost.
   $sql = 'select phone_id, level from users
     where meta like "%s"
     and level < %d
@@ -766,8 +768,8 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
 
   }
 
-// if not: do we have an extra minion that isn't higher than $level_max?
-// if so, tell that player to specialize
+  // If not: do we have an extra minion that isn't higher than $level_max?
+  // If so, tell that player to specialize.
 
   // Wasted effort if we just want a minion.
   if ($type != 'minion') {
@@ -795,9 +797,8 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
 
   }
 
-// no $type player found of appropriate level, none lower that we can boost,
-// no minions that can be told to specialize.  creating new minion
-
+  // No $type player found of appropriate level, none lower that we can boost,
+  // no minions that can be told to specialize.  Creating new minion.
   _ai_out('efforts to find existing player to progress toward ' .
     "level $level_min to $level_max $type player have failed.  " .
     'Creating new minion.');
@@ -809,9 +810,9 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
 
 
 function _ai_allocate_skill_for_elocution($ai_id) {
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $ai_user = db_fetch_object($result);
@@ -831,9 +832,9 @@ function _ai_allocate_skill_for_elocution($ai_id) {
 
 
 function _ai_allocate_skill_for_action($ai_id) {
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $ai_user = db_fetch_object($result);
@@ -853,9 +854,9 @@ function _ai_allocate_skill_for_action($ai_id) {
 
 
 function _ai_allocate_skill_for_energy($ai_id) {
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $ai_user = db_fetch_object($result);
@@ -875,9 +876,9 @@ function _ai_allocate_skill_for_energy($ai_id) {
 
 
 function _ai_allocate_skill_for_initiative($ai_id) {
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $ai_user = db_fetch_object($result);
@@ -897,9 +898,9 @@ function _ai_allocate_skill_for_initiative($ai_id) {
 
 
 function _ai_allocate_skill_for_endurance($ai_id) {
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $ai_user = db_fetch_object($result);
@@ -919,10 +920,10 @@ function _ai_allocate_skill_for_endurance($ai_id) {
 
 
 function _ai_allocate_skill_points($ai_id) {
-// allocate skill points
-// NB: don't *EVER* use _ai_fetch_user() here --
-// this could cause an infinite loop
 
+  // Allocate skill points.
+  // NB: don't *EVER* use _ai_fetch_user() here.
+  // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
   $item = db_fetch_object($result);
@@ -935,18 +936,23 @@ function _ai_allocate_skill_points($ai_id) {
     return _ai_allocate_skill_for_action($ai_id);
 
   if ($item->level <= 25) {
-// up to level 25: even split between actions, energy, specialty, and elocution
 
+    // Up to level 25: even split between actions, energy, specialty, and elocution.
     switch(mt_rand(0, 3)) {
 
-      case 0: // actions
+      case 0:
+
+        // Actions.
         return _ai_allocate_skill_for_action($ai_id);
 
-      case 1: // energy
+      case 1:
+
+        // Energy.
         return _ai_allocate_skill_for_energy($ai_id);
 
-      case 2: // specialty
+      case 2:
 
+        // Specialty.
         switch($item->meta) {
 
           case 'ai_breacher':
@@ -960,14 +966,16 @@ function _ai_allocate_skill_points($ai_id) {
 
         }
 
-      case 3: // elocution
+      case 3:
+
+        // Elocution.
         return _ai_allocate_skill_for_elocution($ai_id);
 
     }
 
   }
 
-// above level 25: pure specialty
+  // Above level 25: pure specialty.
   switch($item->meta) {
 
     case 'ai_breacher':
@@ -985,8 +993,8 @@ function _ai_allocate_skill_points($ai_id) {
 
 
 function _ai_boost_experience($ai_id, $boost_flags = 0) {
-// boost player $ai_id's experience
 
+  // Boost player $ai_id's experience.
   global $game;
 
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1058,11 +1066,11 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
   }
 
   if (empty($seat)) {
-// only do missions if i'm not in a seat
 
+    // Only do missions if i'm not in a seat.
     _ai_out("Trying boosting by doing a quest (energy: $ai_user->energy)");
 
-// find the highest level quest we can do
+    // Find the highest level quest we can do.
     $sql = 'select id, name from quests
       where active = 1
       and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = %d)
@@ -1101,13 +1109,15 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
       _ai_out('Trying boosting by debating');
       if (_ai_do('debate players', $ai_id)) return TRUE;
-// if I won debates, call it good
+
+    // If I won debates, call it good.
     }
 
 
   }
-  else { // in a seat
+  else {
 
+    // In a seat.
     _ai_out('Not going to mission or debate (I am in a seat)');
 
   }
@@ -1118,7 +1128,8 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     _ai_out('Maybe I can buy something?  Checking for necessary equipment ' .
       "(money: $ai_user->money)");
 
-    $stuff_to_get = array( // equip_id => level
+    // equip_id => level
+    $stuff_to_get = array(
        5 => 16,
        8 => 12,
       13 => 23,
@@ -1152,12 +1163,12 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     }
 
     if ($attempt_to_get_one) return FALSE;
-// don't buy land if we need(ed) these
 
-
+    // Don't buy land if we need(ed) these.
     _ai_out('Checking for necessary staff/agents...');
 
-    $staff_to_get = array( // staff_id => level
+    // staff_id => level
+    $staff_to_get = array(
       9 => 25,
     );
 
@@ -1189,8 +1200,8 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     }
 
     if ($attempt_to_get_one) return FALSE;
-// don't buy land if we need(ed) these
 
+    // Don't buy land if we need(ed) these.
     _ai_out("Ok, trying to get a business...");
     _ai_do('buy land', $ai_id);
 
@@ -1207,8 +1218,8 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
 
 function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
-// challenge for a hood seat in a specified range
 
+  // Challenge for a hood seat in a specified range.
   $ai_user = _ai_fetch_user($ai_id);
 
   _ai_out('Trying to get more seats...');
@@ -1348,11 +1359,10 @@ function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
 
 }
 
-
 function _ai_move_somewhere($ai_id) {
-// take me... far away... anywhere...
-// as long as it's FUN FUN FUN FUN FUN FUN FUN i wanna go!
 
+  // Take me... Far away... Anywhere...
+  // As long as it's FUN FUN FUN FUN FUN FUN FUN I wanna go!
   $ai_user = _ai_fetch_user($ai_id);
 
   // Not enough actions to move!
@@ -1375,12 +1385,9 @@ function _ai_move_somewhere($ai_id) {
 
   }
 
-
-// scout or already home?  send out and about
-
+  // Scout or already home? Send out and about.
   if (($ai_user->meta == 'ai_scout') ||
     ($ai_user->fkey_neighborhoods_id == 15)) {
-
 
     $sql = 'select * from neighborhoods
       where has_elections = 1
@@ -1399,8 +1406,8 @@ function _ai_move_somewhere($ai_id) {
 
 
   if ($ai_user->fkey_neighborhoods_id != 15) {
-// not home -- move there!
 
+    // Not home -- move there!
     _ai_out('Why not go home?');
     return _ai_do('move', $ai_id, 15);
 
@@ -1410,11 +1417,11 @@ function _ai_move_somewhere($ai_id) {
 
 
 function _ai_move($ai_id, $hood) {
-// move to hood $hood
 
+  // Move to hood $hood.
   $ai_user = _ai_fetch_user($ai_id);
 
-// are we already here?
+  // Are we already here?
   if ($ai_user->fkey_neighborhoods_id == $hood) return TRUE;
 
   // Not enough actions to move!
@@ -1499,7 +1506,7 @@ function _ai_move($ai_id, $hood) {
     if ($ai_response == 'move-succeeded') {
       $ai_user = _ai_fetch_user($ai_id);
 
-// are already here?
+      // Are already here?
       if ($ai_user->fkey_neighborhoods_id == $hood) return TRUE;
 
       _ai_move($ai_id, $hood);
@@ -1512,8 +1519,8 @@ function _ai_move($ai_id, $hood) {
 
       if (!_ai_do('increase speed stats', $ai_id))
         $boost_flags |= CONSERVE_MONEY;
-// don't spend money if we are saving up for another speed boost
 
+    // Don't spend money if we are saving up for another speed boost.
     }
 
   }
@@ -1531,8 +1538,8 @@ function _ai_move($ai_id, $hood) {
 
 
 function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
-// find the distance between the two points
 
+  // Find the distance between the two points.
   $deltax = $xcoor1 - $xcoor2;
   $deltay = $ycoor1 - $ycoor2;
 
@@ -1542,8 +1549,8 @@ function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
 
 
 function _ai_increase_elocution_stats($ai_id) {
-// get more elocution aides for player
 
+  // Get more elocution aides for player.
   $ai_user = _ai_fetch_user($ai_id);
 
   $ai_response = _ai_web_request($ai_id, 'equipment');
@@ -1553,9 +1560,11 @@ function _ai_increase_elocution_stats($ai_id) {
   foreach ($response as $res) {
 
     if (strpos($res, '/+elo:') === FALSE) continue;
-// only look at elo aides
 
-    $res = substr($res, 0, strpos($res, '/')); // remove /+elo: fluff
+    // Only look at elo aides.
+
+    // Remove /+elo: fluff.
+    $res = substr($res, 0, strpos($res, '/'));
 
     if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0))
       $can_buy = substr($res, 0, strpos($res, '='));
@@ -1593,9 +1602,11 @@ function _ai_increase_speed_stats($ai_id) {
   foreach ($response as $res) {
 
     if (strpos($res, '/+spd:') === FALSE) continue;
-// only look at elo aides
 
-    $res = substr($res, 0, strpos($res, '/')); // remove /+elo: fluff
+    // Only look at elo aides.
+
+    // Remove /+elo: fluff.
+    $res = substr($res, 0, strpos($res, '/'));
 
     if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0))
       $can_buy = substr($res, 0, strpos($res, '='));
@@ -1622,8 +1633,8 @@ function _ai_increase_speed_stats($ai_id) {
 
 
 function _ai_buy_land($ai_id) {
-// get more land for player
 
+  // Get more land for player.
   $ai_user = _ai_fetch_user($ai_id);
 
   $ai_response = _ai_web_request($ai_id, 'land');
@@ -1668,8 +1679,8 @@ function _ai_buy_land($ai_id) {
 
 
 function _ai_debate_players($ai_id) {
-// debate as many players as we can
 
+  // Debate as many players as we can.
   global $game;
 
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1739,8 +1750,8 @@ function _ai_debate_players($ai_id) {
 
 
 function _ai_fetch_user($ai_id) {
-// fetch user object for phone_id $ai_id
 
+  // Fetch user object for phone_id $ai_id.
   static $count = 4;
 
   if (mt_rand(0, 9) < 3)
@@ -1777,8 +1788,9 @@ function _ai_open_presents($ai_id) {
 
 //    _ai_out('Seeing if I have any presents to open...');
 
-  $exploit_actions = array( // present equip_id => open action_id
+  $exploit_actions = array(
 
+    // Present equip_id => open action_id.
     'stlouis' => array(
 
       35 => 61,
@@ -1813,8 +1825,8 @@ function _ai_open_presents($ai_id) {
 
 
 function _ai_list_all_ais() {
-// list ai users.  Freshen stats of those that haven't been accessed in a while.
 
+  // List ai users.  Freshen stats of those that haven't been accessed in a while.
   $sql = 'select * from users
     where meta like "ai_%"
     and last_access < "%s"
@@ -1831,8 +1843,7 @@ function _ai_list_all_ais() {
   }
 
 
-// tell the richest player(s) to buy more land
-
+  // Tell the richest player(s) to buy more land.
   $data = array();
   $sql = 'select phone_id from users
     where meta like "ai_%"
@@ -1848,8 +1859,7 @@ function _ai_list_all_ais() {
   }
 
 
-// tell the player(s) with the least income to buy more land
-
+  // Tell the player(s) with the least income to buy more land.
   $data = array();
   $sql = 'select phone_id from users
     where meta like "ai_%"
@@ -1865,9 +1875,10 @@ function _ai_list_all_ais() {
   }
 
 
-// now show stats
+  // Now show stats.
 
-  return; // or not
+  // Or not.
+  return;
 
   $data = array();
   $sql = 'select users.*, clan_members.fkey_clans_id

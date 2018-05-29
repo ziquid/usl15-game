@@ -36,7 +36,9 @@
 
     WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
-  $game_staff = db_fetch_object($result); // limited to 1 in DB
+
+  // Limited to 1 in DB.
+  $game_staff = db_fetch_object($result);
   $orig_quantity = $count = $quantity;
   $staff_price = 0;
 
@@ -76,7 +78,7 @@ if ($game_user->money < $staff_price) {
 
   }
 
-// too little income to cover upkeep?
+  // Too little income to cover upkeep?
   if ($game_user->income < $game_user->expenses +
     ($game_staff->upkeep * $quantity)) {
 
@@ -97,8 +99,9 @@ firep("$sql, $staff_id, $game_user->id, $quantity");
       $result = db_query($sql, $staff_id, $game_user->id, $quantity);
 
     }
-    else { // existing record - update it
+    else {
 
+      // Existing record - update it.
       $sql = 'update staff_ownership set quantity = quantity + %d where
         fkey_staff_id = %d and fkey_users_id = %d;';
 firep("$sql, $quantity, $staff_id, $game_user->id");
@@ -123,11 +126,13 @@ firep("$sql, $quantity, $staff_id, $game_user->id");
 
     }
 
-    $game_user = $fetch_user(); // reprocess user object
+    // Reprocess user object.
+    $game_user = $fetch_user();
 
   }
-  else { // failed - add option to try an election
+  else {
 
+    // Failed - add option to try an election.
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/elections/' . $arg2 . '">Run for
@@ -339,8 +344,7 @@ EOF;
 
     }
 
-// grab each action for an agent
-
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
@@ -448,8 +452,7 @@ EOF;
 
   }
 
-// show next agent
-
+  // Show next agent.
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
 
@@ -506,8 +509,7 @@ firep($item);
     <div class="land-cost">Cost: $agents_price $game_user->values</div>
 EOF;
 
-// grab each action for an agent
-
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);

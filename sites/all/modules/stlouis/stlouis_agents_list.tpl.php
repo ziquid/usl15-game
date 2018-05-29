@@ -47,7 +47,7 @@ EOF;
 
   $land_active = ' AND active = 1 ';
 
-// for testing - exclude all exclusions (!) if I am abc123
+  // For testing - exclude all exclusions (!) if I am abc123.
   if ($game_user->phone_id == 'abc123') {
     $land_active = ' AND (active = 1 OR active = 0) ';
   }
@@ -152,7 +152,7 @@ EOF;
 
     }
 
-// grab each action for an agent
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
@@ -263,8 +263,7 @@ EOF;
 
   }
 
-// show next agent
-
+  // Show next agent.
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
 
@@ -321,8 +320,7 @@ firep($item);
     <div class="land-cost">Cost: $agents_price $game_user->values</div>
 EOF;
 
-// grab each action for an agent
-
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
