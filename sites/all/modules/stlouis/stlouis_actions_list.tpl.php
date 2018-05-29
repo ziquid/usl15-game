@@ -355,9 +355,9 @@ EOF;
         <option value="0">Select one</option>
 EOF;
 
-        // Which target?
+      // Which target?
 
-        // Expensive query - goes to slave.
+      // Expensive query - goes to slave.
 //      db_set_active('game_' . $game . '_slave1');
       switch ($item->target) {
 
@@ -369,9 +369,8 @@ EOF;
 
         case 'neighborhood_higher_than_you_but_still_debateable':
 
-        // People in your neighborhood who aren't on your wall nor in your clan.
-
-        // Who are a higher level than you but are still debateable.
+        // People in your neighborhood who aren't on your wall nor in your clan
+        // who are a higher level than you but are still debateable.
         case 'neighborhood_not_met':
 
         // People in your neighborhood who aren't on your wall nor in your clan.
@@ -507,7 +506,7 @@ EOF;
 
       }
 
-// Reset to master.
+      // Reset to master.
 //      db_set_active('game_' . $game);
 
       // Too many to list?  Separate by first letter.
@@ -555,7 +554,7 @@ EOF;
 EOF;
 
     }
-  }// if next_action_time_remaining < 0
+  }
     echo <<< EOF
   </form>
 </div>

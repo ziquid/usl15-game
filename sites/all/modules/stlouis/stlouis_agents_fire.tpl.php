@@ -37,7 +37,9 @@
 
     WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
-  $game_staff = db_fetch_object($result); // limited to 1 in DB
+
+  // Limited to 1 in DB.
+  $game_staff = db_fetch_object($result);
   $orig_quantity = $quantity;
   $staff_price = ceil($game_staff->price * $quantity * 0.6);
 /* allow for 80% sale price
@@ -49,10 +51,9 @@
   $outcome_reason = '<div class="land-succeeded">' . t('Success!') .
     '</div>';
 
-// check to see if staff prerequisites are met
+  // Check to see if staff prerequisites are met.
 
-// hit a quantity limit?
-
+  // Hit a quantity limit?
   if ($quantity > $game_staff->quantity) {
 
     $staff_succeeded = FALSE;
@@ -61,7 +62,7 @@
 
   }
 
-// can't sell?
+  // Can't sell?
   if ($game_staff->can_sell != 1) {
 
     $staff_succeeded = FALSE;
@@ -95,11 +96,13 @@
 
     }
 
-    $game_user = $fetch_user(); // reprocess user object
+    // Reprocess user object.
+    $game_user = $fetch_user();
 
   }
-  else { // failed - add option to try an election
+  else {
 
+     // Failed - add option to try an election.
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/elections/' . $arg2 . '">Run for
@@ -311,8 +314,7 @@ EOF;
 
     }
 
-// grab each action for an agent
-
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
@@ -420,8 +422,7 @@ EOF;
 
   }
 
-// show next agent
-
+  // Show next agent.
   $sql = 'SELECT staff.*, staff_ownership.quantity
     FROM staff
 
@@ -478,8 +479,7 @@ EOF;
     <div class="land-cost">Cost: $agents_price $game_user->values</div>
 EOF;
 
-// grab each action for an agent
-
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);
