@@ -102,7 +102,7 @@
   }
   else {
 
-     // Failed - add option to try an election.
+    // Failed - add option to try an election.
     $outcome .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/elections/' . $arg2 . '">Run for

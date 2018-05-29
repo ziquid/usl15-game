@@ -373,7 +373,6 @@ if ($action_succeeded) {
 firep($eq);
 
     // Did it wear out?
-
     // 110 instead of 100% to give a little extra chance of having it work.
     if ($eq->chance_of_loss >= mt_rand(1, 110)) {
 

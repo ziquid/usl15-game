@@ -344,7 +344,7 @@ EOF;
 
     }
 
-     // Grab each action for an agent.
+    // Grab each action for an agent.
     $data2 = array();
     $sql = 'select * from actions where fkey_staff_id = %d;';
     $result = db_query($sql, $item->id);

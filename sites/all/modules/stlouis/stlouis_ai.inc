@@ -367,7 +367,7 @@ function _ai_have_num_clan_leaders($num_leaders) {
 
     _ai_out('Checking for necessary equipment ' . "(money: $ai_user->money)");
 
-    // Equip_id => level.
+    // equip_id => level
     $stuff_to_get = array(
        2 => 20,
        7 => 40,
@@ -940,17 +940,19 @@ function _ai_allocate_skill_points($ai_id) {
     // Up to level 25: even split between actions, energy, specialty, and elocution.
     switch(mt_rand(0, 3)) {
 
-      // Actions.
       case 0:
+
+        // Actions.
         return _ai_allocate_skill_for_action($ai_id);
 
-      // Energy.
       case 1:
+
+        // Energy.
         return _ai_allocate_skill_for_energy($ai_id);
 
-      // Specialty.
       case 2:
 
+        // Specialty.
         switch($item->meta) {
 
           case 'ai_breacher':
@@ -964,8 +966,9 @@ function _ai_allocate_skill_points($ai_id) {
 
         }
 
-      // Elocution.
       case 3:
+
+        // Elocution.
         return _ai_allocate_skill_for_elocution($ai_id);
 
     }
@@ -1125,7 +1128,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     _ai_out('Maybe I can buy something?  Checking for necessary equipment ' .
       "(money: $ai_user->money)");
 
-    // Equip_id => level.
+    // equip_id => level
     $stuff_to_get = array(
        5 => 16,
        8 => 12,
@@ -1164,7 +1167,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     // Don't buy land if we need(ed) these.
     _ai_out('Checking for necessary staff/agents...');
 
-    // Staff_id => level.
+    // staff_id => level
     $staff_to_get = array(
       9 => 25,
     );
