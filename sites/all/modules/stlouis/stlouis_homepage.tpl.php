@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.4.0, 24 May 2018';
+$version = 'v0.4.0, 30 May 2018';
 
 global $game, $phone_id;
 
@@ -364,8 +364,7 @@ echo <<< EOF
 $extra_bonus
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
-<!--<a class="version" href="/$game/changelog/$arg2">-->
-<a class="version" href="/$game/bounce_040/$arg2">
+<a class="version" href="/$game/changelog/$arg2">
   $version
 </a>
 </div>

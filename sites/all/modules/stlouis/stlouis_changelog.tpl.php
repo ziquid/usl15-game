@@ -1,0 +1,36 @@
+<?php
+
+/**
+ * @file stlouis_changelog.tpl.php
+ * The game's changelog.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: N/A
+ */
+
+global $game, $phone_id;
+
+include drupal_get_path('module', arg(0)) . '/game_defs.inc';
+$game_user = $fetch_user();
+$fetch_header($game_user);
+db_set_active('default');
+
+?>
+<div class="news">
+<a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
+<a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button active">Changelog</a>
+</div>
+
+<div class="help">
+<div class="title">
+Uprising: St. Louis Changelog
+</div>
+
+<div class="subtitle">
+  May 30 2018
+</div>
+<ul>
+  <li>
+    New Changelog!
+  </li>
+</ul>

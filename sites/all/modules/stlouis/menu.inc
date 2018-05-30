@@ -489,30 +489,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/bounce_001/%'] = array(
-    'title' => 'St. Louis bounce',
-    'page callback' => 'stlouis_bounce_001_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/bounce_002/%'] = array(
-    'title' => 'St. Louis bounce',
-    'page callback' => 'stlouis_bounce_002_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/bounce_030/%'] = [
-    'title' => 'St. Louis bounce',
-    'page callback' => 'stlouis_bounce_030_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/bounce_040/%'] = [
     'title' => 'St. Louis bounce',
     'page callback' => 'stlouis_bounce_040_callback',
@@ -553,10 +529,16 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  $items['stlouis/changelog/%'] = [
+    'title' => 'St. Louis Changelog',
+    'page callback' => 'stlouis_changelog_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access stlouis content'],
+    'type' => MENU_CALLBACK,
+  ];
+
   return $items;
-
 }
-
 
 function stlouis_homepage_callback($phone_id) {
 
@@ -565,9 +547,7 @@ function stlouis_homepage_callback($phone_id) {
   }
 
   return theme('stlouis_homepage', $phone_id);
-
 }
-
 
 function stlouis_userprofile_callback($phone_id) {
 
@@ -1204,27 +1184,6 @@ function stlouis_bounce_callback($phone_id) {
   return theme('stlouis_bounce', $phone_id);
 }
 
-function stlouis_bounce_001_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_bounce_001', $phone_id);
-}
-
-function stlouis_bounce_002_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_bounce_002', $phone_id);
-}
-
-function stlouis_bounce_030_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_bounce_030', $phone_id);
-}
-
 function stlouis_bounce_040_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1242,7 +1201,6 @@ function stlouis_elders_preference_callback($phone_id) {
 
 }
 
-
 function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
 
   if (empty($phone_id) || is_nan($zombie_id) || is_nan($hood_id)) {
@@ -1250,9 +1208,7 @@ function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
   }
 
   return theme('stlouis_zombie_move', $phone_id, $zombie_id, $hood_id);
-
 }
-
 
 function stlouis_event_info_callback($phone_id) {
 
@@ -1261,9 +1217,7 @@ function stlouis_event_info_callback($phone_id) {
   }
 
   return theme('stlouis_event_info', $phone_id);
-
 }
-
 
 function stlouis_event_prizes_callback($phone_id) {
 
@@ -1275,9 +1229,18 @@ function stlouis_event_prizes_callback($phone_id) {
   }
 
   return theme('stlouis_event_prizes', $phone_id);
-
 }
 
+function stlouis_changelog_callback($phone_id) {
+
+  global $user;
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('stlouis_changelog', $phone_id);
+}
 
 function stlouis_theme() {
   // theme "A" uses template "B" with args "C"
@@ -1734,27 +1697,6 @@ function stlouis_theme() {
       )
     ),
 
-    'stlouis_bounce_001' => array(
-      'template' => 'stlouis_bounce_001',
-      'arguments' => array(
-        'phone_id' => NULL,
-      )
-    ),
-
-    'stlouis_bounce_002' => array(
-      'template' => 'stlouis_bounce_002',
-      'arguments' => array(
-        'phone_id' => NULL,
-      )
-    ),
-
-    'stlouis_bounce_030' => [
-      'template' => 'stlouis_bounce_030',
-      'arguments' => [
-        'phone_id' => NULL,
-      ]
-    ],
-
     'stlouis_bounce_040' => [
       'template' => 'stlouis_bounce_040',
       'arguments' => [
@@ -1791,6 +1733,13 @@ function stlouis_theme() {
         'phone_id' => NULL,
       )
     ),
+
+    'stlouis_changelog' => [
+      'template' => 'stlouis_changelog',
+      'arguments' => [
+        'phone_id' => NULL,
+      ]
+    ],
 
   );
 
