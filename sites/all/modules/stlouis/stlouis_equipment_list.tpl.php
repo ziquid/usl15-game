@@ -25,7 +25,7 @@ EOF;
 
 // For testing - exclude all exclusions (!) if I am an admin.
 if ($game_user->meta == 'admin') {
-  $land_active = ' AND (active = 1 OR active = 0) ';
+  $land_active = ' AND equipment.id > 0';
 }
 else {
   $land_active = ' AND active = 1 ';
