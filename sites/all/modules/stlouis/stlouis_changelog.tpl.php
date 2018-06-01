@@ -31,7 +31,7 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      Added Level 94, Donuts.
+      Added Level 94, Free donuts in Southwest Garden!
     </li>
   </ul>
 

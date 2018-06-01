@@ -16,6 +16,7 @@ define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
 define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
 define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
+define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 
 define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
@@ -33,6 +34,7 @@ global $game;
 $today = date('Y-m-d', time() - 3600);
 switch($today) {
 
+  // ------ MARCH ------
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
     $debate_time = 600; // 900; // 1200;
@@ -50,6 +52,7 @@ switch($today) {
     $event_type = EVENT_NEW_NAMES;
     break;
 
+    // ------ APRIL ------
   case '2018-04-01':
     $event_type = EVENT_APRIL_FOOLS;
     break;
@@ -58,6 +61,7 @@ switch($today) {
     $event_type = EVENT_PRE_MAY;
     break;
 
+    // ------ MAY -----
   case '2018-05-01':
   case '2018-05-02':
   case '2018-05-03':
@@ -114,6 +118,13 @@ switch($today) {
 
   case '2018-05-28':
     $event_type = EVENT_MEMORIAL_DAY_4;
+    break;
+
+    // ------ JUNE ------
+  case '2018-06-01':
+  case '2018-06-02':
+  case '2018-06-03':
+    $event_type = EVENT_POLL_JUN_01_2018;
     break;
 }
 

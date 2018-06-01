@@ -1017,6 +1017,8 @@ a.try-an-election, input.try-an-election {
 .event .event-title {
   margin: 3px;
   font-size: 15px;
+  font-family: Georgia, "times new roman", serif;
+  font-weight: bold;
 }
 
 .event-text {

@@ -461,7 +461,7 @@ $event_text
   <button id="news-user">Personal</button>
   <button id="news-challenge">{$election_tab}</button>
   <button id="news-clan">$party_small</button>
-  <button id="news-system">$system</button>
+  <button id="news-mayor">${game_text['mayor']}</button>
 </div>
 <div id="all-text">
 EOF;
@@ -471,7 +471,6 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   db_set_active('default');
   return;
 }
-
 
 // are we a type 2 elected official?
 $sql = 'SELECT type FROM elected_officials
@@ -518,7 +517,8 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   user_messages.private,
-  "user" as type
+  "user" as type,
+  "" as subtype
   from user_messages
   left join users on user_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -541,7 +541,8 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private,
-  "challenge" as type
+  "challenge" as type,
+  "" as subtype
   from challenge_messages
   left join users on challenge_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -564,7 +565,8 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private,
-  "hood" as type
+  "hood" as type,
+  "" as subtype
   from neighborhood_messages
   left join users on neighborhood_messages.fkey_users_from_id =
     users.id
@@ -588,7 +590,8 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private,
-  "clan" as type
+  "clan" as type,
+  "" as subtype
   from clan_messages
   left join users on clan_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -611,7 +614,8 @@ $sql = '
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private,
-  "values" as type
+  "values" as type,
+  "" as subtype
   from values_messages
   left join users on values_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -635,7 +639,8 @@ $sql = '
   0 AS is_clan_leader,
   NULL AS clan_acronym,
   0 AS private,
-  "system" as type
+  "mayor" as type,
+  subtype
   from system_messages
   left join users on system_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -649,7 +654,7 @@ $sql = '
   )
 
   order by timestamp DESC limit %d;';
-//firep($sql);
+firep($sql, 'sql for homepage');
 
 // don't show if load avg too high
 
@@ -723,14 +728,13 @@ foreach ($data as $item) {
     $private_css = '';
   }
 
-  $private_css .= ' ' . $item->type;
+  $private_css .= ' ' . $item->type . ' ' . $item->subtype;
 
   if (empty($item->username)) {
     $username = '';
     $reply = '';
   }
   else {
-
     $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
       $clan_acronym;
     if ($item->username != 'USLCE Game') {
@@ -790,10 +794,10 @@ $(".news-buttons button").removeClass("active");
 $("#news-clan").addClass("active");
 });
 
-$('#news-system').bind('click', function() {
-isoNews.isotope({ filter: ".system" });
+$('#news-mayor').bind('click', function() {
+isoNews.isotope({ filter: ".mayor" });
 $(".news-buttons button").removeClass("active");
-$("#news-system").addClass("active");
+$("#news-mayor").addClass("active");
 });
 </script>
 <!--  <div id="personal-text">-->
