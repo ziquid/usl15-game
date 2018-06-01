@@ -320,9 +320,9 @@ if (substr($phone_id, 0, 3) == 'ai-') {
 
 $land_active = ' AND active = 1 ';
 
-// for testing - exclude all exclusions (!) if I am abc123
-if ($game_user->phone_id == 'abc123') {
-  $land_active = ' AND (active = 1 OR active = 0) ';
+// For testing -- exclude all exclusions (!) if I am an admin.
+if ($game_user->meta == 'abc123') {
+  $land_active = ' AND equipment.id > 0 ';
 }
 
 $data = [];

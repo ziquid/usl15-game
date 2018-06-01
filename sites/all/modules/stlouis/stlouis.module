@@ -1808,8 +1808,8 @@ function _stlouis_fetch_user() {
     // Just in case.
     $changes_made = TRUE;
 
-    // Can't go beyond max.
-    $game_user->energy = $game_user->energy_max;
+    // Can't go beyond max x 2.
+    $game_user->energy = $game_user->energy_max * 2;
   }
 
   // Calculate income.
