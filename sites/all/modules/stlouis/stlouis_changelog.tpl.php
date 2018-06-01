@@ -25,6 +25,16 @@ db_set_active('default');
   <div class="title">
     Uprising: St. Louis Changelog
   </div>
+
+  <div class="subtitle">
+    Jun 1, 2018
+  </div>
+  <ul>
+    <li>
+      Added Level 94, Donuts.
+    </li>
+  </ul>
+
   <div class="subtitle">
     May 31, 2018
   </div>
