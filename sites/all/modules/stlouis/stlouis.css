@@ -166,6 +166,10 @@ li {
   color: #d4c41c;
 }
 
+.quests .quest-num, .quests .quest-requisites, .quests .quest-disbursements {
+  display: none;
+}
+
 .land .land-owned {
   color: #fff;
 }

@@ -56,7 +56,7 @@ EOF;
 }
 
 
-function NO_required_staff($game_user, $staff_id, $req_quantity) {
+function game_required_staff($game_user, $staff_id, $req_quantity) {
 
   global $game;
   $arg2 = check_plain(arg(2));
@@ -67,18 +67,14 @@ function NO_required_staff($game_user, $staff_id, $req_quantity) {
   $quantity = db_fetch_object($result);
 
   if ($quantity->quantity >= $req_quantity) {
-
     $not_yet = $a_start = $a_end = '';
-
   }
   else {
-
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/staff_buy/' .
       $arg2 . '/' . $staff_id . '/' .
       ($req_quantity - $quantity->quantity) . '">';
     $a_end = '</a>';
-
   }
 
   echo <<< EOF
@@ -92,11 +88,10 @@ function NO_required_staff($game_user, $staff_id, $req_quantity) {
   </div>&nbsp;x$req_quantity
 </div>
 EOF;
-
 }
 
 
-function NO_required_equipment($game_user, $equipment_id, $req_quantity) {
+function game_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
   $arg2 = check_plain(arg(2));
@@ -107,33 +102,27 @@ function NO_required_equipment($game_user, $equipment_id, $req_quantity) {
   $quantity = db_fetch_object($result);
 
   if ($quantity->quantity >= $req_quantity) {
-
     $not_yet = $a_start = $a_end = '';
-
   }
   else {
-
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/equipment_buy/' .
       $arg2 . '/' . $equipment_id . '/' .
       ($req_quantity - $quantity->quantity) . '">';
     $a_end = '</a>';
-
   }
 
   echo <<< EOF
-<div class="quest-required">
-  $a_start
-    <img class="$not_yet"
-      src="/sites/default/files/images/equipment/$game-$equipment_id.png"
-      width="48">
-  $a_end
-  <div class="quest-required-num">
-    x$req_quantity
+    <div class="quest-required_stuff">Requires
+      <div class="quest-required_equipment">
+        $a_start
+        <img class="$not_yet"
+          src="/sites/default/files/images/equipment/$game-$equipment_id.png"
+          width="48">
+        $a_end
+      </div>&nbsp;x$req_quantity
   </div>
-</div>
 EOF;
-
 }
 
 
@@ -967,7 +956,7 @@ EOF;
 
 function game_show_aides_menu($game_user) {
 
-  global $game, $phone_id;
+  global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   $title = '';
@@ -1125,15 +1114,14 @@ EOF;
 }
 
 
-function _show_quest($game_user, $item, $percentage_target,
+function game_show_quest($game_user, $item, $percentage_target,
   $percentage_divisor, $quest_group, $party_title, $outcome = '',
   $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
   $consumption_html = '', $disbursement_html = '',
   $quest_completion_html = '') {
 
-  global $game, $phone_id;
+  global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $arg2 = check_plain(arg(2));
 
   static $location;
 
@@ -1203,9 +1191,14 @@ function _show_quest($game_user, $item, $percentage_target,
 
   }
   else {
+    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
 
-    $img = '/sites/default/files/images/quests/' . "$game-$item->id.png?3";
-
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
+      $img = $icon_path . '.jpg';
+    }
+    else {
+      $img = $icon_path . '.png';
+    }
   }
 
   echo <<< EOF
@@ -1213,7 +1206,7 @@ $outcome
 <div class="quests">
   <div class="quest-icon">
     <a href="/$game/quests_do/$arg2/$item->id">
-      <img src="$img" border="0" width="96"/>
+      <img src="$img" border="0" width="96" class="round4">
     </a>
     <div class="quest-complete">
       <div class="quest-complete-percentage"
@@ -1234,20 +1227,46 @@ $outcome
       </a>
     </div>
     <div class="quest-description">
-      $laquo $description $raquo
+      $description
     </div>
 EOF;
 
   // Quest performed?
   if (empty($exp_added_str)) {
 
-    // No quest performed -- show requirements.
+    // No quest performed -- show disbursements and requirements.
+    echo <<< EOF
+    <div class="quest-disbursements">
+      // Disbursements //
+    </div>
+    <div class="quest-experience">
+      +$item->experience $experience, 
+      +$item->min_money to $item->max_money $game_user->values
+    </div>
+EOF;
+
+    $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
+
+    if ($chance_of_loot > 0) {
+
+      $chance_modifier = '';
+      if ($chance_of_loot <= 20) {
+        $chance_modifier = t('Low');
+      }
+      else if ($chance_of_loot >= 40) {
+        $chance_modifier = t('High');
+      }
+      echo <<< EOF
+  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
+EOF;
+    }
+
     echo <<< EOF
     <div class="quest-requisites">
       // Consumptions //
     </div>
     <div class="quest-required_energy">
-      $item->required_energy $energy
+      Requires $item->required_energy ${game_text['energy']}
     </div>
 EOF;
 
@@ -1290,15 +1309,15 @@ EOF;
         echo '<div class="quest-required_stuff">';
 
         if ($item->equipment_1_required_quantity > 0)
-          _required_equipment($game_user, $item->fkey_equipment_1_required_id,
+          game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
             $item->equipment_1_required_quantity);
 
         if ($item->equipment_2_required_quantity > 0)
-          _required_equipment($game_user, $item->fkey_equipment_2_required_id,
+          game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
             $item->equipment_2_required_quantity);
 
         if ($item->equipment_3_required_quantity > 0)
-          _required_equipment($game_user, $item->fkey_equipment_3_required_id,
+          game_required_equipment($game_user, $item->fkey_equipment_3_required_id,
             $item->equipment_3_required_quantity);
 
         if ($item->clan_equipment_1_required_quantity > 0)
@@ -1312,7 +1331,7 @@ EOF;
 
       // Required staff.
       if ($item->staff_required_quantity > 0)
-        _required_staff($game_user, $item->fkey_staff_required_id,
+        game_required_staff($game_user, $item->fkey_staff_required_id,
           $item->staff_required_quantity);
 
       // Required party.
@@ -1341,28 +1360,6 @@ EOF;
 
     }
 
-    echo <<< EOF
-    <div class="quest-disbursements">
-      // Disbursements //
-    </div>
-    <div class="quest-experience">
-      +$item->experience $experience
-    </div>
-    <div class="quest-experience">
-      +$item->min_money to $item->max_money $game_user->values
-    </div>
-EOF;
-
-    if (($item->chance_of_loot + $item->chance_of_loot_staff) > 0)
-      echo <<< EOF
-    <div class="quest-loot">
-      Equipment Disbursement Percentage, Estimated:
-      <span>
-        $item->chance_of_loot%
-      </span>
-    </div>
-EOF;
-
   }
 
   // Quest performed -- show accomplishments.
@@ -1373,7 +1370,7 @@ EOF;
       // Consumed By You //
     </div>
     <div class="quest-required_energy">
-      $item->required_energy $energy
+      $item->required_energy ${game_text['energy']}
     </div>
     $consumption_html
     <div class="quest-disbursements">

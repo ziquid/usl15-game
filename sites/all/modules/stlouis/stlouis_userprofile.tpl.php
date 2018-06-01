@@ -132,7 +132,7 @@ if ($item->meta == 'frozen') $event_status = 'FROZEN';
 
 $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
   strtolower($item->clan_acronym) . '.png';
-firep($icon_path);
+//firep($icon_path, 'icon path');
 
 if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
 

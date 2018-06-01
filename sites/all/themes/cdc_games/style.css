@@ -1097,3 +1097,7 @@ a .event-text {
   font-weight: bold;
   text-shadow: 1px 1px 1px black, -1px -1px 1px black, 2px 2px 2px white, -2px -2px 2px white;
 }
+
+img.round4 {
+  border-radius: 4px;
+}

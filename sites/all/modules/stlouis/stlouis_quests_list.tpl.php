@@ -10,13 +10,9 @@
 
 global $game, $phone_id;
 
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$arg2 = check_plain(arg(2));
 
 // do AI moves from this page!!!
 include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
@@ -117,7 +113,7 @@ EOF;
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $group_to_show);
 $qg = db_fetch_object($result);
-firep($qg);
+//firep($qg, 'quest group');
 
 $location = str_replace('%location', $location, $qg->name);
 
@@ -160,8 +156,8 @@ $older_missions_html $location $quests $newer_missions_html
 </div>
 EOF;
 
-// abc123 -- show all quests
-$active_quests = ($phone_id == 'abc123') ? '' : 'and quests.active = 1';
+// Admin?  Show all quests.
+$active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
 
 // get quest group stats
 $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
@@ -173,7 +169,7 @@ $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
 $result = db_query($sql, $game_user->id, $group_to_show);
 
 $quest_group = db_fetch_object($result);
-firep($quest_group);
+//firep($quest_group, 'quest group object');
 
 $quest_group->completed += 0; // haha!  typecasting!
 
@@ -234,16 +230,12 @@ foreach ($data as $item) {
   }
 
   if ($item->percent_complete > floor($percentage_target / 2)) {
-
     $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
       (4 * $percentage_divisor))) . 'c0';
-
   }
   else {
-
     $rgb = 'c' . dechex(floor(($item->percent_complete) /
       (4 * $percentage_divisor))) . '0';
-
   }
 
   $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
@@ -258,6 +250,9 @@ foreach ($data as $item) {
     (($item->fkey_neighborhoods_id != 0) &&
       ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
     // show quests in other hoods?
+
+//    game_show_quest($game_user, $item, $percentage_target,
+//      $percentage_divisor, $quest_group, $party_title);
 
     echo <<< EOF
 <div class="quests wrong-hood">
@@ -292,196 +287,8 @@ EOF;
 
   }
   else { // quest in my hood
-
-    echo <<< EOF
-<div class="quests">
-<div class="quest-icon"><a href="/$game/quests_do/$arg2/$item->id"><img
-  src="/sites/default/files/images/quests/$game-$item->id.png" border="0"
-  width="96"></a>
-  <div class="quest-complete"><div class="quest-complete-percentage"
-    style="background-color: #$rgb; width: {$width}px">&nbsp;</div>
-  <div class="quest-complete-text">$item->percent_complete%
-    complete</div></div></div>
-<div class="quest-details">
-  <div class="quest-name"><a
-    href="/$game/quests_do/$arg2/$item->id">$item->name $active</a></div>
-  <div class="quest-description">$description</div>
-  <div class="quest-experience">+$item->experience $experience,
-  +$item->min_money to $item->max_money $game_user->values</div>
-EOF;
-
-    $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
-
-    if ($chance_of_loot > 0) {
-
-      $chance_modifier = '';
-      if ($chance_of_loot <= 20) {
-        $chance_modifier = t('Low');
-      }
-      else if ($chance_of_loot >= 40) {
-        $chance_modifier = t('High');
-      }
-    echo <<< EOF
-  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
-EOF;
-    }
-
-  echo <<< EOF
-  <div class="quest-required_energy">Requires $item->required_energy Energy</div>
-EOF;
-
-  // required land
-  if ($item->land_required_quantity > 0) {
-
-    $sql = 'select quantity from land_ownership
-      where fkey_land_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $item->fkey_land_required_id,
-      $game_user->id);
-    $quantity = db_fetch_object($result);
-
-    if ($quantity->quantity >= $item->land_required_quantity) {
-      $not_yet = $a_start = $a_end = '';
-    }
-    else {
-      $not_yet = 'not-yet';
-      $a_start = '<a href="/' . $game . '/land_buy/' .
-        $arg2 . '/' . $item->fkey_land_required_id . '/' .
-        ($item->land_required_quantity - $quantity->quantity) . '">';
-      $a_end = '</a>';
-    }
-
-    echo <<< EOF
-  <div class="quest-required_stuff">Requires
-    <div class="quest-required_equipment">$a_start<img class="$not_yet"
-      src="/sites/default/files/images/land/$game-$item->fkey_land_required_id.png"
-      width="48">$a_end</div>&nbsp;x$item->land_required_quantity
-  </div>
-EOF;
-
-  }
-
-  // required equipment
-  if ($item->equipment_1_required_quantity > 0) {
-
-    $sql = 'select quantity from equipment_ownership
-      where fkey_equipment_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $item->fkey_equipment_1_required_id,
-      $game_user->id);
-    $quantity = db_fetch_object($result);
-
-    if ($quantity->quantity >= $item->equipment_1_required_quantity) {
-      $not_yet = $a_start = $a_end = '';
-    }
-    else {
-      $not_yet = 'not-yet';
-      $a_start = '<a href="/' . $game . '/equipment_buy/' .
-        $arg2 . '/' . $item->fkey_equipment_1_required_id . '/' .
-        ($item->equipment_1_required_quantity - $quantity->quantity) . '">';
-      $a_end = '</a>';
-    }
-
-    echo <<< EOF
-  <div class="quest-required_stuff">Requires
-    <div class="quest-required_equipment">$a_start<img class="$not_yet"
-      src="/sites/default/files/images/equipment/$game-$item->fkey_equipment_1_required_id.png"
-      width="48">$a_end</div>&nbsp;x$item->equipment_1_required_quantity
-  </div>
-EOF;
-
-    // more required equipment
-    if ($item->equipment_2_required_quantity > 0) {
-
-      $sql = 'select quantity from equipment_ownership
-        where fkey_equipment_id = %d and fkey_users_id = %d;';
-      $result = db_query($sql, $item->fkey_equipment_2_required_id,
-        $game_user->id);
-      $quantity = db_fetch_object($result);
-
-      if ($quantity->quantity >= $item->equipment_2_required_quantity) {
-        $not_yet = $a_start = $a_end = '';
-      }
-      else {
-        $not_yet = 'not-yet';
-        $a_start = '<a href="/' . $game . '/equipment_buy/' .
-          $arg2 . '/' . $item->fkey_equipment_2_required_id . '/' .
-          ($item->equipment_2_required_quantity - $quantity->quantity) . '">';
-        $a_end = '</a>';
-      }
-
-      echo <<< EOF
-    <div class="quest-required_stuff">Requires
-      <div class="quest-required_equipment">$a_start<img class="$not_yet"
-      src="/sites/default/files/images/equipment/$game-$item->fkey_equipment_2_required_id.png"
-      width="48">$a_end</div>&nbsp;x$item->equipment_2_required_quantity
-    </div>
-EOF;
-
-      // more more required equipment
-      if ($item->equipment_3_required_quantity > 0) {
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $item->fkey_equipment_3_required_id,
-          $game_user->id);
-        $quantity = db_fetch_object($result);
-
-        if ($quantity->quantity >= $item->equipment_3_required_quantity) {
-          $not_yet = $a_start = $a_end = '';
-        }
-        else {
-          $not_yet = 'not-yet';
-          $a_start = '<a href="/' . $game . '/equipment_buy/' .
-            $arg2 . '/' . $item->fkey_equipment_3_required_id . '/' .
-            ($item->equipment_3_required_quantity - $quantity->quantity) . '">';
-          $a_end = '</a>';
-        }
-
-        echo <<< EOF
-      <div class="quest-required_stuff">Requires
-        <div class="quest-required_equipment">$a_start<img class="$not_yet"
-        src="/sites/default/files/images/equipment/$game-$item->fkey_equipment_3_required_id.png"
-        width="48">$a_end</div>&nbsp;x$item->equipment_3_required_quantity
-      </div>
-EOF;
-
-      }
-
-    }
-
-  }
-
-  // required staff
-  if ($item->staff_required_quantity > 0) {
-
-    $sql = 'select quantity from staff_ownership
-      where fkey_staff_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $item->fkey_staff_required_id,
-      $game_user->id);
-    $quantity = db_fetch_object($result);
-
-    if ($quantity->quantity >= $item->staff_required_quantity) {
-      $not_yet = '';
-    }
-    else {
-      $not_yet = 'not-yet';
-    }
-
-    echo <<< EOF
-  <div class="quest-required_stuff">Requires
-    <div class="quest-required_equipment"><img class="$not_yet"
-      src="/sites/default/files/images/staff/$game-$item->fkey_staff_required_id.png"
-      width="48"></div>&nbsp;x$item->staff_required_quantity
-  </div>
-EOF;
-
-  }
-
-  echo <<< EOF
-  </div>
-</div>
-</div>
-EOF;
-
+    game_show_quest($game_user, $item, $percentage_target,
+      $percentage_divisor, $quest_group, $party_title);
   }
 
 }

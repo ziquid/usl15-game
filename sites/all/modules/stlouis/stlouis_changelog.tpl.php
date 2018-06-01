@@ -22,15 +22,24 @@ db_set_active('default');
 </div>
 
 <div class="help">
-<div class="title">
-Uprising: St. Louis Changelog
-</div>
+  <div class="title">
+    Uprising: St. Louis Changelog
+  </div>
+  <div class="subtitle">
+    May 31, 2018
+  </div>
+  <ul>
+    <li>
+      Added Fundraising Missions.
+    </li>
+  </ul>
 
-<div class="subtitle">
-  May 30 2018
+  <div class="subtitle">
+    May 30, 2018
+  </div>
+  <ul>
+    <li>
+      New Changelog!
+    </li>
+  </ul>
 </div>
-<ul>
-  <li>
-    New Changelog!
-  </li>
-</ul>

@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.4.0, 30 May 2018';
+$version = 'v0.4.0, 31 May 2018';
 
 global $game, $phone_id;
 

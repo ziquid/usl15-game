@@ -158,6 +158,7 @@ $game_settings = [
 ];
 
 $game_text = [
+  'energy' => 'Energy',
   'investment' => 'Investment',
   'investment_plural' => 'Investments',
   'job' => 'Job',
