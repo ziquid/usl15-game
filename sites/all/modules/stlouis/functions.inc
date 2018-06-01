@@ -480,6 +480,95 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
 
 }
 
+/**
+ * Fetch the list of land to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ *
+ * @return \stdClass[]
+ *   The array of land objects.
+ */
+function game_fetch_land($game_user) {
+  if ($game_user->meta == 'admin') {
+    $sql_to_add = 'WHERE land.id > 0';
+  }
+  else {
+    $sql_to_add = 'WHERE (((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+  )
+
+  AND
+
+  (
+    fkey_values_id = 0
+    OR fkey_values_id = %d
+  ))
+
+    AND required_level <= %d
+    AND active = 1
+  )
+
+  OR land_ownership.quantity > 0 ';
+  }
+
+  $data = [];
+  $sql = 'SELECT land.*, land_ownership.quantity,
+  competencies.name as competency, comp1.name as competency_name_1
+  FROM land
+
+  LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
+  AND land_ownership.fkey_users_id = %d
+
+  LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
+    competencies.id
+  left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
+
+  ' . $sql_to_add . '
+  ORDER BY fkey_enhanced_competencies_id, required_level ASC';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+  return $data;
+}
+
+/**
+ * Fetch the next land item to show.
+ *
+ * @param \stdClass $game_user
+ *
+ * @return \stdClass[]
+ *   The next land item to show, if any.
+ */
+function game_fetch_next_land($game_user) {
+  $sql = 'SELECT land.*, land_ownership.quantity
+  FROM land
+
+  LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
+  AND land_ownership.fkey_users_id = %d
+
+  WHERE ((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+  )
+
+  AND
+  (
+    fkey_values_id = 0
+    OR fkey_values_id = %d
+  ))
+
+  AND required_level > %d
+  AND active = 1
+  ORDER BY required_level ASC LIMIT 1';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+  return db_fetch_object($result);
+}
 
 function game_show_land($game_user, $item, $options = []) {
 

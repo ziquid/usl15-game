@@ -163,6 +163,7 @@ $game_text = [
   'investment_plural' => 'Investments',
   'job' => 'Job',
   'job_plural' => 'Jobs',
+  'mayor' => 'Mayor',
   'staff' => 'Staff',
 ];
 
