@@ -2014,11 +2014,9 @@ function NO_action_use(&$game_user, $quantity = 1) {
 
   // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {
-
     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    db_query($sql, date('Y-m-d H:i:s', time() + 180),
       $game_user->id);
-
   }
 
   // Reprocess user object.

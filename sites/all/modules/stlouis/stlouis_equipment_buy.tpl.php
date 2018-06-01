@@ -134,12 +134,19 @@ firep("$sql, $quantity, $equipment_id, $game_user->id");
   $sql = 'update users set money = money - %d where id = %d;';
   $result = db_query($sql, $equipment_price, $game_user->id);
 
-// give energy bonus, if needed
-
+  // Give energy bonus, if needed.
   // FIXME: Do at the same time as money.
   if ($game_equipment->energy_bonus > 0) {
+
+    // Start the energy clock, if needed.
+    if ($game_user->energy == $game_user->energy_max) {
+      $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+      db_query($sql, date('Y-m-d H:i:s', time() + 300),
+        $game_user->id);
+    }
+
     $sql = 'update users set energy = energy + %d where id = %d;';
-    $result = db_query($sql, $game_equipment->energy_bonus * $quantity, $game_user->id);
+    db_query($sql, $game_equipment->energy_bonus * $quantity, $game_user->id);
   }
 
   // FIXME: Do at the same time as money.
