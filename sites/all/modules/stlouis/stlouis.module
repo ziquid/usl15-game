@@ -1777,9 +1777,8 @@ function _stlouis_fetch_user() {
   if (!empty($game_user->fkey_clans_id)) $energy_bonus++;
   $secs_until = $energy_next_gain - time();
 
-  while (($game_user->energy != $game_user->energy_max) &&
-
   // Do we need energy?
+  while (($game_user->energy != $game_user->energy_max) &&
   ($secs_until <= 0)) {
 
     $changes_made = TRUE;
