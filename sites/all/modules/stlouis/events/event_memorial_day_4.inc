@@ -3,7 +3,7 @@
 /**
  * @file event_memorial_day_4.inc
  *
- * Memorial Day event, Day 3 (Monday).
+ * Memorial Day event, Day 4 (Monday).
  */
 
 /**

@@ -33,6 +33,9 @@ db_set_active('default');
     <li>
       Added Level 94, Free donuts in Southwest Garden!
     </li>
+    <li>
+      The Income tab in Aides now remembers which filter you have applied.
+    </li>
   </ul>
 
   <div class="subtitle">

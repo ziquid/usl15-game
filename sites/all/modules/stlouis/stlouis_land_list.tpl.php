@@ -17,7 +17,7 @@ game_show_aides_menu($game_user);
 echo '<div id="all-land">';
 
 foreach ($data as $item) {
-firep($item, 'Item: ' . $item->name);
+//firep($item, 'Item: ' . $item->name);
   game_show_land($game_user, $item);
 
   $land_price = $item->price + ($item->quantity * $item->price_increase);

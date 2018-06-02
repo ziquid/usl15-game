@@ -346,13 +346,13 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/land_sell/%/%/%'] = array(
+  $items['stlouis/land_sell/%/%/%'] = [
     'title' => 'St. Louis Land Sell',
     'page callback' => 'stlouis_land_sell_callback',
-    'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access stlouis content'),
+    'page arguments' => [2, 3, 4],
+    'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
-  );
+  ];
 
   $items['stlouis/land_work/%/%/%'] = array(
     'title' => 'St. Louis Land Work',

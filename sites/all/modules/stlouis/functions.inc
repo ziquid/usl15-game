@@ -540,7 +540,7 @@ function game_fetch_land($game_user) {
  * Fetch the next land item to show.
  *
  * @param \stdClass $game_user
- *
+ *   The game user object.
  * @return \stdClass[]
  *   The next land item to show, if any.
  */
@@ -567,6 +567,34 @@ function game_fetch_next_land($game_user) {
   ORDER BY required_level ASC LIMIT 1';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
+  return db_fetch_object($result);
+}
+
+/**
+ * Fetch the specified land item.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $land_id
+ *   The land id.
+ *
+ * @return \stdClass
+ *   The land item, if any.
+ */
+function game_fetch_land_by_id($game_user, $land_id) {
+  $sql = 'SELECT land.*, land_ownership.quantity,
+  competencies.name as competency, comp1.name as competency_name_1
+  FROM land
+
+  LEFT OUTER JOIN land_ownership ON land_ownership.fkey_land_id = land.id
+  AND land_ownership.fkey_users_id = %d
+
+  LEFT OUTER JOIN competencies on land.fkey_required_competencies_id =
+    competencies.id
+  left join competencies as comp1 on fkey_enhanced_competencies_id = comp1.id
+
+  WHERE land.id = %d;';
+  $result = db_query($sql, $game_user->id, $land_id);
   return db_fetch_object($result);
 }
 
@@ -1085,9 +1113,9 @@ EOF;
     echo <<< EOF
 <div class="news secondary">
   <div class="news-buttons">
-    <button id="news-all" class="active">All</button>
-    <button id="news-jobs">{$game_text['job_plural']}</button>
-    <button id="news-investments">{$game_text['investment_plural']}</button>
+    <button id="land-all" class="active">All</button>
+    <button id="land-jobs">{$game_text['job_plural']}</button>
+    <button id="land-investments">{$game_text['investment_plural']}</button>
   </div>
 </div>
 EOF;
@@ -3044,4 +3072,18 @@ function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 =
   }
 
   return $retval;
+}
+
+/**
+ * Show the ai output, if necessary.
+ *
+ * @param $phone_id
+ *   The user's phone ID.
+ * @param $ai_output
+ *   The output to show.
+ */
+function game_show_ai_output($phone_id, $ai_output) {
+  if (substr($phone_id, 0, 3) == 'ai-') {
+    echo "<!--\n<ai \"$ai_output\"/>\n-->";
+  }
 }
