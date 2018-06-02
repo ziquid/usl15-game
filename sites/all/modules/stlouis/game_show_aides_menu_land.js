@@ -1,6 +1,4 @@
-Drupal.behaviors.game_show_aides = function (context) {
-
-  // LAND pages
+Drupal.behaviors.game_show_aides_land = function (context) {
 
   var isoLand = $('#all-land').isotope({
     itemSelector: '.land',

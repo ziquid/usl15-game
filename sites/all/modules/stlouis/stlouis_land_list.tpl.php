@@ -24,12 +24,10 @@ foreach ($data as $item) {
   $ai_output .= " $item->id=$land_price";
 }
 
-if (substr($phone_id, 0, 3) == 'ai-') {
-  echo "<!--\n<ai \"$ai_output\"/>\n-->";
-}
+game_show_ai_output($phone_id, $ai_output);
 
 if (!empty($next)) {
-  firep($next, 'Soon Item: ' . $next->name);
+//  firep($next, 'Soon Item: ' . $next->name);
   game_show_land($game_user, $next, ['soon' => TRUE]);
 }
 

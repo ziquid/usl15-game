@@ -602,7 +602,6 @@ function game_show_land($game_user, $item, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $arg2 = check_plain(arg(2));
   static $party_title;
 
   if (empty($party_title)) {
@@ -1010,6 +1009,677 @@ EOF;
   echo '</div>';
 }
 
+/**
+ * Fetch the list of equipment to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ *
+ * @return \stdClass[]
+ *   The array of equipment objects.
+ */
+function game_fetch_equip($game_user) {
+  if ($game_user->meta == 'admin') {
+    $sql_to_add = 'WHERE equipment.id > 0';
+  }
+  else {
+    $sql_to_add = 'WHERE (((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+    )
+  
+    AND
+  
+    (
+      fkey_values_id = 0
+      OR fkey_values_id = %d
+    ))
+  
+      AND required_level <= %d
+      AND active = 1
+    )
+  
+    OR equipment_ownership.quantity > 0 ';
+  }
+
+  $data = [];
+  $sql = 'SELECT equipment.*, equipment_ownership.quantity
+  FROM equipment
+
+  LEFT OUTER JOIN equipment_ownership ON equipment_ownership.fkey_equipment_id = equipment.id
+  AND equipment_ownership.fkey_users_id = %d
+
+  ' . $sql_to_add . '
+  ORDER BY required_level ASC';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+  return $data;
+}
+
+/**
+ * Fetch the next equipment item to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @return \stdClass
+ *   The next equipment item to show, if any.
+ */
+function game_fetch_next_equip($game_user) {
+  if ($game_user->meta == 'admin') {
+    $sql_to_add = 'AND equipment.id > 0';
+  }
+  else {
+    $sql_to_add = 'AND active = 1';
+  }
+  $sql = 'SELECT equipment.*, equipment_ownership.quantity
+  FROM equipment
+
+  LEFT OUTER JOIN equipment_ownership ON equipment_ownership.fkey_equipment_id = equipment.id
+  AND equipment_ownership.fkey_users_id = %d
+
+  WHERE ((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+  )
+
+  AND
+  (
+    fkey_values_id = 0
+    OR fkey_values_id = %d
+  ))
+
+  AND required_level > %d
+  ' . $sql_to_add . '
+  ORDER BY required_level ASC LIMIT 1';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+  return db_fetch_object($result);
+}
+
+/**
+ * Show a piece of equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The equipment item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ */
+function game_show_equip($game_user, $item, &$ai_output, $options = []) {
+
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  static $party_title;
+  $classes = [];
+
+  if (empty($party_title)) {
+    $sql = 'select party_title from `values` where id = %d;';
+    $result = db_query($sql, $game_user->fkey_values_id);
+    $data = db_fetch_object($result);
+    $party_title = preg_replace('/^The /', '', $data->party_title);
+  }
+
+  $soon = ($options['soon']) ? 'soon' : '';
+  $header = ($options['equipment-succeeded'] == 'success') ?
+    '<div class="land-succeeded">Success</div>' : '';
+
+  switch ($options['equipment-buy-succeeded']) {
+
+    case 'buy-success':
+      if ($item->type == 'job') {
+        $header = '<div class="land-succeeded">' . t('You got a job!') .
+          '</div>';
+      }
+      else {
+        $header = '<div class="land-succeeded">' .
+          t('Investment Purchased') . '</div>';
+      }
+      break;
+
+    case 'failed no-money':
+      $offer = game_luck_money_offer($game_user);
+      $header = '<div class="title">' .
+
+        // FIXME remove special characters from text here.
+        t('∆ @value <span>Insufficient</span> ∆',
+          array('@value' => $game_user->values)) . '
+        </div>
+        <div class="try-an-election-wrapper">
+          <div class="try-an-election">
+            <a href="/' . $game . '/elders_do_fill/' . $arg2 .
+        '/money?destination=/' . $game . '/equipment/' . $arg2 . '">' .
+        t('Receive @offer @values (1&nbsp;@luck',
+          array(
+            '@offer' => $offer,
+            '@values' => $game_user->values,
+            '@luck' => $luck,
+          )) . ')
+            </a>
+          </div>
+        </div>';
+
+      $failed = 'failed';
+      break;
+
+    case 'failed not-required-level':
+      $header = '<div class="title">' .
+        t('∆ Player Level <span>Insufficient</span> ∆') .
+        '</div>';
+      $failed = 'failed';
+      break;
+
+    case 'failed not-enough-equipment':
+      $header = '<div class="title">' .
+        t('∆ Quantity <span>Insufficient</span> ∆') .
+        '</div>';
+      $failed = 'failed';
+      break;
+
+    case 'failed not-required-competency':
+      $header = '<div class="title">' .
+        t('Insufficient Competency') .
+        '</div>';
+      $failed = 'failed';
+      competency_gain($game_user, 'incompetent');
+      break;
+
+    case 'failed not-required-hood':
+
+      // FIXME: show equipment available in other hoods.
+      $header = '<div class="title">' .
+        t('∆ Location <span>Incorrect</span> ∆') .
+        '</div>';
+      $failed = 'failed';
+      competency_gain($game_user, 'lost');
+      break;
+
+    case 'failed not-required-party':
+      $header = '<div class="title">' .
+        t('∆ @party <span>Incorrect</span> ∆',
+          array('@party' => $party)) .
+        '</div>';
+      $failed = 'failed';
+      break;
+
+    case 'failed not-active':
+    case 'failed is-loot':
+      $header = '<div class="title">' .
+        t('∆ Item <span>Unavailable</span> ∆') .
+        '</div>';
+      $failed = 'failed';
+      break;
+
+    case 'failed cant-sell':
+      $header = '<div class="title">' .
+        t('∆ Item <span>Unsalable</span> ∆') .
+        '</div>';
+      $failed = 'failed';
+      break;
+  }
+
+  $description = str_replace('%party', "<em>$party_title</em>",
+    $item->description);
+
+  $quantity = $item->quantity;
+  if (empty($quantity)) {
+    $quantity = '<em>' . t('None') . '</em>';
+  }
+
+  $equipment_price = $item->price + ($item->quantity *
+      $item->price_increase);
+
+  if (!$item->is_loot) {
+    $ai_output .= " $item->id=$equipment_price";
+  }
+
+  if ((($equipment_price % 1000) == 0) && $equipment_price > 0) {
+    $equipment_price = ($equipment_price / 1000) . 'K';
+  }
+
+  if ($item->quantity_limit > 0) {
+    $quantity_limit = '<em>(Limited to ' . $item->quantity_limit . ')</em>';
+  }
+  else {
+    $quantity_limit = '';
+  }
+
+  $can_buy = $can_sell = TRUE;
+  $cant_buy_reason = $cant_sell_reason = '';
+
+  if ($item->fkey_neighborhoods_id != 0 &&
+    $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
+    $can_buy = FALSE;
+    $cant_buy_reason = '(Wrong ' . $game_text['hood_short'] . ')';
+  }
+
+  if ($item->fkey_values_id != 0 &&
+    $item->fkey_values_id != $game_user->fkey_values_id) {
+    $can_buy = FALSE;
+    $cant_buy_reason = '(Wrong ' . $party . ')';
+  }
+
+  if ($item->required_level > $game_user->level) {
+    $can_buy = FALSE;
+    $cant_buy_reason = '(Not Enough ' . $experience . ')';
+  }
+
+  if (!$item->active) {
+    $can_buy = FALSE;
+    $cant_buy_reason = '(Inactive)';
+  }
+
+  if ($item->is_loot != 0) {
+    $can_buy = FALSE;
+    $cant_buy_reason = '(Loot Only)';
+  }
+
+  if ($item->can_sell != 1) {
+    $can_sell = FALSE;
+    $cant_sell_reason = '(Ever)';
+  }
+
+  if ($item->quantity < 1) {
+    $can_sell = FALSE;
+  }
+
+  $inactive = ($item->active) ? '' : t('(Inactive)');
+
+  if ($can_buy) {
+    $icon_button = <<< EOF
+<a href="/$game/equipment_buy/$arg2/$item->id/1">
+  <img src="/sites/default/files/images/equipment/$game-$item->id.png?2" width="96"
+    border="0">
+</a>
+EOF;
+    $name_link = <<< EOF
+<a href="/$game/equipment_buy/$arg2/$item->id/1">
+  <span class="type">
+    $inactive
+  </span>
+  $item->name
+</a>
+EOF;
+    $buy_button = <<< EOF
+<div class="land-buy-button">
+  <a href="/$game/equipment_buy/$arg2/$item->id/1">
+    Buy
+  </a>
+</div>
+EOF;
+  }
+  else {
+    // Can't buy.
+    $icon_button = <<< EOF
+  <img src="/sites/default/files/images/equipment/$game-$item->id.png?2" width="96"
+    border="0">
+EOF;
+    $name_link = <<< EOF
+<span class="type">
+  $inactive
+</span>
+$item->name
+EOF;
+    $buy_button = <<< EOF
+<div class="land-buy-button not-yet">
+  Can't Buy $cant_buy_reason
+</div>
+EOF;
+  }
+
+  if ($can_sell) {
+    $sell_button = <<< EOF
+<div class="land-sell-button">
+  <a href="/$game/equipment_sell/$arg2/$item->id/1">
+    Sell
+  </a>
+</div>
+EOF;
+  }
+  else {
+    $sell_button = <<< EOF
+<div class="land-sell-button not-yet">
+  Can't Sell $cant_sell_reason
+</div>
+EOF;
+  }
+
+  // grab each action for the equipment
+  $acts_arr = [];
+  $sql = 'select * from actions where fkey_equipment_id = %d;';
+  $result = db_query($sql, $item->id);
+  while ($action = db_fetch_object($result)) {
+    $acts_arr[] = $action;
+  }
+
+  if ($item->initiative_bonus != 0) {
+    $classes[] = 'equip-ini';
+  }
+
+  if ($item->endurance_bonus != 0) {
+    $classes[] = 'equip-end';
+  }
+
+  if ($item->elocution_bonus != 0) {
+    $classes[] = 'equip-elo';
+  }
+
+  if ($item->speed_increase != 0) {
+    $classes[] = 'equip-move';
+  }
+
+  if ($can_buy) {
+    $classes[] = 'equip-buy';
+  }
+
+  if ($can_sell) {
+    $classes[] = 'equip-sal';
+  }
+
+  if ($item->upkeep != 0) {
+    $classes[] = 'equip-upk';
+  }
+
+  if ($item->energy_bonus != 0 || $item->energy_increase != 0) {
+    $classes[] = 'equip-eng';
+  }
+
+  if (count($acts_arr) > 0) {
+    $classes[] = 'equip-act';
+  }
+
+  $class_str = implode(' ', $classes);
+
+  if ($soon) {
+    echo <<< EOF
+<div class="land $soon $failed $class_str">
+  <div class="land-icon">
+      <img src="/sites/default/files/images/equipment/$game-soon.png?1" width=96
+        border="0">
+  </div>
+  <div class="land-details">
+    <div class="land-name">
+        <span class="type">$inactive</span>
+        $item->name
+    </div>
+    <div class="land-description">$description</div>
+EOF;
+  }
+else {
+    echo <<< EOF
+<div class="land $failed $class_str">
+  $header
+  <div class="land-icon">
+    $icon_button
+  </div>
+  <div class="land-details">
+    <div class="land-name">
+      $name_link
+    </div>
+    <div class="land-description">$description</div>
+EOF;
+  }
+
+  echo <<< EOF
+    <div class="land-owned">Owned: $quantity $quantity_limit</div>
+EOF;
+  $reqs = <<< EOF
+    <div class="land-cost">Cost: $equipment_price $game_user->values</div>
+EOF;
+
+  if ($game_user->level < $item->required_level) {
+    $reqs .= <<< EOF
+    <div class="land-required_level">Player: Level $item->required_level</div>
+EOF;
+  }
+
+  if (!empty($reqs)) {
+    echo <<< EOF
+    <!--<div class="land-requisites">// Requisites //</div>-->
+    $reqs
+EOF;
+  }
+
+  if ($item->energy_bonus > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    Energy: +$item->energy_bonus immediate energy bonus
+  </div>
+EOF;
+  }
+
+  if ($item->energy_increase > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    Energy: +$item->energy_increase every 5 minutes
+  </div>
+EOF;
+  }
+
+  if ($item->initiative_bonus > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    $initiative: +$item->initiative_bonus
+  </div>
+EOF;
+  }
+else if ($item->initiative_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">
+    $initiative: $item->initiative_bonus
+  </div>
+EOF;
+  }
+
+  if ($item->endurance_bonus > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    $endurance: +$item->endurance_bonus
+  </div>
+EOF;
+  }
+else if ($item->endurance_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">
+    $endurance: $item->endurance_bonus
+  </div>
+EOF;
+  }
+
+  if ($item->elocution_bonus > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    $elocution: +$item->elocution_bonus
+  </div>
+EOF;
+
+    if (!$item->is_loot) {
+      $ai_output .= "/+elo:$item->elocution_bonus";
+    }
+
+  }
+else if ($item->elocution_bonus < 0) {
+    echo <<< EOF
+  <div class="land-payout negative">
+    $elocution: $item->elocution_bonus
+  </div>
+EOF;
+
+    if (!$item->is_loot) {
+      $ai_output .= "/+elo:$item->elocution_bonus";
+    }
+  }
+
+  if ($item->speed_increase > 0) {
+    echo <<< EOF
+  <div class="land-payout">
+    Speed Increase: $item->speed_increase fewer Action
+    needed to move to a new $hood_lower
+  </div>
+EOF;
+
+    if ((!$item->is_loot) && ($item->quantity == 0)) {
+      $ai_output .= "/+spd:$item->speed_increase";
+    }
+
+  }
+
+  if ($item->upkeep > 0) {
+    echo <<< EOF
+  <div class="land-payout negative">
+    Upkeep: $item->upkeep every 60 minutes
+  </div>
+EOF;
+  }
+
+  if ($item->chance_of_loss > 0) {
+    $lifetime = floor(100 / $item->chance_of_loss);
+    $use = ($lifetime == 1) ? 'use' : 'uses';
+    echo <<< EOF
+  <div class="land-payout negative">
+    Expected Lifetime: $lifetime $use
+  </div>
+EOF;
+  }
+
+
+  foreach ($acts_arr as $action) {
+//    firep($action, 'action associated with equipment');
+
+    $cost = "Cost: $action->cost Action";
+    if ($action->values_cost > 0)
+      $cost .= ", $action->values_cost $game_user->values";
+
+    $name = str_replace('%value', $game_user->values, $action->name);
+
+    echo '<div class="land-action">Action: ' . $name . '</div>';
+    echo '<div class="land-description">' . $action->description . '</div>';
+    echo '<div class="land-action-cost">' . $cost . '</div>';
+
+    if ($action->influence_change < 0) {
+      $inf_change = -$action->influence_change;
+      echo <<< EOF
+        <div class="land-payout negative">Effect: Target's
+          {$experience_lower} is reduced by $inf_change</div>
+EOF;
+    }
+
+    if (($action->rating_change < 0.10) && ($action->rating_change != 0.0)) {
+      $rat_change = abs($action->rating_change);
+
+      if ($action->rating_change < 0.0) {
+        echo <<< EOF
+    <div class="land-payout negative">Effect: $target approval rating is
+      reduced by $rat_change%</div>
+EOF;
+      }
+      else {
+        echo <<< EOF
+    <div class="land-payout">Effect: $target approval rating is
+      increased by $rat_change%</div>
+EOF;
+      }
+
+    }
+
+    if ($action->rating_change >= 0.10) {
+      $rat_change = $action->rating_change;
+      echo <<< EOF
+    <div class="land-payout">Effect: Your approval rating is
+      increased by $rat_change%</div>
+EOF;
+    }
+
+    if ($action->neighborhood_rating_change < 0.0) {
+      $rat_change = -$action->neighborhood_rating_change;
+      echo <<< EOF
+  <div class="land-payout negative">Effect: $hood $beauty_lower
+    rating is reduced by $rat_change</div>
+EOF;
+    }
+
+    if ($action->neighborhood_rating_change > 0.0) {
+      $rat_change = $action->neighborhood_rating_change;
+      echo <<< EOF
+  <div class="land-payout">Effect: $hood $beauty_lower rating is
+    increased by $rat_change</div>
+EOF;
+    }
+
+    if ($action->values_change < 0) {
+      $val_change = -$action->values_change;
+      echo <<< EOF
+        <div class="land-payout negative">Effect: Target's $game_user->values is
+          reduced by $val_change</div>
+EOF;
+    }
+  }
+
+  echo '</div>';
+
+  // BUY buttons.
+  if ($soon) {
+    echo <<< EOF
+  <div class="land-button-wrapper">
+    <div class="land-buy-button not-yet">
+      Can't Buy
+    </div>
+    <div class="land-sell-button not-yet">
+      Can't Sell
+    </div>
+  </div>
+EOF;
+  }
+  else {
+
+    // Attempt to buy.
+    if ($options['equipment-buy-succeeded']) {
+      echo <<< EOF
+<div class="land-button-wrapper">
+  <form action="/$game/equipment_buy/$arg2/$item->id/use-quantity">
+    <div class="quantity">
+      <select name="quantity">
+EOF;
+      foreach (array(1, 5, 10, 25, 50, 100) as $option) {
+        if ($option == $orig_quantity) {
+          echo '<option selected="selected" value="' . $option . '">' .
+            $option . '</option>';
+        }
+        else {
+          echo '<option value="' . $option . '">' . $option . '</option>';
+        }
+      }
+      echo <<< EOF
+      </select>
+    </div>
+    <input class="equipment-buy-button" type="submit" Value="Buy"/>
+  </form>
+</div>
+EOF;
+
+    }
+
+    // Normal show.
+    else {
+      echo <<< EOF
+  <div class="land-button-wrapper">
+    $buy_button
+    $sell_button
+  </div>
+EOF;
+    }
+
+  }
+
+  echo '</div>';
+}
+
 // Sometimes the income gets hacked -- fix here.
 function game_recalc_income(&$game_user) {
 
@@ -1121,7 +1791,35 @@ EOF;
 EOF;
 
     drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/game_show_aides_menu.js', 'module', 'footer');
+      . '/game_show_aides_menu_land.js', 'module', 'footer');
+  }
+
+  if ($equip_active && $game_user->level >= 25) {
+    echo <<< EOF
+<div class="news secondary">
+  <div class="news-buttons">
+    <button id="equip-all" class="active">All</button>
+    <button id="equip-ini">{$game_text['initiative_short']}</button>
+    <button id="equip-end">{$game_text['endurance_short']}</button>
+    <button id="equip-elo">{$game_text['elocution_short']}</button>
+    <button id="equip-move">Moving</button>
+    <button id="equip-other">Other</button>
+  </div>
+</div>
+
+<div class="news secondary">
+  <div class="news-buttons">
+    <button id="equip-buy">Buyable</button>
+    <button id="equip-sal">Salable</button>
+    <button id="equip-upk">Upkeep</button>
+    <button id="equip-eng">{$game_text['energy']}</button>
+    <button id="equip-act">{$game_text['actions_short']}</button>
+  </div>
+</div>
+EOF;
+
+    drupal_add_js(drupal_get_path('module', 'stlouis')
+      . '/game_show_aides_menu_equip.js', 'module', 'footer');
   }
 
   _show_goal($game_user);

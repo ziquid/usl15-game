@@ -169,7 +169,13 @@ $game_settings = [
 ];
 
 $game_text = [
+  'actions_short' => 'Acts',
+  'elocution_short' => 'Elo',
+  'endurance_short' => 'End',
   'energy' => 'Energy',
+  'hood' => 'Neighborhood',
+  'hood_short' => '\'hood',
+  'initiative_short' => 'Ini',
   'investment' => 'Investment',
   'investment_plural' => 'Investments',
   'job' => 'Job',
