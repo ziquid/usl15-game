@@ -1037,6 +1037,7 @@ function game_fetch_equip($game_user) {
   
       AND required_level <= %d
       AND active = 1
+      AND is_loot = 0
     )
   
     OR equipment_ownership.quantity > 0 ';
@@ -1073,7 +1074,8 @@ function game_fetch_next_equip($game_user) {
     $sql_to_add = 'AND equipment.id > 0';
   }
   else {
-    $sql_to_add = 'AND active = 1';
+    $sql_to_add = 'AND active = 1
+      AND is_loot = 0';
   }
   $sql = 'SELECT equipment.*, equipment_ownership.quantity
   FROM equipment
