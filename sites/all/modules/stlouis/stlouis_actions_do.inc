@@ -730,12 +730,14 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   $sql = 'select * from users where id = %d;';
   $result = db_query($sql, $target_id);
   $target_user = db_fetch_object($result);
-  $actions_required = ceil($target_user->level / 4);
-  $money_required = $target_user->level * 25;
+  $actions_required = ceil($target_user->level / 3);
+  $money_required = $target_user->level * 35;
 
   // Actions cap of 50 for alderman.
   if ($ep_type == 1) {
+    $actions_required = ceil($target_user->level / 4);
     $actions_required = min($actions_required, 50);
+    $money_required = $target_user->level * 25;
   }
 
   game_alter('png_cost', $game_user, $money_required, $actions_required);

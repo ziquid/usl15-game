@@ -342,7 +342,7 @@ firep('allowed not_met users: ' . $allowed_string);
           AND (elected_officials.fkey_elected_positions_id IS NULL
             OR elected_positions.type = 2)
           AND `values`.fkey_neighborhoods_id <> %d
-        ORDER BY username ASC ;';
+        ORDER BY level ASC ;';
 
       $result = db_query($sql, $game_user->fkey_neighborhoods_id,
         $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id);
