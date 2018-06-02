@@ -27,6 +27,21 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 2, 2018
+  </div>
+  <ul>
+    <li>
+      Ranking Committee Members can now PNG
+    </li>
+    <li>
+      Finished filters for Equipment
+    </li>
+    <li>
+      Differentiates between PNG, comp enhancement, and user messages on homepage
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 1, 2018
   </div>
   <ul>
