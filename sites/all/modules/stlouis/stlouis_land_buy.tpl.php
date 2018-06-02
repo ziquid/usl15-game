@@ -68,7 +68,7 @@ if ($game_land->fkey_neighborhoods_id != 0 &&
 if ($game_land->fkey_values_id != 0 &&
   $game_land->fkey_values_id != $game_user->fkey_values_id) {
   $options['land-buy-succeeded'] = 'failed not-required-party';
-  $ai_output = 'land-failed not-required-value';
+  $ai_output = 'land-failed not-required-party';
   game_karma($game_user,
     "trying to purchase $game_land->name in wrong party", -50);
 }
@@ -114,7 +114,7 @@ if ($options['land-buy-succeeded'] == 'buy-success') {
     competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
   }
 
-  land_gain($game_user, $land_id, $quantity, $land_price);
+  game_land_gain($game_user, $land_id, $quantity, $land_price);
 }
 else {
   $quantity = 0;

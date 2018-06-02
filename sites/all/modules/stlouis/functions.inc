@@ -1101,6 +1101,29 @@ function game_fetch_next_equip($game_user) {
 }
 
 /**
+ * Fetch the specified equipment item.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $equip_id
+ *   The equip id.
+ *
+ * @return \stdClass
+ *   The equipment item, if any.
+ */
+function game_fetch_equip_by_id($game_user, $equip_id) {
+  $sql = 'SELECT equipment.*, equipment_ownership.quantity
+  FROM equipment
+
+  LEFT OUTER JOIN equipment_ownership ON equipment_ownership.fkey_equipment_id = equipment.id
+  AND equipment_ownership.fkey_users_id = %d
+
+  WHERE equipment.id = %d;';
+  $result = db_query($sql, $game_user->id, $equip_id);
+  return db_fetch_object($result);
+}
+
+/**
  * Show a piece of equipment.
  *
  * @param \stdClass $game_user
@@ -1131,17 +1154,6 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
     '<div class="land-succeeded">Success</div>' : '';
 
   switch ($options['equipment-buy-succeeded']) {
-
-    case 'buy-success':
-      if ($item->type == 'job') {
-        $header = '<div class="land-succeeded">' . t('You got a job!') .
-          '</div>';
-      }
-      else {
-        $header = '<div class="land-succeeded">' .
-          t('Investment Purchased') . '</div>';
-      }
-      break;
 
     case 'failed no-money':
       $offer = game_luck_money_offer($game_user);
@@ -1175,24 +1187,21 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
       $failed = 'failed';
       break;
 
-    case 'failed not-enough-equipment':
+    case 'failed hit-quantity-limit':
       $header = '<div class="title">' .
-        t('∆ Quantity <span>Insufficient</span> ∆') .
+        t('Limit reached!') .
         '</div>';
       $failed = 'failed';
       break;
 
-    case 'failed not-required-competency':
+    case 'failed not-enough-income':
       $header = '<div class="title">' .
-        t('Insufficient Competency') .
+        t('Not enough hourly income!') .
         '</div>';
       $failed = 'failed';
-      competency_gain($game_user, 'incompetent');
       break;
 
     case 'failed not-required-hood':
-
-      // FIXME: show equipment available in other hoods.
       $header = '<div class="title">' .
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
@@ -1548,7 +1557,6 @@ EOF;
 EOF;
   }
 
-
   foreach ($acts_arr as $action) {
 //    firep($action, 'action associated with equipment');
 
@@ -1646,8 +1654,8 @@ EOF;
     <div class="quantity">
       <select name="quantity">
 EOF;
-      foreach (array(1, 5, 10, 25, 50, 100) as $option) {
-        if ($option == $orig_quantity) {
+      foreach ([1, 5, 10, 25, 50, 100] as $option) {
+        if ($option == $options['orig-quantity']) {
           echo '<option selected="selected" value="' . $option . '">' .
             $option . '</option>';
         }
@@ -1658,7 +1666,7 @@ EOF;
       echo <<< EOF
       </select>
     </div>
-    <input class="equipment-buy-button" type="submit" Value="Buy"/>
+    <input class="land-buy-button" type="submit" Value="Buy"/>
   </form>
 </div>
 EOF;
@@ -2417,13 +2425,15 @@ EOF;
 }
 
 
-function equipment_gain(&$game_user, $id, $quantity) {
+function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
 
-  // BUG?  How do these get here?
+  // BUG!  How do these get here?
   if ($id == 0) {
     mail('joseph@ziquid.com', $game_user->name . ' trying to get equipment 0!',
       $game_user->phone_id);
-    return array(FALSE, 'bad-id', 0);
+    return [FALSE, 'bad-id', 0];
   }
 
   $sql = 'select * from equipment where id = %d;';
@@ -2437,45 +2447,57 @@ function equipment_gain(&$game_user, $id, $quantity) {
 
   // Check for enough income to cover upkeep.
   if ($game_user->income <
-    $game_user->expenses + ($eq->upkeep * $quantity))
-      return array(FALSE, 'not-enough-income', ($eq->upkeep * $quantity));
+    $game_user->expenses + ($eq->upkeep * $quantity)) {
+    return [FALSE, 'not-enough-income', ($eq->upkeep * $quantity)];
+  }
 
   // Eo entry already there.
   if (!empty($eo)) {
 
     if (($eq->quantity_limit > 0) &&
-      (($eo->quantity + $quantity) > $eq->quantity_limit))
-      return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+      (($eo->quantity + $quantity) > $eq->quantity_limit)) {
+      return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
+    }
 
     $sql = 'update equipment_ownership set quantity = quantity + %d
       where fkey_equipment_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $quantity, $id, $game_user->id);
-
+    db_query($sql, $quantity, $id, $game_user->id);
   }
   else {
 
-    if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
-      return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+    if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit)) {
+      return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
+    }
 
     $sql = 'insert into equipment_ownership
       (fkey_users_id, fkey_equipment_id, quantity) values
       (%d, %d, %d);';
-    $result = db_query($sql, $game_user->id, $id, $quantity);
-
+    db_query($sql, $game_user->id, $id, $quantity);
   }
 
-  // Process upkeep.
-  // Add upkeep to user expenses.
-  if ($eq->upkeep > 0) {
-    $sql = 'update users set expenses = expenses + %d where id = %d;';
-    $result = db_query($sql, ($eq->upkeep * $quantity), $game_user->id);
-    $game_user->expenses += ($eq->upkeep * $quantity);
+  // Pay for the equipment, if needed.
+  $sql = 'update users set money = money - %d where id = %d;';
+  db_query($sql, $eq_price, $game_user->id);
+
+  // Give energy bonus, if needed.
+  if ($eq->energy_bonus > 0) {
+
+    // Start the energy clock, if needed.
+    if ($game_user->energy == $game_user->energy_max) {
+      $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+      db_query($sql, date('Y-m-d H:i:s', time() + 300),
+        $game_user->id);
+    }
+
+    $sql = 'update users set energy = energy + %d where id = %d;';
+    db_query($sql, $eq->energy_bonus * $quantity, $game_user->id);
   }
 
-  return array(TRUE, 'success', 0);
-
+  // Reprocess user object.
+  game_recalc_income($game_user);
+  $game_user = $fetch_user();
+  return [TRUE, 'success', 0];
 }
-
 
 function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
@@ -2515,7 +2537,6 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   return array(TRUE, 'success', 0);
 
 }
-
 
 function NO_equipment_lose(&$game_user, $id, $quantity) {
 
@@ -2562,7 +2583,6 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
 
 }
 
-
 function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -2600,15 +2620,9 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
 }
 
-function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
-
-  global $game, $phone_id;
-
+function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
+  global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-
-  $sql = 'select * from land where id = %d;';
-  $result = db_query($sql, $id);
-  $land = db_fetch_object($result);
 
   $sql = 'select * from land_ownership
     where fkey_land_id = %d and fkey_users_id = %d;';
@@ -2617,38 +2631,26 @@ function land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
 
   // Lo entry already there.
   if (!empty($lo)) {
-
     $sql = 'update land_ownership set quantity = quantity + %d
       where fkey_land_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $quantity, $id, $game_user->id);
-
+    db_query($sql, $quantity, $id, $game_user->id);
   }
   else {
-
     $sql = 'insert into land_ownership
       (fkey_users_id, fkey_land_id, quantity) values
       (%d, %d, %d);';
-    $result = db_query($sql, $game_user->id, $id, $quantity);
-
+    db_query($sql, $game_user->id, $id, $quantity);
   }
-
-  // Process income.
-  $sql = 'update users set income = income + %d where id = %d;';
-  $result = db_query($sql, ($land->payout * $quantity), $game_user->id);
-  $game_user->income += ($land->payout * $quantity);
 
   // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
-
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
+    db_query($sql, date('Y-m-d H:i:s', time() + 3600),
       $game_user->id);
-
   }
 
   // Pay for the land, if needed.
-  $sql = 'update users set money = money - %d
-    where id = %d;';
+  $sql = 'update users set money = money - %d where id = %d;';
   db_query($sql, $ex_price, $game_user->id);
 
   // Reprocess user object.
