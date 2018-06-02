@@ -377,15 +377,7 @@ firep($eq);
     if ($eq->chance_of_loss >= mt_rand(1, 110)) {
 
 //firep($eq->name . ' wore out!');
-      $sql = 'update equipment_ownership set quantity = quantity - 1
-        where fkey_equipment_id = %d and fkey_users_id = %d;';
-      $result = db_query($sql, $eq->id, $game_user->id);
-
-      // Do player expenses need resetting?
-      if ($eq->upkeep > 0) {
-        $sql = 'update users set expenses = expenses - %d where id = %d;';
-        $result = db_query($sql, $eq->upkeep, $game_user->id);
-
+      game_equipment_use($game_user, $eq->id, 1);
       // FIXME: do this before _stlouis_header so that upkeep is accurate.
       }
 
@@ -413,7 +405,9 @@ firep($eq);
       $result = db_query($sql, $eq->id, $game_user->id);
       $eo = db_fetch_object($result);
 
-      if ($eo->quantity == 0) $can_do_again = FALSE;
+      if ($eo->quantity == 0) {
+        $can_do_again = FALSE;
+      }
 
     }
     else {

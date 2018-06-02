@@ -9,7 +9,7 @@ $ai_output = 'equipment-prices';
 
 // Fix expenses in case they are out of whack.
 game_recalc_income($game_user);
-$data = game_fetch_equip($game_user);
+$data = game_fetch_visible_equip($game_user);
 $next = game_fetch_next_equip($game_user);
 
 // ------ VIEW ------

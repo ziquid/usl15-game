@@ -26,6 +26,7 @@ while ($count--) {
 
 $options = [];
 $options['land-buy-succeeded'] = 'buy-success';
+$options['orig-quantity'] = $orig_quantity;
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
@@ -121,7 +122,7 @@ else {
 }
 
 $game_land->quantity += $quantity;
-$data = game_fetch_land($game_user);
+$data = game_fetch_visible_land($game_user);
 $next = game_fetch_next_land($game_user);
 
 // ------- VIEW ------

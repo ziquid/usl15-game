@@ -103,7 +103,7 @@ else {
 }
 
 $game_equipment->quantity += $quantity;
-$data = game_fetch_equip($game_user);
+$data = game_fetch_visible_equip($game_user);
 $next = game_fetch_next_equip($game_user);
 
 // ------ VIEW ------

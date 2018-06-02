@@ -8,7 +8,7 @@ $game_user = $fetch_user();
 $ai_output = 'land-prices';
 
 game_recalc_income($game_user);
-$data = game_fetch_land($game_user);
+$data = game_fetch_visible_land($game_user);
 $next = game_fetch_next_land($game_user);
 
 // ------ VIEW ------

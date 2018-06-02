@@ -26,6 +26,7 @@ $land_price = ceil($game_land->price +
 
 $options = [];
 $options['land-sell-succeeded'] = 'sell-success';
+$options['orig-quantity'] = $orig_quantity;
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
@@ -55,14 +56,14 @@ if ($game_land->type == 'job') {
 
 // Success!
 if ($options['land-sell-succeeded'] == 'sell-success') {
-  land_lose($game_user, $land_id, $quantity, $land_price);
+  game_land_lose($game_user, $land_id, $quantity, $land_price);
 }
 else {
   $quantity = 0;
 }
 
 $game_land->quantity -= $quantity;
-$data = game_fetch_land($game_user);
+$data = game_fetch_visible_land($game_user);
 $next = game_fetch_next_land($game_user);
 
 // ------- VIEW ------

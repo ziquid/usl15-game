@@ -489,7 +489,7 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
  * @return \stdClass[]
  *   The array of land objects.
  */
-function game_fetch_land($game_user) {
+function game_fetch_visible_land($game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE land.id > 0';
   }
@@ -1018,7 +1018,7 @@ EOF;
  * @return \stdClass[]
  *   The array of equipment objects.
  */
-function game_fetch_equip($game_user) {
+function game_fetch_visible_equip($game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE equipment.id > 0';
   }
@@ -2426,10 +2426,9 @@ EOF;
 
 }
 
-
 function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
-  $fetch_user = '_' . $game . '_fetch_user';
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   // BUG!  How do these get here?
   if ($id == 0) {
@@ -2438,6 +2437,7 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
     return [FALSE, 'bad-id', 0];
   }
 
+  // FIXME: refactor to use game_fetch_equip_by_id().
   $sql = 'select * from equipment where id = %d;';
   $result = db_query($sql, $id);
   $eq = db_fetch_object($result);
@@ -2478,6 +2478,7 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   }
 
   // Pay for the equipment, if needed.
+  // FIXME: don't process if money is 0.
   $sql = 'update users set money = money - %d where id = %d;';
   db_query($sql, $eq_price, $game_user->id);
 
@@ -2540,8 +2541,26 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
 }
 
-function NO_equipment_lose(&$game_user, $id, $quantity) {
+/**
+ * Lose (or Sell) one or more pieces equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The equipment ID.
+ * @param int $quantity
+ *   Number of pieces to lose/sell
+ * @param int $eq_price
+ *   Amount of compensation to receive for sale.
+ *
+ * @return bool
+ *   Whether the sale succeeded or not.
+ */
+function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
+  // FIXME: refactor to use game_fetch_equip_by_id().
   $sql = 'select * from equipment where id = %d;';
   $result = db_query($sql, $id);
   $eq = db_fetch_object($result);
@@ -2552,37 +2571,59 @@ function NO_equipment_lose(&$game_user, $id, $quantity) {
   $eo = db_fetch_object($result);
 
   // Nothing there?
-  if (empty($eo)) return FALSE;
+  if (empty($eo)) {
+    return FALSE;
+  }
 
   // Not enough?
-  if ($eo->quantity < $quantity) return FALSE;
+  if ($eo->quantity < $quantity) {
+    return FALSE;
+  }
 
-  // Using all?  Remove entry.
-  if ($eo->quantity == $quantity) {
+  $sql = 'update equipment_ownership set quantity = quantity - %d
+    where fkey_equipment_id = %d and fkey_users_id = %d;';
+  db_query($sql, $quantity, $id, $game_user->id);
 
-    $sql = 'delete from equipment_ownership
-      where fkey_users_id = %d and fkey_equipment_id = %d;';
-    $result = db_query($sql, $game_user->id, $id);
+  // Receive money for the equipment, if needed.
+  // FIXME: don't process if money is 0.
+  $sql = 'update users set money = money + %d where id = %d;';
+  db_query($sql, $eq_price, $game_user->id);
 
+  // Reprocess user object.
+  game_recalc_income($game_user);
+  $game_user = $fetch_user();
+  return TRUE;
+}
+
+/**
+ * Use one or more pieces equipment.
+ *
+ * Same as Losing/Selling except no compensation is made, and the quantity used
+ * is tracked in the database.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The equipment ID.
+ * @param int $quantity
+ *   Number of pieces to lose/sell
+ *
+ * @return bool
+ *   Whether the sale succeeded or not.
+ */
+function game_equipment_use(&$game_user, $id, $quantity) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  if (game_equipment_lose($game_user, $id, $quantity, 0)) {
+    $sql = 'update equipment_ownership set quantity_used = quantity_used + %d
+    where fkey_equipment_id = %d and fkey_users_id = %d;';
+    db_query($sql, $quantity, $id, $game_user->id);
+    return TRUE;
   }
   else {
-
-    $sql = 'update equipment_ownership set quantity = quantity - %d
-      where fkey_equipment_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $quantity, $id, $game_user->id);
-
+    return FALSE;
   }
-
-  // Check for upkeep.
-  // Subtract upkeep from user expenses.
-  if ($eq->upkeep > 0) {
-    $sql = 'update users set expenses = expenses - %d where id = %d;';
-    $result = db_query($sql, ($eq->upkeep * $quantity), $game_user->id);
-    $game_user->expenses -= ($eq->upkeep * $quantity);
-  }
-
-  return TRUE;
-
 }
 
 function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
@@ -2661,12 +2702,11 @@ function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
+function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  global $game, $phone_id;
-
-  $fetch_user = '_' . $game . '_fetch_user';
-
+  // FIXME: refactor to use game_fetch_land_by_id().
   $sql = 'select * from land where id = %d;';
   $result = db_query($sql, $id);
   $land = db_fetch_object($result);
@@ -2676,54 +2716,44 @@ function land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   $result = db_query($sql, $id, $game_user->id);
   $lo = db_fetch_object($result);
 
-
   // Nothing there?
-  if (empty($lo)) return FALSE;
+  if (empty($lo)) {
+    return FALSE;
+  }
 
   // Not enough?
-  if ($lo->quantity < $quantity) return FALSE;
+  if ($lo->quantity < $quantity) {
+    return FALSE;
+  }
 
   // Using all?  Remove entry.
   if ($lo->quantity == $quantity) {
-
     $sql = 'delete from land_ownership
       where fkey_users_id = %d and fkey_land_id = %d;';
-    $result = db_query($sql, $game_user->id, $id);
-
+    db_query($sql, $game_user->id, $id);
   }
   else {
-
     $sql = 'update land_ownership set quantity = quantity - %d
       where fkey_land_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $quantity, $id, $game_user->id);
-
+    db_query($sql, $quantity, $id, $game_user->id);
   }
 
-  // Process income.
-  $sql = 'update users set income = income - %d where id = %d;';
-  $result = db_query($sql, ($land->payout * $quantity), $game_user->id);
+  // Reduce income, increase money.
+  $sql = 'update users set income = income - %d, money = money + %d where id = %d;';
+  db_query($sql, ($land->payout * $quantity), $ex_price, $game_user->id);
   $game_user->income -= ($land->payout * $quantity);
 
   // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
-
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
       $game_user->id);
-
   }
 
-  // Receive pay for the land, if needed.
-  $sql = 'update users set money = money + %d
-    where id = %d;';
-  $result = db_query($sql, $ex_price, $game_user->id);
-
-  game_recalc_income($game_user);
-
   // Reprocess user object.
+  game_recalc_income($game_user);
   $game_user = $fetch_user();
   return TRUE;
-
 }
 
 function competency_gain($game_user, $id, $level = 1) {
