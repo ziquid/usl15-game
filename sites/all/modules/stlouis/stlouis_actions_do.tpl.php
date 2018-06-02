@@ -379,7 +379,6 @@ firep($eq);
 //firep($eq->name . ' wore out!');
       game_equipment_use($game_user, $eq->id, 1);
       // FIXME: do this before _stlouis_header so that upkeep is accurate.
-      }
 
       $stuff = strtolower($eq->name);
       if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
