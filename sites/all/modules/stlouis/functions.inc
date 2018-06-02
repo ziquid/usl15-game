@@ -2814,7 +2814,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
         'You have increased your competency &quot;<span class="initial-caps">'
       . $item->name . '</span>&quot;!&nbsp; You are now '
       . $comp_after->level_name_2 . ' and have gained '
-      . $comp_after->level . ' luck.');
+      . $comp_after->level . ' luck.', 'comp');
 
       $sql = 'update users set luck = luck + %d where id = %d;';
       db_query($sql, $comp_after->level, $game_user->id);
@@ -2830,7 +2830,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     db_query($sql, $game_user->id, $id);
     game_send_user_message(1, $game_user->id, 1,
       'You have started learning a new competency, &quot;<span class="initial-caps">'
-    . $item->name . '</span>&quot;!');
+    . $item->name . '</span>&quot;!', 'comp');
   }
 
   return TRUE;
@@ -3676,10 +3676,10 @@ firep($eq->name . ' wore out!');
   return [$lost, $failure_reason, $eo->quantity];
 }
 
-function game_send_user_message($from, $to, $private = 0, $message) {
-  $sql = 'insert into user_messages (fkey_users_from_id,
-    fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
-  db_query($sql, $from, $to, $private, $message);
+function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
+  $sql = 'insert into user_messages (subtype, fkey_users_from_id,
+    fkey_users_to_id, private, message) values ("%s", %d, %d, %d, "%s");';
+  db_query($sql, $subtype, $from, $to, $private, $message);
 }
 
 function game_zombie_name() {

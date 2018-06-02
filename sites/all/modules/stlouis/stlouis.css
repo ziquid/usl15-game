@@ -304,6 +304,23 @@ li {
   background-color: #111811 !important;
 }
 
+.news .message-body.user.user-png {
+  font-weight: bold;
+}
+
+.news .message-body.user.user-comp {
+  color: #85851f
+}
+
+.news .message-body.mayor.mayor-system {
+  color: green;
+  font-style: italic;
+}
+
+.news .message-body.mayor.mayor-mayor {
+  color: green;
+}
+
 .news .button, .news button {
   background-color: #0e5221 !important;
   border: 1px solid #0e5221 !important;

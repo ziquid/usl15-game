@@ -696,9 +696,8 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   $target, &$can_do_again) {
 
   global $game, $phone_id;
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
   $can_do_again = FALSE;
   $target_id = $_GET['target'];
 
@@ -783,11 +782,9 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   }
 
   // Add message to user.
-  $sql = 'insert into user_messages (fkey_users_from_id,
-    fkey_users_to_id, message) values (%d, %d, "%s");';
-  $message = $ep_name . ' ' . $game_user->username . ' has declared you
-    persona non grata.  You have been kicked out of ' . $location . '.';
-  db_query($sql, $game_user->id, $target_id, $message);
+  game_send_user_message($game_user->id, $target_id, 0,
+    $ep_name . ' ' . $game_user->username . ' has declared you
+    persona non grata.  You have been kicked out of ' . $location . '.', 'png');
 
   // Move user, empty Action.
   $sql = 'update users set fkey_neighborhoods_id =
@@ -804,7 +801,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Set major_action counter for three minutes.
   if ($ep_type > 1) {
-    $set_value = '_' . arg(0) . '_set_value';
+    $set_value = '_' . $game . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 180);
   }
 
@@ -817,16 +814,11 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $location = $game_user->location;
 
-  $sql = "select name from neighborhoods where id = '%d';";
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $data = db_fetch_object($result);
-  $location = $data->name;
-
-  $data = array();
+  $data = [];
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,

@@ -518,7 +518,7 @@ $sql = '
   clans.acronym as clan_acronym,
   user_messages.private,
   "user" as type,
-  "" as subtype
+  subtype
   from user_messages
   left join users on user_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -723,12 +723,13 @@ foreach ($data as $item) {
 
   if ($item->private) {
     $private_css = 'private';
+    $private_text = '(private)';
   }
   else {
-    $private_css = '';
+    $private_css = $private_text = '';
   }
 
-  $private_css .= ' ' . $item->type . ' ' . $item->subtype;
+  $private_css .= ' ' . $item->type . ' ' . $item->type . '-' . $item->subtype;
 
   if (empty($item->username)) {
     $username = '';
@@ -750,7 +751,7 @@ foreach ($data as $item) {
   echo <<< EOF
 <div class="news-item $item->type">
 <div class="dateline">
-  $display_time $username
+  $display_time $username $private_text
 </div>
 <div class="message-body $private_css">
   <p>$item->message</p>$reply
