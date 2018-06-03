@@ -31,7 +31,7 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      Added three new income items
+      Added three new income items, level 95
     </li>
   </ul>
 
