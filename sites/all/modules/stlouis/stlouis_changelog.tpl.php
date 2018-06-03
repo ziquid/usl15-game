@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 3, 2018
+  </div>
+  <ul>
+    <li>
+      Added three new income items
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 2, 2018
   </div>
   <ul>
