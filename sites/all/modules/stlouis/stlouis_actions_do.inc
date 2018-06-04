@@ -1183,6 +1183,25 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   return TRUE;
 }
 
+function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $target, &$can_do_again) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $sql = 'update users set energy = energy + 500 where id = %d;';
+  db_query($sql, $game_user->id);
+  $game_user->energy += 500;
+
+  if ($game_user->energy > $game_user->energy_max) {
+    competency_gain($game_user, 'satiated');
+  }
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('You have eaten and feel more energetic') . '</div>';
+
+  return TRUE;
+}
+
 function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
