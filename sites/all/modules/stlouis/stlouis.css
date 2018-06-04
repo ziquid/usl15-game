@@ -1,5 +1,5 @@
 body {
-  background: url(/sites/default/files/images/background.jpg) repeat top left;
+  background: black url(/sites/default/files/images/background.jpg) repeat top left;
 }
 
 body.party-unaffiliated {
