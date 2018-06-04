@@ -1,5 +1,45 @@
 body {
-  background: #000000;
+  background: url(/sites/default/files/images/background.jpg) repeat top left;
+}
+
+body.party-unaffiliated {
+  background-image: url(/sites/default/files/images/background_unaffiliated.jpg);
+}
+
+body.party-anarchists {
+  background-image: url(/sites/default/files/images/background_anarchists.jpg);
+}
+
+body.party-docs {
+  background-image: url(/sites/default/files/images/background_docs.jpg);
+}
+
+body.party-economic {
+  background-image: url(/sites/default/files/images/background_economic.jpg);
+}
+
+body.party-faith {
+  background-image: url(/sites/default/files/images/background_faith.jpg);
+}
+
+body.party-guns {
+  background-image: url(/sites/default/files/images/background_guns.jpg);
+}
+
+body.party-mafia {
+  background-image: url(/sites/default/files/images/background_mafia.jpg);
+}
+
+body.party-intelligentsia {
+  background-image: url(/sites/default/files/images/background_intelligentsia.jpg);
+}
+
+body.party-workers {
+  background-image: url(/sites/default/files/images/background_workers.jpg);
+}
+
+body.party-toxicorp {
+  background-image: url(/sites/default/files/images/background_toxicorp.jpg);
 }
 
 a, a:link, a:visited, a:hover, a:active {

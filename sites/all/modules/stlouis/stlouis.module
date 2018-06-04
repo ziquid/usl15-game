@@ -307,6 +307,7 @@ function stlouis_init() {
     $module_path = drupal_get_path('module', $game);
     drupal_add_js($module_path . '/isotope.pkgd.min.js');
     drupal_add_js($module_path . '/js.cookie.js');
+    drupal_add_js($module_path . '/' . $game . '.js');
 
     $custom_theme = 'cdc_games';
     drupal_add_css($module_path . '/' . $game . '.css');
@@ -328,39 +329,26 @@ function stlouis_init() {
     if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
 
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
-
     }
-
-
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
 
       // Playbook CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
-
     }
-
-
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
 
       // IPad CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
-
     }
-
-
     else if (substr(arg(2), 0, 4) == 'nkc ') {
 
       // Nook css.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
-
     }
-
-
     else if (substr(arg(2), 0, 8) == 'facebook') {
 
       // Facebook.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
-
     }
     else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
 
@@ -1381,7 +1369,7 @@ function _stlouis_remove_value($fkey_users_id, $key) {
 function _stlouis_get_phoneid() {
 
   if ((substr(arg(2), 0, 3) == 'fb=') || arg(2) == '') {
-    mail('joseph@cheek.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . arg(2),
+    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . arg(2),
       'Referrer is ' . $_SERVER['HTTP_REFERER']);
     echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . arg(2) .
       ' from <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
@@ -1645,7 +1633,8 @@ function _stlouis_fetch_user() {
   $sql = 'select users.*, elected_positions.energy_bonus as ep_energy_bonus,
     elected_positions.can_broadcast_to_party, clan_members.fkey_clans_id,
     elected_positions.max_level as max_level_for_office,
-    CURRENT_TIMESTAMP as time_now, neighborhoods.name as location
+    CURRENT_TIMESTAMP as time_now, neighborhoods.name as location,
+    `values`.party_icon
 
     from users
 
@@ -1660,9 +1649,13 @@ function _stlouis_fetch_user() {
     LEFT OUTER JOIN neighborhoods
     ON users.fkey_neighborhoods_id = neighborhoods.id
 
+    LEFT OUTER JOIN `values`
+    on users.fkey_values_id = `values`.id
+    
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
+  drupal_add_js(['stlouis' => ['party_icon' => $game_user->party_icon]], 'setting');
 
   $sql = 'select sum(equipment.energy_increase * equipment_ownership.quantity)
     as energy_increase from equipment
@@ -1688,7 +1681,7 @@ function _stlouis_fetch_user() {
   // Staff.
   $st = db_fetch_object($result);
   $game_user->st_energy_increase = $st->energy_increase;
-  firep($game_user);
+  firep($game_user, 'game_user at fetch_user');
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
