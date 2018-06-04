@@ -51,32 +51,33 @@ li {
 }
 
 .header {
-  background: url(/sites/default/files/images/stlouis_header_bg.jpg) !important;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.35) !important;
 }
 
-.header.hood1 {
-  background: url(/sites/default/files/images/stlouis_header_bg_1.jpg) !important;
-}
+/*.header.hood1 {*/
+  /*background: url(/sites/default/files/images/stlouis_header_bg_1.jpg) !important;*/
+/*}*/
 
-.header.hood2 {
-  background: url(/sites/default/files/images/stlouis_header_bg_2.jpg) !important;
-}
+/*.header.hood2 {*/
+  /*background: url(/sites/default/files/images/stlouis_header_bg_2.jpg) !important;*/
+/*}*/
 
-.header.hood3 {
-  background: url(/sites/default/files/images/stlouis_header_bg_3.jpg) !important;
-}
+/*.header.hood3 {*/
+  /*background: url(/sites/default/files/images/stlouis_header_bg_3.jpg) !important;*/
+/*}*/
 
-.header.hood4 {
-	background: url(/sites/default/files/images/stlouis_header_bg_4.jpg) !important;
-}
+/*.header.hood4 {*/
+	/*background: url(/sites/default/files/images/stlouis_header_bg_4.jpg) !important;*/
+/*}*/
 
-.header.hood5 {
-  background: url(/sites/default/files/images/stlouis_header_bg_5.jpg) !important;
-}
+/*.header.hood5 {*/
+  /*background: url(/sites/default/files/images/stlouis_header_bg_5.jpg) !important;*/
+/*}*/
 
-.header.hood6 {
-  background: url(/sites/default/files/images/stlouis_header_bg_6.jpg) !important;
-}
+/*.header.hood6 {*/
+  /*background: url(/sites/default/files/images/stlouis_header_bg_6.jpg) !important;*/
+/*}*/
 
 .header .experience {
   border-bottom: 1px solid #333833 !important;
