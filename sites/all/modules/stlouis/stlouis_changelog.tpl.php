@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 4, 2018
+  </div>
+  <ul>
+    <li>
+      New bg images
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 3, 2018
   </div>
   <ul>
