@@ -13,8 +13,7 @@
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
 
-// save the message, if any
-    
+    // Save the message, if any.
     $message = check_plain($_GET['message']);
 firep($message);
 
@@ -32,14 +31,14 @@ firep($message);
     drupal_goto($game . '/home/' . $arg2);
 
   if (!empty($message)) {
-    
+
     $sql = 'insert into clan_messages (fkey_users_from_id,
       fkey_neighborhoods_id, message, is_announcement)
       values (%d, %d, "%s", 1);';
     $result = db_query($sql, $game_user->id, $clan_id, $message);
-    
+
   }
-    
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/clan_list/$arg2/$clan_id" class="button">Clan List</a>
@@ -59,7 +58,7 @@ firep($message);
   </form>
 </div>
 EOF;
-   
+
   echo <<< EOF
 <div class="news">
   <div class="messages-title">
@@ -72,27 +71,27 @@ EOF;
     clan_members.is_clan_leader,
     clans.acronym as clan_acronym, clans.name as clan_name,
     clans.rules as clan_rules
-    
-    from clan_messages 
-    
+
+    from clan_messages
+
     left join users on clan_messages.fkey_users_from_id = users.id
-    
+
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
-    
+
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    
+
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       clan_messages.fkey_users_from_id
-    
+
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-    
+
     where clan_messages.fkey_neighborhoods_id = %d
       AND clan_messages.is_announcement = 1
     order by id DESC
     LIMIT 50;';
-  
+
   $result = db_query($sql, $clan_id);
   $msg_shown = FALSE;
 
@@ -106,10 +105,10 @@ firep($item->id);
 
   if (!empty($item->clan_acronym))
     $clan_acronym = "($item->clan_acronym)";
-    
+
   if ($item->is_clan_leader)
     $clan_acronym .= '*';
-    
+
     echo <<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
@@ -125,7 +124,7 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
 
   db_set_active('default');

@@ -65,7 +65,7 @@ EOF;
 firep('$isdupusername = ' . $isdupusername);
   }
 
-// if they have chosen a username and it's not a dupe
+  // If they have chosen a username and it's not a dupe.
   if ($username != '' && !$isdupusername) {
     $sql = 'update users set username = "%s" where id = %d;';
     $result = db_query($sql, $username, $game_user->id);
@@ -76,11 +76,12 @@ firep('$isdupusername = ' . $isdupusername);
       drupal_goto($game . '/debates/' . $arg2);
 
     }
-    else { // changing existing name
+    else {
 
+      // Changing existing name.
       if ($game_user->username != $username) {
-// only do this if they chose something new
 
+        // Only do this if they chose something new.
         $message = "I've changed my name from <em>$game_user->username</em> to
           <em>$username</em>.&nbsp; Please call me <em>$username</em> from now
           on.";
@@ -98,7 +99,9 @@ firep('$isdupusername = ' . $isdupusername);
     }
 
   }
-  else { // haven't chosen a username on this screen, or chose a duplicate
+  else {
+
+    // Haven't chosen a username on this screen, or chose a duplicate.
 
     // Set an error message if a dup.
     if ($isdupusername) {
@@ -121,7 +124,8 @@ EOF;
   }
   else {
 
-    $fetch_header($game_user); // allow them to navigate out of this
+    // Allow them to navigate out of this.
+    $fetch_header($game_user);
     $quote = "Hello, <em>$game_user->username</em>!&nbsp; What would you like
       your new name to be?";
 
