@@ -74,8 +74,6 @@ ob_end_clean();
 
   // Paypal.
   if (arg(3) == '30') $luck = 30;
-
-  // Paypal.
   if (arg(3) == '35') $luck = 35;
 
   // Google.
@@ -86,11 +84,7 @@ ob_end_clean();
 
   // Apple.
   if (arg(3) == 'com.ziquid.uslce.luck.35') $luck = 35;
-
-  // Apple.
   if (arg(3) == 'com.ziquid.celestialglory.luck.35') $luck = 35;
-
-  // Apple.
   if (arg(3) == 'com.ziquid.celestial_glory.luck.35') $luck = 35;
 
   // Blackberry.
@@ -98,8 +92,6 @@ ob_end_clean();
 
   // Paypal.
   if (arg(3) == '130') $luck = 130;
-
-  // Paypal.
   if (arg(3) == '150') $luck = 150;
 
   // Google.
@@ -107,11 +99,7 @@ ob_end_clean();
 
   // Apple.
   if (arg(3) == 'com.ziquid.uslce.luck.150') $luck = 150;
-
-  // Apple.
   if (arg(3) == 'com.ziquid.celestialglory.luck.150') $luck = 150;
-
-  // Apple.
   if (arg(3) == 'com.ziquid.celestial_glory.luck.150') $luck = 150;
 
   // Paypal.
@@ -132,13 +120,13 @@ ob_end_clean();
     where id = %d;';
   $result = db_query($sql, $luck, $game_user->id);
 
-  $sql = 'insert into purchases (fkey_users_id, purchase)
-    values (%d, "%s");';
+  $sql = 'insert into purchases (fkey_users_id, amount_now, amount_purchased, purchase)
+    values (%d, %d, %d, "%s");';
   $msg = 'User ' . $game_user->username . ' purchased ' . $luck .
     ' Luck (currently ' . $game_user->luck . ') at URL ' .
     $_SERVER['REQUEST_URI'] . ' (IP Address ' . $_SERVER['REMOTE_ADDR']
     . ')';
-  $result = db_query($sql, $game_user->id, $msg);
+  $result = db_query($sql, $game_user->id, $game_user->luck, $luck, $msg);
 
   mail('joseph@ziquid.com', $game . ' Luck purchase', $msg);
 

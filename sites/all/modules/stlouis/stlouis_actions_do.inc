@@ -1171,7 +1171,16 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 
   $sql = 'update users set energy = energy + 30 where id = %d;';
   db_query($sql, $game_user->id);
-  $game_user->energy += 30;
+
+  // Start the energy clock, if needed.
+  if ($game_user->energy == $game_user->energy_max) {
+    $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+      $game_user->id);
+  }
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
 
   if ($game_user->energy > $game_user->energy_max) {
     competency_gain($game_user, 'satiated');
@@ -1190,14 +1199,51 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
 
   $sql = 'update users set energy = energy + 500 where id = %d;';
   db_query($sql, $game_user->id);
-  $game_user->energy += 500;
+
+  // Start the energy clock, if needed.
+  if ($game_user->energy == $game_user->energy_max) {
+    $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+      $game_user->id);
+  }
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
 
   if ($game_user->energy > $game_user->energy_max) {
     competency_gain($game_user, 'satiated');
   }
 
   $outcome_reason .= '<div class="action-effect">' .
-    t('You have eaten and feel more energetic') . '</div>';
+    t('You have drunk and feel more energetic') . '</div>';
+
+  return TRUE;
+}
+
+function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$can_do_again) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $sql = 'update users set actions = actions + 50 where id = %d;';
+  db_query($sql, $game_user->id);
+
+  // Start the actions clock, if needed.
+  if ($game_user->actions == $game_user->actions_max) {
+    $sql = 'update users set actions_next_gain = "%s" where id = %d;';
+    db_query($sql, date('Y-m-d H:i:s', time() + 180),
+      $game_user->id);
+  }
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
+
+//  if ($game_user->actions > $game_user->actions_max) {
+//    competency_gain($game_user, 'satiated');
+//  }
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('Wowzers!') . '</div>';
 
   return TRUE;
 }

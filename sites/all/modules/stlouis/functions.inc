@@ -2859,7 +2859,7 @@ function NO_action_use(&$game_user, $quantity = 1) {
 
   $sql = 'update users set actions = actions - %d
     where id = %d;';
-  $result = db_query($sql, $quantity, $game_user->id);
+  db_query($sql, $quantity, $game_user->id);
 
   // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {

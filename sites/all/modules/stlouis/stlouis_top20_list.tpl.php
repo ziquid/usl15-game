@@ -9,14 +9,9 @@
  */
 
 global $game, $phone_id;
-
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$arg2 = check_plain(arg(2));
 $show_where = check_plain($_GET['where']);
 $show_what = check_plain($_GET['what']);
 
@@ -34,8 +29,6 @@ if ($debate == 'Box') {
 else {
   $title = 'Top 20 Players';
 }
-
-game_show_elections_menu($game_user);
 
 $data = [];
 
@@ -467,6 +460,7 @@ else { // normal
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
+    income, expenses, users.money,
     `values`.party_title, `values`.party_icon,
     `values`.name, users.id, users.fkey_neighborhoods_id,
     elected_positions.name as ep_name,
@@ -515,6 +509,39 @@ else { // normal
       $sql2_limit = $game_user->debates_won;
       break;
 
+    case 'initiative':
+      break;
+
+    case 'endurance':
+      break;
+
+    case 'elocution':
+      break;
+
+    case 'income':
+      $subtitle = $land;
+      $sql .= '
+        ORDER BY (users.income - users.expenses) DESC
+      ';
+      $sql2_what = '(users.income - users.expenses)';
+      $sql2_limit = $game_user->income - $game_user->expenses;
+      break;
+
+    case 'cash':
+      $subtitle = 'Money on hand';
+      $sql .= '
+        ORDER BY users.money DESC
+      ';
+      $sql2_what = 'money';
+      $sql2_limit = $game_user->money;
+      break;
+
+    case 'max_energy':
+    case 'max_actions':
+    case 'init_aides':
+    case 'end_aides':
+    case 'eloc_aides':
+
   }
 
   $result = db_query($sql . ' LIMIT 20;');
@@ -552,11 +579,16 @@ $what = [
   'endurance' => $endurance . ' (2 Actions)',
   'elocution' => $elocution . ' (2 Actions)',
   'income' => $land . ' (3 Actions)',
-  'cash' => $land . ' (3 Actions)',
+  'cash' => 'Cash (3 Actions)',
+  'max_energy' => 'Max ' . $game_text['energy'] . ' (3 Actions)',
+  'max_actions' => 'Max Actions (3 Actions)',
   'init_aides' => 'Init Aides (5 Actions)',
   'end_aides' => 'End Aides (5 Actions)',
   'eloc_aides' => 'Eloc Aides (5 Actions)',
 ];
+
+// ------ VIEW ------
+game_show_elections_menu($game_user);
 
 echo <<< EOF
 <form action="/$game/top20/$arg2">
@@ -659,6 +691,55 @@ firep($item, 'rank ' . $rank);
     case 'debates':
       $data_point = number_format($item->debates_won) . " ${debate}s&nbsp;won";
       break;
+
+    case 'initiative':
+      break;
+
+    case 'endurance':
+      break;
+
+    case 'elocution':
+      break;
+
+    case 'income':
+      $data_point = $item->income - $item->expenses;
+
+      if (!isset($data_point_standard)) {
+        $data_point_standard = $data_point;
+      }
+
+      $percent = $data_point / $data_point_standard * 100;
+
+      if ($game_user->meta == 'admin') {
+        $data_point = number_format($data_point) . ' (' . sprintf('%02.02f', $percent) . '%)';
+      }
+      else {
+        $data_point = sprintf('%02.02f', $percent) . '%';
+      }
+      break;
+
+    case 'cash':
+      $data_point = $item->money;
+
+      if (!isset($data_point_standard)) {
+        $data_point_standard = $data_point;
+      }
+
+      $percent = $data_point / $data_point_standard * 100;
+
+      if ($game_user->meta == 'admin') {
+        $data_point = number_format($data_point) . ' (' . sprintf('%02.02f', $percent) . '%)';
+      }
+      else {
+        $data_point = sprintf('%02.02f', $percent) . '%';
+      }
+      break;
+
+    case 'max_energy':
+    case 'max_actions':
+    case 'init_aides':
+    case 'end_aides':
+    case 'eloc_aides':
 
   }
 
