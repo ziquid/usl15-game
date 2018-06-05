@@ -27,14 +27,30 @@ $check_authkey($game_user);
 
 // Check for authorized client.
 if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
-  ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') && // paypal IPN
-  ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') && // paypal IPN
-  ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') && // paypal IPN
-  ($user->roles[4] != 'web game access') && // web users
-  (substr(arg(2), 0, 3) != 'fb=') && // identified facebook user
-  (substr(arg(2), 0, 3) != 'ai-') && // AI player
-  (arg(2) != 'facebook') && // unidentified facebook user
-  (substr(arg(2), 0, 3) != 'ms=') // unidentified MS user
+
+  // Paypal IPN.
+  ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&
+
+  // Paypal IPN.
+  ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') &&
+
+  // Paypal IPN.
+  ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') &&
+
+  // Web users.
+  ($user->roles[4] != 'web game access') &&
+
+  // Identified facebook user.
+  (substr(arg(2), 0, 3) != 'fb=') &&
+
+  // AI player.
+  (substr(arg(2), 0, 3) != 'ai-') &&
+
+  // Unidentified facebook user.
+  (arg(2) != 'facebook') &&
+
+  // Unidentified MS user.
+  (substr(arg(2), 0, 3) != 'ms=')
 ) {
   echo t('This game must be accessed through an authorized client.  ');
   echo t('Please e-mail zipport@ziquid.com if you have any questions.');

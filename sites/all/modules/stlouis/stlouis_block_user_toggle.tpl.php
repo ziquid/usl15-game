@@ -58,7 +58,9 @@ if (empty($block)) {
 can no longer send you messages</div>
 EOF;
 }
-else { // delete block
+else {
+
+  // Delete block.
   $sql = 'delete from message_blocks
     where fkey_blocked_users_id = %d
     and fkey_blocking_users_id = %d;';

@@ -9,14 +9,14 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-// If they have chosen a clan.
+  // If they have chosen a clan.
   if ($clan_id != 0) {
 
     // No change?  Just show stats.
     if ($clan_id == $game_user->fkey_values_id)
       drupal_goto($game . '/user/' . $arg2);
 
-// changing clans?  dock experience, bring level down to match
+    // Changing clans? Dock experience, bring level down to match.
     $new_experience = floor($game_user->experience * 0.75);
     if ($new_experience < 75) $new_experience = 75;
 
@@ -30,7 +30,9 @@
       on quest_group_completion.fkey_quest_groups_id = quests.group
       WHERE fkey_users_id = %d and quests.active = 1;';
     $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result); // limited to 1 in db
+
+    // Limited to 1 in db.
+    $item = db_fetch_object($result);
 
     $new_skill_points = ($new_level * 4) + $item->bonus - 20;
 
@@ -38,7 +40,7 @@
     $result = db_query($sql, $clan_id);
     $item = db_fetch_object($result);
 
-// update his/her user entry
+    // Update his/her user entry.
     $sql = 'update users set fkey_neighborhoods_id = %d, fkey_values_id = %d,
       `values` = "%s", level = %d, experience = %d, energy_max = 200,
       skill_points = %d, initiative = 1, endurance = 1, actions = 3,
@@ -56,11 +58,11 @@
 
     }
 
-// also delete any offices s/he held
+    // Also delete any offices s/he held.
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
 
-// and any clan memberships s/he had (disband the clan if s/he was the leader)
+    // And any clan memberships s/he had (disband the clan if s/he was the leader).
     $sql = 'select * from clan_members where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
     $item = db_fetch_object($result);
@@ -83,20 +85,20 @@
 
     }
 
-// add 24-hour waiting period on major actions
+    // Add 24-hour waiting period on major actions.
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 86400);
 
-    // First time choosing?  Go to debates.
+    // First time choosing? Go to debates.
     if ($game_user->fkey_values_id == 0)
       drupal_goto($game . '/debates/' . $arg2);
 
-// otherwise show your character profile
+    // Otherwise show your character profile.
     drupal_goto($game . '/user/' . $arg2);
 
   }
 
-// otherwise they have not chosen a clan or are rechoosing one
+  // Otherwise they have not chosen a clan or are rechoosing one.
 
   // New clan.
   if ($game_user->level <= 6) {
