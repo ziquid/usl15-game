@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 5, 2018
+  </div>
+  <ul>
+    <li>
+      A new aide, the Socialite, will tell you if anyone is gossiping about you.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 4, 2018
   </div>
   <ul>
