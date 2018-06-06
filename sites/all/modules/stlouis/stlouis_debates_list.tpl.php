@@ -10,7 +10,7 @@
   $fetch_header($game_user);
   $arg2 = check_plain(arg(2));
 
-// do AI moves from this page!!!
+  // Do AI moves from this page!!!
   include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
   ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
     _move_ai();
@@ -28,8 +28,8 @@
 EOF;
 
   if (!$game_user->seen_neighborhood_quests) {
-// intro neighborhood quests == debates, if they haven't been shown
 
+    // Intro neighborhood quests == debates, if they haven't been shown.
     if ($game == 'celestial_glory') {
 
       echo <<< EOF
@@ -129,7 +129,8 @@ EOF;
     date('Y-m-d H:i:s', time() - $zombie_debate_wait),
     $game_user->level - 15,
     $game_user->level + 15, $game_user->experience);
-// jwc flag day - make debates much more active
+
+  // Jwc flag day - make debates much more active.
   $count = 12;
   while ($count-- && $item = db_fetch_object($result)) $data[] = $item;
 firep(db_affected_rows(), 'rows affected');

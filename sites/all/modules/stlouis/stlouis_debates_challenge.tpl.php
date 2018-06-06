@@ -93,8 +93,8 @@ firep($item);
     (time() - strtotime($item->debates_last_time)) <= $debate_time) ||
     ($item->meta == 'zombie' &&
     (time() - strtotime($item->debates_last_time)) <= $zombie_debate_wait)) {
-// not long enough
 
+    // Not long enough.
     $fetch_header($game_user);
 
     echo "<div class=\"title\">$title</div>";
@@ -116,8 +116,8 @@ firep($item);
   }
 
 /*  if ($game_user->experience > ($item->experience * 2)) {
-// you cannot challenge someone if you have more than twice their influence
 
+    // You cannot challenge someone if you have more than twice their influence.
     $fetch_header($game_user);
 
     echo "<div class=\"title\">$title</div>";
@@ -134,9 +134,9 @@ firep($item);
 
   }*/
 
-// otherwise, we need to apply a formula to get votes
+  // Otherwise, we need to apply a formula to get votes.
 
-// ex formulas
+  // Ex formulas.
   $sql = 'SELECT sum(equipment.elocution_bonus * equipment_ownership.quantity)
     as elocution from equipment
 
@@ -263,7 +263,7 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
       $gain_extra = '';
     }
 
-// start the actions clock if needed
+    // Start the actions clock if needed.
     if ($game_user->actions == $game_user->actions_max) {
 
        $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -309,8 +309,8 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
 
       if ($game_user->debates_won >= ($game_user->level * 100)
       || $phone_id == 'abc123') {
-// beaten by super debater... evolve
 
+        // Beaten by super debater... evolve.
         $sql = 'select fkey_clans_id from clan_members
           where fkey_users_id = %d;';
         $result = db_query($sql, $game_user->id);
@@ -321,8 +321,8 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
         $clan_zombie = db_fetch_object($result);
 
         if ($item->fkey_values_id != $game_user->fkey_values_id) {
-// first -- join party
 
+          // First -- join party.
           $sql = 'update users set fkey_values_id = %d, `values` = "%s"
             where id = %d;';
           $result = db_query($sql, $game_user->fkey_values_id,
@@ -346,8 +346,8 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
         } else if
           (($clan_player->fkey_clans_id != $clan_zombie->fkey_clans_id) &&
           ($clan_player->fkey_clans_id > 0)) {
-// second -- join clan
 
+          // Second -- join clan.
           $sql = 'delete from clan_members where fkey_users_id = %d;';
           $result = db_query($sql, $item->id);
 
@@ -368,13 +368,14 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
           . " was beaten by super debater $game_user->username"
           . " and has switched to $clan_name->name!", $slack_channel);
 
-// already party and clan -- move them!
+        // Already party and clan -- move them!
         } else if
           ((($clan_player->fkey_clans_id == $clan_zombie->fkey_clans_id) &&
           ($clan_player->fkey_clans_id > 0) &&
           ($item->fkey_values_id == $game_user->fkey_values_id))
-          ) { // move them!
 
+          ) {
+          // Move them!
           $hoods = array();
           $sql = 'select id, name from neighborhoods
             where has_elections = 1
@@ -402,10 +403,11 @@ EOF;
 
         }
 
-// not beaten by a super debater
+      // Not beaten by a super debater.
       }
-      else if ($item->debates_lost > 4) { // lost 5 debates
+      else if ($item->debates_lost > 4) {
 
+          // Lost 5 debates.
           $sql = 'delete from users where id = %d;';
           $result = db_query($sql, $item->id);
           $sql = 'delete from user_messages where fkey_from_users_id = %d
@@ -420,8 +422,9 @@ EOF;
           . " has five debate losses and has left!", $slack_channel);
 
       }
-      else { // not 5 losses yet
+      else {
 
+        // Not 5 losses yet.
         $points_to_add = ($item->debates_lost + 1) * 2;
 
         slack_send_message("Unconquered zombie $item->id ($item->username)"
@@ -545,14 +548,15 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
     }
 */ // flag day
   }
-  else { // you lost
+  else {
 
+    // You lost.
     competency_gain($item, 'defender');
 
     $experience_gained = mt_rand(floor($game_user->level / 3),
       ceil($game_user->level * 2 / 3));
-// the experience they gain is based on your level
 
+    // The experience they gain is based on your level.
     $sql = 'insert into challenge_messages
       (fkey_users_from_id, fkey_users_to_id, message)
       values (%d, %d, "%s");';
@@ -588,8 +592,7 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 
     }
 
-
-// start the actions clock if needed
+    // Start the actions clock if needed.
     if ($game_user->actions == $game_user->actions_max) {
 
        $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -643,7 +646,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
     }
 
 /*
-// flag day -- did they get a flag?
+
+    // Flag day -- did they get a flag?
     $sql = 'select * from equipment_ownership where fkey_users_id = %d
       and fkey_equipment_id = 23;';
     $result = db_query($sql, $item->id);
@@ -662,8 +666,7 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 */
   }
 
-// YOU USED
-
+  // YOU USED.
   echo '<div class="subtitle">
     <a href="/' . $game . '/debates/' . $arg2 . '">
       <img src="/sites/default/files/images/' . $game . '_continue.png"/>
@@ -715,8 +718,7 @@ EOF;
 
   }
 
-// OPPONENT USED
-
+  // OPPONENT USED.
   echo "</div><div class=\"subtitle\">$username used</div>
     <div class=\"debate-used-wrapper\">";
 
