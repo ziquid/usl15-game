@@ -153,7 +153,7 @@ function stlouis_cron() {
       FROM neighborhoods
       RIGHT JOIN users ON users.fkey_neighborhoods_id = neighborhoods.id
       JOIN elected_officials ON elected_officials.fkey_users_id = users.id
-      AND elected_officials.fkey_elected_positions_id =1
+      AND elected_officials.fkey_elected_positions_id = 1
     )
     ORDER BY RAND()
     LIMIT 1;';

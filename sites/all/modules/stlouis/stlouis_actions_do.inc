@@ -1114,7 +1114,6 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
         '</div><div class="action-effect">You do not have 10 extra Luck to give</div>';
 
       return FALSE;
-
     }
 
     if ($sure != 'yes') {
@@ -1196,6 +1195,7 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
+  $set_value = '_' . $game . '_set_value';
 
   $sql = 'update users set energy = energy + 500 where id = %d;';
   db_query($sql, $game_user->id);
@@ -1206,16 +1206,27 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
     db_query($sql, date('Y-m-d H:i:s', time() + 300),
       $game_user->id);
   }
+  $outcome_reason .= '<div class="action-effect">' .
+    t('You have drunk and feel more energetic') . '</div>';
 
-  // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user->energy += 500;
+  if ($game_user->energy > ($game_user->energy_max * 2)) {
+    $outcome_reason .= '<div class="action-effect">
+      But your heart is beating too fast!
+    </div>
+    <div class="action-effect">
+      You need to sit down for a few minutes.
+    </div>';
+
+    $set_value($game_user->id, 'next_major_action', time() + 180);
+  }
+  else {
+    $set_value($game_user->id, 'next_major_action', time() + 30);
+  }
 
   if ($game_user->energy > $game_user->energy_max) {
     competency_gain($game_user, 'satiated');
   }
-
-  $outcome_reason .= '<div class="action-effect">' .
-    t('You have drunk and feel more energetic') . '</div>';
 
   return TRUE;
 }
@@ -1224,8 +1235,23 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
+  $set_value = '_' . $game . '_set_value';
 
-  $sql = 'update users set actions = actions + 50 where id = %d;';
+  $outcome_reason .= '<div class="action-effect">' .
+    t('Wowzers!') . '</div>';
+
+  if ($game_user->energy < 500) {
+    $outcome_reason = '<div class="action-effect">' .
+      t('Low Blood Sugar!') .
+      '</div><div class="action-effect">You need to sit down for a few minutes.</div>';
+
+    $set_value($game_user->id, 'next_major_action', time() + 300);
+  }
+  else {
+    $set_value($game_user->id, 'next_major_action', time() + 60);
+  }
+
+  $sql = 'update users set actions = actions + 50, energy = energy - 500 where id = %d;';
   db_query($sql, $game_user->id);
 
   // Start the actions clock, if needed.
@@ -1235,15 +1261,12 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
       $game_user->id);
   }
 
-  // Reprocess user object.
-  $game_user = $fetch_user();
-
-//  if ($game_user->actions > $game_user->actions_max) {
-//    competency_gain($game_user, 'satiated');
-//  }
-
-  $outcome_reason .= '<div class="action-effect">' .
-    t('Wowzers!') . '</div>';
+  // Start the energy clock, if needed.
+  if ($game_user->energy == $game_user->energy_max) {
+    $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+      $game_user->id);
+  }
 
   return TRUE;
 }
@@ -1340,9 +1363,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
 }
 
 function _stlouis_action_plant_flowers_function(&$outcome_reason, $target, &$can_do_again) {
-
   global $game;
-
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
@@ -1611,15 +1632,14 @@ EOF;
   return TRUE;
 }
 
-  function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &$can_do_again) {
+function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
-  $fetch_user = '_' . arg(0) . '_fetch_user';
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
-  $action_id = arg(3);
   $msg_shown = FALSE;
 
-  $data = array();
+  $data = [];
   $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
       elected_positions.name as ep_name,
       clan_members.is_clan_leader,
@@ -1679,15 +1699,12 @@ EOF;
 EOF;
 
     $msg_shown = TRUE;
-
   }
 
   if (!$msg_shown) $outcome_reason .= 'No rumors found!';
 
   $outcome_reason .= '</div>';
-
   return TRUE;
-
 }
 
   function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
@@ -1773,7 +1790,6 @@ EOF;
     return TRUE;
 
   }
-
 
   function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
 
@@ -1987,7 +2003,6 @@ EOF;
     return TRUE;
 
   }
-
 
   function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
     $target, &$can_do_again) {
@@ -2211,16 +2226,6 @@ EOF;
 
   }
 
-
-  function _celestial_glory_action_disinherit_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    return _stlouis_action_expel_a_party_member_function($outcome_reason,
-      $target, $can_do_again);
-
-  }
-
-
   function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
     &$can_do_again) {
 
@@ -2307,7 +2312,6 @@ EOF;
     return TRUE;
 
   }
-
 
 function _stlouis_action_get_challenge_results_function(&$outcome_reason, $target,
   &$can_do_again) {
@@ -2401,13 +2405,12 @@ EOF;
 
 function _stlouis_check_for_friendly_hood() {
   global $game, $phone_id;
-
-  if ($phone_id == 'abc123') {
-    return TRUE;
-  }
-
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
+
+  if ($game_user->meta == 'admin') {
+    return TRUE;
+  }
 
   $sql = 'SELECT fkey_values_id from elected_officials
     left join users on elected_officials.fkey_users_id = users.id
