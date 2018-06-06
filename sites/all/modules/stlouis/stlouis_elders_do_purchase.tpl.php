@@ -11,11 +11,13 @@ $game_user = $fetch_user();
 if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
   ($_SERVER['REMOTE_ADDR'] == '173.0.81.1') ||
   ($_SERVER['REMOTE_ADDR'] == '173.0.81.33') ||
-  ($_SERVER['REMOTE_ADDR'] == '173.0.82.126') || // <-- paypal sandbox
+
+  // <-- Paypal sandbox.
+  ($_SERVER['REMOTE_ADDR'] == '173.0.82.126') ||
   (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce')
     !== FALSE)) {
 
-  // iOS receipt data attached -- check it.
+  // IOS receipt data attached -- check it.
   if (arg(4) == 'withAppleReceipt') {
 
     $receipt_data = $_POST['receiptdata'];
@@ -60,8 +62,10 @@ ob_end_clean();
     }
 
     if (substr($response->receipt->bid, 0, 10) !== 'com.ziquid.') {
-// uhoh!  hack
-// FIXME -- debit karma
+
+      // Uhoh! Hack!
+
+      // FIXME -- debit karma.
       echo 'NO';
       exit;
     }

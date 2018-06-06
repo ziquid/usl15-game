@@ -121,11 +121,11 @@ EOF;
   }
 
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') !== FALSE) {
-// support for Google IAPs
 
+    // Support for Google IAPs.
     if (stripos($_SERVER['HTTP_USER_AGENT'], 'PlayBook') !== FALSE) {
-// BlackBerry with Android emulation
 
+      // BlackBerry with Android emulation.
       echo <<< EOF
 <div class="title">Purchase through BlackBerry Commerce</div>
 <div class="elders-menu big">
@@ -148,8 +148,9 @@ or purchase through PayPal
 EOF;
 
     }
-    else { // *real* Android with GoogleIAP
+    else {
 
+      // *Real* Android with GoogleIAP.
       echo <<< EOF
 <div class="title">Purchase through Google Checkout</div>
 <div class="elders-menu big">
@@ -420,8 +421,8 @@ EOF;
 
 /*
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') === FALSE) {
-// no support for Google IAPs
 
+    // No support for Google IAPs.
   	echo <<< EOF
   <div class="title">
 TESTING Google Checkout - Purchase <strong>320</strong> $luck for US $49.99
