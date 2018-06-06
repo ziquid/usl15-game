@@ -12,7 +12,8 @@ $arg2 = check_plain(arg(2));
 $get_value = '_' . $game . '_get_value';
 
 if (substr($phone_id, 0, 3) == 'ai-') {
-// useful for freshening stats
+
+  // Useful for freshening stats.
   echo "<!--\n<ai \"elders\"/>\n-->";
   db_set_active('default');
   return;
@@ -27,9 +28,10 @@ echo <<< EOF
 EOF;
 
 if ($game_user->level >= 6) {
-// only allow users to change parties if they can join one
 
-  // AT LEAST 10 LUCK.
+  // Only allow users to change parties if they can join one.
+
+  // AT LEAST 10 LUCK!
   if ($game_user->luck > 9) {
 
     echo <<< EOF
@@ -48,8 +50,9 @@ $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
   }
-  elseif ($game_user->luck > 4) { // AT LEAST 5 LUCK
+  elseif ($game_user->luck > 4) {
 
+    // AT LEAST 5 LUCK!
     echo <<< EOF
 <div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
 <div class="menu-option"><a href="/$game/choose_clan/$arg2/0">Join a
@@ -66,8 +69,8 @@ EOF;
 
   }
   elseif ($game_user->luck > 2) {
-// AT LEAST THREE LUCK
 
+    // AT LEAST THREE LUCK!
     echo <<< EOF
 <div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
 <div class="menu-option not-yet">Join a different political party (5&nbsp;$luck)</div>
@@ -82,8 +85,9 @@ $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
  }
- elseif ($game_user->luck > 0) { // AT LEAST ONE LUCK
+ elseif ($game_user->luck > 0) {
 
+    // AT LEAST ONE LUCK!
     echo <<< EOF
 <div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
 <div class="menu-option not-yet">Join a different political party (5&nbsp;$luck)</div>
@@ -97,8 +101,9 @@ $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
   }
-  else { // NO LUCK!
+  else {
 
+    // NO LUCK!
     echo <<< EOF
 <div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
 <div class="menu-option not-yet">Join a different political party (5&nbsp;$luck)</div>
