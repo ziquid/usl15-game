@@ -374,9 +374,8 @@ firep('staff elocution bonus is ' . $elocution_bonus_st->elocution);
           ($clan_player->fkey_clans_id > 0) &&
           ($item->fkey_values_id == $game_user->fkey_values_id))
 
-          // Move them!
           ) {
-
+          // Move them!
           $hoods = array();
           $sql = 'select id, name from neighborhoods
             where has_elections = 1
