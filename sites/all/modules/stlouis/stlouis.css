@@ -1,5 +1,6 @@
 body {
   background: black url(/sites/default/files/images/background.jpg) repeat top left;
+  margin: 4px 0 40px;
 }
 
 body.party-unaffiliated {
@@ -51,7 +52,7 @@ li {
 }
 
 .header {
-  width: calc(100% - 2px);
+  width: calc(100% - 4px);
   background-color: rgba(0, 0, 0, 0.35) !important;
 }
 
