@@ -1633,7 +1633,6 @@ EOF;
 }
 
 function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &$can_do_again) {
-
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
@@ -1666,7 +1665,9 @@ function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &
 
   $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s',
     time() - 86400));
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   $outcome_reason .=<<< EOF
 <div class="news">
@@ -2226,92 +2227,89 @@ EOF;
 
   }
 
-  function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
-    &$can_do_again) {
+function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
+  &$can_do_again) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $msg_shown = FALSE;
+  $can_do_again = FALSE;
 
-    global $game, $phone_id;
+  $data = [];
+  $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    clans.acronym as clan_acronym
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+    from challenge_history
 
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $msg_shown = FALSE;
-    $can_do_again = FALSE;
+    left join users on challenge_history.fkey_to_users_id = users.id
 
-    $data = array();
-    $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
-      elected_positions.name as ep_name,
-      clan_members.is_clan_leader,
-      clans.acronym as clan_acronym
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = challenge_history.fkey_to_users_id
 
-      from challenge_history
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
 
-      left join users on challenge_history.fkey_to_users_id = users.id
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    challenge_history.fkey_to_users_id
 
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = challenge_history.fkey_to_users_id
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    where fkey_from_users_id = %d and challenge_history.type = "election"
+    order by timestamp DESC limit 1;';
 
-      LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-      challenge_history.fkey_to_users_id
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-      LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  $outcome_reason .=<<< EOF
+<div class="news">
+<div class="messages-title">
+  Detailed Election Results
+</div>
+EOF;
 
-      where fkey_from_users_id = %d and challenge_history.type = "election"
-      order by timestamp DESC limit 1;';
+  foreach ($data as $item) {
 
-    $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
-    while ($item = db_fetch_object($result)) $data[] = $item;
+    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $clan_acronym = '';
+
+    if (!empty($item->clan_acronym))
+      $clan_acronym = "($item->clan_acronym)";
+
+    if ($item->is_clan_leader)
+      $clan_acronym .= '*';
+
+    $desc_short = nl2br($item->desc_short);
+    $desc_long = nl2br($item->desc_long);
 
     $outcome_reason .=<<< EOF
-<div class="news">
-  <div class="messages-title">
-    Detailed Election Results
-  </div>
-EOF;
-
-    foreach ($data as $item) {
-
-      $display_time = _stlouis_format_date(strtotime($item->timestamp));
-      $clan_acronym = '';
-
-      if (!empty($item->clan_acronym))
-        $clan_acronym = "($item->clan_acronym)";
-
-      if ($item->is_clan_leader)
-        $clan_acronym .= '*';
-
-      $desc_short = nl2br($item->desc_short);
-      $desc_long = nl2br($item->desc_long);
-
-      $outcome_reason .=<<< EOF
 <div class="dateline">
-  $display_time to $item->ep_name $item->username $clan_acronym
+$display_time to $item->ep_name $item->username $clan_acronym
 </div>
 <div class="message-body">
-  <p>$desc_short</p>
-  <p>$desc_long</p>
-  <div class="message-reply-wrapper"><div class="message-reply">
-    <a href="/$game/user/$phone_id/$item->phone_id">View $item->ep_name
-      $item->username $clan_acronym</a>
-  </div></div>
+<p>$desc_short</p>
+<p>$desc_long</p>
+<div class="message-reply-wrapper"><div class="message-reply">
+  <a href="/$game/user/$phone_id/$item->phone_id">View $item->ep_name
+    $item->username $clan_acronym</a>
+</div></div>
 </div>
 EOF;
 
-      $msg_shown = TRUE;
-
-    }
-
-    if (!$msg_shown) $outcome_reason .= 'No elections found!';
-
-    $outcome_reason .= '</div>';
-
-    return TRUE;
-
+    $msg_shown = TRUE;
   }
+
+  if (!$msg_shown) {
+    $outcome_reason .= 'No elections found!';
+  }
+
+  $outcome_reason .= '</div>';
+
+  return TRUE;
+}
 
 function _stlouis_action_get_challenge_results_function(&$outcome_reason, $target,
   &$can_do_again) {
