@@ -1579,8 +1579,6 @@ function _stlouis_fetch_user() {
   $arg2 = check_plain(arg(2));
   db_set_active('game_' . $game);
 
-
-
   // Check for banned users -- phone_id.
   $sql = 'select * from user_blocks where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
@@ -1655,7 +1653,12 @@ function _stlouis_fetch_user() {
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
-  drupal_add_js(['stlouis' => ['party_icon' => $game_user->party_icon]], 'setting');
+  static $saved_party_icon = FALSE;
+
+  if (!$saved_party_icon) {
+    drupal_add_js(['stlouis' => ['party_icon' => $game_user->party_icon]], 'setting');
+    $saved_party_icon = TRUE;
+  }
 
   $sql = 'select sum(equipment.energy_increase * equipment_ownership.quantity)
     as energy_increase from equipment
