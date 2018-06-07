@@ -150,7 +150,10 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
   if ($item->fkey_neighborhoods_id != 0 &&
     $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
     $can_buy = FALSE;
-    $cant_buy_reason = '(Wrong ' . $game_text['hood_short'] . ')';
+    $sql = 'select name from neighborhoods where id = %d;';
+    $result = db_query($sql, $item->fkey_neighborhoods_id);
+    $hood = db_fetch_object($result);
+    $cant_buy_reason = '(' . $hood->name . ' only)';
   }
 
   if ($item->fkey_values_id != 0 &&

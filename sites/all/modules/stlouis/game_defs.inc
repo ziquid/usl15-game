@@ -170,6 +170,7 @@ $game_settings = [
 
 $game_text = [
   'actions_short' => 'Acts',
+  'agents' => 'Agents',
   'elocution_short' => 'Elo',
   'endurance_short' => 'End',
   'energy' => 'Energy',
