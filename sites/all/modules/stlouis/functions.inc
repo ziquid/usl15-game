@@ -1834,6 +1834,34 @@ EOF;
       . '/game_show_aides_menu_equip.js', 'module', 'footer');
   }
 
+  if ($staff_active && $game_user->level >= 25) {
+    echo <<< EOF
+<div class="news secondary">
+  <div class="news-buttons">
+    <button id="staff-staff">Staff</button>
+    <button id="staff-agent">Agents</button>
+    <button id="staff-all" class="active">All</button>
+    <button id="staff-ini">{$game_text['initiative_short']}</button>
+    <button id="staff-end">{$game_text['endurance_short']}</button>
+    <button id="staff-elo">{$game_text['elocution_short']}</button>
+  </div>
+</div>
+
+<div class="news secondary">
+  <div class="news-buttons">
+    <button id="staff-buy">Hireable</button>
+    <button id="staff-sal">Fireable</button>
+    <button id="staff-upk">Upkeep</button>
+    <button id="staff-eng">{$game_text['energy']}</button>
+    <button id="staff-act">{$game_text['actions_short']}</button>
+  </div>
+</div>
+EOF;
+
+    drupal_add_js(drupal_get_path('module', 'stlouis')
+      . '/game_show_aides_menu_staff.js', 'module', 'footer');
+  }
+
   _show_goal($game_user);
 
  if (!empty($title)) echo <<< EOF

@@ -31,6 +31,9 @@ db_set_active('default');
   </div>
   <ul>
     <li>
+      The cost and effectiveness of Planting Flower Seeds grows as your green thumb grows
+    </li>
+    <li>
       Added level 96
     </li>
   </ul>

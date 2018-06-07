@@ -35,7 +35,7 @@ game_show_ai_output($phone_id, $ai_output);
 
 // show next one
 if (!empty($next)) {
-  game_show_equip($game_user, $item, $ai_output, ['soon' => TRUE]);
+  game_show_equip($game_user, $next, $ai_output, ['soon' => TRUE]);
 }
 
 echo '</div>';

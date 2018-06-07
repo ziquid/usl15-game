@@ -185,25 +185,32 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
 
   $inactive = ($item->active) ? '' : t('(Inactive)');
 
+  $types = [
+    'a' => 'Agent',
+    's' => 'Staff',
+  ];
+
+  $item->type = $types[$item->staff_or_agent];
+
   if ($can_buy) {
     $icon_button = <<< EOF
-      <a href="/$game/staff_buy/$arg2/$item->id/1">
+      <a href="/$game/staff_hire/$arg2/$item->id/1">
         <img src="/sites/default/files/images/staff/$game-$item->id.png?2" width="96"
              border="0">
       </a>
 EOF;
     $name_link = <<< EOF
-      <a href="/$game/staff_buy/$arg2/$item->id/1">
+      <a href="/$game/staff_hire/$arg2/$item->id/1">
         <span class="type">
-          $inactive
+          $inactive $item->type:
         </span>
         $item->name
       </a>
 EOF;
     $buy_button = <<< EOF
       <div class="land-buy-button">
-        <a href="/$game/staff_buy/$arg2/$item->id/1">
-          Buy
+        <a href="/$game/staff_hire/$arg2/$item->id/1">
+          Hire
         </a>
       </div>
 EOF;
@@ -216,13 +223,13 @@ EOF;
 EOF;
     $name_link = <<< EOF
       <span class="type">
-        $inactive
+        $inactive $item->type:
       </span>
       $item->name
 EOF;
     $buy_button = <<< EOF
       <div class="land-buy-button not-yet">
-        Can't Buy $cant_buy_reason
+        Can't Hire $cant_buy_reason
       </div>
 EOF;
   }
@@ -230,8 +237,8 @@ EOF;
   if ($can_sell) {
     $sell_button = <<< EOF
       <div class="land-sell-button">
-        <a href="/$game/staff_sell/$arg2/$item->id/1">
-          Sell
+        <a href="/$game/staff_fire/$arg2/$item->id/1">
+          Fire
         </a>
       </div>
 EOF;
@@ -239,7 +246,7 @@ EOF;
   else {
     $sell_button = <<< EOF
       <div class="land-sell-button not-yet">
-        Can't Sell $cant_sell_reason
+        Can't Fire $cant_sell_reason
       </div>
 EOF;
   }
@@ -288,6 +295,8 @@ EOF;
     $classes[] = 'staff-act';
   }
 
+  $classes[] = 'staff-' . drupal_strtolower($item->type);
+
   $class_str = implode(' ', $classes);
 
   if ($soon) {
@@ -300,7 +309,7 @@ echo <<< EOF
   <div class="land-details">
     <div class="land-name">
       <span class="type">$inactive</span>
-      $item->name
+      $item->type: $item->name
     </div>
     <div class="land-description">$description</div>
 EOF;
@@ -518,10 +527,10 @@ EOF;
     echo <<< EOF
       <div class="land-button-wrapper">
         <div class="land-buy-button not-yet">
-          Can't Buy
+          Can't Hire
         </div>
         <div class="land-sell-button not-yet">
-          Can't Sell
+          Can't Fire
         </div>
       </div>
 EOF;
@@ -532,7 +541,7 @@ EOF;
     if ($options['staff-buy-succeeded']) {
       echo <<< EOF
         <div class="land-button-wrapper">
-          <form action="/$game/staff_buy/$arg2/$item->id/use-quantity">
+          <form action="/$game/staff_hire/$arg2/$item->id/use-quantity">
             <div class="quantity">
               <select name="quantity">
 EOF;
@@ -549,7 +558,7 @@ EOF;
       echo <<< EOF
         </select>
       </div>
-      <input class="land-buy-button" type="submit" Value="Buy"/>
+      <input class="land-buy-button" type="submit" Value="Hire"/>
     </form>
   </div>
 EOF;
@@ -568,4 +577,97 @@ EOF;
   }
 
   echo '</div>';
+}
+
+/**
+ * Fetch the list of staff to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ *
+ * @return \stdClass[]
+ *   The array of staff objects.
+ */
+function game_fetch_visible_staff($game_user) {
+  if ($game_user->meta == 'admin') {
+    $sql_to_add = 'WHERE staff.id > 0';
+  }
+  else {
+    $sql_to_add = 'WHERE (((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+    )
+  
+    AND
+  
+    (
+      fkey_values_id = 0
+      OR fkey_values_id = %d
+    ))
+  
+      AND required_level <= %d
+      AND active = 1
+      AND is_loot = 0
+    )
+  
+    OR staff_ownership.quantity > 0 ';
+  }
+
+  $data = [];
+  $sql = 'SELECT staff.*, staff_ownership.quantity
+  FROM staff
+
+  LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
+  AND staff_ownership.fkey_users_id = %d
+
+  ' . $sql_to_add . '
+  ORDER BY required_level ASC';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+  return $data;
+}
+
+/**
+ * Fetch the next staff item to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @return \stdClass
+ *   The next staff item to show, if any.
+ */
+function game_fetch_next_staff($game_user) {
+  if ($game_user->meta == 'admin') {
+    $sql_to_add = 'AND staff.id > 0';
+  }
+  else {
+    $sql_to_add = 'AND active = 1
+      AND is_loot = 0';
+  }
+  $sql = 'SELECT staff.*, staff_ownership.quantity
+  FROM staff
+
+  LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
+  AND staff_ownership.fkey_users_id = %d
+
+  WHERE ((
+    fkey_neighborhoods_id = 0
+    OR fkey_neighborhoods_id = %d
+  )
+
+  AND
+  (
+    fkey_values_id = 0
+    OR fkey_values_id = %d
+  ))
+
+  AND required_level > %d
+  ' . $sql_to_add . '
+  ORDER BY required_level ASC LIMIT 1';
+  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id, $game_user->level);
+  return db_fetch_object($result);
 }

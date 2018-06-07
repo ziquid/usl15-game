@@ -128,11 +128,9 @@ firep($new_hood, 'new hood');
 
 // start the actions clock if needed
   if ($game_user->actions == $game_user->actions_max) {
-
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
        $game_user->id);
-
   }
 
   $unfrozen_msg = '';
@@ -144,6 +142,28 @@ firep($new_hood, 'new hood');
     $game_user->meta = '';
     $unfrozen_msg =
       '<div class="subtitle">Your movement has unfrozen you!</div>';
+  }
+
+  // chance of loss
+
+  // give them a little extra chance
+  if ($eq->chance_of_loss >= mt_rand(1,110)) {
+    $equip_lost = TRUE;
+    firep($eq->name . ' wore out!');
+    $sql = 'update equipment_ownership set quantity = quantity - 1
+      where fkey_equipment_id = %d and fkey_users_id = %d;';
+    $result = db_query($sql, $eq->id, $game_user->id);
+
+    // player expenses need resetting?
+    // Subtract upkeep from your expenses.
+    if ($eq->upkeep > 0) {
+      $sql = 'update users set expenses = expenses - %d where id = %d;';
+      $result = db_query($sql, $eq->upkeep, $game_user->id);
+    }
+  }
+  else {
+    $equip_lost = FALSE;
+    firep($eq->name . ' did NOT wear out');
   }
 
   $game_user = $fetch_user();
@@ -158,39 +178,18 @@ firep($new_hood, 'new hood');
 EOF;
 
   if (!empty($new_hood->welcome_msg)) {
-
     echo <<< EOF
 <p class="second">You see a billboard when you enter the $hood_lower.&nbsp; It states:</p>
 <p class="second">$new_hood->welcome_msg</p>
 EOF;
-
   }
 
   echo $unfrozen_msg;
 
-  // chance of loss
-
-  // give them a little extra chance
-  if ($eq->chance_of_loss >= mt_rand(1,110)) {
-
-firep($eq->name . ' wore out!');
-    $sql = 'update equipment_ownership set quantity = quantity - 1
-      where fkey_equipment_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $eq->id, $game_user->id);
-
-// player expenses need resetting?
-
-    // Subtract upkeep from your expenses.
-    if ($eq->upkeep > 0) {
-      $sql = 'update users set expenses = expenses - %d where id = %d;';
-      $result = db_query($sql, $eq->upkeep, $game_user->id);
-    } // FIXME: do this before _stlouis_header so that upkeep is accurate
-
+  if ($equip_lost) {
+    // FIXME: check equipment_failure_reasons.
     echo '<div class="subtitle">' . t('Your @stuff has worn out',
       array('@stuff' => strtolower($eq->name))) . '</div>';
-  }
-  else {
-firep($eq->name . ' did NOT wear out');
   }
 
   echo <<< EOF
@@ -217,11 +216,9 @@ firep($eq->name . ' did NOT wear out');
 </div>
 EOF;
 
-}
-
-// Cinco De Mayo in Benton Park West.
-if ($event_type == EVENT_CINCO_DE_MAYO && $neighborhood_id == 30) {
-  echo <<< EOF
+  // Cinco De Mayo in Benton Park West.
+  if ($event_type == EVENT_CINCO_DE_MAYO && $neighborhood_id == 30) {
+    echo <<< EOF
   <div class="try-an-election-wrapper">
 <div class="try-an-election">
   <a href="/$game/quests/$arg2/1100">
@@ -230,6 +227,46 @@ if ($event_type == EVENT_CINCO_DE_MAYO && $neighborhood_id == 30) {
 </div>
 </div>
 EOF;
+  }
+
+  // FIXME: add hood_id to the query.
+  $hood_equip = game_fetch_visible_equip($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
+
+  foreach($hood_equip as $item) {
+    if ($item->fkey_neighborhoods_id == $neighborhood_id) {
+      if (!$title_shown) {
+        echo <<< EOF
+<div class="title">
+  Useful Equipment Here
+</div>
+EOF;
+        $title_shown = TRUE;
+      }
+      game_show_equip($game_user, $item, $ai_output);
+    }
+  }
+
+  // FIXME: add hood_id to the query.
+  $hood_staff = game_fetch_visible_staff($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
+
+  foreach($hood_staff as $item) {
+    if ($item->fkey_neighborhoods_id == $neighborhood_id) {
+      if (!$title_shown) {
+        echo <<< EOF
+<div class="title">
+  Useful Staff and Aides Here
+</div>
+EOF;
+        $title_shown = TRUE;
+      }
+      game_show_staff($game_user, $item, $ai_output);
+    }
+  }
+
 }
 
 if (substr($phone_id, 0, 3) == 'ai-')

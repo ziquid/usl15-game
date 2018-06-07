@@ -455,6 +455,16 @@ firep('allowed not_met users: ' . $allowed_string);
 
 // GAME PREACTION FUNCTIONS //
 
+function game_preaction_plant_flower_seeds(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->neighborhood_rating_change += ($comp_level->level * 0.02);
+  $action->values_cost += ($comp_level->level * 10);
+}
+
 function game_preaction_spread_gossip(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';

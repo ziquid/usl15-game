@@ -145,7 +145,7 @@ foreach ($data as $item) {
 }
 
 if (!empty($next)) {
-  game_show_land($game_user, $item, ['soon' => TRUE]);
+  game_show_land($game_user, $next, ['soon' => TRUE]);
 }
 
 echo '</div>';
