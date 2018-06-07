@@ -27,11 +27,29 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 7, 2018
+  </div>
+  <ul>
+    <li>
+      Added level 96
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jun 6, 2018
+  </div>
+  <ul>
+    <li>
+      A new aide, the Shady Clerk, will give you details about votes against you
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 5, 2018
   </div>
   <ul>
     <li>
-      A new aide, the Socialite, will tell you if anyone is gossiping about you.
+      A new aide, the Socialite, will tell you if anyone is gossiping about you
     </li>
   </ul>
 

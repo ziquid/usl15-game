@@ -8,17 +8,12 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.5.0, Jun 05 2018';
+$version = 'v0.5.0, Jun 07 2018';
 
 global $game, $phone_id;
 
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
-$game_user = $fetch_user();
-$arg2 = check_plain(arg(2));
 include drupal_get_path('module', $game) . '/game_defs.inc';
-
+$game_user = $fetch_user();
 $message = check_plain($_GET['message']);
 
 competency_gain($game_user, 'where the heart is');
