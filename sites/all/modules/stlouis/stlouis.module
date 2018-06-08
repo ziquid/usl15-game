@@ -146,7 +146,7 @@ function stlouis_cron() {
   db_query($sql);
 
   // No alder?  Reset one hood to base stats.
-  $sql = 'SELECT id
+  $sql = 'SELECT id, welcome_msg
     FROM neighborhoods
     WHERE id NOT IN (
       SELECT neighborhoods.id
@@ -160,10 +160,18 @@ function stlouis_cron() {
   $result = db_query($sql);
   $item = db_fetch_object($result);
 
+  if ($item->welcome_msg == 'Unmaintained and unloved, this neighborhood has atrophied.' ||
+    $item->welcome_msg == '') {
+    $welcome_msg = '';
+  }
+  else {
+    $welcome_msg = 'Unmaintained and unloved, this neighborhood has atrophied.';
+  }
+
   $sql = 'update neighborhoods set rating = 50, residents = 10,
-    welcome_msg = "Unmaintained and unloved, this neighborhood has atrophied."
+    welcome_msg = "%s"
     where id = %d;';
-  db_query($sql, $item->id);
+  db_query($sql, $welcome_msg, $item->id);
 
   // Add one resident for each calendar month.
   $addition = (int) date('n');
