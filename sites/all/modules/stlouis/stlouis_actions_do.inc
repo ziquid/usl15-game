@@ -1844,7 +1844,9 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
   $result = db_query($sql, $game_user->fkey_neighborhoods_id,
     date('Y-m-d H:i:s', time() - ($hour_to_show * 3600) - 3600),
     date('Y-m-d H:i:s', time() - ($hour_to_show * 3600)));
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   $item->desc_short = 'end';
 
@@ -1861,21 +1863,29 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
   // Previous hour.
   if ($hour_to_show > 0) {
     $previous_hour = $hour_to_show - 1;
+
+    if ($previous_hour == 1) {
+      $prev_hours = 'hour';
+    }
+    else {
+      $prev_hours = 'hours';
+    }
+
     $outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/actions_do/$phone_id/$action_id?hour=$previous_hour">&lt;&lt;&lt;
-    See $previous_hour hours ago</a>
-</div>
+  <div class="try-an-election">
+    <a href="/$game/actions_do/$arg2/$action_id?hour=$previous_hour">&lt;&lt;&lt;
+      See $previous_hour $prev_hours ago</a>
+  </div>
 </div>
 EOF;
   }
   else {
     $outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
-<div class="try-an-election not-yet">
-  &lt;&lt;&lt; No more hours to view
-</div>
+  <div class="try-an-election not-yet">
+    &lt;&lt;&lt; No more hours to view
+  </div>
 </div>
 EOF;
   }
@@ -1883,30 +1893,38 @@ EOF;
   // Next hour.
   if ($hour_to_show < ($num_cameras->quantity - 1)) {
     $next_hour = $hour_to_show + 1;
+
+    if ($next_hour == 1) {
+      $next_hours = 'hour';
+    }
+    else {
+      $next_hours = 'hours';
+    }
+
     $outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/actions_do/$phone_id/$action_id?hour=$next_hour">See
-    $next_hour hours ago &gt;&gt;&gt;</a>
-</div>
+  <div class="try-an-election">
+    <a href="/$game/actions_do/$arg2/$action_id?hour=$next_hour">See
+      $next_hour $next_hours ago &gt;&gt;&gt;</a>
+  </div>
 </div>
 EOF;
   }
   else {
     $outcome_reason .=<<< EOF
 <div class="try-an-election-wrapper">
-<div class="try-an-election not-yet">
-  No more security cameras &gt;&gt;&gt;
-</div>
+  <div class="try-an-election not-yet">
+    No more security cameras &gt;&gt;&gt;
+  </div>
 </div>
 EOF;
   }
 
   $outcome_reason .=<<< EOF
 <div class="news">
-<div class="messages-title">
-  Actions $hour_to_show $hours ago in your {$hood_lower}
-</div>
+  <div class="messages-title">
+    Actions $hour_to_show $hours ago in your {$hood_lower}
+  </div>
 EOF;
 
   unset($old_item);
@@ -1937,14 +1955,15 @@ EOF;
         }
 
         $outcome_reason .=<<< EOF
-<div class="dateline">
-$time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
-</div>
-<div class="message-body">
-<p>$instance_text $old_item->desc_short</p>
-<div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$phone_id/$old_item->phone_id">View</a>
-</div></div>
+  <div class="dateline">
+    $time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
+  </div>
+  <div class="message-body">
+    <p>$instance_text $old_item->desc_short</p>
+    <div class="message-reply-wrapper"><div class="message-reply">
+      <a href="/$game/user/$arg2/$old_item->phone_id">View</a>
+    </div>
+  </div>
 </div>
 EOF;
      }
