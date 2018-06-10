@@ -1942,9 +1942,9 @@ EOF;
 
     if ($item->desc_short !== $old_item->desc_short) {
 
-     // New item to display... show it and reset counters.
-     // Anything to display?
-     if ($old_item) {
+      // New item to display... show it and reset counters.
+      // Anything to display?
+      if ($old_item) {
 
         if ($instance_count > 1) {
           $instance_text = "($instance_count times) ";
@@ -1953,8 +1953,9 @@ EOF;
         else {
           $instance_text = $time_prefix = '';
         }
+       $msg_shown = TRUE;
 
-        $outcome_reason .=<<< EOF
+       $outcome_reason .=<<< EOF
   <div class="dateline">
     $time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
   </div>
@@ -1966,20 +1967,20 @@ EOF;
   </div>
 </div>
 EOF;
-     }
+      }
 
-// Now display current item.
-//        $outcome_reason .=<<< EOF
-//<div class="dateline">
-//  $display_time from $item->ep_name $item->username $clan_acronym
-//</div>
-//<div class="message-body">
-//  <p>($item->id) $item->desc_short</p>
-//  <div class="message-reply-wrapper"><div class="message-reply">
-//    <a href="/$game/user/$phone_id/$item->phone_id">View</a>
-//  </div></div>
-//</div>
-//EOF;
+      // Now display current item.
+      //        $outcome_reason .=<<< EOF
+      //<div class="dateline">
+      //  $display_time from $item->ep_name $item->username $clan_acronym
+      //</div>
+      //<div class="message-body">
+      //  <p>($item->id) $item->desc_short</p>
+      //  <div class="message-reply-wrapper"><div class="message-reply">
+      //    <a href="/$game/user/$phone_id/$item->phone_id">View</a>
+      //  </div></div>
+      //</div>
+      //EOF;
 
       $instance_count = 1;
       $old_item = $item;
@@ -1992,7 +1993,6 @@ EOF;
       $instance_count++;
     }
 
-    $msg_shown = TRUE;
   }
 
   if (!$msg_shown) {
