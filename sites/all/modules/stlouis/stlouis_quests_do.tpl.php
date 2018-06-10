@@ -1054,6 +1054,12 @@ $outcome_reason
 </div>
 EOF;
 
+//  game_show_quest($game_user, $game_quest, $percent_complete,
+//    $percentage_divisor, $quest_group, $party_title, $outcome_reason,
+//    "You gained <strong>$game_quest->experience</strong>",
+//    "You gained <strong>$money_added</strong>",'',
+//    '', $loot_html, $quest_completion_html);
+
 }
 else { // failed!
 
