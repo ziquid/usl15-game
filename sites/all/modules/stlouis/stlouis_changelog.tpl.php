@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 10, 2018
+  </div>
+  <ul>
+    <li>
+      Added level 97, Security Cameras
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 7, 2018
   </div>
   <ul>

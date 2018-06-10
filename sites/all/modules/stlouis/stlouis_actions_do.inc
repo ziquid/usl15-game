@@ -1792,180 +1792,162 @@ EOF;
 
   }
 
-  function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
+function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $action_id = arg(3);
+  $msg_shown = FALSE;
 
-    global $game, $phone_id;
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $msg_shown = FALSE;
+  if (!_stlouis_check_for_friendly_hood()) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not in a friendly @hood!',
+        array('@hood' => $hood_lower)) .
+      '</div><div class="action-effect">You must be in friendly territory to
+        perform this action.</div>';
+    return FALSE;
+  }
 
-    if (!_stlouis_check_for_friendly_hood()) {
+  $hour_to_show = (int) check_plain($_GET['hour']);
 
-    	$outcome_reason = '<div class="land-failed">' .
-        t('Not in a friendly @hood!',
-          array('@hood' => $hood_lower)) .
-        '</div><div class="action-effect">You must be in friendly territory to
-          perform this action.</div>';
+  $sql = 'select quantity from equipment_ownership
+    where fkey_users_id = %d and fkey_equipment_id = 42;';
+  $result = db_query($sql, $game_user->id);
+  $num_cameras = db_fetch_object($result);
 
-      return FALSE;
+  $data = [];
+  $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    clans.acronym as clan_acronym
 
-    }
+    from challenge_history
 
-    $hour_to_show = check_plain($_GET['hour']) + 0;
+    left join users on challenge_history.fkey_from_users_id = users.id
 
-    $sql = 'select quantity from equipment_ownership
-      where fkey_users_id = %d and fkey_equipment_id = 21;';
-    $result = db_query($sql, $game_user->id);
-    $num_cameras = db_fetch_object($result);
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
 
-    $data = array();
-    $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
-      elected_positions.name as ep_name,
-      clan_members.is_clan_leader,
-      clans.acronym as clan_acronym
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
 
-      from challenge_history
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    challenge_history.fkey_from_users_id
 
-      left join users on challenge_history.fkey_from_users_id = users.id
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
+    where challenge_history.fkey_neighborhoods_id = %d
+    and challenge_history.timestamp >= "%s"
+    and challenge_history.timestamp <= "%s"
+    order by challenge_history.timestamp DESC;';
 
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    date('Y-m-d H:i:s', time() - ($hour_to_show * 3600) - 3600),
+    date('Y-m-d H:i:s', time() - ($hour_to_show * 3600)));
+  while ($item = db_fetch_object($result)) $data[] = $item;
 
-      LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-      challenge_history.fkey_from_users_id
+  $item->desc_short = 'end';
 
-      LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  // Hack to force last item to show.
+  $data[] = $item;
 
-      where challenge_history.fkey_neighborhoods_id = %d
-      and challenge_history.timestamp >= "%s"
-      and challenge_history.timestamp <= "%s"
-      order by challenge_history.timestamp DESC;';
+  if ($hour_to_show == 1) {
+    $hours = 'hour';
+  }
+  else {
+    $hours = 'hours';
+  }
 
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-      date('Y-m-d H:i:s', time() - ($hour_to_show * 3600) - 3600),
-      date('Y-m-d H:i:s', time() - ($hour_to_show * 3600)));
-    while ($item = db_fetch_object($result)) $data[] = $item;
-
-    $item->desc_short = 'end';
-
-    // Hack to force last item to show.
-    $data[] = $item;
-
-    if ($hour_to_show == 1) {
-    	$hours = 'hour';
-    }
-    else {
-    	$hours = 'hours';
-    }
-
-    // Previous hour.
-    if ($hour_to_show > 0) {
-
-    	$previous_hour = $hour_to_show - 1;
-
-    	$outcome_reason .=<<< EOF
-<div class="try-an-election-wrapper">
-  <div class="try-an-election">
-    <a href="/$game/actions_do/$phone_id/$action_id?hour=$previous_hour">&lt;&lt;&lt;
-      See $previous_hour hours ago</a>
-  </div>
-</div>
-EOF;
-
-    }
-    else {
-
-    	$outcome_reason .=<<< EOF
-<div class="try-an-election-wrapper">
-  <div class="try-an-election not-yet">
-    &lt;&lt;&lt; No more hours to view
-  </div>
-</div>
-EOF;
-
-    }
-
-    // Next hour.
-    if ($hour_to_show < ($num_cameras->quantity - 1)) {
-
-      $next_hour = $hour_to_show + 1;
-
-      $outcome_reason .=<<< EOF
-<div class="try-an-election-wrapper">
-  <div class="try-an-election">
-    <a href="/$game/actions_do/$phone_id/$action_id?hour=$next_hour">See
-      $next_hour hours ago &gt;&gt;&gt;</a>
-  </div>
-</div>
-EOF;
-
-    }
-    else {
-
-      $outcome_reason .=<<< EOF
-<div class="try-an-election-wrapper">
-  <div class="try-an-election not-yet">
-    No more security cameras &gt;&gt;&gt;
-  </div>
-</div>
-EOF;
-
-    }
-
+  // Previous hour.
+  if ($hour_to_show > 0) {
+    $previous_hour = $hour_to_show - 1;
     $outcome_reason .=<<< EOF
+<div class="try-an-election-wrapper">
+<div class="try-an-election">
+  <a href="/$game/actions_do/$phone_id/$action_id?hour=$previous_hour">&lt;&lt;&lt;
+    See $previous_hour hours ago</a>
+</div>
+</div>
+EOF;
+  }
+  else {
+    $outcome_reason .=<<< EOF
+<div class="try-an-election-wrapper">
+<div class="try-an-election not-yet">
+  &lt;&lt;&lt; No more hours to view
+</div>
+</div>
+EOF;
+  }
+
+  // Next hour.
+  if ($hour_to_show < ($num_cameras->quantity - 1)) {
+    $next_hour = $hour_to_show + 1;
+    $outcome_reason .=<<< EOF
+<div class="try-an-election-wrapper">
+<div class="try-an-election">
+  <a href="/$game/actions_do/$phone_id/$action_id?hour=$next_hour">See
+    $next_hour hours ago &gt;&gt;&gt;</a>
+</div>
+</div>
+EOF;
+  }
+  else {
+    $outcome_reason .=<<< EOF
+<div class="try-an-election-wrapper">
+<div class="try-an-election not-yet">
+  No more security cameras &gt;&gt;&gt;
+</div>
+</div>
+EOF;
+  }
+
+  $outcome_reason .=<<< EOF
 <div class="news">
-  <div class="messages-title">
-    Actions $hour_to_show $hours ago in your {$hood_lower}
-  </div>
+<div class="messages-title">
+  Actions $hour_to_show $hours ago in your {$hood_lower}
+</div>
 EOF;
 
-    unset($old_item);
-    $instance_count = 1;
+  unset($old_item);
+  $instance_count = 1;
 
-    foreach ($data as $item) {
+  foreach ($data as $item) {
+    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $clan_acronym = '';
 
-      $display_time = _stlouis_format_date(strtotime($item->timestamp));
-      $clan_acronym = '';
+    if (!empty($item->clan_acronym))
+      $clan_acronym = "($item->clan_acronym)";
 
-      if (!empty($item->clan_acronym))
-        $clan_acronym = "($item->clan_acronym)";
+    if ($item->is_clan_leader)
+      $clan_acronym .= '*';
 
-      if ($item->is_clan_leader)
-        $clan_acronym .= '*';
+    if ($item->desc_short !== $old_item->desc_short) {
 
-      if ($item->desc_short !== $old_item->desc_short) {
+     // New item to display... show it and reset counters.
+     // Anything to display?
+     if ($old_item) {
 
-       // New item to display... show it and reset counters.
+        if ($instance_count > 1) {
+          $instance_text = "($instance_count times) ";
+          $time_prefix = 'Starting ';
+        }
+        else {
+          $instance_text = $time_prefix = '';
+        }
 
-       // Anything to display?
-       if ($old_item) {
-
-      		if ($instance_count > 1) {
-      			$instance_text = "($instance_count times) ";
-      			$time_prefix = 'Starting ';
-          }
-          else {
-      			$instance_text = $time_prefix = '';
-      		}
-
-          $outcome_reason .=<<< EOF
+        $outcome_reason .=<<< EOF
 <div class="dateline">
-  $time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
+$time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
 </div>
 <div class="message-body">
-  <p>$instance_text $old_item->desc_short</p>
-  <div class="message-reply-wrapper"><div class="message-reply">
-    <a href="/$game/user/$phone_id/$old_item->phone_id">View</a>
-  </div></div>
+<p>$instance_text $old_item->desc_short</p>
+<div class="message-reply-wrapper"><div class="message-reply">
+  <a href="/$game/user/$phone_id/$old_item->phone_id">View</a>
+</div></div>
 </div>
 EOF;
-
-       }
+     }
 
 // Now display current item.
 //        $outcome_reason .=<<< EOF
@@ -1980,30 +1962,28 @@ EOF;
 //</div>
 //EOF;
 
-        $instance_count = 1;
-        $old_item = $item;
-        $old_clan_acronym = $clan_acronym;
-        $old_display_time = $display_time;
-
-      }
-      else {
-
-        // Dup of existing item... abbreviate.
-      	$instance_count++;
-
-      }
-
-      $msg_shown = TRUE;
+      $instance_count = 1;
+      $old_item = $item;
+      $old_clan_acronym = $clan_acronym;
+      $old_display_time = $display_time;
 
     }
+    else {
+      // Dup of existing item... abbreviate.
+      $instance_count++;
+    }
 
-    if (!$msg_shown) $outcome_reason .= 'Nothing found!';
-
-    $outcome_reason .= '</div>';
-
-    return TRUE;
-
+    $msg_shown = TRUE;
   }
+
+  if (!$msg_shown) {
+    $outcome_reason .= 'Nothing found!';
+  }
+
+  $outcome_reason .= '</div>';
+
+  return TRUE;
+}
 
   function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
     $target, &$can_do_again) {
@@ -2303,7 +2283,7 @@ EOF;
   }
 
   if (!$msg_shown) {
-    $outcome_reason .= 'No elections found!';
+    $outcome_reason .= 'No challenges found!';
   }
 
   $outcome_reason .= '</div>';
