@@ -373,6 +373,12 @@ li {
   border: 1px solid #fff !important;
 }
 
+.news .button.not-yet, .news button.not-yet {
+  background-color: #bbb !important;
+  border: 1px solid #bbb !important;
+  color: black;
+}
+
 .news .message-reply {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;

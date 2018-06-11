@@ -1760,7 +1760,6 @@ function game_show_aides_menu($game_user) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $arg2 = check_plain(arg(2));
   $title = '';
 
   if (substr(arg(1), 0, 4) == 'land') {
@@ -1791,9 +1790,9 @@ function game_show_aides_menu($game_user) {
 <div class="news">
   <a href="/$game/land/$arg2" class="button $land_active">$land_plural</a>
   <a href="/$game/equipment/$arg2" class="button $equip_active">$equipment</a>
-  <!--<a href="/$game/weapons/$arg2" class="button $weapons_active">$weapons</a>-->
-  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']}</a>
-  <a href="/$game/agents/$arg2" class="button">Agents</a>
+  <a href="#" class="button not-yet $clan_eq_active">{$game_text['clan_eq_short']}</a>
+  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']} / {$game_text['agents']}</a>
+  <!--<a href="/$game/agents/$arg2" class="button">Agents</a>-->
 </div>
 EOF;
 
