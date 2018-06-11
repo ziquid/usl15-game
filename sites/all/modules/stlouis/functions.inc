@@ -2577,7 +2577,7 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 }
 
 /**
- * Lose (or Sell) one or more pieces equipment.
+ * Lose (or Sell) one or more pieces of equipment.
  *
  * @param \stdClass $game_user
  *   The game user object.

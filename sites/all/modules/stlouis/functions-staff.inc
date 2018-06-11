@@ -788,3 +788,57 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
   $game_user = $fetch_user();
   return [TRUE, 'success', 0];
 }
+
+/**
+ * Lose (or Fire) one or more staff or agents.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The staff ID.
+ * @param int $quantity
+ *   Number of people to lose/fire
+ * @param int $st_price
+ *   Amount of compensation to receive for sale.
+ *
+ * @return bool
+ *   Whether the sale succeeded or not.
+ */
+function game_staff_lose(&$game_user, $id, $quantity, $st_price = 0) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  // FIXME: refactor to use game_fetch_staff_by_id().
+  $sql = 'select * from staff where id = %d;';
+  $result = db_query($sql, $id);
+  $st = db_fetch_object($result);
+
+  $sql = 'select * from staff_ownership
+    where fkey_staff_id = %d and fkey_users_id = %d;';
+  $result = db_query($sql, $id, $game_user->id);
+  $so = db_fetch_object($result);
+
+  // Nothing there?
+  if (empty($so)) {
+    return FALSE;
+  }
+
+  // Not enough?
+  if ($so->quantity < $quantity) {
+    return FALSE;
+  }
+
+  $sql = 'update staff_ownership set quantity = quantity - %d
+    where fkey_staff_id = %d and fkey_users_id = %d;';
+  db_query($sql, $quantity, $id, $game_user->id);
+
+  // Receive money for the staff, if needed.
+  // FIXME: don't process if st_price is 0.
+  $sql = 'update users set money = money + %d where id = %d;';
+  db_query($sql, $st_price, $game_user->id);
+
+  // Reprocess user object.
+  game_recalc_income($game_user);
+  $game_user = $fetch_user();
+  return TRUE;
+}
