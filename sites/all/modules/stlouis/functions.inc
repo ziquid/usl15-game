@@ -1791,7 +1791,7 @@ function game_show_aides_menu($game_user) {
   <a href="/$game/land/$arg2" class="button $land_active">$land_plural</a>
   <a href="/$game/equipment/$arg2" class="button $equip_active">$equipment</a>
   <a href="#" class="button not-yet $clan_eq_active">{$game_text['clan_eq_short']}</a>
-  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']} / {$game_text['agents']}</a>
+  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']}/{$game_text['agents']}</a>
   <!--<a href="/$game/agents/$arg2" class="button">Agents</a>-->
 </div>
 EOF;

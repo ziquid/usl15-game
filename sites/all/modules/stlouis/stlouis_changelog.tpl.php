@@ -31,7 +31,7 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      Added level 97, Security Cameras
+      Added level 97, Security Cameras, Flag Lapel Pins
     </li>
   </ul>
 
