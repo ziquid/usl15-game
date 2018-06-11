@@ -557,8 +557,8 @@ a.crafting-submit-button {
 }
 
 .news {
-  width: 99%;
-  margin: 3px 3px 0;
+  width: calc(100% - 2px);
+  margin: 3px 1px 0;
   clear: both;
   text-align: center;
 }
