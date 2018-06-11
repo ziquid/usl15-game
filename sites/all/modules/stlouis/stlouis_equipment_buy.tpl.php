@@ -56,8 +56,6 @@ if ($game_user->income < $game_user->expenses +
   $ai_output = 'equipment-failed not-enough-income';
   game_karma($game_user,
     "not enough income to cover $game_equipment->name\'s upkeep", -100);
-//  $outcome_reason = '<div class="equipment-failed">' . t('Not enough hourly income!') .
-//    '</div>';
 }
 
 // Not in right hood.
@@ -122,7 +120,7 @@ game_show_equip($game_user, $game_equipment, $ai_output, $options);
 
 echo <<< EOF
 <div class="title">
-Purchase $equipment
+  Purchase $equipment
 </div>
 EOF;
 

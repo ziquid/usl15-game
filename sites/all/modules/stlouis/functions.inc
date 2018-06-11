@@ -2263,7 +2263,6 @@ EOF;
 
 }
 
-
 function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   global $game, $phone_id;
@@ -2514,7 +2513,7 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   }
 
   // Pay for the equipment, if needed.
-  // FIXME: don't process if money is 0.
+  // FIXME: don't process if eq_price is 0.
   $sql = 'update users set money = money - %d where id = %d;';
   db_query($sql, $eq_price, $game_user->id);
 

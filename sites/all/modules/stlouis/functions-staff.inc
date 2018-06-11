@@ -9,6 +9,29 @@
  */
 
 /**
+ * Fetch the specified staff or agent item.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $staff_id
+ *   The staff/agent id.
+ *
+ * @return \stdClass
+ *   The staff/agent item, if any.
+ */
+function game_fetch_staff_by_id($game_user, $staff_id) {
+  $sql = 'SELECT staff.*, staff_ownership.quantity
+  FROM staff
+
+  LEFT OUTER JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
+  AND staff_ownership.fkey_users_id = %d
+
+  WHERE staff.id = %d;';
+  $result = db_query($sql, $game_user->id, $staff_id);
+  return db_fetch_object($result);
+}
+
+/**
 * Show a staff or agent.
 *
 * @param \stdClass $game_user
@@ -673,4 +696,95 @@ function game_fetch_next_staff($game_user) {
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
   return db_fetch_object($result);
+}
+
+/**
+ * Gain (Hire, etc.) a staff member / agent.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param int $id
+ *   The staff id.
+ * @param int $quantity
+ *   The quantity to gain.
+ * @param int $st_price
+ *   The amount of money to deduct to pay for the staff.
+ *
+ * @return array
+ *   An array with success or failure info.
+ */
+function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  // BUG!  How do these get here?
+  if ($id == 0) {
+    mail('joseph@ziquid.com', $game_user->name . ' trying to get staff 0!',
+      $game_user->phone_id);
+    return [FALSE, 'bad-id', 0];
+  }
+
+  // FIXME: refactor to use game_fetch_staff_by_id().
+  $sql = 'select * from staff where id = %d;';
+  $result = db_query($sql, $id);
+  $st = db_fetch_object($result);
+
+  $sql = 'select * from staff_ownership
+    where fkey_staff_id = %d and fkey_users_id = %d;';
+  $result = db_query($sql, $id, $game_user->id);
+  $so = db_fetch_object($result);
+
+  // Check for enough income to cover upkeep.
+  if ($game_user->income <
+    $game_user->expenses + ($st->upkeep * $quantity)) {
+    return [FALSE, 'not-enough-income', ($st->upkeep * $quantity)];
+  }
+
+  // So entry already there.
+  if (!empty($so)) {
+
+    if (($st->quantity_limit > 0) &&
+      (($so->quantity + $quantity) > $st->quantity_limit)) {
+      return [FALSE, 'quantity-exceeded', $st->quantity_limit];
+    }
+
+    $sql = 'update staff_ownership set quantity = quantity + %d
+      where fkey_staff_id = %d and fkey_users_id = %d;';
+    db_query($sql, $quantity, $id, $game_user->id);
+  }
+  else {
+
+    if (($st->quantity_limit > 0) && ($quantity > $st->quantity_limit)) {
+      return [FALSE, 'quantity-exceeded', $st->quantity_limit];
+    }
+
+    $sql = 'insert into staff_ownership
+      (fkey_users_id, fkey_staff_id, quantity) values
+      (%d, %d, %d);';
+    db_query($sql, $game_user->id, $id, $quantity);
+  }
+
+  // Pay for the staff, if needed.
+  // FIXME: don't process if st_price is 0.
+  $sql = 'update users set money = money - %d where id = %d;';
+  db_query($sql, $st_price, $game_user->id);
+
+  // Give energy bonus, if needed.
+  if ($st->energy_bonus > 0) {
+
+    // Start the energy clock, if needed.
+    if ($game_user->energy == $game_user->energy_max) {
+      $sql = 'update users set energy_next_gain = "%s" where id = %d;';
+      db_query($sql, date('Y-m-d H:i:s', time() + 300),
+        $game_user->id);
+    }
+
+    $sql = 'update users set energy = energy + %d where id = %d;';
+    db_query($sql, $st->energy_bonus * $quantity, $game_user->id);
+  }
+
+  // Reprocess user object.
+  game_recalc_income($game_user);
+  $game_user = $fetch_user();
+  return [TRUE, 'success', 0];
 }
