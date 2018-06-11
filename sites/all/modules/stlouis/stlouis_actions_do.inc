@@ -1808,8 +1808,7 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
     return FALSE;
   }
 
-  $hour_to_show = (int) check_plain($_GET['hour']);
-
+  $hour_to_show = 0 + (int) check_plain($_GET['hour']);
   $sql = 'select quantity from equipment_ownership
     where fkey_users_id = %d and fkey_equipment_id = 42;';
   $result = db_query($sql, $game_user->id);

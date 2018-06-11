@@ -1,13 +1,8 @@
 <?php
 
-  global $game, $phone_id;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
-  $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  $arg2 = check_plain(arg(2));
+global $game, $phone_id;
+include drupal_get_path('module', $game) . '/game_defs.inc';
+$game_user = $fetch_user();
 
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
@@ -120,14 +115,10 @@ EOF;
   $username = $item->username;
 
   if (empty($item->id)) {
-
     $title = "Run for the office of $item->ep_name";
-
   }
   else {
-
     $title = "Challenge $item->ep_name $username";
-
   }
 
   if ($item->id == $game_user->id) {
@@ -149,7 +140,6 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   // Not enough action left.
@@ -182,7 +172,7 @@ EOF;
     // Party office.
     if ($item->type == 2) {
 // make it so s/he can't perform a major action for a day
-      $set_value = '_' . arg(0) . '_set_value';
+      $set_value = '_' . $game . '_set_value';
       $set_value($game_user->id, 'next_major_action', time() + 86400);
     }
 
@@ -205,13 +195,11 @@ EOF;
     $sql = 'update users set actions = actions - %d  where id = %d;';
     $result = db_query($sql, $item->energy_bonus, $game_user->id);
 
-// start the actions clock if needed
+    // Start the actions clock, if needed.
     if ($game_user->actions == $game_user->actions_max) {
-
        $sql = 'update users set actions_next_gain = "%s" where id = %d;';
       $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
          $game_user->id);
-
     }
 
     $game_user = $fetch_user();
@@ -235,6 +223,15 @@ EOF;
 
     if (substr($phone_id, 0, 3) == 'ai-')
       echo "<!--\n<ai \"election-won\"/>\n-->";
+
+    $sql = 'insert into challenge_history
+    (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+    fkey_elected_positions_id, won, desc_short, desc_long) values
+    ("election", %d, NULL, %d, %d, %d, "%s", "%s");';
+    $result = db_query($sql, $game_user->id,
+      $game_user->fkey_neighborhoods_id, $position_id, 1,
+      "$game_user->username challenged for the seat $item->ep_name in $location unopposed.",
+      "$game_user->username challenged for the seat $item->ep_name in $location unopposed.");
 
     db_set_active('default');
     return;
