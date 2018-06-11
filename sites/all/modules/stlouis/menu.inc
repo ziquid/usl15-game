@@ -386,30 +386,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/agents/%'] = array(
-    'title' => 'St. Louis Agents',
-    'page callback' => 'stlouis_agents_list_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/agents_hire/%/%/%'] = array(
-    'title' => 'St. Louis Agents Hire',
-    'page callback' => 'stlouis_agents_hire_callback',
-    'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/agents_fire/%/%/%'] = array(
-    'title' => 'St. Louis Agents Fire',
-    'page callback' => 'stlouis_agents_fire_callback',
-    'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['stlouis/actions/%'] = array(
     'title' => 'St. Louis Actions',
     'page callback' => 'stlouis_actions_list_callback',
@@ -1015,9 +991,7 @@ function stlouis_staff_list_callback($phone_id) {
   }
 
   return theme('stlouis_staff_list', $phone_id);
-
 }
-
 
 function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
 
@@ -1027,9 +1001,7 @@ function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
   }
 
   return theme('stlouis_staff_hire', $phone_id, $staff_id, $quantity);
-
 }
-
 
 function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
 
@@ -1039,44 +1011,7 @@ function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
   }
 
   return theme('stlouis_staff_fire', $phone_id, $staff_id, $quantity);
-
 }
-
-
-function stlouis_agents_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_agents_list', $phone_id);
-
-}
-
-
-function stlouis_agents_hire_callback($phone_id, $staff_id, $quantity) {
-
-  if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
-    ($quantity === 'use-quantity'))) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_agents_hire', $phone_id, $staff_id, $quantity);
-
-}
-
-
-function stlouis_agents_fire_callback($phone_id, $staff_id, $quantity) {
-
-  if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
-    ($quantity === 'use-quantity'))) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_agents_fire', $phone_id, $staff_id, $quantity);
-
-}
-
 
 function stlouis_actions_list_callback($phone_id) {
 
@@ -1085,9 +1020,7 @@ function stlouis_actions_list_callback($phone_id) {
   }
 
   return theme('stlouis_actions_list', $phone_id);
-
 }
-
 
 function stlouis_actions_do_callback($phone_id, $action_id) {
 
@@ -1096,9 +1029,7 @@ function stlouis_actions_do_callback($phone_id, $action_id) {
   }
 
   return theme('stlouis_actions_do', $phone_id, $action_id);
-
 }
-
 
 function stlouis_equipment_list_callback($phone_id) {
 
@@ -1107,9 +1038,7 @@ function stlouis_equipment_list_callback($phone_id) {
   }
 
   return theme('stlouis_equipment_list', $phone_id);
-
 }
-
 
 function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
 
@@ -1119,9 +1048,7 @@ function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
   }
 
   return theme('stlouis_equipment_buy', $phone_id, $equipment_id, $quantity);
-
 }
-
 
 function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
@@ -1131,9 +1058,7 @@ function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
   }
 
   return theme('stlouis_equipment_sell', $phone_id, $equipment_id, $quantity);
-
 }
-
 
 function stlouis_move_callback($phone_id, $neighborhood_id) {
 
@@ -1142,9 +1067,7 @@ function stlouis_move_callback($phone_id, $neighborhood_id) {
   }
 
   return theme('stlouis_move', $phone_id, $neighborhood_id);
-
 }
-
 
 function stlouis_move_do_callback($phone_id, $neighborhood_id) {
 
@@ -1153,9 +1076,7 @@ function stlouis_move_do_callback($phone_id, $neighborhood_id) {
   }
 
   return theme('stlouis_move_do', $phone_id, $neighborhood_id);
-
 }
-
 
 function stlouis_authenticate_callback($phone_id) {
 
@@ -1164,13 +1085,11 @@ function stlouis_authenticate_callback($phone_id) {
   }
 
   return theme('stlouis_authenticate', $phone_id);
-
 }
 
 /**
  * Used for playbooks that didn't authorize the app
  */
-
 function stlouis_playbook_NULL_callback() {
 
   return theme('stlouis_playbook_NULL');
@@ -1591,31 +1510,6 @@ function stlouis_theme() {
 
     'stlouis_staff_fire' => array(
       'template' => 'stlouis_staff_fire',
-      'arguments' => array(
-        'phone_id' => NULL,
-        'staff_id' => NULL,
-        'quantity' => NULL,
-      )
-    ),
-
-    'stlouis_agents_list' => array(
-      'template' => 'stlouis_agents_list',
-      'arguments' => array(
-        'phone_id' => NULL,
-      )
-    ),
-
-    'stlouis_agents_hire' => array(
-      'template' => 'stlouis_agents_hire',
-      'arguments' => array(
-        'phone_id' => NULL,
-        'staff_id' => NULL,
-        'quantity' => NULL,
-      )
-    ),
-
-    'stlouis_agents_fire' => array(
-      'template' => 'stlouis_agents_fire',
       'arguments' => array(
         'phone_id' => NULL,
         'staff_id' => NULL,
