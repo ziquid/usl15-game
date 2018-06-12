@@ -2572,7 +2572,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   foreach ($target_users as $target) {
     db_query($sql, $target->home_hood, $target->id);
     game_send_user_message($game_user->id, $target->id, 0,
-      $msg . $target->hood_text . $game_text['hood'] . '.');
+      $msg . $target->hood_text . $game_text['hood'] . '.', 'png');
   }
 
   // Save as major action.

@@ -629,10 +629,14 @@ $sql = '
 
   (
   select system_messages.timestamp, system_messages.message,
-  NULL AS username, NULL as phone_id,
-  NULL AS ep_name,
-  0 AS is_clan_leader,
-  NULL AS clan_acronym,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+--  NULL AS username, NULL as phone_id,
+--  NULL AS ep_name,
+--  0 AS is_clan_leader,
+--  NULL AS clan_acronym,
   0 AS private,
   "mayor" as type,
   subtype
@@ -642,9 +646,9 @@ $sql = '
   ON elected_officials.fkey_users_id = users.id
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
---    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
---    system_messages.fkey_users_from_id
---    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    system_messages.fkey_users_from_id
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   order by timestamp DESC limit %d
   )
 

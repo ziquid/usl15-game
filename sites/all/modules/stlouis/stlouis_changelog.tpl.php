@@ -31,7 +31,10 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      Added support for Fast Competencies
+      New action: Evacuate Forest Park
+    </li>
+    <li>
+      Added support for Fast Competencies, Level 98
     </li>
   </ul>
 
