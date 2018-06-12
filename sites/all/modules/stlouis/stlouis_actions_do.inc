@@ -2514,7 +2514,7 @@ function _stlouis_action_close_forest_park_function(&$outcome_reason,
 
   $sql = 'select users.*, `values`.fkey_neighborhoods_id as home_hood from users
     left join `values` on users.fkey_values_id = `values`.id
-  where users.fkey_neighborhoods_id = 81 LIMIT 10;';
+  where users.fkey_neighborhoods_id = 81;';
   $result = db_query($sql);
   $target_users = [];
   while ($item = db_fetch_object($result)) {
@@ -2560,7 +2560,7 @@ function _stlouis_action_close_forest_park_function(&$outcome_reason,
   }
 
   // Closing succeeds!
-  // Send a syste-wide message.
+  // Send a system-wide message.
   $msg = $game_user->ep_name . ' ' . $game_user->username . ' has closed Forest Park.
     All people there have been sent to their home ' . $game_text['hood'] . 's.';
   game_send_system_message($game_user->id, $msg, 'mayor');
