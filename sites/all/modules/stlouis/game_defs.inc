@@ -32,6 +32,7 @@ $month_mission = MISSION_NONE;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
 $competency_gain_wait_time = 180;
+$competency_gain_wait_time_str = '3 minutes';
 
 global $game;
 
@@ -134,6 +135,7 @@ switch($today) {
   case '2018-06-12':
     $event_type = EVENT_FAST_COMPETENCIES;
     $competency_gain_wait_time = 30;
+    $competency_gain_wait_time_str = '30 seconds';
     break;
 }
 

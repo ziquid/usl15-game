@@ -9,7 +9,6 @@
 */
 
 global $game, $phone_id;
-
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
@@ -17,6 +16,9 @@ $fetch_header($game_user);
 if (empty($game_user->username)) {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
+
+// Refresh every 20 seconds.
+drupal_set_html_head('<meta http-equiv="refresh" content="20">');
 
 _show_profile_menu($game_user);
 
@@ -89,7 +91,7 @@ $item->ep_name <span class="username">$item->username</span> $clan_acronym
 </div>
 <div class="subsubtitle">$stats</div>
 <div class="subsubtitle">Recently-increased competencies are yellow<br>
-Wait a few minutes before increasing them</div>
+Wait $competency_gain_wait_time_str before increasing them</div>
 <div class="user-profile">
 EOF;
 
