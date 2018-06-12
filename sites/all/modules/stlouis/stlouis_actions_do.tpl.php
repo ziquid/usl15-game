@@ -179,10 +179,10 @@ if ($action_succeeded) {
 
   // Affect competencies.
   if ($action->competency_enhanced_1 != 0) {
-    competency_gain($game_user, (int) $action->competency_enhanced_1);
+    game_competency_gain($game_user, (int) $action->competency_enhanced_1);
   }
   if ($action->competency_enhanced_2 != 0) {
-    competency_gain($game_user, (int) $action->competency_enhanced_2);
+    game_competency_gain($game_user, (int) $action->competency_enhanced_2);
   }
 
   // Affect influence.

@@ -309,6 +309,8 @@ function stlouis_init() {
   if (($game == 'stlouis') || ($game == 'celestial_glory') ||
     ($game == 'robber_barons')) {
 
+    define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
+
     // Don't cache anything.
     $conf['cache'] = FALSE;
 

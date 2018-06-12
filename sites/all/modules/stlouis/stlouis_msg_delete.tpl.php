@@ -30,7 +30,7 @@ if ($msg->fkey_users_to_id != $game_user->id && $msg->fkey_users_from_id != $gam
   drupal_goto($game . '/home/' . $arg2);
 }
 
-competency_gain($game_user, 'pruner');
+game_competency_gain($game_user, 'pruner');
 
 $sql = 'delete from user_messages where id = %d;';
 db_query($sql, $msg_id);

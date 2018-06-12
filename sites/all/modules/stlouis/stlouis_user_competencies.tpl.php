@@ -10,12 +10,13 @@
 
 global $game, $phone_id;
 
-include drupal_get_path('module', arg(0)) . '/game_defs.inc';
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
 
-if (empty($game_user->username))
+if (empty($game_user->username)) {
   drupal_goto($game . '/choose_name/' . $arg2);
+}
 
 _show_profile_menu($game_user);
 
@@ -124,7 +125,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
       $pip .= '<span class="competency-pip ' . $competent . '"></span>';
     }
 
-    if ((time() - strtotime($comp->timestamp)) < 300) {
+    if ((REQUEST_TIME - strtotime($comp->timestamp)) < $competency_gain_wait_time) {
       $too_soon = 'too-soon';
     }
     else {

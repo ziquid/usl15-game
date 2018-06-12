@@ -67,7 +67,7 @@ if (($game_user->energy < $game_quest->required_energy) &&
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
 
-  competency_gain($game_user, 'too tired');
+  game_competency_gain($game_user, 'too tired');
 }
 
 // Need to be drunk for quest 45!
@@ -77,7 +77,7 @@ if ($quest_id == 45 && game_competency_level($game_user, 'drunk')->level == 0) {
     '</div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-drunk-enough';
-//  competency_gain($game_user, 'sober');
+//  game_competency_gain($game_user, 'sober');
 }
 
 // Need to be sober for quest 46!
@@ -87,7 +87,7 @@ if ($quest_id == 46 && game_competency_level($game_user, 'sober')->level == 0) {
     '</div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-sober-enough';
-//  competency_gain($game_user, 'drunk');
+//  game_competency_gain($game_user, 'drunk');
 }
 
 if ($game_quest->equipment_1_required_quantity > 0) {
@@ -115,7 +115,7 @@ if ($game_quest->equipment_1_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_1_required_id;
 
-    competency_gain($game_user, 'hole in pockets');
+    game_competency_gain($game_user, 'hole in pockets');
   }
 
 }
@@ -143,7 +143,7 @@ if ($game_quest->equipment_2_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_2_required_id;
 
-    competency_gain($game_user, 'hole in pockets');
+    game_competency_gain($game_user, 'hole in pockets');
 
   }
 
@@ -172,7 +172,7 @@ if ($game_quest->equipment_3_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_3_required_id;
 
-    competency_gain($game_user, 'hole in pockets');
+    game_competency_gain($game_user, 'hole in pockets');
 
   }
 
@@ -199,7 +199,7 @@ if ($game_quest->staff_required_quantity > 0) {
     $ai_output = 'quest-failed need-staff-' .
       $game_quest->fkey_staff_required_id;
 
-    competency_gain($game_user, 'friendless');
+    game_competency_gain($game_user, 'friendless');
 
   }
 
@@ -228,7 +228,7 @@ if ($game_quest->land_required_quantity > 0) {
     $ai_output = 'quest-failed need-land-' .
       $game_quest->fkey_land_required_id;
 
-    competency_gain($game_user, 'homeless');
+    game_competency_gain($game_user, 'homeless');
 
   }
 
@@ -256,7 +256,7 @@ if (($game_quest->group > 0) && ($game_quest->fkey_neighborhoods_id != 0) &&
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed wrong-hood';
 
-  competency_gain($game_user, 'lost');
+  game_competency_gain($game_user, 'lost');
 }
 
 
@@ -286,11 +286,11 @@ $sql = 'SELECT times_completed FROM `quest_group_completion`
 $quest_completion_html = '';
 
 if ($quest_succeeded) {
-  competency_gain($game_user, 'quester');
+  game_competency_gain($game_user, 'quester');
 
   // Quest-specific competency to add?
   if ($game_quest->fkey_enhanced_competencies_id > 0) {
-    competency_gain($game_user, (int) $game_quest->fkey_enhanced_competencies_id);
+    game_competency_gain($game_user, (int) $game_quest->fkey_enhanced_competencies_id);
   }
 
   $old_energy = $game_user->energy;
@@ -350,7 +350,7 @@ if ($quest_succeeded) {
 
     if ($pc->bonus_given < $percentage_divisor) {
 
-      competency_gain($game_user, 'quest finisher');
+      game_competency_gain($game_user, 'quest finisher');
 
       $game_user->experience += $game_quest->experience;
       $game_user->money += $money_added;
@@ -411,7 +411,7 @@ points!</p>
 have <span class="highlighted">$quest_group->completed</span> new skill points
 to spend</a></p>
 EOF;
-        competency_gain($game_user, 'quest groupie');
+        game_competency_gain($game_user, 'quest groupie');
 
         // Update user stats.
         $sql = 'update users set skill_points = skill_points + %d
@@ -459,7 +459,7 @@ EOF;
       if ($quest_group->completed == ($quest_group->total * 2)) {
 // woohoo!  user just completed an entire group the second time!
 
-//          competency_gain($game_user, 'second-mile saint');
+//          game_competency_gain($game_user, 'second-mile saint');
 
         $sql = 'select * from quest_group_bonus
           where fkey_quest_groups_id = %d;';
@@ -801,7 +801,7 @@ EOF;
 
       // Special case for Drunken Stupor.
       if ($game_quest->fkey_loot_equipment_id == 36) {
-        competency_gain($game_user, 'drunk');
+        game_competency_gain($game_user, 'drunk');
       }
 
       $loot_html =<<< EOF
@@ -866,7 +866,7 @@ EOF;
 
 // add/update db entry
 
-      competency_gain($game_user, 'looter');
+      game_competency_gain($game_user, 'looter');
 
       $sql = 'SELECT equipment.*, equipment_ownership.quantity
         FROM equipment
@@ -973,7 +973,7 @@ EOF;
   </div>
 EOF;
 
-    competency_gain($game_user, 'looter');
+    game_competency_gain($game_user, 'looter');
 
     // Add/update db entry.
     $sql = 'SELECT staff.*, staff_ownership.quantity

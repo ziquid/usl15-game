@@ -112,7 +112,7 @@ if ($options['land-buy-succeeded'] == 'buy-success') {
 
   // Investment?  Add competency.
   if ($game_land->type == 'investment') {
-    competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
+    game_competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
   }
 
   game_land_gain($game_user, $land_id, $quantity, $land_price);

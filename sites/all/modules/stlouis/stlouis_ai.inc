@@ -1687,7 +1687,7 @@ function _ai_debate_players($ai_id) {
 
   $ai_user = _ai_fetch_user($ai_id);
 
-//    $debate_time = 1200;
+//    $debate_wait_time = 1200;
 //    $zombie_debate_wait = 300;
 
   $sql = 'SELECT users.id, users.username

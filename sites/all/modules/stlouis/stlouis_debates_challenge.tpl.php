@@ -79,11 +79,11 @@ if ($game_user->actions == 0) {
   return;
 }
 
-//  $debate_time = 1200;
-//  if ($debate == 'Box') $debate_time = 900;
+//  $debate_wait_time = 1200;
+//  if ($debate == 'Box') $debate_wait_time = 900;
 
 if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
-  (time() - strtotime($item->debates_last_time)) <= $debate_time) ||
+  (time() - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
   ($item->meta == 'zombie' &&
   (time() - strtotime($item->debates_last_time)) <= $zombie_debate_wait)) {
 
@@ -222,7 +222,7 @@ db_query($sql, $game_user->id, $item->id, 0, 0, ($won ? 1 : 0),
 // Did you win?
 if ($won) {
 
-  competency_gain($game_user, 'challenger');
+  game_competency_gain($game_user, 'challenger');
 
   // The experience you gain is based on their level.
   $experience_gained = mt_rand(floor($item->level / 3),
@@ -444,7 +444,7 @@ EOF;
   // Debatebots
   if ($item->meta == 'debatebot') {
 
-    competency_gain($game_user, 'beat a bot');
+    game_competency_gain($game_user, 'beat a bot');
 
     $sql = 'select id from neighborhoods where has_elections = 1
       and id <> %d
@@ -538,7 +538,7 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 else {
 
   // You lost.
-  competency_gain($item, 'defender');
+  game_competency_gain($item, 'defender');
 
   $experience_gained = mt_rand(floor($game_user->level / 3),
     ceil($game_user->level * 2 / 3));

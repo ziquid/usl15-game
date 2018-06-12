@@ -102,8 +102,8 @@ Whom would you like to $debate_lower?
 </div>
 EOF;
 
-//  $debate_time = 1200;
-//  if ($debate == 'Box') $debate_time = 900;
+//  $debate_wait_time = 1200;
+//  if ($debate == 'Box') $debate_wait_time = 900;
 
   $data = array();
   $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
@@ -125,7 +125,7 @@ EOF;
     ORDER BY abs(users.experience - %d) ASC
     LIMIT 12;'; // and users.fkey_neighborhoods_id = %d
   $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
-    date('Y-m-d H:i:s', time() - $debate_time),
+    date('Y-m-d H:i:s', time() - $debate_wait_time),
     date('Y-m-d H:i:s', time() - $zombie_debate_wait),
     $game_user->level - 15,
     $game_user->level + 15, $game_user->experience);

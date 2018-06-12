@@ -47,7 +47,7 @@ if ($options['equipment-sell-succeeded'] == 'sell-success') {
   game_equipment_lose($game_user, $equipment_id, $quantity, $equipment_price);
 
   if ($game_equipment->is_loot > 0) {
-    competency_gain($game_user, 'thrifty');
+    game_competency_gain($game_user, 'thrifty');
   }
 }
 else {

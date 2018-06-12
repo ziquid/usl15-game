@@ -69,7 +69,7 @@ if (!$can_work_again->allowed) {
 if ($options['land-work-succeeded'] == 'work-success') {
 
   // Add competency.
-  competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
+  game_competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
 
   // Set timer.  Can work again in 4 hours.
   $set_value = '_' . $game . '_set_value';

@@ -38,10 +38,10 @@ if (substr($arg3, 0, 3) == 'id:') {
 }
 
 if ($phone_id_to_check == $phone_id) {
-  competency_gain($game_user, 'introspective');
+  game_competency_gain($game_user, 'introspective');
 }
 else {
-  competency_gain($game_user, 'people person');
+  game_competency_gain($game_user, 'people person');
 }
 
 if (($phone_id_to_check == $phone_id) ||
@@ -63,14 +63,14 @@ if (strlen($message) > 0 and strlen($message) < 3) {
   echo '<div class="message-error">Your message must be at least 3
     characters long.</div>';
   $message = '';
-  competency_gain($game_user, 'silent cal');
+  game_competency_gain($game_user, 'silent cal');
 }
 
 if (substr($message, 0, 3) == 'XXX') {
   echo '<div class="message-error">Your message contains words that are not
     allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
   $message = '';
-  competency_gain($game_user, 'uncouth');
+  game_competency_gain($game_user, 'uncouth');
 }
 
 $sql = 'SELECT username, experience, initiative, endurance,
@@ -161,7 +161,7 @@ if (!empty($message)) {
     fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
   $result = db_query($sql, $game_user->id, $item->id, $private, $message);
   $message_orig = '';
-  competency_gain($game_user, 'talkative');
+  game_competency_gain($game_user, 'talkative');
 }
 
 // Halloween Jack-o-lantern posting.
@@ -358,15 +358,15 @@ echo <<< EOF
 <div class="value">$item->debates_won $super_debater</div>
 EOF;
 
-//  $debate_time = 1200;
-//  if ($debate == 'Box') $debate_time = 900;
+//  $debate_wait_time = 1200;
+//  if ($debate == 'Box') $debate_wait_time = 900;
 
 if (($phone_id_to_check != $phone_id) &&
   (abs($item->level - $game_user->level) <= 15) &&
   (($item->fkey_clans_id != $game_user->fkey_clans_id) ||
     empty($item->fkey_clans_id) || empty($game_user->fkey_clans_id))) {
 
-  if ((((time() - strtotime($item->debates_last_time)) > $debate_time) ||
+  if ((((time() - strtotime($item->debates_last_time)) > $debate_wait_time) ||
     (($item->meta == 'zombie') &&
     ((time() - strtotime($item->debates_last_time)) > $zombie_debate_wait)))) {
 // debateable and enough time has passed
@@ -388,7 +388,7 @@ EOF;
         (time() - strtotime($item->debates_last_time));
     }
 	else {
-      $time_left = $debate_time -
+      $time_left = $debate_wait_time -
         (time() - strtotime($item->debates_last_time));
     }
 

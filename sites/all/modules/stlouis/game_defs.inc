@@ -10,6 +10,9 @@ define(EVENT_PRE_MAY, 6);
 define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
+
+define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
+
 define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
@@ -22,22 +25,23 @@ define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
 
-$debate_time = 900; // 1200
+$debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
 $event_type = EVENT_NONE;
 $month_mission = MISSION_NONE;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
+$competency_gain_wait_time = 180;
 
 global $game;
 
-$today = date('Y-m-d', time() - 3600);
+$today = date('Y-m-d', REQUEST_TIME - 3600);
 switch($today) {
 
   // ------ MARCH ------
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
-    $debate_time = 600; // 900; // 1200;
+    $debate_wait_time = 600; // 900; // 1200;
     break;
 
   case '2013-03-09':
@@ -125,6 +129,11 @@ switch($today) {
   case '2018-06-02':
   case '2018-06-03':
     $event_type = EVENT_POLL_JUN_01_2018;
+    break;
+
+  case '2018-06-12':
+    $event_type = EVENT_FAST_COMPETENCIES;
+    $competency_gain_wait_time = 30;
     break;
 }
 

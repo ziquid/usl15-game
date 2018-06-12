@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.5.0, Jun 10 2018';
+$version = 'v0.5.0, Jun 12 2018';
 
 global $game, $phone_id;
 
@@ -16,7 +16,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $message = check_plain($_GET['message']);
 
-competency_gain($game_user, 'where the heart is');
+game_competency_gain($game_user, 'where the heart is');
 
 if ($game_user->level < 6) {
 
@@ -91,7 +91,7 @@ if ($game_user->last_bonus_date != $today) {
 */
   $money = ceil($money);
 
-//  competency_gain($game_user, 'daily bonus');
+//  game_competency_gain($game_user, 'daily bonus');
 
 firep("adding $money money because last_bonus_date = $last_bonus_date");
 
@@ -118,7 +118,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $item = db_fetch_object($result);
 
   if (isset($item->fkey_enhanced_competencies_id)) {
-    competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
+    game_competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
   }
 }
 

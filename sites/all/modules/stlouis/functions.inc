@@ -674,7 +674,7 @@ function game_show_land($game_user, $item, $options = []) {
         t('Insufficient Competency') .
         '</div>';
       $failed = 'failed';
-      competency_gain($game_user, 'incompetent');
+      game_competency_gain($game_user, 'incompetent');
       break;
 
     case 'failed not-required-hood':
@@ -684,7 +684,7 @@ function game_show_land($game_user, $item, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      competency_gain($game_user, 'lost');
+      game_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':
@@ -1210,7 +1210,7 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      competency_gain($game_user, 'lost');
+      game_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':
@@ -2790,7 +2790,7 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function competency_gain($game_user, $id, $level = 1) {
+function game_competency_gain($game_user, $id, $level = 1) {
 
   // If id is string, find numerical id.
   if (gettype($id) == 'string') {
@@ -2802,20 +2802,16 @@ function competency_gain($game_user, $id, $level = 1) {
     if (!empty($item)) {
       $id = (int) $item->id;
     }
-
-    // Not found! Create it!
     else {
-
+      // Not found! Create it!
       $sql = 'insert into competencies (name, level) values ("%s", %d);';
-      $result = db_query($sql, $id, $level);
+      db_query($sql, $id, $level);
 
       $sql = 'select * from competencies where name = "%s";';
       $result = db_query($sql, $id);
       $item = db_fetch_object($result);
       $id = (int) $item->id;
-
     }
-
   }
   else {
     $sql = 'select * from competencies where id = %d;';
@@ -2828,7 +2824,7 @@ function competency_gain($game_user, $id, $level = 1) {
   $result = db_query($sql, $id, $game_user->id);
   $data = db_fetch_object($result);
 
-  if ((time() - strtotime($data->timestamp)) < 180) {
+  if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
 firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
   }

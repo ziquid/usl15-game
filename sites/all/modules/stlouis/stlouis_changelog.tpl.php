@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 12, 2018
+  </div>
+  <ul>
+    <li>
+      Added support for Fast Competencies
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 10, 2018
   </div>
   <ul>
