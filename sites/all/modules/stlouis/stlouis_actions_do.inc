@@ -2479,7 +2479,7 @@ function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
   return TRUE;
 }
 
-function _stlouis_action_close_forest_park_function(&$outcome_reason,
+function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
