@@ -1641,6 +1641,7 @@ function _stlouis_fetch_user() {
   $sql = 'select users.*, elected_positions.energy_bonus as ep_energy_bonus,
     elected_positions.can_broadcast_to_party, clan_members.fkey_clans_id,
     elected_positions.max_level as max_level_for_office,
+    elected_positions.name as ep_name,
     CURRENT_TIMESTAMP as time_now, neighborhoods.name as location,
     `values`.party_icon
 

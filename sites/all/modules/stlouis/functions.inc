@@ -3714,6 +3714,12 @@ function game_send_user_message($from, $to, $private = 0, $message, $subtype = '
   db_query($sql, $subtype, $from, $to, $private, $message);
 }
 
+function game_send_system_message($from, $message, $subtype = 'system') {
+  $sql = 'insert into system_messages (subtype, fkey_users_from_id,
+    fkey_users_to_id, message) values ("%s", %d, 0, "%s");';
+  db_query($sql, $subtype, $from, $message);
+}
+
 function game_zombie_name() {
 
   $first = array(

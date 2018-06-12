@@ -1708,67 +1708,61 @@ EOF;
   return TRUE;
 }
 
-  function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
-    $target) {
+function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
+  $target, &$can_do_again) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $msg_shown = FALSE;
 
-    global $game, $phone_id;
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+  $data = [];
+  $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    clans.acronym as clan_acronym
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'] + 0;
+    from challenge_history
 
-    $action_id = arg(3);
-    $msg_shown = FALSE;
+    left join users on challenge_history.fkey_from_users_id = users.id
 
-    $data = array();
-    $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
-      elected_positions.name as ep_name,
-      clan_members.is_clan_leader,
-      clans.acronym as clan_acronym
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
 
-      from challenge_history
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
 
-      left join users on challenge_history.fkey_from_users_id = users.id
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    challenge_history.fkey_from_users_id
 
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    where fkey_to_users_id = %d and challenge_history.type = "gift" and
+    challenge_history.timestamp >= "%s"
+    order by timestamp DESC;';
 
-      LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-      challenge_history.fkey_from_users_id
+  $result = db_query($sql, $game_user->id,
+    date('Y-m-d H:i:s', time() - 86400));
+  while ($item = db_fetch_object($result)) $data[] = $item;
 
-      LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-      where fkey_to_users_id = %d and challenge_history.type = "gift" and
-      challenge_history.timestamp >= "%s"
-      order by timestamp DESC;';
-
-    $result = db_query($sql, $game_user->id,
-      date('Y-m-d H:i:s', time() - 86400));
-    while ($item = db_fetch_object($result)) $data[] = $item;
-
-    $outcome_reason .=<<< EOF
+  $outcome_reason .=<<< EOF
 <div class="news">
   <div class="messages-title">
     List of Benefactors
   </div>
 EOF;
 
-    foreach ($data as $item) {
+  foreach ($data as $item) {
 
-      $display_time = _stlouis_format_date(strtotime($item->timestamp));
-      $clan_acronym = '';
+    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $clan_acronym = '';
 
-      if (!empty($item->clan_acronym))
-        $clan_acronym = "($item->clan_acronym)";
+    if (!empty($item->clan_acronym))
+      $clan_acronym = "($item->clan_acronym)";
 
-      if ($item->is_clan_leader)
-        $clan_acronym .= '*';
+    if ($item->is_clan_leader)
+      $clan_acronym .= '*';
 
-      $outcome_reason .=<<< EOF
+    $outcome_reason .=<<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1780,23 +1774,22 @@ EOF;
 </div>
 EOF;
 
-      $msg_shown = TRUE;
-
-    }
-
-    if (!$msg_shown) $outcome_reason .= 'No benefactors found!';
-
-    $outcome_reason .= '</div>';
-
-    return TRUE;
-
+    $msg_shown = TRUE;
   }
+
+  if (!$msg_shown) {
+    $outcome_reason .= 'No benefactors found!';
+  }
+
+  $outcome_reason .= '</div>';
+  return TRUE;
+}
 
 function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
-  $action_id = arg(3);
+  $action_id = $arg3;
   $msg_shown = FALSE;
 
   if (!_stlouis_check_for_friendly_hood()) {
@@ -2003,227 +1996,177 @@ EOF;
   return TRUE;
 }
 
-  function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
-    $target, &$can_do_again) {
+function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
+  $target, &$can_do_again) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $action_id = $arg3;
+  $sure = check_plain($_GET['sure']);
+  $target_id = $_GET['target'];
 
-    global $game, $phone_id;
-    $arg2 = check_plain(arg(2));
-    $action_id = arg(3);
-    $sure = check_plain($_GET['sure']);
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $target_id = $_GET['target'];
-
-    if ($sure != 'yes') {
-
-      $outcome_reason = '<div class="subtitle">Are you sure?</div>
-        <div class="subsubtitle">
-          This expels level <strong>' . $target->level .
-          '</strong> <strong>' . $target->username .
-          '</strong> and cannot be undone!
+  if ($sure != 'yes') {
+    $outcome_reason = '<div class="subtitle">Are you sure?</div>
+      <div class="subsubtitle">
+        This expels level <strong>' . $target->level .
+        '</strong> <strong>' . $target->username .
+        '</strong> and cannot be undone!
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions_do/' .
+          $arg2 . '/' . $action_id . '?target=' . $target_id .
+          '&sure=yes">Yes, I\'m sure</a>
         </div>
-        <div class="try-an-election-wrapper">
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions_do/' .
-            $arg2 . '/' . $action_id . '?target=' . $target_id .
-            '&sure=yes">Yes, I\'m sure</a>
-          </div>
-          <div class="try-an-election">
-            <a href="/' . $game . '/actions/' . $phone_id .
-            '">No, I\'m not sure</a>
-          </div>
-        </div>';
-
-      return FALSE;
-
-    }
-
-    $game_user = $fetch_user();
-
-    $sql = 'select * from users where id = %d;';
-    $result = db_query($sql, $target_id);
-    $target_user = db_fetch_object($result);
-    $actions_required = $target_user->level;
-
-    // User is already expelled.
-    if ($target_user->fkey_values_id == 0) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Already expelled!') .
-        '</div><div class="action-effect">You can\'t expel someone who has
-          already been expelled.</div>';
-
-      return FALSE;
-
-    }
-
-    // Not enough actions.
-    if ($game_user->actions < $actions_required) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Not enough Action!') .
-        '</div><div class="action-effect">You do not have enough Action to
-          expel this Level ' . $target_user->level . ' player.</div>';
-
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-        class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-        $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
-        '">Refill your Action (1&nbsp;Luck)</a></div></div>';
-
-      return FALSE;
-
-    }
-
-    // Expel succeeds! Save as major action.
-    $sql = 'SELECT elected_positions.name as ep_name,
-      elected_positions.type as ep_type
-      FROM `users`
-
-      LEFT OUTER JOIN elected_officials
-      ON elected_officials.fkey_users_id = users.id
-
-      LEFT OUTER JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-      WHERE users.id = %d';
-
-    $result = db_query($sql, $game_user->id);
-    $data = db_fetch_object($result);
-    $ep_name = $data->ep_name;
-    $ep_type = $data->ep_type;
-
-    $set_value = '_' . arg(0) . '_set_value';
-    $set_value($game_user->id, 'next_major_action', time() + 7200);
-
-    $sql = "select party_title from `values` where id = '%d';";
-    $result = db_query($sql, $game_user->fkey_values_id);
-    $data = db_fetch_object($result);
-
-    $party = ($game == 'stlouis') ? 'party' : 'family';
-
-    // Add message to user.
-    $sql = 'insert into user_messages (fkey_users_from_id,
-      fkey_users_to_id, message) values (%d, %d, "%s");';
-    $message = $ep_name . ' ' . $game_user->username .
-    ' has expelled you from the ' .
-    $data->party_title . ' ' . $party . '. &nbsp; You have been stripped
-      of 10% of your influence and of your aides.';
-    $result = db_query($sql, $game_user->id, $target_id, $message);
-
-    // Update aides.
-    $sql = 'update equipment_ownership
-      set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $sql = 'update land_ownership
-      set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $sql = 'update staff_ownership
-      set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    // Update levels, skill points.
-    $sql = 'select experience from users where id = %d;';
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
-    $new_experience = ceil($item->experience * 0.9);
-
-    $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
-    $result = db_query($sql, $new_experience);
-    $item = db_fetch_object($result);
-    $new_level = $item->new_level;
-
-    $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
-      left outer join quests
-      on quest_group_completion.fkey_quest_groups_id = quests.group
-      WHERE fkey_users_id = %d and quests.active = 1;';
-    $result = db_query($sql, $target_id);
-
-    // Limited to 1 in db.
-    $item = db_fetch_object($result);
-    $new_skill_points = ($new_level * 4) + $item->bonus - 20;
-
-    $values = ($game == 'stlouis') ? 'Greenbacks' : 'No Values';
-
-    // Update his/her user entry.
-    $sql = 'update users set fkey_values_id = 0,
-      `values` = "%s", level = %d, experience = %d, energy_max = 200,
-      skill_points = %d, initiative = 1, endurance = 1, actions = 3,
-      actions_max = 3, elocution = 1
-      where id = %d;';
-    $result = db_query($sql, $values, $new_level, $new_experience,
-      $new_skill_points, $target_id);
-
-    // Also delete any offices s/he held.
-    $sql = 'delete from elected_officials where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    // And any clan memberships s/he had (disband the clan if s/he was the leader).
-    $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
-
-    // Clan leader? Delete entire clan.
-    if ($item->is_clan_leader) {
-
-      $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-      $result = db_query($sql, $item->fkey_clans_id);
-      $sql = 'delete from clan_members where fkey_clans_id = %d;';
-      $result = db_query($sql, $item->id);
-      $sql = 'delete from clans where id = %d;';
-      $result = db_query($sql, $item->id);
-
-    }
-    else {
-
-      $sql = 'delete from clan_members where fkey_users_id = %d;';
-      $result = db_query($sql, $target_id);
-
-    }
-
-  // Update income.
-  $sql = 'update users set income =
-    (SELECT sum(land.payout * land_ownership.quantity)
-    as income from land
-    left join land_ownership
-    on land_ownership.fkey_land_id = land.id and
-    land_ownership.fkey_users_id = %d)
-    where id = %d;';
-  $result = db_query($sql, $target_id, $target_id);
-
-  // Update expenses.
-  $sql = 'update users set expenses =
-
-    ((SELECT sum(equipment.upkeep * equipment_ownership.quantity)
-    as expenses from equipment
-    left join equipment_ownership
-    on equipment_ownership.fkey_equipment_id = equipment.id and
-    equipment_ownership.fkey_users_id = %d)
-
-    +
-
-    (SELECT sum(staff.upkeep * staff_ownership.quantity)
-    as expenses from staff
-    left join staff_ownership
-    on staff_ownership.fkey_staff_id = staff.id and
-    staff_ownership.fkey_users_id = %d))
-
-    where id = %d;';
-  $result = db_query($sql, $target_id, $target_id, $target_id);
-
-    // Deduct your Action.
-    $sql = 'update users set actions = actions - %d where id = %d;';
-    $result = db_query($sql, $actions_required, $game_user->id);
-
-    $outcome_reason .= '<div class="action-effect">' . $target_user->username .
-      ' has been expelled from your party.</div>';
-
-    $can_do_again = FALSE;
-
-    return TRUE;
-
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions/' . $arg2 .
+          '">No, I\'m not sure</a>
+        </div>
+      </div>';
+    return FALSE;
   }
+
+  $game_user = $fetch_user();
+
+  $sql = 'select * from users where id = %d;';
+  $result = db_query($sql, $target_id);
+  $target_user = db_fetch_object($result);
+  $actions_required = $target_user->level;
+
+  // User is already expelled.
+  if ($target_user->fkey_values_id == 0) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Already expelled!') .
+      '</div><div class="action-effect">You can\'t expel someone who has
+        already been expelled.</div>';
+    return FALSE;
+  }
+
+  // Not enough actions.
+  if ($game_user->actions < $actions_required) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough Action!') .
+      '</div><div class="action-effect">You do not have enough Action to
+        expel this Level ' . $target_user->level . ' player.</div>';
+    $outcome_reason .= '<div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+      $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
+      '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+    return FALSE;
+  }
+
+  // Expel succeeds!  Save as major action.
+  $sql = 'SELECT elected_positions.name as ep_name,
+    elected_positions.type as ep_type
+    FROM `users`
+
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+
+    WHERE users.id = %d';
+
+  $result = db_query($sql, $game_user->id);
+  $data = db_fetch_object($result);
+  $ep_name = $data->ep_name;
+
+  $set_value = '_' . $game . '_set_value';
+  $set_value($game_user->id, 'next_major_action', time() + 7200);
+
+  $sql = "select party_title from `values` where id = '%d';";
+  $result = db_query($sql, $game_user->fkey_values_id);
+  $data = db_fetch_object($result);
+
+  $party = ($game == 'stlouis') ? 'party' : 'family';
+
+  // Add message to user.
+  $sql = 'insert into user_messages (fkey_users_from_id,
+    fkey_users_to_id, message) values (%d, %d, "%s");';
+  $message = $ep_name . ' ' . $game_user->username .
+  ' has expelled you from the ' .
+  $data->party_title . ' ' . $party . '. &nbsp; You have been stripped
+    of 10% of your ' . $game_text['experience'] . ' and of your aides.';
+  $result = db_query($sql, $game_user->id, $target_id, $message);
+
+  // Update aides.
+  $sql = 'update equipment_ownership
+    set quantity = ceil(quantity * 0.9), quantity_used = ceil(quantity_used * 0.9)
+    where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  $sql = 'update land_ownership
+    set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  $sql = 'update staff_ownership
+    set quantity = ceil(quantity * 0.9) where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  // Update levels, skill points.
+  $new_experience = ceil($target_user->experience * 0.9);
+
+  $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
+  $result = db_query($sql, $new_experience);
+  $item = db_fetch_object($result);
+  $new_level = $item->new_level;
+
+  $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
+    left outer join quests
+    on quest_group_completion.fkey_quest_groups_id = quests.group
+    WHERE fkey_users_id = %d and quests.active = 1;';
+  $result = db_query($sql, $target_id);
+
+  // Limited to 1 in db.
+  $item = db_fetch_object($result);
+  $new_skill_points = ($new_level * 4) + $item->bonus - 20;
+
+  $values = ($game == 'stlouis') ? 'Greenbacks' : 'No Values';
+
+  // Update his/her user entry.
+  $sql = 'update users set fkey_values_id = 0,
+    `values` = "%s", level = %d, experience = %d, energy_max = 200,
+    skill_points = %d, initiative = 1, endurance = 1, actions = 3,
+    actions_max = 3, elocution = 1
+    where id = %d;';
+  db_query($sql, $values, $new_level, $new_experience,
+    $new_skill_points, $target_id);
+
+  // Also delete any offices s/he held.
+  $sql = 'delete from elected_officials where fkey_users_id = %d;';
+  db_query($sql, $target_id);
+
+  // And any clan memberships s/he had (disband the clan if s/he was the leader).
+  $sql = 'select * from clan_members where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
+
+  // Clan leader? Delete entire clan.
+  if ($item->is_clan_leader) {
+    $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
+    db_query($sql, $item->fkey_clans_id);
+    $sql = 'delete from clan_members where fkey_clans_id = %d;';
+    db_query($sql, $item->id);
+    $sql = 'delete from clans where id = %d;';
+    db_query($sql, $item->id);
+  }
+  else {
+    $sql = 'delete from clan_members where fkey_users_id = %d;';
+    db_query($sql, $target_id);
+  }
+
+  // Update his/her income.
+  game_recalc_income($target_user);
+
+  // Deduct your Action.
+  game_action_use($game_user, $actions_required);
+
+  $outcome_reason .= '<div class="action-effect">' . $target_user->username .
+    ' has been expelled from your ' . $party . '.</div>';
+
+  $can_do_again = FALSE;
+  return TRUE;
+}
 
 function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
   &$can_do_again) {
@@ -2398,7 +2341,6 @@ EOF;
   return TRUE;
 }
 
-
 function _stlouis_check_for_friendly_hood() {
   global $game, $phone_id;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -2465,674 +2407,6 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
   return !empty($result) ? TRUE : FALSE;
 }
 
-
-  function _stlouis_action_open_a_bank_account_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-    $can_do_again = FALSE;
-
-    $password = trim(check_plain($_GET['password']));
-
-    // Need a password.
-    if (empty($password)) {
-
-      $outcome_reason =<<< EOF
-<div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Please enter a password for your new account</p>
-    <p class="second">Anyone with your account number and password can
-      deposit or withdraw</p>
-    <input type="text" name="password" size="20" maxlength="20"/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-EOF;
-
-      return FALSE;
-
-    }
-
-    // Generate an account number.
-    $account_num = 0;
-
-    while ($account_num == 0) {
-
-      $account_num = mt_rand(100000000, 999999999); // 9 digits
-      $sql = 'select account_number from bank_accounts
-        where account_number = %d;';
-      $result = db_query($sql, $account_num);
-      $item = db_fetch_object($result);
-firep($item);
-
-      // Account number already exists.
-      if (!empty($item)) {
-        $account_num = 0;
-      }
-
-    }
-
-    // Doesn't exist - create it!
-    $sql = 'insert into bank_accounts (fkey_users_id, account_number, password)
-      values (%d, %d, "%s");';
-    $result = db_query($sql, $game_user->id, $account_num, $password);
-
-//    mail('joseph@cheek.com', 'bank account ' . $account_num . ' created',
-//      $game_user->username . ' opened it.');
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your account number is <span class="account-num">$account_num</span>.
-</div>
-<div class="action-effect">
-  Your password is <span class="account-num">$password</span>.
-</div>
-<div class="action-effect">
-  Please write these down!
-</div>
-EOF;
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_close_a_bank_account_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-    $can_do_again = FALSE;
-
-    $account_num = trim(check_plain($_GET['account_num']));
-    $password = trim(check_plain($_GET['password']));
-
-    if (empty($password) || empty($account_num)) {
-
-      // Need an account number and password.
-
-      $outcome_reason =<<< EOF
-<div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Please enter your account number and password</p>
-    Account #: <input type="text" name="account_num" size="9" maxlength="9"/>
-    <br/>
-    Password: <input type="text" name="password" size="20" maxlength="20"/>
-    <br/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-EOF;
-
-      return FALSE;
-
-    }
-
-    // Validate the info.
-    $sql = 'select * from bank_accounts
-      where account_number = %d
-      and password = "%s"
-      and fkey_users_id = %d
-      and active = 1;';
-    $result = db_query($sql, $account_num, $password, $game_user->id);
-    $item = db_fetch_object($result);
-firep($item);
-
-    // Account info not correct.
-    if (empty($item)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We cannot find an open account in
-        your name with that account number and password.</div>';
-
-      return FALSE;
-
-    }
-
-    // Close the account.
-    $sql = 'update bank_accounts
-      set timestamp_closed = CURRENT_TIMESTAMP, active = 0, balance = 0
-      where id = %d;';
-    $result = db_query($sql, $item->id);
-    $sql = 'update users
-      set money = money + %d
-      where id = %d;';
-    $result = db_query($sql, $item->balance, $game_user->id);
-    $game_user->money += $item->balance;
-
-    // No need to reprocess; automatically.
-    $balance = number_format($item->balance);
-
-    mail('joseph@cheek.com', 'bank account ' . $account_num . ' closed',
-      'by ' . $game_user->username . ', who pocketed ' . $balance .
-      ' ' . $game_user->values . '.');
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your account is now closed and the remaining balance of $balance
-  $game_user->values has been given to you.
-</div>
-EOF;
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_list_your_bank_accounts_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-//    $can_do_again = FALSE;
-
-    $sql = 'select * from bank_accounts
-      where fkey_users_id = %d
-      and active = 1;';
-    $result = db_query($sql, $game_user->id);
-    while ($item = db_fetch_object($result)) $data[] = $item;
-
-    foreach ($data as $item) {
-
-      $balance = number_format($item->balance);
-      $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Account <span class="account-num medium">$item->account_number</span> has
-  <span class="account-num medium">$balance</span>
-  $game_user->values
-</div>
-EOF;
-
-    }
-
-    if (sizeof($data) == 0)
-      $outcome_reason .=<<< EOF
-<div class="action-effect">No accounts found!</div>
-EOF;
-
-//    mail('joseph@cheek.com', 'bank account check', 'by ' .
-//      $game_user->username . ', who has ' . sizeof($data) . ' account(s)');
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_change_a_bank_account_password_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-//    $can_do_again = FALSE;
-
-    $account_num = trim(check_plain($_GET['account_num']));
-    $password = trim(check_plain($_GET['password']));
-
-    if (empty($password) || empty($account_num)) {
-
-    // Need an account number and password.
-      $outcome_reason =<<< EOF
-<div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Please enter the account number and the new password</p>
-    Account #: <input type="text" name="account_num" size="9" maxlength="9"/>
-    <br/>
-    New Password: <input type="text" name="password" size="20" maxlength="20"/>
-    <br/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-EOF;
-
-      return FALSE;
-
-    }
-
-    // Validate the info.
-    $sql = 'select * from bank_accounts
-      where account_number = %d
-      and fkey_users_id = %d
-      and active = 1;';
-    $result = db_query($sql, $account_num, $game_user->id);
-    $item = db_fetch_object($result);
-firep($item);
-
-    // Account info not correct.
-    if (empty($item)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We cannot find an open account in
-        your name with that account number.</div>';
-
-      return FALSE;
-
-    }
-
-    // Update the password.
-    $sql = 'update bank_accounts
-      set password = "%s"
-      where id = %d;';
-    $result = db_query($sql, $password, $item->id);
-
-//    mail('joseph@cheek.com', 'bank account ' . $account_num .
-//      ' password changed', 'by ' . $game_user->username . '.');
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  The password for account <strong>$account_num</strong>
-  has successfully been changed to <strong>$password</strong>.
-</div>
-<div class="action-effect">
-  The old password will no longer work for deposits or withdrawals.
-</div>
-EOF;
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_deposit_funds_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-//    $can_do_again = FALSE;
-
-    $account_num = trim(check_plain($_GET['account_num']));
-//    $password = trim(check_plain($_GET['password']));
-    $amount = trim(check_plain($_GET['amount']));
-
-//    if (empty($password) || empty($account_num) || empty($amount)) {
-    if (empty($account_num) || empty($amount)) {
-
-      // Need an account number and password and amount.
-      $outcome_reason =<<< EOF
-<div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Please enter the account number, password, and amount you wish to
-      deposit</p>
-    Account #: <input type="text" name="account_num" size="9" maxlength="9"/>
-    <br/>
-<!--    Password: <input type="text" name="password" size="20" maxlength="20"/>
-    <br/>-->
-    Amount: <input type="text" name="amount" size="10" maxlength="10"/>
-    <br/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-EOF;
-
-      return FALSE;
-
-    }
-
-    // Validate the info -- first, check that the account exists.
-    $sql = 'select * from bank_accounts
-      where account_number = %d
---      and password = "%s"
-      and active = 1;';
-    $result = db_query($sql, $account_num/* , $password */ );
-    $item = db_fetch_object($result);
-firep($item);
-
-    // Account info not correct.
-    if (empty($item)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We cannot find an open account
-        with that account number and password.</div>';
-
-      return FALSE;
-
-    }
-
-    // Set transaction_lock and then reprocess user object.
-
-    // Spin 10 times for 1 second waiting for a lock, if necessary.
-    $lock_acquired = FALSE;
-    $lock_try = 0;
-
-    while ((!$lock_acquired) && ($lock_try < 10)) {
-
-      $sql = 'select * from bank_accounts
-        where account_number = %d
---        and password = "%s"
-        and active = 1;';
-      $result = db_query($sql, $account_num /*, $password */);
-      $item = db_fetch_object($result);
-
-      if ($item->transaction_lock == 0) {
-        db_query('update bank_accounts set transaction_lock = 1
-          where id = %d;', $item->id);
-        $lock_acquired = TRUE;
-        $lock_try = 0;
-      }
-      else {
-        $lock_try++;
-        sleep(1);
-      }
-
-    }
-
-    // Unable to get a lock.
-    if ($lock_try > 0) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We temporarily cannot access your
-        account.&nbsp; Please try again later.</div>';
-
-      return FALSE;
-
-    }
-
-    $game_user = $fetch_user();
-
-    // Check moolah.
-
-    // Not enough moolah.
-    if (($amount > $game_user->money) || ($amount < 0)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">You do not have that much to
-        deposit.</div>';
-
-      db_query('update bank_accounts set transaction_lock = 0
-        where id = %d;', $item->id);
-      return FALSE;
-
-    }
-
-    // Next, check account.
-
-    // Make the deposit and subtract from the user.
-    $sql = 'update bank_accounts
-      set balance = balance + %d
-      where id = %d;';
-    $result = db_query($sql, $amount * 0.8, $item->id);
-
-    $sql = 'update users
-      set money = money - %d
-      where id = %d;';
-    $result = db_query($sql, $amount, $game_user->id);
-    $game_user->money -= $amount;
-    $new_balance = number_format($item->balance + $amount * 0.8);
-
-    $sql = 'insert into bank_account_transactions
-      (fkey_users_id, fkey_bank_accounts_id, transaction_type, orig_balance,
-      fkey_account_values_id, transaction_amount, fkey_transaction_values_id,
-      account_currency_strength, transaction_currency_strength,
-      account_currency_amount, fee_percentage, fee_amount,
-      net_transaction_amount, ending_balance)
-
-      values ($game_user->id, %d, "deposit", %d,
-        (SELECT users.fkey_values_id
-        FROM  `bank_accounts`
-        LEFT JOIN users ON users.id = bank_accounts.fkey_users_id
-        WHERE bank_accounts.account_number = %d),
-      %d, %d, 1.00, 1.00, %d, 20, %d, %d, %d);';
-    $result = db_query($sql, $item->id, $item->balance, $account_num,
-      $amount, $game_user->fkey_values_id, $amount, $amount * 0.2,
-      $amount * 0.8, $item->balance + $amount * 0.8);
-
-/*
-    mail('joseph@cheek.com', 'bank account deposit to ' . $account_num . '.',
-      'by ' . $game_user->username . ', who deposited ' .
-      number_format($amount) . ' less ' . number_format($amount * 0.2) .
-      ' in fees.  The ' .
-      'current balance in the account is now ' . $new_balance . '.');
-*/
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your deposit was successful!
-</div>
-EOF;
-
-    // Show balance if you own it.
-    if ($game_user->id == $item->fkey_users_id) {
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your account balance is now $new_balance $game_user->values.
-</div>
-EOF;
-
-    }
-
-      // Reprocess user object and then clear transaction_lock.
-      db_query('update bank_accounts set transaction_lock = 0
-        where id = %d;', $item->id);
-
-    $game_user = $fetch_user();
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_withdraw_funds_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-    $arg2 = check_plain(arg(2));
-//    $can_do_again = FALSE;
-
-    $account_num = trim(check_plain($_GET['account_num']));
-    $password = trim(check_plain($_GET['password']));
-    $amount = trim(check_plain($_GET['amount']));
-
-    if (empty($password) || empty($account_num) || empty($amount)) {
-
-      // Need an account number and password and amount.
-      $outcome_reason =<<< EOF
-<div class="ask-clan-name">
-  <form method=get action="/$game/actions_do/$arg2/$action_id">
-    <p>Please enter the account number, password, and amount you wish to
-      withdraw</p>
-    Account #: <input type="text" name="account_num" size="9" maxlength="9"/>
-    <br/>
-    Password: <input type="text" name="password" size="20" maxlength="20"/>
-    <br/>
-    Amount: <input type="text" name="amount" size="10" maxlength="10"/>
-    <br/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-EOF;
-
-      return FALSE;
-
-    }
-
-    // Validate the info -- first, check that the account exists.
-    $sql = 'select * from bank_accounts
-      where account_number = %d
-      and password = "%s"
-      and active = 1;';
-    $result = db_query($sql, $account_num, $password);
-    $item = db_fetch_object($result);
-firep($item);
-
-    // Account info not correct.
-    if (empty($item)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We cannot find an open account
-        with that account number and password.</div>';
-
-      return FALSE;
-
-    }
-
-    // Set transaction_lock and then reprocess user object.
-
-    // Spin 10 times for 1 second waiting for a lock, if necessary.
-    $lock_acquired = FALSE;
-    $lock_try = 0;
-
-    while ((!$lock_acquired) && ($lock_try < 10)) {
-
-      $sql = 'select * from bank_accounts
-        where account_number = %d
-        and password = "%s"
-        and active = 1;';
-      $result = db_query($sql, $account_num, $password);
-      $item = db_fetch_object($result);
-
-      if ($item->transaction_lock == 0) {
-        db_query('update bank_accounts set transaction_lock = 1
-          where id = %d;', $item->id);
-        $lock_acquired = TRUE;
-        $lock_try = 0;
-      }
-      else {
-        $lock_try++;
-        sleep(1);
-      }
-
-    }
-
-    // Unable to get a lock.
-    if ($lock_try > 0) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">We temporarily cannot access your
-        account.&nbsp; Please try again later.</div>';
-
-      return FALSE;
-
-    }
-
-    $game_user = $fetch_user();
-
-    // Check moolah.
-
-    // Not enough moolah.
-    if (($amount > $item->balance) || ($amount < 0)) {
-
-      $outcome_reason = '<div class="land-failed">' .
-        t('Sorry!') .
-        '</div><div class="action-effect">The account does not have that much to
-        withdraw.</div>';
-
-      db_query('update bank_accounts set transaction_lock = 0
-        where id = %d;', $item->id);
-      return FALSE;
-
-    }
-
-    // Make the withdrawal and add to the user.
-    $sql = 'update bank_accounts
-      set balance = balance - %d
-      where id = %d;';
-    $result = db_query($sql, $amount, $item->id);
-
-    $sql = 'update users
-      set money = money + %d
-      where id = %d;';
-    $result = db_query($sql, $amount, $game_user->id);
-    $game_user->money += $amount;
-    $new_balance = number_format($item->balance - $amount);
-
-    $sql = 'insert into bank_account_transactions
-      (fkey_users_id, fkey_bank_accounts_id, transaction_type, orig_balance,
-      fkey_account_values_id, transaction_amount, fkey_transaction_values_id,
-      account_currency_strength, transaction_currency_strength,
-      account_currency_amount, fee_percentage, fee_amount,
-      net_transaction_amount, ending_balance)
-
-      values ($game_user->id, %d, "withdrawal", %d,
-        (SELECT users.fkey_values_id
-        FROM  `bank_accounts`
-        LEFT JOIN users ON users.id = bank_accounts.fkey_users_id
-        WHERE bank_accounts.account_number = %d),
-      %d, %d, 1.00, 1.00, %d, 0, 0, %d, %d);';
-    $result = db_query($sql, $item->id, $item->balance, $account_num,
-      $amount, $game_user->fkey_values_id, $amount,
-      $amount, $item->balance - $amount);
-
-    // Not owned by you?
-    if ($game_user->id != $item->fkey_users_id) {
-      $not_owner = 'The withdrawer is not the account owner!';
-    }
-
-/*
-    mail('joseph@cheek.com', 'bank account withdrawal from ' . $account_num .
-      '.', 'by ' . $game_user->username . ', who withdrew ' .
-      number_format($amount) . '.  The ' .
-      'current balance in the account is now ' . $new_balance . '.  ' .
-      $not_owner);
-*/
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your withdrawal was successful!
-</div>
-EOF;
-
-    // Show balance if you own it.
-    if ($game_user->id == $item->fkey_users_id) {
-
-    $outcome_reason .=<<< EOF
-<div class="action-effect">
-  Your account balance is now $new_balance $game_user->values.
-</div>
-EOF;
-
-    }
-
-      // Reprocess user object and then clear transaction_lock.
-      db_query('update bank_accounts set transaction_lock = 0
-        where id = %d;', $item->id);
-
-    $game_user = $fetch_user();
-    return TRUE;
-
-  }
-
 function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   $target, &$can_do_again) {
 
@@ -3164,48 +2438,159 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   }
 }
 
-  function _stlouis_action_support_your_party_official_function(
-    &$outcome_reason, $target, &$can_do_again) {
+function _stlouis_action_support_your_party_official_function(
+  &$outcome_reason, $target, &$can_do_again) {
 
-    global $game;
-    $game_user = _stlouis_fetch_user();
-    $target_id = $_GET['target'];
+  global $game;
+  $game_user = _stlouis_fetch_user();
+  $target_id = $_GET['target'];
 
-    $sql = 'SELECT elected_officials.id
-      FROM elected_officials
-      LEFT JOIN users ON elected_officials.fkey_users_id = users.id
-      LEFT JOIN elected_positions
-      ON elected_positions.id = elected_officials.fkey_elected_positions_id
-      WHERE users.fkey_values_id = %d
-      AND elected_positions.type = 2
-      AND users.id = %d';
+  $sql = 'SELECT elected_officials.id
+    FROM elected_officials
+    LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+    LEFT JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    WHERE users.fkey_values_id = %d
+    AND elected_positions.type = 2
+    AND users.id = %d';
 
-    $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
+  $item = db_fetch_object($result);
 
-    if ($item) {
-      return TRUE;
+  if ($item) {
+    return TRUE;
+  }
+  else {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Target is not a party official!') .
+      '</div>';
+    return FALSE;
+  }
+}
+
+function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
+  $target, &$can_do_again) {
+
+  // One hour ago, since we are ET.
+  $st_time = date('g:i:s A', REQUEST_TIME - 3600);
+  $outcome_reason .= '<div class="title">Current Time in St. Louis</div>
+    <div class="subtitle">' . $st_time . '</div>';
+
+  return TRUE;
+}
+
+function _stlouis_action_close_forest_park_function(&$outcome_reason,
+  $target, &$can_do_again) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $action_id = $arg3;
+  $sure = check_plain($_GET['sure']);
+
+  if ($sure != 'yes') {
+    $sql = 'select count(*) as count from users
+      where fkey_neighborhoods_id = 81;';
+    $result = db_query($sql);
+    $count = db_fetch_object($result);
+
+    $outcome_reason = '<div class="subtitle">Are you sure?</div>
+      <div class="subsubtitle">
+        This action clears Forest Park of all <strong>' . $count->count .
+      '</strong> players and cannot be undone!
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions_do/' .
+      $arg2 . '/' . $action_id . '?sure=yes">Yes, I\'m sure</a>
+        </div>
+        <div class="try-an-election">
+          <a href="/' . $game . '/actions/' . $arg2 .
+      '">No, I\'m not sure</a>
+        </div>
+      </div>';
+    return FALSE;
+  }
+
+  $game_user = $fetch_user();
+
+  $sql = 'select users.*, `values`.fkey_neighborhoods_id as home_hood from users
+    left join `values` on users.fkey_values_id = `values`.id
+  where users.fkey_neighborhoods_id = 81 LIMIT 10;';
+  $result = db_query($sql);
+  $target_users = [];
+  while ($item = db_fetch_object($result)) {
+    if ($item->home_hood == 81) {
+      $item->home_hood = 39;
+      $item->hood_text = 'sent to a random ';
     }
     else {
-      $outcome_reason = '<div class="land-failed">' .
-        t('Target is not a party official!') .
-        '</div>';
-      return FALSE;
+      $item->hood_text = 'returned to your home ';
     }
+    $target_users[] = $item;
+  }
+  $num_users = count($target_users);
+  $actions_required = $num_users;
+  $money_required = $num_users * 50;
+
+  // Not enough actions.
+  if ($game_user->actions < $actions_required) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough Action!') .
+      '</div><div class="action-effect">You do not have enough Action to
+        expel these ' . $num_users . ' players.</div>';
+    $outcome_reason .= '<div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+      $phone_id . '/action?destination=/' .  $game . '/actions/' . $arg2 .
+      '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+    return FALSE;
   }
 
-  function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    // One hour ago, since we are ET.
-    $st_time = date('g:i:s A', time() - 3600);
-    $outcome_reason .= '<div class="title">Current Time in St. Louis</div>
-      <div class="subtitle">' . $st_time . '</div>';
-
-    return TRUE;
-
+  // Not enough money.
+  if ($game_user->money < $money_required) {
+    $offer = game_luck_money_offer($game_user);
+    $outcome_reason = '<div class="land-failed">' .
+      t('Not enough @value!', ['@value' => $game_user->values]) .
+      '</div><div class="action-effect">You do not have enough ' . $game_user->values . ' to
+        expel these ' . $num_users . ' players.</div>
+      <div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+      $phone_id . '/money?destination=/' . $game . '/actions/' . $arg2 .
+      '">Receive ' . $offer . ' ' . $game_user->values .
+      ' (1&nbsp;Luck)</a></div></div>';
+    return FALSE;
   }
 
+  // Closing succeeds!
+  // Send a syste-wide message.
+  $msg = $game_user->ep_name . ' ' . $game_user->username . ' has closed Forest Park.
+    All people there have been sent to their home ' . $game_text['hood'] . 's.';
+  game_send_system_message($game_user->id, $msg, 'mayor');
+
+  // Move users, tell them.
+  $sql = 'update users set fkey_neighborhoods_id = %d where id = %d;';
+  $msg = $game_user->ep_name . ' ' . $game_user->username . ' has closed Forest Park.
+    You have been ';
+  foreach ($target_users as $target) {
+    db_query($sql, $target->home_hood, $target->id);
+    game_send_user_message($game_user->id, $target->id, 0,
+      $msg . $target->hood_text . $game_text['hood'] . '.');
+  }
+
+  // Save as major action.
+  $set_value = '_' . $game . '_set_value';
+  $set_value($game_user->id, 'next_major_action', time() + 900);
+
+  // Deduct your Action, money.
+  $sql = 'update users set money = money - %d where id = %d;';
+  db_query($sql, $money_required, $game_user->id);
+  $game_user->money -= $money_required;
+  game_action_use($game_user, $actions_required);
+
+  $outcome_reason .= '<div class="action-effect">Cleared ' . $count->count .
+    ' players from Forest Park.</div>';
+
+  $can_do_again = FALSE;
+  return TRUE;
+}
 
   function _stlouis_action_don_a_different_costume_function(&$outcome_reason,
     $target, &$can_do_again) {
@@ -4241,36 +3626,6 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
 
   }
 
-
-  function _celestial_glory_action_give_a_gift_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-    $arg2 = check_plain(arg(2));
-    $action_id = arg(3);
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    $outcome_reason .= '<div class="action-effect">' .
-      t('Your gift is given back to you, and more') . '<br/>' .
-      t('(You get 5 extra Action)') . '</div>';
-
-    $sql = 'update users set actions = actions + 6
-      where id = %d';
-    $result = db_query($sql, $game_user->id);
-
-    // Save as major action.
-    $set_value = '_' . arg(0) . '_set_value';
-    $set_value($game_user->id, 'next_major_action', time() + 600);
-
-    $can_do_again = FALSE;
-
-    return TRUE;
-
-  }
-
-
   function _stlouis_action_spend_some_funds_function(&$outcome_reason,
     $target, &$can_do_again) {
 
@@ -4497,7 +3852,6 @@ EOF;
 
   }
 
-
   function _stlouis_action_unfreeze_a_player_function(&$outcome_reason,
     $target, &$can_do_again) {
 
@@ -4671,1892 +4025,5 @@ EOF;
     $result = db_query($sql, $game_user->id, $target_id, $message);
 
    return TRUE;
-
-  }
-
-
-  function _stlouis_action_open_a_small_present_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-//    $can_do_again = FALSE;
-
-
-    switch(mt_rand(0, 142)) {
-
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-        $money = floor(($game_user->income - $game_user->expenses) / 8);
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
-          '<div class="title">You got 5 actions!</div>';
-
-        $sql = 'update users set actions = actions + 6
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
-          '<div class="title">You got 100 influence!</div>';
-
-        $sql = 'update users set experience = experience + 100
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-        $outcome_reason .=
-          '<div class="title">You got 500 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 500
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $land = 1;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Lemonade Stand!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $land = 2;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Paper Route!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 100:
-      case 101:
-      case 102:
-      case 103:
-      case 104:
-      case 105:
-      case 106:
-      case 107:
-      case 108:
-      case 109:
-        $land = 3;
-
-        $outcome_reason .= '<div class="title">You got a deed to an
-          Online Auction Business!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 110:
-      case 111:
-      case 112:
-      case 113:
-      case 114:
-      case 115:
-      case 116:
-      case 117:
-      case 118:
-      case 119:
-        $equipment = 3;
-
-        $outcome_reason .= '<div class="title">You got a Dictionary!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 1
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_equipment_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 120:
-      case 121:
-      case 122:
-      case 123:
-      case 124:
-      case 125:
-      case 126:
-      case 127:
-      case 128:
-      case 129:
-        $equipment = 10;
-
-        $outcome_reason .= '<div class="title">You got a Political Flyer!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 1
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_equipment_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 130:
-      case 131:
-      case 132:
-      case 133:
-      case 134:
-      case 135:
-      case 136:
-      case 137:
-      case 138:
-      case 139:
-        $equipment = 11;
-
-        $outcome_reason .= '<div class="title">You got a Political Button!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 1
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_eqiupment_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 140:
-        $land = 10;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Bank!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 141:
-        $land = 11;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Luxury Car Importer!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 142:
-        $land = 12;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Manufacturing Plant!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      default:
-        $money = $game_user->level * 100;
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-    }
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_open_a_medium_present_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-//    $can_do_again = FALSE;
-
-
-    switch(mt_rand(30, 145)) {
-
-/*
-      case 30:
-      case 31:
-      case 32:
-      case 33:
-      case 34:
-      case 35:
-      case 36:
-      case 37:
-      case 38:
-      case 39:
-        $outcome_reason .=
-          '<div class="title">You got your energy refilled!</div>';
-
-        $sql = 'update users set energy = energy_max
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-*/
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-      case 45:
-      case 46:
-      case 47:
-      case 48:
-      case 49:
-        $money = floor(($game_user->income - $game_user->expenses) / 2);
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
-          '<div class="title">You got 20 actions!</div>';
-
-        $sql = 'update users set actions = actions + 21
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
-          '<div class="title">You got 1000 influence!</div>';
-
-        $sql = 'update users set experience = experience + 1000
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-      case 75:
-      case 76:
-      case 77:
-      case 78:
-      case 79:
-        $outcome_reason .=
-          '<div class="title">You got 2500 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 2500
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $land = 4;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Pool Hall!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $land = 5;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Woodworking Shop!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 100:
-      case 101:
-      case 102:
-      case 103:
-      case 104:
-      case 105:
-      case 106:
-      case 107:
-      case 108:
-      case 109:
-        $land = 6;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Restaurant!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 110:
-      case 111:
-      case 112:
-      case 113:
-      case 114:
-      case 115:
-      case 116:
-      case 117:
-      case 118:
-      case 119:
-        $equipment = 4;
-
-        $outcome_reason .= '<div class="title">You got 10 Thesauruses!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 10
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_equipment_id, fkey_users_id, quantity) values
-            (%d, %d, 10);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 120:
-      case 121:
-      case 122:
-      case 123:
-      case 124:
-      case 125:
-      case 126:
-      case 127:
-      case 128:
-      case 129:
-        $staff = 1;
-
-        $outcome_reason .= '<div class="title">You found 10
-          Supportive Family Members!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 10
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 10);';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-
-        break;
-
-      case 130:
-      case 131:
-      case 132:
-      case 133:
-      case 134:
-      case 135:
-      case 136:
-      case 137:
-      case 138:
-      case 139:
-        $staff = 6;
-
-        $outcome_reason .= '<div class="title">You found 10
-          Supportive Friends!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 10
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 10);';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-
-        break;
-
-      case 140:
-      case 141:
-        $land = 10;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Bank!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 142:
-      case 143:
-        $land = 11;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Luxury Car Importer!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 144:
-      case 145:
-        $land = 12;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Manufacturing Plant!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      default:
-        $money = $game_user->level * 1000;
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-    }
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_open_a_large_present_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-//    $can_do_again = FALSE;
-
-
-    switch(mt_rand(30, 151)) {
-
-      case 30:
-      case 31:
-      case 32:
-      case 33:
-      case 34:
-      case 35:
-      case 36:
-      case 37:
-      case 38:
-      case 39:
-        $outcome_reason .=
-          '<div class="title">You got your energy refilled!</div>';
-
-        $sql = 'update users set energy = energy_max
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-      case 45:
-      case 46:
-      case 47:
-      case 48:
-      case 49:
-        $money = floor(($game_user->income - $game_user->expenses) * 4);
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
-          '<div class="title">You got 50 actions!</div>';
-
-        $sql = 'update users set actions = actions + 50
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
-          '<div class="title">You got 5000 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 5000
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-      case 75:
-      case 76:
-      case 77:
-      case 78:
-      case 79:
-        $outcome_reason .=
-          '<div class="title">You got 10000 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 10000
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $land = 7;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Used Car Dealership!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $land = 8;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Department Store!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 100:
-      case 101:
-      case 102:
-      case 103:
-      case 104:
-      case 105:
-      case 106:
-      case 107:
-      case 108:
-      case 109:
-        $land = 9;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Luxury Home Builder!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 110:
-      case 111:
-      case 112:
-      case 113:
-      case 114:
-      case 115:
-      case 116:
-      case 117:
-      case 118:
-      case 119:
-        $equipment = 14;
-
-        $outcome_reason .= '<div class="title">You got 100
-          Toastmasters Memberships!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 100
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_equipment_id, fkey_users_id, quantity) values
-            (%d, %d, 100);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 120:
-      case 121:
-      case 122:
-      case 123:
-      case 124:
-      case 125:
-      case 126:
-      case 127:
-      case 128:
-      case 129:
-        $staff = 2;
-
-        $outcome_reason .= '<div class="title">You found a class of 100
-          Political Science Interns!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 100
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 100);';
-          $result = db_query($sql, $game_user->id, $staff);
-
-        }
-
-        break;
-
-      case 130:
-      case 131:
-      case 132:
-      case 133:
-      case 134:
-      case 135:
-      case 136:
-      case 137:
-      case 138:
-      case 139:
-        $staff = 7;
-
-        $outcome_reason .= '<div class="title">You found 100
-          Foreign War Veterans!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 100
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 100);';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-
-        break;
-
-      case 140:
-      case 141:
-      case 142:
-      case 143:
-        $land = 10;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Bank!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 144:
-      case 145:
-      case 146:
-      case 147:
-        $land = 11;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Luxury Car Importer!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 148:
-      case 149:
-      case 150:
-      case 151:
-        $land = 12;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Manufacturing Plant!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already own that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      default:
-        $money = $game_user->level * 100000;
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-    }
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_open_a_giant_present_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-//    $can_do_again = FALSE;
-
-
-    switch(mt_rand(30, 139)) {
-
-      case 30:
-      case 31:
-      case 32:
-      case 33:
-      case 34:
-      case 35:
-      case 36:
-      case 37:
-      case 38:
-      case 39:
-        $outcome_reason .=
-          '<div class="title">You got your energy refilled!</div>';
-
-        $sql = 'update users set energy = energy_max
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-      case 45:
-      case 46:
-      case 47:
-      case 48:
-      case 49:
-        $money = floor(($game_user->income - $game_user->expenses) * 24);
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
-          '<div class="title">You got 100 actions!</div>';
-
-        $sql = 'update users set actions = actions + 100
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
-          '<div class="title">You got 20000 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 20000
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-      case 75:
-      case 76:
-      case 77:
-      case 78:
-      case 79:
-        $outcome_reason .=
-          '<div class="title">You got 50000 Influence!</div>';
-
-        $sql = 'update users set experience = experience + 50000
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        break;
-
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $land = 10;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Bank!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $land = 11;
-
-        $outcome_reason .= '<div class="title">You got a deed to
-          a Luxury Car Importer!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 100:
-      case 101:
-      case 102:
-      case 103:
-      case 104:
-      case 105:
-      case 106:
-      case 107:
-      case 108:
-      case 109:
-        $land = 12;
-
-        $outcome_reason .= '<div class="title">You got a deed to a
-          Manufacturing Plant!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/land/stlouis-' . $land .
-            '.png"/></div>';
-
-        $sql = 'select quantity from land_ownership
-          where fkey_land_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $land, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that business.
-        if (!empty($data)) {
-
-          $sql = 'update land_ownership set quantity = quantity + 1
-            where fkey_land_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into land_ownership
-            (fkey_land_id, fkey_users_id, quantity) values
-            (%d, %d, 1);';
-          $result = db_query($sql, $land, $game_user->id);
-
-        }
-
-        break;
-
-      case 110:
-      case 111:
-      case 112:
-      case 113:
-      case 114:
-      case 115:
-      case 116:
-      case 117:
-      case 118:
-      case 119:
-        $equipment = 20;
-
-        $outcome_reason .= '<div class="title">You got 250
-          iPads!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-            '.png"/></div>';
-
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $equipment, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that equipment.
-        if (!empty($data)) {
-
-          $sql = 'update equipment_ownership set quantity = quantity + 250
-            where fkey_equipment_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_equipment_id, fkey_users_id, quantity) values
-            (%d, %d, 250);';
-          $result = db_query($sql, $equipment, $game_user->id);
-
-        }
-
-        break;
-
-      case 120:
-      case 121:
-      case 122:
-      case 123:
-      case 124:
-      case 125:
-      case 126:
-      case 127:
-      case 128:
-      case 129:
-        $staff = 22;
-
-        $outcome_reason .= '<div class="title">You found a forest full of
-          250 Environmental Activists!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 250
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 250);';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-
-        break;
-
-      case 130:
-      case 131:
-      case 132:
-      case 133:
-      case 134:
-      case 135:
-      case 136:
-      case 137:
-      case 138:
-      case 139:
-        $staff = 23;
-
-        $outcome_reason .= '<div class="title">You found a classful of 250
-          Press Attachés!</div>
-          <div class="title"><img
-            src="/sites/default/files/images/staff/stlouis-' . $staff .
-            '.png"/></div>';
-
-        $sql = 'select quantity from staff_ownership
-          where fkey_staff_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $staff, $game_user->id);
-        $data = db_fetch_object($result);
-
-        // Already have that staff member.
-        if (!empty($data)) {
-
-          $sql = 'update staff_ownership set quantity = quantity + 250
-            where fkey_staff_id = %d and fkey_users_id = %d;';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-        else {
-
-          $sql = 'insert into staff_ownership
-            (fkey_staff_id, fkey_users_id, quantity) values
-            (%d, %d, 250);';
-          $result = db_query($sql, $staff, $game_user->id);
-
-        }
-
-        break;
-
-      default:
-        $money = $game_user->level * 1000000;
-        $outcome_reason .=
-          '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
-
-        $sql = 'update users set money = money + %d
-          where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
-
-        break;
-
-    }
-
-    return TRUE;
-
-  }
-
-
-  function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    global $game, $phone_id;
-
-    $fetch_user = '_' . $game . '_fetch_user';
-    $game_user = $fetch_user();
-    $can_do_again = FALSE;
-    $get_value = '_' . $game . '_get_value';
-    $set_value = '_' . $game . '_set_value';
-
-    $next_major_action_time =
-      $get_value($game_user->id, 'next_major_action', 0);
-
-    // Egads! Hacking!
-    if ($next_major_action_time > time()) {
-
-      $sql = 'update users set karma = karma - 50 where id = %d;';
-      $result = db_query($sql, $game_user->id);
-
-      $outcome_reason = '<div class="title error">--&gt; h4x0r &lt;--</div>';
-
-      return FALSE;
-
-    }
-
-    // Time waster.
-    if (mt_rand(0, 9) == 0) {
-
-      $outcome_reason .= '<div class="title">But... your time
-        was completely wasted</div>
-        <div class="title"><img
-          src="/sites/default/files/images/stlouis-frustrated-official.png"/>
-        </div>
-        <div class="subtitle">That\'s 45 minutes that you will never
-        get back</div>';
-
-      $set_value($game_user->id, 'next_major_action', time() + 2700);
-
-      return TRUE;
-
-    }
-
-
-    if ($game_user->level > 100) {
-      $equipment = 37;
-
-      // secs for major action
-      $major_action_timer = 900;
-    }
-    else if ($game_user->level > 50) {
-      $equipment = 36;
-
-      // Secs for major action.
-      $major_action_timer = 600;
-    }
-    else {
-      $equipment = 35;
-
-      // Secs for major action.
-      $major_action_timer = 360;
-    }
-
-
-    $outcome_reason .= '<div class="title">You got a present!</div>
-      <div class="title"><img
-        src="/sites/default/files/images/equipment/stlouis-' . $equipment .
-        '.png"/></div>';
-
-    $sql = 'select quantity from equipment_ownership
-      where fkey_equipment_id = %d and fkey_users_id = %d;';
-    $result = db_query($sql, $equipment, $game_user->id);
-    $data = db_fetch_object($result);
-
-    // Already have that equipment.
-    if (!empty($data)) {
-
-      $sql = 'update equipment_ownership set quantity = quantity + 1
-        where fkey_equipment_id = %d and fkey_users_id = %d;';
-      $result = db_query($sql, $equipment, $game_user->id);
-
-    }
-    else {
-
-      $sql = 'insert into equipment_ownership
-        (fkey_equipment_id, fkey_users_id, quantity) values
-        (%d, %d, 1);';
-      $result = db_query($sql, $equipment, $game_user->id);
-
-    }
-
-    $set_value($game_user->id, 'next_major_action',
-      time() + $major_action_timer);
-
-    return TRUE;
 
   }
