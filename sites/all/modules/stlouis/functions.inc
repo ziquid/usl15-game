@@ -1732,7 +1732,6 @@ function game_recalc_income(&$game_user) {
   $item = db_fetch_object($result);
   $game_user->income = $item->income;
   $game_user->expenses = $item->expenses;
-
 }
 
 
@@ -2879,13 +2878,16 @@ function NO_election_won($game_user, $id) {
   return TRUE;
 }
 
+function game_action_use(&$game_user, $quantity = 1) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
-function NO_action_use(&$game_user, $quantity = 1) {
-
-  if ($game_user->actions < $quantity) return FALSE;
-  if ($quantity < 1) return FALSE;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
+  if ($game_user->actions < $quantity) {
+    return FALSE;
+  }
+  if ($quantity < 1) {
+    return FALSE;
+  }
 
   $sql = 'update users set actions = actions - %d
     where id = %d;';
