@@ -2789,6 +2789,8 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
 }
 
 function game_competency_gain($game_user, $id, $level = 1) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   // If id is string, find numerical id.
   if (gettype($id) == 'string') {
