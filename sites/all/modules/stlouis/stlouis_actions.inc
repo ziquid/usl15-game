@@ -430,6 +430,8 @@ firep('allowed not_met users: ' . $allowed_string);
               (SELECT id from neighborhoods where district = %d)
             AND elected_positions.type = 3
             
+            UNION
+            
 -- type 4: city positions
 
             SELECT elected_officials.fkey_elected_positions_id,

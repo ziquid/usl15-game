@@ -114,7 +114,7 @@ EOF;
   You have no agents and cannot perform any actions.
 </div>
 <div class="try-an-election-wrapper"><div
-  class="try-an-election"><a href="/$game/agents/$arg2">Hire
+  class="try-an-election"><a href="/$game/staff/$arg2">Hire
   agents</a></div></div>
 EOF;
 
