@@ -3660,13 +3660,10 @@ EOF;
 EOF;
 
     }
-
   }
 
   echo '</div>';
-
 }
-
 
 function NO_equipment_check_wear_out(&$game_user, $id) {
 
@@ -3708,10 +3705,27 @@ firep($eq->name . ' wore out!');
   return [$lost, $failure_reason, $eo->quantity];
 }
 
+/**
+ * Send a user a message.
+ *
+ * @param int $from
+ *   From user id.
+ * @param int $to
+ *   To user id.
+ * @param int $private
+ *   1 if this is a private message, 0 otherwise.
+ * @param string $message
+ *   The message.
+ * @param string $subtype
+ *   Subtype of message.  See db for allowed subtypes.
+ *
+ * @return bool
+ *   Whether the user message succeeded or not.
+ */
 function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
   $sql = 'insert into user_messages (subtype, fkey_users_from_id,
     fkey_users_to_id, private, message) values ("%s", %d, %d, %d, "%s");';
-  db_query($sql, $subtype, $from, $to, $private, $message);
+  return db_query($sql, $subtype, $from, $to, $private, $message);
 }
 
 function game_send_system_message($from, $message, $subtype = 'system') {
