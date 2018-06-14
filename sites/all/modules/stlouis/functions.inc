@@ -2778,7 +2778,7 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 3600),
+    db_query($sql, date('Y-m-d H:i:s', time() + 3600),
       $game_user->id);
   }
 
@@ -2823,6 +2823,13 @@ function game_competency_gain($game_user, $id, $level = 1) {
     where fkey_competencies_id = %d and fkey_users_id = %d;';
   $result = db_query($sql, $id, $game_user->id);
   $data = db_fetch_object($result);
+
+  if (game_timed_bonus_in_effect($game_user, 'fast_comps_30')->allowed) {
+    $competency_gain_wait_time = min($competency_gain_wait_time, 30);
+  }
+  if (game_timed_bonus_in_effect($game_user, 'fast_comps_10')->allowed) {
+    $competency_gain_wait_time = min($competency_gain_wait_time, 10);
+  }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
 firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
@@ -3774,7 +3781,6 @@ function game_zombie_name() {
  *
  * @param \stdClass $game_user
  *   The user object.
- *
  * @param string $key
  *   The key to check.
  *
@@ -3783,12 +3789,9 @@ function game_zombie_name() {
  *   hours, minutes, and seconds until action can be performed.
  */
 function game_can_do_yet($game_user, $key) {
-  global $game;
-
-  $get_value = '_' . $game . '_get_value';
   $can_do = new stdClass();
-  $can_do->time_ready = (int) $get_value($game_user->id, $key, time());
-  $can_do->time_remaining = $can_do->time_ready - time();
+  $can_do->time_ready = (int) game_get_value($game_user, $key, REQUEST_TIME);
+  $can_do->time_remaining = $can_do->time_ready - REQUEST_TIME;
 
   if ($can_do->time_remaining > 0) {
     $can_do->allowed = FALSE;
@@ -3802,6 +3805,117 @@ function game_can_do_yet($game_user, $key) {
   }
 
   return $can_do;
+}
+
+/**
+ * Timed bonus still in effect?
+ *
+ * Logically the opposite of game_can_do_yet().
+ *
+ * @param \stdClass $game_user
+ *   The user object.
+ * @param string $key
+ *   The key to check.
+ *
+ * @return \stdClass
+ *   An object with whether a bonus is in effect and the hours, minutes, and
+ *   seconds remaining, or FALSE.
+ */
+function game_timed_bonus_in_effect($game_user, $bonus_key) {
+  $in_effect = new stdClass();
+  $in_effect->time_ready = (int) game_get_value($game_user, $bonus_key, REQUEST_TIME);
+  $in_effect->time_remaining = $in_effect->time_ready - REQUEST_TIME;
+
+  if ($in_effect->time_remaining > 0) {
+    $in_effect->allowed = TRUE;
+    $in_effect->hours_remaining = floor($in_effect->time_remaining / 3600);
+    $minutes_remaining_in_sec = $in_effect->time_remaining % 3600;
+    $in_effect->minutes_remaining = floor($minutes_remaining_in_sec / 60);
+    $in_effect->seconds_remaining = floor($minutes_remaining_in_sec % 60);
+  }
+  else {
+    $in_effect->allowed = FALSE;
+  }
+
+  return $in_effect;
+}
+
+/**
+ * Set timer for user (either for bonus or disallowed action).
+ *
+ * @param \stdClass $game_user
+ *   The user object.
+ * @param string $timer_key
+ *   The key to set.
+ * @param int $time_secs
+ *   The number of seconds to set for the timer.
+ */
+function game_set_timer($game_user, $timer_key, $time_secs) {
+  game_set_value($game_user->id, $timer_key, REQUEST_TIME + $time_secs);
+}
+
+/**
+ * Return the value for the key in the db if found, or $default if not found.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param string $key
+ *   The key to use for the query.
+ * @param mixed $default
+ *  The result to return if KVP is not found.
+ *
+ * @return mixed
+ *   The value, if found, or $default, if not found.
+ */
+function game_get_value($game_user, $key, $default = NULL) {
+  $sql = 'SELECT `value` FROM {user_attributes}
+    WHERE `fkey_users_id` = %d AND `key` = "%s";';
+  $result = db_query($sql, (int) $game_user->id, $key);
+  $item = db_fetch_object($result);
+  firep($item, 'user_attributes value for key ' . $key);
+
+  return !empty($item->value) ? $item->value : $default;
+}
+
+/**
+ * Set a value for a certain key for the game user.
+ *
+ * Updates the value if the KVP already exists.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param string $key
+ *   The key to use for the value in the db.
+ * @param string $value
+ *   The value to set in the db.
+ *
+ * @return bool
+ *   TRUE if the set succeeded; FALSE otherwise.
+ */
+function game_set_value($game_user, $key, $value) {
+
+  // Set a value in the db; updates it if it already exists.
+  $sql = 'INSERT INTO {user_attributes}
+    (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
+    ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
+  return db_query($sql, $game_user->id, $key, $value, $value);
+}
+
+/**
+ * Remove a KVP for a user.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param string $key
+ *   The key to remove.
+ *
+ * @return bool
+ *   Whether the removal succeeded or not.
+ */
+function game_remove_value($game_user, $key) {
+  $sql = 'delete from {user_attributes}
+    where `fkey_users_id` = %d and `key` = "%s";';
+  return db_query($sql, $game_user->id, $key);
 }
 
 /**

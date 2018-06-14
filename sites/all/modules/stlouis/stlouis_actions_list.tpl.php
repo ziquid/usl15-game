@@ -317,9 +317,9 @@ EOF;
 EOF;
 
   $get_value = '_' . $game . '_get_value';
-  $next_major_action_time = $get_value($game_user->id, 'next_major_action');
+  $next_major_action_time = game_get_value($game_user, 'next_major_action');
   $next_major_action_time_remaining = !empty($next_major_action_time) ?
-    (int)$next_major_action_time - time() : NULL;
+    (int) $next_major_action_time - REQUEST_TIME : 0;
 
   if (($next_major_action_time_remaining > 0) && ($item->major_action > 0)) {
 

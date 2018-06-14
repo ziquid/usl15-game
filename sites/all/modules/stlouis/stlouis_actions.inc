@@ -3,11 +3,8 @@
 function actionlist() {
 
   global $game, $phone_id;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
 
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
@@ -84,8 +81,8 @@ function actionlist() {
       and actions.need_specific_official_group = 0';
   }
 
-  // For testing - exclude all exclusions (!) if I am abc123.
-  if ($phone_id == 'abc123') {
+  // For testing - exclude all exclusions for admin.
+  if ($game_user->meta == 'admin') {
     $sql_to_add = '';
     $actions_active = 'and (actions.active = 1 or actions.active = 0)';
   }
@@ -432,6 +429,16 @@ firep('allowed not_met users: ' . $allowed_string);
             WHERE users.fkey_neighborhoods_id IN
               (SELECT id from neighborhoods where district = %d)
             AND elected_positions.type = 3
+            
+-- type 4: city positions
+
+            SELECT elected_officials.fkey_elected_positions_id,
+              elected_officials.approval_rating, users.*
+            FROM elected_officials
+            LEFT JOIN users ON elected_officials.fkey_users_id = users.id
+            LEFT JOIN elected_positions
+              ON elected_positions.id = elected_officials.fkey_elected_positions_id
+            WHERE elected_positions.type = 4
 
             ) AS blah ON blah.fkey_elected_positions_id = elected_positions.id
 
@@ -442,10 +449,11 @@ firep('allowed not_met users: ' . $allowed_string);
 
       $result = db_query($sql, $game_user->fkey_neighborhoods_id,
         $game_user->fkey_values_id, $district);
-      while ($official = db_fetch_object($result)) $data2[] = $official;
+      while ($official = db_fetch_object($result)) {
+        $data2[] = $official;
+      }
 
       break;
-
   }
 
 // Reset to master.
@@ -491,5 +499,26 @@ function game_preaction_support_your_local_official(&$action) {
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->influence_change += ($comp_level->level * 3);
+  $action->values_cost += ($comp_level->level);
+}
+
+function game_preaction_support_your_party_official(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->influence_change += ($comp_level->level * 3);
+  $action->values_cost += ($comp_level->level);
+}
+
+function game_preaction_throw_eggs(&$action) {
+  global $game;
+  $fetch_user = '_' . $game . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+  $action->influence_change -= ($comp_level->level * 2);
+  $action->neighborhood_rating_change -= ($comp_level->level * 0.01);
   $action->values_cost += ($comp_level->level);
 }

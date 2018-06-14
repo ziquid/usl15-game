@@ -1151,7 +1151,6 @@ function _stlouis_save_user_agent($game_user) {
 
 }
 
-
 function _stlouis_save_user_IP($game_user) {
 
   // Save the user IP.
@@ -1229,7 +1228,6 @@ to
   }
 
 }
-
 
 function _stlouis_check_authKey($game_user) {
 
@@ -1354,20 +1352,17 @@ function _stlouis_check_authKey($game_user) {
 
 }
 
-
 function _stlouis_get_value($fkey_users_id, $key, $default = NULL) {
 
   // Return the value in the db if found, or $default if not found.
   $sql = 'SELECT `value` FROM {user_attributes}
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
 
-  $result = db_fetch_object(db_query($sql, (int)$fkey_users_id, $key));
-firep($result);
+  $result = db_fetch_object(db_query($sql, (int) $fkey_users_id, $key));
+firep($result, 'user_attributes value for key ' . $key);
 
   return !empty($result->value) ? $result->value : $default;
-
 }
-
 
 function _stlouis_set_value($fkey_users_id, $key, $value = NULL) {
 
@@ -1375,22 +1370,16 @@ function _stlouis_set_value($fkey_users_id, $key, $value = NULL) {
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
-
-    $result = db_query($sql, $fkey_users_id, $key, $value, $value);
-
+   return db_query($sql, $fkey_users_id, $key, $value, $value);
 }
-
 
 function _stlouis_remove_value($fkey_users_id, $key) {
 
   // Remove a value in the db.
   $sql = 'delete from {user_attributes}
     where `fkey_users_id` = %d and `key` = "%s";';
-
-    $result = db_query($sql, $fkey_users_id, $key);
-
+  return db_query($sql, $fkey_users_id, $key);
 }
-
 
 function _stlouis_get_phoneid() {
 
