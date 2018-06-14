@@ -799,33 +799,34 @@ firep($ip_array);
     }
 
     if ($item->ep_id == 1) {
-// you beat the Alderman - all officials in that neighborhood lose their seats
 
-      $data = array();
+      // You beat the Alderman - all type 1 officials in that neighborhood lose their seats.
+      $data = [];
       $sql = 'SELECT users.id FROM elected_officials
         left join users on elected_officials.fkey_users_id = users.id
-        where fkey_neighborhoods_id = %d;';
+        left join elected_positions on elected_officials.fkey_elected_positions_id = elected_positions.id
+        where fkey_neighborhoods_id = %d and elected_positions.type = 1;';
       $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-      while ($official = db_fetch_object($result)) $data[] = $official;
+      while ($official = db_fetch_object($result)) {
+        $data[] = $official;
+      }
 
       $message = t('%user1 has successfully challenged %user2 for the office ' .
         'of %office.&nbsp; You lose your seat.',
-        array('%user1' => $game_user->username, '%user2' => $item->username,
-          '%office' => $item->ep_name));
+        ['%user1' => $game_user->username, '%user2' => $item->username,
+          '%office' => $item->ep_name]);
+      $official_ids = [];
 
-      foreach ($data as $official) {
-
-        $sql = 'insert into challenge_messages (fkey_users_from_id,
+      $sql = 'insert into challenge_messages (fkey_users_from_id,
           fkey_users_to_id, message) values (%d, %d, "%s");';
+      foreach ($data as $official) {
         $result = db_query($sql, $game_user->id, $official->id, $message);
-
+        $official_ids[] = $official->id;
       }
 
       $sql = 'delete from elected_officials
-        where fkey_users_id in (
-          select id from users where users.fkey_neighborhoods_id = %d
-        );';
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+        where fkey_users_id in (%s);';
+      $result = db_query($sql, implode(',', $official_ids));
       $all_officials_in = $location; // set a flag
 
     }
@@ -888,8 +889,8 @@ EOF;
 
     if ($all_officials_in)
       echo '<div class="subtitle">' .
-        t('All officials in @place lose their seats',
-          array('@place' => $all_officials_in)) . '</div>';
+        t('All @hood officials in @place lose their seats',
+          ['@place' => $all_officials_in, '@hood' => $game_text['hood']]) . '</div>';
 
   }
   else { // you lost
