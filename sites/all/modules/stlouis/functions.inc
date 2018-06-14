@@ -1697,7 +1697,6 @@ EOF;
 
 // Sometimes the income gets hacked -- fix here.
 function game_recalc_income(&$game_user) {
-
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -3723,9 +3722,9 @@ firep($eq->name . ' wore out!');
  *   Whether the user message succeeded or not.
  */
 function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
-  $sql = 'insert into user_messages (subtype, fkey_users_from_id,
-    fkey_users_to_id, private, message) values ("%s", %d, %d, %d, "%s");';
-  return db_query($sql, $subtype, $from, $to, $private, $message);
+  $sql = 'insert into user_messages (fkey_users_from_id, fkey_users_to_id,
+    private, message, subtype) values (%d, %d, %d, "%s", "%s");';
+  return db_query($sql, $from, $to, $private, $message, $subtype);
 }
 
 function game_send_system_message($from, $message, $subtype = 'system') {

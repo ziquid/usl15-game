@@ -12,13 +12,14 @@ define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
+define(EVENT_FLAG_DAY, 'event_flag_day');
 
-define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
 define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
 define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
+define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 
 define(MISSION_NONE, 1000);
@@ -137,6 +138,10 @@ switch($today) {
     $competency_gain_wait_time = 30;
     $competency_gain_wait_time_str = '30 seconds';
     break;
+
+  case '2018-06-14':
+    $event_type = EVENT_FLAG_DAY;
+    break;
 }
 
 //if (arg(2) == 'abc123') {
@@ -236,7 +241,9 @@ $residence_lower = strtolower($residence);
 $system_lower = strtolower($system);
 
 // Function-wide defs.
-$game = check_plain(arg(0));
+if (arg(0) != 'node') {
+  $game = check_plain(arg(0));
+}
 $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
 $fetch_user = '_' . $game . '_fetch_user';

@@ -32,17 +32,18 @@ function game_event_flag_day_homepage_event_notice($game_user, &$event_text) {
 function game_event_flag_day_cron() {
   $sql = 'SELECT users.* FROM `users`
     inner join elected_officials on elected_officials.fkey_users_id = users.id 
-    WHERE fkey_neighborhoods_id = 59';
+    WHERE fkey_neighborhoods_id = 59;';
   $result = db_query($sql);
   $data = [];
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
-echo count($data) . ' officials will get flags.' . PHP_EOL;
+
   $msg = 'Because of your attendance at today\'s flag ceremony, you have been
     awarded a ceremonial flag.';
   foreach ($data as $item) {
+    $item_id = $item->id;
     game_equipment_gain($item, 44, 1);
-    game_send_user_message(1, $item->id, 1, $msg, 'comp');
+    game_send_user_message(1, $item_id, 1, $msg, 'comp');
   }
 }

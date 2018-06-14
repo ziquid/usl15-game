@@ -20,9 +20,12 @@ require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
 require_once drupal_get_path('module', 'stlouis') . '/functions.inc';
 
 function stlouis_cron() {
+  global $game;
+  $game = 'stlouis';
+  define('REQUEST_TIME', time());
 
-  db_set_active('game_stlouis');
-  include drupal_get_path('module', 'stlouis') . '/game_defs.inc';
+  db_set_active('game_' . $game);
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   // Save old approval ratings.
   $sql = 'update elected_officials set approval_45 = approval_30,
@@ -32,25 +35,25 @@ function stlouis_cron() {
   // Move all elected officials toward a 60% approval rating.
   $sql = 'update elected_officials set approval_rating = 60
     where (approval_rating >= 59.75 AND approval_rating <= 60.25);';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update elected_officials
     set approval_rating = approval_rating + 0.25
     where approval_rating <= 59.75;';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update elected_officials
     set approval_rating = approval_rating - 0.25
     where approval_rating >= 60.25;';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update elected_officials
     set approval_rating = 0 where approval_rating < 0;';
-  $result = db_query($sql);
+  db_query($sql);
 
   $sql = 'update elected_officials
     set approval_rating = 100 where approval_rating > 100;';
-  $result = db_query($sql);
+  db_query($sql);
 /*
 
   // < 9AM -- 10 carolers every 15 mins.
@@ -94,41 +97,42 @@ function stlouis_cron() {
     // Move them, enhance experience.
     $sql = 'update users set experience = floor(rand() * 1500000) + 1
       where meta = "zombie" order by rand() limit %d;';
-    $result = db_query($sql, ceil($zombie_count / 10));
+    db_query($sql, ceil($zombie_count / 10));
 
     $sql = 'update users set experience = floor(rand() * 250000) + 1
       where meta = "zombie" order by rand() limit %d;';
-    $result = db_query($sql, ceil($zombie_count / 10));
+    db_query($sql, ceil($zombie_count / 10));
 
     $sql = 'update users set fkey_neighborhoods_id = floor(rand() * 85) + 1,
       experience = experience + 10000
       where meta = "zombie" and fkey_neighborhoods_id = 81;';
-    $result = db_query($sql);
+    db_query($sql);
 
     $sql = 'update users set fkey_neighborhoods_id = floor(rand() * 85) + 1,
       experience = experience + 1000
       where meta = "zombie" order by rand() limit %d;';
-    $result = db_query($sql, ceil($zombie_count / 10));
+    db_query($sql, ceil($zombie_count / 10));
 
     $sql = 'select * from levels;';
     $result = db_query($sql);
     $levels = [];
-    while ($level = db_fetch_object($result)) $levels[] = $level;
+    while ($level = db_fetch_object($result)) {
+      $levels[] = $level;
+    }
 
     for ($a = 0; $a < count($levels) - 1 ; $a++) {
-
       $sql = 'update users set level = %d, elocution = %d
         where experience >= %d and experience < %d
         and meta = "zombie";';
-      $result = db_query($sql, $a + 1, $a * 2 + 2, $levels[$a]->experience,
+      db_query($sql, $a + 1, $a * 2 + 2, $levels[$a]->experience,
         $levels[$a + 1]->experience - 1);
     }
 
   }
 
-    // Unfreeze players.
-    $sql = 'update users set meta = "" where meta = "frozen";';
-    $result = db_query($sql);
+  // Unfreeze players.
+  $sql = 'update users set meta = "" where meta = "frozen";';
+  db_query($sql);
 
   // Move all hoods toward a 50 beauty rating.
   $sql = 'update neighborhoods set rating = 50
@@ -297,8 +301,20 @@ function stlouis_cron() {
 
   }
 */
+  // Set up includes and init() for event, if any.
+  if ($event_type !== EVENT_NONE) {
+    $module_path = drupal_get_path('module', $game);
+    $file_to_include = $module_path . '/events/' . $event_type . '.inc';
+    if (file_exists($file_to_include)) {
+      include_once $file_to_include;
+      $function_name = 'game_' . $event_type . '_init';
+      if (function_exists($function_name)) {
+        $function_name();
+      }
+    }
+  }
+  game_alter('cron', NULL);
   db_set_active('default');
-
 }
 
 function stlouis_init() {
@@ -1529,6 +1545,11 @@ function _stlouis_reset_event_tags_con($id) {
 function _stlouis_fetch_user() {
 
   global $game, $phone_id, $extra_messages, $next_level, $user;
+
+  // Running from drush cron?  There is no user to fetch, so return silently.
+  if (arg(0) == 'node') {
+    return NULL;
+  }
 
   // Only allow access through authorized clients.
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
