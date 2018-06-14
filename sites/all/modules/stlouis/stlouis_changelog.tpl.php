@@ -31,6 +31,9 @@ db_set_active('default');
   </div>
   <ul>
     <li>
+      Flag Day Event
+    </li>
+    <li>
       Level 99
     </li>
   </ul>
