@@ -2409,9 +2409,10 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
 
 function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   $target, &$can_do_again) {
-
   global $game;
-  $game_user = _stlouis_fetch_user();
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $target_id = (int) $_GET['target'];
 
   $sql = 'SELECT elected_officials.id
       FROM elected_officials
@@ -2421,8 +2422,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
       WHERE users.fkey_neighborhoods_id = %d
       AND elected_positions.type = 1
       AND users.id = %d';
-
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id, $target->id);
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id, $target_id);
   $item = db_fetch_object($result);
 
   if ($item) {
@@ -2440,10 +2440,10 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
 
 function _stlouis_action_support_your_party_official_function(
   &$outcome_reason, $target, &$can_do_again) {
-
   global $game;
-  $game_user = _stlouis_fetch_user();
-  $target_id = $_GET['target'];
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $target_id = (int) $_GET['target'];
 
   $sql = 'SELECT elected_officials.id
     FROM elected_officials
@@ -2453,17 +2453,18 @@ function _stlouis_action_support_your_party_official_function(
     WHERE users.fkey_values_id = %d
     AND elected_positions.type = 2
     AND users.id = %d';
-
-  $result = db_query($sql, $game_user->fkey_values_id, (int) $target_id);
+  $result = db_query($sql, $game_user->fkey_values_id, $target_id);
   $item = db_fetch_object($result);
 
   if ($item) {
+    game_competency_gain($target, 'trustworthy');
     return TRUE;
   }
   else {
     $outcome_reason = '<div class="land-failed">' .
       t('Target is not a party official!') .
       '</div>';
+    game_karma($game_user, "Target {$target->username} is not a party official", -20);
     return FALSE;
   }
 }
