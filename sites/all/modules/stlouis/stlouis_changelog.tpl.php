@@ -31,6 +31,9 @@ db_set_active('default');
   </div>
   <ul>
     <li>
+      Admin accounts don't count in election challenges
+    </li>
+    <li>
       Location on the Home Page is underlined in the color of the Alderman's party
     </li>
     <li>
