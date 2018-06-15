@@ -3122,7 +3122,7 @@ function fetch_user_by_id($id) {
 //   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
   if (empty($item->ep_level)) {
     $item->ep_level = 0;
-
+  }
   $user_cache[$id] = $item;
 
 firep($item, 'fetch_user_by_id for id ' . $id);
