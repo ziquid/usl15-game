@@ -3847,7 +3847,7 @@ function game_timed_bonus_in_effect($game_user, $bonus_key) {
  *   The number of seconds to set for the timer.
  */
 function game_set_timer($game_user, $timer_key, $time_secs) {
-  game_set_value($game_user->id, $timer_key, REQUEST_TIME + $time_secs);
+  game_set_value($game_user, $timer_key, REQUEST_TIME + $time_secs);
 }
 
 /**

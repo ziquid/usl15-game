@@ -87,7 +87,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     $competency_gain_wait_time_str = '30 seconds';
     $time_left = ' (' . $fast_comps_30->hours_remaining . 'h' .
       $fast_comps_30->minutes_remaining . 'm' . $fast_comps_30->seconds_remaining .
-      's left)';
+      's&nbsp;left)';
   }
   $fast_comps_15 = game_timed_bonus_in_effect($item, 'fast_comps_15');
   if ($fast_comps_15->allowed) {
@@ -95,7 +95,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     $competency_gain_wait_time_str = '15 seconds';
     $time_left = ' (' . $fast_comps_15->hours_remaining . 'h' .
       $fast_comps_15->minutes_remaining . 'm' . $fast_comps_15->seconds_remaining .
-      's left)';
+      's&nbsp;left)';
   }
 }
 else {
