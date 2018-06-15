@@ -852,6 +852,7 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
     where ( users.actions_next_gain > "%s" OR users.energy_next_gain > "%s" )
     and users.fkey_neighborhoods_id = %d
     and username <> ""
+    and meta <> "admin"
     ORDER by users.experience DESC;';
 
   $result = db_query($sql, date('Y-m-d', time() - 1728000),
