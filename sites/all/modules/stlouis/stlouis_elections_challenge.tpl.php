@@ -172,8 +172,7 @@ EOF;
     // Party office.
     if ($item->type == 2) {
 // make it so s/he can't perform a major action for a day
-      $set_value = '_' . $game . '_set_value';
-      $set_value($game_user->id, 'next_major_action', time() + 86400);
+      game_set_timer($game_user, 'next_major_action', 86400);
     }
 
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
@@ -417,7 +416,8 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
       AND fkey_neighborhoods_id = %d
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
       AND ua_sdk.`value` IS NULL
-      AND username <>  "";';
+      AND username <>  ""
+      AND meta <> "admin";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000),
       $game_user->fkey_neighborhoods_id);
@@ -446,7 +446,8 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
       AND fkey_values_id = %d
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
       AND ua_sdk.`value` IS NULL
-      AND username <>  "";';
+      AND username <>  ""
+      AND meta <> "admin";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000), $game_user->fkey_values_id);
 
@@ -475,7 +476,8 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
         (SELECT id from neighborhoods where district = %d)
       AND (SUBSTR( phone_id, 0, 4 ) <>  "sdk ")
       AND ua_sdk.`value` IS NULL
-      AND username <>  "";';
+      AND username <>  ""
+      AND meta <> "admin";';
     $result = db_query($sql, date('Y-m-d', time() - 1728000),
       date('Y-m-d', time() - 1728000), $district);
 
