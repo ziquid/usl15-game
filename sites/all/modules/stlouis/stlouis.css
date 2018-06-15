@@ -465,3 +465,43 @@ a.version {
 textarea {
   background-color: lightgrey;
 }
+
+.location-ammunition {
+  border-bottom: #080 solid 1px;
+}
+
+.location-chaos {
+  border-bottom: #ffa500 solid 1px;
+}
+
+.location-charisma {
+  border-bottom: #e00 solid 1px;
+}
+
+.location-finance {
+  border-bottom: #e0e0e0 solid 1px;
+}
+
+.location-goo {
+  border-bottom: #800080 solid 1px;
+}
+
+.location-greenbacks {
+  border-bottom: #fff dotted 1px;
+}
+
+.location-health {
+  border-bottom: #0f0 solid 1px;
+}
+
+.location-humility {
+  border-bottom: #dd0 solid 1px;
+}
+
+.location-intelligence {
+  border-bottom: #35f solid 1px;
+}
+
+.location-strength {
+  border-bottom: #0ee solid 1px;
+}

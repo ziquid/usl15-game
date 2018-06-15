@@ -22,7 +22,7 @@ if ($game_user->level < 6) {
 
   echo <<< EOF
 <div class="title">
-<img src="/sites/default/files/images/{$game}_title.png"/>
+  <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
 <p>&nbsp;</p>
 <div class="welcome">
@@ -121,6 +121,16 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
     game_competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
   }
 }
+
+// Get values of current hood's alder.
+$sql = 'SELECT `values` FROM `users`
+  inner join elected_officials on elected_officials.fkey_users_id = users.id
+  WHERE fkey_neighborhoods_id = %d
+  and elected_officials.fkey_elected_positions_id = 1;';
+$result = db_query($sql, $game_user->fkey_neighborhoods_id);
+$alder = db_fetch_object($result);
+firep($alder, 'values of current hood alder');
+$alder_values = drupal_strtolower($alder->values);
 
 $fetch_header($game_user);
 
@@ -444,7 +454,7 @@ EOF;
 </map>
 </div>
 <div class="location">
-$game_user->location
+<span class="location-$alder_values">$game_user->location</span>
 </div>
 $event_text
 <div class="news">

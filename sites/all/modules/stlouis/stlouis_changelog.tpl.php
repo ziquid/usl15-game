@@ -31,6 +31,9 @@ db_set_active('default');
   </div>
   <ul>
     <li>
+      Location on the Home Page is underlined in the color of the Alderman's party
+    </li>
+    <li>
       Game change: When an Alderman loses his/her seat, only neighborhood officials
       lose their seats &mdash; party, district, and city officials will still retain their
       seats
