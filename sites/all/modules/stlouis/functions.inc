@@ -2827,8 +2827,8 @@ function game_competency_gain($game_user, $id, $level = 1) {
   if (game_timed_bonus_in_effect($game_user, 'fast_comps_30')->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 30);
   }
-  if (game_timed_bonus_in_effect($game_user, 'fast_comps_10')->allowed) {
-    $competency_gain_wait_time = min($competency_gain_wait_time, 10);
+  if (game_timed_bonus_in_effect($game_user, 'fast_comps_15')->allowed) {
+    $competency_gain_wait_time = min($competency_gain_wait_time, 15);
   }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {

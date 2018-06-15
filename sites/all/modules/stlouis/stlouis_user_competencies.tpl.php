@@ -76,10 +76,27 @@ $sql = 'select count(*) as total from user_competencies
 $result = db_query($sql, $item->id);
 $count = db_fetch_object($result);
 $user_comps = $count->total;
+$time_left = '';
 
 if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
   $stats = t('You have discovered @user out of @total competencies',
-    array('@user' => $user_comps, '@total' => $total_comps));
+    ['@user' => $user_comps, '@total' => $total_comps]);
+  $fast_comps_30 = game_timed_bonus_in_effect($item, 'fast_comps_30');
+  if ($fast_comps_30->allowed) {
+    $competency_gain_wait_time = min($competency_gain_wait_time, 30);
+    $competency_gain_wait_time_str = '30 seconds';
+    $time_left = ' (' . $fast_comps_30->hours_remaining . 'h' .
+      $fast_comps_30->minutes_remaining . 'm' . $fast_comps_30->seconds_remaining .
+      's left)';
+  }
+  $fast_comps_15 = game_timed_bonus_in_effect($item, 'fast_comps_15');
+  if ($fast_comps_15->allowed) {
+    $competency_gain_wait_time = min($competency_gain_wait_time, 15);
+    $competency_gain_wait_time_str = '15 seconds';
+    $time_left = ' (' . $fast_comps_15->hours_remaining . 'h' .
+      $fast_comps_15->minutes_remaining . 'm' . $fast_comps_15->seconds_remaining .
+      's left)';
+  }
 }
 else {
   $stats = '';
@@ -91,7 +108,7 @@ $item->ep_name <span class="username">$item->username</span> $clan_acronym
 </div>
 <div class="subsubtitle">$stats</div>
 <div class="subsubtitle">Recently-increased competencies are yellow<br>
-Wait $competency_gain_wait_time_str before increasing them</div>
+Wait $competency_gain_wait_time_str before increasing them $time_left</div>
 <div class="user-profile">
 EOF;
 

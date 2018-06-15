@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.5.0, Jun 14 2018';
+$version = 'v0.5.0, Jun 15 2018';
 
 global $game, $phone_id;
 
@@ -52,7 +52,7 @@ if (substr($phone_id, 0, 3) == 'ai-')
 
 $today = date('Y-m-d');
 
-if ($game_user->last_bonus_date != $today) {
+if ($game_user->last_bonus_date != $today || $game_user->meta == 'admin') {
 
   $sql = 'select residents from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -91,8 +91,6 @@ if ($game_user->last_bonus_date != $today) {
 */
   $money = ceil($money);
 
-//  game_competency_gain($game_user, 'daily bonus');
-
 firep("adding $money money because last_bonus_date = $last_bonus_date");
 
   $sql = 'update users set money = money + %d, last_bonus_date = "%s"
@@ -106,8 +104,12 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
       <div class="level-up-text">You have received a bonus of ' .
         number_format($money) . ' ' . $game_user->values . '!</div>' .
         $extra_text .
-      '<div class="level-up-text">Come back tomorrow for another bonus</div>
+      '<div class="level-up-text">For the next three minutes, competencies can be enhanced every 15 seconds</div>
+      <div class="level-up-text">Come back tomorrow for another bonus</div>
     </div>';
+
+  // Fast comps for the next three minutes.
+  game_set_timer($game_user, 'fast_comps_15', 180);
 
   // Add competency for work.
   $sql = 'SELECT land.fkey_enhanced_competencies_id FROM `land`
@@ -120,6 +122,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   if (isset($item->fkey_enhanced_competencies_id)) {
     game_competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
   }
+
 }
 
 // Get values of current hood's alder.

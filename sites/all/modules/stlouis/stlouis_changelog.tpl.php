@@ -27,11 +27,20 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 15, 2018
+  </div>
+  <ul>
+    <li>
+      Level 100
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 14, 2018
   </div>
   <ul>
     <li>
-      Admin accounts don't count in election challenges
+      Admin accounts don't count in election challenges nor show up in PNG or Roll Call lists
     </li>
     <li>
       Location on the Home Page is underlined in the color of the Alderman's party
