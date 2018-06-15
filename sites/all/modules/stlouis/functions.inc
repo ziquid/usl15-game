@@ -3071,14 +3071,10 @@ function fetch_user_by_id($id) {
 
   // Find id from phone_id.
   if (gettype($id) == 'string') {
-
     $where = 'WHERE users.phone_id = "%s"';
-
   }
   else {
-
     $where = 'WHERE users.id = %d';
-
   }
 
   $sql = 'SELECT users.*,
@@ -3124,13 +3120,13 @@ function fetch_user_by_id($id) {
   $item = db_fetch_object($result);
 
 //   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
-  if (empty($item->ep_level)) $item->ep_level = 0;
+  if (empty($item->ep_level)) {
+    $item->ep_level = 0;
 
   $user_cache[$id] = $item;
 
-firep($item);
+firep($item, 'fetch_user_by_id for id ' . $id);
   return $item;
-
 }
 
 

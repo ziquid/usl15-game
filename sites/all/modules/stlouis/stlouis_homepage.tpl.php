@@ -104,7 +104,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
       <div class="level-up-text">You have received a bonus of ' .
         number_format($money) . ' ' . $game_user->values . '!</div>' .
         $extra_text .
-      '<div class="level-up-text">For the next three minutes, competencies can be enhanced every 15 seconds</div>
+      '<!--<div class="level-up-text">For the next three minutes, competencies can be enhanced every 15 seconds</div>-->
       <div class="level-up-text">Come back tomorrow for another bonus</div>
     </div>';
 
