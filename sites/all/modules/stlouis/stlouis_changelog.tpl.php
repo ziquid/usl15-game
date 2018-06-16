@@ -27,9 +27,26 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 16, 2018
+  </div>
+  <ul>
+    <li>
+      Father's Day Missions
+    </li>
+    <li>
+      Level 101
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 15, 2018
   </div>
   <ul>
+    <li>
+      When leveling up and when getting your daily bonus, competencies can be
+      enhanced every
+      fifteen seconds for a few minutes
+    </li>
     <li>
       Level 100
     </li>

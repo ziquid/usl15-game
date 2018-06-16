@@ -342,6 +342,31 @@ switch ($month_mission) {
       </div>-->
       </div>';
     break;
+
+  case MISSION_JUN:
+    $event_text .= '<div class="event">
+<div class="event-title">
+        June\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect tie for your husband ~
+      </div>
+      <div class="event-tagline">
+        to celebrate Father\'s Day
+      </div>
+      <div class="event-text">
+        Ends June 18
+      </div>
+      <div class="event-text">
+        <a href="/' . $game . '/quests/' . $arg2 .
+      '/1006">Start Here</a>
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+      '">Leaderboard</a>
+      </div>-->
+      </div>';
+    break;
 }
 
 // dead presidents event

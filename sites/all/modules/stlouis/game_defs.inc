@@ -142,6 +142,12 @@ switch($today) {
   case '2018-06-14':
     $event_type = EVENT_FLAG_DAY;
     break;
+
+  case '2018-06-16':
+  case '2018-06-17':
+  case '2018-06-18':
+    $month_mission = MISSION_JUN;
+    break;
 }
 
 //if (arg(2) == 'abc123') {
