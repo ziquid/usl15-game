@@ -314,6 +314,14 @@ function stlouis_cron() {
     }
   }
   game_alter('cron', NULL);
+
+  if ($month_mission == MISSION_JUN) {
+    $sql = 'update quests set fkey_neighborhoods_id =
+      (SELECT id FROM `neighborhoods` WHERE has_elections = 1 order by rand() limit 1)
+      where id = 58;';
+    db_query($sql);
+  }
+
   db_set_active('default');
 }
 
