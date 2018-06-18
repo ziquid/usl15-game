@@ -27,11 +27,11 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
-    Jun 17, 2018
+    Jun 18, 2018
   </div>
   <ul>
     <li>
-      Level 102
+      Level 102, Father's Day event extended another day
     </li>
   </ul>
 
