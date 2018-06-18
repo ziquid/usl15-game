@@ -613,7 +613,7 @@ firep($item);
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What should the sign state?</p>
   $error
-  <textarea name="welcome_msg" cols="30"
+  <textarea name="welcome_msg" cols="28"
     rows="8"/>$item->welcome_msg</textarea><br/>
   <input type="submit" value="Submit"/>
 </form>
