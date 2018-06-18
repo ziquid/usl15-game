@@ -579,12 +579,9 @@ EOF;
 function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $action_id = arg(3);
+  $game_user = $fetch_user();
+  $action_id = $arg3;
 
   $welcome_msg = check_plain($_GET['welcome_msg']);
   $welcome_msg = _stlouis_filter_profanity($welcome_msg);
@@ -616,7 +613,7 @@ firep($item);
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What should the sign state?</p>
   $error
-  <textarea name="welcome_msg" cols="32"
+  <textarea name="welcome_msg" cols="30"
     rows="8"/>$item->welcome_msg</textarea><br/>
   <input type="submit" value="Submit"/>
 </form>
