@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 19, 2018
+  </div>
+  <ul>
+    <li>
+      Meet Someone New now boosts target influence by 20
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 18, 2018
   </div>
   <ul>
