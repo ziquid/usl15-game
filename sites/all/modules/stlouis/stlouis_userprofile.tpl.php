@@ -9,19 +9,14 @@
  */
 
 global $game, $phone_id;
-
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
-$game_user = $fetch_user();
 include drupal_get_path('module', $game) . '/game_defs.inc';
+$game_user = $fetch_user();
 $fetch_header($game_user);
-$arg2 = check_plain(arg(2));
-$arg3 = check_plain(arg(3));
 $q = $_GET['q'];
 
-if (empty($game_user->username))
+if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
+}
 
 _show_profile_menu($game_user);
 

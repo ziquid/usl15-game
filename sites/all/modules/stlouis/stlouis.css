@@ -217,8 +217,9 @@ li {
 }
 
 .level-up {
-  border: 1px solid #0e5221;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
   background-color: #0e5221;
+  min-height: 72px;
 }
 
 .choose-clan-name {

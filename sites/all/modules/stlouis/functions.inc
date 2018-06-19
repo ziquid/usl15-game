@@ -2859,15 +2859,17 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
 
   }
 
-  // New competency.
+  // New competency.  Tell user about it if above level 6.
   else {
     $sql = 'insert into user_competencies
       (fkey_users_id, fkey_competencies_id, use_count) values
       (%d, %d, 1);';
     db_query($sql, $game_user->id, $id);
-    game_send_user_message(1, $game_user->id, 1,
+    if ($game_user->level > 6) {
+      game_send_user_message(1, $game_user->id, 1,
       'You have started learning a new competency, &quot;<span class="initial-caps">'
-    . $item->name . '</span>&quot;!', 'comp');
+      . $item->name . '</span>&quot;!', 'comp');
+    }
   }
 
   return TRUE;
@@ -3714,28 +3716,51 @@ firep($eq->name . ' wore out!');
  *
  * @param int $from
  *   From user id.
- * @param int $to
- *   To user id.
- * @param int $private
- *   1 if this is a private message, 0 otherwise.
+ * @param int|int[] $to
+ *   To user id, or array of uids.  Note: assumes presence of $to[0].
+ * @param int|bool $private
+ *   1/TRUE if this is a private message, 0/FALSE otherwise.
  * @param string $message
  *   The message.
  * @param string $subtype
  *   Subtype of message.  See db for allowed subtypes.
  *
  * @return bool
- *   Whether the user message succeeded or not.
+ *   Whether the user message succeeded or not (for a single uid),
+ *   or whether ALL messages succeeded or not (for an array of uids).
  */
 function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
-  $sql = 'insert into user_messages (fkey_users_from_id, fkey_users_to_id,
-    private, message, subtype) values (%d, %d, %d, "%s", "%s");';
-  return db_query($sql, $from, $to, $private, $message, $subtype);
+  if (is_array($to) && is_numeric($to[0])) {
+    $result = TRUE;
+    foreach ($to as $item) {
+      $result &= game_send_user_message($from, $item, $private, $message, $subtype);
+    }
+    return $result;
+  }
+  else {
+    $sql = 'insert into user_messages (fkey_users_from_id, fkey_users_to_id,
+      private, message, subtype) values (%d, %d, %d, "%s", "%s");';
+    return db_query($sql, $from, $to, (int) $private, $message, $subtype);
+  }
 }
 
+/**
+ * Send a system message.
+ *
+ * @param int $from
+ *   From user id.
+ * @param string $message
+ *   The message.
+ * @param string $subtype
+ *   Subtype of message.  See db for allowed subtypes.
+ *
+ * @return bool
+ *   Whether the message succeeded or not.
+ */
 function game_send_system_message($from, $message, $subtype = 'system') {
   $sql = 'insert into system_messages (subtype, fkey_users_from_id,
     fkey_users_to_id, message) values ("%s", %d, 0, "%s");';
-  db_query($sql, $subtype, $from, $message);
+  return db_query($sql, $subtype, $from, $message);
 }
 
 function game_zombie_name() {

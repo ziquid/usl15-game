@@ -31,6 +31,10 @@ db_set_active('default');
   </div>
   <ul>
     <li>
+      New party seats: Welcome Committee Member and Welcome Committee Chair
+      get notifications of all new users who start the game
+    </li>
+    <li>
       Meet Someone New now boosts target influence by 20
     </li>
   </ul>

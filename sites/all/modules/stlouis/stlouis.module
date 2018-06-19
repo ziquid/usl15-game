@@ -1743,7 +1743,9 @@ function _stlouis_fetch_user() {
   $result = db_query($sql, $game_user->level + 1);
   $level = db_fetch_object($result);
   $next_level = $level->experience;
-  if ($next_level == 0) $next_level = 99999999;
+  if ($next_level == 0) {
+    $next_level = 99999999;
+  }
   $leveled_up = FALSE;
 
   // Leveled up!
@@ -1751,8 +1753,9 @@ function _stlouis_fetch_user() {
 
     $changes_made = $leveled_up = TRUE;
 
-    if ($game_user->level >= 5)
-    $game_user->skill_points += 4;
+    if ($game_user->level >= 5) {
+      $game_user->skill_points += 4;
+    }
 
     $game_user->energy = $game_user->energy_max;
     $game_user->actions = max($game_user->actions_max, $game_user->actions);
@@ -1768,7 +1771,7 @@ function _stlouis_fetch_user() {
     $extra_messages .= '<div class="level-up">
       <div class="wise_old_man happy"></div>
       <div class="level-up-header">Congratulations!</div>
-      <div class="level-up-text">You have reached level ' .
+      <div class="level-up-text">You have reached Level ' .
     $game_user->level . '!</div>';
 
     // Fast comps for the next five minutes.
@@ -1780,6 +1783,10 @@ function _stlouis_fetch_user() {
         <strong>4</strong> new skill points to spend</a></div>
         <div class="level-up-text">For the next five minutes,
         competencies can be enhanced every 15 seconds</div>';
+    }
+    else {
+      $extra_messages .= '<div class="level-up-text">Keep going to reach
+        Level 6!</div>';
     }
 
     if (!empty($game_user->max_level_for_office) &&
