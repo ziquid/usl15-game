@@ -27,12 +27,33 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 21, 2018
+  </div>
+  <ul>
+    <li>
+      Link to Wiki page from Help screen, Level 105
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jun 20, 2018
+  </div>
+  <ul>
+    <li>
+      Level 104
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 19, 2018
   </div>
   <ul>
     <li>
       New party seats: Welcome Committee Member and Welcome Committee Chair
       get notifications of all new users who start the game
+    </li>
+    <li>
+      Level 103
     </li>
     <li>
       Meet Someone New now boosts target influence by 20

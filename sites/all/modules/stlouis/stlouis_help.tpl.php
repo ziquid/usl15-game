@@ -9,15 +9,15 @@
  */
 
 global $game, $phone_id;
-
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
-include drupal_get_path('module', $game) . '/game_defs.inc';
 
 echo <<< EOF
+<div class="news">
+  <button class="active">Help</button>
+  <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
+</div>
 <div class="help">
 <div class="title">
 Help / FAQ
