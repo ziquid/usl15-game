@@ -147,6 +147,8 @@ switch($today) {
   case '2018-06-17':
   case '2018-06-18':
   case '2018-06-19':
+  case '2018-06-23':
+  case '2018-06-24':
     $month_mission = MISSION_JUN;
     break;
 }

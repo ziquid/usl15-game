@@ -27,6 +27,18 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 23, 2018
+  </div>
+  <ul>
+    <li>
+      Extended Father's Day event, Level 106
+    </li>
+    <li>
+      New players can see homepage at any level
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 21, 2018
   </div>
   <ul>

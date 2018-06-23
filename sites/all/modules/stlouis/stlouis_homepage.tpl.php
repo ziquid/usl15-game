@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.5.0, Jun 21 2018';
+$version = 'v0.5.0, Jun 23 2018';
 
 global $game, $phone_id;
 
@@ -18,7 +18,7 @@ $message = check_plain($_GET['message']);
 
 game_competency_gain($game_user, 'where the heart is');
 
-if ($game_user->level < 6) {
+if (FALSE && $game_user->level < 6) {
 
   echo <<< EOF
 <div class="title">
@@ -355,7 +355,7 @@ switch ($month_mission) {
         to celebrate Father\'s Day
       </div>
       <div class="event-text">
-        Ends June 19
+        Ends June 24
       </div>
       <div class="event-text">
         <a href="/' . $game . '/quests/' . $arg2 .
