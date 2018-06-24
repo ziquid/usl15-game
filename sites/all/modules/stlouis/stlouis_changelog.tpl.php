@@ -31,7 +31,7 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      New aide, Gardener, who can check for planting
+      New aide, Florist, can check for planting
     </li>
     <li>
       Extended Father's Day event, Level 106

@@ -1496,12 +1496,13 @@ function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, 
 
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
-    where fkey_to_users_id = %d and challenge_history.type = "planting"
+    where fkey_neighborhoods_id = %d and challenge_history.type = "planting"
     AND challenge_history.timestamp >= "%s"
 
     order by challenge_history.timestamp DESC;';
 
-  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', REQUEST_TIME - 86400));
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    date('Y-m-d H:i:s', REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
