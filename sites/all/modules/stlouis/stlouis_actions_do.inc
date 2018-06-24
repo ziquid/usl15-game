@@ -1469,11 +1469,88 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   return TRUE;
 }
 
-function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target, &$can_do_again) {
-
+function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  $msg_shown = FALSE;
 
-  $fetch_user = '_' . $game . '_fetch_user';
+  $data = [];
+  $sql = 'SELECT challenge_history.*, users.phone_id, users.username,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    clans.acronym as clan_acronym
+
+    from challenge_history
+
+    left join users on challenge_history.fkey_from_users_id = users.id
+
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = challenge_history.fkey_from_users_id
+
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    challenge_history.fkey_from_users_id
+
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+
+    where fkey_to_users_id = %d and challenge_history.type = "planting"
+    AND challenge_history.timestamp >= "%s"
+
+    order by challenge_history.timestamp DESC;';
+
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', REQUEST_TIME - 86400));
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+
+  $outcome_reason .=<<< EOF
+<div class="news">
+<div class="messages-title">
+  Flowers that have been planted in this neighborhood
+</div>
+EOF;
+
+  foreach ($data as $item) {
+    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $clan_acronym = '';
+
+    if (!empty($item->clan_acronym)) {
+      $clan_acronym = "($item->clan_acronym)";
+    }
+
+    if ($item->is_clan_leader) {
+      $clan_acronym .= '*';
+    }
+
+    $outcome_reason .=<<< EOF
+<div class="dateline">
+$display_time from $item->ep_name $item->username $clan_acronym
+</div>
+<div class="message-body">
+<p>$item->desc_short</p>
+<div class="message-reply-wrapper"><div class="message-reply">
+  <a href="/$game/user/$phone_id/$item->phone_id">View</a>
+</div></div>
+</div>
+EOF;
+
+    $msg_shown = TRUE;
+  }
+
+  if (!$msg_shown) {
+    $outcome_reason .= 'No flowers found!';
+  }
+
+  $outcome_reason .= '</div>';
+  return TRUE;
+}
+
+function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target, &$can_do_again) {
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
   $msg_shown = FALSE;
 
@@ -1503,7 +1580,7 @@ function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target,
 
     order by challenge_history.timestamp DESC;';
 
-  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
