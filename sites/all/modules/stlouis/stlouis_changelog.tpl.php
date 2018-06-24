@@ -36,6 +36,9 @@ db_set_active('default');
     <li>
       New players can see homepage at any level
     </li>
+    <li>
+      Fundraising missions are complete
+    </li>
   </ul>
 
   <div class="subtitle">
