@@ -329,11 +329,12 @@ if ($won) {
 
         $points_to_add = 10;
 
-        slack_send_message("Zombie $item->id ($item->username)"
-        . " was beaten by super debater $game_user->username"
-        . " and has switched to $party->clan_title!", $slack_channel);
+//        slack_send_message("Zombie $item->id ($item->username)"
+//        . " was beaten by super debater $game_user->username"
+//        . " and has switched to $party->clan_title!", $slack_channel);
 
-      } else if
+      }
+      else if
         (($clan_player->fkey_clans_id != $clan_zombie->fkey_clans_id) &&
         ($clan_player->fkey_clans_id > 0)) {
 
@@ -354,9 +355,9 @@ if ($won) {
 
         $points_to_add = 15;
 
-        slack_send_message("Zombie $item->id ($item->username)"
-        . " was beaten by super debater $game_user->username"
-        . " and has switched to $clan_name->name!", $slack_channel);
+//        slack_send_message("Zombie $item->id ($item->username)"
+//        . " was beaten by super debater $game_user->username"
+//        . " and has switched to $clan_name->name!", $slack_channel);
 
       // Already party and clan -- move them!
       } else if
@@ -405,8 +406,8 @@ EOF;
 
         $points_to_add = 10;
 
-        slack_send_message("Conquered zombie $item->id ($item->username)"
-        . " has five debate losses and has left!", $slack_channel);
+//        slack_send_message("Conquered zombie $item->id ($item->username)"
+//        . " has five debate losses and has left!", $slack_channel);
 
     }
     else {
@@ -414,8 +415,8 @@ EOF;
       // Not 5 losses yet.
       $points_to_add = ($item->debates_lost + 1) * 2;
 
-      slack_send_message("Unconquered zombie $item->id ($item->username)"
-      . " has less than five debate losses", $slack_channel);
+//      slack_send_message("Unconquered zombie $item->id ($item->username)"
+//      . " has less than five debate losses", $slack_channel);
 
     }
 
@@ -459,8 +460,8 @@ EOF;
     echo '<div class="subtitle">' . $item->username
     . ' has retreated to another region.</div>';
 
-    slack_send_message("$item->username has lost a debate and moved to"
-      . " a new region.", $slack_channel);
+//    slack_send_message("$item->username has lost a debate and moved to"
+//      . " a new region.", $slack_channel);
 
     // Give debatebot another token.
     $sql = 'select * from equipment_ownership where fkey_users_id = %d
@@ -498,7 +499,7 @@ EOF;
       echo '<div class="subtitle">In haste to leave, ' . $item->username
         . ' dropped a token.&nbsp; You pick it up.</div>';
 
-      slack_send_message("$item->username left behind a token", $slack_channel);
+//      slack_send_message("$item->username left behind a token", $slack_channel);
     }
 
   }
