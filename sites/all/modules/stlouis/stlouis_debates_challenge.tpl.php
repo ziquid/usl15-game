@@ -295,10 +295,10 @@ if ($won) {
   $points_to_add = 0;
 
   // Zombies!
-  if ($item->meta == 'zombie' /* || $phone_id == 'abc123' */) {
+  if ($item->meta == 'zombie') {
 
     if ($game_user->debates_won >= ($game_user->level * 100)
-    || $phone_id == 'abc123') {
+    || $game_user->meta == 'admin') {
 
       // Beaten by super debater... evolve.
       $sql = 'select fkey_clans_id from clan_members
@@ -324,7 +324,7 @@ if ($won) {
         $result = db_query($sql, $game_user->fkey_values_id);
         $party = db_fetch_object($result);
         echo '<div class="subtitle">Because you are a super debater,<br/>' .
-          $item->username . ' now owes his allegiance to ' .
+          $item->username . ' now owes its allegiance to ' .
           $party->party_title . '.</div>';
 
         $points_to_add = 10;
@@ -367,17 +367,19 @@ if ($won) {
 
         ) {
         // Move them!
-        $hoods = array();
+        $hoods = [];
         $sql = 'select id, name from neighborhoods
           where has_elections = 1
           order by name ASC;';
         $result = db_query($sql);
-        while ($hood = db_fetch_object($result)) $hoods[] = $hood;
+        while ($hood = db_fetch_object($result)) {
+          $hoods[] = $hood;
+        }
 
         echo <<< EOF
 <div class="subtitle">Because you are a super debater,<br/>
-$item->username will move to where you want him or her.</div>
-<div class="title">To where should he or she move?</div>
+$item->username will move to where you want it.</div>
+<div class="title">To where should it move?</div>
 EOF;
 
         foreach ($hoods as $hood) {

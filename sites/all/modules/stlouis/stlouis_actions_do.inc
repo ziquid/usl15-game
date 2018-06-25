@@ -1360,7 +1360,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
   return TRUE;
 }
 
-function _stlouis_action_plant_flowers_function(&$outcome_reason, $target, &$can_do_again) {
+function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
