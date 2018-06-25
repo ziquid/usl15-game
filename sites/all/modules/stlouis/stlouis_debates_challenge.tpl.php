@@ -610,7 +610,7 @@ else {
     echo '<div class="subtitle">' . $item->username .
       ' has gained 500 ' . $experience . '.</div>';
 
-    slack_send_message("Zombie $item->id won the debate!");
+//    slack_send_message("Zombie $item->id won the debate!");
 
   }
 
@@ -626,10 +626,8 @@ else {
     echo "<!--\n<ai \"debate-lost\"/>\n-->";
 
   if ($event_type == EVENT_DEBATE) {
-
     echo '<div class="subsubtitle">You have ' . $row->tags_con .
     ' consecutive debate win(s) and ' . $row->points . ' point(s)</div>';
-
   }
 
 /*
