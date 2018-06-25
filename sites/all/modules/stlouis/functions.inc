@@ -3765,7 +3765,7 @@ function game_send_system_message($from, $message, $subtype = 'system') {
 
 function game_zombie_name() {
 
-  $first = array(
+  $first = [
     'Angry',
     'Beastly',
     'Creepy',
@@ -3777,9 +3777,9 @@ function game_zombie_name() {
     'Infected',
     'Jaundiced',
     'Killer',
-  ); // https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
+  ]; // https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
 
-  $last = array(
+  $last = [
     'Quaint Stench',
     'Rottie',
     'Stinkbag',
@@ -3790,7 +3790,7 @@ function game_zombie_name() {
     'Xtra Creep',
     'Yard Bump',
     'Zero',
-  );
+  ];
 
   return 'Zombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];

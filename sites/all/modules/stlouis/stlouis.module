@@ -322,6 +322,46 @@ function stlouis_cron() {
     db_query($sql);
   }
 
+  // Add zombies?
+  $sql = 'select count(*) as count from users where last_access < "%s"
+    and meta = "";';
+  $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 90)));
+  $old_users = db_fetch_object($result);
+
+  // 100 or more old accounts?  Check zombie count.
+  if ($old_users->count >= 100) {
+    $sql = 'select count(*) as count from users where meta = "zombie";';
+    $result = db_query($sql);
+    $zombies = db_fetch_object($result);
+
+    // Fewer than 50 zombies?  Add 100 more.
+    if ($zombies->count < 50) {
+
+      $sql = 'select id from users where last_access < "%s"
+        order by rand() limit 100;';
+      $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 90)));
+      $zombie_users = [];
+      while ($item = db_fetch_object($result)) {
+        $zombie_users[] = $item;
+      }
+
+      // Change each user to a zombie.
+      foreach ($zombie_users as $zombie) {
+        $name = game_zombie_name();
+        if ($zombie->level < 25) {
+          $zombie->level += 25 + mt_rand(0,50);
+        }
+        $sql = 'update users set meta = "zombie", username = "%s", level = %d
+          where id = %d;';
+        $result = db_query($sql, $name, $zombie->level, $zombie->id);
+      }
+
+      // Notify the game players.
+      game_send_system_message(1,
+        'Grrrr!&nbsp; Zombies have sprung up everywhere!');
+    }
+  }
+
   db_set_active('default');
 }
 
