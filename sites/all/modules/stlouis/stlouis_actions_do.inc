@@ -1496,7 +1496,8 @@ function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, 
 
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
 
-    where fkey_neighborhoods_id = %d and challenge_history.type = "planting"
+    where challenge_history.fkey_neighborhoods_id = %d 
+    and challenge_history.type = "planting"
     AND challenge_history.timestamp >= "%s"
 
     order by challenge_history.timestamp DESC;';
