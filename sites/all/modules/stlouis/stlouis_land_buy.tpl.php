@@ -30,7 +30,6 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
-
 // Not enough money.
 if ($game_user->money < $land_price) {
   $options['land-buy-succeeded'] = 'failed no-money';
@@ -93,7 +92,7 @@ if ($game_land->is_loot != 0) {
 // Success!
 if ($options['land-buy-succeeded'] == 'buy-success') {
 
-  // Job?  delete other job(s).
+  // Job? Delete other job(s).
   if ($game_land->type == 'job') {
 
     $sql = 'DELETE FROM `land_ownership` WHERE id IN (
