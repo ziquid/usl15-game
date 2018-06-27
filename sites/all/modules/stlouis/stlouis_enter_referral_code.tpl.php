@@ -44,8 +44,7 @@ EOF;
     if ($referral_code == $game_user->referral_code)
       drupal_goto($game . '/user/' . $arg2);
 
-// have they already used that code?
-
+    // Have they already used that code?
     $sql = 'select referred_by from user_creations
       where phone_id = "%s" and referred_by <> "";';
     $result = db_query($sql, $phone_id);
@@ -61,10 +60,12 @@ EOF;
     $item2 = db_fetch_object($result);
 
     if (!empty($item->referred_by) ||
-      ($item2->count > 5)) { // houston, we have a problem
-// user is trying to enter a code more than once from same phone
-// or more than 5 referral codes from same IP in 24 hours
 
+      // Houston, we have a problem.
+      ($item2->count > 5)) {
+
+      // User is trying to enter a code more than once from same phone
+      // or more than 5 referral codes from same IP in 24 hours.
       echo <<< EOF
 <p>&nbsp;</p>
 <div class="welcome">
@@ -171,7 +172,7 @@ EOF;
 </div>
 EOF;
 
-// update his/her user entry
+    // Update his/her user entry.
     $sql = 'update users set fkey_neighborhoods_id = %d, referred_by = "%s",
       fkey_values_id = %d, `values` = "%s", money = money + 1000
       where id = %d;';
@@ -182,7 +183,7 @@ EOF;
       order by datetime desc limit 1;';
     $result = db_query($sql, $referral_code, $game_user->phone_id);
 
-// give the referrer an experience bonus
+    // Give the referrer an experience bonus.
     $sql = 'update users set experience = experience + 1000 where id = %d;';
     $result = db_query($sql, $mentor->id);
 
@@ -204,8 +205,7 @@ EOF;
     return;
   }
 
-// otherwise they have not chosen a clan or are rechoosing one
-
+  // Otherwise they have not chosen a clan or are rechoosing one.
   echo <<< EOF
 <p>&nbsp;</p>
 <div class="welcome">

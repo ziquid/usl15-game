@@ -10,7 +10,7 @@ $fetch_header($game_user);
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 
-// do AI moves from this page!!!
+// Do AI moves from this page!!!
 include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
 ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
   _move_ai();
@@ -203,7 +203,9 @@ firep($item);
       '</a>';
     $action_class = '';
   }
-  else { // existing officer
+  else {
+
+    // Existing officer.
     $official_link .= '<br/><a href="/' . $game . '/user/' .
       $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
     $action = '<a href="/' . $game . '/elections_challenge/' . $arg2 .
