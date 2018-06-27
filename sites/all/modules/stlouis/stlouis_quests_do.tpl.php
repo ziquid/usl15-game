@@ -55,7 +55,9 @@ $ai_output = 'quest-succeeded';
 
 // Check to see if quest prerequisites are met.
 if (($game_user->energy < $game_quest->required_energy) &&
-  ($game_user->level >= 6)) { // unlimited quests below level 6
+
+  // Unlimited quests below level 6.
+  ($game_user->level >= 6)) {
 
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not enough Energy!') .
@@ -266,7 +268,7 @@ $result = db_query($sql, $game_user->id, $quest_id);
 $pc = db_fetch_object($result);
 //firep($pc);
 
-// get quest completion stats
+// Get quest completion stats.
 $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
   $result = db_query($sql, $game_user->id, $game_quest->group);
@@ -308,6 +310,7 @@ if ($quest_succeeded) {
       $game_quest->experience, $money_added, $game_user->id);
   }
   else {
+
     // Save all updated stats.
     $sql = 'update users set energy = energy - %d,
       experience = experience + %d, money = money + %d,
@@ -345,7 +348,7 @@ if ($quest_succeeded) {
     floor($game_quest->percent_complete / $percentage_divisor),
     $percentage_target);
 
-// if they have completed the quest for the first time in a round, give them a bonus
+  // If they have completed the quest for the first time in a round, give them a bonus.
   if ($percent_complete == $percentage_target) {
 
     if ($pc->bonus_given < $percentage_divisor) {
@@ -373,8 +376,7 @@ EOF;
 
     }
 
-// did they complete all quests in the group?
-
+    // Did they complete all quests in the group?
     $sql = 'select * from quest_group_completion
       where fkey_users_id = %d and fkey_quest_groups_id = %d;';
     $result = db_query($sql, $game_user->id, $game_quest->group);
@@ -382,9 +384,9 @@ EOF;
 //firep($qgc);
 
     if (empty($qgc) || $qgc->times_completed == 0) {
-// if no quest_group bonus has been given
 
-// get quest group stats
+      // If no quest_group bonus has been given.
+      // Get quest group stats.
       $sql = 'SELECT sum( bonus_given ) AS completed,
         count( quests.id ) AS total, quest_groups.ready_for_bonus
         FROM `quests`
@@ -401,8 +403,8 @@ EOF;
 
       if (($quest_group->completed == $quest_group->total) &&
         ($quest_group->ready_for_bonus == 1)) {
-// woohoo!  user just completed an entire group!
 
+        // Woohoo! User just completed an entire group!
         $quest_completion_html .=<<< EOF
 <div class="title loot">Congratulations!</div>
 <p>You have completed all {$quest_lower}s in this group and have gained extra skill
@@ -438,10 +440,10 @@ EOF;
 
     }
 
-    // what?  They've completed a 2nd time?
+    // What? They've completed a 2nd time?
     if ($qgc->times_completed == 1) {
 
-// get quest group stats
+      // Get quest group stats.
       $sql = 'SELECT sum( bonus_given ) AS completed,
         count( quests.id ) AS total, quest_groups.ready_for_bonus
         FROM `quests`
@@ -457,22 +459,24 @@ EOF;
 //firep($quest_group);
 
       if ($quest_group->completed == ($quest_group->total * 2)) {
-// woohoo!  user just completed an entire group the second time!
 
+        // Woohoo! User just completed an entire group the second time!
 //          game_competency_gain($game_user, 'second-mile saint');
 
         $sql = 'select * from quest_group_bonus
           where fkey_quest_groups_id = %d;';
         $result = db_query($sql, $game_quest->group);
-        $item = db_fetch_object($result); // limited to 1 in db
+
+        // Limited to 1 in db.
+        $item = db_fetch_object($result);
 //firep($item);
         $eq_id = $item->fkey_equipment_id;
         $land_id = $item->fkey_land_id;
         $st_id = $item->fkey_staff_id;
 
         if (($eq_id + $land_id + $st_id) > 0) {
-// anything to give him/her?
 
+          // Anything to give him/her?
           // Equipment bonus.
           if ($eq_id > 0) {
 
@@ -606,9 +610,11 @@ EOF;
 
               WHERE staff.id = %d;';
             $result = db_query($sql, $game_user->id, $st_id);
-            $game_staff = db_fetch_object($result); // limited to 1 in DB
 
-// give the stuff
+            // Limited to 1 in DB.
+            $game_staff = db_fetch_object($result);
+
+            // Give the stuff.
             // No record exists - insert one.
             if ($game_staff->quantity == '') {
               $sql = 'insert into staff_ownership
@@ -616,13 +622,15 @@ EOF;
                 values (%d, %d, %d);';
               $result = db_query($sql, $st_id, $game_user->id, 1);
             }
-            else { // existing record - update it
+            else {
+
+              // Existing record - update it.
               $sql = 'update staff_ownership set quantity = quantity + 1 where
                 fkey_staff_id = %d and fkey_users_id = %d;';
               $result = db_query($sql, $st_id, $game_user->id);
             }
 
-// tell the user about it
+            // Tell the user about it.
             $quest_completion_html .=<<< EOF
 <div class="quest-succeeded title loot">Congratulations!</div>
 <div class="subsubtitle">You have completed the second round of {$quest_lower}s!</div>
@@ -726,7 +734,7 @@ EOF;
 
           }
 
-// update quest_groups_completion
+        // Update quest_groups_completion.
         $sql = 'update quest_group_completion set times_completed = 2
           where fkey_users_id = %d and fkey_quest_groups_id = %d;';
         $result = db_query($sql, $game_user->id, $game_quest->group);
@@ -736,8 +744,9 @@ EOF;
 //          $percentage_divisor = 2;
 
         }
-        else { // we don't have a bonus yet
+        else {
 
+          // We don't have a bonus yet.
           $quest_completion_html .=<<< EOF
 <div class="title loot">Congratulations!</div>
 <div class="quest-icon"><img
@@ -769,7 +778,6 @@ EOF;
   $width = floor($percent_complete * 94 / $percentage_target) + 2;
 
   // Check for loot -- equipment.
-
   $sql = 'SELECT equipment.quantity_limit, equipment_ownership.quantity
     FROM equipment
 
@@ -864,8 +872,7 @@ EOF;
   </div>
 EOF;
 
-// add/update db entry
-
+      // Add/update db entry.
       game_competency_gain($game_user, 'looter');
 
       $sql = 'SELECT equipment.*, equipment_ownership.quantity
@@ -878,7 +885,9 @@ EOF;
         WHERE equipment.id = %d;';
       $result = db_query($sql, $game_user->id,
         $game_quest->fkey_loot_equipment_id);
-      $game_equipment = db_fetch_object($result); // limited to 1 in DB
+
+      // Limited to 1 in DB.
+      $game_equipment = db_fetch_object($result);
 
       // No record exists - insert one.
       if ($game_equipment->quantity == '') {
@@ -887,7 +896,9 @@ EOF;
         $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
           $game_user->id);
       }
-      else { // existing record - update it
+      else {
+
+        // Existing record - update it.
         $sql = 'update equipment_ownership set quantity = quantity + 1 where
           fkey_equipment_id = %d and fkey_users_id = %d;';
         $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
@@ -903,7 +914,6 @@ EOF;
   }
 
   // Check for loot -- staff.
-
   $sql = 'SELECT staff.quantity_limit,staff_ownership.quantity
     FROM staff
 
@@ -995,7 +1005,9 @@ EOF;
       $result = db_query($sql, $game_quest->fkey_loot_staff_id,
         $game_user->id);
     }
-    else { // existing record - update it
+    else {
+
+      // Existing record - update it.
       $sql = 'update staff_ownership set quantity = quantity + 1 where
         fkey_staff_id = %d and fkey_users_id = %d;';
       $result = db_query($sql, $game_quest->fkey_loot_staff_id,
@@ -1061,8 +1073,9 @@ EOF;
 //    '', $loot_html, $quest_completion_html);
 
 }
-else { // failed!
+else {
 
+// Failed!
       $fetch_header($game_user);
 
   if ($game_user->level < 6 and $game_user->experience > 0) {
@@ -1151,8 +1164,9 @@ if ($game_user->level < 6) {
   $sql_quest_neighborhood = 'where fkey_neighborhoods_id = 0';
 
 }
-else { // show location-specific quests
+else {
 
+// Show location-specific quests.
   $sql_quest_neighborhood = 'where ((fkey_neighborhoods_id = 0 and
     required_level >= 6) or fkey_neighborhoods_id = ' .
     $game_user->fkey_neighborhoods_id . ')';
@@ -1196,7 +1210,7 @@ $older_missions_html $location $quests $newer_missions_html
 </div>
 EOF;
 
-// get quest group stats
+// Get quest group stats.
 $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
   FROM `quests`
   left outer join quest_completion
@@ -1208,7 +1222,8 @@ $result = db_query($sql, $game_user->id, $game_quest->group);
 $quest_group = db_fetch_object($result);
 //firep($quest_group);
 
-$quest_group->completed += 0; // haha!  typecasting!
+ // Haha! Typecasting!
+$quest_group->completed += 0;
 
 if ($quest_group_completion->times_completed > 0) {
 
@@ -1225,7 +1240,7 @@ complete $next_group_html
 </div>
 EOF;
 
-// show each quest
+// Show each quest.
 $data = [];
 $sql = 'select quests.*, quest_completion.percent_complete,
   neighborhoods.name as hood from quests
@@ -1272,8 +1287,8 @@ foreach ($data as $item) {
   if (($game_quest->group > 0) &&
     (($item->fkey_neighborhoods_id != 0) &&
     ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
-// show quests in other hoods?
 
+    // Show quests in other hoods?
     echo <<< EOF
 <div class="quests wrong-hood">
   <div class="quest-icon">
@@ -1306,14 +1321,16 @@ foreach ($data as $item) {
 EOF;
 
   }
-  else { // quest in my hood
+  else {
+
+    // Quest in my hood.
     game_show_quest($game_user, $item, $percentage_target,
       $percentage_divisor, $quest_group, $party_title);
   }
 
 }
 
-// Don't show extra quests at first.
+  // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
 
   $data = array();

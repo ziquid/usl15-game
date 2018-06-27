@@ -4,7 +4,7 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-// random hood -- april fools 2013
+// Random hood -- April fools 2013.
 /*
 if (mt_rand(0, 1) > 0) {
 
@@ -67,7 +67,7 @@ firep($new_hood, 'new hood');
 
   game_alter('actions_to_move', $game_user, $actions_to_move);
 
-// april fools 2013
+  // April fools 2013.
 //    $actions_to_move = 1;
 
   if ($game_user->actions < $actions_to_move) {
@@ -97,8 +97,8 @@ firep($new_hood, 'new hood');
 
   $resigned_text = '';
 
-// you lose your old type 1 position, if any (type 1 = neighborhood)
-// moving to a new district loses the type 3 (house) position
+  // You lose your old type 1 position, if any (type 1 = neighborhood).
+  // Moving to a new district loses the type 3 (house) position.
   $sql = 'SELECT elected_positions.type
     FROM elected_officials
     LEFT JOIN elected_positions
@@ -120,13 +120,13 @@ firep($new_hood, 'new hood');
     $resigned_text = 'and resigned your current position';
   }
 
-// update neighborhood and actions
+  // Update neighborhood and actions.
   $sql = 'update users set fkey_neighborhoods_id = %d,
     actions = actions - %d where id = %d;';
   $result = db_query($sql, $neighborhood_id, $actions_to_move,
     $game_user->id);
 
-// start the actions clock if needed
+  // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
@@ -135,7 +135,7 @@ firep($new_hood, 'new hood');
 
   $unfrozen_msg = '';
 
-// frozen?  10% chance to mark as unfrozen
+// Frozen? 10% chance to mark as unfrozen.
   if (($game_user->meta == 'frozen') && (mt_rand(1, 10) == 1)) {
     $sql = 'update users set meta = "" where id = %d;';
     $result = db_query($sql, $game_user->id);
@@ -144,9 +144,8 @@ firep($new_hood, 'new hood');
       '<div class="subtitle">Your movement has unfrozen you!</div>';
   }
 
-  // chance of loss
-
-  // give them a little extra chance
+  // Chance of loss.
+  // Give them a little extra chance.
   if ($eq->chance_of_loss >= mt_rand(1,110)) {
     $equip_lost = TRUE;
     firep($eq->name . ' wore out!');
@@ -154,7 +153,7 @@ firep($new_hood, 'new hood');
       where fkey_equipment_id = %d and fkey_users_id = %d;';
     $result = db_query($sql, $eq->id, $game_user->id);
 
-    // player expenses need resetting?
+    // Player expenses need resetting?
     // Subtract upkeep from your expenses.
     if ($eq->upkeep > 0) {
       $sql = 'update users set expenses = expenses - %d where id = %d;';
@@ -187,6 +186,7 @@ EOF;
   echo $unfrozen_msg;
 
   if ($equip_lost) {
+
     // FIXME: check equipment_failure_reasons.
     echo '<div class="subtitle">' . t('Your @stuff has worn out',
       array('@stuff' => strtolower($eq->name))) . '</div>';

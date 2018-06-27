@@ -14,7 +14,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
 
-// do AI moves from this page!!!
+// Do AI moves from this page!!!
 include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
 ($game == 'stlouis') && ((mt_rand(0, 5) == 1) || ($arg2 == 'abc123')) &&
   _move_ai();
@@ -24,16 +24,21 @@ if (is_numeric(arg(3))) $group_to_show = arg(3);
 if (is_numeric($group_to_show)) {
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
 }
-else if ($game_user->level < 6) { // show beginning quests
+else if ($game_user->level < 6) {
+
+  // Show beginning quests.
   $group_to_show = '0';
   $sql_quest_neighborhood = 'where `group` = 0';
 }
+
 // Cinco De Mayo Quests.
 else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id == 30) {
   $group_to_show = '1100';
   $sql_quest_neighborhood = 'where `group` = 1100';
 }
-else { // show the group for which the player last successfully completed a quest
+else {
+
+  // Show the group for which the player last successfully completed a quest.
   $group_to_show = $game_user->fkey_last_played_quest_groups_id;
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
 }
@@ -72,11 +77,11 @@ EOF;
 if ($game_user->fkey_values_id == 0 && $game_user->level >= 6 &&
   $game_user->level <= 25)
   drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
-// don't let them do quests at levels 6-25 without being in a party
 
+// Don't let them do quests at levels 6-25 without being in a party.
 if (!$game_user->seen_neighborhood_quests && $game_user->level >= 6) {
-// intro neighborhood quests at level 6
 
+  // Intro neighborhood quests at level 6.
   echo <<< EOF
 <div class="welcome">
 <div class="wise_old_man_small">
@@ -159,7 +164,7 @@ EOF;
 // Admin?  Show all quests.
 $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
 
-// get quest group stats
+// Get quest group stats.
 $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
   FROM `quests`
   left outer join quest_completion
@@ -171,7 +176,8 @@ $result = db_query($sql, $game_user->id, $group_to_show);
 $quest_group = db_fetch_object($result);
 //firep($quest_group, 'quest group object');
 
-$quest_group->completed += 0; // haha!  typecasting!
+// Haha! Typecasting!
+$quest_group->completed += 0;
 
 $sql = 'SELECT times_completed FROM `quest_group_completion`
   where fkey_users_id = %d and fkey_quest_groups_id = %d;';
@@ -249,8 +255,8 @@ foreach ($data as $item) {
   if (($group_to_show > 0) &&
     (($item->fkey_neighborhoods_id != 0) &&
       ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
-    // show quests in other hoods?
 
+    // Show quests in other hoods?
 //    game_show_quest($game_user, $item, $percentage_target,
 //      $percentage_divisor, $quest_group, $party_title);
 
@@ -286,14 +292,16 @@ foreach ($data as $item) {
 EOF;
 
   }
-  else { // quest in my hood
+  else {
+
+    // Quest in my hood.
     game_show_quest($game_user, $item, $percentage_target,
       $percentage_divisor, $quest_group, $party_title);
   }
 
 }
 
-// Don't show extra quests at first.
+  // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
 
   $data = array();

@@ -25,7 +25,8 @@ $msg = db_fetch_object($result);
 
 // Not origin or recipient of msg?
 if ($msg->fkey_users_to_id != $game_user->id && $msg->fkey_users_from_id != $game_user->id) {
-// FIXME jwc 10Apr2014 -- deduct karma
+
+  // FIXME jwc 10Apr2014 -- deduct karma.
   db_set_active('default');
   drupal_goto($game . '/home/' . $arg2);
 }
