@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jun 30, 2018
+  </div>
+  <ul>
+    <li>
+      Level 108, Stats-only missions
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 25, 2018
   </div>
   <ul>
