@@ -24,8 +24,8 @@ function game_move_ai() {
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
-    //      mail('joseph@ziquid.com', 'not performing AI moves for ' .
-    //        $game_name_full, "since lock could not be acquired");
+    slack_send_message('not performing AI moves for ' .
+      $game_name_full . " since lock could not be acquired");
     db_set_active('game_' . $game);
     return;
   }
@@ -38,7 +38,7 @@ function game_move_ai() {
   game_ai_list_all_ais();
 
   game_ai_do('build');
-//  game_ai_do('build');
+  game_ai_do('build');
 //  game_ai_do('build');
 //  game_ai_do('build');
 //  game_ai_do('build');
@@ -132,7 +132,10 @@ function game_ai_build() {
     return game_ai_do('allocate skill points', $ai_id);
   }
 
-  return game_ai_do('do quest', $ai_id, 1);
+  return game_ai_do('do quest', $ai_id, 4) |
+    game_ai_do('do quest', $ai_id, 3) |
+    game_ai_do('do quest', $ai_id, 2) |
+    game_ai_do('do quest', $ai_id, 1);
 }
 
 /**
