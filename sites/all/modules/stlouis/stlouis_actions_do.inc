@@ -123,15 +123,13 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   &$can_do_again) {
 
   global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $get_value = '_' . $game . '_get_value';
   $remove_value = '_' . $game . '_remove_value';
-  $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  $action_id = arg(3);
-  $arg2 = check_plain(arg(2));
+  $action_id = $arg3;
   $can_do_again = FALSE;
 
   $clan_acronym = check_plain($_GET['acronym']);
