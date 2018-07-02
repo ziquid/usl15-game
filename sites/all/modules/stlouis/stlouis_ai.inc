@@ -726,7 +726,7 @@ function game_ai_create_new_player() {
 
   $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-  $response = file_get_contents($uri);
+  $response = game_ai_web_request($id_to_check, 'home');
   game_ai_out($response);
 
   game_ai_out('updating record to make this a ToxiCorp Employee');
