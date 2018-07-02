@@ -37,6 +37,11 @@ function _move_ai() {
 
   game_ai_list_all_ais();
 
+  game_ai_do('build');
+  game_ai_do('build');
+  game_ai_do('build');
+  game_ai_do('build');
+  game_ai_do('build');
   //  game_ai_do('have_num_clan_leaders', 1) && game_ai_do('build');
   //  game_ai_do('have_num_interns', 21) && game_ai_do('build');
   //  game_ai_do('have_num_members', 18) && game_ai_do('build');
@@ -101,35 +106,25 @@ function game_ai_do($goal) {
   return call_user_func_array($goal_function, $args);
 }
 
-
-function _ai_build() {
-
-  // Generic function for building a random ai player.
-  global $game;
-
+/**
+ * Generic function for building a random AI player.
+ *
+ * @return bool|mixed
+ */
+function game_ai_build() {
   game_ai_out('figuring out what is the best building course of action');
 
-  // Find most available player.
-  if (mt_rand(0,2) > 0) {
-    $sql = 'select phone_id from users
-      where meta like "ai_%"
-      order by (energy + (actions * 40)) desc
-      limit 1;';
-  }
-  else {
-    // Random player.
-    $sql = 'select phone_id from users
-      where meta like "ai_%"
-      order by RAND()
-      limit 1;';
-  }
-
+  // Find most energy.
+  $sql = 'select phone_id from users
+    where meta like "ai_%"
+    order by energy desc
+    limit 1;';
   $result = db_query($sql);
   $item = db_fetch_object($result);
   $ai_id = $item->phone_id;
 
   game_ai_web_request($ai_id, 'home');
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
   game_ai_out("Building player #$ai_id");
 
   if ($ai_user->skill_points > 0) {
@@ -137,17 +132,24 @@ function _ai_build() {
     return game_ai_do('allocate skill points', $ai_id);
   }
 
-  return game_ai_do('boost experience', $ai_id);
+  return game_ai_do('do quest', $ai_id, 1);
 }
 
-
-function _ai_do_quest($ai_id, $quest) {
-
-  // Perform quest $quest as player $ai_id.
+/**
+ * Perform a quest as a specific AI player.
+ *
+ * @param string $ai_id
+ *   The phone ID of the AI player.
+ * @param int $quest
+ *   The quest ID.
+ *
+ * @return bool
+ *   Whether the quest succeeded or failed.
+ */
+function game_ai_do_quest($ai_id, $quest) {
   $ai_response = game_ai_web_request($ai_id, 'quests_do', $quest);
 
   if ($ai_response == 'quest-succeeded') {
-//      game_ai_out('Quest succeeded!');
     return TRUE;
   }
 
@@ -157,9 +159,7 @@ function _ai_do_quest($ai_id, $quest) {
   foreach($response_array as $response) {
 
     if ($response == 'quest-failed') {
-
       continue;
-
     }
     else if (strpos($response, 'need-staff-') === 0) {
 
@@ -180,9 +180,9 @@ function _ai_do_quest($ai_id, $quest) {
         $worked = game_ai_do('do quest', $ai_id, $item->id);
 // yes, call recursively
 
-        if ($worked) return FALSE;
-// this quest may have succeeded, but goal failed
-
+        if ($worked) {
+          return FALSE;
+        }
       }
 
 // next, check to see if we can purchase item
@@ -190,7 +190,6 @@ function _ai_do_quest($ai_id, $quest) {
       game_ai_out("Ok, seeing if we can purchase Staff #$staff_to_get");
       game_ai_do('purchase staff', $ai_id, $staff_to_get);
       return FALSE;
-
     }
     else if (strpos($response, 'need-equipment-') === 0) {
 
@@ -220,34 +219,41 @@ function _ai_do_quest($ai_id, $quest) {
       game_ai_out("Ok, seeing if we can purchase Equipment #$eq_to_get");
       game_ai_do('purchase equipment', $ai_id, $eq_to_get);
       return FALSE;
-
     }
-
   }
 
   game_ai_out('FIXME: Not doing anything -- giving up!!!');
   return FALSE;
-
 }
 
-
+/**
+ * Call a specific web request.
+ *
+ * @param string $ai_id
+ *   The Phone ID of the AI player.
+ * @param string $screen
+ *   The name of the screen.
+ * @param string $arg1
+ *   Any additional arguments to the request.
+ *
+ * @return string
+ *   The resulting string.
+ */
 function game_ai_web_request($ai_id, $screen, $arg1 = '') {
-
-  // Call a web request for player $ai_id to screen $screen with optional.
-// arg $arg1
-
   global $game;
 
   $uri = 'http://' . $_SERVER['SERVER_NAME'] . "/$game/$screen/$ai_id";
-  if ($arg1 != '') $uri .= "/$arg1";
+  if ($arg1 != '') {
+    $uri .= "/$arg1";
+  }
 
   if (($screen != 'home') &&
     ($screen != 'debates_challenge') &&
-    ($screen != 'land'))
+    ($screen != 'land')) {
     game_ai_out("$ai_id: doing $screen $arg1 @ $uri");
+  }
 
   $response = file_get_contents($uri);
-
   $ai_response_start = strpos($response, "\n<ai ") + 5;
 
   if ($ai_response_start > 5) {
@@ -594,7 +600,7 @@ function _ai_find_free_player($type, $level_min, $level_max,
   $result = db_query($sql, "ai_$type", $level_min, $level_max, $min_actions);
   while ($item = db_fetch_object($result)) $data[] = $item;
 
-  if (!empty($data)) return _ai_fetch_user($data[mt_rand(0, 9)]->phone_id);
+  if (!empty($data)) return game_ai_fetch_user($data[mt_rand(0, 9)]->phone_id);
 
   game_ai_out("No free $type ... looking for one with extra skill points");
 
@@ -614,7 +620,7 @@ function _ai_find_free_player($type, $level_min, $level_max,
   if (!empty($item)) {
 
     _ai_allocate_skill_for_action($item->phone_id);
-    $ai_user = _ai_fetch_user($item->phone_id);
+    $ai_user = game_ai_fetch_user($item->phone_id);
 
     if ($ai_user->actions >= $min_actions) return $ai_user;
 
@@ -799,7 +805,7 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
 
 function _ai_allocate_skill_for_elocution($ai_id) {
 
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -821,7 +827,7 @@ function _ai_allocate_skill_for_elocution($ai_id) {
 
 function _ai_allocate_skill_for_action($ai_id) {
 
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -843,7 +849,7 @@ function _ai_allocate_skill_for_action($ai_id) {
 
 function _ai_allocate_skill_for_energy($ai_id) {
 
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -865,7 +871,7 @@ function _ai_allocate_skill_for_energy($ai_id) {
 
 function _ai_allocate_skill_for_initiative($ai_id) {
 
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -887,7 +893,7 @@ function _ai_allocate_skill_for_initiative($ai_id) {
 
 function _ai_allocate_skill_for_endurance($ai_id) {
 
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -910,7 +916,7 @@ function _ai_allocate_skill_for_endurance($ai_id) {
 function _ai_allocate_skill_points($ai_id) {
 
   // Allocate skill points.
-  // NB: don't *EVER* use _ai_fetch_user() here.
+  // NB: don't *EVER* use game_ai_fetch_user() here.
   // This could cause an infinite loop.
   $sql = 'select * from users where phone_id = "%s";';
   $result = db_query($sql, $ai_id);
@@ -987,7 +993,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
   game_ai_out("Trying to boost experience of $ai_id");
 
   $multiplier = 0;
@@ -1208,7 +1214,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
 
   // Challenge for a hood seat in a specified range.
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   game_ai_out('Trying to get more seats...');
   game_ai_out("looking for empty seats in hood #$ai_user->fkey_neighborhoods_id "
@@ -1351,7 +1357,7 @@ function _ai_move_somewhere($ai_id) {
 
   // Take me... Far away... Anywhere...
   // As long as it's FUN FUN FUN FUN FUN FUN FUN I wanna go!
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   // Not enough actions to move!
   if ($ai_user->actions < 6) {
@@ -1407,7 +1413,7 @@ function _ai_move_somewhere($ai_id) {
 function _ai_move($ai_id, $hood) {
 
   // Move to hood $hood.
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   // Are we already here?
   if ($ai_user->fkey_neighborhoods_id == $hood) return TRUE;
@@ -1492,7 +1498,7 @@ function _ai_move($ai_id, $hood) {
 
     // Succeeded?  Try again!
     if ($ai_response == 'move-succeeded') {
-      $ai_user = _ai_fetch_user($ai_id);
+      $ai_user = game_ai_fetch_user($ai_id);
 
       // Are already here?
       if ($ai_user->fkey_neighborhoods_id == $hood) return TRUE;
@@ -1539,7 +1545,7 @@ function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
 function _ai_increase_elocution_stats($ai_id) {
 
   // Get more elocution aides for player.
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   $ai_response = game_ai_web_request($ai_id, 'equipment');
   $response = array_slice(explode(' ', $ai_response), 1);
@@ -1581,7 +1587,7 @@ function _ai_increase_elocution_stats($ai_id) {
 function _ai_increase_speed_stats($ai_id) {
 // get more speed aides for player
 
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   $ai_response = game_ai_web_request($ai_id, 'equipment');
   $response = array_slice(explode(' ', $ai_response), 1);
@@ -1616,7 +1622,6 @@ function _ai_increase_speed_stats($ai_id) {
   }
 
   return FALSE;
-
 }
 
 /**
@@ -1630,7 +1635,7 @@ function _ai_increase_speed_stats($ai_id) {
  */
 function game_ai_buy_land($ai_id) {
 
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
   $ai_response = game_ai_web_request($ai_id, 'land');
   $response = array_slice(explode(' ', $ai_response), 1);
@@ -1670,7 +1675,7 @@ function _ai_debate_players($ai_id) {
 
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  $ai_user = _ai_fetch_user($ai_id);
+  $ai_user = game_ai_fetch_user($ai_id);
 
 //    $debate_wait_time = 1200;
 //    $zombie_debate_wait = 300;
@@ -1742,9 +1747,7 @@ function _ai_debate_players($ai_id) {
  * @return bool|null|object|\stdClass
  *   The ai player object.
  */
-function _ai_fetch_user($ai_id) {
-
-  // Fetch user object for phone_id $ai_id.
+function game_ai_fetch_user($ai_id) {
   static $count = 4;
 
   $sql = 'select users.*, clan_members.fkey_clans_id
