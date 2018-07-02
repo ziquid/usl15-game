@@ -3,7 +3,7 @@
 define('CONSERVE_ACTIONS', 1);
 define('CONSERVE_MONEY', 2);
 
-function _move_ai() {
+function game_move_ai() {
 
   global $game, $ai_output, $bt_skip;
 
