@@ -9,16 +9,15 @@ function _move_ai() {
 
   $game = check_plain(arg(0));
   include drupal_get_path('module', $game) . '/game_defs.inc';
-
+  $game_user = $fetch_user();
 
   // no AI moves if load is too high
   $load = sys_getloadavg();
 
   if ($load[0] > 7) {
-    //      mail('joseph@ziquid.com', 'not performing AI moves for ' .
-    //        $game_name_full, "since load average is $load[0]");
+    slack_send_message('not performing AI moves for ' .
+      $game_name_full . " since load average is $load[0]");
     return;
-
   }
 
   db_set_active('default');
@@ -44,9 +43,9 @@ function _move_ai() {
   //  _ai_do('have_num_treasurers', 2) && _ai_do('build');
   //  _ai_do('have_num_alders', 1) && _ai_do('build');
 
-//  if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123')) {
+  if ($game_user->admin == 'toxiboss') {
     slack_send_message($ai_output);
-//  }
+  }
 
   db_set_active('default');
   lock_release('ai_move');
