@@ -914,7 +914,7 @@ function _ai_allocate_skill_for_endurance($ai_id) {
 }
 
 
-function _ai_allocate_skill_points($ai_id) {
+function game_ai_allocate_skill_points($ai_id) {
 
   // Allocate skill points.
   // NB: don't *EVER* use game_ai_fetch_user() here.
@@ -967,7 +967,6 @@ function _ai_allocate_skill_points($ai_id) {
         return _ai_allocate_skill_for_elocution($ai_id);
 
     }
-
   }
 
   // Above level 25: pure specialty.
@@ -983,7 +982,6 @@ function _ai_allocate_skill_points($ai_id) {
       return _ai_allocate_skill_for_action($ai_id);
 
   }
-
 }
 
 
