@@ -6,13 +6,10 @@
  */
 
 function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can_do_again) {
-
   global $game, $phone_id;
-
-  $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $action_id = arg(3);
+  $game_user = $fetch_user();
+  $action_id = $arg3;
   $can_do_again = FALSE;
 
   $clan_name = trim(check_plain($_GET['name']));
@@ -316,13 +313,10 @@ firep($now, 'time now');
 }
 
 function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$can_do_again) {
-
   global $game, $phone_id;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
-  $action_id = arg(3);
+  $game_user = $fetch_user();
+  $action_id = $arg3;
   $can_do_again = FALSE;
 
   // Not a member of a clan.
@@ -332,7 +326,6 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
       t('Not a member of a clan!') .
       '</div><div class="action-effect">You don\'t belong to a clan.&nbsp;
       You cannot leave it.</div>';
-
     return FALSE;
   }
 
@@ -394,14 +387,11 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
 }
 
 function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
-
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $set_value = '_' . $game . '_set_value';
   $fetch_user = '_' . $game . '_fetch_user';
-
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
   $can_do_again = FALSE;
 
   $target_name = $target->ep_name . ' ' . $target->username;

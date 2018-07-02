@@ -11,12 +11,12 @@ function _move_ai() {
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
 
-// no AI moves if load is too high
+  // no AI moves if load is too high
   $load = sys_getloadavg();
 
   if ($load[0] > 7) {
-//      mail('joseph@ziquid.com', 'not performing AI moves for ' .
-//        $game_name_full, "since load average is $load[0]");
+    //      mail('joseph@ziquid.com', 'not performing AI moves for ' .
+    //        $game_name_full, "since load average is $load[0]");
     return;
 
   }
@@ -25,34 +25,32 @@ function _move_ai() {
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
-//      mail('joseph@ziquid.com', 'not performing AI moves for ' .
-//        $game_name_full, "since lock could not be acquired");
+    //      mail('joseph@ziquid.com', 'not performing AI moves for ' .
+    //        $game_name_full, "since lock could not be acquired");
     db_set_active('game_' . $game);
     return;
   }
 
   db_set_active('game_' . $game);
-
   $ai_output = '';
   $bt_skip = count(debug_backtrace());
   _ai_out('start: load avg ' . $load[0]);
 
   _ai_list_all_ais();
 
-  _ai_do('have_num_clan_leaders', 1) && _ai_do('build');
-  _ai_do('have_num_interns', 21) && _ai_do('build');
-  _ai_do('have_num_members', 18) && _ai_do('build');
-  _ai_do('have_num_treasurers', 2) && _ai_do('build');
-  _ai_do('have_num_alders', 1) && _ai_do('build');
+  //  _ai_do('have_num_clan_leaders', 1) && _ai_do('build');
+  //  _ai_do('have_num_interns', 21) && _ai_do('build');
+  //  _ai_do('have_num_members', 18) && _ai_do('build');
+  //  _ai_do('have_num_treasurers', 2) && _ai_do('build');
+  //  _ai_do('have_num_alders', 1) && _ai_do('build');
 
-if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123'))
-  mail('joseph@ziquid.com', 'performing AI moves for ' .
-    $game_name_full, $ai_output);
+//  if ((mt_rand(0, 99) < -5) || (arg(2) == 'abc123')) {
+    slack_send_message($ai_output);
+//  }
 
   db_set_active('default');
   lock_release('ai_move');
   db_set_active('game_' . $game);
-
 }
 
 
@@ -62,12 +60,12 @@ function _ai_out($output) {
   global $ai_output, $bt_skip;
 
   $bt = debug_backtrace();
-  $args = '';
-
   $args = '(' . implode(', ', $bt[1]['args']) . ')';
   $spaces = str_repeat(' ', count($bt) - $bt_skip);
 
-  if ((count($bt) - $bt_skip) <= 2) $ai_output .= "\n";
+  if ((count($bt) - $bt_skip) <= 2) {
+    $ai_output .= "\n";
+  }
 
   if ($bt[1]['function'] == '_ai_do') {
     $ai_output .= $spaces . "$output\n";
@@ -77,7 +75,6 @@ function _ai_out($output) {
   }
 
   // Failsafe hack.
-
   // Too long -- kill script.
   if (strlen($ai_output) > 25000) {
 //      mail('joseph@ziquid.com', 'ai output too long!', $ai_output);
@@ -103,7 +100,6 @@ function _ai_do($goal) {
   _ai_out('calling ' . $goal_function . '(' . implode(', ', $args) . ')');
 
   return call_user_func_array($goal_function, $args);
-
 }
 
 
@@ -116,21 +112,17 @@ function _ai_build() {
 
   // Find most available player.
   if (mt_rand(0,2) > 0) {
-
     $sql = 'select phone_id from users
       where meta like "ai_%"
       order by (energy + (actions * 40)) desc
       limit 1;';
-
   }
   else {
-
     // Random player.
     $sql = 'select phone_id from users
       where meta like "ai_%"
       order by RAND()
       limit 1;';
-
   }
 
   $result = db_query($sql);
@@ -142,14 +134,11 @@ function _ai_build() {
   _ai_out("Building player #$ai_id");
 
   if ($ai_user->skill_points > 0) {
-
     _ai_out('We have skill points to allocate!');
     return _ai_do('allocate skill points', $ai_id);
-
   }
 
   return _ai_do('boost experience', $ai_id);
-
 }
 
 
@@ -1831,47 +1820,46 @@ function _ai_list_all_ais() {
     where meta like "ai_%"
     and last_access < "%s"
     limit 6;';
-  $result = db_query($sql, date('Y-m-d H:i:s', time() - 600));
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 600));
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
 //    _ai_out(count($data) . ' ai players need refreshing.');
 
   foreach ($data as $item) {
-
     _ai_web_request($item->phone_id, 'home');
-
   }
 
-
   // Tell the richest player(s) to buy more land.
-  $data = array();
+  $data = [];
   $sql = 'select phone_id from users
     where meta like "ai_%"
     order by money DESC
-    limit 1;';
+    limit 2;';
   $result = db_query($sql);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   foreach ($data as $item) {
-
     _ai_do('buy land', $item->phone_id);
-
   }
 
 
   // Tell the player(s) with the least income to buy more land.
-  $data = array();
+  $data = [];
   $sql = 'select phone_id from users
     where meta like "ai_%"
     order by income ASC
     limit 3;';
   $result = db_query($sql);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   foreach ($data as $item) {
-
     _ai_do('buy land', $item->phone_id);
-
   }
 
 
