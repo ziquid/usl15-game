@@ -15,9 +15,9 @@ $game_user = $fetch_user();
 $fetch_header($game_user);
 
 // Do AI moves from this page!!!
-if ((mt_rand(0, 5) == 1) || ($game_user->meta == 'toxiboss' || ($game_user->meta == 'admin')) {
+if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
   include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
-game_move_ai();
+  game_move_ai();
 }
 
 if (is_numeric(arg(3))) $group_to_show = arg(3);
