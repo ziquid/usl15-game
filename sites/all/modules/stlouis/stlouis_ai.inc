@@ -115,13 +115,14 @@ function game_ai_build() {
   game_ai_out('figuring out what is the best building course of action');
 
   // Find most energy.
-  $sql = 'select phone_id from users
+  $sql = 'select phone_id, energy from users
     where meta like "ai_%"
     order by energy desc
     limit 1;';
   $result = db_query($sql);
   $item = db_fetch_object($result);
   $ai_id = $item->phone_id;
+  game_ai_out("Choosing player #$ai_id because he has energy {$item->energy}");
 
   game_ai_web_request($ai_id, 'home');
   $ai_user = game_ai_fetch_user($ai_id);
@@ -242,7 +243,7 @@ function game_ai_do_quest($ai_id, $quest) {
 function game_ai_web_request($ai_id, $screen, $arg1 = '') {
   global $game;
 
-  $uri = 'http://' . $_SERVER['SERVER_NAME'] . "/$game/$screen/$ai_id";
+  $uri = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . "/$game/$screen/$ai_id";
   if ($arg1 != '') {
     $uri .= "/$arg1";
   }
