@@ -7,7 +7,7 @@ function game_move_ai() {
 
   global $game, $ai_output, $bt_skip;
 
-  $game = check_plain(arg(0));
+//  $game = check_plain(arg(0));
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
 
