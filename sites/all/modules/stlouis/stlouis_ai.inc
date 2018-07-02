@@ -116,11 +116,17 @@ function game_ai_build() {
 
   // Find most energy.
   $sql = 'select phone_id, energy from users
-    where meta like "ai_%"
+    where meta like "ai_%" and energy > 20
     order by energy desc
     limit 1;';
   $result = db_query($sql);
   $item = db_fetch_object($result);
+
+  if (empty($item)) {
+    game_ai_out("No players found!  Creating one instead...");
+    return game_ai_do('create new player');
+  }
+
   $ai_id = $item->phone_id;
   game_ai_out("Choosing player #$ai_id because he has energy {$item->energy}");
 
