@@ -37,9 +37,10 @@ function game_move_ai() {
 
   game_ai_list_all_ais();
 
+  game_ai_do('have num players', 12);
   game_ai_do('build');
   game_ai_do('build');
-//  game_ai_do('build');
+  game_ai_do('build');
 //  game_ai_do('build');
 //  game_ai_do('build');
   //  game_ai_do('have_num_clan_leaders', 1) && game_ai_do('build');
@@ -663,56 +664,62 @@ function _ai_find_free_player($type, $level_min, $level_max,
   }
 
   return FALSE;
-
 }
 
-
-function _ai_have_num_players($num_players) {
+/**
+ * Create AI players until there are enough.
+ *
+ * @param int $num_players
+ *   The number of players to have.
+ *
+ * @return bool
+ *   Whether there were already enough players or not.
+ */
+function game_ai_have_num_players($num_players) {
 
   // Goal: $num players across the game.
   $sql = 'select count(id) as count from users
     where meta like "ai_%";';
   $result = db_query($sql);
   $item = db_fetch_object($result);
+  $count = $item->count;
 
-  game_ai_out("want $num_players players, have $item->count");
+  game_ai_out("want $num_players players, have $count");
 
-  if ($item->count >= $num_players) {
+  if ($count >= $num_players) {
 //      game_ai_out('woohoo!  we have enough players!  returning TRUE');
     return TRUE;
   }
 
   game_ai_do('create new player');
+  game_ai_do('create new player');
+  game_ai_do('create new player');
   return FALSE;
-
 }
 
-
-function _ai_create_new_player() {
-
-  // Create a new player.
+/**
+ * Create a new AI player.
+ */
+function game_ai_create_new_player() {
   global $game;
 
   while (TRUE) {
-
     $num = mt_rand(0, 99999);
     $id_to_check = 'ai-' . $num;
-
-     game_ai_out("checking for existing player $id_to_check");
+    game_ai_out("checking for existing player $id_to_check");
 
     $sql = 'select id from users
       where phone_id = "%s";';
     $result = db_query($sql, $id_to_check);
     $item = db_fetch_object($result);
 
-    if (empty($item)) break;
-
+    if (empty($item)) {
+      break;
+    }
   }
 
   $uri = 'http://' . $_SERVER['SERVER_NAME'] . "/$game/home/$id_to_check";
-
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-
   $response = file_get_contents($uri);
 //    game_ai_out($response);
 
@@ -720,10 +727,7 @@ function _ai_create_new_player() {
   $sql = 'update users set username = "%s", fkey_neighborhoods_id = 75,
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
-  $result = db_query($sql, "TC Emp $num", $id_to_check);
-
-  return FALSE;
-
+  db_query($sql, "TC Emp $num", $id_to_check);
 }
 
 
