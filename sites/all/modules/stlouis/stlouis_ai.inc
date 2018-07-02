@@ -1807,8 +1807,10 @@ function game_ai_list_all_ais() {
 
   game_ai_out(count($data) . ' ai players need refreshing.');
 
-  foreach ($data as $item) {
-    game_ai_web_request($item->phone_id, 'home');
+  if ($count($data) > 0) {
+    foreach ($data as $item) {
+      game_ai_web_request($item->phone_id, 'home');
+    }
   }
 
   // All AIs not in a clan should join TC1.
