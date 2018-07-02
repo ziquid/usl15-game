@@ -1807,7 +1807,7 @@ function game_ai_list_all_ais() {
 
   game_ai_out(count($data) . ' ai players need refreshing.');
 
-  if ($count($data) > 0) {
+  if (count($data) > 0) {
     foreach ($data as $item) {
       game_ai_web_request($item->phone_id, 'home');
     }
