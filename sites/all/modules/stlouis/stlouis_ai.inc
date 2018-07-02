@@ -50,7 +50,8 @@ function game_move_ai() {
   //  game_ai_do('have_num_alders', 1) && game_ai_do('build');
 
   if ($game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
-    slack_send_message($ai_output);
+//    slack_send_message($ai_output);
+    mail('joseph@ziquid.com', 'ai output', $ai_output);
   }
 
   db_set_active('default');
