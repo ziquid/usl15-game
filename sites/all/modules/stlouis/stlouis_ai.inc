@@ -244,9 +244,9 @@ function game_ai_do_quest($ai_id, $quest) {
  *   The resulting string.
  */
 function game_ai_web_request($ai_id, $screen, $arg1 = '') {
-  global $game;
+  global $game, $base_url;
 
-  $uri = 'http://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER['SERVER_PORT'] . "/$game/$screen/$ai_id";
+  $uri = $base_url . "/$game/$screen/$ai_id";
   if ($arg1 != '') {
     $uri .= "/$arg1";
   }
@@ -701,7 +701,7 @@ function game_ai_have_num_players($num_players) {
  * Create a new AI player.
  */
 function game_ai_create_new_player() {
-  global $game;
+  global $game, $base_url;
 
   while (TRUE) {
     $num = mt_rand(0, 99999);
@@ -718,7 +718,7 @@ function game_ai_create_new_player() {
     }
   }
 
-  $uri = 'http://' . $_SERVER['SERVER_NAME'] . "/$game/home/$id_to_check";
+  $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
   $response = file_get_contents($uri);
 //    game_ai_out($response);
