@@ -506,3 +506,8 @@ textarea {
 .location-strength {
   border-bottom: #0ee solid 1px;
 }
+
+#drupalforfirebug_general {
+  margin-top: 60px;
+  display: block !important;
+}

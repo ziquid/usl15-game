@@ -34,6 +34,9 @@ db_set_active('default');
       Gateway Arch Museum Mission
     </li>
     <li>
+      Covered Wagons
+    </li>
+    <li>
       Level 110
     </li>
   </ul>

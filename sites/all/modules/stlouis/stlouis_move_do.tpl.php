@@ -16,7 +16,8 @@ if (mt_rand(0, 1) > 0) {
 
 }
 */
-if ($neighborhood_id == $game_user->fkey_neighborhoods_id) {
+if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
+  $game_user->meta != 'admin') {
   $fetch_header($game_user);
   echo <<< EOF
 <div class="title">You are already in $game_user->location</div>
@@ -60,10 +61,15 @@ firep($new_hood, 'new hood');
   $result = db_query($sql, $game_user->id);
   $eq = db_fetch_object($result);
 
-  if ($eq->speed_increase > 0)
+  if ($eq->speed_increase > 0) {
     $actions_to_move -= $eq->speed_increase;
+  }
 
   $actions_to_move = max($actions_to_move, 6);
+
+  if ($game_user->meta == 'admin') {
+    $actions_to_move = 0;
+  }
 
   game_alter('actions_to_move', $game_user, $actions_to_move);
 
@@ -234,7 +240,7 @@ EOF;
   $ai_output = '';
   $title_shown = FALSE;
 
-  foreach($hood_equip as $item) {
+  foreach ($hood_equip as $item) {
     if ($item->fkey_neighborhoods_id == $neighborhood_id) {
       if (!$title_shown) {
         echo <<< EOF
@@ -253,7 +259,7 @@ EOF;
   $ai_output = '';
   $title_shown = FALSE;
 
-  foreach($hood_staff as $item) {
+  foreach ($hood_staff as $item) {
     if ($item->fkey_neighborhoods_id == $neighborhood_id) {
       if (!$title_shown) {
         echo <<< EOF
@@ -264,6 +270,22 @@ EOF;
         $title_shown = TRUE;
       }
       game_show_staff($game_user, $item, $ai_output);
+    }
+  }
+
+  $hood_qgs = game_fetch_visible_quest_groups($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
+
+  foreach ($hood_qgs as $item) {
+    if (!$title_shown) {
+      echo <<< EOF
+<div class="title">
+  Useful Missions Here
+</div>
+EOF;
+      $title_shown = TRUE;
+      game_show_quest_group($game_user, $item, $ai_output);
     }
   }
 
