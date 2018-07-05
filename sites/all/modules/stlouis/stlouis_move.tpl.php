@@ -1,21 +1,17 @@
 <?php
 
 global $game, $phone_id;
-
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', $game) . '/game_defs.inc' ;
 $game_user = $fetch_user();
 $fetch_header($game_user);
-include drupal_get_path('module', $game) . '/game_defs.inc' ;
-$arg2 = check_plain(arg(2));
 
 $sql = 'select name from neighborhoods where id = %d;';
 $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 $item = db_fetch_object($result);
 $location = $item->name;
 
-if ($neighborhood_id == $game_user->fkey_neighborhoods_id) {
+if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
+  $game_user->meta != 'admin') {
 
   echo <<< EOF
 <div class="title">You are already in $location</div>
@@ -24,7 +20,6 @@ EOF;
 
   db_set_active('default');
   return;
-
 }
 
 if ($neighborhood_id > 0) {
@@ -249,7 +244,67 @@ foreach ($data as $item) {
 echo <<< EOF
   </map>
 </div>
+EOF;
 
+/* FIXME: do this only if you have tour guide
+
+// FIXME: add hood_id to the query.
+$hood_equip = game_fetch_visible_equip($game_user);
+$ai_output = '';
+$title_shown = FALSE;
+
+foreach ($hood_equip as $item) {
+  if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+    if (!$title_shown) {
+      echo <<< EOF
+<div class="title">
+  Useful Equipment in <span class="nowrap">$game_user->location</span>
+</div>
+EOF;
+      $title_shown = TRUE;
+    }
+    game_show_equip($game_user, $item, $ai_output);
+  }
+}
+
+// FIXME: add hood_id to the query.
+$hood_staff = game_fetch_visible_staff($game_user);
+$ai_output = '';
+$title_shown = FALSE;
+
+foreach ($hood_staff as $item) {
+  if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+    if (!$title_shown) {
+      echo <<< EOF
+<div class="title">
+  Useful Staff and Aides in <span class="nowrap">$game_user->location</span>
+</div>
+EOF;
+      $title_shown = TRUE;
+    }
+    game_show_staff($game_user, $item, $ai_output);
+  }
+}
+
+$hood_qgs = game_fetch_visible_quest_groups($game_user);
+$ai_output = '';
+$title_shown = FALSE;
+
+foreach ($hood_qgs as $item) {
+  if (!$title_shown) {
+    echo <<< EOF
+<div class="title">
+  Useful Missions in <span class="nowrap">$game_user->location</span>
+</div>
+EOF;
+    $title_shown = TRUE;
+    game_show_quest_group($game_user, $item, $ai_output);
+  }
+}
+*/
+
+// FIXME: move this to .js, update to use jQuery.
+echo <<< EOF
 <script type="text/javascript">
 
 window.onload = function() {

@@ -116,13 +116,8 @@ firep($new_hood, 'new hood');
   if (($item->type == 1) ||
     ($item->type == 3 && ($cur_hood->district != $new_hood->district))) {
 
-// mail('joseph@cheek.com', 'loss of seat due to move',
-//   "$game_user->username has lost seat of type $item->type due to move to " .
-//   "$new_hood->name.");
-
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
-
     $resigned_text = 'and resigned your current position';
   }
 
@@ -135,7 +130,7 @@ firep($new_hood, 'new hood');
 // start the actions clock if needed
   if ($game_user->actions == $game_user->actions_max) {
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
   }
 
@@ -179,7 +174,7 @@ firep($new_hood, 'new hood');
     '</div>';
 
   echo <<< EOF
-<div class="subtitle">You have arrived in your new $hood_lower</div>
+<div class="subtitle">You have arrived in <span class="nowrap highlight">$game_user->location</span></div>
 <div class="subsubtitle">$resigned_text</div>
 EOF;
 
@@ -245,7 +240,7 @@ EOF;
       if (!$title_shown) {
         echo <<< EOF
 <div class="title">
-  Useful Equipment Here
+  Useful Equipment in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
         $title_shown = TRUE;
@@ -264,7 +259,7 @@ EOF;
       if (!$title_shown) {
         echo <<< EOF
 <div class="title">
-  Useful Staff and Aides Here
+  Useful Staff and Aides in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
         $title_shown = TRUE;
@@ -281,7 +276,7 @@ EOF;
     if (!$title_shown) {
       echo <<< EOF
 <div class="title">
-  Useful Missions Here
+  Useful Missions in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
       $title_shown = TRUE;

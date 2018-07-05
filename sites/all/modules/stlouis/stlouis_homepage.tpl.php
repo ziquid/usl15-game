@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.6.0, Jul 04 2018';
+$version = 'v0.6.0, Jul 05 2018';
 
 global $game, $phone_id;
 
@@ -98,8 +98,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $result = db_query($sql, $money, $today, $game_user->id);
   $game_user = $fetch_user();
 
-  $extra_bonus = '<div class="level-up">
-      <div class="wise_old_man happy"></div>
+  $extra_bonus = '<div class="level-up happy">
       <div class="level-up-header">Daily Bonus!</div>
       <div class="level-up-text">You have received a bonus of ' .
         number_format($money) . ' ' . $game_user->values . '!</div>' .
@@ -134,6 +133,7 @@ $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 $alder = db_fetch_object($result);
 firep($alder, 'values of current hood alder');
 $alder_values = drupal_strtolower($alder->values);
+$player_values = drupal_strtolower($game_user->values);
 
 $fetch_header($game_user);
 
@@ -482,7 +482,7 @@ EOF;
 </map>
 </div>
 <div class="location">
-<span class="location-$alder_values">$game_user->location</span>
+<span class="location-$alder_values player-$player_values">$game_user->location</span>
 </div>
 $event_text
 <div class="news">
