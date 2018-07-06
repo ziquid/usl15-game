@@ -29,8 +29,7 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'staff-succeeded';
 
 // Check to see if staff prerequisites are met.
-
-// enough money?
+// Eough money?
 if ($game_user->money < $staff_price) {
   $options['staff-buy-succeeded'] = 'failed no-money';
   $ai_output = 'staff-failed no-money';
@@ -44,7 +43,7 @@ if ($game_user->level < $game_staff->required_level) {
     "trying to hire $game_staff->name at level $game_user->level", -100);
 }
 
-// hit a quantity limit?
+// Hit a quantity limit?
 if ((($game_staff->quantity + $quantity) > $game_staff->quantity_limit) &&
   ($game_staff->quantity_limit >= 1)) {
   $options['staff-buy-succeeded'] = 'failed hit-quantity-limit';
@@ -53,7 +52,7 @@ if ((($game_staff->quantity + $quantity) > $game_staff->quantity_limit) &&
     "trying to hire more $game_staff->name than allowed", -100);
 }
 
-// too little income to cover upkeep?
+// Too little income to cover upkeep?
 if ($game_user->income < $game_user->expenses +
   ($game_staff->upkeep * $quantity)) {
   $options['staff-buy-succeeded'] = 'failed not-enough-income';

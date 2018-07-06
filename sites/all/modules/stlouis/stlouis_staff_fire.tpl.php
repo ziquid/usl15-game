@@ -29,7 +29,6 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'staff-succeeded';
 
 // Check to see if staff prerequisites are met.
-
 // Hit a quantity limit?
 if ($quantity > $game_staff->quantity) {
   $options['staff-sell-succeeded'] = 'failed not-enough-staff';
