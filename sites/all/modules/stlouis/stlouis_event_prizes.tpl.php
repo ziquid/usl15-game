@@ -56,7 +56,6 @@ EOF;
       left join users on fkey_users_id = users.id
       order by points DESC
 
-      // Top %d players.
       limit %d;';
     $result = db_query($sql, $top);
     $data = array();
