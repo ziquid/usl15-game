@@ -1,0 +1,9 @@
+name = Slack
+description = Integration with Slack.com service
+core = 6.x
+; Information added by Drupal.org packaging script on 2016-03-25
+version = "6.x-1.0+2-dev"
+core = "6.x"
+project = "slack"
+datestamp = "1458873548"
+

@@ -22,6 +22,8 @@ define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 
+define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
+
 define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
@@ -58,7 +60,7 @@ switch($today) {
     $event_type = EVENT_NEW_NAMES;
     break;
 
-    // ------ APRIL ------
+  // ------ APRIL ------
   case '2018-04-01':
     $event_type = EVENT_APRIL_FOOLS;
     break;
@@ -67,7 +69,7 @@ switch($today) {
     $event_type = EVENT_PRE_MAY;
     break;
 
-    // ------ MAY -----
+  // ------ MAY -----
   case '2018-05-01':
   case '2018-05-02':
   case '2018-05-03':
@@ -126,7 +128,7 @@ switch($today) {
     $event_type = EVENT_MEMORIAL_DAY_4;
     break;
 
-    // ------ JUNE ------
+  // ------ JUNE ------
   case '2018-06-01':
   case '2018-06-02':
   case '2018-06-03':
@@ -150,6 +152,18 @@ switch($today) {
   case '2018-06-23':
   case '2018-06-24':
     $month_mission = MISSION_JUN;
+    break;
+
+  case '2018-06-30':
+    $event_type = EVENT_STATS_ONLY_HOOD;
+    break;
+
+  // ------ JULY ------
+  case '2018-07-01':
+  case '2018-07-02':
+  case '2018-07-03':
+  case '2018-07-04':
+    $event_type = EVENT_STATS_ONLY_HOOD;
     break;
 }
 

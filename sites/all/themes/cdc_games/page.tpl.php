@@ -10,6 +10,9 @@
 </head>
 
 <body <?php print theme("onload_attribute"); ?>>
+<?php if ($messages != ""): ?>
+  <div id="message"><?php print $messages ?></div>
+<?php endif; ?>
 <?php print $content ?>
 <div id="footer">
   <?php print $footer_message ?>

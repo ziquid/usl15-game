@@ -1012,6 +1012,59 @@ EOF;
 }
 
 /**
+ * Fetch the list of quest groups to show.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ *
+ * @return \stdClass[]
+ *   The array of quest group objects.
+ */
+function game_fetch_visible_quest_groups($game_user) {
+  $data = $data2 = [];
+  $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
+    left join quests q on q.group = qg.id
+    where q.required_level <= %d
+    group by qg.id';
+  $result = db_query($sql, $game_user->level);
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+
+  foreach ($data as $item) {
+    // FIXME: create hook to allow altering data.
+    if ($item->highlight_in_hood == $game_user->fkey_neighborhoods_id) {
+      $data2[] = $item;
+    }
+  }
+
+  return $data2;
+}
+
+/**
+ * Show a quest group name, with a link to go to it.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The quest group object.
+ * @param string $ai_output
+ *   unused.
+ */
+function game_show_quest_group($game_user, $item, &$ai_output) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  echo <<< EOF
+<div class="subtitle">
+  <a href="/$game/quests/$arg2/$item->id">
+    $item->name
+  </a>
+</div>
+EOF;
+}
+
+/**
  * Fetch the list of equipment to show.
  *
  * @param \stdClass $game_user

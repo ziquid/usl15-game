@@ -222,6 +222,16 @@ li {
   min-height: 72px;
 }
 
+.level-up.happy {
+  background-image: url('/sites/default/files/images/stlouis_wise_old_man_happy.png');
+  background-repeat: no-repeat;
+  background-position: 2px 2px;
+  background-size: contain;
+  padding-left: 66px;
+  -webkit-background-size: 54px 72px;
+  background-size: 54px 72px;
+}
+
 .choose-clan-name {
   margin-left: 6px;
   font-weight: bold;
@@ -505,4 +515,49 @@ textarea {
 
 .location-strength {
   border-bottom: #0ee solid 1px;
+}
+
+.player-ammunition {
+  border-top: #080 solid 1px;
+}
+
+.player-chaos {
+  border-top: #ffa500 solid 1px;
+}
+
+.player-charisma {
+  border-top: #e00 solid 1px;
+}
+
+.player-finance {
+  border-top: #e0e0e0 solid 1px;
+}
+
+.player-goo {
+  border-top: #800080 solid 1px;
+}
+
+.player-greenbacks {
+  border-top: #fff dotted 1px;
+}
+
+.player-health {
+  border-top: #0f0 solid 1px;
+}
+
+.player-humility {
+  border-top: #dd0 solid 1px;
+}
+
+.player-intelligence {
+  border-top: #35f solid 1px;
+}
+
+.player-strength {
+  border-top: #0ee solid 1px;
+}
+
+#drupalforfirebug_general {
+  margin-top: 60px;
+  display: block !important;
 }
