@@ -29,7 +29,7 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'staff-succeeded';
 
 // Check to see if staff prerequisites are met.
-// Eough money?
+// Enough money?
 if ($game_user->money < $staff_price) {
   $options['staff-buy-succeeded'] = 'failed no-money';
   $ai_output = 'staff-failed no-money';
