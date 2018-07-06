@@ -635,7 +635,7 @@ EOF;
   // Allow user to delete own messages.
   if ($phone_id_to_check == $phone_id || $item->fkey_users_from_id == $game_user->id) {
     echo <<< EOF
-      <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id?destination=$q"><img
+      <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id?destination=/$q"><img
         src="/sites/default/files/images/delete.png" width="16" height="16"/></a></div>
 EOF;
   }

@@ -85,7 +85,7 @@ firep($new_hood, 'new hood');
     echo '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a
       href="/' . $game . '/elders_do_fill/' . $arg2 .
-      '/action?destination=' . $game . '/move/' . $arg2 . '/' .
+      '/action?destination=/' . $game . '/move/' . $arg2 . '/' .
       $neighborhood_id . '">' . t('Refill your Action (1&nbsp;Luck)') .
       '</a></div></div>';
     echo '<div class="try-an-election-wrapper"><div
