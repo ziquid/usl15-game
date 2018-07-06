@@ -369,7 +369,7 @@ switch ($month_mission) {
     break;
 }
 
-// dead presidents event
+// Dead presidents event.
 /*
 if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 '/top_event_points/' . $arg2 . '">-->
@@ -432,7 +432,7 @@ echo <<< EOF
 EOF;
 
 
-// Move
+  // Move.
   $coords = _stlouis_scale_coords($coefficient, 131, 127, 183, 147);
 
   echo <<< EOF
@@ -440,7 +440,7 @@ EOF;
 EOF;
 
 
-// Elders, Profile
+// Elders, Profile.
 $coords = _stlouis_scale_coords($coefficient, 126, 155, 192, 180);
 $coords2 = _stlouis_scale_coords($coefficient, 45, 192, 100, 210);
 
@@ -505,7 +505,7 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   return;
 }
 
-// are we a type 2 elected official?
+// Are we a type 2 elected official?
 $sql = 'SELECT type FROM elected_officials
   left join elected_positions on elected_positions.id = fkey_elected_positions_id
   WHERE fkey_users_id = %d;';
@@ -516,6 +516,7 @@ $elected_official_type = $item->type;
 
 // If a party official.
 if ($elected_official_type == 2) {
+
   // Grab the list of all clans in the user's party.
   // We need to do this separately to keep the db from locking.
   // Wish mysql had a select with nolock feature - JWC.
@@ -693,13 +694,13 @@ $sql = '
   order by timestamp DESC limit %d;';
 firep($sql, 'sql for homepage');
 
-// don't show if load avg too high
-
-//  $load_avg = sys_getloadavg(); // FIXME: get load avg of db server
+// Don't show if load avg too high.
+// FIXME: get load avg of db server.
+//  $load_avg = sys_getloadavg();
 $data = [];
 
 if (TRUE/*$load_avg[0] <= 2.0*/) {
-// expensive query - goes to slave
+  // Expensive query - goes to slave.
 //   db_set_active('game_' . $game . '_slave1');
   $result = db_query($sql, $game_user->id, $limit,
     $game_user->id, 10, // challenge limit of 10
@@ -710,7 +711,9 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
-  db_set_active('game_' . $game); // reset to master
+
+  // Reset to master.
+  db_set_active('game_' . $game);
 }
 
 $msg_shown = FALSE;

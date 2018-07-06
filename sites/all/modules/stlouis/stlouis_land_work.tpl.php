@@ -46,7 +46,6 @@ $options['land-work-succeeded'] = 'work-success';
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
-
 // No job found.
 if (empty($game_land)) {
   $options['land-work-succeeded'] = 'failed no-such-job';

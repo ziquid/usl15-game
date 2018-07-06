@@ -30,8 +30,7 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'land-succeeded';
 
 // Check to see if land prerequisites are met.
-
-// hit a quantity limit?
+// Hit a quantity limit?
 if ($quantity > $game_land->quantity) {
   $options['land-sell-succeeded'] = 'failed not-enough-land';
   $ai_output = 'land-failed not-enough-land';
@@ -40,14 +39,14 @@ if ($quantity > $game_land->quantity) {
     $quantity * -10);
 }
 
-// can't sell?
+// Can't sell?
 if ($game_land->can_sell != 1) {
   $options['land-sell-succeeded'] = 'failed cant-sell';
   $ai_output = 'land-failed cant-sell';
   game_karma($game_user, "trying to sell unsalable $game_land->name", -100);
 }
 
-// job?
+// Job?
 if ($game_land->type == 'job') {
   $options['land-sell-succeeded'] = 'failed cant-sell-job';
   $ai_output = 'land-failed cant-sell-job';

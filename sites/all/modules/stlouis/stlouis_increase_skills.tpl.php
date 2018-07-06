@@ -112,7 +112,7 @@
           where id = %d;';
         $result = db_query($sql, $game_user->id);
 
-// start the actions clock if needed
+        // Start the actions clock if needed.
         if ($game_user->actions == $game_user->actions_max) {
 
           $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -137,7 +137,7 @@
           where id = %d;';
         $result = db_query($sql, $game_user->id);
 
-// start the actions clock if needed
+        // Start the actions clock if needed.
         if ($game_user->actions == $game_user->actions_max) {
 
           $sql = 'update users set actions_next_gain = "%s" where id = %d;';
