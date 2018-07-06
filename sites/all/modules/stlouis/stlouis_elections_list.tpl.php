@@ -199,7 +199,9 @@ firep($item);
       '</a>';
     $action_class = '';
   }
-  else { // existing officer
+  else {
+
+    // Existing officer.
     $official_link .= '<br/><a href="/' . $game . '/user/' .
       $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
     $action = '<a href="/' . $game . '/elections_challenge/' . $arg2 .

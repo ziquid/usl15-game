@@ -55,14 +55,15 @@ EOF;
     $sql = 'select fkey_users_id as id, users.username from event_points
       left join users on fkey_users_id = users.id
       order by points DESC
-      limit %d;'; // top %d players
+
+      limit %d;';
     $result = db_query($sql, $top);
     $data = array();
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $user) {
 
-// does user have any of this present?
+      // Does user have any of this present?
       $sql = 'select quantity from equipment_ownership
         where fkey_users_id = %d
         and fkey_equipment_id = %d;';
@@ -83,8 +84,9 @@ echo '<div class="subsubtitle">creating record for ' . $user->username .
   '</div>';
 
       }
-      else { // update record
+      else {
 
+        // Update record.
         $sql = 'update equipment_ownership
           set quantity = quantity + %d
           where fkey_users_id = %d

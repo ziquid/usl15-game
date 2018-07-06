@@ -111,7 +111,7 @@ $result = db_query($sql, $game_user->fkey_neighborhoods_id,
 $item = db_fetch_object($result);
 firep($item);
 
-// labor day -- all are UWP - jwc
+  // Labor day -- all are UWP - jwc.
 //  $game_user->fkey_values_id = 7;
 
 $username = $item->username;
@@ -168,16 +168,19 @@ EOF;
 }
 
 if (empty($item->id)) {
-// if you are running without an opponent, you automatically win
 
+  // If you are running without an opponent, you automatically win.
   // Party office.
   if ($item->type == 2) {
-// make it so s/he can't perform a major action for a day
+
+    // Make it so s/he can't perform a major action for a day.
     game_set_timer($game_user, 'next_major_action', 86400);
   }
 
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id); // you can only hold one position
+
+  // You can only hold one position.
+  $result = db_query($sql, $game_user->id);
 
   $sql = 'insert into elected_officials set fkey_users_id = %d,
     fkey_elected_positions_id = %d;';
@@ -238,7 +241,6 @@ EOF;
 }
 
 /*    if ($game_user->experience > ($item->experience * 2)) {
-// you cannot challenge someone if you have more than twice their influence
 
   echo '<div class="election-failed">' . t('Sorry!') . '</div>';
   echo '<div class="subtitle">' .
@@ -251,9 +253,6 @@ EOF;
 
 }
 */
-// otherwise, we need to apply a formula to get votes
-
-// CHALLENGER's initiative
 
 $sql = 'SELECT sum(staff.initiative_bonus * staff_ownership.quantity)
   as initiative from staff
@@ -292,8 +291,7 @@ $eq_extra_votes = db_fetch_object($result);
 $extra_votes = $st_extra_votes->extra_votes + $eq_extra_votes->extra_votes;
 game_alter('extra_votes', $game_user, $extra_votes, $extra_defending_votes);
 
-// INCUMBENT's endurance
-
+// INCUMBENT's endurance.
 $sql = 'SELECT sum(staff.endurance_bonus * staff_ownership.quantity)
   as endurance from staff
   left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
@@ -338,11 +336,12 @@ firep("your total influence: $my_influence");
 
 $opp_approval = max(($item->approval_rating + $item->approval_15 +
   $item->approval_30 + $item->approval_45) / 4, 10);
-// minimum of 10% average approval rating
 
+// Minimum of 10% average approval rating.
 $opp_influence = ceil((ceil($item->experience / 5) + ($item->endurance *
   $en_bonus)) * $opp_approval * 0.017);
-// 60% is a "normal" approval rating - multiplying by .017 = 1.02, close enough
+
+// 60% is a "normal" approval rating - multiplying by .017 = 1.02, close enough.
 firep("opp total influence: $opp_influence");
 
 $total_influence = $my_influence + $opp_influence + 100; // bias for incumbent
@@ -350,26 +349,25 @@ $votes = $extra_defending_votes - $extra_votes;
 firep("Your $extra_votes voters vote for you");
 firep("His/her $extra_defending_votes voters vote for him/her");
 
-// limited (ie, training) hood?  don't allow challengers with more than 100k
-// influence for Alderman seat
-
-// also don't allow defenders with more than 100k endurance
-
+// Limited (ie, training) hood? Don't allow challengers with more than 100k.
+// Influence for Alderman seat.
+// Also don't allow defenders with more than 100k endurance.
 if (($is_limited) && ($item->ep_id == 1)) {
 
   // Opponent has too much influence!
   if ($opp_influence > 100000) {
-// stack the votes so you automatically win
 
+    // Stack the votes so you automatically win.
     $extra_votes += 10000;
 firep('10000 extra voters spontaneously arrive to vote for you!');
 //mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
 //  "$item->username [$opp_influence] in $location is voted out of office");
 
   }
-  else if ($my_influence > 100000) { // challenger has too much influence
-// do not allow him/her to challenge
+  else if ($my_influence > 100000) {
 
+      // Challenger has too much influence.
+      // Do not allow him/her to challenge.
 //mail('joseph@cheek.com',
 //  'Challenger for Alder in training hood has too much influence!',
 //  "$game_user->username [$my_influence] in $location " .
@@ -422,8 +420,9 @@ if ($item->type == 1) {
     $game_user->fkey_neighborhoods_id);
 
 }
-else if ($item->type == 2) { // party
+else if ($item->type == 2) {
 
+  // Party.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
     ua_ip.`value` AS last_IP, ua_sdk.`value` AS sdk
 
@@ -451,8 +450,9 @@ else if ($item->type == 2) { // party
     date('Y-m-d', REQUEST_TIME - 1728000), $game_user->fkey_values_id);
 
 }
-else if ($item->type == 3) { // district
+else if ($item->type == 3) {
 
+  // District.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
     ua_ip.`value` AS last_IP, ua_sdk.`value` AS sdk
 
@@ -495,7 +495,7 @@ firep('voter IP is ' . $voter->last_IP);
 $ip_key = $game_user->fkey_neighborhoods_id . '_' . $voter->last_IP;
 $ip_array[$ip_key]++;
 
-// only allow first five players from same IP address to vote
+ // Only allow first five players from same IP address to vote.
  if (($ip_array[$ip_key] > 6) && (substr($voter->meta, 0, 3) != 'ai_')) {
 
     // Move to FP, zero actions.
@@ -504,7 +504,9 @@ $ip_array[$ip_key]++;
         actions_next_gain = "%s", karma = karma - 100
         where id = %d;';
     }
-    else { // CG -- move to zagros
+    else {
+
+      // CG -- move to zagros.
       $sql = 'update users set fkey_neighborhoods_id = 11, actions = 0,
         actions_next_gain = "%s", karma = karma - 100
         where id = %d;';
@@ -520,19 +522,26 @@ $ip_array[$ip_key]++;
       $ip_array[$ip_key] . ' at IP address ' .
       $voter->last_IP . ' in ' . $location . '.');
 */
-    continue; // vote doesn't count!
+
+    // Vote doesn't count!
+    continue;
   }
 
   if ($voter->id == $game_user->id) {
-    $votes--; // you vote for yourself
+
+    // You vote for yourself.
+    $votes--;
 firep('you vote for yourself');
   }
   elseif ($voter->id == $item->id) {
-    $votes++; // s/he votes for her/himself
+
+    // S/he votes for her/himself.
+    $votes++;
 firep($item->username . ' votes for her/himself');
   }
-  else { // other voters
+  else {
 
+    // Other voters.
 /* 4th of July - check wall postings
     $sql = 'select * from user_messages
       where fkey_users_from_id = %d and fkey_users_to_id = %d
@@ -559,12 +568,13 @@ firep('voter posted to incumbent:');
 firep($incumbent_wall);
 }
 
-// recent wall post to challenger
+    // Recent wall post to challenger.
     if (empty($incumbent_wall) &&
       !empty($challenger_wall) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes--; // vote for you
+      // Vote for you.
+      $votes--;
 firep($voter->username .
 ' votes for you because s/he posted to your wall recently');
       $election_polls[] =
@@ -574,13 +584,14 @@ firep($voter->username .
 
     }
 
-// recent wall post to incumbent
+    // Recent wall post to incumbent.
     if (!empty($incumbent_wall) &&
       empty($challenger_wall) &&
       ((strtotime($incumbent_wall->timestamp) + 259200) > time()) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes++; // vote for opponent
+      // Vote for opponent.
+      $votes++;
 firep($voter->username .
 ' votes for your opponent because s/he posted to his/her wall recently');
       $election_polls[] =
@@ -591,10 +602,10 @@ firep($voter->username .
     }
 */
 
-// labor day -- all players are UWP
+    // Labor day -- all players are UWP.
 // $voter->fkey_clans_id = 7;
 
-// same clan, used actions in last 3 days (challenger)
+    // Same clan, used actions in last 3 days (challenger).
     if (!$stats_only_hood &&
       ($voter->fkey_clans_id > 0) &&
       ($voter->fkey_clans_id == $game_user->fkey_clans_id) &&
@@ -603,14 +614,15 @@ firep($voter->username .
       ((strtotime($voter->energy_next_gain) + 259200) > REQUEST_TIME)) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes--; // vote for you
+      // Vote for you.
+      $votes--;
 firep($voter->username . ' votes for you because you are in the same clan');
       $election_polls[] = 'I voted for you because we are in the same clan.';
       $votes_you_same_clan++;
       continue;
     }
 
-// same clan, used actions in last 3 days (incumbent)
+    // Same clan, used actions in last 3 days (incumbent).
     if (!$stats_only_hood &&
       ($voter->fkey_clans_id > 0) &&
       ($voter->fkey_clans_id == $item->fkey_clans_id) &&
@@ -619,7 +631,8 @@ firep($voter->username . ' votes for you because you are in the same clan');
       ((strtotime($voter->energy_next_gain) + 259200) > REQUEST_TIME)) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes++; // vote for opponent
+      // Vote for opponent.
+      $votes++;
 firep($voter->username . ' (' . $voter->fkey_neighborhoods_id . ') votes for ' . $item->username .
 ' because they are in the same clan');
       $election_polls[] = 'I voted for your opponent because we are in the same clan.';
@@ -655,12 +668,13 @@ firep($incumbent_wall);
 }
 
 
-// recent wall post from challenger
+    // Recent wall post from challenger.
     if (empty($incumbent_wall) &&
       !empty($challenger_wall) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes--; // vote for you
+      // Vote for you.
+      $votes--;
 firep($voter->username .
 ' votes for you because you posted to his/her wall');
       $election_polls[] =
@@ -670,12 +684,13 @@ firep($voter->username .
 
     }
 
-// recent wall post from incumbent
+    // Recent wall post from incumbent.
     if (!empty($incumbent_wall) &&
       empty($challenger_wall) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes++; // vote for opponent
+      // Vote for opponent.
+      $votes++;
 firep($voter->username . ' votes for ' . $item->username .
 ' because s/he posted to his/her wall');
       $election_polls[] =
@@ -686,7 +701,7 @@ firep($voter->username . ' votes for ' . $item->username .
     }
 */
 
-// same party, used actions in last 7 days (challenger)
+    // Same party, used actions in last 7 days (challenger).
     if (!$stats_only_hood &&
       ($voter->fkey_values_id > 0) &&
       ($voter->fkey_values_id == $game_user->fkey_values_id) &&
@@ -695,14 +710,15 @@ firep($voter->username . ' votes for ' . $item->username .
       ((strtotime($voter->energy_next_gain) + 604800) > REQUEST_TIME)) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes--; // vote for you
+      // Vote for you.
+      $votes--;
 firep($voter->username . ' votes for you because you are in the same party');
       $election_polls[] = 'I voted for you because we are in the same political party.';
       $votes_you_same_party++;
       continue;
     }
 
-// same party, used actions in last 7 days (incumbent)
+    // Same party, used actions in last 7 days (incumbent).
     if (!$stats_only_hood &&
       ($voter->fkey_values_id > 0) &&
       ($voter->fkey_values_id == $item->fkey_values_id) &&
@@ -711,7 +727,8 @@ firep($voter->username . ' votes for you because you are in the same party');
       ((strtotime($voter->energy_next_gain) + 604800) > REQUEST_TIME)) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
-      $votes++; // vote for opponent
+      // Vote for opponent.
+      $votes++;
 firep($voter->username . ' votes for ' . $item->username .
 ' because they are in the same party');
       $election_polls[] = 'I voted for your opponent because we are in the same political party.';
@@ -723,7 +740,9 @@ firep($voter->username . ' votes for ' . $item->username .
 
     // Vote for me!
     if ($vote_rand < $my_influence) {
-      $votes--; // voter votes for you
+
+      // Voter votes for you.
+      $votes--;
 firep($voter->username . ' level ' . $voter->level . ' votes for you');
       $election_polls[] = 'I voted for you because of your ' . $experience . '.';
       $votes_you_influence++;
@@ -731,7 +750,8 @@ firep($voter->username . ' level ' . $voter->level . ' votes for you');
     }
     else {
 
-      $votes++; // voter votes for incumbent
+      // Voter votes for incumbent.
+      $votes++;
 firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->username);
       $election_polls[] = 'I voted for your opponent because of his or her ' . $experience . '.';
       $votes_opp_influence++;
@@ -742,7 +762,7 @@ firep($voter->username . ' level ' . $voter->level . ' votes for ' . $item->user
 
 }
 
-// resident voters for type 1 (hood) elections
+// Resident voters for type 1 (hood) elections.
 $count = ($item->type == 1) ? $residents : 0;
 while ($count--) {
 
@@ -751,14 +771,16 @@ while ($count--) {
   // Vote for me!
   if ($vote_rand < $my_influence) {
 
-    $votes--; // voter votes for you
+    // Voter votes for you.
+    $votes--;
 firep('resident votes for you');
     $votes_you_influence++;
 
   }
   else {
 
-    $votes++; // votes for incumbent
+    // Votes for incumbent.
+    $votes++;
 firep('resident votes for incumbent');
     $votes_opp_influence++;
 
@@ -770,10 +792,12 @@ firep('voter IP array:');
 firep($ip_array);
 
 $experience_change = mt_rand(10 + ($game_user->level * 2),
-  15 + ($game_user->level * 3)); // influence changed
 
-// if the same challenge has happened more than 5 times in the past hour, they
-// are just trying to game the system.  Don't give anyone any experience.
+  // Influence changed.
+  15 + ($game_user->level * 3));
+
+    // Influence changed.
+    15 + ($game_user->level * 3));
 
 $sql = 'select count(id) as count from challenge_history
   where fkey_from_users_id = %d and fkey_to_users_id = %d
@@ -784,7 +808,6 @@ $challenge_history = db_fetch_object($result);
 // Sorry!  No experience!
 if ($challenge_history->count > 5) $experience_change = 0;
 
-
 // You won!  Woohoo!
 if ($votes < 0) {
 
@@ -793,7 +816,8 @@ if ($votes < 0) {
 
   // Party office.
   if ($item->type == 2) {
-// make it so s/he can't perform a major action for a day
+
+    // Make it so s/he can't perform a major action for a day.
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', time() + 86400);
   }
@@ -827,19 +851,23 @@ if ($votes < 0) {
     $sql = 'delete from elected_officials
       where fkey_users_id in (%s);';
     $result = db_query($sql, implode(',', $official_ids));
-    $all_officials_in = $location; // set a flag
+
+    // Set a flag.
+    $all_officials_in = $location;
 
   }
 
   $sql = 'delete from elected_officials where fkey_users_id = %d or
     fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id, $item->id); // incumbent lost
-// and you lost your old position, if any
 
+  // Incumbent lost.
+  $result = db_query($sql, $game_user->id, $item->id);
+
+  // And you lost your old position, if any.
   $sql = 'update users set actions = 0 where id = %d;';
   $result = db_query($sql, $item->id); // incumbent loses all actions
 
-// start the incumbent actions clock if needed
+  // Start the incumbent actions clock if needed.
   if ($item->actions == $item->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -867,7 +895,7 @@ if ($votes < 0) {
   $sql = 'update users set experience = greatest(experience - %d, 0) where id = %d;';
   $result = db_query($sql, $experience_change, $item->id);
 
-// start the actions clock if needed
+  // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -893,8 +921,9 @@ EOF;
         ['@place' => $all_officials_in, '@hood' => $game_text['hood']]) . '</div>';
 
 }
-else { // you lost
+else {
 
+  // You lost.
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-lost\"/>\n-->";
 
@@ -915,7 +944,7 @@ else { // you lost
   $sql = 'update users set experience = experience + %d where id = %d;';
   $result = db_query($sql, $experience_change, $item->id);
 
-// start the actions clock if needed
+  // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
@@ -932,8 +961,8 @@ else { // you lost
 EOF;
 
   $experience_change = min($experience_change, $game_user->experience);
-  // don't tell s/he that s/he has lost more experience than s/he has
 
+  // Don't tell s/he that s/he has lost more experience than s/he has.
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
   echo "<div class=\"subtitle\">You lost to $item->username by $votes" .
     " vote(s)</div><div class=\"action-effect\">" .
@@ -983,13 +1012,13 @@ Extra defending votes: $extra_defending_votes
 
 $residents residents";
 
-  // Mail me hood tosses.
+// Mail me hood tosses.
 //  if (($item->ep_id == 1) && ($votes < 0))
 //    mail('joseph@cheek.com', "election results" /* for $game_user->username " .
 //      "[$my_influence] vs. $item->username [$opp_influence] in $location" */,
 //      $message);
 
-  // And house challenges.
+// And house challenges.
 //  if ($item->ep_id >= 28)
 //    mail('joseph@cheek.com', "house seat results (district $district seat " .
 //    "$item->ep_id)", $message);
@@ -1013,7 +1042,9 @@ for ($c = 0 ; $c < $total_polls ; $c++) {
   $c1 = mt_rand(0, count($election_polls));
 
   echo "<div class=\"action-effect\">&quot;{$election_polls[$c1]}&quot;</div>";
-  unset($election_polls[$c1]); // so we don't get dups
+
+  // So we don't get dups.
+  unset($election_polls[$c1]);
 
 
 }

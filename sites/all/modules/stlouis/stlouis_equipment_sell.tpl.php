@@ -25,7 +25,6 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'equipment-succeeded';
 
 // Check to see if equipment prerequisites are met.
-
 // Hit a quantity limit?
 if ($quantity > $game_equipment->quantity) {
   $options['equipment-sell-succeeded'] = 'failed not-enough-equipment';
@@ -87,7 +86,7 @@ foreach ($data as $item) {
 
 game_show_ai_output($phone_id, $ai_output);
 
-// show next one
+// Show next one.
 if (!empty($next)) {
   game_show_equip($game_user, $next, $ai_output, ['soon' => TRUE]);
 }

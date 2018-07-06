@@ -33,7 +33,7 @@ foreach ($data as $item) {
 
 game_show_ai_output($phone_id, $ai_output);
 
-// show next one
+// Show next one.
 if (!empty($next)) {
   game_show_equip($game_user, $next, $ai_output, ['soon' => TRUE]);
 }

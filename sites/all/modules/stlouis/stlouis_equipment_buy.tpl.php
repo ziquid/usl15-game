@@ -25,8 +25,7 @@ $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'equipment-succeeded';
 
 // Check to see if equipment prerequisites are met.
-
-// enough money?
+// Enough money?
 if ($game_user->money < $equipment_price) {
   $options['equipment-buy-succeeded'] = 'failed no-money';
   $ai_output = 'equipment-failed no-money';
@@ -40,7 +39,7 @@ if ($game_user->level < $game_equipment->required_level) {
     "trying to purchase $game_equipment->name at level $game_user->level", -100);
 }
 
-// hit a quantity limit?
+// Hit a quantity limit?
 if ((($game_equipment->quantity + $quantity) > $game_equipment->quantity_limit) &&
   ($game_equipment->quantity_limit >= 1)) {
   $options['equipment-buy-succeeded'] = 'failed hit-quantity-limit';
@@ -49,7 +48,7 @@ if ((($game_equipment->quantity + $quantity) > $game_equipment->quantity_limit) 
     "trying to purchase more $game_equipment->name than allowed", -100);
 }
 
-// too little income to cover upkeep?
+// Too little income to cover upkeep?
 if ($game_user->income < $game_user->expenses +
    ($game_equipment->upkeep * $quantity)) {
   $options['equipment-buy-succeeded'] = 'failed not-enough-income';
@@ -133,7 +132,7 @@ foreach ($data as $item) {
 
 game_show_ai_output($phone_id, $ai_output);
 
-// show next one
+// Show next one.
 if (!empty($next)) {
   game_show_equip($game_user, $next, $ai_output, ['soon' => TRUE]);
 }
