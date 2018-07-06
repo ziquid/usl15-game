@@ -1075,7 +1075,7 @@ EOF;
 }
 else {
 
-// Failed!
+      // Failed!
       $fetch_header($game_user);
 
   if ($game_user->level < 6 and $game_user->experience > 0) {
@@ -1166,7 +1166,7 @@ if ($game_user->level < 6) {
 }
 else {
 
-// Show location-specific quests.
+  // Show location-specific quests.
   $sql_quest_neighborhood = 'where ((fkey_neighborhoods_id = 0 and
     required_level >= 6) or fkey_neighborhoods_id = ' .
     $game_user->fkey_neighborhoods_id . ')';
@@ -1222,7 +1222,7 @@ $result = db_query($sql, $game_user->id, $game_quest->group);
 $quest_group = db_fetch_object($result);
 //firep($quest_group);
 
- // Haha! Typecasting!
+// Haha! Typecasting!
 $quest_group->completed += 0;
 
 if ($quest_group_completion->times_completed > 0) {

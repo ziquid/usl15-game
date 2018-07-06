@@ -136,7 +136,7 @@ firep($new_hood, 'new hood');
 
   $unfrozen_msg = '';
 
-// Frozen? 10% chance to mark as unfrozen.
+  // Frozen? 10% chance to mark as unfrozen.
   if (($game_user->meta == 'frozen') && (mt_rand(1, 10) == 1)) {
     $sql = 'update users set meta = "" where id = %d;';
     $result = db_query($sql, $game_user->id);
