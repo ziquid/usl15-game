@@ -13,8 +13,8 @@ h3, h4 {
 .title {
   font: 16px Arial, Helvetica, sans-serif;
   clear: both;
-  margin-top: 12px;
-  margin-bottom: 6px;
+  margin-top: 8px;
+  margin-bottom: 5px;
   text-align: center;
   font-weight: bold;
 }
@@ -1064,6 +1064,7 @@ a .event-text {
   color: #888;
   font: 10px Helvetica, Arial, sans-serif;
   text-align: center;
+  padding-top: 2px;
 }
 
 .version {
@@ -1112,4 +1113,8 @@ a .event-text {
 
 img.round4 {
   border-radius: 4px;
+}
+
+.highlight {
+  color: #cc0 !important;
 }

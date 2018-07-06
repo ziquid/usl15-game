@@ -27,6 +27,66 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jul 06, 2018
+  </div>
+  <ul>
+    <li>
+      Level 113, more party seats
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jul 05, 2018
+  </div>
+  <ul>
+    <li>
+      Level 112
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jul 04, 2018
+  </div>
+  <ul>
+    <li>
+      Level 111, Fair St. Louis
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jul 03, 2018
+  </div>
+  <ul>
+    <li>
+      Gateway Arch Museum Mission
+    </li>
+    <li>
+      Covered Wagons
+    </li>
+    <li>
+      Level 110
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jul 02, 2018
+  </div>
+  <ul>
+    <li>
+      Level 109
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jun 30, 2018
+  </div>
+  <ul>
+    <li>
+      Level 108, Stats-only missions
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 25, 2018
   </div>
   <ul>
