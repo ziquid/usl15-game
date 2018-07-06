@@ -224,8 +224,12 @@ echo <<< EOF
 EOF;
 
 //  $divisor = 2.15625; // 690/320
-$xoff = 0; // offset of x
-$yoff = 900; // offset of y
+
+// Offset of x.
+$xoff = 0; 
+
+// Offset of y.
+$yoff = 900;
 
 foreach ($data as $item) {
 //firep($item);
