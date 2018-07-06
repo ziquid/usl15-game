@@ -146,8 +146,7 @@ $result = db_query($sql, $item->fkey_neighborhoods_id);
 $data = db_fetch_object($result);
 $location = $data->name;
 
-// save the message, if any
-
+// Save the message, if any.
 $private = check_plain($_GET['private']) == '1' ? 1 : 0;
 
 if (!empty($message)) {
@@ -192,6 +191,7 @@ if (($want_jol == '/want_jol') && !empty($message)) {
     where fkey_equipment_id = 27 and fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $data = db_fetch_object($result);
+
   // No JoLs yet!
   if ($data->quantity < 1) {
 
@@ -205,6 +205,7 @@ if (($want_jol == '/want_jol') && !empty($message)) {
     where fkey_users_from_id = %d and fkey_users_to_id = %d;';
   $result = db_query($sql, $game_user->id, $item->id);
   $data = db_fetch_object($result);
+
   // Already gotten a JoLs for this user!
   if (!empty($data)) {
 
@@ -269,7 +270,7 @@ $clan_icon_html
 <div class="value">$clan_link</div><br/>
 EOF;
 
- // Show more stats if it's you.
+// Show more stats if it's you.
 if ($phone_id_to_check == $phone_id) {
 
   echo <<< EOF
@@ -364,7 +365,8 @@ if (($phone_id_to_check != $phone_id) &&
   if ((((time() - strtotime($item->debates_last_time)) > $debate_wait_time) ||
     (($item->meta == 'zombie') &&
     ((time() - strtotime($item->debates_last_time)) > $zombie_debate_wait)))) {
-// debateable and enough time has passed
+
+    // Debateable and enough time has passed.
     echo <<< EOF
 <div class="news relative">
 <div class="message-reply-wrapper">
@@ -376,8 +378,9 @@ if (($phone_id_to_check != $phone_id) &&
 EOF;
 
   }
-  else { // debateable but not enough time has passed
+  else {
 
+    // Debateable but not enough time has passed.
     if ($item->meta == 'zombie') {
       $time_left = $zombie_debate_wait -
         (time() - strtotime($item->debates_last_time));
@@ -403,7 +406,9 @@ EOF;
   }
 
 }
-else { // not debateable at all
+else {
+
+  // Not debateable at all.
   echo '<br>';
 }
 
@@ -470,7 +475,7 @@ echo <<< EOF
 <div class="value">$location</div><br/>
 EOF;
 
-// Elected?  give approval rating!
+// Elected? Give approval rating!
 if (!empty($item->ep_name)) {
 
   echo <<< EOF
@@ -537,7 +542,7 @@ echo <<< EOF
 </div>
 EOF;
 
-  // It's ok to send to this user.
+ // It's ok to send to this user.
  if (empty($is_blocked)) {
    echo <<< EOF
 <div class="message-title">Send a message</div>
@@ -554,8 +559,9 @@ EOF;
 </div>
 EOF;
  }
- else { // you can't send to them but you can still block them
+ else {
 
+   // You can't send to them but you can still block them.
    echo '<div class="send-message">' . $block_this_user . '</div>';
 
  }
@@ -568,9 +574,12 @@ echo <<< EOF
 EOF;
 
 if ($phone_id != $phone_id_to_check) {
-// not looking at yourself?  don't show private messages
+
+  // Not looking at yourself? Don't show private messages.
   $no_private = 'and (private = 0 OR user_messages.fkey_users_from_id = ' .
-  $game_user->id . ')'; // FIXME -- don't add user id inline, use %d instead
+
+  // FIXME -- don't add user id inline, use %d instead.
+  $game_user->id . ')';
 }
 
 $sql = 'select user_messages.*, users.username, users.phone_id,

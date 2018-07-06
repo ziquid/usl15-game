@@ -454,8 +454,9 @@ $data = [];
   }
 
 }
-else { // normal
+else {
 
+  // Normal.
   // Base SQL statement.
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
@@ -592,7 +593,7 @@ game_show_elections_menu($game_user);
 
 echo <<< EOF
 <form action="/$game/top20/$arg2">
-  <div class="title">$title 
+  <div class="title">$title
     <select name="where">
 EOF;
 
@@ -605,7 +606,7 @@ foreach ($where as $where_name => $where_title) {
 echo <<< EOF
     </select>
   </div>
-  <div class="subtitle">Based on 
+  <div class="subtitle">Based on
     <select name="what">
 EOF;
 

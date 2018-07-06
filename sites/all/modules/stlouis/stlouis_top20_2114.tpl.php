@@ -455,8 +455,9 @@ $data2 = $data = [];
   }
 
 }
-else { // normal
+else {
 
+  // Normal.
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
@@ -617,7 +618,7 @@ EOF;
 
   $last_weight = $item->weight;
 
-} // foreach position
+}
 
 echo <<< EOF
 <div class="election-details">
@@ -692,10 +693,9 @@ EOF;
 
   $last_weight = $item->weight;
 
-} // foreach position
+}
 
-// GAME-WIDE TOP 20
-
+// GAME-WIDE TOP 20.
 echo <<< EOF
 </div>
 <div class="title">$title Game-Wide</div>
