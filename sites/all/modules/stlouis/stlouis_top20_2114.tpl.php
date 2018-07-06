@@ -618,7 +618,6 @@ EOF;
 
   $last_weight = $item->weight;
 
-// For each position.
 }
 
 echo <<< EOF
@@ -694,7 +693,6 @@ EOF;
 
   $last_weight = $item->weight;
 
-// For each position.
 }
 
 // GAME-WIDE TOP 20.
