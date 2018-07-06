@@ -432,7 +432,7 @@ echo <<< EOF
 EOF;
 
 
-  // Move,
+  // Move.
   $coords = _stlouis_scale_coords($coefficient, 131, 127, 183, 147);
 
   echo <<< EOF
