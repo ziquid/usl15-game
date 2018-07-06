@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jul 06, 2018
+  </div>
+  <ul>
+    <li>
+      Level 113, more party seats
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jul 05, 2018
   </div>
   <ul>
