@@ -791,22 +791,20 @@ firep('total votes are ' . $votes);
 firep('voter IP array:');
 firep($ip_array);
 
+// Influence changed.
 $experience_change = mt_rand(10 + ($game_user->level * 2),
-
-  // Influence changed.
   15 + ($game_user->level * 3));
-
-    // Influence changed.
-    15 + ($game_user->level * 3));
 
 $sql = 'select count(id) as count from challenge_history
   where fkey_from_users_id = %d and fkey_to_users_id = %d
   and timestamp > "%s";';
-$result = db_query($sql, $game_user->id, $item->id, date('Y-m-d H:i:s', time() - 3600));
+$result = db_query($sql, $game_user->id, $item->id, date('Y-m-d H:i:s', REQUEST_TIME - 3600));
 $challenge_history = db_fetch_object($result);
 
 // Sorry!  No experience!
-if ($challenge_history->count > 5) $experience_change = 0;
+if ($challenge_history->count > 5) {
+  $experience_change = 0;
+}
 
 // You won!  Woohoo!
 if ($votes < 0) {
@@ -819,7 +817,7 @@ if ($votes < 0) {
 
     // Make it so s/he can't perform a major action for a day.
     $set_value = '_' . arg(0) . '_set_value';
-    $set_value($game_user->id, 'next_major_action', time() + 86400);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
   }
 
   if ($item->ep_id == 1) {
