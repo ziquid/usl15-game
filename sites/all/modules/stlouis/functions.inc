@@ -3833,19 +3833,19 @@ function game_zombie_name() {
   ]; // https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
 
   $last = [
-    'Quaint Stench',
-    'Rottie',
-    'Stinkbag',
+    'Quilter',
+    'Rogue',
+    'Suck-Up',
     'Twitcher',
     'Undead',
-    'Valkyrie',
+    'Voter',
     'Walker',
     'Xtra Creep',
     'Yard Bump',
     'Zero',
   ];
 
-  return 'Zombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
+  return 'PoliZombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 
 }

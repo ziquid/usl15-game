@@ -21,8 +21,8 @@ $result = db_query($sql, $ip_address);
 $item = db_fetch_object($result);
 
 // Allow multiple from my IP.
-if (($item->count > 5) && ($ip_address != '69.255.171.73') &&
-  ($ip_address != '73.82.211.0') && $ip_address != '127.0.0.1') {
+if (($item->count > 5) && $ip_address != '127.0.0.1' &&
+  $ip_address != '158.69.120.3') {
   echo 'Error E-2242: ' . $arg2 . ' from ' . $ip_address .
     '.  Please email <strong>zipport@ziquid.com</strong>.';
   exit();
