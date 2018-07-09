@@ -153,7 +153,8 @@ function game_ai_build() {
   return game_ai_do('do quest', $ai_id, 4) |
     game_ai_do('do quest', $ai_id, 3) |
     game_ai_do('do quest', $ai_id, 2) |
-    game_ai_do('do quest', $ai_id, 1);
+    game_ai_do('do quest', $ai_id, 1) |
+    game_ai_do('debate players', $ai_id, 3);
 }
 
 /**
@@ -747,7 +748,6 @@ function game_ai_create_new_player() {
   db_query($sql, "TC Emp $num", $id_to_check);
 }
 
-
 function _ai_have_num_type_level_min_max_players($num_players, $type,
   $level_min, $level_max) {
 
@@ -826,7 +826,6 @@ function _ai_have_num_type_level_min_max_players($num_players, $type,
 
 }
 
-
 function _ai_allocate_skill_for_elocution($ai_id) {
 
   // NB: don't *EVER* use game_ai_fetch_user() here.
@@ -847,7 +846,6 @@ function _ai_allocate_skill_for_elocution($ai_id) {
   return FALSE;
 
 }
-
 
 function _ai_allocate_skill_for_action($ai_id) {
 
@@ -870,7 +868,6 @@ function _ai_allocate_skill_for_action($ai_id) {
 
 }
 
-
 function _ai_allocate_skill_for_energy($ai_id) {
 
   // NB: don't *EVER* use game_ai_fetch_user() here.
@@ -891,7 +888,6 @@ function _ai_allocate_skill_for_energy($ai_id) {
   return FALSE;
 
 }
-
 
 function _ai_allocate_skill_for_initiative($ai_id) {
 
@@ -914,7 +910,6 @@ function _ai_allocate_skill_for_initiative($ai_id) {
 
 }
 
-
 function _ai_allocate_skill_for_endurance($ai_id) {
 
   // NB: don't *EVER* use game_ai_fetch_user() here.
@@ -935,7 +930,6 @@ function _ai_allocate_skill_for_endurance($ai_id) {
   return FALSE;
 
 }
-
 
 function game_ai_allocate_skill_points($ai_id) {
 
@@ -1006,7 +1000,6 @@ function game_ai_allocate_skill_points($ai_id) {
 
   }
 }
-
 
 function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
@@ -1232,7 +1225,6 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
 }
 
-
 function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
 
   // Challenge for a hood seat in a specified range.
@@ -1431,7 +1423,6 @@ function _ai_move_somewhere($ai_id) {
 
 }
 
-
 function _ai_move($ai_id, $hood) {
 
   // Move to hood $hood.
@@ -1552,7 +1543,6 @@ function _ai_move($ai_id, $hood) {
 
 }
 
-
 function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
 
   // Find the distance between the two points.
@@ -1560,13 +1550,18 @@ function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
   $deltay = $ycoor1 - $ycoor2;
 
   return ceil(sqrt(pow($deltax, 2) + pow($deltay, 2)));
-
 }
 
-
-function _ai_increase_elocution_stats($ai_id) {
-
-  // Get more elocution aides for player.
+/**
+ * Get more elocution aides for bot.
+ *
+ * @param string $ai_id
+ *   The player ID of the AI bot.
+ *
+ * @return bool
+ *   Whether any elocution aides could be successfully obtained.
+ */
+function game_ai_increase_elocution_stats($ai_id) {
   $ai_user = game_ai_fetch_user($ai_id);
 
   $ai_response = game_ai_web_request($ai_id, 'equipment');
@@ -1575,34 +1570,28 @@ function _ai_increase_elocution_stats($ai_id) {
 
   foreach ($response as $res) {
 
-    if (strpos($res, '/+elo:') === FALSE) continue;
+    // No elo aides?
+    if (strpos($res, '/+elo:') === FALSE) {
+      continue;
+    }
 
     // Only look at elo aides.
-
     // Remove /+elo: fluff.
     $res = substr($res, 0, strpos($res, '/'));
-
-    if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0))
+    if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0)) {
       $can_buy = substr($res, 0, strpos($res, '='));
-
+    }
   }
 
   if ($can_buy > 0) {
-
 //      game_ai_out("I have $ai_user->money money, " .
 //        "so I can buy aide #$can_buy...");
     $ai_response = game_ai_web_request($ai_id, 'equipment_buy', "$can_buy/1");
-
+    return TRUE;
   }
-  else {
-
 //      game_ai_out("I have $ai_user->money money, " .
 //        "so I can't buy any elocution aides!");
-
-  }
-
   return FALSE;
-
 }
 
 
@@ -1689,15 +1678,22 @@ function game_ai_buy_land($ai_id) {
   return FALSE;
 }
 
-
-function _ai_debate_players($ai_id) {
-
-  // Debate as many players as we can.
+/**
+ * Debate players a specific number of times.
+ *
+ * @param string $ai_id
+ *   The player ID of the AI bot.
+ * @param int $num_debates
+ *   Max number of debates to attempt.
+ *
+ * @return bool
+ *   Whether any debates were successful or not.
+ */
+function game_ai_debate_players($ai_id, $num_debates = 99) {
   global $game;
-
   include drupal_get_path('module', $game) . '/game_defs.inc';
-
   $ai_user = game_ai_fetch_user($ai_id);
+  $num_attempts = min($num_debates, $ai_user->actions);
 
 //    $debate_wait_time = 1200;
 //    $zombie_debate_wait = 300;
@@ -1717,19 +1713,19 @@ function _ai_debate_players($ai_id) {
     LIMIT %d;';
 
   $result = db_query($sql, $ai_user->id, $ai_user->fkey_clans_id,
-    date('Y-m-d H:i:s', time() - $debate_time),
-    date('Y-m-d H:i:s', time() - $zombie_debate_wait),
+    date('Y-m-d H:i:s', REQUEST_TIME - $debate_time),
+    date('Y-m-d H:i:s', REQUEST_TIME - $zombie_debate_wait),
     $ai_user->level - 15,
-    $ai_user->level + 15, $ai_user->experience, $ai_user->actions);
-
-  $data = array();
-  while ($item = db_fetch_object($result)) $data[] = $item;
+    $ai_user->level + 15, $ai_user->experience, $num_attempts);
+  $data = [];
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
   $successful_debate = FALSE;
   game_ai_out("Found " . count($data) .
     " people to debate ($ai_user->actions actions)");
 
   foreach ($data as $item) {
-
     game_ai_out("Can debate $item->username");
     $ai_response = game_ai_web_request($ai_id, 'debates_challenge', $item->id);
 
@@ -1745,7 +1741,6 @@ function _ai_debate_players($ai_id) {
 
     if ($ai_response == 'debate-no-action') {
 //        game_ai_out('Egads!  Out of Action!');
-      if ($successful_debate) return TRUE;
       break;
     }
 
@@ -1753,11 +1748,9 @@ function _ai_debate_players($ai_id) {
 //        game_ai_out("Must wait to debate $item->username");
       continue;
     }
-
   }
 
   return ($successful_debate);
-
 }
 
 /**
@@ -1817,7 +1810,7 @@ function game_ai_list_all_ais() {
     where meta like "ai_%"
     and last_access < "%s"
     limit 6;';
-  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 600));
+  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 300));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
