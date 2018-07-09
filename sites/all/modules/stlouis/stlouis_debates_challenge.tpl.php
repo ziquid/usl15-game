@@ -297,6 +297,7 @@ if ($won) {
   // Zombies!
   if ($item->meta == 'zombie') {
 
+    game_competency_gain($game_user, 'zombie whisperer');
     if ($game_user->debates_won >= ($game_user->level * 100)
     || $game_user->meta == 'admin') {
 

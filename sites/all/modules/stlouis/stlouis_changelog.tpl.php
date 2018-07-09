@@ -31,7 +31,7 @@ db_set_active('default');
   </div>
   <ul>
     <li>
-      Level 114
+      Level 114, another competency, finished Gateway Arch Museum missions
     </li>
   </ul>
 
