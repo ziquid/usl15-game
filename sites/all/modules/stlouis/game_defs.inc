@@ -264,7 +264,7 @@ $residence_lower = strtolower($residence);
 $system_lower = strtolower($system);
 
 // Function-wide defs.
-if (arg(0) != 'node') {
+if (arg(0) != 'node' && arg(0) != 'devel') {
   $game = check_plain(arg(0));
 }
 $arg2 = check_plain(arg(2));

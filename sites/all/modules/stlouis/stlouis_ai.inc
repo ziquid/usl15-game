@@ -49,9 +49,19 @@ function game_move_ai() {
   //  game_ai_do('have_num_treasurers', 2) && game_ai_do('build');
   //  game_ai_do('have_num_alders', 1) && game_ai_do('build');
 
+  // From player?  send to email.
   if ($game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
-//    slack_send_message($ai_output);
     mail('joseph@ziquid.com', 'ai output', $ai_output);
+  }
+
+  // From devel?  send to dpm.
+  if (arg(0) == 'devel') {
+    dpm($ai_output, 'ai output');
+  }
+
+  // From cron?  Send to Slack.
+  if (arg(0) == 'node') {
+    slack_send_message($ai_output);
   }
 
   db_set_active('default');
@@ -689,7 +699,7 @@ function game_ai_have_num_players($num_players) {
     where meta like "ai_%";';
   $result = db_query($sql);
   $item = db_fetch_object($result);
-  $count = $item->count;
+  $count = (int) $item->count;
 
   game_ai_out("want $num_players players, have $count");
 

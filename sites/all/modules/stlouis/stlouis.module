@@ -1588,7 +1588,7 @@ function _stlouis_fetch_user() {
   global $game, $phone_id, $extra_messages, $next_level, $user;
 
   // Running from drush cron?  There is no user to fetch, so return silently.
-  if (arg(0) == 'node') {
+  if (isset($game) && $game !== arg(0)) {
     return NULL;
   }
 
