@@ -1803,13 +1803,13 @@ function game_ai_join_clan($ai_id, $clan = 'TC1') {
 /**
  * List all AI players.
  *
- * Freshen stats of those that haven't been access recently.
+ * Freshen stats of those that haven't been accessed recently.
  */
 function game_ai_list_all_ais() {
   $sql = 'select phone_id from users
     where meta like "ai_%"
     and last_access < "%s"
-    limit 6;';
+    limit 3;';
   $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 300));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;

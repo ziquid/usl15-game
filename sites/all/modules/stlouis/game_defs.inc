@@ -21,12 +21,13 @@ define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
-
+define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
 
 define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
+define(MISSION_JUL, 1007);
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
@@ -165,6 +166,11 @@ switch($today) {
   case '2018-07-04':
     $event_type = EVENT_STATS_ONLY_HOOD;
     break;
+
+  case '2018-07-10':
+  case '2018-07-11':
+    $event_type = EVENT_ROT13_COMPS;
+    break;
 }
 
 //if (arg(2) == 'abc123') {
@@ -271,3 +277,8 @@ $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
 $fetch_user = '_' . $game . '_fetch_user';
 $fetch_header = '_' . $game . '_header';
+
+// Add events to include list.
+if ($event_type !== EVENT_NONE) {
+  game_includes_add($event_type, 'event');
+}

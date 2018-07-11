@@ -226,7 +226,7 @@ EOF;
 //  $divisor = 2.15625; // 690/320
 
 // Offset of x.
-$xoff = 0; 
+$xoff = 0;
 
 // Offset of y.
 $yoff = 900;
@@ -250,62 +250,64 @@ echo <<< EOF
 </div>
 EOF;
 
-/* FIXME: do this only if you have tour guide
+if (game_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
+  // FIXME: add hood_id to the query.
+  $hood_equip = game_fetch_visible_equip($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
 
-// FIXME: add hood_id to the query.
-$hood_equip = game_fetch_visible_equip($game_user);
-$ai_output = '';
-$title_shown = FALSE;
-
-foreach ($hood_equip as $item) {
-  if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
-    if (!$title_shown) {
-      echo <<< EOF
+  foreach ($hood_equip as $item) {
+    if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+      if (!$title_shown) {
+        echo <<< EOF
+<br>
 <div class="title">
   Useful Equipment in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
-      $title_shown = TRUE;
+        $title_shown = TRUE;
+      }
+      game_show_equip($game_user, $item, $ai_output);
     }
-    game_show_equip($game_user, $item, $ai_output);
   }
-}
 
-// FIXME: add hood_id to the query.
-$hood_staff = game_fetch_visible_staff($game_user);
-$ai_output = '';
-$title_shown = FALSE;
+  // FIXME: add hood_id to the query.
+  $hood_staff = game_fetch_visible_staff($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
 
-foreach ($hood_staff as $item) {
-  if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
-    if (!$title_shown) {
-      echo <<< EOF
+  foreach ($hood_staff as $item) {
+    if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+      if (!$title_shown) {
+        echo <<< EOF
+<br>
 <div class="title">
   Useful Staff and Aides in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
-      $title_shown = TRUE;
+        $title_shown = TRUE;
+      }
+      game_show_staff($game_user, $item, $ai_output);
     }
-    game_show_staff($game_user, $item, $ai_output);
   }
-}
 
-$hood_qgs = game_fetch_visible_quest_groups($game_user);
-$ai_output = '';
-$title_shown = FALSE;
+  $hood_qgs = game_fetch_visible_quest_groups($game_user);
+  $ai_output = '';
+  $title_shown = FALSE;
 
-foreach ($hood_qgs as $item) {
-  if (!$title_shown) {
-    echo <<< EOF
+  foreach ($hood_qgs as $item) {
+    if (!$title_shown) {
+      echo <<< EOF
+<br>
 <div class="title">
   Useful Missions in <span class="nowrap">$game_user->location</span>
 </div>
 EOF;
-    $title_shown = TRUE;
-    game_show_quest_group($game_user, $item, $ai_output);
+      $title_shown = TRUE;
+      game_show_quest_group($game_user, $item, $ai_output);
+    }
   }
 }
-*/
 
 // FIXME: move this to .js, update to use jQuery.
 echo <<< EOF

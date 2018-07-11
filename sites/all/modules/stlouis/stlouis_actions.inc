@@ -108,6 +108,8 @@ function actionlist() {
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
   while ($item = db_fetch_object($result)) {
+    $item->competency_name_1 = game_competency_name($item->competency_name_1);
+    $item->competency_name_2 = game_competency_name($item->competency_name_2);
     $data[] = $item;
   }
 
@@ -135,6 +137,8 @@ function actionlist() {
 //  firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
   while ($item = db_fetch_object($result)) {
+    $item->competency_name_1 = game_competency_name($item->competency_name_1);
+    $item->competency_name_2 = game_competency_name($item->competency_name_2);
     $data[] = $item;
   }
 
@@ -153,6 +157,8 @@ function actionlist() {
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) {
+    $item->competency_name_1 = game_competency_name($item->competency_name_1);
+    $item->competency_name_2 = game_competency_name($item->competency_name_2);
     $data[] = $item;
   }
 

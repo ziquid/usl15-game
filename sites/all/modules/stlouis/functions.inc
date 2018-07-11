@@ -247,7 +247,7 @@ function NO_required_competency($game_user, $id, $level, $name) {
   $arg2 = check_plain(arg(2));
 
   $check = game_competency_level($game_user, $id);
-  $comp_name = competency_level_name($level, TRUE);
+  $comp_name = game_competency_level_name($level, TRUE);
 
   if ($check->level >= $level) {
 
@@ -533,6 +533,8 @@ function game_fetch_visible_land($game_user) {
     $game_user->fkey_values_id, $game_user->level);
 
   while ($item = db_fetch_object($result)) {
+    $item->competency = game_competency_name($item->competency);
+    $item->competency_name_1 = game_competency_name($item->competency_name_1);
     $data[] = $item;
   }
   return $data;
@@ -597,7 +599,10 @@ function game_fetch_land_by_id($game_user, $land_id) {
 
   WHERE land.id = %d;';
   $result = db_query($sql, $game_user->id, $land_id);
-  return db_fetch_object($result);
+  $item = db_fetch_object($result);
+  $item->competency = game_competency_name($item->competency);
+  $item->competency_name_1 = game_competency_name($item->competency_name_1);
+  return $item;
 }
 
 function game_show_land($game_user, $item, $options = []) {
@@ -906,7 +911,7 @@ EOF;
     $check = game_competency_level($game_user,
       (int) $item->fkey_required_competencies_id);
 firep($check);
-    $comp_name = competency_level_name($item->required_competencies_level,
+    $comp_name = game_competency_level_name($item->required_competencies_level,
       TRUE);
 
     $reqs .= <<< EOF
@@ -3042,8 +3047,8 @@ function game_competency_level($game_user, $id) {
 
   }
 
-  $comp->level_name = competency_level_name($comp->level, TRUE);
-  $comp->level_name_2 = competency_level_name($comp->level);
+  $comp->level_name = game_competency_level_name($comp->level, TRUE);
+  $comp->level_name_2 = game_competency_level_name($comp->level);
   return $comp;
 }
 
@@ -3085,7 +3090,7 @@ function competency_min_count($level, $comp_level) {
 }
 
 
-function competency_level_name($id, $req = FALSE) {
+function game_competency_level_name($id, $req = FALSE) {
 
   if ($req) {
     $competencies = [
@@ -3111,6 +3116,20 @@ function competency_level_name($id, $req = FALSE) {
   return $competencies[$id];
 }
 
+function game_competency_name($comp) {
+  $comps = &drupal_static(__FUNCTION__, []);
+
+  if (!count($comps)) {
+    $sql = 'select name from competencies;';
+    $result = db_query($sql);
+    while ($item = db_fetch_object($result)) {
+      $comps[$item->name] = $item->name;
+    }
+  }
+
+  game_alter('comp_names_alter', NULL, $comps);
+  return $comps[$comp];
+}
 
 function fetch_user_by_id($id) {
 
@@ -3335,7 +3354,7 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
       '<span>@comp (Level @l)</span>',
       array(
         '@name' => $req_comp,
-        '@comp' => competency_level_name($req_level),
+        '@comp' => game_competency_level_name($req_level),
         '@l' => $req_level,
       )
     );
@@ -3967,8 +3986,6 @@ function game_get_value($game_user, $key, $default = NULL) {
  *   TRUE if the set succeeded; FALSE otherwise.
  */
 function game_set_value($game_user, $key, $value) {
-
-  // Set a value in the db; updates it if it already exists.
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
@@ -4028,23 +4045,86 @@ function game_luck_money_offer($game_user) {
  *   The game's user object.
  *
  * @return bool
- *   TRUE if the hook exists and returned TRUE.  FALSE otherwise.
+ *   TRUE if any hooks exist and returned TRUE.  FALSE otherwise.
  */
 function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $retval = FALSE;
+  $game_include_list = game_includes_get();
 
-  // Find and call hook.
-  if ($event_type !== EVENT_NONE) {
-    $function_name = 'game_' . $event_type . '_' . $hook;
+  // Find and call hook(s).
+  foreach ($game_include_list as $type_include_file) {
+    $include_file = substr($type_include_file, strpos($type_include_file, '/') + 1);
+    $function_name = 'game_' . $include_file . '_' . $hook;
     if (function_exists($function_name)) {
-      $retval = $function_name($game_user, $garg2, $garg3, $garg4);
+//      dpm('calling ' . $function_name);
+      $retval |= $function_name($game_user, $garg2, $garg3, $garg4);
+    }
+    else {
+//      dpm('function ' . $function_name . ' does not exist!');
     }
   }
 
   return $retval;
+}
+
+/**
+ * Add a file to the list of includes.  Run its init hook, if it exists.
+ *
+ * Will ignore multiple submissions of the same file and any missing files.
+ *
+ * @param string $include_file
+ *   The file to include.
+ * @param string $type
+ *   The type file inclusion.
+ */
+function game_includes_add($include_file, $type) {
+  global $game;
+
+  $game_include_list = &drupal_static('game_include_list', []);
+  $game_include_missing = &drupal_static('game_include_missing', []);
+  $module_path = drupal_get_path('module', $game);
+  $file_to_include = $module_path . '/includes/' . $type . '/' . $include_file . '.inc';
+
+  // Already in include list; return.
+  if (in_array($type . '/' . $include_file, $game_include_list)) {
+//    dpm($game_include_list, $type . '/' . $include_file . ' is already in game include list, not adding again');
+    return;
+  }
+
+  // Already in missing list; return.
+  if (in_array($type . '/' . $include_file, $game_include_missing)) {
+//    dpm($game_include_missing, $type . '/' . $include_file . ' is already in game include missing list, not adding again');
+    return;
+  }
+
+  if (file_exists($file_to_include)) {
+    $game_include_list[] = $type . '/' . $include_file;
+    include_once $file_to_include;
+//    dpm('including file ' . $file_to_include);
+    $function_name = 'game_' . $include_file . '_init';
+    if (function_exists($function_name)) {
+//      dpm('calling ' . $function_name);
+      $function_name();
+    }
+  }
+  else {
+
+    // File does not exist; add to missing list.
+    $game_include_missing[] = $type . '/' . $include_file;
+  }
+}
+
+/**
+ * Return the list of includes.
+ *
+ * @return string[]
+ *   The list of includes.
+ */
+function game_includes_get() {
+  $game_include_list = &drupal_static('game_include_list', []);
+  return $game_include_list;
 }
 
 /**
@@ -4058,5 +4138,26 @@ function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 =
 function game_show_ai_output($phone_id, $ai_output) {
   if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
+  }
+}
+
+/**
+ * Check to see if the user has a particular trait.
+ *
+ * Admin users automatically have all traits.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param string $trait
+ *   The trait for which to check.
+ *
+ * @return bool
+ *   Whether the user has that trait or not.
+ */
+function game_user_has_trait($game_user, $trait) {
+  if ($game_user->meta == 'admin' ||
+    (array_key_exists($trait, $game_user->traits) &&
+    $game_user->traits[$trait])) {
+    return TRUE;
   }
 }

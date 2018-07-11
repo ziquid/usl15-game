@@ -120,9 +120,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     ORDER BY level DESC, name ASC;';
   $result = db_query($sql, $item->id);
   while ($item = db_fetch_object($result)) {
-    if (array_key_exists($item->name, $game_settings['competencies'])) {
-      $item->name = $game_settings['competencies'][$item->name];
-    }
+    $item->name = game_competency_name($item->name);
     $comps[] = $item;
   }
 

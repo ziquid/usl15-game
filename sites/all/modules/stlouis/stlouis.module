@@ -19,6 +19,9 @@ function stlouis_perm() {
 require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
 require_once drupal_get_path('module', 'stlouis') . '/functions.inc';
 
+/**
+ * Implementaiton of hook_cron().
+ */
 function stlouis_cron() {
   global $game;
   $game = 'stlouis';
@@ -216,7 +219,6 @@ function stlouis_cron() {
       $sql = 'UPDATE users SET fkey_neighborhoods_id = %d
       WHERE id = %d;';
       db_dquery($sql, $hood->id, $item->id);
-
     }
   }
 
@@ -369,8 +371,10 @@ function stlouis_cron() {
   db_set_active('default');
 }
 
+/**
+ * Implementation of hook_init().
+ */
 function stlouis_init() {
-
   global $custom_theme, $conf;
 
   $game = arg(0);
@@ -390,18 +394,6 @@ function stlouis_init() {
     $custom_theme = 'cdc_games';
     drupal_add_css($module_path . '/' . $game . '.css');
     include $module_path . '/game_defs.inc';
-
-    // Set up includes and init() for event, if any.
-    if ($event_type !== EVENT_NONE) {
-      $file_to_include = $module_path . '/events/' . $event_type . '.inc';
-      if (file_exists($file_to_include)) {
-        include_once $file_to_include;
-        $function_name = 'game_' . $event_type . '_init';
-        if (function_exists($function_name)) {
-          $function_name();
-        }
-      }
-    }
 
     // BB Z10.
     if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
@@ -1586,7 +1578,6 @@ function _stlouis_reset_event_tags_con($id) {
 function _stlouis_fetch_user() {
 
   global $game, $phone_id, $extra_messages, $next_level, $user;
-
   // Running from drush cron?  There is no user to fetch, so return silently.
   if (isset($game) && $game !== arg(0)) {
     return NULL;
@@ -1619,20 +1610,17 @@ function _stlouis_fetch_user() {
     // Unidentified MS user.
     (substr(arg(2), 0, 3) != 'ms=')
   ) {
-
-      echo t('This game must be accessed through an authorized client.  ');
-      echo t('Please e-mail zipport@ziquid.com if you have any questions.');
-      exit;
-
+    echo t('This game must be accessed through an authorized client.  ');
+    echo t('Please e-mail zipport@ziquid.com if you have any questions.');
+    exit;
   }
 
   if (($user->uid != 0) &&
     (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid') === FALSE)) {
   }
 
+  // AI player -- only allow from certain IPs.
   if (substr(arg(2), 0, 3) == 'ai-') {
-
-    // AI player -- only allow from certain IPs.
     if ((ip_address() != $_SERVER['SERVER_ADDR']) &&
     ($user->roles[4] != 'web game access')) {
 
@@ -1642,13 +1630,13 @@ function _stlouis_fetch_user() {
     }
   }
 
-
   $changes_made = FALSE;
 
   $game = check_plain(arg(0));
   $phone_id = _stlouis_get_phoneid();
-// if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
+  // if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
   $arg2 = check_plain(arg(2));
+  $module_path = drupal_get_path('module', $game);
   db_set_active('game_' . $game);
 
   // Check for banned users -- phone_id.
@@ -1656,9 +1644,8 @@ function _stlouis_fetch_user() {
   $result = db_query($sql, $phone_id);
   $blocked_user = db_fetch_object($result);
 
+  // User is banned!
   if (!empty($blocked_user) &&
-
-    // User is banned!
     $blocked_user->phone_id == $phone_id) {
 
     // Banned by phone ID.
@@ -1689,10 +1676,10 @@ function _stlouis_fetch_user() {
 
     if (!empty($game_user)) {
       $sql = 'delete from users where phone_id = "%s";';
-         $result = db_query($sql, $phone_id);
+      db_query($sql, $phone_id);
       $sql = 'update users set phone_id = "%s"
         where phone_id = "%s";';
-      $result = db_query($sql, $phone_id, 'nkc ' . $phone_id);
+      db_query($sql, $phone_id, 'nkc ' . $phone_id);
 
 //      mail('joseph@cheek.com', 'Nook Color Phone ID swap',
 //        "nkc $phone_id is now $phone_id");
@@ -1726,8 +1713,38 @@ function _stlouis_fetch_user() {
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
-  static $saved_party_icon = FALSE;
+  $game_user->traits = [];
+  if (strlen($game_user->meta)) {
+    game_includes_add('user_meta_' . $game_user->meta, 'user_meta');
+  }
+  game_alter('game_fetch_user_post', $game_user);
 
+  // Start welcome wizard if user not in db.
+  if (empty($game_user->id)) {
+    /*
+        if ($arg2 == 'facebook') {
+          echo 'would redirect to welcome ' . $phone_id ;
+          echo '<a href="/' . $game . '/welcome/' . $arg2 . '">do it manually</a>';
+          echo '<a href="/' . $game . '/quests/' . $arg2 . '">go straight to quests</a>';
+          exit;
+        }
+    */
+    db_set_active();
+    drupal_goto($game . '/welcome/' . $arg2);
+  }
+
+  // Save the IP address, user agent of user.
+  _stlouis_save_user_agent($game_user);
+  _stlouis_save_user_IP($game_user);
+  _stlouis_check_authKey($game_user);
+
+  if (strpos($_SERVER['HTTP_USER_AGENT'], 'BlueStacks') !== FALSE) {
+    if ($game_user->level <= 50) {
+      _stlouis_set_value($game_user->id, 'sdk', 1);
+    }
+  }
+
+  static $saved_party_icon = FALSE;
   if (!$saved_party_icon) {
     drupal_add_js(['stlouis' => ['party_icon' => $game_user->party_icon]], 'setting');
     $saved_party_icon = TRUE;
@@ -1759,28 +1776,19 @@ function _stlouis_fetch_user() {
   $game_user->st_energy_increase = $st->energy_increase;
   firep($game_user, 'game_user at fetch_user');
 
-  // Start welcome wizard if user not in db.
-  if (empty($game_user->id)) {
-/*
-    if ($arg2 == 'facebook') {
-      echo 'would redirect to welcome ' . $phone_id ;
-      echo '<a href="/' . $game . '/welcome/' . $arg2 . '">do it manually</a>';
-      echo '<a href="/' . $game . '/quests/' . $arg2 . '">go straight to quests</a>';
-      exit;
-    }
-*/
-    drupal_goto($game . '/welcome/' . $arg2);
+  // Add includes and process init() for staff, if any.
+  $sql = 'SELECT LOWER(s.name) as name from staff_ownership so
+    left join staff s on s.id = so.fkey_staff_id 
+    left join users u on so.fkey_users_id = u.id
+    where u.id = %d and so.quantity > 0;';
+  $result = db_query($sql, $game_user->id);
+  $staff_list = [];
+  while ($item = db_fetch_object($result)) {
+    $staff_list[] = str_replace(' ', '_', $item->name);
   }
 
-  // Save the IP address, user agent of user.
-  _stlouis_save_user_agent($game_user);
-  _stlouis_save_user_IP($game_user);
-  _stlouis_check_authKey($game_user);
-
-  if (strpos($_SERVER['HTTP_USER_AGENT'], 'BlueStacks') !== FALSE) {
-    if ($game_user->level <= 50) {
-      _stlouis_set_value($game_user->id, 'sdk', 1);
-    }
+  foreach ($staff_list as $staff) {
+    game_includes_add('staff_' . $staff, 'staff');
   }
 
   $sql = 'select experience from levels where level = %d;';
@@ -1930,7 +1938,6 @@ function _stlouis_fetch_user() {
 
     // Ditto.
     $secs_until += 180;
-
   }
 
   while (($game_user->actions > $game_user->actions_max) &&
@@ -1948,7 +1955,6 @@ function _stlouis_fetch_user() {
 
     // Ditto.
     $secs_until += 180;
-
   }
 
   // Frozen.
@@ -1966,36 +1972,28 @@ function _stlouis_fetch_user() {
       actions = %d, actions_next_gain = "%s",
       money = %d, skill_points = %d, last_access = CURRENT_TIMESTAMP
       where id = %d;';
-    $result = db_query($sql, $game_user->energy_next_gain,
+    db_query($sql, $game_user->energy_next_gain,
     $game_user->energy, $game_user->energy_max,
     $game_user->level, $game_user->income_next_gain,
     $game_user->actions, $game_user->actions_next_gain,
     $game_user->money, $game_user->skill_points, $game_user->id);
-
   }
-
   else {
 
     // Only save last_access.
     $sql = 'update users set last_access = CURRENT_TIMESTAMP
       where id = %d;';
-    $result = db_query($sql, $game_user->id);
-
+    db_query($sql, $game_user->id);
   }
 
   if ($leveled_up && ($game_user->level == 6) &&
     (substr($game_user->meta, 0, 3) !== 'ai_')) {
-
-//    if (($game == 'stlouis') || ($game == 'robber_barons'))
-      drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
-
-//    if ($game == 'celestial_glory')
-//      drupal_goto($game . '/debates/' . $arg2);
-
+    db_set_active();
+    drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
   }
 
+  game_alter('game_fetch_user_end', $game_user);
   return $game_user;
-
 }
 
 
