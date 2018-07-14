@@ -68,47 +68,8 @@ if (substr($message, 0, 3) == 'XXX') {
   game_competency_gain($game_user, 'uncouth');
 }
 
-$sql = 'SELECT username, experience, initiative, endurance,
-  elocution, debates_won, debates_lost, skill_points, luck,
-  debates_last_time, users.fkey_values_id, level, referral_code,
-  users.meta, users.income, users.expenses,
-  user_creations.datetime as startdate, users.meta_int,
-  `values`.party_title, `values`.party_icon,
-  `values`.name, users.id, users.fkey_neighborhoods_id,
-  elected_positions.name as ep_name,
-  elected_officials.approval_rating,
-  clan_members.is_clan_leader,
-  clans.name as clan_name, clans.acronym as clan_acronym,
-  clans.id as fkey_clans_id,
-  event_points.points
-
-  FROM `users`
-
-  LEFT JOIN `values` ON users.fkey_values_id = `values`.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id = users.id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  LEFT JOIN user_creations on user_creations.phone_id = users.phone_id
-
-  LEFT JOIN event_points on event_points.fkey_users_id = users.id
-
-  WHERE users.phone_id = "%s"
-
-  ORDER by user_creations.datetime ASC
-  LIMIT 1';
-
-$result = db_query($sql, $phone_id_to_check);
-$item = db_fetch_object($result);
-firep($item, 'user profile to view');
-
+$item = game_fetch_user_by_id($phone_id_to_check);
+$location = $item->location;
 $points = $item->points + 0;
 
 $sql = 'select count(id) as ranking from event_points
@@ -118,7 +79,9 @@ $ranking = db_fetch_object($result);
 $rank = $ranking->ranking + 1;
 
 $event_status = 'Event starts soon';
-if ($item->meta == 'frozen') $event_status = 'FROZEN';
+if ($item->meta == 'frozen') {
+  $event_status = 'FROZEN';
+}
 
 // labor day -- all are UWP -- jwc
 //  $item->fkey_values_id = 7;
@@ -140,11 +103,6 @@ if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
 $icon = $game . '_clan_' . $item->party_icon . '.png';
 
 $clan_title = preg_replace('/^The /', '', $item->clan_title);
-
-$sql = "select name from neighborhoods where id = '%d';";
-$result = db_query($sql, $item->fkey_neighborhoods_id);
-$data = db_fetch_object($result);
-$location = $data->name;
 
 // Save the message, if any.
 $private = check_plain($_GET['private']) == '1' ? 1 : 0;
@@ -245,7 +203,7 @@ else {
 
 if ($item->is_clan_leader) {
   $clan_acronym .= '*';
-  $clan_link .= " (leader)";
+  $clan_link .= ' (leader)';
 }
 
 if (($game_user->fkey_clans_id) &&
@@ -253,7 +211,6 @@ if (($game_user->fkey_clans_id) &&
 
     $clan_link = '<a href="/' . $game . '/clan_list/' . $arg2 .
       '/' . $game_user->fkey_clans_id . '">' . $clan_link . '</a>';
-
   }
 
 echo <<< EOF
@@ -324,10 +281,17 @@ if ($show_all) {
   + $equipment_bonus->elocution);
   $extra_votes = (int) $staff_bonus->extra_votes;
   $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
+  $money = number_format($item->money);
 
   game_alter('extra_votes', $item, $extra_votes, $extra_defending_votes);
 
   echo <<< EOF
+<div class="heading">$item->values:</div>
+<div class="value">$money</div><br/>
+<div class="heading">{$game_text['energy']}:</div>
+<div class="value">$item->energy ($item->energy_max)</div><br/>
+<div class="heading">{$game_text['actions']}:</div>
+<div class="value">$item->actions ($item->actions_max)</div><br/>
 <div class="heading">$initiative:</div>
 <div class="value">$item->initiative ($extra_initiative)</div><br/>
 <div class="heading">$endurance:</div>
@@ -504,9 +468,21 @@ if ($phone_id_to_check == $phone_id) {
 <div class="heading">Skill Points:</div>
 <div class="value">$item->skill_points</div>$skill_button<br/>
 EOF;
-
 }
 
+if ($show_all) {
+  if (strlen($item->meta)) {
+    echo <<< EOF
+<div class="heading">Meta:</div>
+<div class="value">$item->meta</div><br>
+EOF;
+  }
+  $last_access = game_format_date(strtotime($item->last_access));
+  echo <<< EOF
+<div class="heading">Last Access:</div>
+<div class="value">$last_access</div><br>
+EOF;
+}
 $block_this_user = '<div class="block-user"><a href="/' . $game .
   '/block_user_toggle/' . $arg2 . '/' . $arg3 .
   '">Block this user</a></div>';
@@ -526,9 +502,11 @@ if (!empty($block))
   '/block_user_toggle/' . $arg2 . '/' . $arg3 .
   '">Unblock this user</a></div>';
 
-if ($phone_id == $phone_id_to_check) $block_this_user = '';
+if ($phone_id == $phone_id_to_check) {
+  $block_this_user = '';
+}
 
-if (($phone_id == 'abc123') || ($game_user->username == 'New iPad test')) {
+if ($game_user->meta == 'admin') {
   $private_message = '<div class="private-message-checkbox">
     <input type="checkbox" name="private" id="private" value="1"/>
     <label for="private">Send as private message</label>
@@ -615,7 +593,7 @@ while ($item = db_fetch_object($result)) $data[] = $item;
 
 foreach ($data as $item) {
 firep($item->id);
-  $display_time = _stlouis_format_date(strtotime($item->timestamp));
+  $display_time = game_format_date(strtotime($item->timestamp));
   $clan_acronym = '';
 
 if (!empty($item->clan_acronym))

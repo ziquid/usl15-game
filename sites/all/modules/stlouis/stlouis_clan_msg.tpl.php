@@ -25,29 +25,29 @@ firep($message);
   }
 
   if (substr($message, 0, 3) == 'XXX') {
-    
+
     echo '<div class="message-error">Your message contains words that are not
       allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
     $message = '';
-    
+
   }
 
   $sql = 'select fkey_clans_id from clan_members where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-  
+
   if ($item->fkey_clans_id != $clan_id)
     drupal_goto($game . '/home/' . $arg2);
 
   if (!empty($message)) {
-    
+
     $sql = 'insert into clan_messages (fkey_users_from_id,
       fkey_neighborhoods_id, message) values (%d, %d, "%s");';
     $result = db_query($sql, $game_user->id, $clan_id, $message);
     $message_orig = '';
-    
+
   }
-    
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/clan_list/$arg2/$clan_id" class="button">Clan List</a>
@@ -67,7 +67,7 @@ firep($message);
   </form>
 </div>
 EOF;
-   
+
   echo <<< EOF
 <div class="news">
   <div class="messages-title">
@@ -100,28 +100,28 @@ EOF;
       AND clan_messages.is_announcement = 0
     order by id DESC
     LIMIT 50;';
-  
+
   $result = db_query($sql, $clan_id);
   $msg_shown = FALSE;
 
   $data = array();
   while ($item = db_fetch_object($result)) $data[] = $item;
-  
+
 /*  echo <<< EOF
 <div>{$data[0]->clan_name} ({$data[0]->clan_acronym}) - {$data[0]->clan_rules}</div>
 EOF;*/
 
   foreach ($data as $item) {
 firep($item->id);
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
   if (!empty($item->clan_acronym))
     $clan_acronym = "($item->clan_acronym)";
-    
+
   if ($item->is_clan_leader)
     $clan_acronym .= '*';
-    
+
     echo <<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
@@ -137,7 +137,7 @@ EOF;
 </div>
 EOF;
     $msg_shown = TRUE;
-    
+
   }
 
-  db_set_active('default');           
+  db_set_active('default');

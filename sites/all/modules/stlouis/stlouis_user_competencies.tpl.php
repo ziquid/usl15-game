@@ -41,7 +41,7 @@ else {
   $show_all = FALSE;
 }
 
-$item = fetch_user_by_id($phone_id_to_check);
+$item = game_fetch_user_by_id($phone_id_to_check);
 
 //  $party_title = preg_replace('/^The /', '', $item->party_title);
 

@@ -214,6 +214,7 @@ $game_settings = [
 ];
 
 $game_text = [
+  'actions' => 'Actions',
   'actions_short' => 'Acts',
   'agents' => 'Agents',
   'clan_eq' => 'Clan Equipment',

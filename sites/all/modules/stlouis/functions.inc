@@ -2440,7 +2440,7 @@ EOF;
     // Due date.
     if (!empty($item->time_due)) {
 
-    $time_due = _stlouis_format_date(strtotime($item->time_due));
+    $time_due = game_format_date(strtotime($item->time_due));
 
     echo <<< EOF
     <div class="quest-experience">
@@ -2964,7 +2964,7 @@ function game_action_use(&$game_user, $quantity = 1) {
   // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {
     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
       $game_user->id);
   }
 
@@ -3131,7 +3131,7 @@ function game_competency_name($comp) {
   return $comps[$comp];
 }
 
-function fetch_user_by_id($id) {
+function game_fetch_user_by_id($id) {
 
   // Simple per-page cache.
   static $user_cache;
@@ -3186,9 +3186,7 @@ function fetch_user_by_id($id) {
 
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
 
-    ' . $where . '
-    ORDER by user_creations.datetime ASC
-    LIMIT 1';
+    ' . $where . ';';
 
   $result = db_query($sql, $id);
   $item = db_fetch_object($result);
@@ -3199,7 +3197,7 @@ function fetch_user_by_id($id) {
   }
   $user_cache[$id] = $item;
 
-firep($item, 'fetch_user_by_id for id ' . $id);
+firep($item, 'game_fetch_user_by_id for id ' . $id);
   return $item;
 }
 

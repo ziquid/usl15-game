@@ -100,7 +100,7 @@ EOF;
 
   foreach ($data as $item) {
 firep($item->id);
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
   if (!empty($item->clan_acronym))

@@ -1074,9 +1074,9 @@ function _stlouis_filter_profanity($message) {
 }
 
 
-function _stlouis_format_date($epoch) {
+function game_format_date($epoch) {
 
-  $time_diff = time() - $epoch;
+  $time_diff = REQUEST_TIME - $epoch;
 // firep("time difference: $time_diff");
 
   if ($time_diff < 10) {
@@ -1541,10 +1541,8 @@ function _stlouis_bump_event_tags_con($id) {
 
   $sql = 'update event_points set tags_con = %d, points = %d
     where fkey_users_id = %d;';
-  $result = db_query($sql, $row->tags_con, $row->points, $id);
-
+  db_query($sql, $row->tags_con, $row->points, $id);
   return $row;
-
 }
 
 
@@ -1556,11 +1554,9 @@ function _stlouis_reset_event_tags_con($id) {
   $row = db_fetch_object($result);
 
   if (empty($row)) {
-
     $sql = 'insert into event_points set fkey_users_id = %d;';
     $result = db_query($sql, $id);
     $row->points = $row->tags_con = 0;
-
   }
 
   // Update points.
@@ -1568,10 +1564,8 @@ function _stlouis_reset_event_tags_con($id) {
 
   $sql = 'update event_points set tags_con = %d
     where fkey_users_id = %d;';
-  $result = db_query($sql, $row->tags_con, $id);
-
+  db_query($sql, $row->tags_con, $id);
   return $row;
-
 }
 
 
@@ -1636,7 +1630,6 @@ function _stlouis_fetch_user() {
   $phone_id = _stlouis_get_phoneid();
   // if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
   $arg2 = check_plain(arg(2));
-  $module_path = drupal_get_path('module', $game);
   db_set_active('game_' . $game);
 
   // Check for banned users -- phone_id.
@@ -1860,7 +1853,7 @@ function _stlouis_fetch_user() {
 
   // Bonus for joining a clan.
   if (!empty($game_user->fkey_clans_id)) $energy_bonus++;
-  $secs_until = $energy_next_gain - time();
+  $secs_until = $energy_next_gain - REQUEST_TIME;
 
   // Do we need energy?
   while (($game_user->energy != $game_user->energy_max) &&
@@ -1898,7 +1891,7 @@ function _stlouis_fetch_user() {
 
   // Calculate income.
   $income_next_gain = strtotime($game_user->income_next_gain);
-  $secs_until = $income_next_gain - time();
+  $secs_until = $income_next_gain - REQUEST_TIME;
   $max_income_gain = 72;
 
   // Do we get money?
@@ -1920,7 +1913,7 @@ function _stlouis_fetch_user() {
   }
 
   $actions_next_gain = strtotime($game_user->actions_next_gain);
-  $secs_until = $actions_next_gain - time();
+  $secs_until = $actions_next_gain - REQUEST_TIME;
 
   // Calculate actions.
   while (($game_user->actions < $game_user->actions_max) &&

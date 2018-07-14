@@ -1504,7 +1504,7 @@ function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, 
 EOF;
 
   foreach ($data as $item) {
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym)) {
@@ -1583,7 +1583,7 @@ function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target,
 EOF;
 
   foreach ($data as $item) {
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym)) {
@@ -1664,7 +1664,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
@@ -1743,7 +1743,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
@@ -1818,7 +1818,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
@@ -1988,7 +1988,7 @@ EOF;
   $instance_count = 1;
 
   foreach ($data as $item) {
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
@@ -2279,7 +2279,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym))
@@ -2367,7 +2367,7 @@ EOF;
 
   foreach ($data as $item) {
 
-    $display_time = _stlouis_format_date(strtotime($item->timestamp));
+    $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
     if (!empty($item->clan_acronym)) {
