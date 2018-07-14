@@ -178,7 +178,7 @@ function actionlist() {
   return $data;
 }
 
-function _target_list($target, $game_user) {
+function game_action_target_list($target, $game_user) {
 
 // Return a list of valid targets.
 
@@ -199,11 +199,12 @@ function _target_list($target, $game_user) {
         LEFT JOIN clans ON clan_members.fkey_clans_id = clans.id
         WHERE fkey_clans_id = %d
         AND users.id <> %d
-        ORDER BY username ASC;';
+        ORDER BY level DESC;';
 
       $result = db_query($sql, $game_user->fkey_clans_id, $game_user->id);
-      while ($user = db_fetch_object($result)) $data2[] = $user;
-
+      while ($user = db_fetch_object($result)) {
+        $data2[] = $user;
+      }
       break;
 
     case 'neighborhood':

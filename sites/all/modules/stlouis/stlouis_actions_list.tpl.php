@@ -385,7 +385,7 @@ EOF;
         // Type 1 in your hood, type 2 in your party, and all type 3.
         case 'officials':
 
-        $data2 = _target_list($item->target, $game_user);
+        $data2 = game_action_target_list($item->target, $game_user);
           break;
 
         case 'officials_type_1':
