@@ -27,6 +27,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jul 14, 2018
+  </div>
+  <ul>
+    <li>
+      Level 117, Investigate a Clan Member
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jul 11, 2018
   </div>
   <ul>

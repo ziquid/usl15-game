@@ -153,7 +153,8 @@ EOF;
 if ($action_succeeded) {
 
   // Special case for investigate someone.
-  if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
+  if ($action_function == '_stlouis_action_investigate_a_public_official_function'
+    || $action_function == '_stlouis_action_investigate_a_clan_member_function') {
     $show_all = '?show_all=yes';
   }
   else {
