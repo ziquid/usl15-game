@@ -395,7 +395,7 @@ firep('allowed not_met users: ' . $allowed_string);
 
       // Elected officials only.
       $data2 = [];
-      $sql = 'SELECT elected_positions.id AS ep_id,
+      $sql = 'SELECT DISTINCT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
             elected_positions.name AS ep_name, blah.*,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym
@@ -411,7 +411,7 @@ firep('allowed not_met users: ' . $allowed_string);
             LEFT JOIN elected_positions
               ON elected_positions.id = elected_officials.fkey_elected_positions_id
             WHERE users.fkey_neighborhoods_id = %d
-            AND elected_positions.type = 1
+--            AND elected_positions.type = 1
 
             UNION
 

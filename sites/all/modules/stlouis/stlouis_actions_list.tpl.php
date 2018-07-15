@@ -542,7 +542,7 @@ EOF;
 
           echo '<option value="' . $user->id . '">' .
             substr($user->ep_name . ' ' . $user->username . ' ' . $clan_acronym,
-            0, 30) . '</option>';
+            0, 36) . '</option>';
 
         }
 
