@@ -36,6 +36,9 @@ db_set_active('default');
     <li>
       Many more stats are shown for players being investigated
     </li>
+    <li>
+      New competency!
+    </li>
   </ul>
 
   <div class="subtitle">

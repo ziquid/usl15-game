@@ -1970,7 +1970,7 @@ EOF;
 }
 
 
-function _show_profile_menu($game_user) {
+function game_show_profile_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';

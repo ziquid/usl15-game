@@ -14,16 +14,19 @@ $game_user = $fetch_user();
 $fetch_header($game_user);
 
 if (empty($game_user->username)) {
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
 // Refresh every 20 seconds.
 drupal_set_html_head('<meta http-equiv="refresh" content="20">');
 
-_show_profile_menu($game_user);
+game_show_profile_menu($game_user);
 
 $phone_id_to_check = $phone_id;
-if ($arg3 != '') $phone_id_to_check = $arg3;
+if ($arg3 != '') {
+  $phone_id_to_check = $arg3;
+}
 
 if (substr($arg3, 0, 3) == 'id:') {
   $sql = 'select phone_id from users where id = %d;';

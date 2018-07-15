@@ -18,7 +18,7 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-_show_profile_menu($game_user);
+game_show_profile_menu($game_user);
 
 $phone_id_to_check = $phone_id;
 if ($arg3 != '') {
