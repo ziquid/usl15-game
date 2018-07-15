@@ -282,12 +282,13 @@ if ($show_all) {
   $extra_votes = (int) $staff_bonus->extra_votes;
   $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
   $money = number_format($item->money);
+  $iph = number_format($item->income - $item->expenses);
 
   game_alter('extra_votes', $item, $extra_votes, $extra_defending_votes);
 
   echo <<< EOF
 <div class="heading">$item->values:</div>
-<div class="value">$money</div><br/>
+<div class="value">$money ($iph IPH)</div><br/>
 <div class="heading">{$game_text['energy']}:</div>
 <div class="value">$item->energy ($item->energy_max)</div><br/>
 <div class="heading">{$game_text['actions']}:</div>
