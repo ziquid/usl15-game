@@ -33,6 +33,9 @@ db_set_active('default');
     <li>
       Level 117, Investigate a Clan Member
     </li>
+    <li>
+      Many more stats are shown for players being investigated
+    </li>
   </ul>
 
   <div class="subtitle">

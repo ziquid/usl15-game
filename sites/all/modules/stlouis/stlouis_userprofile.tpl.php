@@ -327,9 +327,9 @@ if (($phone_id_to_check != $phone_id) &&
   (($item->fkey_clans_id != $game_user->fkey_clans_id) ||
     empty($item->fkey_clans_id) || empty($game_user->fkey_clans_id))) {
 
-  if ((((time() - strtotime($item->debates_last_time)) > $debate_wait_time) ||
-    (($item->meta == 'zombie') &&
-    ((time() - strtotime($item->debates_last_time)) > $zombie_debate_wait)))) {
+  $debate_since = REQUEST_TIME - strtotime($item->debates_last_time);
+  if ((($debate_since > $debate_wait_time) ||
+    ($item->meta == 'zombie' && $debate_since > $zombie_debate_wait))) {
 
     // Debateable and enough time has passed.
     echo <<< EOF
@@ -347,12 +347,10 @@ EOF;
 
     // Debateable but not enough time has passed.
     if ($item->meta == 'zombie') {
-      $time_left = $zombie_debate_wait -
-        (time() - strtotime($item->debates_last_time));
+      $time_left = $zombie_debate_wait - $debate_since;
     }
-	else {
-      $time_left = $debate_wait_time -
-        (time() - strtotime($item->debates_last_time));
+  	else {
+      $time_left = $debate_wait_time - $debate_since;
     }
 
     $time_min = floor($time_left / 60);
@@ -367,9 +365,7 @@ EOF;
 </div>
 </div>
 EOF;
-
   }
-
 }
 else {
 
