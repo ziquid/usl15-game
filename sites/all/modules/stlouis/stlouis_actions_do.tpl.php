@@ -139,12 +139,15 @@ EOF;
       ' (1&nbsp;Luck)</a></div></div>';
   }
 
-  $action_function = '_' . $game . '_action_' .
+  $action_function = $game . '_action_' .
     strtolower(str_replace(
-      array(' ', '%', "'", '.', '(', ')'),
-      array('_', '', '', '', '', ''),
-      $action->name)) .
-    '_function';
+      [' ', '%', "'", '.', '(', ')'],
+      ['_', '', '', '', '', ''],
+      $action->name));
+
+  if (!function_exists($action_function)) {
+    $action_function = '_' . $action_function . '_function';
+  }
 
   if ($action_succeeded && function_exists($action_function)) {
     $action_succeeded = $action_function($outcome_reason, $target, $can_do_again, $action);
@@ -153,9 +156,11 @@ EOF;
 if ($action_succeeded) {
 
   // Special case for investigate someone.
-  if ($action_function == '_stlouis_action_investigate_a_public_official_function'
-    || $action_function == '_stlouis_action_investigate_a_clan_member_function') {
-    $show_all = '?show_all=yes';
+  if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
+    $show_all = '?comp_show_level=curious';
+  }
+  else if ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
+    $show_all = '?comp_show_level=yes';
   }
   else {
     $show_all = '';

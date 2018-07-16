@@ -3052,6 +3052,33 @@ function game_competency_level($game_user, $id) {
   return $comp;
 }
 
+/**
+ * Show text if certain comp. level has been obtained.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param string $text
+ *   The text to show.
+ * @param int $level_obtained
+ *   The comp. level obtained.
+ * @param int $level_needed
+ *   The comp. level needed.
+ */
+function game_show_by_level($game_user, $text, $level_obtained, $level_needed = 0) {
+  if ($level_obtained >= $level_needed) {
+    if ($game_user->meta == 'admin') {
+      $level_debug = ' (' . $level_obtained . ':' . $level_needed . ')';
+      if (substr($text, -4) === '<br>') {
+        $text = str_replace('<br>', $level_debug . '<br>', $text);
+      }
+      else {
+        $text .= $level_debug;
+      }
+    }
+    print $text;
+  }
+}
+
 function competency_min_count($level, $comp_level) {
 
   // Return the minimum use count for a given level [0..5] and competency level.
