@@ -42,18 +42,21 @@ else {
   game_competency_gain($game_user, 'people person');
 }
 
+$item = game_fetch_user_by_id($phone_id_to_check);
+$location = $item->location;
+$points = $item->points + 0;
 $extra_comp = 0;
 
 // Same party?  Bonus to comp.
 if ($game_user->fkey_values_id &&
-  $game_user->fkey_values_id == $item->fkey_values_id) {
+  ($game_user->fkey_values_id == $item->fkey_values_id)) {
   $extra_comp++;
   firep('extra comp because same party!');
 }
 
 // Same clan?  Another bonus to comp.
 if ($game_user->fkey_clans_id &&
-  $game_user->fkey_clans_id == $item->fkey_clans_id) {
+  ($game_user->fkey_clans_id == $item->fkey_clans_id)) {
   $extra_comp++;
   firep('extra comp because same clan!');
 }
@@ -103,10 +106,6 @@ if (substr($message, 0, 3) == 'XXX') {
   $message = '';
   game_competency_gain($game_user, 'uncouth');
 }
-
-$item = game_fetch_user_by_id($phone_id_to_check);
-$location = $item->location;
-$points = $item->points + 0;
 
 $sql = 'select count(id) as ranking from event_points
   where points > %d;';
@@ -262,12 +261,10 @@ $clan_icon_html
 <div class="value">$clan_link</div><br>
 EOF;
 
-
 $details_referral_code = <<< EOF
 <div class="heading">Referral Code:</div>
 <div class="value">$item->referral_code</div><br>
 EOF;
-
 
 $exp = number_format($item->experience);
 $details_level = <<< EOF
@@ -276,7 +273,6 @@ $details_level = <<< EOF
 <div class="heading">$experience:</div>
 <div class="value">$exp</div><br>
 EOF;
-
 
 $sql = 'SELECT
   SUM( staff.extra_votes * staff_ownership.quantity ) AS extra_votes,
@@ -355,7 +351,6 @@ $details_vote_stats = <<< EOF
 <div class="heading">Extra Def. Votes:</div>
 <div class="value">$extra_defending_votes</div><br>
 EOF;
-
 
 // Debates.
 if ($item->debates_won >= $item->level * 100) {
@@ -464,9 +459,7 @@ if ($debate == 'Box') {
 <div class="heading">{$debate_tab} Weight:</div>
 <div class="value">$boxing_weight</div><br>
 EOF;
-
 }
-
 
 // FIXME: Valentine's day massacre.
 if (FALSE && $comp_show_level) {
@@ -479,7 +472,6 @@ if (FALSE && $comp_show_level) {
 <div class="value">$event_status</div><br>-->
 </span>
 EOF;
-
 }
 
 $details_residence = <<< EOF
@@ -499,7 +491,6 @@ else {
   $details_approval = '';
 }
 
-
 if ($item->skill_points == 0) {
   $skill_button = '<div class="action not-yet">Can\'t increase skills</div>';
 }
@@ -516,7 +507,6 @@ $details_luck_expenses_skills = <<< EOF
 <div class="heading">Skill Points:</div>
 <div class="value">$item->skill_points</div>$skill_button<br>
 EOF;
-
 
 if (strlen($item->meta)) {
   $details_meta = <<< EOF
@@ -535,7 +525,6 @@ $details_last_access = <<< EOF
 EOF;
 
 $details_end = '</div>';
-
 
 // Messages.
 $block_this_user = '<div class="block-user"><a href="/' . $game .
