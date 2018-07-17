@@ -509,6 +509,15 @@ else {
       $sql2_limit = $game_user->debates_won;
       break;
 
+    case 'debate_ratio':
+      $subtitle = $debate . 'win/lose ratio';
+      $sql .= '
+        ORDER BY (users.debates_won * 100 / users.debates_lost) DESC
+      ';
+      $sql2_what = '(users.debates_won * 100 / users.debates_lost)';
+      $sql2_limit = ($game_user->debates_won * 100 / $game_user->debates_lost);
+      break;
+
     case 'initiative':
       break;
 
@@ -528,7 +537,7 @@ else {
       break;
 
     case 'cash':
-      $subtitle = 'Money on hand';
+      $subtitle = 'Cash on hand';
       $sql .= '
         ORDER BY users.money DESC
       ';
@@ -557,12 +566,13 @@ else {
   $game_rank = db_fetch_object($result);
   $game_rank = $game_rank->count + 1;
 
-  $count = max($game_rank - 5, 0);
-  $result = db_query($sql . ' LIMIT %d, 9;', $count);
-  while ($item = db_fetch_object($result)) {
-    $data[++$count] = $item;
+  if ($show_what != 'income' && $show_what != 'cash') {
+    $count = max($game_rank - 5, 0);
+    $result = db_query($sql . ' LIMIT %d, 9;', $count);
+    while ($item = db_fetch_object($result)) {
+      $data[++$count] = $item;
+    }
   }
-
 }
 
 $where = [
@@ -575,11 +585,12 @@ $where = [
 $what = [
   'experience' => $experience . ' (Free)',
   'debates' => $debate . 's won (1 Action)',
+  'debate_ratio' => $debate . 's win/lose ratio (1 Action)',
   'initiative' => $initiative . ' (2 Actions)',
   'endurance' => $endurance . ' (2 Actions)',
   'elocution' => $elocution . ' (2 Actions)',
   'income' => $land . ' (3 Actions)',
-  'cash' => 'Cash (3 Actions)',
+  'cash' => 'Cash on Hand (3 Actions)',
   'max_energy' => 'Max ' . $game_text['energy'] . ' (3 Actions)',
   'max_actions' => 'Max Actions (3 Actions)',
   'init_aides' => 'Init Aides (5 Actions)',
@@ -722,6 +733,11 @@ firep($item, 'rank ' . $rank);
 
     case 'debates':
       $data_point = number_format($item->debates_won) . " ${debate}s&nbsp;won";
+      break;
+
+    case 'debate_ratio':
+      $data_point = sprintf('%2.02f%%', $item->debates_won * 100 / $item->debates_lost) .
+        " ${debate} win/lose ratio";
       break;
 
     case 'initiative':

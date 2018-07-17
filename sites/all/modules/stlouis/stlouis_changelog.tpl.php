@@ -34,7 +34,7 @@ db_set_active('default');
       Level 119
     </li>
     <li>
-      Top 20 for Debates, Income, and Money are active
+      Top 20 for Debates, Debate win/loss ratio, Income, and Cash on hand are active
     </li>
   </ul>
 
