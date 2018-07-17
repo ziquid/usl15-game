@@ -719,7 +719,7 @@ function game_ai_have_num_players($num_players) {
  * Create a new AI player.
  */
 function game_ai_create_new_player() {
-  global $game, $base_url;
+  global $game, $base_url, $ai_output;
 
   while (TRUE) {
     $num = mt_rand(0, 99999);
@@ -738,7 +738,7 @@ function game_ai_create_new_player() {
 
   $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-  $response = game_ai_web_request($id_to_check, 'home');
+//  $response = game_ai_web_request($id_to_check, 'home');
   game_ai_out($response);
 
   game_ai_out('updating record to make this a ToxiCorp Employee');
@@ -746,6 +746,7 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
+  mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);
 }
 
 function _ai_have_num_type_level_min_max_players($num_players, $type,
