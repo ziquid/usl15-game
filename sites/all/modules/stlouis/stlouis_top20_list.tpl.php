@@ -11,7 +11,6 @@
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
 $show_where = check_plain($_GET['where']);
 $show_what = check_plain($_GET['what']);
 
@@ -588,8 +587,37 @@ $what = [
   'eloc_aides' => 'Eloc Aides (5 Actions)',
 ];
 
+$total_cost = 0;
+$where_title = $where[$show_where];
+$what_title = $what[$show_what];
+$where_matches = $what_matches = [];
+
+preg_match('/\(([0-9]) Action/', $where_title, $where_matches);
+preg_match('/\(([0-9]) Action/', $what_title, $what_matches);
+
+if (array_key_exists(1, $where_matches)) {
+  $total_cost += (int) $where_matches[1];
+}
+if (array_key_exists(1, $what_matches)) {
+  $total_cost += (int) $what_matches[1];
+}
+
+$actions_paid = game_action_use($game_user, $total_cost);
+if (!$actions_paid) {
+  $data = [];
+}
+
 // ------ VIEW ------
+$fetch_header($game_user);
 game_show_elections_menu($game_user);
+
+if (!$actions_paid) {
+  print '<div class="land-failed">' . t('Out of Action!') .
+    '</div><div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+    $arg2 . '/action?destination=/' . $game . '/top20/' . $arg2 .
+    '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+}
 
 echo <<< EOF
 <form action="/$game/top20/$arg2">
@@ -612,7 +640,9 @@ EOF;
 
 foreach ($what as $what_name => $what_title) {
   $what_selected = ($what_name == $show_what) ? 'selected' : '';
-  $disabled = ($what_name == 'experience' || $game_user->meta == 'admin') ? '' : 'disabled';
+  $disabled = ($what_name == 'experience' || $what_name == 'debates' ||
+    $what_name == 'income' || $what_name == 'cash' ||
+    $game_user->meta == 'admin') ? '' : 'disabled';
   echo "<option value=\"$what_name\" $what_selected $disabled>$what_title</option>";
 }
 
@@ -621,6 +651,7 @@ echo <<< EOF
     <input class="land-buy-button" type="submit" Value="Go"/>
   </div>
 </form>
+<div class="subsubtitle">(Total cost: $total_cost Action(s))</div>
 <div class="subsubtitle">(Your rank: $game_rank)</div>
 <div class="elections-header">
 <div class="election-details">

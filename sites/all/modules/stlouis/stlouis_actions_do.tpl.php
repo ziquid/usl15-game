@@ -1,19 +1,12 @@
 <?php
 
-  global $game, $phone_id, $action;
+global $game, $phone_id, $action;
+include drupal_get_path('module', $game) . '/game_defs.inc';
+include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
+include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
+$game_user = $fetch_user();
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
-  $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  include drupal_get_path('module', $game) . '/' . $game .
-    '_actions.inc';
-  include drupal_get_path('module', $game) . '/' . $game .
-    '_actions_do.inc';
-  $arg2 = check_plain(arg(2));
-
-  if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
 
     $fetch_header($game_user);
 
@@ -23,9 +16,8 @@
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
 
-  db_set_active('default');
-  return;
-
+    db_set_active('default');
+    return;
   }
 
   $data = actionlist();
@@ -65,7 +57,6 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   if (($_GET['target'] == 0) && ($action->target != 'none')) {
@@ -79,7 +70,6 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   $sql = 'SELECT username, phone_id, elected_positions.name as ep_name,

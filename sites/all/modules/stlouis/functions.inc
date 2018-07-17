@@ -2946,14 +2946,25 @@ function NO_election_won($game_user, $id) {
   return TRUE;
 }
 
+/**
+ * Debit (use) an amount of action from (by) the user.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $quantity
+ *   The quantity of action to debit.
+ *
+ * @return bool
+ *   Whether the action(s) could be debited from the game user.
+ */
 function game_action_use(&$game_user, $quantity = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if ($game_user->actions < $quantity) {
-    return FALSE;
-  }
   if ($quantity < 1) {
+    return TRUE;
+  }
+  if ($game_user->actions < $quantity) {
     return FALSE;
   }
 
