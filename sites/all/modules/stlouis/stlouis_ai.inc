@@ -746,7 +746,8 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
-  mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);
+//  mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);
+  slack_send_message($ai_output);
 }
 
 function _ai_have_num_type_level_min_max_players($num_players, $type,
@@ -1777,6 +1778,8 @@ function game_ai_fetch_user($ai_id) {
     $ai_user = db_fetch_object($result);
 
     if ($ai_user->skill_points > 0) {
+      game_ai_out('bot has ' . $ai_user->skill_points . 'skill points (count ' .
+      $count . '), allocating!')
       game_ai_do('allocate skill points', $ai_id);
     }
 
