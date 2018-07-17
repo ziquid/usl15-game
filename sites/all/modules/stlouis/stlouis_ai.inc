@@ -1779,7 +1779,7 @@ function game_ai_fetch_user($ai_id) {
 
     if ($ai_user->skill_points > 0) {
       game_ai_out('bot has ' . $ai_user->skill_points . 'skill points (count ' .
-      $count . '), allocating!')
+      $count . '), allocating!');
       game_ai_do('allocate skill points', $ai_id);
     }
 
