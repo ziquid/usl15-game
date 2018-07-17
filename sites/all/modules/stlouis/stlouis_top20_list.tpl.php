@@ -652,7 +652,7 @@ EOF;
 foreach ($what as $what_name => $what_title) {
   $what_selected = ($what_name == $show_what) ? 'selected' : '';
   $disabled = ($what_name == 'experience' || $what_name == 'debates' ||
-    $what_name == 'income' || $what_name == 'cash' ||
+    $what_name == 'debate_ratio' || $what_name == 'income' || $what_name == 'cash' ||
     $game_user->meta == 'admin') ? '' : 'disabled';
   echo "<option value=\"$what_name\" $what_selected $disabled>$what_title</option>";
 }
