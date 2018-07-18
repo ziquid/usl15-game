@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_clan_announcements.tpl.php
+ * Stlouis clan announcements page
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';

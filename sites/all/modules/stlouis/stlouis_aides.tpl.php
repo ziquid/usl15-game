@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_aides.tpl.php
+ * Stlouis aides
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 //  global $mobi, $api_theme;
   global $game, $phone_id;
 
