@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_top_aldermen_list.tpl.php
+ * Stlouis top aldermen list
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();

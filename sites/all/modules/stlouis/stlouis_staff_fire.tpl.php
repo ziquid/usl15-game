@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_staff_fire.tpl.php
+ * Stlouis staff fire
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 
 // ------ CONTROLLER ------

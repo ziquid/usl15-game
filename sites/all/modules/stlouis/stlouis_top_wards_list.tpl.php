@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_top_wards_list.tpl.php
+ * Stlouis top wards list
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
   
   $fetch_user = '_' . arg(0) . '_fetch_user';

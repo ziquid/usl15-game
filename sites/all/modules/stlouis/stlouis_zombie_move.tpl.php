@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stloiuis_zombie_move.tpl,php
+ * Stlouis zombie move page
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
