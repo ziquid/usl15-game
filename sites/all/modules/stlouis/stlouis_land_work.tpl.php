@@ -4,8 +4,8 @@
  * @file stlouis_land_work.tpl.php
  * Template for working a job.
  *
- * Synced with CG: no
- * Synced with 2114: no
+ * Synced with CG: N/A
+ * Synced with 2114: N/A
  */
 
 global $game, $phone_id;
