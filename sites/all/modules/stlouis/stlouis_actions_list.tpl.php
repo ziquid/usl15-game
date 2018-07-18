@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_actions_list.tpl.php
+ * List of actions
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';

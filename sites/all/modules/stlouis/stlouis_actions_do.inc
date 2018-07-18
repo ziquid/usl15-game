@@ -3,6 +3,9 @@
 /**
  * @file stlouis_actions_do.inc
  * Includes for special functions.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
  */
 
 function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can_do_again) {

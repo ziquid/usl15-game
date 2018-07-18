@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_ai.inc
+ * Stlouis ai
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 define('CONSERVE_ACTIONS', 1);
 define('CONSERVE_MONEY', 2);
 
