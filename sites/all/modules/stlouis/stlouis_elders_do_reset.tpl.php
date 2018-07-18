@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_elders_do_reset.tpl.php
+ * Stlouis elders do reset
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
