@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_equipment_list.tpl.php
+ * Stlouis equipment list
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 
 // ------ CONTROLLER ------
