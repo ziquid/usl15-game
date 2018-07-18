@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_google_checkout.tpl.php
+ * Stlouis google checkout
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
