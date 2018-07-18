@@ -1,27 +1,12 @@
 <?php
 
-/**
- * @file stlouis_actions_do.tpl.php
- * Stlouis actions do
- *
- * Synced with CG: no
- * Synced with 2114: no
- */
+global $game, $phone_id, $action;
+include drupal_get_path('module', $game) . '/game_defs.inc';
+include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
+include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
+$game_user = $fetch_user();
 
-  global $game, $phone_id, $action;
-
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
-  $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  include drupal_get_path('module', $game) . '/' . $game .
-    '_actions.inc';
-  include drupal_get_path('module', $game) . '/' . $game .
-    '_actions_do.inc';
-  $arg2 = check_plain(arg(2));
-
-  if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
 
     $fetch_header($game_user);
 
@@ -31,9 +16,8 @@
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
 
-  db_set_active('default');
-  return;
-
+    db_set_active('default');
+    return;
   }
 
   $data = actionlist();
@@ -73,7 +57,6 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   if (($_GET['target'] == 0) && ($action->target != 'none')) {
@@ -87,7 +70,6 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
 
   $sql = 'SELECT username, phone_id, elected_positions.name as ep_name,
@@ -147,12 +129,15 @@ EOF;
       ' (1&nbsp;Luck)</a></div></div>';
   }
 
-  $action_function = '_' . $game . '_action_' .
+  $action_function = $game . '_action_' .
     strtolower(str_replace(
-      array(' ', '%', "'", '.', '(', ')'),
-      array('_', '', '', '', '', ''),
-      $action->name)) .
-    '_function';
+      [' ', '%', "'", '.', '(', ')'],
+      ['_', '', '', '', '', ''],
+      $action->name));
+
+  if (!function_exists($action_function)) {
+    $action_function = '_' . $action_function . '_function';
+  }
 
   if ($action_succeeded && function_exists($action_function)) {
     $action_succeeded = $action_function($outcome_reason, $target, $can_do_again, $action);
@@ -161,9 +146,11 @@ EOF;
 if ($action_succeeded) {
 
   // Special case for investigate someone.
-  if ($action_function == '_stlouis_action_investigate_a_public_official_function'
-    || $action_function == '_stlouis_action_investigate_a_clan_member_function') {
-    $show_all = '?show_all=yes';
+  if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
+    $show_all = '?comp_show_level=curious';
+  }
+  else if ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
+    $show_all = '?comp_show_level=yes';
   }
   else {
     $show_all = '';

@@ -11,7 +11,6 @@
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
 $show_where = check_plain($_GET['where']);
 $show_what = check_plain($_GET['what']);
 
@@ -510,6 +509,15 @@ else {
       $sql2_limit = $game_user->debates_won;
       break;
 
+    case 'debate_ratio':
+      $subtitle = $debate . 'win/lose ratio';
+      $sql .= '
+        ORDER BY (users.debates_won * 100 / users.debates_lost) DESC
+      ';
+      $sql2_what = '(users.debates_won * 100 / users.debates_lost)';
+      $sql2_limit = ($game_user->debates_won * 100 / $game_user->debates_lost);
+      break;
+
     case 'initiative':
       break;
 
@@ -529,7 +537,7 @@ else {
       break;
 
     case 'cash':
-      $subtitle = 'Money on hand';
+      $subtitle = 'Cash on hand';
       $sql .= '
         ORDER BY users.money DESC
       ';
@@ -558,12 +566,13 @@ else {
   $game_rank = db_fetch_object($result);
   $game_rank = $game_rank->count + 1;
 
-  $count = max($game_rank - 5, 0);
-  $result = db_query($sql . ' LIMIT %d, 9;', $count);
-  while ($item = db_fetch_object($result)) {
-    $data[++$count] = $item;
+  if ($show_what != 'income' && $show_what != 'cash') {
+    $count = max($game_rank - 5, 0);
+    $result = db_query($sql . ' LIMIT %d, 9;', $count);
+    while ($item = db_fetch_object($result)) {
+      $data[++$count] = $item;
+    }
   }
-
 }
 
 $where = [
@@ -576,11 +585,12 @@ $where = [
 $what = [
   'experience' => $experience . ' (Free)',
   'debates' => $debate . 's won (1 Action)',
+  'debate_ratio' => $debate . 's win/lose ratio (1 Action)',
   'initiative' => $initiative . ' (2 Actions)',
   'endurance' => $endurance . ' (2 Actions)',
   'elocution' => $elocution . ' (2 Actions)',
   'income' => $land . ' (3 Actions)',
-  'cash' => 'Cash (3 Actions)',
+  'cash' => 'Cash on Hand (3 Actions)',
   'max_energy' => 'Max ' . $game_text['energy'] . ' (3 Actions)',
   'max_actions' => 'Max Actions (3 Actions)',
   'init_aides' => 'Init Aides (5 Actions)',
@@ -588,8 +598,37 @@ $what = [
   'eloc_aides' => 'Eloc Aides (5 Actions)',
 ];
 
+$total_cost = 0;
+$where_title = $where[$show_where];
+$what_title = $what[$show_what];
+$where_matches = $what_matches = [];
+
+preg_match('/\(([0-9]) Action/', $where_title, $where_matches);
+preg_match('/\(([0-9]) Action/', $what_title, $what_matches);
+
+if (array_key_exists(1, $where_matches)) {
+  $total_cost += (int) $where_matches[1];
+}
+if (array_key_exists(1, $what_matches)) {
+  $total_cost += (int) $what_matches[1];
+}
+
+$actions_paid = game_action_use($game_user, $total_cost);
+if (!$actions_paid) {
+  $data = [];
+}
+
 // ------ VIEW ------
+$fetch_header($game_user);
 game_show_elections_menu($game_user);
+
+if (!$actions_paid) {
+  print '<div class="land-failed">' . t('Out of Action!') .
+    '</div><div class="try-an-election-wrapper"><div
+      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+    $arg2 . '/action?destination=/' . $game . '/top20/' . $arg2 .
+    '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+}
 
 echo <<< EOF
 <form action="/$game/top20/$arg2">
@@ -612,7 +651,9 @@ EOF;
 
 foreach ($what as $what_name => $what_title) {
   $what_selected = ($what_name == $show_what) ? 'selected' : '';
-  $disabled = ($what_name == 'experience' || $game_user->meta == 'admin') ? '' : 'disabled';
+  $disabled = ($what_name == 'experience' || $what_name == 'debates' ||
+    $what_name == 'debate_ratio' || $what_name == 'income' || $what_name == 'cash' ||
+    $game_user->meta == 'admin') ? '' : 'disabled';
   echo "<option value=\"$what_name\" $what_selected $disabled>$what_title</option>";
 }
 
@@ -621,6 +662,7 @@ echo <<< EOF
     <input class="land-buy-button" type="submit" Value="Go"/>
   </div>
 </form>
+<div class="subsubtitle">(Total cost: $total_cost Action(s))</div>
 <div class="subsubtitle">(Your rank: $game_rank)</div>
 <div class="elections-header">
 <div class="election-details">
@@ -691,6 +733,11 @@ firep($item, 'rank ' . $rank);
 
     case 'debates':
       $data_point = number_format($item->debates_won) . " ${debate}s&nbsp;won";
+      break;
+
+    case 'debate_ratio':
+      $data_point = sprintf('%2.02f%%', $item->debates_won * 100 / $item->debates_lost) .
+        " ${debate} win/lose ratio";
       break;
 
     case 'initiative':

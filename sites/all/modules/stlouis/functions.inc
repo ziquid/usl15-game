@@ -2946,14 +2946,25 @@ function NO_election_won($game_user, $id) {
   return TRUE;
 }
 
+/**
+ * Debit (use) an amount of action from (by) the user.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $quantity
+ *   The quantity of action to debit.
+ *
+ * @return bool
+ *   Whether the action(s) could be debited from the game user.
+ */
 function game_action_use(&$game_user, $quantity = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if ($game_user->actions < $quantity) {
-    return FALSE;
-  }
   if ($quantity < 1) {
+    return TRUE;
+  }
+  if ($game_user->actions < $quantity) {
     return FALSE;
   }
 
@@ -3050,6 +3061,33 @@ function game_competency_level($game_user, $id) {
   $comp->level_name = game_competency_level_name($comp->level, TRUE);
   $comp->level_name_2 = game_competency_level_name($comp->level);
   return $comp;
+}
+
+/**
+ * Show text if certain comp. level has been obtained.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param string $text
+ *   The text to show.
+ * @param int $level_obtained
+ *   The comp. level obtained.
+ * @param int $level_needed
+ *   The comp. level needed.
+ */
+function game_show_by_level($game_user, $text, $level_obtained, $level_needed = 0) {
+  if ($level_obtained >= $level_needed) {
+    if ($game_user->meta == 'admin') {
+      $level_debug = ' (' . $level_obtained . ':' . $level_needed . ')';
+      if (substr($text, -4) === '<br>') {
+        $text = str_replace('<br>', $level_debug . '<br>', $text);
+      }
+      else {
+        $text .= $level_debug;
+      }
+    }
+    print $text;
+  }
 }
 
 function competency_min_count($level, $comp_level) {

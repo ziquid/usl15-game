@@ -36,7 +36,7 @@ if (substr($arg3, 0, 3) == 'id:') {
 }
 
 if (($phone_id_to_check == $phone_id) ||
-  ($_GET['show_all'] == 'yes') ||
+  ($_GET['comp_show_level'] == 'yes') ||
   $game_user->meta == 'admin') {
   $show_all = TRUE;
 }

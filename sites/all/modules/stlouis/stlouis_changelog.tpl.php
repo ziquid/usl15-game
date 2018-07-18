@@ -27,6 +27,30 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jul 17, 2018
+  </div>
+  <ul>
+    <li>
+      Level 119
+    </li>
+    <li>
+      Top 20 for Debates, Debate win/loss ratio, Income, and Cash on hand are active
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Jul 16, 2018
+  </div>
+  <ul>
+    <li>
+      Level 118
+    </li>
+    <li>
+      Stats shown for players are now based on competencies
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jul 14, 2018
   </div>
   <ul>

@@ -57,9 +57,9 @@ function game_move_ai() {
   //  game_ai_do('have_num_treasurers', 2) && game_ai_do('build');
   //  game_ai_do('have_num_alders', 1) && game_ai_do('build');
 
-  // From player?  send to email.
+  // From player?  send to firep.
   if ($game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
-    mail('joseph@ziquid.com', 'ai output', $ai_output);
+    firep($ai_output, 'ai output');
   }
 
   // From devel?  send to dpm.
@@ -727,7 +727,7 @@ function game_ai_have_num_players($num_players) {
  * Create a new AI player.
  */
 function game_ai_create_new_player() {
-  global $game, $base_url;
+  global $game, $base_url, $ai_output;
 
   while (TRUE) {
     $num = mt_rand(0, 99999);
@@ -746,7 +746,7 @@ function game_ai_create_new_player() {
 
   $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-  $response = game_ai_web_request($id_to_check, 'home');
+//  $response = game_ai_web_request($id_to_check, 'home');
   game_ai_out($response);
 
   game_ai_out('updating record to make this a ToxiCorp Employee');
@@ -754,6 +754,8 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
+//  mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);
+  slack_send_message($ai_output);
 }
 
 function _ai_have_num_type_level_min_max_players($num_players, $type,
@@ -950,24 +952,46 @@ function game_ai_allocate_skill_points($ai_id) {
 
   game_ai_out("$ai_id is an $item->meta; allocating skill points based on that");
 
-  if ($item->elocution < 3) return _ai_allocate_skill_for_elocution($ai_id);
+  if ($item->elocution < 8) {
+    game_ai_out("elocution is less than 8, allocating for elocution!");
+    return _ai_allocate_skill_for_elocution($ai_id);
+  }
 
-  if (($item->actions_max < 20) && ($item->skill_points >= 2))
+  if ($item->energy_max < 300) {
+    game_ai_out("energy is less than 300, allocating for energy!");
+    return _ai_allocate_skill_for_energy($ai_id);
+  }
+
+  if (($item->actions_max < 8) && ($item->skill_points >= 2)) {
+    game_ai_out("actions is less than 8, allocating for action!");
     return _ai_allocate_skill_for_action($ai_id);
+  }
 
+  if ($item->elocution < 16) {
+    game_ai_out("elocution is less than 16, allocating for elocution!");
+    return _ai_allocate_skill_for_elocution($ai_id);
+  }
+
+  if (($item->actions_max < 12) && ($item->skill_points >= 2)) {
+    game_ai_out("actions is less than 12, allocating for action!");
+    return _ai_allocate_skill_for_action($ai_id);
+  }
+
+  // Up to level 25: even split between actions, energy, specialty, and elocution.
   if ($item->level <= 25) {
 
-    // Up to level 25: even split between actions, energy, specialty, and elocution.
     switch(mt_rand(0, 3)) {
 
       case 0:
 
         // Actions.
+        game_ai_out("random is 0, allocating for action!");
         return _ai_allocate_skill_for_action($ai_id);
 
       case 1:
 
         // Energy.
+        game_ai_out("random is 1, allocating for energy!");
         return _ai_allocate_skill_for_energy($ai_id);
 
       case 2:
@@ -976,21 +1000,27 @@ function game_ai_allocate_skill_points($ai_id) {
         switch($item->meta) {
 
           case 'ai_breacher':
+            game_ai_out("random is 2, specialty is breacher, allocating for initiative!");
             return _ai_allocate_skill_for_initiative($ai_id);
 
           case 'ai_holder':
+            game_ai_out("random is 2, specialty is holder, allocating for endurance!");
             return _ai_allocate_skill_for_endurance($ai_id);
 
-          case 'ai_scout':
+          case 'ai_minion':
+            game_ai_out("random is 2, no specialty, allocating for action!");
             return _ai_allocate_skill_for_action($ai_id);
 
+          case 'ai_scout':
+            game_ai_out("random is 2, specialty is scout, allocating for action!");
+            return _ai_allocate_skill_for_action($ai_id);
         }
 
       case 3:
 
         // Elocution.
+        game_ai_out("random is 3, allocating for elocution!");
         return _ai_allocate_skill_for_elocution($ai_id);
-
     }
   }
 
@@ -998,14 +1028,20 @@ function game_ai_allocate_skill_points($ai_id) {
   switch($item->meta) {
 
     case 'ai_breacher':
+      game_ai_out("specialty is breacher, allocating for initiative!");
       return _ai_allocate_skill_for_initiative($ai_id);
 
     case 'ai_holder':
+      game_ai_out("specialty is holder, allocating for endurance!");
       return _ai_allocate_skill_for_endurance($ai_id);
 
-    case 'ai_scout':
+    case 'ai_minion':
+      game_ai_out("no specialty, allocating for action!");
       return _ai_allocate_skill_for_action($ai_id);
 
+    case 'ai_scout':
+      game_ai_out("specialty is scout, allocating for action!");
+      return _ai_allocate_skill_for_action($ai_id);
   }
 }
 
@@ -1658,32 +1694,26 @@ function game_ai_buy_land($ai_id) {
 
   $ai_response = game_ai_web_request($ai_id, 'land');
   $response = array_slice(explode(' ', $ai_response), 1);
-  $can_buy = 0;
+  $can_buy = [];
+  $did_buy = FALSE;
 
   foreach ($response as $res) {
     if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0)) {
-      $can_buy = substr($res, 0, strpos($res, '='));
+      $can_buy[] = substr($res, 0, strpos($res, '='));
     }
   }
 
-  if ($can_buy > 0) {
-    $did_buy = FALSE;
+  foreach (array_reverse($can_buy) as $item) {
     game_ai_out("I have $ai_user->money money, " .
-      "so I can buy item #$can_buy...");
+      "so I can buy item #$item...");
 
-    $ai_response = game_ai_web_request($ai_id, 'land_buy', "$can_buy/10");
-    ($ai_response == 'land-succeeded') && $did_buy = TRUE;
-
-    $ai_response = game_ai_web_request($ai_id, 'land_buy', "$can_buy/5");
-    ($ai_response == 'land-succeeded') && $did_buy = TRUE;
-
-    $ai_response = game_ai_web_request($ai_id, 'land_buy', "$can_buy/1");
-    ($ai_response == 'land-succeeded') && $did_buy = TRUE;
-
-    return $did_buy;
+    $ai_response = game_ai_web_request($ai_id, 'land_buy', "$item/1");
+    if ($ai_response == 'land-succeeded') {
+      $did_buy = TRUE;
+    }
   }
 
-  return FALSE;
+  return $did_buy;
 }
 
 /**
@@ -1784,11 +1814,14 @@ function game_ai_fetch_user($ai_id) {
     $ai_user = db_fetch_object($result);
 
     if ($ai_user->skill_points > 0) {
+      game_ai_out('bot has ' . $ai_user->skill_points . ' skill points (count ' .
+      $count . '), allocating!');
       game_ai_do('allocate skill points', $ai_id);
     }
 
-  } while (($ai_user->skill_points > 0) && $count--);
+  } while ($ai_user->skill_points && --$count);
 
+  $count = 4;
   return $ai_user;
 }
 
