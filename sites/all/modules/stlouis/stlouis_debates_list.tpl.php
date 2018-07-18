@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_debates_list.tpl.php
+ * Stlouis debates list
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();

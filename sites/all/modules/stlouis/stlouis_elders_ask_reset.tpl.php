@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_ask_reset.tpl.php
+ * @file stlouis_elders_ask_reset.tpl.php
  * User asks for reset.
  *
  * Synced with CG: no
