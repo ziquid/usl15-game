@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_clan_list_available.tpl.php
+ * Stlouis available clan list page
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
