@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_actions.inc
+ * Stlouis actions
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 function actionlist() {
 
   global $game, $phone_id;

@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file game_defs.inc
+ * Stlouis game definitions
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 define(EVENT_NONE, 0);
 define(EVENT_DONE, 1);
 define(EVENT_DEBATE, 2);
