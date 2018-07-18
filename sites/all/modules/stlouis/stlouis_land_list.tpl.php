@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_land _list.tpl.php
+ * Stlouis land list
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 
 // ------ CONTROLLER ------
