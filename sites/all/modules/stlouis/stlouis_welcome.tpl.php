@@ -1,5 +1,13 @@
 <?php
 
+/**
+ * @file stlouis_welcome.tpl.php
+ * Stlouis welcome
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ */
+
 global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
