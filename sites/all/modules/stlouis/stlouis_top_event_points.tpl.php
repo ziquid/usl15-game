@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_top_event_pionts.tpl.php
+ * @file stlouis_top_event_points.tpl.php
  * Stlouis top 100 event points
  *
  * Synced with CG: no
