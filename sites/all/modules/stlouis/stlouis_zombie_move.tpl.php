@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stloiuis_zombie_move.tpl,php
+ * @file stlouis_zombie_move.tpl.php
  * Stlouis zombie move page
  *
  * Synced with CG: no
