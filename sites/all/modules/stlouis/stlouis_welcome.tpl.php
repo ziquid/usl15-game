@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_welcome.tpl.php
- * Stlouis welcome
+ * @file Stlouis_welcome.tpl.php
+ * Stlouis welcome.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;

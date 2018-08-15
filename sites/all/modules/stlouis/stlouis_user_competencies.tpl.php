@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @file stlouis_user_competencies.tpl.php
-* Show a user's competencies.
-*
-* Synced with CG: yes
-* Synced with 2114: no
-*/
+ * @file Stlouis_user_competencies.tpl.php
+ * Show a user's competencies.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: no.
+ */
 
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -46,8 +46,7 @@ else {
 
 $item = game_fetch_user_by_id($phone_id_to_check);
 
-//  $party_title = preg_replace('/^The /', '', $item->party_title);
-
+// $party_title = preg_replace('/^The /', '', $item->party_title);.
 if (!empty($item->clan_acronym)) {
   $clan_acronym = "($item->clan_acronym)";
   $clan_link = $item->clan_name;
@@ -137,7 +136,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
       (array) game_competency_level($game_user,
         intval($comp->fkey_competencies_id))
     );
-// firep($comp, 'competency');
+// firep($comp, 'competency');.
     $pip = '';
 
     for ($c = 1; $c <= 5; $c++) {
