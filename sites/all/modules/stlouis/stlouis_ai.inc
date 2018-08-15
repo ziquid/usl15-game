@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_ai.inc
- * Stlouis ai
+ * @file Stlouis_ai.inc
+ * Stlouis ai.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 define('CONSERVE_ACTIONS', 1);
@@ -1237,6 +1237,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
       if (game_ai_do('debate players', $ai_id)) {
         return TRUE;
       }
+      // If I won debates, call it good.
     }
   }
   else {
@@ -1451,10 +1452,8 @@ function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
     $item = db_fetch_object($result);
 
     if (!empty($item)) {
-
       game_ai_out("Hood #$hood->hood_id has free seats, getting ready to move...");
       game_ai_do('move', $ai_id, $hood->hood_id);
-
       return FALSE;
     }
 
@@ -1818,7 +1817,7 @@ function game_ai_debate_players($ai_id, $num_debates = 99) {
   $num_attempts = min($num_debates, $ai_user->actions);
 
   // $debate_wait_time = 1200;
-  // $zombie_debate_wait = 300;
+  //    $zombie_debate_wait = 300;.
   $sql = 'SELECT users.id, users.username
     FROM users
     LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = users.id

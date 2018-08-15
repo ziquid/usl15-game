@@ -12,8 +12,9 @@
 function game_event_poll_jun_01_2018_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_poll_jun_01_2018_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">

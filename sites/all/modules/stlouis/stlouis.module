@@ -1,17 +1,27 @@
 <?php
 
+/**
+ * @file
+ */
+
+/**
+ *
+ */
 function stlouis_help($path, $arg) {
   $output = '';
 
   switch ($path) {
     case "admin/help#stlouis":
-      $output = '<p>'.  t('Back end for <em>Uprising: St. Louis</em> game') .'</p>';
+      $output = '<p>' . t('Back end for <em>Uprising: St. Louis</em> game') . '</p>';
       break;
   }
 
   return $output;
 }
 
+/**
+ *
+ */
 function stlouis_perm() {
   return ['access stlouis content'];
 }
@@ -61,36 +71,36 @@ function stlouis_cron() {
   $sql = 'update elected_officials
     set approval_rating = 100 where approval_rating > 100;';
   db_query($sql);
-/*
+  /*
 
   // < 9AM -- 10 carolers every 15 mins.
   if (date('H') < 9) {
-    $carolers_wanted = 20;
+  $carolers_wanted = 20;
   }
   elseif (date('H') < 17) {
 
-    // < 5PM -- 25 carolers.
-    $carolers_wanted = 35;
+  // < 5PM -- 25 carolers.
+  $carolers_wanted = 35;
   }
   else {
 
-    // >= 5PM -- 50 carolers.
-    $carolers_wanted = 55;
+  // >= 5PM -- 50 carolers.
+  $carolers_wanted = 55;
   }
 
   // Enjoy caroling?
   $sql = 'update neighborhoods
-    set special_int = %d where special_int >= 0;';
+  set special_int = %d where special_int >= 0;';
   $result = db_query($sql, $carolers_wanted);
 
   // The grinch!
   $sql = 'update neighborhoods
-    set special_int = -50
-    where special_int > 0 and xcoor > 0
-    order by rand()
-    limit 20;';
+  set special_int = -50
+  where special_int > 0 and xcoor > 0
+  order by rand()
+  limit 20;';
   $result = db_query($sql);
-*/
+   */
 
   // Zombies!
   $sql = 'select count(id) as count from users
@@ -127,7 +137,7 @@ function stlouis_cron() {
       $levels[] = $level;
     }
 
-    for ($a = 0; $a < count($levels) - 1 ; $a++) {
+    for ($a = 0; $a < count($levels) - 1; $a++) {
       $sql = 'update users set level = %d, elocution = %d
         where experience >= %d and experience < %d
         and meta = "zombie";';
@@ -289,8 +299,8 @@ function stlouis_cron() {
   imagedestroy($map_top);
   imagedestroy($map_bottom);
 
-// Flag day -- give luck to those with flags.
-/*
+  // Flag day -- give luck to those with flags.
+  /*
   unset($data);
   $sql = 'select * from equipment_ownership where fkey_equipment_id = 23;';
   $result = db_query($sql);
@@ -298,15 +308,15 @@ function stlouis_cron() {
 
   foreach ($data as $item) {
 
-    $sql = 'update users set luck = luck + 1 where id = %d;';
-    $result = db_query($sql, $item->fkey_users_id);
+  $sql = 'update users set luck = luck + 1 where id = %d;';
+  $result = db_query($sql, $item->fkey_users_id);
 
-    $sql = 'insert into user_messages set fkey_users_from_id = 177,
-      fkey_users_to_id = %d, message = "Old Glory gives you 1 Luck!";';
-    $result = db_query($sql, $item->fkey_users_id);
+  $sql = 'insert into user_messages set fkey_users_from_id = 177,
+  fkey_users_to_id = %d, message = "Old Glory gives you 1 Luck!";';
+  $result = db_query($sql, $item->fkey_users_id);
 
   }
-*/
+   */
   // Set up includes and init() for event, if any.
   if ($event_type !== EVENT_NONE) {
     $module_path = drupal_get_path('module', $game);
@@ -355,7 +365,7 @@ function stlouis_cron() {
       foreach ($zombie_users as $zombie) {
         $name = game_zombie_name();
         if ($zombie->level < 25) {
-          $zombie->level += 25 + mt_rand(0,50);
+          $zombie->level += 25 + mt_rand(0, 50);
         }
         $sql = 'update users set meta = "zombie", username = "%s", level = %d
           where id = %d;';
@@ -398,43 +408,43 @@ function stlouis_init() {
     // BB Z10.
     if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
 
-        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
+      drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
 
       // Playbook CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
 
       // IPad CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
     }
-    else if (substr(arg(2), 0, 4) == 'nkc ') {
+    elseif (substr(arg(2), 0, 4) == 'nkc ') {
 
       // Nook css.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
     }
-    else if (substr(arg(2), 0, 8) == 'facebook') {
+    elseif (substr(arg(2), 0, 8) == 'facebook') {
 
       // Facebook.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
 
       if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=853') !== FALSE) {
 
-        // 853dip width display
+        // 853dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width853.css');
 
       }
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
 
-        // 800dip width display
+        // 800dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width800.css');
 
       }
-      else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
+      elseif ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
 
         // 768dip width display.
         || (substr(arg(2), 0, 3) === 'ms=')) {
@@ -442,54 +452,50 @@ function stlouis_init() {
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width768.css');
 
       }
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
 
         // 600dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width600.css');
 
       }
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
 
         // 533dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width533.css');
 
-      } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
+      }
+      elseif ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
         (stripos($_SERVER['HTTP_USER_AGENT'], 'width=+480') !== FALSE)) {
 
         // 480dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
       }
 
-
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
 
         // 414dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width414.css');
       }
 
-
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
 
         // 411dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width411.css');
       }
 
-
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
 
         // 400dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width400.css');
       }
 
-
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=375') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=375') !== FALSE) {
 
         // 375dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width375.css');
       }
 
-
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
 
         // 360dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width360.css');
@@ -501,555 +507,557 @@ function stlouis_init() {
 
 }
 
-
+/**
+ *
+ */
 function _stlouis_filter_profanity($message) {
 
   $profanity = array(
-	'4r5e',
-	'5h1t',
-	'5hit',
-	'a_s_s',
-	'a55',
-	'anal',
-	'anus',
-	'ar5e',
-	'arrse',
-	'arse',
-	'a§§',
-	'ass',
-	'asses',
-	'assfucker',
-	'ass-fucker',
-	'assfukka',
-	'asshole',
-	'assholes',
-	'asskisser',
-	'asswhole',
-	'asswipe',
-        'asz',
-        'azz',
-	'beotch',
-	'b!tch',
-	'b00bs',
-	'b17ch',
-	'b1tch',
-	'ballbag',
-	'ballsack',
-	'bastard',
-	'beastial',
-	'beastiality',
-	'beastility',
-	'beaver',
-	'bellend',
-	'belly whacker',
-	'bestial',
-	'bestiality',
-	'beotch',
-	'b!tch',
-	'bytch',
-	'bi+ch',
-	'biatch',
-	'bitch',
-	'bitcher',
-	'bitchers',
-	'bitches',
-	'bitchin',
-	'bitching',
-	'bloody',
-	'blow job',
-	'blowjob',
-	'blowjobs',
-	'boiolas',
-	'bollock',
-	'bollok',
-	'bonehead',
-	'boner',
-	'boob',
-	'boobs',
-	'booobs',
-	'boooobs',
-	'booooobs',
-	'booooooobs',
-	'browntown',
-	'btch',
-	'buceta',
-	'bucket cunt',
-//	'bugger',
-	'bullshit',
-	'bung hole',
-	'butch',
-	'butt breath',
-	'butt hair',
-	'buttface',
-	'buttfuck',
-	'buttfucker',
-	'butthead',
-	'butthole',
-	'buttmuch',
-	'buttpicker',
-	'buttplug',
-	'c0ck',
-	'c0cksucker',
-	'carpet muncher',
-	'cawk',
-	'chink',
-	'cipa',
-	'circle jerk',
-	'cl1t',
-	'clam',
-	'clit',
-	'clitoris',
-	'clits',
-	'cnut',
-	'cobia',
-	'cock',
-	'cockface',
-	'cockhead',
-	'cockmunch',
-	'cockmuncher',
-	'cocks',
-	'cocksuck',
-	'cocksucked',
-	'cocksucker',
-	'cock-sucker',
-	'cocksucking',
-	'cocksucks',
-	'cocksuka',
-	'cok',
-	'cokmuncher',
-	'coksucka',
-	'coon',
-	'cooter',
-	'cox',
-	'crap',
-	'cum',
-	'cummer',
-	'cumming',
-	'cums',
-	'cumshot',
-	'cunilingus',
-	'cunillingus',
-	'cunnilingus',
-	'cunnilingus',
-	'cunt',
-	'cuntlick',
-	'cuntlicker',
-	'cuntlicking',
-	'cunts',
-	'cyalis',
-	'cyberfuc',
-	'cyberfuck',
-	'cyberfucked',
-	'cyberfucker',
-	'cyberfuckers',
-	'cyberfucking',
-	'dammit',
-	'd1ck',
-	'damn',
-	'damn',
-	'dick',
-	'dickk',
-	'dickhead',
-	'dike',
-	'dildo',
-	'dildos',
-	'dink',
-	'dinks',
-	'dipshit',
-	'dirsa',
-	'dlck',
-	'dog-fucker',
-	'doggin',
-	'dogging',
-	'dong',
-	'donkeyribber',
-	'doosh',
-	'douche bag',
-	'duche',
-	'dumbass',
-	'dumbfuck',
-	'dyke',
-	'dyke',
-	'ejaculate',
-	'ejaculated',
-	'ejaculates',
-	'ejaculating',
-	'ejaculatings',
-	'ejaculation',
-	'ejakulate',
-	'fuc k',
-	'fu c k',
-	'fukin',
-	'fck',
-	'fvk',
-	'f u c k',
-	'f u c k e r',
-	'f_u_c_k',
-	'f4nny',
-	'fag',
-	'fagget',
-	'fagging',
-	'faggit',
-	'faggitt',
-	'faggot',
-	'faggs',
-	'fagot',
-	'fagot',
-	'fagots',
-	'fags',
-	'fanny',
-	'fannyflaps',
-	'fannyfucker',
-	'fanyy',
-	'fart',
-	'farted',
-	'farting',
-	'fartings',
-	'farts',
-	'farty',
-	'fatass',
-	'fatso',
-	'fcuk',
-	'fcuker',
-	'fcuking',
-	'feck',
-	'fecker',
-	'felatio',
-	'felching',
-	'fellate',
-	'fellatio',
-	'fellatio',
-	'fingerfuck',
-	'fingerfucked',
-	'fingerfucker',
-	'fingerfuckers',
-	'fingerfucking',
-	'fingerfucks',
-	'fistfuck',
-	'fistfucked',
-	'fistfucker',
-	'fistfuckers',
-	'fistfucking',
-	'fistfuckings',
-	'fistfucks',
-	'flange',
-	'fook',
-	'fooker',
-	'fuck',
-	'fucka',
-	'fucked',
-	'fucker',
-	'fuckers',
-	'fuckers',
-	'fuckhead',
-	'fuckheads',
-	'fuckin',
-	'fucking',
-	'fuckings',
-	'fuckingshitmotherfucker',
-	'fuckme',
-	'fuckr',
-	'fucks',
-	'fuckwhit',
-	'fuckwit',
-	'fudge packer',
-	'fudgepacker',
-	'fuggin',
-	'fuk',
-	'fuker',
-	'fukker',
-	'fukkin',
-	'fuks',
-	'fukwhit',
-	'fukwit',
-	'furburger',
-	'fux',
-	'fux0r',
-	'fvck',
-	'gangbang',
-	'gangbanged',
-	'gangbangs',
-	'gaylord',
-	'gaysex',
-	'gaysex',
-	'gazongers',
-	'goatse',
-	'god-dam',
-	'g--dam',
-	'goddamn',
-	'goddamn',
-	'goddamned',
-	'god-damned',
-	'gonads',
-	'gook',
-	'guinne',
-	'hard on',
-	'hardcoresex',
-	'hell',
-	'heshe',
-	'hoar',
-	'hoare',
-	'hoer',
-	'homo',
-	'hooker',
-	'hore',
-	'horniest',
-	'horny',
-	'hotsex',
-	'hussy',
-	'lmao',
-	'lmfao',
-	'jack off',
-	'jackass',
-	'jacking off',
-	'jackoff',
-	'jack-off',
-	'jerk-off',
-	'jism',
-	'jiz',
-	'jiz',
-	'jizm',
-	'jizz',
-	'kawk',
-	'kike',
-	'knobead',
-	'knobed',
-	'knobend',
-	'knobhead',
-	'knobjocky',
-	'knobjokey',
-	'kock',
-	'kondum',
-	'kondums',
-	'kum',
-	'kummer',
-	'kumming',
-	'kums',
-	'kunilingus',
-	'kunilingus',
-	'l3i+ch',
-	'l3itch',
-	'labia',
-	'lesbian',
-	'lesbo',
-	'm0f0',
-	'm0fo',
-	'm45terbate',
-	'ma5terb8',
-	'ma5terbate',
-	'masterb8',
-	'masterbat*',
-	'masterbat3',
-	'masterbate',
-	'master-bate',
-	'masterbation',
-	'masterbations',
-	'masturbate',
-	'mof0',
-	'mofo',
-	'mo-fo',
-	'mothafuck',
-	'mothafucka',
-	'mothafuckas',
-	'mothafuckaz',
-	'mothafucked',
-	'mothafucker',
-	'mothafuckers',
-	'mothafuckin',
-	'mothafucking',
-	'mothafuckings',
-	'mothafucks',
-	'mother fucker',
-	'motherfuck',
-	'motherfuck',
-	'motherfucked',
-	'motherfucker',
-	'motherfuckers',
-	'motherfuckin',
-	'motherfuckin',
-	'motherfucking',
-	'motherfuckings',
-	'motherfuckka',
-	'motherfucks',
-	'muff',
-	'mutha',
-	'muthafecker',
-	'muthafuckker',
-	'muther',
-	'mutherfucker',
-	'n1gga',
-	'n1gger',
-	'nazi',
-	'nigg3r',
-	'nigg4h',
-	'nigga',
-	'niggah',
-	'niggas',
-	'niggaz',
-	'nigger',
-	'niggers',
-	'nobhead',
-	'nobjocky',
-	'nobjokey',
-	'numbnuts',
-	'nutsack',
-	'orgasim',
-	'orgasims',
-	'orgasm',
-	'orgasms',
-	'p0rn',
-	'pawn',
-	'pecker',
-	'penis',
-	'penisfucker',
-	'phonesex',
-	'phuck',
-	'phuk',
-	'phuked',
-	'phuking',
-	'phuking',
-	'phukked',
-	'phukking',
-	'phuks',
-	'phuks',
-	'phuq',
-	'phuq',
-	'pigfucker',
-	'pimp',
-	'pimpis',
-	'piss',
-	'pissed',
-	'pisser',
-	'pissers',
-	'pisses',
-	'pissflaps',
-	'pissin',
-	'pissing',
-	'pissoff',
-	'pissrr',
-	'poop',
-	'porn',
-	'porno',
-	'pornography',
-	'pornos',
-	'pron',
-	'pube',
-	'pusse',
-	'pussi',
-	'pussies',
-	'pussies',
-	'pussy',
-	'pussys',
-	'queer',
-	'rectum',
-	'retard',
-	'rimjaw',
-	'rimming',
-	'rape',
-	'shlt',
-	'sh!t',
-	'sh!ts',
-	'slut',
-	's hit',
-	's.o.b.',
-	's_h_i_t',
-	'sadist',
-	'schlong',
-	'screw',
-	'screwing',
-	'scroat',
-	'scrote',
-	'scrotum',
-	'semen',
-	'sex',
-	'sh!+',
-	'sh!t',
-	'sh1t',
-	'shag',
-	'shagger',
-	'shaggin',
-	'shagging',
-	'sheister',
-	'shemale',
-	'shi+',
-	'shit',
-	'sh!t',
-	'shitdick',
-	'shite',
-	'shited',
-	'shited',
-	'shitey',
-	'shitfuck',
-	'shitfull',
-	'shitfull',
-	'shithead',
-	'shiting',
-	'shitings',
-	'shits',
-	'shits',
-	'shitted',
-	'shitter',
-	'shitters',
-	'shitting',
-	'shittings',
-	'shitty',
-	'shitty',
-	'shiz',
-	'sht',
-	'shttim',
-	'skank',
-	'slag',
-	'sleaze',
-	'slut',
-	'slut',
-	'sluts',
-	'smartass',
-	'smegma',
-	'smut',
-	'snatch',
-	'son-of-a-bitch',
-	'spac',
-	'spunk',
-	'stupidass',
-	't1tt1e5',
-	't1tties',
-	'teets',
-	'teez',
-	'testical',
-	'testicle',
-	'tit',
-	'titfuck',
-	'tits',
-	'titt',
-	'tittie5',
-	'tittiefucker',
-	'titties',
-	'tittyfuck',
-	'tittywank',
-	'titwank',
-	'tosser',
-	'turd',
-	'tw4t',
-	'twat',
-	'twathead',
-	'twatty',
-	'twunt',
-	'twunter',
-	'tampon',
-	'v14gra',
-	'v1gra',
-	'vagina',
-	'viagra',
-	'vulva',
-	'w00se',
-	'wang',
-	'wank',
-	'wanker',
-	'wanky',
-	'wetback',
-	'whoar',
-	'whore',
-	);
+    '4r5e',
+    '5h1t',
+    '5hit',
+    'a_s_s',
+    'a55',
+    'anal',
+    'anus',
+    'ar5e',
+    'arrse',
+    'arse',
+    'a§§',
+    'ass',
+    'asses',
+    'assfucker',
+    'ass-fucker',
+    'assfukka',
+    'asshole',
+    'assholes',
+    'asskisser',
+    'asswhole',
+    'asswipe',
+    'asz',
+    'azz',
+    'beotch',
+    'b!tch',
+    'b00bs',
+    'b17ch',
+    'b1tch',
+    'ballbag',
+    'ballsack',
+    'bastard',
+    'beastial',
+    'beastiality',
+    'beastility',
+    'beaver',
+    'bellend',
+    'belly whacker',
+    'bestial',
+    'bestiality',
+    'beotch',
+    'b!tch',
+    'bytch',
+    'bi+ch',
+    'biatch',
+    'bitch',
+    'bitcher',
+    'bitchers',
+    'bitches',
+    'bitchin',
+    'bitching',
+    'bloody',
+    'blow job',
+    'blowjob',
+    'blowjobs',
+    'boiolas',
+    'bollock',
+    'bollok',
+    'bonehead',
+    'boner',
+    'boob',
+    'boobs',
+    'booobs',
+    'boooobs',
+    'booooobs',
+    'booooooobs',
+    'browntown',
+    'btch',
+    'buceta',
+    'bucket cunt',
+  // 'bugger',.
+    'bullshit',
+    'bung hole',
+    'butch',
+    'butt breath',
+    'butt hair',
+    'buttface',
+    'buttfuck',
+    'buttfucker',
+    'butthead',
+    'butthole',
+    'buttmuch',
+    'buttpicker',
+    'buttplug',
+    'c0ck',
+    'c0cksucker',
+    'carpet muncher',
+    'cawk',
+    'chink',
+    'cipa',
+    'circle jerk',
+    'cl1t',
+    'clam',
+    'clit',
+    'clitoris',
+    'clits',
+    'cnut',
+    'cobia',
+    'cock',
+    'cockface',
+    'cockhead',
+    'cockmunch',
+    'cockmuncher',
+    'cocks',
+    'cocksuck',
+    'cocksucked',
+    'cocksucker',
+    'cock-sucker',
+    'cocksucking',
+    'cocksucks',
+    'cocksuka',
+    'cok',
+    'cokmuncher',
+    'coksucka',
+    'coon',
+    'cooter',
+    'cox',
+    'crap',
+    'cum',
+    'cummer',
+    'cumming',
+    'cums',
+    'cumshot',
+    'cunilingus',
+    'cunillingus',
+    'cunnilingus',
+    'cunnilingus',
+    'cunt',
+    'cuntlick',
+    'cuntlicker',
+    'cuntlicking',
+    'cunts',
+    'cyalis',
+    'cyberfuc',
+    'cyberfuck',
+    'cyberfucked',
+    'cyberfucker',
+    'cyberfuckers',
+    'cyberfucking',
+    'dammit',
+    'd1ck',
+    'damn',
+    'damn',
+    'dick',
+    'dickk',
+    'dickhead',
+    'dike',
+    'dildo',
+    'dildos',
+    'dink',
+    'dinks',
+    'dipshit',
+    'dirsa',
+    'dlck',
+    'dog-fucker',
+    'doggin',
+    'dogging',
+    'dong',
+    'donkeyribber',
+    'doosh',
+    'douche bag',
+    'duche',
+    'dumbass',
+    'dumbfuck',
+    'dyke',
+    'dyke',
+    'ejaculate',
+    'ejaculated',
+    'ejaculates',
+    'ejaculating',
+    'ejaculatings',
+    'ejaculation',
+    'ejakulate',
+    'fuc k',
+    'fu c k',
+    'fukin',
+    'fck',
+    'fvk',
+    'f u c k',
+    'f u c k e r',
+    'f_u_c_k',
+    'f4nny',
+    'fag',
+    'fagget',
+    'fagging',
+    'faggit',
+    'faggitt',
+    'faggot',
+    'faggs',
+    'fagot',
+    'fagot',
+    'fagots',
+    'fags',
+    'fanny',
+    'fannyflaps',
+    'fannyfucker',
+    'fanyy',
+    'fart',
+    'farted',
+    'farting',
+    'fartings',
+    'farts',
+    'farty',
+    'fatass',
+    'fatso',
+    'fcuk',
+    'fcuker',
+    'fcuking',
+    'feck',
+    'fecker',
+    'felatio',
+    'felching',
+    'fellate',
+    'fellatio',
+    'fellatio',
+    'fingerfuck',
+    'fingerfucked',
+    'fingerfucker',
+    'fingerfuckers',
+    'fingerfucking',
+    'fingerfucks',
+    'fistfuck',
+    'fistfucked',
+    'fistfucker',
+    'fistfuckers',
+    'fistfucking',
+    'fistfuckings',
+    'fistfucks',
+    'flange',
+    'fook',
+    'fooker',
+    'fuck',
+    'fucka',
+    'fucked',
+    'fucker',
+    'fuckers',
+    'fuckers',
+    'fuckhead',
+    'fuckheads',
+    'fuckin',
+    'fucking',
+    'fuckings',
+    'fuckingshitmotherfucker',
+    'fuckme',
+    'fuckr',
+    'fucks',
+    'fuckwhit',
+    'fuckwit',
+    'fudge packer',
+    'fudgepacker',
+    'fuggin',
+    'fuk',
+    'fuker',
+    'fukker',
+    'fukkin',
+    'fuks',
+    'fukwhit',
+    'fukwit',
+    'furburger',
+    'fux',
+    'fux0r',
+    'fvck',
+    'gangbang',
+    'gangbanged',
+    'gangbangs',
+    'gaylord',
+    'gaysex',
+    'gaysex',
+    'gazongers',
+    'goatse',
+    'god-dam',
+    'g--dam',
+    'goddamn',
+    'goddamn',
+    'goddamned',
+    'god-damned',
+    'gonads',
+    'gook',
+    'guinne',
+    'hard on',
+    'hardcoresex',
+    'hell',
+    'heshe',
+    'hoar',
+    'hoare',
+    'hoer',
+    'homo',
+    'hooker',
+    'hore',
+    'horniest',
+    'horny',
+    'hotsex',
+    'hussy',
+    'lmao',
+    'lmfao',
+    'jack off',
+    'jackass',
+    'jacking off',
+    'jackoff',
+    'jack-off',
+    'jerk-off',
+    'jism',
+    'jiz',
+    'jiz',
+    'jizm',
+    'jizz',
+    'kawk',
+    'kike',
+    'knobead',
+    'knobed',
+    'knobend',
+    'knobhead',
+    'knobjocky',
+    'knobjokey',
+    'kock',
+    'kondum',
+    'kondums',
+    'kum',
+    'kummer',
+    'kumming',
+    'kums',
+    'kunilingus',
+    'kunilingus',
+    'l3i+ch',
+    'l3itch',
+    'labia',
+    'lesbian',
+    'lesbo',
+    'm0f0',
+    'm0fo',
+    'm45terbate',
+    'ma5terb8',
+    'ma5terbate',
+    'masterb8',
+    'masterbat*',
+    'masterbat3',
+    'masterbate',
+    'master-bate',
+    'masterbation',
+    'masterbations',
+    'masturbate',
+    'mof0',
+    'mofo',
+    'mo-fo',
+    'mothafuck',
+    'mothafucka',
+    'mothafuckas',
+    'mothafuckaz',
+    'mothafucked',
+    'mothafucker',
+    'mothafuckers',
+    'mothafuckin',
+    'mothafucking',
+    'mothafuckings',
+    'mothafucks',
+    'mother fucker',
+    'motherfuck',
+    'motherfuck',
+    'motherfucked',
+    'motherfucker',
+    'motherfuckers',
+    'motherfuckin',
+    'motherfuckin',
+    'motherfucking',
+    'motherfuckings',
+    'motherfuckka',
+    'motherfucks',
+    'muff',
+    'mutha',
+    'muthafecker',
+    'muthafuckker',
+    'muther',
+    'mutherfucker',
+    'n1gga',
+    'n1gger',
+    'nazi',
+    'nigg3r',
+    'nigg4h',
+    'nigga',
+    'niggah',
+    'niggas',
+    'niggaz',
+    'nigger',
+    'niggers',
+    'nobhead',
+    'nobjocky',
+    'nobjokey',
+    'numbnuts',
+    'nutsack',
+    'orgasim',
+    'orgasims',
+    'orgasm',
+    'orgasms',
+    'p0rn',
+    'pawn',
+    'pecker',
+    'penis',
+    'penisfucker',
+    'phonesex',
+    'phuck',
+    'phuk',
+    'phuked',
+    'phuking',
+    'phuking',
+    'phukked',
+    'phukking',
+    'phuks',
+    'phuks',
+    'phuq',
+    'phuq',
+    'pigfucker',
+    'pimp',
+    'pimpis',
+    'piss',
+    'pissed',
+    'pisser',
+    'pissers',
+    'pisses',
+    'pissflaps',
+    'pissin',
+    'pissing',
+    'pissoff',
+    'pissrr',
+    'poop',
+    'porn',
+    'porno',
+    'pornography',
+    'pornos',
+    'pron',
+    'pube',
+    'pusse',
+    'pussi',
+    'pussies',
+    'pussies',
+    'pussy',
+    'pussys',
+    'queer',
+    'rectum',
+    'retard',
+    'rimjaw',
+    'rimming',
+    'rape',
+    'shlt',
+    'sh!t',
+    'sh!ts',
+    'slut',
+    's hit',
+    's.o.b.',
+    's_h_i_t',
+    'sadist',
+    'schlong',
+    'screw',
+    'screwing',
+    'scroat',
+    'scrote',
+    'scrotum',
+    'semen',
+    'sex',
+    'sh!+',
+    'sh!t',
+    'sh1t',
+    'shag',
+    'shagger',
+    'shaggin',
+    'shagging',
+    'sheister',
+    'shemale',
+    'shi+',
+    'shit',
+    'sh!t',
+    'shitdick',
+    'shite',
+    'shited',
+    'shited',
+    'shitey',
+    'shitfuck',
+    'shitfull',
+    'shitfull',
+    'shithead',
+    'shiting',
+    'shitings',
+    'shits',
+    'shits',
+    'shitted',
+    'shitter',
+    'shitters',
+    'shitting',
+    'shittings',
+    'shitty',
+    'shitty',
+    'shiz',
+    'sht',
+    'shttim',
+    'skank',
+    'slag',
+    'sleaze',
+    'slut',
+    'slut',
+    'sluts',
+    'smartass',
+    'smegma',
+    'smut',
+    'snatch',
+    'son-of-a-bitch',
+    'spac',
+    'spunk',
+    'stupidass',
+    't1tt1e5',
+    't1tties',
+    'teets',
+    'teez',
+    'testical',
+    'testicle',
+    'tit',
+    'titfuck',
+    'tits',
+    'titt',
+    'tittie5',
+    'tittiefucker',
+    'titties',
+    'tittyfuck',
+    'tittywank',
+    'titwank',
+    'tosser',
+    'turd',
+    'tw4t',
+    'twat',
+    'twathead',
+    'twatty',
+    'twunt',
+    'twunter',
+    'tampon',
+    'v14gra',
+    'v1gra',
+    'vagina',
+    'viagra',
+    'vulva',
+    'w00se',
+    'wang',
+    'wank',
+    'wanker',
+    'wanky',
+    'wetback',
+    'whoar',
+    'whore',
+  );
 
   $msg = str_replace(
     array('@', '$', "'", '.', '&#039;', '&quot;'),
@@ -1073,34 +1081,35 @@ function _stlouis_filter_profanity($message) {
   return $message;
 }
 
-
+/**
+ *
+ */
 function game_format_date($epoch) {
 
   $time_diff = REQUEST_TIME - $epoch;
-// firep("time difference: $time_diff");
-
+  // firep("time difference: $time_diff");.
   if ($time_diff < 10) {
     return t('A few seconds ago');
   }
-  else if ($time_diff < 60) {
+  elseif ($time_diff < 60) {
     return t('@time seconds ago', array('@time' => $time_diff));
   }
-  else if ($time_diff < 120) {
+  elseif ($time_diff < 120) {
     return t('1 minute ago');
   }
-  else if ($time_diff < 3600) {
+  elseif ($time_diff < 3600) {
     return t('@time minutes ago', array('@time' => floor($time_diff / 60)));
   }
-  else if ($time_diff < 7200) {
+  elseif ($time_diff < 7200) {
     return t('1 hour ago');
   }
-  else if ($time_diff < 86400) {
+  elseif ($time_diff < 86400) {
     return t('@time hours ago', array('@time' => floor($time_diff / 3600)));
   }
-  else if ($time_diff < 172800) {
+  elseif ($time_diff < 172800) {
     return t('A day ago');
   }
-  else if ($time_diff < 1728000) {
+  elseif ($time_diff < 1728000) {
     return t('@time days ago', array('@time' => floor($time_diff / 86400)));
   }
   else {
@@ -1109,19 +1118,25 @@ function game_format_date($epoch) {
 
 }
 
-
+/**
+ *
+ */
 function _stlouis_ordinal($num) {
 
-  // lifted from http://php.net/manual/en/function.number-format.php
-
+  // Lifted from http://php.net/manual/en/function.number-format.php
   // Special case "teenth".
-  if ( ($num / 10) % 10 != 1 ) {
+  if (($num / 10) % 10 != 1) {
 
     // Handle 1st, 2nd, 3rd.
-    switch( $num % 10 ) {
-      case 1: return $num . 'st';
-      case 2: return $num . 'nd';
-      case 3: return $num . 'rd';
+    switch ($num % 10) {
+      case 1:
+        return $num . 'st';
+
+      case 2:
+        return $num . 'nd';
+
+      case 3:
+        return $num . 'rd';
     }
 
   }
@@ -1130,6 +1145,9 @@ function _stlouis_ordinal($num) {
   return $num . 'th';
 }
 
+/**
+ *
+ */
 function _stlouis_scale_coords($scale, $n1, $n2, $n3, $n4) {
 
   // Multiply each $n by $scale and return as a formatted string.
@@ -1139,6 +1157,9 @@ function _stlouis_scale_coords($scale, $n1, $n2, $n3, $n4) {
     ((int) ($n4 * $scale));
 }
 
+/**
+ *
+ */
 function _stlouis_save_user_agent($game_user) {
 
   global $purchasing_luck, $user;
@@ -1146,11 +1167,12 @@ function _stlouis_save_user_agent($game_user) {
   $user_agent = $_SERVER['HTTP_USER_AGENT'];
 
   // Loading luck doesn't count.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
-   // Admin access.
-//  if ($user->roles[4] == 'web game access') return;
-
+  // Admin access.
+  //  if ($user->roles[4] == 'web game access') return;.
   $extra_stuff_pos = stripos($user_agent, '(com.ziquid');
 
   // Remove our added stuff, if present.
@@ -1172,7 +1194,6 @@ function _stlouis_save_user_agent($game_user) {
   else {
 
     // Existing entry.
-
     // New User Agent!
     if ($user_list->value != $user_agent) {
 
@@ -1195,6 +1216,9 @@ function _stlouis_save_user_agent($game_user) {
 
 }
 
+/**
+ *
+ */
 function _stlouis_save_user_IP($game_user) {
 
   // Save the user IP.
@@ -1203,11 +1227,12 @@ function _stlouis_save_user_IP($game_user) {
   $ip_addr = ip_address();
 
   // Loading luck doesn't count.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
   // Admin access.
-//  if ($user->roles[4] == 'web game access') return;
-
+  //  if ($user->roles[4] == 'web game access') return;.
   $last_ip = _stlouis_get_value($game_user->id, 'last_IP', '');
 
   // No entry?  Create one!
@@ -1217,7 +1242,6 @@ function _stlouis_save_user_IP($game_user) {
     return TRUE;
 
   }
-
 
   else {
 
@@ -1232,33 +1256,33 @@ function _stlouis_save_user_IP($game_user) {
       if (empty($game_user->password)) {
 
         _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
-/*
+        /*
         mail('joseph@cheek.com', 'new IP address',
-          'The IP address of passwordless player ' .
-          $game_user->username . ' has just changed from
+        'The IP address of passwordless player ' .
+        $game_user->username . ' has just changed from
 
-' . $last_ip . '
+        ' . $last_ip . '
 
-to
+        to
 
-' . $ip_addr);
-*/
+        ' . $ip_addr);
+         */
       }
 
       else {
 
-          // New ip address and a password -- gotta authenticate!
-/*
-          mail('joseph@cheek.com', 'new IP address hacking attempt?',
-            'The IP address of PASSWORDED player ' .
-            $game_user->username . ' has just changed from
+        // New ip address and a password -- gotta authenticate!
+        /*
+        mail('joseph@cheek.com', 'new IP address hacking attempt?',
+        'The IP address of PASSWORDED player ' .
+        $game_user->username . ' has just changed from
 
-' . $last_ip . '
+        ' . $last_ip . '
 
-to
+        to
 
-' . $ip_addr);
-*/
+        ' . $ip_addr);
+         */
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
         drupal_goto("$game/authenticate/$arg2");
@@ -1273,15 +1297,22 @@ to
 
 }
 
+/**
+ *
+ */
 function _stlouis_check_authKey($game_user) {
 
   global $purchasing_luck, $user;
 
   // Web access trumps this.
-  if ($user->roles[4] == 'web game access') return;
+  if ($user->roles[4] == 'web game access') {
+    return;
+  }
 
   // Loading luck does too.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
   $authKey = '';
 
@@ -1291,7 +1322,6 @@ function _stlouis_check_authKey($game_user) {
 
   }
 
-
   else {
 
     // Authkey in user agent.
@@ -1299,8 +1329,9 @@ function _stlouis_check_authKey($game_user) {
 
     foreach ($agentBits as $agentBit) {
 
-      if (substr($agentBit, 0, 8) == 'authKey=')
+      if (substr($agentBit, 0, 8) == 'authKey=') {
         $authKey = substr($agentBit, 8, strlen($agentBit) - 9);
+      }
 
     }
 
@@ -1309,10 +1340,11 @@ function _stlouis_check_authKey($game_user) {
   // An authKey sent.
   if ($authKey != '') {
 
-    if ($game_user->authKey == $authKey) return;
+    if ($game_user->authKey == $authKey) {
+      return;
+    }
 
     // Keys match, all is good in the world.
-
     // New authKey -- save it.
     if ($game_user->authKey == '') {
 
@@ -1336,12 +1368,10 @@ function _stlouis_check_authKey($game_user) {
 
   }
 
-
   else {
 
-   // No authkey sent.
-
-   // No key sent.
+    // No authkey sent.
+    // No key sent.
     if ($game_user->authKey == $authKey) {
 
       if (arg(0) == 'celestial_glory') {
@@ -1387,7 +1417,6 @@ function _stlouis_check_authKey($game_user) {
     }
 
     // Otherwise, client doesn't have an authkey... someone is hacking!
-
     // No authkey.
     echo 'Error E-0922: ' . $game_user->referral_code;
     exit;
@@ -1396,6 +1425,9 @@ function _stlouis_check_authKey($game_user) {
 
 }
 
+/**
+ *
+ */
 function _stlouis_get_value($fkey_users_id, $key, $default = NULL) {
 
   // Return the value in the db if found, or $default if not found.
@@ -1403,20 +1435,26 @@ function _stlouis_get_value($fkey_users_id, $key, $default = NULL) {
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
 
   $result = db_fetch_object(db_query($sql, (int) $fkey_users_id, $key));
-firep($result, 'user_attributes value for key ' . $key);
+  firep($result, 'user_attributes value for key ' . $key);
 
   return !empty($result->value) ? $result->value : $default;
 }
 
+/**
+ *
+ */
 function _stlouis_set_value($fkey_users_id, $key, $value = NULL) {
 
   // Set a value in the db; updates it if it already exists.
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
-   return db_query($sql, $fkey_users_id, $key, $value, $value);
+  return db_query($sql, $fkey_users_id, $key, $value, $value);
 }
 
+/**
+ *
+ */
 function _stlouis_remove_value($fkey_users_id, $key) {
 
   // Remove a value in the db.
@@ -1425,6 +1463,9 @@ function _stlouis_remove_value($fkey_users_id, $key) {
   return db_query($sql, $fkey_users_id, $key);
 }
 
+/**
+ *
+ */
 function _stlouis_get_phoneid() {
 
   if ((substr(arg(2), 0, 3) == 'fb=') || arg(2) == '') {
@@ -1439,10 +1480,10 @@ function _stlouis_get_phoneid() {
   if (arg(2) == 'facebook') {
     return (_stlouis_get_fbid());
   }
-  else if (arg(2) === 'null') {
+  elseif (arg(2) === 'null') {
     drupal_goto('stlouis/playbook_null');
   }
-  else if (substr(arg(2), 0, 3) === 'ms=') {
+  elseif (substr(arg(2), 0, 3) === 'ms=') {
     return (_stlouis_get_msid());
   }
   else {
@@ -1451,7 +1492,9 @@ function _stlouis_get_phoneid() {
 
 }
 
-
+/**
+ *
+ */
 function _stlouis_get_msid() {
 
   drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/msie.css');
@@ -1459,9 +1502,12 @@ function _stlouis_get_msid() {
 
 }
 
+/**
+ *
+ */
 function _stlouis_get_fbid() {
 
-  require_once ('fb/facebook.php');
+  require_once 'fb/facebook.php';
 
   // Facebook configuration.
   if (arg(0) == 'stlouis') {
@@ -1471,7 +1517,7 @@ function _stlouis_get_fbid() {
     $canvas_page = 'https://apps.facebook.com/uprisingstlouis/';
 
   }
-  else if (arg(0) == 'celestial_glory') {
+  elseif (arg(0) == 'celestial_glory') {
 
     $app_id = '315942001775829';
     $secret = '648a1945d57bdad144677f5cfd045f62';
@@ -1489,17 +1535,17 @@ function _stlouis_get_fbid() {
     'cookie' => TRUE,
   ));
 
-//  echo '<pre>'; print_r($_SERVER); echo '</pre>';
+  // Echo '<pre>'; print_r($_SERVER); echo '</pre>';.
   $signed_request = $_REQUEST['signed_request'];
-//  echo '<pre>'; print_r($signed_request); echo '</pre>';
-
+  // Echo '<pre>'; print_r($signed_request); echo '</pre>';
   // Get User ID.
   $user = $facebook->getUser();
-  if ($user != '0') return 'fb=' . $user;
+  if ($user != '0') {
+    return 'fb=' . $user;
+  }
 
-  // GetUser() didn't work.  Try oAuth.  Maybe user needs to log in or
-
-  // authorize the game?
+  // GetUser() didn't work.  Try oAuth.  Maybe user needs to log in or.
+  // Authorize the game?
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
@@ -1510,16 +1556,18 @@ function _stlouis_get_fbid() {
   if (empty($data["user_id"])) {
     echo '<a target="_top" href="' . $auth_url . '">Login to Facebook</a>';
     exit;
-//    echo("<script> top.location.href='" . $auth_url . "'</script>");
+    // echo("<script> top.location.href='" . $auth_url . "'</script>");.
   }
   else {
-//    echo ("Welcome User: " . $data["user_id"]);
+    // Echo ("Welcome User: " . $data["user_id"]);.
     return 'fb=' . $data['user_id'];
   }
 
 }
 
-
+/**
+ *
+ */
 function _stlouis_bump_event_tags_con($id) {
 
   // Add user entry, if it doesn't exist.
@@ -1545,7 +1593,9 @@ function _stlouis_bump_event_tags_con($id) {
   return $row;
 }
 
-
+/**
+ *
+ */
 function _stlouis_reset_event_tags_con($id) {
 
   // Add user entry, if it doesn't exist.
@@ -1568,7 +1618,9 @@ function _stlouis_reset_event_tags_con($id) {
   return $row;
 }
 
-
+/**
+ *
+ */
 function _stlouis_fetch_user() {
 
   global $game, $phone_id, $extra_messages, $next_level, $user;
@@ -1628,7 +1680,7 @@ function _stlouis_fetch_user() {
 
   $game = check_plain(arg(0));
   $phone_id = _stlouis_get_phoneid();
-  // if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
+  // If (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';.
   $arg2 = check_plain(arg(2));
   db_set_active('game_' . $game);
 
@@ -1674,8 +1726,8 @@ function _stlouis_fetch_user() {
         where phone_id = "%s";';
       db_query($sql, $phone_id, 'nkc ' . $phone_id);
 
-//      mail('joseph@cheek.com', 'Nook Color Phone ID swap',
-//        "nkc $phone_id is now $phone_id");
+      // mail('joseph@cheek.com', 'Nook Color Phone ID swap',
+      //        "nkc $phone_id is now $phone_id");.
     }
 
   }
@@ -1715,13 +1767,13 @@ function _stlouis_fetch_user() {
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
     /*
-        if ($arg2 == 'facebook') {
-          echo 'would redirect to welcome ' . $phone_id ;
-          echo '<a href="/' . $game . '/welcome/' . $arg2 . '">do it manually</a>';
-          echo '<a href="/' . $game . '/quests/' . $arg2 . '">go straight to quests</a>';
-          exit;
-        }
-    */
+    if ($arg2 == 'facebook') {
+    echo 'would redirect to welcome ' . $phone_id ;
+    echo '<a href="/' . $game . '/welcome/' . $arg2 . '">do it manually</a>';
+    echo '<a href="/' . $game . '/quests/' . $arg2 . '">go straight to quests</a>';
+    exit;
+    }
+     */
     db_set_active();
     drupal_goto($game . '/welcome/' . $arg2);
   }
@@ -1811,7 +1863,9 @@ function _stlouis_fetch_user() {
     $result = db_query($sql, $game_user->level + 1);
     $level = db_fetch_object($result);
     $next_level = $level->experience;
-    if ($next_level == 0) $next_level = 99999999;
+    if ($next_level == 0) {
+      $next_level = 99999999;
+    }
 
     $extra_messages .= '<div class="level-up">
       <div class="wise_old_man happy"></div>
@@ -1852,7 +1906,9 @@ function _stlouis_fetch_user() {
     $game_user->eq_energy_increase + $game_user->st_energy_increase;
 
   // Bonus for joining a clan.
-  if (!empty($game_user->fkey_clans_id)) $energy_bonus++;
+  if (!empty($game_user->fkey_clans_id)) {
+    $energy_bonus++;
+  }
   $secs_until = $energy_next_gain - REQUEST_TIME;
 
   // Do we need energy?
@@ -1900,8 +1956,9 @@ function _stlouis_fetch_user() {
     $changes_made = TRUE;
 
     // Add money.
-    if ($max_income_gain > 0)
+    if ($max_income_gain > 0) {
       $game_user->money += $game_user->income - $game_user->expenses;
+    }
 
     // Next add in 60 mins.
     $income_next_gain += 3600;
@@ -1951,8 +2008,9 @@ function _stlouis_fetch_user() {
   }
 
   // Frozen.
-  if ($game_user->meta == 'frozen')
+  if ($game_user->meta == 'frozen') {
     $extra_messages = '<div class="title">- = * F R O Z E N * = -</div>';
+  }
 
   // Save changes, if needed.
   if ($changes_made) {
@@ -1989,7 +2047,9 @@ function _stlouis_fetch_user() {
   return $game_user;
 }
 
-
+/**
+ *
+ */
 function _stlouis_header($game_user) {
 
   global $game, $phone_id, $extra_messages, $next_level;
@@ -2018,8 +2078,7 @@ function _stlouis_header($game_user) {
   if ($game_user->actions != $game_user->actions_max) {
 
     $actions_secs_until = strtotime($game_user->actions_next_gain) - time();
-// firep('secs_until now at ' . $secs_until);
-
+    // firep('secs_until now at ' . $secs_until);.
     $actions_minutes = (string) (int) ($actions_secs_until / 60);
     $actions_seconds = sprintf('%02d', (int) ($actions_secs_until % 60));
 
@@ -2042,8 +2101,7 @@ function _stlouis_header($game_user) {
     $income_str = $income_bonus . '';
 
     $money_secs_until = strtotime($game_user->income_next_gain) - time();
-    //firep('income secs_until now at ' . $money_secs_until);
-
+    // firep('income secs_until now at ' . $money_secs_until);.
     $money_minutes = (string) (int) ($money_secs_until / 60);
     $money_seconds = sprintf('%02d', (int) ($money_secs_until % 60));
     $money_secondsStr = ':' . sprintf('%02d', (int) ($money_secs_until % 60));
@@ -2072,7 +2130,6 @@ function _stlouis_header($game_user) {
     $money_str = substr($money_str, 0, strlen($money_str) - 3) . 'K';
   }
 
-
   // More skill points?
   if ($game_user->skill_points > 0) {
 
@@ -2087,7 +2144,6 @@ function _stlouis_header($game_user) {
       '</strong><div class="level-text">Level</div></div>';
 
   }
-
 
   // Experience.
   $experience_str = $game_user->experience . '';
@@ -2112,15 +2168,17 @@ function _stlouis_header($game_user) {
     $result = db_query($sql, $points_obj->last_goal_achieved);
     $goal_obj = db_fetch_object($result);
 
-    if ($goal_obj->points == 0) $goal_obj->points = 99999999;
+    if ($goal_obj->points == 0) {
+      $goal_obj->points = 99999999;
+    }
 
-firep('points: ' . $points_obj->points);
-firep('points for next prize: ' . $goal_obj->points);
+    firep('points: ' . $points_obj->points);
+    firep('points for next prize: ' . $goal_obj->points);
 
     // User gets a prize!
     if ($points_obj->points >= $goal_obj->points) {
 
-firep('a prize is deserved!');
+      firep('a prize is deserved!');
 
       // What's goal after this?
       $sql = 'select points from event_milestones where points > %d
@@ -2128,7 +2186,9 @@ firep('a prize is deserved!');
       $result = db_query($sql, $goal_obj->points);
       $new_goal_obj = db_fetch_object($result);
 
-      if ($new_goal_obj->points == 0) $new_goal_obj->points = 99999999;
+      if ($new_goal_obj->points == 0) {
+        $new_goal_obj->points = 99999999;
+      }
 
       // Which prize should be given?
       if ($goal_obj->points >= 50000) {
@@ -2136,7 +2196,7 @@ firep('a prize is deserved!');
         // Large gift.
         $prize_id = 37;
       }
-      else if ($goal_obj->points >= 5000) {
+      elseif ($goal_obj->points >= 5000) {
 
         // Med gift.
         $prize_id = 36;
@@ -2161,7 +2221,7 @@ firep('a prize is deserved!');
           (fkey_users_id, fkey_equipment_id, quantity)
           values
           (%d, %d, 1);';
-// if ($phone_id == 'abc123')
+        // If ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
       }
@@ -2173,7 +2233,7 @@ firep('a prize is deserved!');
           set quantity = quantity + 1
           where fkey_users_id = %d
           and fkey_equipment_id = %d;';
-// if ($phone_id == 'abc123')
+        // If ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
       }
@@ -2181,7 +2241,7 @@ firep('a prize is deserved!');
       // Update record of user getting this present.
       $sql = 'update event_points set last_goal_achieved = %d
         where fkey_users_id = %d;';
-// if ($phone_id == 'abc123')
+      // If ($phone_id == 'abc123')
       $result = db_query($sql, $goal_obj->points, $game_user->id);
 
       // Get present title.
@@ -2191,7 +2251,7 @@ firep('a prize is deserved!');
       $equip_obj = db_fetch_object($result);
       $equip_name = str_replace(' ', '&nbsp;', strtolower($equip_obj->name));
 
-// if ($phone_id == 'abc123')
+      // If ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
         $new_goal_obj->points . ' points
@@ -2211,11 +2271,10 @@ firep('a prize is deserved!');
 
     }
 
-
     else {
 
       // User doesn't get a prize.
-// if ($phone_id == 'abc123')
+      // if ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
         $goal_obj->points . ' points
@@ -2436,4 +2495,3 @@ $extra_messages
 EOF;
 
 }
-

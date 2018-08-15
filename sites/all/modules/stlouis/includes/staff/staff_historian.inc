@@ -10,11 +10,12 @@
  * Init the staff member.
  */
 function game_staff_historian_init() {
-//  dpm('Historian reporting for duty!');
+  // dpm('Historian reporting for duty!');.
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_staff_historian_homepage_event_notice($game_user, &$event_text) {
   return;
   $event_text .= '
@@ -25,6 +26,9 @@ function game_staff_historian_homepage_event_notice($game_user, &$event_text) {
 </div>';
 }
 
+/**
+ *
+ */
 function game_staff_historian_game_fetch_user_post($game_user) {
   $game_user->traits['show_highlighted_quest_groups_on_map'] = TRUE;
 }

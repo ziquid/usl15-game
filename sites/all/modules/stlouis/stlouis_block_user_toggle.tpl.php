@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_block_user_toggle.tpl.php
+ * @file Stlouis_block_user_toggle.tpl.php
  * Toggle whether to block a user or not.
  *
  * Synced with CG: no
- * Synced with 2114: yes
+ * Synced with 2114: yes.
  */
 
 global $game, $phone_id;
@@ -30,7 +30,8 @@ if (substr($arg3, 0, 3) == 'id:') {
   $item = db_fetch_object($result);
   $target_id = (int) substr($arg3, 3);
 }
-else { // phone_id
+// phone_id.
+else {
   $sql = 'select id, username from users where phone_id = "%s";';
   $result = db_query($sql, $phone_id_to_block);
   $item = db_fetch_object($result);

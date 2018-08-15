@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 global $game, $phone_id, $action;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
@@ -18,7 +22,7 @@ EOF;
 
     db_set_active('default');
     return;
-  }
+}
 
   $data = actionlist();
   $action_found = FALSE;
@@ -119,8 +123,9 @@ EOF;
     t('Out of @value!', array('@value' => $game_user->values)) .
       '</div>';
 
-    if (substr($phone_id, 0, 3) == 'ai-')
+    if (substr($phone_id, 0, 3) == 'ai-') {
       $ai_output = 'action-failed no-money';
+    }
     $offer = game_luck_money_offer($game_user);
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
@@ -149,7 +154,7 @@ if ($action_succeeded) {
   if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
     $show_all = '?comp_show_level=curious';
   }
-  else if ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
+  elseif ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
     $show_all = '?comp_show_level=yes';
   }
   else {
@@ -164,7 +169,7 @@ if ($action_succeeded) {
 
   // Decrement available actions.
   $sql = 'update users set actions = actions - %d where id = %d;';
-  $result = db_query($sql, $action->cost,  $game_user->id);
+  $result = db_query($sql, $action->cost, $game_user->id);
 
   // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
@@ -199,7 +204,7 @@ if ($action_succeeded) {
 
     $sql = 'update users set experience = greatest(experience + %d, 0)
       where id = %d;';
-    $result = db_query($sql, $inf_change,  $target_id);
+    $result = db_query($sql, $inf_change, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name .
          ' ' . $experience . ' is ' .
     (($inf_change > 0) ? 'increased' : 'decreased') .
@@ -230,7 +235,6 @@ if ($action_succeeded) {
     if (($action->target == 'none') || ($action->rating_change >= 0.10)) {
 
       // No target or larger positive ratings - actions affect player.
-
       $target_name = 'Your';
       $target_id = $game_user->id;
 
@@ -247,7 +251,7 @@ if ($action_succeeded) {
     $sql = 'update elected_officials
       set approval_rating = greatest(least(approval_rating + %f, 100), 0)
       where fkey_users_id = %d;';
-    $result = db_query($sql, $rat_change,  $target_id);
+    $result = db_query($sql, $rat_change, $target_id);
 
     // Get new rating.
     $sql = 'select approval_rating from elected_officials
@@ -269,7 +273,7 @@ if ($action_succeeded) {
     // Affect rating.
     $sql = 'update neighborhoods
         set rating = greatest(0, rating + %f) where id = %d;';
-    $result = db_query($sql, $rat_change,  $game_user->fkey_neighborhoods_id);
+    $result = db_query($sql, $rat_change, $game_user->fkey_neighborhoods_id);
 
     // Get new rating.
     $sql = 'select name, rating from neighborhoods
@@ -311,7 +315,7 @@ if ($action_succeeded) {
       $money = -min(-$action->values_change, $item->money);
     }
 
-//    $sql = 'update users set money = greatest(money + %d, 0) where id = %d;';
+// $sql = 'update users set money = greatest(money + %d, 0) where id = %d;';.
     $sql = 'update users set money = money + %d where id = %d;';
     $result = db_query($sql, $money, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name . ' ' .
@@ -372,12 +376,12 @@ firep($eq);
     // 110 instead of 100% to give a little extra chance of having it work.
     if ($eq->chance_of_loss >= mt_rand(1, 110)) {
 
-//firep($eq->name . ' wore out!');
+// firep($eq->name . ' wore out!');.
       game_equipment_use($game_user, $eq->id, 1);
       // FIXME: do this before _stlouis_header so that upkeep is accurate.
-
       $stuff = strtolower($eq->name);
-      if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
+      if (substr($stuff, 0, 2) == 'a ') {$stuff = substr($stuff, 2);
+      }
 
       $sql = 'select message from equipment_failure_reasons
         where fkey_equipment_id = %d
@@ -412,7 +416,6 @@ firep($eq);
   }
 
   // Chance of loss - aides.
-
   // Any staff for this action?
   if ($action->fkey_staff_id) {
 
@@ -430,7 +433,6 @@ firep($st->name . ' has run away!');
       $result = db_query($sql, $st->id, $game_user->id);
 
       // Player expenses need resetting?
-
       // Subtract upkeep from your expenses.
       if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
@@ -498,7 +500,7 @@ firep($st->name . ' has run away!');
     // Reprocess user object.
     $game_user = $fetch_user();
 
-  }
+}
   else {
 
     // Failed - try a different action.
@@ -520,9 +522,10 @@ $title
 $outcome_reason
 EOF;
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output " .
     filter_xss($outcome_reason, array()) .
     " \"/>\n-->";
+  }
 
   db_set_active('default');
