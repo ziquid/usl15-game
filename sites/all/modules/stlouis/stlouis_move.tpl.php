@@ -104,7 +104,10 @@ EOF;
 if (substr(arg(2), 0, 4) == 'nkc ') {
   $coefficient = 1.875;
 }
-elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
+else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 9') !== FALSE) {
+  $coefficient = 1;
+}
+else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
   $coefficient = 1;
 }
 elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {

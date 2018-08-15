@@ -1,7 +1,8 @@
 <?php
 
 /**
- * @file Functions.inc
+ * @file functions.inc
+ *
  * Misc functions for Ziquid games.
  *
  * Synced with CG: yes
@@ -143,7 +144,6 @@ EOF;
 function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
-  $arg2 = check_plain(arg(2));
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'select quantity from clan_equipment_ownership
@@ -152,9 +152,7 @@ function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
   $quantity = db_fetch_object($result);
 
   if ($quantity->quantity >= $req_quantity) {
-
     $not_yet = $a_start = $a_end = '';
-
   }
   else {
 
