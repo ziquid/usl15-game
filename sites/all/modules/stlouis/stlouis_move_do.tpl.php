@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
@@ -24,8 +28,9 @@ if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
 <div class="election-continue"><a href="/$game/move/$arg2/0">Try again</a></div>
 EOF;
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"move-failed already-there\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -74,8 +79,7 @@ firep($new_hood, 'new hood');
   game_alter('actions_to_move', $game_user, $actions_to_move);
 
   // April fools 2013.
-//    $actions_to_move = 1;
-
+//    $actions_to_move = 1;.
   if ($game_user->actions < $actions_to_move) {
 
     $fetch_header($game_user);
@@ -94,8 +98,9 @@ firep($new_hood, 'new hood');
       array('@neighborhood' => $hood_lower)) .
       '</a></div></div>';
 
-    if (substr($phone_id, 0, 3) == 'ai-')
+    if (substr($phone_id, 0, 3) == 'ai-') {
       echo "<!--\n<ai \"move-failed no-action\"/>\n-->";
+    }
 
     db_set_active('default');
     return;
@@ -147,7 +152,7 @@ firep($new_hood, 'new hood');
 
   // Chance of loss.
   // Give them a little extra chance.
-  if ($eq->chance_of_loss >= mt_rand(1,110)) {
+  if ($eq->chance_of_loss >= mt_rand(1, 110)) {
     $equip_lost = TRUE;
     firep($eq->name . ' wore out!');
     $sql = 'update equipment_ownership set quantity = quantity - 1
@@ -286,7 +291,8 @@ EOF;
 
 }
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"move-succeeded\"/>\n-->";
+}
 
  db_set_active('default');

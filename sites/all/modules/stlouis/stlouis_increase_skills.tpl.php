@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_increase_skills.tpl.php
- * Stlouis increase skills page
+ * @file Stlouis_increase_skills.tpl.php
+ * Stlouis increase skills page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -79,7 +79,7 @@
 
       }
 
-      break;
+        break;
 
     case 'energy_max':
 
@@ -296,7 +296,8 @@ EOF;
 
   }
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
+  }
 
   db_set_active('default');

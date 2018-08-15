@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_google_checkout.tpl.php
- * Stlouis google checkout
+ * @file Stlouis_google_checkout.tpl.php
+ * Stlouis google checkout.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -15,9 +15,8 @@
 
   $game = check_plain(arg(0));
 
-//  $game_user = $fetch_user();
-
- /* if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
+// $game_user = $fetch_user();
+ /* If (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
     (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.stlouis') !== FALSE) ||
     (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.celestial_glory')
       !== FALSE)) {
@@ -43,16 +42,14 @@
 
 	  $sql = 'insert into purchases (fkey_users_id, purchase)
 	  	values (%d, "%s");';*/
-//	  $msg = 'User ' . $game_user->username . ' purchased ' . $luck .
-//	    ' Luck (currently ' . $game_user->luck . ') at URL ' . $_SERVER['REQUEST_URI'];
-//	  $result = db_query($sql, $game_user->id, $msg);
-
+// $msg = 'User ' . $game_user->username . ' purchased ' . $luck .
+// ' Luck (currently ' . $game_user->luck . ') at URL ' . $_SERVER['REQUEST_URI'];
+// $result = db_query($sql, $game_user->id, $msg);.
     $msg = print_r($_POST, TRUE);
-	  mail('joseph@ziquid.com', $game . ' Google Checkout Luck purchase', $msg);
+      mail('joseph@ziquid.com', $game . ' Google Checkout Luck purchase', $msg);
 
-//  }
-//  drupal_goto($game . '/elders/' . $phone_id);
-
+// }
+//  drupal_goto($game . '/elders/' . $phone_id);.
   echo '<notification-acknowledgement xmlns="http://checkout.google.com/schema/2"
     serial-number="' . $_POST['serial-number'] . '" />';
 

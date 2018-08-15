@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_help.tpl.php
+ * @file Stlouis_help.tpl.php
  * Help screen.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;

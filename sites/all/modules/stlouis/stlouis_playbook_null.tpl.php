@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
   echo <<< EOF
 <p>
 Uhoh!&nbsp; This game requires that you allow us to read your BlackBerry
