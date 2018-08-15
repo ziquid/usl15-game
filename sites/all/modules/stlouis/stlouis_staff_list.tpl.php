@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @file stlouis_staff_list.tpl.php
- * Stlouis staff list
+ * @file Stlouis_staff_list.tpl.php
+ * Stlouis staff list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
 
-// ------ CONTROLLER ------
+// ------ CONTROLLER ------.
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $ai_output = 'staff-prices';
@@ -20,7 +20,7 @@ game_recalc_income($game_user);
 $data = game_fetch_visible_staff($game_user);
 $next = game_fetch_next_staff($game_user);
 
-// ------ VIEW ------
+// ------ VIEW ------.
 $fetch_header($game_user);
 game_show_aides_menu($game_user);
 
@@ -35,7 +35,7 @@ EOF;
 echo '<div id="all-staff">';
 
 foreach ($data as $item) {
-  game_show_staff($game_user, $item,$ai_output);
+  game_show_staff($game_user, $item, $ai_output);
 }
 
 game_show_ai_output($phone_id, $ai_output);

@@ -12,12 +12,16 @@
 function game_event_move_3_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_move_3_actions_to_move($game_user, &$actions_to_move) {
   $actions_to_move = min($actions_to_move, 3);
 }
 
+/**
+ *
+ */
 function game_event_move_3_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
@@ -33,6 +37,9 @@ function game_event_move_3_homepage_event_notice($game_user, &$event_text) {
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_move_3_speed_increase($game_user, &$speed_increase, &$verb) {
   $verb = 'Ride in a taxi';
 }

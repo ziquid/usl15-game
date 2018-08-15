@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @file
+ */
+
   global $game, $phone_id;
 
   $fetch_user = '_' . arg(0) . '_fetch_user';

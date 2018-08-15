@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_preferences.tpl.php
- * Stlouis preferences page
+ * @file Stlouis_elders_preferences.tpl.php
+ * Stlouis preferences page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -22,8 +22,8 @@
   if ($ask_luck_refill <= 0) {
     $ask_luck_refill = 0;
   }
- 
-  $currentPreferences = _stlouis_get_value($game_user->id, 'ask_before_refilling_luck',0);
+
+  $currentPreferences = _stlouis_get_value($game_user->id, 'ask_before_refilling_luck', 0);
   if ($currentPreferences > 0) {
     $checkedYes = 'checked="checked"';
   }
@@ -45,7 +45,7 @@
   </div>  
 </div>
 EOF;
-  
+
   if (($ask_luck_refill) >= 0) {
     _stlouis_set_value($game_user->id, 'ask_before_refilling_luck', $ask_luck_refill);
   }

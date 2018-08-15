@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_party_msg.tpl.php
- * Stlouis party message page
+ * @file Stlouis_party_msg.tpl.php
+ * Stlouis party message page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -23,8 +23,7 @@ if (empty($game_user->username)) {
 }
 
 $target = check_plain($_GET['target']);
-//firep($target);
-
+// firep($target);
 $message_orig = check_plain($_GET['message']);
 $message = _stlouis_filter_profanity($message_orig);
 

@@ -12,8 +12,9 @@
 function game_event_memorial_day_2_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_memorial_day_2_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
@@ -34,6 +35,9 @@ function game_event_memorial_day_2_homepage_event_notice($game_user, &$event_tex
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_memorial_day_2_quest_item($game_user, $quest_item) {
 
   // Talk to disabled vets mission, 75 energy.
@@ -42,6 +46,9 @@ function game_event_memorial_day_2_quest_item($game_user, $quest_item) {
   }
 }
 
+/**
+ *
+ */
 function game_event_memorial_day_2_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
 
   // Every 75 DAVs is an extra vote.

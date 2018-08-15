@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file functions-staff.inc
+ * @file Functions-staff.inc
  * Misc staff functions for Ziquid games.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 /**
@@ -32,17 +32,17 @@ function game_fetch_staff_by_id($game_user, $staff_id) {
 }
 
 /**
-* Show a staff or agent.
-*
-* @param \stdClass $game_user
-*   The game user object.
-* @param \stdClass $item
-*   The staff item.
-* @param string $ai_output
-*   AI output.
-* @param array $options
-*   Options that modify the display behavior.
-*/
+ * Show a staff or agent.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The staff item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ */
 function game_show_staff($game_user, $item, &$ai_output, $options = []) {
 
   global $game;
@@ -77,9 +77,9 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
               '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
             t('Receive @offer @values (1&nbsp;@luck',
             array(
-            '@offer' => $offer,
-            '@values' => $game_user->values,
-            '@luck' => $luck,
+              '@offer' => $offer,
+              '@values' => $game_user->values,
+              '@luck' => $luck,
             )) . ')
           </a>
         </div>
@@ -242,7 +242,7 @@ EOF;
 EOF;
   }
   else {
-  // Can't buy.
+    // Can't buy.
     $icon_button = <<< EOF
       <img src="/sites/default/files/images/staff/$game-$item->id.png?2" width="96"
            border="0">
@@ -277,7 +277,7 @@ EOF;
 EOF;
   }
 
-  // grab each action for the staff
+  // Grab each action for the staff.
   $acts_arr = [];
   $sql = 'select * from actions where fkey_staff_id = %d;';
   $result = db_query($sql, $item->id);
@@ -326,7 +326,7 @@ EOF;
   $class_str = implode(' ', $classes);
 
   if ($soon) {
-echo <<< EOF
+    echo <<< EOF
 <div class="land $soon $failed $class_str">
   <div class="land-icon">
     <img src="/sites/default/files/images/staff/$game-soon.png?1" width=96
@@ -398,7 +398,7 @@ EOF;
       </div>
 EOF;
   }
-  else if ($item->initiative_bonus < 0) {
+  elseif ($item->initiative_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $initiative: $item->initiative_bonus
@@ -413,7 +413,7 @@ EOF;
       </div>
 EOF;
   }
-  else if ($item->endurance_bonus < 0) {
+  elseif ($item->endurance_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $endurance: $item->endurance_bonus
@@ -432,7 +432,7 @@ EOF;
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
   }
-  else if ($item->elocution_bonus < 0) {
+  elseif ($item->elocution_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $elocution: $item->elocution_bonus
@@ -476,11 +476,11 @@ EOF;
   }
 
   foreach ($acts_arr as $action) {
-  //    firep($action, 'action associated with staff');
-
+    // firep($action, 'action associated with staff');.
     $cost = "Cost: $action->cost Action";
-    if ($action->values_cost > 0)
+    if ($action->values_cost > 0) {
       $cost .= ", $action->values_cost $game_user->values";
+    }
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
@@ -662,6 +662,7 @@ function game_fetch_visible_staff($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
+ *
  * @return \stdClass
  *   The next staff item to show, if any.
  */
@@ -797,7 +798,7 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
  * @param int $id
  *   The staff ID.
  * @param int $quantity
- *   Number of people to lose/fire
+ *   Number of people to lose/fire.
  * @param int $st_price
  *   Amount of compensation to receive for sale.
  *

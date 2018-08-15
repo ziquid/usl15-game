@@ -1,7 +1,11 @@
 <?php
 
+/**
+ * @file
+ */
+
   global $game, $phone_id;
-  
+
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
@@ -22,5 +26,5 @@ All the $initiative, Endurance, $elocution, and Action your character has
   I want to reset my skill points</a></div>
 </div>
 EOF;
-    
-  db_set_active('default');  
+
+  db_set_active('default');

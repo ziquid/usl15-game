@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_event_info.tpl.php
- * Stlouis event info page
+ * @file Stlouis_event_info.tpl.php
+ * Stlouis event info page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
