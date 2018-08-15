@@ -27,6 +27,18 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Aug 15, 2018
+  </div>
+  <ul>
+    <li>
+      Level 120
+    </li>
+    <li>
+      Support for Android 9
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jul 17, 2018
   </div>
   <ul>
