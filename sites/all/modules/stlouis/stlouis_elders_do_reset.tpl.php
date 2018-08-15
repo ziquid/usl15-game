@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_do_reset.tpl.php
- * Stlouis elders do reset
+ * @file Stlouis_elders_do_reset.tpl.php
+ * Stlouis elders do reset.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -14,7 +14,7 @@
   $fetch_header = '_' . arg(0) . '_header';
 
   $game_user = $fetch_user();
-//  $fetch_header($game_user);
+// $fetch_header($game_user);
   $arg2 = check_plain(arg(2));
 
   $reset_me = check_plain(trim($_GET['reset_me']));
@@ -123,6 +123,6 @@
 
   }
   else {
-    drupal_goto($game . '/elders_ask_reset/' . $arg2,'msg=error');
-    //drupal_goto($game . '/user/' . $arg2);
+    drupal_goto($game . '/elders_ask_reset/' . $arg2, 'msg=error');
+    // drupal_goto($game . '/user/' . $arg2);.
   }

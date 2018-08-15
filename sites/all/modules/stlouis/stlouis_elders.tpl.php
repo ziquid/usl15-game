@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file elders_tpl.php
- * Stlouis elders
+ * @file Elders_tpl.php
+ * Stlouis elders.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -38,7 +38,6 @@ EOF;
 if ($game_user->level >= 6) {
 
   // Only allow users to change parties if they can join one.
-
   // AT LEAST 10 LUCK!
   if ($game_user->luck > 9) {
 
@@ -92,7 +91,7 @@ your Energy (1&nbsp;$luck)</a></div>
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
- }
+  }
  elseif ($game_user->luck > 0) {
 
     // AT LEAST ONE LUCK!
@@ -108,7 +107,7 @@ your Energy (1&nbsp;$luck)</a></div>
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
-  }
+ }
   else {
 
     // NO LUCK!

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_ask_reset.tpl.php
+ * @file Stlouis_elders_ask_reset.tpl.php
  * User asks for reset.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;

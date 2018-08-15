@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_do_fill.tpl.php
+ * @file Stlouis_elders_do_fill.tpl.php
  * Fill your stats by using Luck.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
