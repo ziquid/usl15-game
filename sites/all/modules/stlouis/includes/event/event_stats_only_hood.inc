@@ -12,8 +12,9 @@
 function game_event_stats_only_hood_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_stats_only_hood_homepage_event_notice($game_user, &$event_text) {
   $hood = game_event_stats_only_hood_get_todays_hood();
   $event_text .= '
@@ -35,10 +36,13 @@ function game_event_stats_only_hood_homepage_event_notice($game_user, &$event_te
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_stats_only_hood_get_todays_hood() {
   $hood = new stdClass();
   $today = date('Y-m-d', REQUEST_TIME - 3600);
-  switch($today) {
+  switch ($today) {
 
     case '2018-06-30':
       $hood->id = 36;
@@ -69,6 +73,9 @@ function game_event_stats_only_hood_get_todays_hood() {
   return $hood;
 }
 
+/**
+ *
+ */
 function game_event_stats_only_hood_elections_challenge_get_hood($game_user, &$hood_info) {
   $today = date('Y-m-d', REQUEST_TIME - 3600);
   $hood = game_event_stats_only_hood_get_todays_hood();

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file game_defs.inc
- * Stlouis game definitions
+ * @file Game_defs.inc
+ * Stlouis game definitions.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 define(EVENT_NONE, 0);
@@ -37,8 +37,10 @@ define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
 define(MISSION_JUL, 1007);
 
-$debate_wait_time = 900; // 1200
-$zombie_debate_wait = 180; // 300
+// 1200.
+$debate_wait_time = 900;
+// 300.
+$zombie_debate_wait = 180;
 $event_type = EVENT_NONE;
 $month_mission = MISSION_NONE;
 $energy_wait = 300;
@@ -49,12 +51,13 @@ $competency_gain_wait_time_str = '3 minutes';
 global $game;
 
 $today = date('Y-m-d', REQUEST_TIME - 3600);
-switch($today) {
+switch ($today) {
 
-  // ------ MARCH ------
+  // ------ MARCH ------.
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
-    $debate_wait_time = 600; // 900; // 1200;
+    // 900; // 1200;.
+    $debate_wait_time = 600;
     break;
 
   case '2013-03-09':
@@ -69,7 +72,7 @@ switch($today) {
     $event_type = EVENT_NEW_NAMES;
     break;
 
-  // ------ APRIL ------
+  // ------ APRIL ------.
   case '2018-04-01':
     $event_type = EVENT_APRIL_FOOLS;
     break;
@@ -78,7 +81,7 @@ switch($today) {
     $event_type = EVENT_PRE_MAY;
     break;
 
-  // ------ MAY -----
+  // ------ MAY -----.
   case '2018-05-01':
   case '2018-05-02':
   case '2018-05-03':
@@ -137,7 +140,7 @@ switch($today) {
     $event_type = EVENT_MEMORIAL_DAY_4;
     break;
 
-  // ------ JUNE ------
+  // ------ JUNE ------.
   case '2018-06-01':
   case '2018-06-02':
   case '2018-06-03':
@@ -167,7 +170,7 @@ switch($today) {
     $event_type = EVENT_STATS_ONLY_HOOD;
     break;
 
-  // ------ JULY ------
+  // ------ JULY ------.
   case '2018-07-01':
   case '2018-07-02':
   case '2018-07-03':
@@ -181,10 +184,9 @@ switch($today) {
     break;
 }
 
-//if (arg(2) == 'abc123') {
+// If (arg(2) == 'abc123') {
 //  $event_type = EVENT_MEMORIAL_DAY_4;
-//}
-
+// }.
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
 $alder_short = 'Alder';
@@ -252,11 +254,11 @@ if ($event_type == EVENT_NEW_NAMES) {
 /*
 // Boxing day.
 if ((date('Y-m-d') == '2012-12-26') || arg(2) == 'abc123') {
-  $debate = 'Box';
-  $debate_tab = 'Boxing';
-  $top20 = 'Top Boxers';
+$debate = 'Box';
+$debate_tab = 'Boxing';
+$top20 = 'Top Boxers';
 }
-*/
+ */
 
 $beauty_lower = strtolower($beauty);
 $city_lower = strtolower($city);
