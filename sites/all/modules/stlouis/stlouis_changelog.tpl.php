@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_changelog.tpl.php
+ * @file Stlouis_changelog.tpl.php
  * The game's changelog.
  *
  * Synced with CG: yes
- * Synced with 2114: N/A
+ * Synced with 2114: N/A.
  */
 
 global $game, $phone_id;
