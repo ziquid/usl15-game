@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file event_pre_memorial_day.inc
+ * @file Event_pre_memorial_day.inc.
  *
  * Pre-Memorial Day event.
  */
@@ -12,8 +12,9 @@
 function game_event_pre_memorial_day_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_pre_memorial_day_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
@@ -32,6 +33,9 @@ function game_event_pre_memorial_day_homepage_event_notice($game_user, &$event_t
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_pre_memorial_day_quest_item($game_user, $quest_item) {
 
   // Talk to disabled vets mission, 100 energy.

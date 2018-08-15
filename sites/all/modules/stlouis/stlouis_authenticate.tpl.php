@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_authenticate.tpl.php
+ * @file Stlouis_authenticate.tpl.php
  * Enter the user's password.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;

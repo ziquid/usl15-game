@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_clan_msg.tpl.php
- * Stlouis clan messages page
+ * @file Stlouis_clan_msg.tpl.php
+ * Stlouis clan messages page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -18,8 +18,9 @@
   $fetch_header($game_user);
   $arg2 = check_plain(arg(2));
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
   // Save the message, if any.
   $message_orig = check_plain($_GET['message']);
@@ -44,8 +45,9 @@ firep($message);
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
-  if ($item->fkey_clans_id != $clan_id)
+  if ($item->fkey_clans_id != $clan_id) {
     drupal_goto($game . '/home/' . $arg2);
+  }
 
   if (!empty($message)) {
 
@@ -113,7 +115,8 @@ EOF;
   $msg_shown = FALSE;
 
   $data = array();
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {$data[] = $item;
+  }
 
 /*  echo <<< EOF
 <div>{$data[0]->clan_name} ({$data[0]->clan_acronym}) - {$data[0]->clan_rules}</div>
@@ -124,11 +127,13 @@ firep($item->id);
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-  if (!empty($item->clan_acronym))
+  if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
+  }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
     echo <<< EOF
 <div class="dateline">

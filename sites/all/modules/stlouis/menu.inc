@@ -1,13 +1,16 @@
 <?php
 
 /**
- * @file menu.inc
+ * @file Menu.inc
  * Menu functions for Ziquid games.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
+/**
+ *
+ */
 function stlouis_menu() {
 
   $items['stlouis/home/%'] = array(
@@ -516,6 +519,9 @@ function stlouis_menu() {
   return $items;
 }
 
+/**
+ *
+ */
 function stlouis_homepage_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -525,6 +531,9 @@ function stlouis_homepage_callback($phone_id) {
   return theme('stlouis_homepage', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_userprofile_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -535,6 +544,9 @@ function stlouis_userprofile_callback($phone_id) {
 
 }
 
+/**
+ *
+ */
 function stlouis_user_competencies_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -544,6 +556,9 @@ function stlouis_user_competencies_callback($phone_id) {
   return theme('stlouis_user_competencies', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_clan_list_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -554,7 +569,9 @@ function stlouis_clan_list_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_clan_list_available_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -565,7 +582,9 @@ function stlouis_clan_list_available_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_clan_msg_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -576,7 +595,9 @@ function stlouis_clan_msg_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_clan_announcements_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -587,7 +608,9 @@ function stlouis_clan_announcements_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_class_list_callback($phone_id, $class_id) {
 
   if (empty($phone_id) || !is_numeric($class_id)) {
@@ -598,7 +621,9 @@ function stlouis_class_list_callback($phone_id, $class_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
   if (empty($phone_id) || empty($phone_id_to_block)) {
@@ -610,7 +635,9 @@ function stlouis_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_msg_delete_callback($phone_id, $msg_id) {
 
   if (empty($phone_id) || !is_numeric($msg_id)) {
@@ -621,7 +648,9 @@ function stlouis_msg_delete_callback($phone_id, $msg_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_party_msg_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -632,7 +661,9 @@ function stlouis_party_msg_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_increase_skills_callback($phone_id, $skill) {
 
   if (empty($phone_id) || empty($skill)) {
@@ -643,7 +674,9 @@ function stlouis_increase_skills_callback($phone_id, $skill) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_quests_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -654,7 +687,9 @@ function stlouis_quests_list_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_quests_do_callback($phone_id, $quest_id) {
 
   if (empty($phone_id) || !is_numeric($quest_id)) {
@@ -665,7 +700,9 @@ function stlouis_quests_do_callback($phone_id, $quest_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -676,7 +713,9 @@ function stlouis_elders_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_ask_reset_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -687,7 +726,9 @@ function stlouis_elders_ask_reset_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_do_reset_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -698,7 +739,9 @@ function stlouis_elders_do_reset_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_ask_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -709,7 +752,9 @@ function stlouis_elders_ask_reset_skills_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_do_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -720,7 +765,9 @@ function stlouis_elders_do_reset_skills_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_do_fill_callback($phone_id, $fill_type) {
 
   if (empty($phone_id) || empty($fill_type)) {
@@ -731,7 +778,9 @@ function stlouis_elders_do_fill_callback($phone_id, $fill_type) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_rename_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -742,7 +791,9 @@ function stlouis_elders_rename_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_set_password_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -753,7 +804,9 @@ function stlouis_elders_set_password_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_ask_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -764,7 +817,9 @@ function stlouis_elders_ask_purchase_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_do_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -775,7 +830,9 @@ function stlouis_elders_do_purchase_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elders_check_receipt_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -786,7 +843,9 @@ function stlouis_elders_check_receipt_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_google_checkout_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -797,7 +856,9 @@ function stlouis_google_checkout_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_welcome_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -808,7 +869,9 @@ function stlouis_welcome_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_choose_clan_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -819,7 +882,9 @@ function stlouis_choose_clan_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_help_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -830,7 +895,9 @@ function stlouis_help_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_debates_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -841,7 +908,9 @@ function stlouis_debates_list_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_debates_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -852,7 +921,9 @@ function stlouis_debates_challenge_callback($phone_id, $position_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elections_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -863,7 +934,9 @@ function stlouis_elections_list_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_elections_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -874,6 +947,9 @@ function stlouis_elections_challenge_callback($phone_id, $position_id) {
 
 }
 
+/**
+ *
+ */
 function stlouis_top20_list_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -881,6 +957,9 @@ function stlouis_top20_list_callback($phone_id) {
   return theme('stlouis_top20_list', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_top20_2114_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -888,6 +967,9 @@ function stlouis_top20_2114_callback($phone_id) {
   return theme('stlouis_top20_2114', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_top_aldermen_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -898,7 +980,9 @@ function stlouis_top_aldermen_list_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_top_event_points_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -909,7 +993,9 @@ function stlouis_top_event_points_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_choose_name_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -920,7 +1006,9 @@ function stlouis_choose_name_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_enter_referral_code_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -931,7 +1019,9 @@ function stlouis_enter_referral_code_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_aides_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -942,7 +1032,9 @@ function stlouis_aides_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_land_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -953,7 +1045,9 @@ function stlouis_land_list_callback($phone_id) {
 
 }
 
-
+/**
+ *
+ */
 function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -964,6 +1058,9 @@ function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_buy', $phone_id, $land_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -974,6 +1071,9 @@ function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_sell', $phone_id, $land_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -984,6 +1084,9 @@ function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_work', $phone_id, $land_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_staff_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -993,6 +1096,9 @@ function stlouis_staff_list_callback($phone_id) {
   return theme('stlouis_staff_list', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -1003,6 +1109,9 @@ function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
   return theme('stlouis_staff_hire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -1013,6 +1122,9 @@ function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
   return theme('stlouis_staff_fire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_actions_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1022,6 +1134,9 @@ function stlouis_actions_list_callback($phone_id) {
   return theme('stlouis_actions_list', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_actions_do_callback($phone_id, $action_id) {
 
   if (empty($phone_id) || !is_numeric($action_id)) {
@@ -1031,6 +1146,9 @@ function stlouis_actions_do_callback($phone_id, $action_id) {
   return theme('stlouis_actions_do', $phone_id, $action_id);
 }
 
+/**
+ *
+ */
 function stlouis_equipment_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1040,6 +1158,9 @@ function stlouis_equipment_list_callback($phone_id) {
   return theme('stlouis_equipment_list', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -1050,6 +1171,9 @@ function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
   return theme('stlouis_equipment_buy', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -1060,6 +1184,9 @@ function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
   return theme('stlouis_equipment_sell', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ *
+ */
 function stlouis_move_callback($phone_id, $neighborhood_id) {
 
   if (empty($phone_id) || !is_numeric($neighborhood_id)) {
@@ -1069,6 +1196,9 @@ function stlouis_move_callback($phone_id, $neighborhood_id) {
   return theme('stlouis_move', $phone_id, $neighborhood_id);
 }
 
+/**
+ *
+ */
 function stlouis_move_do_callback($phone_id, $neighborhood_id) {
 
   if (empty($phone_id) || !is_numeric($neighborhood_id)) {
@@ -1078,6 +1208,9 @@ function stlouis_move_do_callback($phone_id, $neighborhood_id) {
   return theme('stlouis_move_do', $phone_id, $neighborhood_id);
 }
 
+/**
+ *
+ */
 function stlouis_authenticate_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1088,7 +1221,7 @@ function stlouis_authenticate_callback($phone_id) {
 }
 
 /**
- * Used for playbooks that didn't authorize the app
+ * Used for playbooks that didn't authorize the app.
  */
 function stlouis_playbook_NULL_callback() {
 
@@ -1096,6 +1229,9 @@ function stlouis_playbook_NULL_callback() {
 
 }
 
+/**
+ *
+ */
 function stlouis_bounce_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1103,6 +1239,9 @@ function stlouis_bounce_callback($phone_id) {
   return theme('stlouis_bounce', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_bounce_040_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1110,6 +1249,9 @@ function stlouis_bounce_040_callback($phone_id) {
   return theme('stlouis_bounce_040', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1120,6 +1262,9 @@ function stlouis_elders_preference_callback($phone_id) {
 
 }
 
+/**
+ *
+ */
 function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
 
   if (empty($phone_id) || is_nan($zombie_id) || is_nan($hood_id)) {
@@ -1129,6 +1274,9 @@ function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
   return theme('stlouis_zombie_move', $phone_id, $zombie_id, $hood_id);
 }
 
+/**
+ *
+ */
 function stlouis_event_info_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1138,6 +1286,9 @@ function stlouis_event_info_callback($phone_id) {
   return theme('stlouis_event_info', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_event_prizes_callback($phone_id) {
 
   global $user;
@@ -1150,6 +1301,9 @@ function stlouis_event_prizes_callback($phone_id) {
   return theme('stlouis_event_prizes', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_changelog_callback($phone_id) {
 
   global $user;
@@ -1161,30 +1315,32 @@ function stlouis_changelog_callback($phone_id) {
   return theme('stlouis_changelog', $phone_id);
 }
 
+/**
+ *
+ */
 function stlouis_theme() {
-  // theme "A" uses template "B" with args "C"
-
+  // Theme "A" uses template "B" with args "C".
   return array(
 
     'stlouis_homepage' => array(
       'template' => 'stlouis_homepage',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_userprofile' => array(
       'template' => 'stlouis_userprofile',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_user_competencies' => array(
       'template' => 'stlouis_user_competencies',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_clan_list' => array(
@@ -1192,14 +1348,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'clan_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_clan_list_available' => array(
       'template' => 'stlouis_clan_list_available',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_clan_msg' => array(
@@ -1207,7 +1363,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'clan_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_clan_announcements' => array(
@@ -1215,7 +1371,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'clan_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_class_list' => array(
@@ -1223,7 +1379,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'class_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_block_user_toggle' => array(
@@ -1231,7 +1387,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'phone_id_to_block' => NULL,
-      )
+      ),
     ),
 
     'stlouis_msg_delete' => array(
@@ -1239,14 +1395,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'msg_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_party_msg' => array(
       'template' => 'stlouis_party_msg',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_increase_skills' => array(
@@ -1254,14 +1410,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'skill' => NULL,
-      )
+      ),
     ),
 
     'stlouis_quests_list' => array(
       'template' => 'stlouis_quests_list',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_quests_do' => array(
@@ -1269,42 +1425,42 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'quest_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elders' => array(
       'template' => 'stlouis_elders',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_elders_ask_reset' => array(
       'template' => 'stlouis_elders_ask_reset',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_elders_do_reset' => array(
       'template' => 'stlouis_elders_do_reset',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_elders_ask_reset_skills' => array(
       'template' => 'stlouis_elders_ask_reset_skills',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_elders_do_reset_skills' => array(
       'template' => 'stlouis_elders_do_reset_skills',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_elders_do_fill' => array(
@@ -1312,56 +1468,56 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'fill_type' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elders_rename' => array(
       'template' => 'stlouis_elders_rename',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elders_set_password' => array(
       'template' => 'stlouis_elders_set_password',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elders_ask_purchase' => array(
       'template' => 'stlouis_elders_ask_purchase',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elders_do_purchase' => array(
       'template' => 'stlouis_elders_do_purchase',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_check_receipt' => array(
       'template' => 'stlouis_elders_check_receipt',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_google_checkout' => array(
       'template' => 'stlouis_google_checkout',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_welcome' => array(
       'template' => 'stlouis_welcome',
       'arguments' => array(
-        'phone_id' => NULL
-      )
+        'phone_id' => NULL,
+      ),
     ),
 
     'stlouis_choose_clan' => array(
@@ -1369,21 +1525,21 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'clan_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_help' => array(
       'template' => 'stlouis_help',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elections_list' => array(
       'template' => 'stlouis_elections_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_elections_challenge' => array(
@@ -1391,14 +1547,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'position_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_debates_list' => array(
       'template' => 'stlouis_debates_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_debates_challenge' => array(
@@ -1406,63 +1562,63 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'position_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_top20_list' => array(
       'template' => 'stlouis_top20_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_top20_2114' => array(
       'template' => 'stlouis_top20_2114',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_top_aldermen_list' => array(
       'template' => 'stlouis_top_aldermen_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_top_event_points' => array(
       'template' => 'stlouis_top_event_points',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_choose_name' => array(
       'template' => 'stlouis_choose_name',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_enter_referral_code' => array(
       'template' => 'stlouis_enter_referral_code',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_aides' => array(
       'template' => 'stlouis_aides',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_land_list' => array(
       'template' => 'stlouis_land_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_land_buy' => array(
@@ -1471,7 +1627,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_land_sell' => array(
@@ -1480,7 +1636,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_land_work' => array(
@@ -1489,14 +1645,14 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_staff_list' => array(
       'template' => 'stlouis_staff_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_staff_hire' => array(
@@ -1505,7 +1661,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_staff_fire' => array(
@@ -1514,14 +1670,14 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_actions_list' => array(
       'template' => 'stlouis_actions_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_actions_do' => array(
@@ -1529,14 +1685,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'action_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_equipment_list' => array(
       'template' => 'stlouis_equipment_list',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_equipment_buy' => array(
@@ -1545,7 +1701,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_equipment_sell' => array(
@@ -1554,7 +1710,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      )
+      ),
     ),
 
     'stlouis_move' => array(
@@ -1562,7 +1718,7 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'neighborhood_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_move_do' => array(
@@ -1570,14 +1726,14 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'neighborhood_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_authenticate' => array(
       'template' => 'stlouis_authenticate',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_playbook_NULL' => array(
@@ -1588,21 +1744,21 @@ function stlouis_theme() {
       'template' => 'stlouis_bounce',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_bounce_040' => [
       'template' => 'stlouis_bounce_040',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elders_preferences' => array(
       'template' => 'stlouis_elders_preferences',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_zombie_move' => array(
@@ -1611,31 +1767,30 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'zombie_id' => NULL,
         'hood_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_event_info' => array(
       'template' => 'stlouis_event_info',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_event_prizes' => array(
       'template' => 'stlouis_event_prizes',
       'arguments' => array(
         'phone_id' => NULL,
-      )
+      ),
     ),
 
     'stlouis_changelog' => [
       'template' => 'stlouis_changelog',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
   );
 
 }
-

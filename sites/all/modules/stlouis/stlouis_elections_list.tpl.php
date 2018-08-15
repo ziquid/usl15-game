@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elections_list.tpl.php
- * Stlouis elections list
+ * @file Stlouis_elections_list.tpl.php
+ * Stlouis elections list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -42,7 +42,8 @@ $rating = $data->rating;
 $residents = $data->residents;
 $district = $data->district;
 
-if (($rating * 100) == (ceil($rating) * 100)) $rating = ceil($rating);
+if (($rating * 100) == (ceil($rating) * 100)) {$rating = ceil($rating);
+}
 
 if ($data->has_elections == 0) {
 
@@ -172,7 +173,8 @@ $sql = 'SELECT elected_positions.id AS ep_id,
 
 $result = db_query($sql, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $district, $game_user->level);
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {$data[] = $item;
+}
 
   echo <<< EOF
 <div class="elections-header">
@@ -195,8 +197,9 @@ firep($item);
   $official_link = $item->ep_name;
   $clan_class = 'election-details';
 
-  if ($item->can_broadcast_to_party)
+  if ($item->can_broadcast_to_party) {
     $official_link .= '<div class="can-broadcast-to-party">*</div>';
+  }
 
   // No existing officer.
   if (empty($item->id)) {
@@ -229,9 +232,8 @@ firep($item);
   // Not enough action left.
   if ($game_user->actions < $item->energy_bonus) {
 
-//      $action = t('Not enough Action left');
-//      $action_class = 'not-yet';
-
+// $action = t('Not enough Action left');
+//      $action_class = 'not-yet';.
   }
 
   // Can't challenge yourself.
@@ -266,14 +268,17 @@ firep($item);
 
   $clan_acronym = '';
 
-  if (!empty($item->clan_acronym))
+  if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
+  }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
-  if ($last_group != $item->ep_group)
+  if ($last_group != $item->ep_group) {
     echo '</div><div class="elections">';
+  }
 
   echo <<< EOF
 <div class="$clan_class">

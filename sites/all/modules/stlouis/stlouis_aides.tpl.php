@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @file stlouis_aides.tpl.php
- * Stlouis aides
+ * @file Stlouis_aides.tpl.php
+ * Stlouis aides.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
-//  global $mobi, $api_theme;
+// Global $mobi, $api_theme;.
   global $game, $phone_id;
 
   $game_user = _stlouis_fetch_user();
@@ -25,33 +25,5 @@ Aides
 <div class="menu-option"><a href="/$game/agents/$phone_id">Agents</a></div>
 </div>
 EOF;
-    
+
   db_set_active('default');
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-                                                                                  
-  

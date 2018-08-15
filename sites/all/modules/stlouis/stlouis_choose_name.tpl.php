@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_choose_name.tpl.php
- * Stlouis choose name
+ * @file Stlouis_choose_name.tpl.php
+ * Stlouis choose name.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -93,7 +93,7 @@ else {
   // Set an error message if a dup.
   if ($isdupusername) {
 
-    $msgUserDuplicate =<<< EOF
+    $msgUserDuplicate = <<< EOF
 <div class="message-error big">Sorry!</div>
 <p>The username <em>$username</em> already exists.</p>
 <p class="second">Please choose a different name and try again.</p>
