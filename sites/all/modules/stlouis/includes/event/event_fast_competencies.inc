@@ -12,8 +12,9 @@
 function game_event_fast_competencies_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_fast_competencies_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
