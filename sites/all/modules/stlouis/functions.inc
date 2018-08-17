@@ -6,11 +6,14 @@
  * Misc functions for Ziquid games.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 require_once drupal_get_path('module', 'stlouis') . '/functions-staff.inc';
 
+/**
+ *
+ */
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
   global $game, $phone_id;
@@ -27,17 +30,20 @@ function game_button($link = 'home', $type = 'continue', $extra_link = '') {
   </a>
 </div>
 EOF;
-    break;
+      break;
 
   }
 
 }
 
+/**
+ *
+ */
 function NO_sound($name) {
 
   global $game;
 
-echo <<< EOF
+  echo <<< EOF
   <script type="text/javascript">
     var mp3 = document.createElement("audio");
     mp3.setAttribute('src', '/sites/default/files/sounds/{$game}_$name.mp3');
@@ -58,7 +64,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function game_required_staff($game_user, $staff_id, $req_quantity) {
 
   global $game;
@@ -93,7 +101,9 @@ function game_required_staff($game_user, $staff_id, $req_quantity) {
 EOF;
 }
 
-
+/**
+ *
+ */
 function game_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
@@ -128,7 +138,9 @@ function game_required_equipment($game_user, $equipment_id, $req_quantity) {
 EOF;
 }
 
-
+/**
+ *
+ */
 function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
@@ -166,7 +178,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_required_land($game_user, $land_id, $req_quantity) {
 
   global $game;
@@ -206,7 +220,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_required_elected_position($game_user, $id, $name) {
 
   global $game;
@@ -238,7 +254,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_required_competency($game_user, $id, $level, $name) {
 
   global $game;
@@ -274,7 +292,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_enhanced_competency($game_user, $id, $name) {
 
   global $game;
@@ -289,9 +309,11 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function _show_goal($game_user) {
-return;
+  return;
   global $game;
 
   $sql = 'select goals.* from goals
@@ -302,8 +324,9 @@ return;
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
-  if (substr(arg(1), 0, strlen($item->type)) == $item->type)
+  if (substr(arg(1), 0, strlen($item->type)) == $item->type) {
     $current = 'current';
+  }
 
   $finished = eval($item->code_to_check);
 
@@ -316,7 +339,7 @@ return;
     $result = db_query($sql, $game_user->id, $item->id);
 
     // Congratulate user.
-    $extra_title =<<< EOF
+    $extra_title = <<< EOF
 <div class="title goal-achieved">
   Goal Achievement
   <span class="arrows">&raquo; </span>
@@ -345,9 +368,13 @@ EOF;
   }
 
   // No goal.
-  if (empty($item->title) && empty($extra_title)) return;
+  if (empty($item->title) && empty($extra_title)) {
+    return;
+  }
 
-  if (empty($item->title)) $item->title = t('None');
+  if (empty($item->title)) {
+    $item->title = t('None');
+  }
 
   $description = t($item->description, array(
     '@level' => $game_user->level,
@@ -393,7 +420,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_is_quest_complete($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
@@ -405,7 +434,9 @@ function NO_is_quest_complete($game_user, $quest_id) {
 
 }
 
-
+/**
+ *
+ */
 function NO_is_quest_started($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
@@ -417,14 +448,18 @@ function NO_is_quest_started($game_user, $quest_id) {
 
 }
 
-
+/**
+ *
+ */
 function NO_on_screen($screen) {
 
   return (arg(1) == $screen);
 
 }
 
-
+/**
+ *
+ */
 function NO_has_job($game_user) {
 
   $sql = 'SELECT sum(payout) as job_income
@@ -439,7 +474,9 @@ function NO_has_job($game_user) {
 
 }
 
-
+/**
+ *
+ */
 function NO_has_sent_message($game_user) {
 
   $sql = 'SELECT count(id) as count
@@ -452,7 +489,9 @@ function NO_has_sent_message($game_user) {
 
 }
 
-
+/**
+ *
+ */
 function NO_has_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
@@ -466,7 +505,9 @@ function NO_has_equipment($game_user, $id, $quantity) {
 
 }
 
-
+/**
+ *
+ */
 function NO_has_clan_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
@@ -543,6 +584,7 @@ function game_fetch_visible_land($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
+ *
  * @return \stdClass[]
  *   The next land item to show, if any.
  */
@@ -603,6 +645,9 @@ function game_fetch_land_by_id($game_user, $land_id) {
   return $item;
 }
 
+/**
+ *
+ */
 function game_show_land($game_user, $item, $options = []) {
 
   global $game;
@@ -718,46 +763,56 @@ function game_show_land($game_user, $item, $options = []) {
     $item->description);
 
   $quantity = $item->quantity;
-  if (empty($quantity)) $quantity = t('None');
+  if (empty($quantity)) {
+    $quantity = t('None');
+  }
 
   $land_price = $item->price + ($item->quantity *
     $item->price_increase);
 
-  if (($land_price % 1000) == 0)
+  if (($land_price % 1000) == 0) {
     $land_price = ($land_price / 1000) . 'K';
+  }
 
   $payout = $item->payout;
 
-  if ((($payout % 1000) == 0) && ($payout > 0))
+  if ((($payout % 1000) == 0) && ($payout > 0)) {
     $payout = ($payout / 1000) . 'K';
+  }
 
   $can_buy = $can_sell = TRUE;
 
   // FIXME firep() all reason why can't buy nor sell.
   if ($item->fkey_neighborhoods_id != 0 &&
-    $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)
+    $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
     $can_buy = FALSE;
+  }
 
   if ($item->fkey_values_id != 0 &&
-    $item->fkey_values_id != $game_user->fkey_values_id)
+    $item->fkey_values_id != $game_user->fkey_values_id) {
     $can_buy = FALSE;
+  }
 
-  if ($item->required_level > $game_user->level)
+  if ($item->required_level > $game_user->level) {
     $can_buy = FALSE;
+  }
 
   if (!$item->active) {
     $can_buy = FALSE;
     firep('Cannot buy because ACTIVE is FALSE', $item->name);
   }
 
-  if ($item->is_loot != 0)
+  if ($item->is_loot != 0) {
     $can_buy = FALSE;
+  }
 
-  if ($item->can_sell != 1)
+  if ($item->can_sell != 1) {
     $can_sell = FALSE;
+  }
 
-  if ($item->quantity < 1)
+  if ($item->quantity < 1) {
     $can_sell = FALSE;
+  }
 
   $current = ($item->type == 'job' && $item->quantity > 0) ? t('Current') : '';
   $inactive = ($item->active) ? '' : t('(Inactive)');
@@ -900,15 +955,17 @@ EOF;
 EOF;
   }
 
-  if ($game_user->level < $item->required_level) $reqs .= <<< EOF
+  if ($game_user->level < $item->required_level) {
+    $reqs .= <<< EOF
     <div class="land-required_level">Player: Level $item->required_level</div>
 EOF;
+  }
 
   if ($item->fkey_required_competencies_id > 0) {
 
     $check = game_competency_level($game_user,
       (int) $item->fkey_required_competencies_id);
-firep($check);
+    firep($check);
     $comp_name = game_competency_level_name($item->required_competencies_level,
       TRUE);
 
@@ -921,10 +978,12 @@ EOF;
 
   }
 
-  if (!empty($reqs)) echo <<< EOF
+  if (!empty($reqs)) {
+    echo <<< EOF
     <!--<div class="land-requisites">// Requisites //</div>-->
     $reqs
 EOF;
+  }
 
   echo <<< EOF
     <div class="land-disbursements">
@@ -961,7 +1020,7 @@ EOF;
   </div>
 EOF;
   }
-  else if ($item->type == 'investment') {
+  elseif ($item->type == 'investment') {
 
     // Attempt to buy.
     if ($options['land-buy-succeeded']) {
@@ -1003,8 +1062,8 @@ EOF;
   }
   else {
 
-      // Job.
-      echo <<< EOF
+    // Job.
+    echo <<< EOF
   <div class="land-button-wrapper">
     $apply_button
   </div>
@@ -1124,6 +1183,7 @@ function game_fetch_visible_equip($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
+ *
  * @return \stdClass
  *   The next equipment item to show, if any.
  */
@@ -1422,7 +1482,7 @@ EOF;
 EOF;
   }
 
-  // grab each action for the equipment
+  // Grab each action for the equipment.
   $acts_arr = [];
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
@@ -1483,7 +1543,7 @@ EOF;
     <div class="land-description">$description</div>
 EOF;
   }
-else {
+  else {
     echo <<< EOF
 <div class="land $failed $class_str">
   $header
@@ -1541,7 +1601,7 @@ EOF;
   </div>
 EOF;
   }
-else if ($item->initiative_bonus < 0) {
+  elseif ($item->initiative_bonus < 0) {
     echo <<< EOF
   <div class="land-payout negative">
     $initiative: $item->initiative_bonus
@@ -1556,7 +1616,7 @@ EOF;
   </div>
 EOF;
   }
-else if ($item->endurance_bonus < 0) {
+  elseif ($item->endurance_bonus < 0) {
     echo <<< EOF
   <div class="land-payout negative">
     $endurance: $item->endurance_bonus
@@ -1576,7 +1636,7 @@ EOF;
     }
 
   }
-else if ($item->elocution_bonus < 0) {
+  elseif ($item->elocution_bonus < 0) {
     echo <<< EOF
   <div class="land-payout negative">
     $elocution: $item->elocution_bonus
@@ -1621,11 +1681,11 @@ EOF;
   }
 
   foreach ($acts_arr as $action) {
-//    firep($action, 'action associated with equipment');
-
+    // firep($action, 'action associated with equipment');.
     $cost = "Cost: $action->cost Action";
-    if ($action->values_cost > 0)
+    if ($action->values_cost > 0) {
       $cost .= ", $action->values_cost $game_user->values";
+    }
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
@@ -1751,7 +1811,9 @@ EOF;
   echo '</div>';
 }
 
-// Sometimes the income gets hacked -- fix here.
+/**
+ * Sometimes the income gets hacked -- fix here.
+ */
 function game_recalc_income(&$game_user) {
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
@@ -1789,15 +1851,21 @@ function game_recalc_income(&$game_user) {
   $game_user->expenses = $item->expenses;
 }
 
-
+/**
+ *
+ */
 function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-  if (arg(3) == '') $normal_active = 'active';
-  if (arg(3) == 'clan') $clan_active = 'active';
+  if (arg(3) == '') {
+    $normal_active = 'active';
+  }
+  if (arg(3) == 'clan') {
+    $clan_active = 'active';
+  }
 
   echo <<< EOF
 <div class="news">
@@ -1810,6 +1878,9 @@ EOF;
 
 }
 
+/**
+ *
+ */
 function game_show_aides_menu($game_user) {
 
   global $game;
@@ -1837,7 +1908,7 @@ function game_show_aides_menu($game_user) {
     $title = t('Hire @staff and @agents', [
       '@staff' => $game_text['staff'],
       '@agents' => $game_text['agents'],
-      ]);
+    ]);
   }
 
   echo <<< EOF
@@ -1923,15 +1994,19 @@ EOF;
 
   _show_goal($game_user);
 
- if (!empty($title)) echo <<< EOF
+  if (!empty($title)) {
+    echo <<< EOF
 <div class="title">
   $title
 </div>
 EOF;
+  }
 
 }
 
-
+/**
+ *
+ */
 function game_show_elections_menu($game_user) {
 
   global $game;
@@ -1967,7 +2042,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function game_show_profile_menu($game_user) {
 
   global $game, $phone_id;
@@ -1975,13 +2052,19 @@ function game_show_profile_menu($game_user) {
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
-  if (arg(1) == 'user') $user_active = 'active';
-  if (arg(1) == 'user_favors') $favor_active = 'active';
+  if (arg(1) == 'user') {
+    $user_active = 'active';
+  }
+  if (arg(1) == 'user_favors') {
+    $favor_active = 'active';
+  }
   if (arg(1) == 'favor_perform') {
     $favor_active = 'active';
     $arg3 = '';
   }
-  if (arg(1) == 'user_comp') $comp_active = 'active';
+  if (arg(1) == 'user_comp') {
+    $comp_active = 'active';
+  }
 
   echo <<< EOF
 <div class="news">
@@ -1997,7 +2080,9 @@ EOF;
 
 }
 
-
+/**
+ *
+ */
 function NO_show_clan_menu($game_user) {
 
   global $game, $phone_id;
@@ -2005,10 +2090,18 @@ function NO_show_clan_menu($game_user) {
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
-  if (arg(1) == 'clan_list') $list_active = 'active';
-  if (arg(1) == 'clan_msg') $msg_active = 'active';
-  if (arg(1) == 'clan_announcements') $ann_active = 'active';
-  if (arg(1) == 'clan_admin') $admin_active = 'active';
+  if (arg(1) == 'clan_list') {
+    $list_active = 'active';
+  }
+  if (arg(1) == 'clan_msg') {
+    $msg_active = 'active';
+  }
+  if (arg(1) == 'clan_announcements') {
+    $ann_active = 'active';
+  }
+  if (arg(1) == 'clan_admin') {
+    $admin_active = 'active';
+  }
 
   echo <<< EOF
 <div class="news">
@@ -2027,11 +2120,21 @@ EOF;
 
 }
 
-
-function game_show_quest($game_user, $item, $percentage_target,
-  $percentage_divisor, $quest_group, $party_title, $outcome = '',
-  $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
-  $consumption_html = '', $disbursement_html = '',
+/**
+ *
+ */
+function game_show_quest($game_user,
+ $item,
+ $percentage_target,
+  $percentage_divisor,
+ $quest_group,
+ $party_title,
+ $outcome = '',
+  $exp_added_str = '',
+ $money_added_str = '',
+ $disbursements_doubled = '',
+  $consumption_html = '',
+ $disbursement_html = '',
   $quest_completion_html = '') {
 
   global $game;
@@ -2054,8 +2157,12 @@ function game_show_quest($game_user, $item, $percentage_target,
   $data = db_fetch_object($result);
   $seq_num = $item->id - $data->id;
 
-  if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
-  if (substr($item->description, -1) != '>') $raquo = '&raquo;';
+  if (substr($item->description, 0, 3) != '<p ') {
+    $laquo = '&laquo;';
+  }
+  if (substr($item->description, -1) != '>') {
+    $raquo = '&raquo;';
+  }
 
   $name = t($item->name, array(
     '@clan' => $game_user->clan_name,
@@ -2073,7 +2180,9 @@ function game_show_quest($game_user, $item, $percentage_target,
     '@username' => $game_user->username,
   ));
 
-  if (empty($item->percent_complete)) $item->percent_complete = 0;
+  if (empty($item->percent_complete)) {
+    $item->percent_complete = 0;
+  }
 
   if ($item->percent_complete > floor($percentage_target / 2)) {
 
@@ -2167,7 +2276,7 @@ EOF;
       if ($chance_of_loot <= 20) {
         $chance_modifier = t('Low');
       }
-      else if ($chance_of_loot >= 40) {
+      elseif ($chance_of_loot >= 40) {
         $chance_modifier = t('High');
       }
       echo <<< EOF
@@ -2184,19 +2293,19 @@ EOF;
     </div>
 EOF;
 
-  if ($item->clan_equipment_1_consumed_quantity > 0) {
+    if ($item->clan_equipment_1_consumed_quantity > 0) {
 
-    echo '<div class="quest-required_stuff">';
+      echo '<div class="quest-required_stuff">';
 
-    _clan_required_equipment($game_user,
+      _clan_required_equipment($game_user,
       $item->fkey_clan_equipment_1_consumed_id,
       $item->clan_equipment_1_consumed_quantity);
 
-    echo '</div>';
+      echo '</div>';
 
-  }
+    }
 
-  if ($item->land_required_quantity +
+    if ($item->land_required_quantity +
     $item->equipment_1_required_quantity +
     $item->equipment_2_required_quantity +
     $item->equipment_3_required_quantity +
@@ -2210,9 +2319,10 @@ EOF;
 EOF;
 
       // Required land.
-      if ($item->land_required_quantity > 0)
+      if ($item->land_required_quantity > 0) {
         _required_land($game_user, $item->fkey_land_required_id,
           $item->land_required_quantity);
+      }
 
       // Required equipment.
       if ($item->equipment_1_required_quantity +
@@ -2222,55 +2332,63 @@ EOF;
 
         echo '<div class="quest-required_stuff">';
 
-        if ($item->equipment_1_required_quantity > 0)
+        if ($item->equipment_1_required_quantity > 0) {
           game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
-            $item->equipment_1_required_quantity);
+          $item->equipment_1_required_quantity);
+        }
 
-        if ($item->equipment_2_required_quantity > 0)
+        if ($item->equipment_2_required_quantity > 0) {
           game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
-            $item->equipment_2_required_quantity);
+          $item->equipment_2_required_quantity);
+        }
 
-        if ($item->equipment_3_required_quantity > 0)
+        if ($item->equipment_3_required_quantity > 0) {
           game_required_equipment($game_user, $item->fkey_equipment_3_required_id,
-            $item->equipment_3_required_quantity);
+          $item->equipment_3_required_quantity);
+        }
 
-        if ($item->clan_equipment_1_required_quantity > 0)
+        if ($item->clan_equipment_1_required_quantity > 0) {
           _clan_required_equipment($game_user,
-            $item->fkey_clan_equipment_1_required_id,
-            $item->clan_equipment_1_required_quantity);
+          $item->fkey_clan_equipment_1_required_id,
+          $item->clan_equipment_1_required_quantity);
+        }
 
         echo '</div>';
 
       }
 
       // Required staff.
-      if ($item->staff_required_quantity > 0)
+      if ($item->staff_required_quantity > 0) {
         game_required_staff($game_user, $item->fkey_staff_required_id,
-          $item->staff_required_quantity);
+        $item->staff_required_quantity);
+      }
 
       // Required party.
-      if ($item->need_party > 0)
+      if ($item->need_party > 0) {
         echo <<< EOF
     <div class="quest-required_energy">
       You must belong to a non-Underground $party_lower
     </div>
 EOF;
+      }
 
       // Required clan.
-      if ($item->need_clan > 0)
+      if ($item->need_clan > 0) {
         echo <<< EOF
     <div class="quest-required_energy">
       You must belong to a clan
     </div>
 EOF;
+      }
 
       // Required job.
-      if ($item->need_job > 0)
+      if ($item->need_job > 0) {
         echo <<< EOF
     <div class="quest-required_energy">
       You must have a job
     </div>
 EOF;
+      }
 
     }
 
@@ -2316,6 +2434,9 @@ EOF;
 
 }
 
+/**
+ *
+ */
 function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   global $game, $phone_id;
@@ -2342,8 +2463,12 @@ function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   }
 
-  if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
-  if (substr($item->description, -1) != '>') $raquo = '&raquo;';
+  if (substr($item->description, 0, 3) != '<p ') {
+    $laquo = '&laquo;';
+  }
+  if (substr($item->description, -1) != '>') {
+    $raquo = '&raquo;';
+  }
 
   $name = t($item->name, array(
     '%party' => $party_title,
@@ -2352,8 +2477,9 @@ function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
     '@location' => $location,
   ));
 
-  if (($view == 'runner') || ($view == 'perform'))
+  if (($view == 'runner') || ($view == 'perform')) {
     $item->initiator_description = $item->runner_description;
+  }
 
   $description = t($item->initiator_description, array(
     '%party' => $party_title,
@@ -2412,7 +2538,8 @@ function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
     </div>
 EOF;
 
-  if ($view == 'initiator') echo <<< EOF
+  if ($view == 'initiator') {
+    echo <<< EOF
     <div class="quest-requisites">
       // Initiator Requisites //
     </div>
@@ -2423,6 +2550,7 @@ EOF;
       {$actions}: $item->actions_cost
     </div>
 EOF;
+  }
 
   if ($view != 'perform') {
 
@@ -2438,9 +2566,9 @@ EOF;
     // Due date.
     if (!empty($item->time_due)) {
 
-    $time_due = game_format_date(strtotime($item->time_due));
+      $time_due = game_format_date(strtotime($item->time_due));
 
-    echo <<< EOF
+      echo <<< EOF
     <div class="quest-experience">
       Perform By: <span class="highlight">$time_due</span>
     </div>
@@ -2500,7 +2628,8 @@ EOF;
   </div>
 EOF;
 
-  if ($view != 'perform') echo <<< EOF
+  if ($view != 'perform') {
+    echo <<< EOF
   <div class="quest-perform-button-wrapper">
     <div class="quest-perform-button">
       $a_start
@@ -2509,11 +2638,15 @@ EOF;
     </div>
   </div>
 EOF;
+  }
 
   echo '</div>';
 
 }
 
+/**
+ *
+ */
 function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -2590,6 +2723,9 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   return [TRUE, 'success', 0];
 }
 
+/**
+ *
+ */
 function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -2605,8 +2741,9 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   if (!empty($eo)) {
 
     if (($eq->quantity_limit > 0) &&
-      (($eo->quantity + $quantity) > $eq->quantity_limit))
+      (($eo->quantity + $quantity) > $eq->quantity_limit)) {
       return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+    }
 
     $sql = 'update clan_equipment_ownership set quantity = quantity + %d
       where fkey_equipment_id = %d and fkey_clans_id = %d;';
@@ -2615,8 +2752,9 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   }
   else {
 
-    if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
+    if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit)) {
       return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+    }
 
     $sql = 'insert into clan_equipment_ownership
       (fkey_clans_id, fkey_equipment_id, quantity) values
@@ -2637,7 +2775,7 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
  * @param int $id
  *   The equipment ID.
  * @param int $quantity
- *   Number of pieces to lose/sell
+ *   Number of pieces to lose/sell.
  * @param int $eq_price
  *   Amount of compensation to receive for sale.
  *
@@ -2694,7 +2832,7 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
  * @param int $id
  *   The equipment ID.
  * @param int $quantity
- *   Number of pieces to lose/sell
+ *   Number of pieces to lose/sell.
  *
  * @return bool
  *   Whether the sale succeeded or not.
@@ -2714,6 +2852,9 @@ function game_equipment_use(&$game_user, $id, $quantity) {
   }
 }
 
+/**
+ *
+ */
 function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -2726,10 +2867,14 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
   $eo = db_fetch_object($result);
 
   // Nothing there?
-  if (empty($eo)) return FALSE;
+  if (empty($eo)) {
+    return FALSE;
+  }
 
   // Not enough?
-  if ($eo->quantity < $quantity) return FALSE;
+  if ($eo->quantity < $quantity) {
+    return FALSE;
+  }
 
   // Using all?  Remove entry.
   if ($eo->quantity == $quantity) {
@@ -2751,6 +2896,9 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
 }
 
+/**
+ *
+ */
 function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -2790,6 +2938,9 @@ function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
+/**
+ *
+ */
 function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -2844,6 +2995,9 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
+/**
+ *
+ */
 function game_competency_gain($game_user, $id, $level = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -2888,7 +3042,7 @@ function game_competency_gain($game_user, $id, $level = 1) {
   }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
-firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
+    firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
   }
 
@@ -2931,7 +3085,9 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
   return TRUE;
 }
 
-
+/**
+ *
+ */
 function NO_election_won($game_user, $id) {
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
   db_query($sql, $game_user->id);
@@ -2982,6 +3138,9 @@ function game_action_use(&$game_user, $quantity = 1) {
   return TRUE;
 }
 
+/**
+ *
+ */
 function game_karma($game_user, $text, $quantity) {
 
   $sql = 'update users set karma = karma + %d where id = %d;';
@@ -2996,6 +3155,9 @@ function game_karma($game_user, $text, $quantity) {
   return TRUE;
 }
 
+/**
+ *
+ */
 function game_competency_level($game_user, $id) {
 
   // Return the user's competency level [0..5] for a given competency.
@@ -3088,6 +3250,9 @@ function game_show_by_level($game_user, $text, $level_obtained, $level_needed = 
   }
 }
 
+/**
+ *
+ */
 function competency_min_count($level, $comp_level) {
 
   // Return the minimum use count for a given level [0..5] and competency level.
@@ -3100,7 +3265,7 @@ function competency_min_count($level, $comp_level) {
       150,
       300,
       500,
-      PHP_INT_MAX
+      PHP_INT_MAX,
     ],
     2 => [
       0,
@@ -3109,7 +3274,7 @@ function competency_min_count($level, $comp_level) {
       75,
       150,
       250,
-      PHP_INT_MAX
+      PHP_INT_MAX,
     ],
     3 => [
       0,
@@ -3118,14 +3283,16 @@ function competency_min_count($level, $comp_level) {
       15,
       30,
       50,
-      PHP_INT_MAX
+      PHP_INT_MAX,
     ],
   ];
 
   return $min_count[$comp_level][$level];
 }
 
-
+/**
+ *
+ */
 function game_competency_level_name($id, $req = FALSE) {
 
   if ($req) {
@@ -3152,6 +3319,9 @@ function game_competency_level_name($id, $req = FALSE) {
   return $competencies[$id];
 }
 
+/**
+ *
+ */
 function game_competency_name($comp) {
   $comps = &drupal_static(__FUNCTION__, []);
 
@@ -3167,6 +3337,9 @@ function game_competency_name($comp) {
   return $comps[$comp];
 }
 
+/**
+ *
+ */
 function game_fetch_user_by_id($id) {
 
   // Simple per-page cache.
@@ -3176,7 +3349,7 @@ function game_fetch_user_by_id($id) {
     firep("query for user $id resulted in cached object");
     // Jwc 05Jul2013 -- don't return cached results.
     // Until we can reliably invalidate the cache.
-//    return $user_cache[$id];
+    //    return $user_cache[$id];.
   }
 
   // Find id from phone_id.
@@ -3227,17 +3400,19 @@ function game_fetch_user_by_id($id) {
   $result = db_query($sql, $id);
   $item = db_fetch_object($result);
 
-//   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+  // If (empty($item->ep_name)) $item->ep_name = 'Subjugate';.
   if (empty($item->ep_level)) {
     $item->ep_level = 0;
   }
   $user_cache[$id] = $item;
 
-firep($item, 'game_fetch_user_by_id for id ' . $id);
+  firep($item, 'game_fetch_user_by_id for id ' . $id);
   return $item;
 }
 
-
+/**
+ *
+ */
 function NO_hierarchy_status($game_user, $level) {
 
   global $game, $phone_id;
@@ -3263,7 +3438,6 @@ function NO_hierarchy_status($game_user, $level) {
       $ret->qualified = $ret->passed[0];
       break;
 
-
     case 1:
 
       list($ret->target[], $ret->progress[], $ret->passed[]) =
@@ -3271,7 +3445,6 @@ function NO_hierarchy_status($game_user, $level) {
 
       $ret->qualified = $ret->passed[0] & $ret->passed[1];
       break;
-
 
     case 2:
 
@@ -3305,11 +3478,10 @@ function NO_hierarchy_status($game_user, $level) {
         $ret->passed[3] & $ret->passed[4] & $ret->passed[5];
       break;
 
-
     case 3:
 
-//      list($ret->target[], $ret->progress[], $ret->passed[]) =
-//        _hierarchy_competency_check($game_user, 'Enriching', 1);
+      // list($ret->target[], $ret->progress[], $ret->passed[]) =
+      //        _hierarchy_competency_check($game_user, 'Enriching', 1);.
       list($ret->target[], $ret->progress[], $ret->passed[]) =
         _hierarchy_competency_check($game_user, 'Purifying', 1);
       list($ret->target[], $ret->progress[], $ret->passed[]) =
@@ -3379,7 +3551,9 @@ function NO_hierarchy_status($game_user, $level) {
 
 }
 
-
+/**
+ *
+ */
 function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 
   $check = game_competency_level($game_user, $req_comp);
@@ -3397,7 +3571,7 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
       array(
         '@name' => $req_comp,
         '@comp' => $check->level_name,
-        '@l' => $check->level
+        '@l' => $check->level,
       )
     );
   $passed = ($check->level >= $req_level);
@@ -3406,7 +3580,9 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 
 }
 
-
+/**
+ *
+ */
 function show_equipment($game_user, $item, $options = array()) {
 
   global $game, $phone_id;
@@ -3418,15 +3594,20 @@ function show_equipment($game_user, $item, $options = array()) {
     $item->description);
 
   $quantity = $item->quantity;
-  if (empty($quantity)) $quantity = '<em>None</em>';
+  if (empty($quantity)) {
+    $quantity = '<em>None</em>';
+  }
 
   $equipment_price = $item->price + ($item->quantity *
     $item->price_increase);
 
-  if (!$item->is_loot) $ai_output .= " $item->id=$equipment_price";
+  if (!$item->is_loot) {
+    $ai_output .= " $item->id=$equipment_price";
+  }
 
-  if (($equipment_price % 1000) == 0)
+  if (($equipment_price % 1000) == 0) {
     $equipment_price = ($equipment_price / 1000) . 'K';
+  }
 
   if ($equipment_price === '0K') {
     $equipment_price = 'Free';
@@ -3486,11 +3667,13 @@ function show_equipment($game_user, $item, $options = array()) {
     </div>
 EOF;
 
-  if (empty($soon)) echo <<< EOF
+  if (empty($soon)) {
+    echo <<< EOF
     <div class="land-owned">
       Owned: $quantity $quantity_limit
     </div>
 EOF;
+  }
 
   echo <<< EOF
     <div class="land-requisites">
@@ -3498,11 +3681,13 @@ EOF;
     </div>
 EOF;
 
-  if ($item->required_level > $game_user->level) echo <<< EOF
+  if ($item->required_level > $game_user->level) {
+    echo <<< EOF
     <div class="land-required_level">
       Player: Level $item->required_level
     </div>
 EOF;
+  }
 
   echo <<< EOF
     <div class="land-cost">
@@ -3568,7 +3753,9 @@ EOF;
     </div>
 EOF;
 
-  if (!$item->is_loot) $ai_output .= "/+elo:$item->elocution_bonus";
+    if (!$item->is_loot) {
+      $ai_output .= "/+elo:$item->elocution_bonus";
+    }
 
   }
 
@@ -3581,8 +3768,9 @@ EOF;
     </div>
 EOF;
 
-  if ((!$item->is_loot) && ($item->quantity == 0))
-    $ai_output .= "/+spd:$item->speed_increase";
+    if ((!$item->is_loot) && ($item->quantity == 0)) {
+      $ai_output .= "/+spd:$item->speed_increase";
+    }
 
   }
 
@@ -3613,14 +3801,17 @@ EOF;
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
 
-  while ($action = db_fetch_object($result)) $data2[] = $action;
+  while ($action = db_fetch_object($result)) {
+    $data2[] = $action;
+  }
 
   foreach ($data2 as $action) {
-firep($action);
+    firep($action);
 
     $cost = "Cost: $action->cost Action";
-    if ($action->values_cost > 0)
+    if ($action->values_cost > 0) {
       $cost .= ", $action->values_cost $game_user->values";
+    }
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
@@ -3777,6 +3968,9 @@ EOF;
   echo '</div>';
 }
 
+/**
+ *
+ */
 function NO_equipment_check_wear_out(&$game_user, $id) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -3786,13 +3980,15 @@ function NO_equipment_check_wear_out(&$game_user, $id) {
   $lost = FALSE;
 
   // Did it wear out?
-  if ($eq->chance_of_loss >= mt_rand(1,110)) {
+  if ($eq->chance_of_loss >= mt_rand(1, 110)) {
     // 110 instead of 100% to give a little extra chance of having it work.
-firep($eq->name . ' wore out!');
+    firep($eq->name . ' wore out!');
     $lost = equipment_lose($game_user, $id, 1);
 
     $stuff = strtolower($eq->name);
-    if (substr($stuff, 0, 2) == 'a ') $stuff = substr($stuff, 2);
+    if (substr($stuff, 0, 2) == 'a ') {
+      $stuff = substr($stuff, 2);
+    }
 
     $sql = 'select message from equipment_failure_reasons
       where fkey_equipment_id = %d
@@ -3869,6 +4065,9 @@ function game_send_system_message($from, $message, $subtype = 'system') {
   return db_query($sql, $subtype, $from, $message);
 }
 
+/**
+ *
+ */
 function game_zombie_name() {
 
   $first = [
@@ -3883,7 +4082,8 @@ function game_zombie_name() {
     'Infected',
     'Jaundiced',
     'Killer',
-  ]; // https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
+  // https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
+  ];
 
   $last = [
     'Quilter',
@@ -3989,7 +4189,7 @@ function game_set_timer($game_user, $timer_key, $time_secs) {
  * @param string $key
  *   The key to use for the query.
  * @param mixed $default
- *  The result to return if KVP is not found.
+ *   The result to return if KVP is not found.
  *
  * @return mixed
  *   The value, if found, or $default, if not found.
@@ -4092,11 +4292,11 @@ function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 =
     $include_file = substr($type_include_file, strpos($type_include_file, '/') + 1);
     $function_name = 'game_' . $include_file . '_' . $hook;
     if (function_exists($function_name)) {
-//      dpm('calling ' . $function_name);
+      // dpm('calling ' . $function_name);.
       $retval |= $function_name($game_user, $garg2, $garg3, $garg4);
     }
     else {
-//      dpm('function ' . $function_name . ' does not exist!');
+      // dpm('function ' . $function_name . ' does not exist!');.
     }
   }
 
@@ -4123,23 +4323,23 @@ function game_includes_add($include_file, $type) {
 
   // Already in include list; return.
   if (in_array($type . '/' . $include_file, $game_include_list)) {
-//    dpm($game_include_list, $type . '/' . $include_file . ' is already in game include list, not adding again');
+    // dpm($game_include_list, $type . '/' . $include_file . ' is already in game include list, not adding again');.
     return;
   }
 
   // Already in missing list; return.
   if (in_array($type . '/' . $include_file, $game_include_missing)) {
-//    dpm($game_include_missing, $type . '/' . $include_file . ' is already in game include missing list, not adding again');
+    // dpm($game_include_missing, $type . '/' . $include_file . ' is already in game include missing list, not adding again');.
     return;
   }
 
   if (file_exists($file_to_include)) {
     $game_include_list[] = $type . '/' . $include_file;
     include_once $file_to_include;
-//    dpm('including file ' . $file_to_include);
+    // dpm('including file ' . $file_to_include);.
     $function_name = 'game_' . $include_file . '_init';
     if (function_exists($function_name)) {
-//      dpm('calling ' . $function_name);
+      // dpm('calling ' . $function_name);.
       $function_name();
     }
   }

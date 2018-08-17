@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @file stlouis_equipment_list.tpl.php
- * Stlouis equipment list
+ * @file Stlouis_equipment_list.tpl.php
+ * Stlouis equipment list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
 
-// ------ CONTROLLER ------
+// ------ CONTROLLER ------.
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $ai_output = 'equipment-prices';
@@ -20,7 +20,7 @@ game_recalc_income($game_user);
 $data = game_fetch_visible_equip($game_user);
 $next = game_fetch_next_equip($game_user);
 
-// ------ VIEW ------
+// ------ VIEW ------.
 $fetch_header($game_user);
 game_show_aides_menu($game_user);
 
@@ -35,7 +35,7 @@ EOF;
 echo '<div id="all-equip">';
 
 foreach ($data as $item) {
-//firep($item, 'equipment item');
+// firep($item, 'equipment item');.
   game_show_equip($game_user, $item, $ai_output);
 }
 

@@ -12,8 +12,9 @@
 function game_event_flag_day_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_flag_day_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
@@ -29,6 +30,9 @@ function game_event_flag_day_homepage_event_notice($game_user, &$event_text) {
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_flag_day_cron() {
   $sql = 'SELECT users.* FROM `users`
     inner join elected_officials on elected_officials.fkey_users_id = users.id 

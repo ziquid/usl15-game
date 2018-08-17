@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_msg_delete.tpl.php
+ * @file Stlouis_msg_delete.tpl.php
  * Delete a message sent to you.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_zombie_move.tpl.php
- * Stlouis zombie move page
+ * @file Stlouis_zombie_move.tpl.php
+ * Stlouis zombie move page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -61,9 +61,8 @@
 </div>
 EOF;
 
-//      mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",
-//        "due to action from $game_user->username.");
-
+// mail('joseph@cheek.com', "Zombie $zombie_id has moved to $location",
+//        "due to action from $game_user->username.");.
   }
   else {
 
@@ -77,9 +76,8 @@ EOF;
 </div>
 EOF;
 
-//      mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",
-//        "due to action from $game_user->username.");
-
+// mail('joseph@cheek.com', "Zombie $zombie_id cannot move to $location",
+//        "due to action from $game_user->username.");.
   }
 
   db_set_active('default');

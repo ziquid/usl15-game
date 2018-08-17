@@ -12,8 +12,9 @@
 function game_event_fast_competencies_init() {
 }
 
-// HOOKS
-
+/**
+ * HOOKS.
+ */
 function game_event_rot13_comps_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
@@ -23,6 +24,9 @@ function game_event_rot13_comps_homepage_event_notice($game_user, &$event_text) 
 </div>';
 }
 
+/**
+ *
+ */
 function game_event_rot13_comps_comp_names_alter($game_user, &$comps) {
   foreach ($comps as $name => &$comp) {
     $comp = str_rot13($name);
