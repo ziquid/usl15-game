@@ -315,7 +315,7 @@ if ($action_succeeded) {
       $money = -min(-$action->values_change, $item->money);
     }
 
-// $sql = 'update users set money = greatest(money + %d, 0) where id = %d;';.
+// $sql = 'update users set money = greatest(money + %d, 0) where id = %d;';
     $sql = 'update users set money = money + %d where id = %d;';
     $result = db_query($sql, $money, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name . ' ' .
@@ -376,11 +376,12 @@ firep($eq);
     // 110 instead of 100% to give a little extra chance of having it work.
     if ($eq->chance_of_loss >= mt_rand(1, 110)) {
 
-// firep($eq->name . ' wore out!');.
+// firep($eq->name . ' wore out!');
       game_equipment_use($game_user, $eq->id, 1);
       // FIXME: do this before _stlouis_header so that upkeep is accurate.
       $stuff = strtolower($eq->name);
-      if (substr($stuff, 0, 2) == 'a ') {$stuff = substr($stuff, 2);
+      if (substr($stuff, 0, 2) == 'a ') {
+        $stuff = substr($stuff, 2);
       }
 
       $sql = 'select message from equipment_failure_reasons

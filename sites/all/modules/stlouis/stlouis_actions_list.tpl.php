@@ -79,7 +79,7 @@ EOF;
 
   }
 
-// If ($game == 'stlouis') {
+// if ($game == 'stlouis') {
 //
 //    if (arg(3) == 'banking') {
 //      $banking_active = 'active';
@@ -89,14 +89,14 @@ EOF;
 //      $normal_active = 'active';
 //      $actions_type = 'Normal';
 //      $order_by = 'required_level DESC';
-//    }.
+//    }
 // echo <<< EOF
 // <!--<div class="news">
 //  <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
 //  <a href="/$game/actions/$arg2/banking" class="button $banking_active">Banking</a>
 // </div>-->`
 // EOF;
-// }.
+// }
   if ($game_user->level < 20) {
     echo <<< EOF
 <ul>
@@ -365,7 +365,7 @@ EOF;
 
       // Which target?
       // Expensive query - goes to slave.
-//      db_set_active('game_' . $game . '_slave1');.
+//      db_set_active('game_' . $game . '_slave1');
       switch ($item->target) {
 
         // Users in your clan.
@@ -518,7 +518,7 @@ EOF;
       }
 
       // Reset to master.
-//      db_set_active('game_' . $game);.
+//      db_set_active('game_' . $game);
       // Too many to list?  Separate by first letter.
       if ($phone_id == 'abc123' &&
         count($data2) > 250) {

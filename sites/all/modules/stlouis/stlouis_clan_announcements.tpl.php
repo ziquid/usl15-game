@@ -106,7 +106,8 @@ EOF;
   $msg_shown = FALSE;
 
   $data = array();
-  while ($item = db_fetch_object($result)) {$data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
   }
 
   foreach ($data as $item) {

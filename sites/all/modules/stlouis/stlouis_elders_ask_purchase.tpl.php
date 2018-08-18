@@ -59,7 +59,7 @@ EOF;
 //
 //    db_set_active('default');
 //    return;
-//  }.
+//  }
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE)) {
 
     echo <<< EOF

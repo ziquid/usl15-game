@@ -124,7 +124,7 @@ EOF;
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $group_to_show);
 $qg = db_fetch_object($result);
-// firep($qg, 'quest group');.
+// firep($qg, 'quest group');
 $location = str_replace('%location', $location, $qg->name);
 
 if ($game_user->level < 6) {
@@ -234,7 +234,7 @@ while ($item = db_fetch_object($result)) {
 foreach ($data as $item) {
 
 // if ($event_type == EVENT_QUESTS_100)
-//    $item->required_energy = min($item->required_energy, 100);.
+//    $item->required_energy = min($item->required_energy, 100);
   $description = str_replace('%party', "<em>$party_title</em>",
     $item->description);
 
@@ -264,7 +264,7 @@ foreach ($data as $item) {
 
     // Show quests in other hoods?
 //    game_show_quest($game_user, $item, $percentage_target,
-//      $percentage_divisor, $quest_group, $party_title);.
+//      $percentage_divisor, $quest_group, $party_title);
     echo <<< EOF
 <div class="quests wrong-hood">
   <div class="quest-icon">
@@ -307,7 +307,7 @@ EOF;
 }
 
   // Don't show extra quests at first.
-//  if ($game_user->level > 1) {.
+//  if ($game_user->level > 1) {
   $data = array();
   $sql = 'select * from quests ' . $sql_quest_neighborhood .
     ' and required_level = %d ' . $active_quests .
@@ -321,7 +321,7 @@ EOF;
   foreach ($data as $item) {
 
 // if ($event_type == EVENT_QUESTS_100)
-//      $item->required_energy = min($item->required_energy, 100);.
+//      $item->required_energy = min($item->required_energy, 100);
     $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
 
@@ -342,5 +342,5 @@ EOF;
 
   }
 
-// }.
+// }
 db_set_active('default');

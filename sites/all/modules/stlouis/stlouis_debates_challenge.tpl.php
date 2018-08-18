@@ -83,7 +83,7 @@ if ($game_user->actions == 0) {
 }
 
 // $debate_wait_time = 1200;
-//  if ($debate == 'Box') $debate_wait_time = 900;.
+//  if ($debate == 'Box') $debate_wait_time = 900;
 if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   (time() - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
   ($item->meta == 'zombie' &&
@@ -339,7 +339,7 @@ if ($won) {
 
 // slack_send_message("Zombie $item->id ($item->username)"
 //        . " was beaten by super debater $game_user->username"
-//        . " and has switched to $party->clan_title!", $slack_channel);.
+//        . " and has switched to $party->clan_title!", $slack_channel);
       }
       elseif
         (($clan_player->fkey_clans_id != $clan_zombie->fkey_clans_id) &&
@@ -364,7 +364,7 @@ if ($won) {
 
 // slack_send_message("Zombie $item->id ($item->username)"
 //        . " was beaten by super debater $game_user->username"
-//        . " and has switched to $clan_name->name!", $slack_channel);.
+//        . " and has switched to $clan_name->name!", $slack_channel);
       // Already party and clan -- move them!
       } elseif
         ((($clan_player->fkey_clans_id == $clan_zombie->fkey_clans_id) &&
@@ -415,7 +415,7 @@ EOF;
         $points_to_add = 10;
 
 // slack_send_message("Conquered zombie $item->id ($item->username)"
-//        . " has five debate losses and has left!", $slack_channel);.
+//        . " has five debate losses and has left!", $slack_channel);
     }
     else {
 
@@ -423,7 +423,7 @@ EOF;
       $points_to_add = ($item->debates_lost + 1) * 2;
 
 // slack_send_message("Unconquered zombie $item->id ($item->username)"
-//      . " has less than five debate losses", $slack_channel);.
+//      . " has less than five debate losses", $slack_channel);
     }
 
   }
@@ -436,11 +436,11 @@ EOF;
 //  if (empty($row)) {
 //    $sql = 'insert into event_points set fkey_users_id = %d;';
 //      $result = db_query($sql, $game_user->id);
-//  }.
+//  }
 // $points_to_add += (int) date('n') + min($row->tags_con, 10);
 // $sql = 'update event_points set points = points + %d
 //      where fkey_users_id = %d;';
-//    $result = db_query($sql, $points_to_add, $game_user->id);.
+//    $result = db_query($sql, $points_to_add, $game_user->id);
 // echo <<< EOF
 // <!--<div class="subsubtitle">You gained $points_to_add point(s)</div>-->
 // EOF;
@@ -463,7 +463,7 @@ EOF;
     . ' has retreated to another region.</div>';
 
 // slack_send_message("$item->username has lost a debate and moved to"
-//      . " a new region.", $slack_channel);.
+//      . " a new region.", $slack_channel);
     // Give debatebot another token.
     $sql = 'select * from equipment_ownership where fkey_users_id = %d
       and fkey_equipment_id = %d;';
@@ -500,7 +500,7 @@ EOF;
       echo '<div class="subtitle">In haste to leave, ' . $item->username
         . ' dropped a token.&nbsp; You pick it up.</div>';
 
-// slack_send_message("$item->username left behind a token", $slack_channel);.
+// slack_send_message("$item->username left behind a token", $slack_channel);
     }
 
   }
@@ -618,7 +618,7 @@ else {
     echo '<div class="subtitle">' . $item->username .
       ' has gained 500 ' . $experience . '.</div>';
 
-// slack_send_message("Zombie $item->id won the debate!");.
+// slack_send_message("Zombie $item->id won the debate!");
   }
 
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
