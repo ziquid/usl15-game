@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_choose_clan.tpl.php
- * Stlouis choose clan
+ * @file Stlouis_choose_clan.tpl.php
+ * Stlouis choose clan.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -16,12 +16,14 @@ $game_user = $fetch_user();
 if ($clan_id != 0) {
 
   // No change?  Just show stats.
-  if ($clan_id == $game_user->fkey_values_id)
+  if ($clan_id == $game_user->fkey_values_id) {
     drupal_goto($game . '/user/' . $arg2);
+  }
 
   // Changing clans? Dock experience, bring level down to match.
   $new_experience = floor($game_user->experience * 0.75);
-  if ($new_experience < 75) $new_experience = 75;
+  if ($new_experience < 75) {$new_experience = 75;
+  }
 
   $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
   $result = db_query($sql, $new_experience);
@@ -91,8 +93,9 @@ if ($clan_id != 0) {
   $set_value($game_user->id, 'next_major_action', time() + 86400);
 
   // First time choosing? Go to debates.
-  if ($game_user->fkey_values_id == 0)
+  if ($game_user->fkey_values_id == 0) {
     drupal_goto($game . '/debates/' . $arg2);
+  }
 
   // Otherwise show your character profile.
   drupal_goto($game . '/user/' . $arg2);
@@ -100,14 +103,14 @@ if ($clan_id != 0) {
 }
 
 // Otherwise they have not chosen a clan or are rechoosing one.
-
 // New clan.
 if ($game_user->level <= 6) {
 
 $elder = 'You are met by the city elder again';
 
-if ($game == 'celestial_glory')
+if ($game == 'celestial_glory') {
   $elder = 'You see Lehi in a vision again';
+}
 
   echo <<< EOF
 <p>&nbsp;</p>
@@ -158,7 +161,9 @@ $sql = 'SELECT * FROM  `values`
 $result = db_query($sql);
 $data = array();
 
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 firep($data, 'values');
 foreach ($data as $item) {
   $value = strtolower($item->name);
@@ -180,4 +185,3 @@ EOF;
 echo '</div>';
 
 db_set_active('default');
-

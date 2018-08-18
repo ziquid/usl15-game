@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_class_list.tpl.php
- * Stlouis class list page
+ * @file Stlouis_class_list.tpl.php
+ * Stlouis class list page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -17,9 +17,10 @@
   $fetch_header($game_user);
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     drupal_goto($game . '/choose_name/' . $phone_id);
-	
+  }
+
   $data = array();
   $sql = 'SELECT username, experience, initiative, endurance, 
   	elocution, debates_won, debates_lost, skill_points, luck,
@@ -38,12 +39,14 @@
 		AND users.fkey_neighborhoods_id = %d
 		AND users.username <> ""
 		ORDER by users.experience DESC;';
-  
+
   $result = db_query($sql, $class_id, $game_user->fkey_neighborhoods_id);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   $num_members = count($data);
-  
+
    echo <<< EOF
 <!--<div class="news">
 	<a href="/$game/clan_list/$phone_id/$clan_id" class="button active">Clan List</a>
@@ -64,22 +67,23 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   foreach ($data as $item) {
 firep($item);
 
-  	$username = $item->username;
-  	$action_class = '';
-  	$official_link = $item->ep_name;
-		$clan_class = 'election-details';
-		
-  	if ($item->can_broadcast_to_party)
-  		$official_link .= '<div class="can-broadcast-to-party">*</div>';
-  		
-   	$official_link .= '<br/><a href="/' . $game . '/user/' .
- 		  $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
+      $username = $item->username;
+      $action_class = '';
+      $official_link = $item->ep_name;
+      $clan_class = 'election-details';
 
-  	echo <<< EOF
+      if ($item->can_broadcast_to_party) {
+          $official_link .= '<div class="can-broadcast-to-party">*</div>';
+      }
+
+       $official_link .= '<br/><a href="/' . $game . '/user/' .
+           $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
+
+      echo <<< EOF
 <div class="$clan_class">
   <div class="clan-title">&nbsp;</div>
   <div class="opponent-name">$official_link</div>
@@ -87,8 +91,7 @@ firep($item);
 		Level $item->level</div>
 </div>
 EOF;
-  
+
   }
-  
+
   db_set_active('default');
-  

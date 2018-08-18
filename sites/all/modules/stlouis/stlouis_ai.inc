@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_ai.inc
- * Stlouis ai
+ * @file Stlouis_ai.inc
+ * Stlouis ai.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 define('CONSERVE_ACTIONS', 1);
@@ -1818,7 +1818,7 @@ function game_ai_debate_players($ai_id, $num_debates = 99) {
   $num_attempts = min($num_debates, $ai_user->actions);
 
   // $debate_wait_time = 1200;
-  // $zombie_debate_wait = 300;
+  // $zombie_debate_wait = 300;.
   $sql = 'SELECT users.id, users.username
     FROM users
     LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = users.id
@@ -1998,8 +1998,7 @@ function game_ai_list_all_ais() {
 
   // Now show stats.
   // Or not.
-//  return;
-
+  //  return;.
   $data = [];
   $sql = 'select users.*, clan_members.fkey_clans_id
     from users

@@ -1,19 +1,20 @@
 <?php
 
 /**
-* @file stlouis_debates_challenge.tpl.php
-* Do the debates challenge.
-*
-* Synced with CG: yes
-* Synced with 2114: no
-*/
+ * @file Stlouis_debates_challenge.tpl.php
+ * Do the debates challenge.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: no.
+ */
 
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-if (empty($game_user->username))
+if (empty($game_user->username)) {
   drupal_goto($game . '/choose_name/' . $arg2);
+}
 
 $sql = 'SELECT users.*,  elected_positions.name as ep_name,
   clan_members.is_clan_leader,
@@ -53,8 +54,9 @@ if ($item->id == $game_user->id) {
     </a>
   </div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-lost\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -72,16 +74,16 @@ if ($game_user->actions == 0) {
     $game . '/debates/' . $arg2 . '">Refill
     your Action (1&nbsp;' . $luck . ')</a></div></div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-no-action\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
 }
 
-//  $debate_wait_time = 1200;
-//  if ($debate == 'Box') $debate_wait_time = 900;
-
+// $debate_wait_time = 1200;
+//  if ($debate == 'Box') $debate_wait_time = 900;.
 if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   (time() - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
   ($item->meta == 'zombie' &&
@@ -100,8 +102,9 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
     </a>
   </div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-must-wait\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -128,7 +131,6 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
 }*/
 
 // Otherwise, we need to apply a formula to get votes.
-
 // Ex formulas.
 $sql = 'SELECT sum(equipment.elocution_bonus * equipment_ownership.quantity)
   as elocution from equipment
@@ -233,8 +235,12 @@ if ($won) {
     values (%d, %d, "%s");';
   $message = t('%user has successfully @debated you!  ' .
     'You lost @money @value.',
-    array('%user' => $game_user->username, '@money' => $money_change,
-      '@value' => $item->values, '@debated' => "{$debate_lower}d"));
+    array(
+      '%user' => $game_user->username,
+      '@money' => $money_change,
+      '@value' => $item->values,
+      '@debated' => "{$debate_lower}d",
+    ));
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set money = money + %d, experience = experience + %d,
@@ -282,8 +288,9 @@ if ($won) {
     $money_change $game_user->values $gain_extra
     and $experience_gained $experience!</div>";
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-won\"/>\n-->";
+  }
 
   if ($event_type == EVENT_DEBATE) {
 
@@ -330,12 +337,11 @@ if ($won) {
 
         $points_to_add = 10;
 
-//        slack_send_message("Zombie $item->id ($item->username)"
+// slack_send_message("Zombie $item->id ($item->username)"
 //        . " was beaten by super debater $game_user->username"
-//        . " and has switched to $party->clan_title!", $slack_channel);
-
+//        . " and has switched to $party->clan_title!", $slack_channel);.
       }
-      else if
+      elseif
         (($clan_player->fkey_clans_id != $clan_zombie->fkey_clans_id) &&
         ($clan_player->fkey_clans_id > 0)) {
 
@@ -356,12 +362,11 @@ if ($won) {
 
         $points_to_add = 15;
 
-//        slack_send_message("Zombie $item->id ($item->username)"
+// slack_send_message("Zombie $item->id ($item->username)"
 //        . " was beaten by super debater $game_user->username"
-//        . " and has switched to $clan_name->name!", $slack_channel);
-
+//        . " and has switched to $clan_name->name!", $slack_channel);.
       // Already party and clan -- move them!
-      } else if
+      } elseif
         ((($clan_player->fkey_clans_id == $clan_zombie->fkey_clans_id) &&
         ($clan_player->fkey_clans_id > 0) &&
         ($item->fkey_values_id == $game_user->fkey_values_id))
@@ -396,7 +401,7 @@ EOF;
 
     // Not beaten by a super debater.
     }
-    else if ($item->debates_lost > 4) {
+    elseif ($item->debates_lost > 4) {
 
         // Lost 5 debates.
         $sql = 'delete from users where id = %d;';
@@ -409,18 +414,16 @@ EOF;
 
         $points_to_add = 10;
 
-//        slack_send_message("Conquered zombie $item->id ($item->username)"
-//        . " has five debate losses and has left!", $slack_channel);
-
+// slack_send_message("Conquered zombie $item->id ($item->username)"
+//        . " has five debate losses and has left!", $slack_channel);.
     }
     else {
 
       // Not 5 losses yet.
       $points_to_add = ($item->debates_lost + 1) * 2;
 
-//      slack_send_message("Unconquered zombie $item->id ($item->username)"
-//      . " has less than five debate losses", $slack_channel);
-
+// slack_send_message("Unconquered zombie $item->id ($item->username)"
+//      . " has less than five debate losses", $slack_channel);.
     }
 
   }
@@ -433,19 +436,15 @@ EOF;
 //  if (empty($row)) {
 //    $sql = 'insert into event_points set fkey_users_id = %d;';
 //      $result = db_query($sql, $game_user->id);
-//  }
-
-//  $points_to_add += (int) date('n') + min($row->tags_con, 10);
-
-//  $sql = 'update event_points set points = points + %d
+//  }.
+// $points_to_add += (int) date('n') + min($row->tags_con, 10);
+// $sql = 'update event_points set points = points + %d
 //      where fkey_users_id = %d;';
-//    $result = db_query($sql, $points_to_add, $game_user->id);
-
-//  echo <<< EOF
-//<!--<div class="subsubtitle">You gained $points_to_add point(s)</div>-->
-//EOF;
-
-  // Debatebots
+//    $result = db_query($sql, $points_to_add, $game_user->id);.
+// echo <<< EOF
+// <!--<div class="subsubtitle">You gained $points_to_add point(s)</div>-->
+// EOF;
+  // Debatebots.
   if ($item->meta == 'debatebot') {
 
     game_competency_gain($game_user, 'beat a bot');
@@ -463,9 +462,8 @@ EOF;
     echo '<div class="subtitle">' . $item->username
     . ' has retreated to another region.</div>';
 
-//    slack_send_message("$item->username has lost a debate and moved to"
-//      . " a new region.", $slack_channel);
-
+// slack_send_message("$item->username has lost a debate and moved to"
+//      . " a new region.", $slack_channel);.
     // Give debatebot another token.
     $sql = 'select * from equipment_ownership where fkey_users_id = %d
       and fkey_equipment_id = %d;';
@@ -502,7 +500,7 @@ EOF;
       echo '<div class="subtitle">In haste to leave, ' . $item->username
         . ' dropped a token.&nbsp; You pick it up.</div>';
 
-//      slack_send_message("$item->username left behind a token", $slack_channel);
+// slack_send_message("$item->username left behind a token", $slack_channel);.
     }
 
   }
@@ -537,7 +535,8 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
       "$item->username's flag was captured by $game_user->username!");
 
   }
-*/ // flag day
+// flag day
+*/
 }
 else {
 
@@ -553,9 +552,14 @@ else {
     values (%d, %d, "%s");';
   $message = t('You have successfully defended yourself against a @debate ' .
     'from %user.  You gained @money @value and @exp @experience.',
-    array('%user' => $game_user->username, '@money' => $money_change,
-      '@value' => $item->values, '@experience' => $experience,
-      '@exp' => $experience_gained, '@debate' => $debate_lower));
+    array(
+      '%user' => $game_user->username,
+      '@money' => $money_change,
+      '@value' => $item->values,
+      '@experience' => $experience,
+      '@exp' => $experience_gained,
+      '@debate' => $debate_lower,
+    ));
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set money = money - %d, actions = actions - 1,
@@ -614,20 +618,22 @@ else {
     echo '<div class="subtitle">' . $item->username .
       ' has gained 500 ' . $experience . '.</div>';
 
-//    slack_send_message("Zombie $item->id won the debate!");
-
+// slack_send_message("Zombie $item->id won the debate!");.
   }
 
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
   echo "<div class=\"subtitle\">You lost to
   <a href=\"/$game/user/$arg2/$item->phone_id\">$item->username</a></div>
     <div class=\"action-effect\">" .
-    t('You lost @money @value' . $gain_extra, array('@money' => $money_change,
-      '@value' => $game_user->values)) .
+    t('You lost @money @value' . $gain_extra, array(
+      '@money' => $money_change,
+      '@value' => $game_user->values,
+    )) .
     '</div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-lost\"/>\n-->";
+  }
 
   if ($event_type == EVENT_DEBATE) {
     echo '<div class="subsubtitle">You have ' . $row->tags_con .
@@ -692,9 +698,13 @@ $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   ORDER BY elocution_bonus DESC;';
 $result = db_query($sql, $game_user->id, $game_user->id);
 
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 
-if (empty($data)) echo '<div class="debate-used">' . t('Nothing') . '</div>';
+if (empty($data)) {
+  echo '<div class="debate-used">' . t('Nothing') . '</div>';
+}
 
 foreach ($data as $item) {
 firep($item);
@@ -738,9 +748,12 @@ $sql = 'SELECT equipment.id, equipment.elocution_bonus,
 
   ORDER BY elocution_bonus DESC;';
 $result = db_query($sql, $position_id, $position_id);
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {$data[] = $item;
+}
 
-if (empty($data)) echo '<div class="debate-used">' . t('Nothing') . '</div>';
+if (empty($data)) {
+  echo '<div class="debate-used">' . t('Nothing') . '</div>';
+}
 
 foreach ($data as $item) {
 firep($item);
