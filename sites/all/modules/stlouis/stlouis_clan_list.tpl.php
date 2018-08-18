@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_clan_list.tpl.php
- * Stlouis clan list page
+ * @file Stlouis_clan_list.tpl.php
+ * Stlouis clan list page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -24,8 +24,9 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
   game_move_ai();
 }
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
   echo <<< EOF
 <div class="news">
@@ -70,7 +71,9 @@ EOF;
 		ORDER by users.experience DESC;';
 
   $result = db_query($sql, $clan_id);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   $num_members = count($data);
 
@@ -90,27 +93,30 @@ EOF;
   foreach ($data as $item) {
 firep($item);
 
-  	$username = $item->username;
-  	$action_class = '';
-  	$official_link = $item->ep_name;
-		$clan_class = 'election-details';
+      $username = $item->username;
+      $action_class = '';
+      $official_link = $item->ep_name;
+        $clan_class = 'election-details';
 
-  	if ($item->can_broadcast_to_party)
-  		$official_link .= '<div class="can-broadcast-to-party">*</div>';
+      if ($item->can_broadcast_to_party) {
+          $official_link .= '<div class="can-broadcast-to-party">*</div>';
+      }
 
-   	$official_link .= '<br/><a href="/' . $game . '/user/' .
- 		  $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
+       $official_link .= '<br/><a href="/' . $game . '/user/' .
+           $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
- 		$experience = $item->experience;
+         $experience = $item->experience;
     $clan_acronym = '';
 
-	  if (!empty($item->clan_acronym))
-	  	$clan_acronym = "($item->clan_acronym)";
+      if (!empty($item->clan_acronym)) {
+          $clan_acronym = "($item->clan_acronym)";
+      }
 
-	  if ($item->is_clan_leader)
-	  	$clan_acronym .= '*';
+      if ($item->is_clan_leader) {
+          $clan_acronym .= '*';
+      }
 
-  	echo <<< EOF
+      echo <<< EOF
 <div class="$clan_class">
   <div class="clan-title">$item->location</div>
   <div class="opponent-name">$official_link $clan_acronym</div>
@@ -122,4 +128,3 @@ EOF;
   }
 
   db_set_active('default');
-

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_debates_list.tpl.php
- * Stlouis debates list
+ * @file Stlouis_debates_list.tpl.php
+ * Stlouis debates list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -107,9 +107,8 @@ Whom would you like to $debate_lower?
 </div>
 EOF;
 
-//  $debate_wait_time = 1200;
+// $debate_wait_time = 1200;
 //  if ($debate == 'Box') $debate_wait_time = 900;
-
 $data = array();
 $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
   users.id, users.phone_id, clan_members.is_clan_leader, users.meta,
@@ -128,7 +127,8 @@ $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
   AND users.level > %d
   AND users.level < %d
   ORDER BY abs(users.experience - %d) ASC
-  LIMIT 12;'; // and users.fkey_neighborhoods_id = %d
+// and users.fkey_neighborhoods_id = %d
+  LIMIT 12;';
 $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
   date('Y-m-d H:i:s', time() - $debate_wait_time),
   date('Y-m-d H:i:s', time() - $zombie_debate_wait),
@@ -137,7 +137,9 @@ $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
 
 // Jwc flag day - make debates much more active.
 $count = 12;
-while ($count-- && $item = db_fetch_object($result)) $data[] = $item;
+while ($count-- && $item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 firep(db_affected_rows(), 'rows affected');
 
 echo <<< EOF
@@ -155,7 +157,9 @@ foreach ($data as $item) {
 firep($item);
 
   $username = $item->username;
-  if (empty($username)) $username = '<em>Anonymous</em>';
+  if (empty($username)) {
+    $username = '<em>Anonymous</em>';
+  }
 
   if ($item->id == $game_user->id) {
     $clan_class = 'election-details me';
@@ -174,13 +178,15 @@ firep($item);
       strtolower($item->clan_acronym) . '.png';
 firep($icon_path);
 
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path))
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
       $icon = $game . '_clan_' . strtolower($item->clan_acronym) . '.png';
+    }
 
   }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
   $action_class = '';
   $action = $debate;

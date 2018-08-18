@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_ask_purchase.tpl.php
- * Stlouis elders ask purchase
+ * @file Stlouis_elders_ask_purchase.tpl.php
+ * Stlouis elders ask purchase.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -55,13 +55,12 @@ EOF;
 //      150 Luck (US $24.99)</a></div>
 //  </div>
 //
-//EOF;
+// EOF;
 //
 //    db_set_active('default');
 //    return;
 //  }
-
-  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
+  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE)) {
 
     echo <<< EOF
 
@@ -185,8 +184,7 @@ EOF;
 
   }
 
-// Win8/RT IAPs
-
+// Win8/RT IAPs.
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSAppHost') !== FALSE) {
 
     echo <<< EOF

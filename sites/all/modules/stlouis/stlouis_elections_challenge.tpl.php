@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elections_challenge.tpl.php
- * Stlouis elections challenge
+ * @file Stlouis_elections_challenge.tpl.php
+ * Stlouis elections challenge.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -41,8 +41,9 @@ Why worry about elections here?</div>
 </div>
 EOF;
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
+  }
 
   $sql = 'update users set karma = karma - 25 where id = %d;';
   $result = db_query($sql, $game_user->id);
@@ -121,7 +122,6 @@ firep($item);
 
   // Labor day -- all are UWP - jwc.
 //  $game_user->fkey_values_id = 7;
-
 $username = $item->username;
 
 if (empty($item->id)) {
@@ -145,8 +145,9 @@ EOF;
 </a>
 </div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-failed no-challenge-yourself\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -168,8 +169,9 @@ EOF;
     '">' . t('Refill your Action (1&nbsp;@luck)', array('@luck' => $luck)) .
     '</a></div>';
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-failed no-action\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -232,8 +234,9 @@ EOF;
   $message = "$game_user->username ran unopposed for the seat $item->ep_name" .
     " in $location.";
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-won\"/>\n-->";
+  }
 
   $sql = 'insert into challenge_history
   (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
@@ -352,7 +355,8 @@ $opp_influence = ceil((ceil($item->experience / 5) + ($item->endurance *
 // 60% is a "normal" approval rating - multiplying by .017 = 1.02, close enough.
 firep("opp total influence: $opp_influence");
 
-$total_influence = $my_influence + $opp_influence + 100; // bias for incumbent
+// Bias for incumbent.
+$total_influence = $my_influence + $opp_influence + 100;
 $votes = $extra_defending_votes - $extra_votes;
 firep("Your $extra_votes voters vote for you");
 firep("His/her $extra_defending_votes voters vote for him/her");
@@ -368,19 +372,17 @@ if (($is_limited) && ($item->ep_id == 1)) {
     // Stack the votes so you automatically win.
     $extra_votes += 10000;
 firep('10000 extra voters spontaneously arrive to vote for you!');
-//mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
+// mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
 //  "$item->username [$opp_influence] in $location is voted out of office");
-
   }
-  else if ($my_influence > 100000) {
+  elseif ($my_influence > 100000) {
 
       // Challenger has too much influence.
       // Do not allow him/her to challenge.
-//mail('joseph@cheek.com',
+// mail('joseph@cheek.com',
 //  'Challenger for Alder in training hood has too much influence!',
 //  "$game_user->username [$my_influence] in $location " .
 //  'is not allowed to challenge.');
-
     echo '<div class="election-failed">' . t('Sorry!') . '</div>';
     echo '<div class="subtitle">' .
       t('Your influence is too high to challenge ') . $item->username .
@@ -428,7 +430,7 @@ if ($item->type == 1) {
     $game_user->fkey_neighborhoods_id);
 
 }
-else if ($item->type == 2) {
+elseif ($item->type == 2) {
 
   // Party.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
@@ -458,7 +460,7 @@ else if ($item->type == 2) {
     date('Y-m-d', REQUEST_TIME - 1728000), $game_user->fkey_values_id);
 
 }
-else if ($item->type == 3) {
+elseif ($item->type == 3) {
 
   // District.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
@@ -498,7 +500,7 @@ while ($voter = db_fetch_object($result)) {
 }
 
 foreach ($data as $voter) {
-//firep($voter);
+// firep($voter);
 firep('voter IP is ' . $voter->last_IP);
 $ip_key = $game_user->fkey_neighborhoods_id . '_' . $voter->last_IP;
 $ip_array[$ip_key]++;
@@ -533,7 +535,7 @@ $ip_array[$ip_key]++;
 
     // Vote doesn't count!
     continue;
-  }
+ }
 
   if ($voter->id == $game_user->id) {
 
@@ -612,7 +614,6 @@ firep($voter->username .
 
     // Labor day -- all players are UWP.
 // $voter->fkey_clans_id = 7;
-
     // Same clan, used actions in last 3 days (challenger).
     if (!$stats_only_hood &&
       ($voter->fkey_clans_id > 0) &&
@@ -620,7 +621,7 @@ firep($voter->username .
       ($voter->fkey_clans_id != $item->fkey_clans_id) &&
       (((strtotime($voter->actions_next_gain) + 259200) > REQUEST_TIME) ||
       ((strtotime($voter->energy_next_gain) + 259200) > REQUEST_TIME)) &&
-      (mt_rand(-50,50) <= $voter->level)) {
+      (mt_rand(-50, 50) <= $voter->level)) {
 
       // Vote for you.
       $votes--;
@@ -637,7 +638,7 @@ firep($voter->username . ' votes for you because you are in the same clan');
       ($voter->fkey_clans_id != $game_user->fkey_clans_id) &&
       (((strtotime($voter->actions_next_gain) + 259200) > REQUEST_TIME) ||
       ((strtotime($voter->energy_next_gain) + 259200) > REQUEST_TIME)) &&
-      (mt_rand(-50,50) <= $voter->level)) {
+      (mt_rand(-50, 50) <= $voter->level)) {
 
       // Vote for opponent.
       $votes++;
@@ -716,7 +717,7 @@ firep($voter->username . ' votes for ' . $item->username .
       ($voter->fkey_values_id != $item->fkey_values_id) &&
       (((strtotime($voter->actions_next_gain) + 604800) > REQUEST_TIME) ||
       ((strtotime($voter->energy_next_gain) + 604800) > REQUEST_TIME)) &&
-      (mt_rand(-50,50) <= $voter->level)) {
+      (mt_rand(-50, 50) <= $voter->level)) {
 
       // Vote for you.
       $votes--;
@@ -733,7 +734,7 @@ firep($voter->username . ' votes for you because you are in the same party');
       ($voter->fkey_values_id != $game_user->fkey_values_id) &&
       (((strtotime($voter->actions_next_gain) + 604800) > REQUEST_TIME) ||
       ((strtotime($voter->energy_next_gain) + 604800) > REQUEST_TIME)) &&
-      (mt_rand(-50,50) <= $voter->level)) {
+      (mt_rand(-50, 50) <= $voter->level)) {
 
       // Vote for opponent.
       $votes++;
@@ -817,8 +818,9 @@ if ($challenge_history->count > 5) {
 // You won!  Woohoo!
 if ($votes < 0) {
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-won\"/>\n-->";
+  }
 
   // Party office.
   if ($item->type == 2) {
@@ -843,8 +845,11 @@ if ($votes < 0) {
 
     $message = t('%user1 has successfully challenged %user2 for the office ' .
       'of %office.&nbsp; You lose your seat.',
-      ['%user1' => $game_user->username, '%user2' => $item->username,
-        '%office' => $item->ep_name]);
+      [
+        '%user1' => $game_user->username,
+        '%user2' => $item->username,
+        '%office' => $item->ep_name,
+      ]);
     $official_ids = [];
 
     $sql = 'insert into challenge_messages (fkey_users_from_id,
@@ -871,7 +876,8 @@ if ($votes < 0) {
 
   // And you lost your old position, if any.
   $sql = 'update users set actions = 0 where id = %d;';
-  $result = db_query($sql, $item->id); // incumbent loses all actions
+// Incumbent loses all actions.
+  $result = db_query($sql, $item->id);
 
   // Start the incumbent actions clock if needed.
   if ($item->actions == $item->actions_max) {
@@ -891,8 +897,11 @@ if ($votes < 0) {
     values (%d, %d, "%s");';
   $message = t('%user has successfully challenged you for your office!  ' .
     'You are no longer %office and lost @exp influence.',
-    array('%user' => $game_user->username, '%office' => $item->ep_name,
-      '@exp' => $experience_change));
+    array(
+      '%user' => $game_user->username,
+      '%office' => $item->ep_name,
+      '@exp' => $experience_change,
+    ));
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set experience = experience + %d,
@@ -921,25 +930,30 @@ EOF;
   echo "<div class=\"subtitle\">You beat $item->username by " .
     (0 - $votes) . " vote(s)!</div>";
 
-  if ($all_officials_in)
+  if ($all_officials_in) {
     echo '<div class="subtitle">' .
       t('All @hood officials in @place lose their seats',
         ['@place' => $all_officials_in, '@hood' => $game_text['hood']]) . '</div>';
+  }
 
 }
 else {
 
   // You lost.
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-lost\"/>\n-->";
+  }
 
   $sql = 'insert into challenge_messages
     (fkey_users_from_id, fkey_users_to_id, message)
     values (%d, %d, "%s");';
   $message = t('You have successfully defended yourself against a challenge ' .
     'from %user.  You remain %office and gain @exp influence.',
-    array('%user' => $game_user->username, '%office' => $item->ep_name,
-      '@exp' => $experience_change));
+    array(
+      '%user' => $game_user->username,
+      '%office' => $item->ep_name,
+      '@exp' => $experience_change,
+    ));
   $result = db_query($sql, $game_user->id, $item->id, $message,
     $experience_change);
 
@@ -972,8 +986,10 @@ EOF;
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
   echo "<div class=\"subtitle\">You lost to $item->username by $votes" .
     " vote(s)</div><div class=\"action-effect\">" .
-    t('You lost @exp @influence', array('@exp' => $experience_change,
-      '@influence' => $experience_lower)) .
+    t('You lost @exp @influence', array(
+      '@exp' => $experience_change,
+      '@influence' => $experience_lower,
+    )) .
     '</div>';
 
 }
@@ -1023,12 +1039,10 @@ $residents residents";
 //    mail('joseph@cheek.com', "election results" /* for $game_user->username " .
 //      "[$my_influence] vs. $item->username [$opp_influence] in $location" */,
 //      $message);
-
 // And house challenges.
 //  if ($item->ep_id >= 28)
 //    mail('joseph@cheek.com', "house seat results (district $district seat " .
 //    "$item->ep_id)", $message);
-
 $sql = 'insert into challenge_history
   (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
   fkey_elected_positions_id, won, desc_short, desc_long) values
@@ -1043,7 +1057,7 @@ $result = db_query($sql, $game_user->id, $item->id,
 echo "<div class=\"subtitle\">Election poll results:</div>";
 $total_polls = 2;
 
-for ($c = 0 ; $c < $total_polls ; $c++) {
+for ($c = 0; $c < $total_polls; $c++) {
 
   $c1 = mt_rand(0, count($election_polls));
 

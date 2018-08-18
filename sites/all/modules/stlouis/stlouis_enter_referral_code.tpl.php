@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_enter_referral_code.tpl.php
- * Stlouis enter referral code
+ * @file Stlouis_enter_referral_code.tpl.php
+ * Stlouis enter referral code.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -49,8 +49,9 @@ EOF;
   if (!empty($referral_code)) {
 
     // No change?  Just show stats.
-    if ($referral_code == $game_user->referral_code)
+    if ($referral_code == $game_user->referral_code) {
       drupal_goto($game . '/user/' . $arg2);
+    }
 
     // Have they already used that code?
     $sql = 'select referred_by from user_creations
@@ -156,9 +157,10 @@ EOF;
     $icon = $game . '_clan_' . $mentor->party_icon . '.png';
     $party_title = preg_replace('/^The /', '', $mentor->party_title);
 
-    if (!empty($mentor->clan_acronym))
+    if (!empty($mentor->clan_acronym)) {
       $clan_html = " and the <span class=\"highlighted\">$mentor->clan_name
         ($mentor->clan_acronym)</span> clan";
+    }
 
     echo <<< EOF
 <p>&nbsp;</p>

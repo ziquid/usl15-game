@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_equipment_buy.tpl.php
- * Stlouis equipment buy
+ * @file Stlouis_equipment_buy.tpl.php
+ * Stlouis equipment buy.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -24,7 +24,7 @@ $equipment_price = 0;
 
 while ($count--) {
   $equipment_price += $game_equipment->price +
-    (($game_equipment->quantity + $count) *  $game_equipment->price_increase);
+    (($game_equipment->quantity + $count) * $game_equipment->price_increase);
 }
 
 $options = [];
@@ -134,7 +134,7 @@ EOF;
 echo '<div id="all-equip">';
 
 foreach ($data as $item) {
-  //firep($item, 'equipment item');
+  // firep($item, 'equipment item');
   game_show_equip($game_user, $item, $ai_output);
 }
 

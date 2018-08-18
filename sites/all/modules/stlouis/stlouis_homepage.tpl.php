@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_homepage.tpl.php
+ * @file Stlouis_homepage.tpl.php
  * The game's main screen.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 $version = 'v0.6.0, Aug 15 2018';
@@ -39,16 +39,18 @@ href="/$game/quests/$arg2"><img
   src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"home not-yet\"/>\n-->";
+}
 
 db_set_active('default');
 return;
 
 }
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"home\"/>\n-->";
+}
 
 $today = date('Y-m-d');
 
@@ -171,59 +173,59 @@ firep($referral_code);
 if (substr(arg(2), 0, 4) == 'nkc ') {
   $coefficient = 1.875;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 9') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 9') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
   $coefficient = 1;
 }
-else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
+elseif ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
   (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4') !== FALSE)) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
   $coefficient = 2.5;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
   $coefficient = 1.875;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
   $coefficient = 1.66;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
   $coefficient = 1.5;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
   $coefficient = 1.25;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
   $coefficient = 1.25;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
   $coefficient = 1.2;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
   $coefficient = 1.125;
 }
 else {
@@ -394,7 +396,7 @@ if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 */
 
 // Add event text, if any.
-game_alter('homepage_event_notice', $game_user,$event_text);
+game_alter('homepage_event_notice', $game_user, $event_text);
 
 echo <<< EOF
 $extra_bonus
@@ -535,7 +537,7 @@ if ($elected_official_type == 2) {
 
   $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
   $clan_id_to_use = implode(',', $data);
-//firep($clan_id_to_use);
+// firep($clan_id_to_use);
   $limit = 50;
   $all_limit = 150;
 }
@@ -706,7 +708,8 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
   // Expensive query - goes to slave.
 //   db_set_active('game_' . $game . '_slave1');
   $result = db_query($sql, $game_user->id, $limit,
-    $game_user->id, 10, // challenge limit of 10
+// Challenge limit of 10.
+    $game_user->id, 10,
     $game_user->fkey_neighborhoods_id, $limit,
     $clan_id_to_use, $limit,
     $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
@@ -754,15 +757,16 @@ EOF;
 
 foreach ($data as $item) {
 // firep($item);
-
   $display_time = game_format_date(strtotime($item->timestamp));
   $clan_acronym = '';
 
-  if (!empty($item->clan_acronym))
+  if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
+  }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
   if ($item->private) {
     $private_css = 'private';
