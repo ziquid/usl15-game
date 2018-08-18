@@ -20,12 +20,12 @@ function actionlist() {
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
-  // If (arg(3) == 'banking') {
+  // if (arg(3) == 'banking') {
   //    $banking_active = 'active';
   //    $actions_type = 'Banking';
   //    $order_by = 'actions.id ASC';
   //  }
-  //  else {.
+  //  else {
   $normal_active = 'active';
   $actions_type = 'Normal';
   $order_by = 'actions.required_level DESC';
@@ -50,7 +50,7 @@ function actionlist() {
 
     // Clan leader - exclude all those that need no clan leader.
     // We don't have any actions that need no clan leader, so line commented out below.
-    //    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';.
+    //    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';
   }
   else {
     $sql_to_add .= ' and actions.need_clan_leader <> 1 ';
@@ -110,7 +110,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY ' . $order_by;
-  // firep($sql, 'actions with staff');.
+  // firep($sql, 'actions with staff');
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
   while ($item = db_fetch_object($result)) {
@@ -140,7 +140,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY actions.required_level DESC';
-  // firep($sql, 'actions with equipment');.
+  // firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
   while ($item = db_fetch_object($result)) {
     $item->competency_name_1 = game_competency_name($item->competency_name_1);
@@ -159,7 +159,7 @@ function actionlist() {
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY actions.name ASC';
-  // firep($sql, 'actions without staff or equipment');.
+  // firep($sql, 'actions without staff or equipment');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) {
@@ -191,7 +191,7 @@ function game_action_target_list($target, $game_user) {
 
   // Return a list of valid targets.
   // Expensive query - goes to slave.
-  //   db_set_active('game_' . $game . '_slave1');.
+  //   db_set_active('game_' . $game . '_slave1');
   $data2 = [];
   switch ($target) {
 
@@ -479,7 +479,7 @@ function game_action_target_list($target, $game_user) {
   }
 
   // Reset to master.
-  //  db_set_active('game_' . $game);.
+  //  db_set_active('game_' . $game);
   return $data2;
 }
 
