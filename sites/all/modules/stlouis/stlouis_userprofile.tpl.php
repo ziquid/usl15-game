@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_userprofile.tpl.php
+ * @file Stlouis_userprofile.tpl.php
  * Show a user's profile.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -35,7 +35,7 @@ if (substr($arg3, 0, 3) == 'id:') {
 if (isset($_GET['comp_show_level'])) {
   // Using an action which gives curious comp; do nothing.
 }
-else if ($phone_id_to_check == $phone_id) {
+elseif ($phone_id_to_check == $phone_id) {
   game_competency_gain($game_user, 'introspective');
 }
 else {
@@ -65,11 +65,11 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
   $comp_show_level = 6;
   firep('checking yourself!');
 }
-else if ($_GET['comp_show_level'] == 'yes') {
+elseif ($_GET['comp_show_level'] == 'yes') {
   $comp_show_level = 5;
   firep('investigating a clannie!');
 }
-else if ($_GET['comp_show_level'] == 'curious') {
+elseif ($_GET['comp_show_level'] == 'curious') {
   $comp_show_level = game_competency_level($game_user, 'curious')->level;
   firep($comp_show_level, 'comps based on curiosity');
   if ($comp_show_level == 5) {
@@ -86,13 +86,11 @@ else {
 }
 firep($comp_show_level, 'final comp_show_level value (' . $extra_comp . ' were extra)');
 
-//$want_jol = ($_GET['want_jol'] == 'yes') ? '/want_jol' : '';
-//if (arg(4) == 'want_jol') $want_jol = '/want_jol';
-
+// $want_jol = ($_GET['want_jol'] == 'yes') ? '/want_jol' : '';
+// if (arg(4) == 'want_jol') $want_jol = '/want_jol';
 $message_orig = check_plain($_GET['message']);
 $message = _stlouis_filter_profanity($message_orig);
-//firep($message);
-
+// firep($message);
 if (strlen($message) && strlen($message) < 3) {
   $message_error .= '<div class="message-error">Your message must be at least 3
     characters long.</div>';
@@ -122,11 +120,9 @@ if ($item->meta == 'frozen') {
 //  $item->fkey_values_id = 7;
 //  $item->party_icon = 'workers';
 //  $item->party_title = 'United Workers Party';
-
 $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
   strtolower($item->clan_acronym) . '.png';
-//firep($icon_path, 'icon path');
-
+// firep($icon_path, 'icon path');
 if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
   $clan_icon_html = '<div class="clan-icon"><img width="24"
     src="/sites/default/files/images/' .
@@ -365,9 +361,8 @@ $details_debates = <<< EOF
 <div class="value">$item->debates_won $super_debater</div>
 EOF;
 
-//  $debate_wait_time = 1200;
+// $debate_wait_time = 1200;
 //  if ($debate == 'Box') $debate_wait_time = 900;
-
 if (($phone_id_to_check != $phone_id) &&
   (abs($item->level - $game_user->level) <= 15) &&
   (($item->fkey_clans_id != $game_user->fkey_clans_id) ||
@@ -428,25 +423,25 @@ if ($debate == 'Box') {
   if ($item->level <= 20) {
     $boxing_weight = 'Minimumweight';
   }
-  else if ($item->level <= 35) {
+  elseif ($item->level <= 35) {
     $boxing_weight = 'Flyweight';
   }
-  else if ($item->level <= 50) {
+  elseif ($item->level <= 50) {
     $boxing_weight = 'Bantamweight';
   }
-  else if ($item->level <= 65) {
+  elseif ($item->level <= 65) {
     $boxing_weight = 'Featherweight';
   }
-  else if ($item->level <= 80) {
+  elseif ($item->level <= 80) {
     $boxing_weight = 'Lightweight';
   }
-  else if ($item->level <= 95) {
+  elseif ($item->level <= 95) {
     $boxing_weight = 'Welterweight';
   }
-  else if ($item->level <= 110) {
+  elseif ($item->level <= 110) {
     $boxing_weight = 'Middleweight';
   }
-  else if ($item->level <= 125) {
+  elseif ($item->level <= 125) {
     $boxing_weight = 'Cruiserweight';
   }
   else {
@@ -627,8 +622,7 @@ $sql = 'select user_messages.*, users.username, users.phone_id,
   LIMIT 50;';
 
 $result = db_query($sql, $item->id);
-//$msg_shown = FALSE;
-
+// $msg_shown = FALSE;
 $data = [];
 while ($item = db_fetch_object($result)) {
   $data[] = $item;
@@ -682,7 +676,7 @@ EOF;
   }
 
   $messages .= '</div>';
-  //  $msg_shown = TRUE;
+  // $msg_shown = TRUE;
 }
 
 $message_end = '</div>';
