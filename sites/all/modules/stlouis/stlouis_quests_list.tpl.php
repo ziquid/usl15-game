@@ -5,7 +5,7 @@
  * List of quests.
  *
  * Synced with CG: yes
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -20,12 +20,14 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
   game_move_ai();
 }
 
-if (is_numeric(arg(3))) $group_to_show = arg(3);
+if (is_numeric(arg(3))) {
+  $group_to_show = arg(3);
+}
 
 if (is_numeric($group_to_show)) {
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
 }
-else if ($game_user->level < 6) {
+elseif ($game_user->level < 6) {
 
   // Show beginning quests.
   $group_to_show = '0';
@@ -33,7 +35,7 @@ else if ($game_user->level < 6) {
 }
 
 // Cinco De Mayo Quests.
-else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id == 30) {
+elseif ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id == 30) {
   $group_to_show = '1100';
   $sql_quest_neighborhood = 'where `group` = 1100';
 }
@@ -76,8 +78,9 @@ EOF;
 }
 
 if ($game_user->fkey_values_id == 0 && $game_user->level >= 6 &&
-  $game_user->level <= 25)
+  $game_user->level <= 25) {
   drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
+}
 
 // Don't let them do quests at levels 6-25 without being in a party.
 if (!$game_user->seen_neighborhood_quests && $game_user->level >= 6) {
@@ -103,7 +106,9 @@ EOF;
 }
 
 // Keep location from user.
-if ($game_user->level < 6) $location = '';
+if ($game_user->level < 6) {
+  $location = '';
+}
 
 if ($game_user->level < 6 and $game_user->experience > 0) {
 
@@ -119,11 +124,12 @@ EOF;
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $group_to_show);
 $qg = db_fetch_object($result);
-//firep($qg, 'quest group');
-
+// firep($qg, 'quest group');
 $location = str_replace('%location', $location, $qg->name);
 
-if ($game_user->level < 6) $location = '';
+if ($game_user->level < 6) {
+  $location = '';
+}
 
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $group_to_show - 1);
@@ -132,7 +138,7 @@ $qgo = db_fetch_object($result);
 if (!empty($qgo->name) && ($group_to_show <= 1000)) {
 
   $older_group = $group_to_show - 1;
-  $older_missions_html =<<< EOF
+  $older_missions_html = <<< EOF
 <a href="/$game/quests/$arg2/$older_group">&lt;&lt;</a>
 EOF;
 
@@ -148,7 +154,7 @@ if (!empty($item->min) && ($item->min <= $game_user->level + 1) &&
   ($group_to_show <= 1000)) {
 
   $newer_group = $group_to_show + 1;
-  $newer_missions_html =<<< EOF
+  $newer_missions_html = <<< EOF
 <a href="/$game/quests/$arg2/$newer_group">&gt;&gt;</a>
 EOF;
 
@@ -175,8 +181,7 @@ $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
 $result = db_query($sql, $game_user->id, $group_to_show);
 
 $quest_group = db_fetch_object($result);
-//firep($quest_group, 'quest group object');
-
+// firep($quest_group, 'quest group object');
 // Haha! Typecasting!
 $quest_group->completed += 0;
 
@@ -219,16 +224,17 @@ $sql = 'select quests.*, quest_completion.percent_complete,
   ' . $sql_quest_neighborhood .
   ' and required_level <= %d ' . $active_quests .
   ' order by required_level ASC;';
-//firep($sql);
+// firep($sql);
 $result = db_query($sql, $game_user->id, $game_user->level);
 
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 
 foreach ($data as $item) {
 
-//  if ($event_type == EVENT_QUESTS_100)
+// if ($event_type == EVENT_QUESTS_100)
 //    $item->required_energy = min($item->required_energy, 100);
-
   $description = str_replace('%party', "<em>$party_title</em>",
     $item->description);
 
@@ -247,7 +253,6 @@ foreach ($data as $item) {
 
   $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
 // firep($rgb);
-
   $active = ($item->active) ? '' : ' (inactive)';
 
   game_alter('quest_item', $game_user, $item);
@@ -260,7 +265,6 @@ foreach ($data as $item) {
     // Show quests in other hoods?
 //    game_show_quest($game_user, $item, $percentage_target,
 //      $percentage_divisor, $quest_group, $party_title);
-
     echo <<< EOF
 <div class="quests wrong-hood">
   <div class="quest-icon">
@@ -304,20 +308,20 @@ EOF;
 
   // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
-
   $data = array();
   $sql = 'select * from quests ' . $sql_quest_neighborhood .
     ' and required_level = %d ' . $active_quests .
     ' order by required_level ASC;';
   $result = db_query($sql, $game_user->level + 1);
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   foreach ($data as $item) {
 
-//    if ($event_type == EVENT_QUESTS_100)
+// if ($event_type == EVENT_QUESTS_100)
 //      $item->required_energy = min($item->required_energy, 100);
-
     $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
 
@@ -338,6 +342,5 @@ EOF;
 
   }
 
-//  }
-
+// }
 db_set_active('default');

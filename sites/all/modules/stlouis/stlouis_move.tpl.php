@@ -2,14 +2,14 @@
 
 /**
  * @file stlouis_move.tpl.php
- * Stlouis move
+ * Stlouis move.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc' ;
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
 
@@ -35,13 +35,11 @@ if ($neighborhood_id > 0) {
   $sql = 'select * from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
   $cur_hood = db_fetch_object($result);
-//firep($cur_hood);
-
+// firep($cur_hood);
   $sql = 'select * from neighborhoods where id = %d;';
   $result = db_query($sql, $neighborhood_id);
   $new_hood = db_fetch_object($result);
-//firep($new_hood);
-
+// firep($new_hood);
   $distance = floor(sqrt(pow($cur_hood->xcoor - $new_hood->xcoor, 2) +
     pow($cur_hood->ycoor - $new_hood->ycoor, 2)));
 
@@ -106,63 +104,64 @@ EOF;
 if (substr(arg(2), 0, 4) == 'nkc ') {
   $coefficient = 1.875;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 9') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 9') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 8') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 7') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 6') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 5') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.4') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.3') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.2') !== FALSE) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4.1') !== FALSE) {
   $coefficient = 1;
 }
-else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
+elseif ((stripos($_SERVER['HTTP_USER_AGENT'], 'BNTV') !== FALSE) &&
   (stripos($_SERVER['HTTP_USER_AGENT'], 'Android 4') !== FALSE)) {
   $coefficient = 1;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
   $coefficient = 2.5;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
   $coefficient = 1.875;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
   $coefficient = 1.66;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) {
   $coefficient = 1.5;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
   $coefficient = 1.25;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=411') !== FALSE) {
   $coefficient = 1.25;
 }
-else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
+elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=360') !== FALSE) {
   $coefficient = 1.125;
 }
 else {
   $coefficient = 1;
 }
 
-$divisor = 2.5; // 800/320
+// 800/320.
+$divisor = 2.5;
 $ext = '.jpg';
 $nonce = date('Y-m-d-H-i-s-') . mt_rand();
 
@@ -210,9 +209,12 @@ while ($item = db_fetch_object($result)) {
   $data[] = $item;
 }
 
-$divisor = 2.15625; // 690/320
-$xoff = 54; // offset of x
-$yoff = 488; // offset of y
+// 690/320.
+$divisor = 2.15625;
+// Offset of x.
+$xoff = 54;
+// Offset of y.
+$yoff = 488;
 
 foreach ($data as $item) {
   $xcoor = floor(($item->xcoor - $xoff) * $coefficient / $divisor);
@@ -234,8 +236,7 @@ echo <<< EOF
     <area id="map_bottom_back_click" shape="rect" coords="0,0,20,80" alt="Back" href="#" />
 EOF;
 
-//  $divisor = 2.15625; // 690/320
-
+// $divisor = 2.15625; // 690/320
 // Offset of x.
 $xoff = 0;
 
@@ -243,12 +244,11 @@ $xoff = 0;
 $yoff = 900;
 
 foreach ($data as $item) {
-//firep($item);
-
+// firep($item);
   $xcoor = floor(($item->xcoor - $xoff) * $coefficient / $divisor);
   $ycoor = floor(($item->ycoor - $yoff) * $coefficient / $divisor);
 
-  if ($xcoor >=16 /* && $xcoor < 320 */ &&
+  if ($xcoor >= 16 /* && $xcoor < 320 */ &&
     $ycoor >= 16 /* && $ycoor <= 334 */) {
     echo "<area shape=\"circle\" coords=\"$xcoor,$ycoor,16\" href=\"$item->id\"
       alt=\"$item->name\" />\n";
