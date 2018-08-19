@@ -2,14 +2,14 @@
 
 /**
  * @file stlouis_top_wards_list.tpl.php
- * Stlouis top wards list
+ * Stlouis top wards list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
-  
+
   $fetch_user = '_' . arg(0) . '_fetch_user';
   $fetch_header = '_' . arg(0) . '_header';
 
@@ -18,8 +18,9 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
   echo <<< EOF
 <div class="news">
@@ -30,7 +31,7 @@
 </div>
 <div class="title">Top Clans</div>
 EOF;
-  
+
   $data = array();
   $sql = 'SELECT fkey_clans_id, clans.name, clans.acronym,
     COUNT( users.id ) AS size, SUM( experience ) AS experience,
@@ -42,9 +43,11 @@ EOF;
     GROUP BY fkey_clans_id
     ORDER BY experience DESC 
     limit 20;';
-  
+
   $result = db_query($sql);
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
     echo <<< EOF
 <div class="elections-header">
@@ -56,7 +59,7 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   $rank = 0;
   foreach ($data as $item) {
 firep($item);
@@ -73,7 +76,7 @@ firep($item);
   <div class="opponent-influence">$item->experience</div>
 </div>
 EOF;
-  
+
   }
-  
+
   db_set_active('default');

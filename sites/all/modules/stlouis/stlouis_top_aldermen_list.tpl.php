@@ -2,10 +2,10 @@
 
 /**
  * @file stlouis_top_aldermen_list.tpl.php
- * Stlouis top aldermen list
+ * Stlouis top aldermen list.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 global $game, $phone_id;
@@ -82,8 +82,9 @@ firep($item, 'alder');
   $official_link = $item->ep_name;
   $clan_class = 'election-details';
 
-  if ($item->can_broadcast_to_party)
+  if ($item->can_broadcast_to_party) {
     $official_link .= '<div class="can-broadcast-to-party">*</div>';
+  }
 
    $official_link .= '<br/><a href="/' . $game . '/user/' .
      $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
@@ -93,11 +94,13 @@ firep($item, 'alder');
    $exp = $item->experience;
   $clan_acronym = '';
 
-  if (!empty($item->clan_acronym))
+  if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
+  }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
   $time_len_function = 'game_format_date';
   $time_len = $time_len_function(strtotime($item->timestamp));

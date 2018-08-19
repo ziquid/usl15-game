@@ -5,7 +5,7 @@
  * Template for working a job.
  *
  * Synced with CG: N/A
- * Synced with 2114: N/A
+ * Synced with 2114: N/A.
  */
 
 global $game, $phone_id;
@@ -76,7 +76,7 @@ if ($options['land-work-succeeded'] == 'work-success') {
 
   // Set timer.  Can work again in 4 hours.
   $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'can_work_again', time() + 60*60*4);
+  $set_value($game_user->id, 'can_work_again', time() + 60 * 60 * 4);
 
   // Gain the wage.
   $sql = 'update users set money = money + %d where id = %d;';
