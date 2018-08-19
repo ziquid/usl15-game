@@ -1,13 +1,16 @@
 <?php
 
 /**
- * @file stlouis_actions.inc
- * Stlouis actions
+ * @file Stlouis_actions.inc
+ * Stlouis actions.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
+/**
+ *
+ */
 function actionlist() {
 
   global $game, $phone_id;
@@ -17,25 +20,23 @@ function actionlist() {
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
-//  if (arg(3) == 'banking') {
-//    $banking_active = 'active';
-//    $actions_type = 'Banking';
-//    $order_by = 'actions.id ASC';
-//  }
-//  else {
-    $normal_active = 'active';
-    $actions_type = 'Normal';
-    $order_by = 'actions.required_level DESC';
-//  }
-
+  // if (arg(3) == 'banking') {
+  //    $banking_active = 'active';
+  //    $actions_type = 'Banking';
+  //    $order_by = 'actions.id ASC';
+  //  }
+  //  else {
+  $normal_active = 'active';
+  $actions_type = 'Normal';
+  $order_by = 'actions.required_level DESC';
+  // }
   // Part of a clan?
   $sql = 'select * from {clan_members}
     left join clans on clans.id = clan_members.fkey_clans_id
     where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-//  firep($item);
-
+  // firep($item);
   // Part of a clan - exclude all those that need no clan.
   if (!empty($item)) {
     $sql_to_add .= ' and actions.need_no_clan <> 1 ';
@@ -47,11 +48,9 @@ function actionlist() {
 
   if (!empty($item->is_clan_leader)) {
 
-  // Clan leader - exclude all those that need no clan leader.
-
-// We don't have any actions that need no clan leader, so line commented out below.
-//    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';
-
+    // Clan leader - exclude all those that need no clan leader.
+    // We don't have any actions that need no clan leader, so line commented out below.
+    //    $sql_to_add .= ' and actions.need_no_clan_leader <> 1 ';
   }
   else {
     $sql_to_add .= ' and actions.need_clan_leader <> 1 ';
@@ -69,8 +68,7 @@ function actionlist() {
   // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-//  firep($item);
-
+  // firep($item);
   if (!empty($item)) {
 
     // An elected official - exclude all those that need no elected official.
@@ -112,7 +110,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY ' . $order_by;
-//  firep($sql, 'actions with staff');
+  // firep($sql, 'actions with staff');
   $result = db_query($sql, $game_user->id, $sql_to_add);
 
   while ($item = db_fetch_object($result)) {
@@ -142,7 +140,7 @@ function actionlist() {
   ' . $actions_active .
   ' AND quantity > 0 ' . $sql_to_add .
   ' ORDER BY actions.required_level DESC';
-//  firep($sql, 'actions with equipment');
+  // firep($sql, 'actions with equipment');
   $result = db_query($sql, $game_user->id);
   while ($item = db_fetch_object($result)) {
     $item->competency_name_1 = game_competency_name($item->competency_name_1);
@@ -161,7 +159,7 @@ function actionlist() {
   where actions.fkey_staff_id = 0 and actions.fkey_equipment_id = 0
   ' . $actions_active . ' ' . $sql_to_add .
   ' ORDER BY actions.name ASC';
-//  firep($sql, 'actions without staff or equipment');
+  // firep($sql, 'actions without staff or equipment');
   $result = db_query($sql, $game_user->id);
 
   while ($item = db_fetch_object($result)) {
@@ -186,13 +184,14 @@ function actionlist() {
   return $data;
 }
 
+/**
+ *
+ */
 function game_action_target_list($target, $game_user) {
 
-// Return a list of valid targets.
-
-// Expensive query - goes to slave.
-//   db_set_active('game_' . $game . '_slave1');
-
+  // Return a list of valid targets.
+  // Expensive query - goes to slave.
+  //   db_set_active('game_' . $game . '_slave1');
   $data2 = [];
   switch ($target) {
 
@@ -231,7 +230,9 @@ function game_action_target_list($target, $game_user) {
 
       $result = db_query($sql, $game_user->fkey_neighborhoods_id,
         $game_user->id);
-      while ($user = db_fetch_object($result)) $data2[] = $user;
+      while ($user = db_fetch_object($result)) {
+        $data2[] = $user;
+      }
 
       break;
 
@@ -273,7 +274,9 @@ function game_action_target_list($target, $game_user) {
         $game_user->level, date('Y-m-d H:i:s', time() - $debate_time),
         $game_user->id, $game_user->fkey_clans_id, $game_user->id,
         $game_user->id);
-      while ($user = db_fetch_object($result)) $data2[] = $user;
+      while ($user = db_fetch_object($result)) {
+        $data2[] = $user;
+      }
 
       break;
 
@@ -328,9 +331,8 @@ function game_action_target_list($target, $game_user) {
       }
 
       $allowed_string = substr($allowed_string, 0, strlen($allowed_string) - 1);
-firep('allowed not_met users: ' . $allowed_string);
+      firep('allowed not_met users: ' . $allowed_string);
       break;
-
 
     case 'neighborhood_no_official_not_home':
 
@@ -476,13 +478,14 @@ firep('allowed not_met users: ' . $allowed_string);
       break;
   }
 
-// Reset to master.
-//  db_set_active('game_' . $game);
+  // Reset to master.
+  //  db_set_active('game_' . $game);
   return $data2;
 }
 
-// GAME PREACTION FUNCTIONS //
-
+/**
+ * GAME PREACTION FUNCTIONS //
+ */
 function game_preaction_plant_flower_seeds(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -493,6 +496,9 @@ function game_preaction_plant_flower_seeds(&$action) {
   $action->values_cost += ($comp_level->level * 10);
 }
 
+/**
+ *
+ */
 function game_preaction_spread_gossip(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -503,6 +509,9 @@ function game_preaction_spread_gossip(&$action) {
   $action->values_cost += ($comp_level->level);
 }
 
+/**
+ *
+ */
 function game_preaction_steal_some_value(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -512,6 +521,9 @@ function game_preaction_steal_some_value(&$action) {
   $action->values_change -= ($comp_level->level * 20);
 }
 
+/**
+ *
+ */
 function game_preaction_support_your_local_official(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -522,6 +534,9 @@ function game_preaction_support_your_local_official(&$action) {
   $action->values_cost += ($comp_level->level);
 }
 
+/**
+ *
+ */
 function game_preaction_support_your_party_official(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -532,6 +547,9 @@ function game_preaction_support_your_party_official(&$action) {
   $action->values_cost += ($comp_level->level);
 }
 
+/**
+ *
+ */
 function game_preaction_throw_eggs(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
