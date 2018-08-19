@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_event_prizes.tpl.php
- * stlouis event prizes page
+ * @file Stlouis_event_prizes.tpl.php
+ * stlouis event prizes page.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -47,8 +47,7 @@ EOF;
   );
 
   foreach ($prizes as $prize) {
-// top $top get $quantity gifts #$prize_id
-
+// Top $top get $quantity gifts #$prize_id.
     $top = $prize[0];
     $quantity = $prize[1];
     $prize_id = $prize[2];
@@ -67,7 +66,9 @@ EOF;
       limit %d;';
     $result = db_query($sql, $top);
     $data = array();
-    while ($item = db_fetch_object($result)) $data[] = $item;
+    while ($item = db_fetch_object($result)) {
+      $data[] = $item;
+    }
 
     foreach ($data as $user) {
 

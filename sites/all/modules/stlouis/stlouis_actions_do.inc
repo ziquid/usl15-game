@@ -1,13 +1,16 @@
 <?php
 
 /**
- * @file stlouis_actions_do.inc
+ * @file Stlouis_actions_do.inc
  * Includes for special functions.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
+/**
+ *
+ */
 function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -23,7 +26,7 @@ function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can
   // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   // Already a member of a clan.
   if (!empty($item)) {
@@ -43,7 +46,7 @@ firep($item);
     where users.id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
   $max_clan_size = $item->max_clan_size;
 
   // No aides to create a clan.
@@ -55,9 +58,8 @@ firep($item);
     return FALSE;
   }
 
-
   // Didn't fill both out.
-  if (empty($clan_name) XOR empty($clan_acronym)) {
+  if (empty($clan_name) xor empty($clan_acronym)) {
 
     $form_reminder = '<div class="land-failed">' .
       t('Both fields are required') .
@@ -70,7 +72,7 @@ firep($item);
   if (empty($clan_name) || empty($clan_acronym)) {
 
     $outcome_reason = $form_reminder;
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What will you name your clan?</p>
@@ -90,7 +92,7 @@ EOF;
   $sql = 'select * from clans where acronym = "%s" or name = "%s" limit 1;';
   $result = db_query($sql, $clan_acronym, $clan_name);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   // Clan does exist.
   if (!empty($item)) {
@@ -122,7 +124,11 @@ firep($item);
   return TRUE;
 }
 
-function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
+/**
+ *
+ */
+function _stlouis_action_join_a_clan_function(&$outcome_reason,
+ $target,
   &$can_do_again) {
 
   global $game, $phone_id;
@@ -140,7 +146,7 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $sql = 'select * from clan_members where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   if (!empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
@@ -152,7 +158,7 @@ firep($item);
 
   if (empty($clan_acronym)) {
 
-    $outcome_reason =<<< EOF
+    $outcome_reason = <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$arg2/$action_id">
   <p>Which clan would you like to join (three letters)?</p>
@@ -169,7 +175,7 @@ EOF;
   $sql = 'select * from clans where acronym = "%s";';
   $result = db_query($sql, $clan_acronym);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   // Clan does not exist.
   if (empty($item)) {
@@ -195,7 +201,7 @@ firep($item);
     where clans.id = %d and clan_members.is_clan_leader = 1;';
   $result = db_query($sql, $clan_id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
   $clan_leader_id = $item->id;
 
   // Different political party?
@@ -216,14 +222,14 @@ firep($item);
     where users.id = %d;';
   $result = db_query($sql, $clan_leader_id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
   $max_clan_size = $item->max_clan_size;
 
   $sql = 'select count(id) as current_clan_size from clan_members
     where fkey_clans_id = %d;';
   $result = db_query($sql, $clan_id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
   $current_clan_size = $item->current_clan_size;
 
   if ($current_clan_size >= $max_clan_size) {
@@ -246,7 +252,7 @@ firep($item);
       '</div><div class="action-effect">' .
       t('This clan has a password.  What is it?') . '</div>';
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$arg2/$action_id">
   <input type="hidden" name="acronym" value="$clan_acronym"/>
@@ -273,8 +279,8 @@ EOF;
   // Prohibited from joining for a time?
   $join_allowed_time = $get_value($game_user->id, 'cant_join_clan', 0);
   $now = time();
-firep($join_allowed_time, 'allowed time');
-firep($now, 'time now');
+  firep($join_allowed_time, 'allowed time');
+  firep($now, 'time now');
 
   // Can't join yet!
   if ($now < $join_allowed_time) {
@@ -313,6 +319,9 @@ firep($now, 'time now');
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -387,6 +396,9 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -441,8 +453,12 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   global $game;
 
@@ -514,7 +530,11 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
   return TRUE;
 }
 
-function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target,
+/**
+ *
+ */
+function _stlouis_action_change_clan_rules_function(&$outcome_reason,
+ $target,
   &$can_do_again) {
 
   global $game, $phone_id;
@@ -529,7 +549,7 @@ function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target,
   $sql = 'select * from clan_members where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item, 'clan member');
+  firep($item, 'clan member');
 
   // Ask for rules.
   if (empty($clan_rules)) {
@@ -538,7 +558,7 @@ firep($item, 'clan member');
     $result = db_query($sql, $game_user->fkey_clans_id);
     $item = db_fetch_object($result);
 
-    $outcome_reason =<<< EOF
+    $outcome_reason = <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What are your clan rules?</p>
@@ -567,6 +587,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
@@ -576,20 +599,20 @@ function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target
 
   $welcome_msg = check_plain($_GET['welcome_msg']);
   $welcome_msg = _stlouis_filter_profanity($welcome_msg);
-firep('welcome message = ' . $welcome_msg);
+  firep('welcome message = ' . $welcome_msg);
 
   $sql = 'select * from elected_officials where fkey_users_id = %d;';
 
   // Limited to 1 in db.
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   $error = '';
   if (substr($welcome_msg, 0, 3) == 'XXX') {
-     $error = '<div class="message-error">Your message contains words that are not
+    $error = '<div class="message-error">Your message contains words that are not
         allowed.&nbsp; Please rephrase.&nbsp; ' . $welcome_msg . '</div>';
-      $welcome_msg = '';
+    $welcome_msg = '';
   }
 
   // Ask for message.
@@ -599,7 +622,7 @@ firep($item);
     $result = db_query($sql, $game_user->fkey_neighborhoods_id);
     $item = db_fetch_object($result);
 
-    $outcome_reason =<<< EOF
+    $outcome_reason = <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What should the sign state?</p>
@@ -626,6 +649,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_change_clan_password_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
@@ -637,7 +663,7 @@ function _stlouis_action_change_clan_password_function(&$outcome_reason, $target
   $sql = 'select * from clan_members where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
+  firep($item);
 
   // Check to see if clan leader.
   if ($item->is_clan_leader != 1) {
@@ -650,7 +676,7 @@ firep($item);
 
   // Ask for the new password.
   if (empty($clan_password)) {
-    $outcome_reason =<<< EOF
+    $outcome_reason = <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$phone_id/$action_id">
   <p>What is your clan password (6 characters)?</p>
@@ -680,8 +706,12 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -739,7 +769,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
       ' player <em>persona non grata</em>.</div>
       <div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
+      $phone_id . '/action?destination=/' . $game . '/actions/' . $phone_id .
       '">Refill your Action (1&nbsp;Luck)</a></div></div>';
     return FALSE;
   }
@@ -800,6 +830,9 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
@@ -849,7 +882,7 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="action-effect">These players are in $location:
   <div class="elections-header">
     <div class="election-details">
@@ -862,10 +895,12 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
 EOF;
 
   foreach ($data as $item) {
-firep($item);
+    firep($item);
 
     $username = $item->username;
-    if (empty($username)) $username = '<em>Anonymous</em>';
+    if (empty($username)) {
+      $username = '<em>Anonymous</em>';
+    }
 
     if ($item->id == $game_user->id) {
       $clan_class = 'election-details me';
@@ -895,7 +930,7 @@ firep($item);
 
     $icon = $game . '_clan_' . $item->party_icon . '.png';
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
     <div class="$clan_class">
 <div class="clan-icon"><img
   src="/sites/default/files/images/$icon"/></div>
@@ -912,17 +947,20 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . $game . '_fetch_user';
+  $fetch_user = '_' . $game . '_fetch_user';
 
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
-    $data = [];
-    $sql = 'SELECT username, experience, initiative, endurance,
+  $data = [];
+  $sql = 'SELECT username, experience, initiative, endurance,
       elocution, debates_won, debates_lost, skill_points, luck,
       debates_last_time, users.fkey_values_id, level, phone_id,
       `values`.party_title, `values`.party_icon,
@@ -955,11 +993,13 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
       and username <> ""
       ORDER by users.experience DESC;';
 
-    $result = db_query($sql, date('Y-m-d', time() - 1200),
+  $result = db_query($sql, date('Y-m-d', time() - 1200),
       date('Y-m-d', time() - 1200), $game_user->fkey_values_id);
-    while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-    $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="action-effect">These players are online:
     <div class="elections-header">
 <div class="election-details">
@@ -971,43 +1011,44 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
 <div class="elections">
 EOF;
 
-    foreach ($data as $item) {
-firep($item);
+  foreach ($data as $item) {
+    firep($item);
 
-      $username = $item->username;
-      if (empty($username)) {
-        $username = '<em>Anonymous</em>';
-      }
+    $username = $item->username;
+    if (empty($username)) {
+      $username = '<em>Anonymous</em>';
+    }
 
-      if ($item->id == $game_user->id) {
-        $clan_class = 'election-details me';
-      }
-      else {
-        $clan_class = 'election-details';
-      }
+    if ($item->id == $game_user->id) {
+      $clan_class = 'election-details me';
+    }
+    else {
+      $clan_class = 'election-details';
+    }
 
-      $official_link = $item->ep_name;
+    $official_link = $item->ep_name;
 
-      if ($item->can_broadcast_to_party) {
-        $official_link .= '<div class="can-broadcast-to-party">*</div>';
-      }
+    if ($item->can_broadcast_to_party) {
+      $official_link .= '<div class="can-broadcast-to-party">*</div>';
+    }
 
-      $official_link .= '<br/><a href="/' . $game . '/user/' .
+    $official_link .= '<br/><a href="/' . $game . '/user/' .
         $phone_id . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
-      $exp = $item->experience;
-      $clan_acronym = '';
+    $exp = $item->experience;
+    $clan_acronym = '';
 
-      if (!empty($item->clan_acronym))
-        $clan_acronym = "($item->clan_acronym)";
+    if (!empty($item->clan_acronym)) {
+      $clan_acronym = "($item->clan_acronym)";
+    }
 
-      if ($item->is_clan_leader) {
-        $clan_acronym .= '*';
-      }
+    if ($item->is_clan_leader) {
+      $clan_acronym .= '*';
+    }
 
-      $icon = $game . '_clan_' . $item->party_icon . '.png';
+    $icon = $game . '_clan_' . $item->party_icon . '.png';
 
-      $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
       <div class="$clan_class">
   <div class="clan-icon"><img
     src="/sites/default/files/images/$icon"/></div>
@@ -1018,13 +1059,17 @@ firep($item);
 </div>
 EOF;
 
-    }
-
-    return TRUE;
   }
 
+  return TRUE;
+}
+
+/**
+ *
+ */
 function _stlouis_action_steal_some_value_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   global $game;
 
@@ -1040,8 +1085,12 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_erase_your_wall_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   global $game, $phone_id;
 
@@ -1067,7 +1116,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
           '">No, I\'m not sure</a>
         </div>
       </div>';
-      return FALSE;
+    return FALSE;
   }
 
   $sql = 'delete from user_messages where fkey_users_to_id = %d;';
@@ -1075,39 +1124,42 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
   return TRUE;
 }
 
-  function _stlouis_action_give_luck_to_a_clan_member_function(&$outcome_reason, $target) {
+/**
+ *
+ */
+function _stlouis_action_give_luck_to_a_clan_member_function(&$outcome_reason, $target) {
 
-    global $game, $phone_id;
-    $game_user = _stlouis_fetch_user();
-    $action_id = arg(3);
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
-    $sure = check_plain($_GET['sure']);
+  global $game, $phone_id;
+  $game_user = _stlouis_fetch_user();
+  $action_id = arg(3);
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
+  $sure = check_plain($_GET['sure']);
 
-    if ((substr($phone_id, 0, 3) == 'sdk') ||
-      (strpos($_SERVER['HTTP_USER_AGENT'], 'vm Build/MASTER') !== FALSE) ||
-      (strpos($_SERVER['HTTP_USER_AGENT'], 'sdk Build') !== FALSE)) {
+  if ((substr($phone_id, 0, 3) == 'sdk') ||
+  (strpos($_SERVER['HTTP_USER_AGENT'], 'vm Build/MASTER') !== FALSE) ||
+  (strpos($_SERVER['HTTP_USER_AGENT'], 'sdk Build') !== FALSE)) {
 
-      $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
+    $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
         '</div><div class="action-effect">SDK users cannot give Luck.</div>';
 
-      return FALSE;
+    return FALSE;
 
-    }
+  }
 
-    // Not enough luck.
-    if ($game_user->luck < 20) {
+  // Not enough luck.
+  if ($game_user->luck < 20) {
 
-      $outcome_reason = '<div class="land-failed">' .
+    $outcome_reason = '<div class="land-failed">' .
         t('Not enough Luck!') .
         '</div><div class="action-effect">You do not have 10 extra Luck to give</div>';
 
-      return FALSE;
-    }
+    return FALSE;
+  }
 
-    if ($sure != 'yes') {
+  if ($sure != 'yes') {
 
-      $outcome_reason = '<div class="subtitle">Are you sure?</div>
+    $outcome_reason = '<div class="subtitle">Are you sure?</div>
         <div class="subsubtitle">
           This gives 10 of your Luck and cannnot be undone!
         </div>
@@ -1123,33 +1175,36 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
           </div>
         </div>';
 
-        return FALSE;
+    return FALSE;
 
-    }
+  }
 
-    $sql = 'insert into challenge_history
+  $sql = 'insert into challenge_history
         (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
         fkey_elected_positions_id, won, desc_short, desc_long) values
         ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
-     $result = db_query($sql, $game_user->id, $target_id,$game_user->fkey_neighborhoods_id,
-       $target->ep_id, 0,
-       "$game_user->username gave a gift of Luck to " .$target_name. '.',
-       "$game_user->username gave a gift of 10 Luck to " . $target_name.
-        ' (currently ' . $target->luck . ').');
+  $result = db_query($sql, $game_user->id, $target_id, $game_user->fkey_neighborhoods_id,
+   $target->ep_id, 0,
+   "$game_user->username gave a gift of Luck to " . $target_name . '.',
+   "$game_user->username gave a gift of 10 Luck to " . $target_name .
+    ' (currently ' . $target->luck . ').');
 
-    $sql = 'update users set luck = luck - 10 where id = %d;';
-    $result = db_query($sql, $game_user->id);
+  $sql = 'update users set luck = luck - 10 where id = %d;';
+  $result = db_query($sql, $game_user->id);
 
-    $sql = 'update users set luck = luck + 10 where id = %d;';
-    $result = db_query($sql, $target_id);
+  $sql = 'update users set luck = luck + 10 where id = %d;';
+  $result = db_query($sql, $target_id);
 
-    $outcome_reason .= '<div class="action-effect">' .
+  $outcome_reason .= '<div class="action-effect">' .
       t('You have transferred 10 of your Luck to @name',
-      array('@name' => $target_name)) . '</div>';
+  array('@name' => $target_name)) . '</div>';
 
-    return TRUE;
-  }
+  return TRUE;
+}
 
+/**
+ *
+ */
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
@@ -1180,6 +1235,9 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -1220,6 +1278,9 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -1260,6 +1321,9 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
@@ -1299,8 +1363,12 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_meet_someone_new_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   global $game;
 
@@ -1319,8 +1387,13 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_spread_gossip_function(&$outcome_reason,
-  $target, &$can_do_again, &$action) {
+  $target,
+ &$can_do_again,
+ &$action) {
 
   global $game;
 
@@ -1351,6 +1424,9 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -1378,6 +1454,9 @@ function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, 
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id, $action;
@@ -1408,11 +1487,10 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   // Make actions current.  If this didn't happen, you could give actions to a
   // user that would be swallowed up by time if s/he was low on actions and not
   // currently playing.
-//    $text = 'User ' . $game_user->username . ' is sending actions to ' .
-//      $target_name . ' (currently ' . $item->actions . ' of ' .
-//      $item->actions_max . ' with a next_gain time of ' .
-//      $item->actions_next_gain . ').';
-
+  //    $text = 'User ' . $game_user->username . ' is sending actions to ' .
+  //      $target_name . ' (currently ' . $item->actions . ' of ' .
+  //      $item->actions_max . ' with a next_gain time of ' .
+  //      $item->actions_next_gain . ').';
   // Add actions if low.
   while (($item->actions < $item->actions_max) && ($secs_until <= 0)) {
     $item->actions++;
@@ -1460,6 +1538,9 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1499,7 +1580,7 @@ function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, 
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
 <div class="messages-title">
   Flowers that have been planted in this neighborhood
@@ -1518,7 +1599,7 @@ EOF;
       $clan_acronym .= '*';
     }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
 $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1541,6 +1622,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1578,7 +1662,7 @@ function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target,
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
 <div class="messages-title">
   Eggs that have been thrown at your office
@@ -1597,7 +1681,7 @@ EOF;
       $clan_acronym .= '*';
     }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
 $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1620,6 +1704,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_critique_last_debates_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
@@ -1658,7 +1745,7 @@ function _stlouis_action_critique_last_debates_function(&$outcome_reason, $targe
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
 <div class="messages-title">
   Latest debate(s)
@@ -1670,13 +1757,15 @@ EOF;
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-    if (!empty($item->clan_acronym))
+    if (!empty($item->clan_acronym)) {
       $clan_acronym = "($item->clan_acronym)";
+    }
 
-    if ($item->is_clan_leader)
+    if ($item->is_clan_leader) {
       $clan_acronym .= '*';
+    }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
 $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1700,6 +1789,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1737,7 +1829,7 @@ function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
   <div class="messages-title">
     Rumors around town
@@ -1749,13 +1841,15 @@ EOF;
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-    if (!empty($item->clan_acronym))
+    if (!empty($item->clan_acronym)) {
       $clan_acronym = "($item->clan_acronym)";
+    }
 
-    if ($item->is_clan_leader)
+    if ($item->is_clan_leader) {
       $clan_acronym .= '*';
+    }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1770,14 +1864,20 @@ EOF;
     $msg_shown = TRUE;
   }
 
-  if (!$msg_shown) $outcome_reason .= 'No rumors found!';
+  if (!$msg_shown) {
+    $outcome_reason .= 'No rumors found!';
+  }
 
   $outcome_reason .= '</div>';
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
@@ -1810,9 +1910,11 @@ function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
 
   $result = db_query($sql, $game_user->id,
     date('Y-m-d H:i:s', time() - 86400));
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
   <div class="messages-title">
     List of Benefactors
@@ -1824,13 +1926,15 @@ EOF;
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-    if (!empty($item->clan_acronym))
+    if (!empty($item->clan_acronym)) {
       $clan_acronym = "($item->clan_acronym)";
+    }
 
-    if ($item->is_clan_leader)
+    if ($item->is_clan_leader) {
       $clan_acronym .= '*';
+    }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
   $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -1853,6 +1957,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1931,7 +2038,7 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
       $prev_hours = 'hours';
     }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="try-an-election-wrapper">
   <div class="try-an-election">
     <a href="/$game/actions_do/$arg2/$action_id?hour=$previous_hour">&lt;&lt;&lt;
@@ -1941,7 +2048,7 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
 EOF;
   }
   else {
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="try-an-election-wrapper">
   <div class="try-an-election not-yet">
     &lt;&lt;&lt; No more hours to view
@@ -1961,7 +2068,7 @@ EOF;
       $next_hours = 'hours';
     }
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="try-an-election-wrapper">
   <div class="try-an-election">
     <a href="/$game/actions_do/$arg2/$action_id?hour=$next_hour">See
@@ -1971,7 +2078,7 @@ EOF;
 EOF;
   }
   else {
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="try-an-election-wrapper">
   <div class="try-an-election not-yet">
     No more security cameras &gt;&gt;&gt;
@@ -1980,7 +2087,7 @@ EOF;
 EOF;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
   <div class="messages-title">
     Actions $hour_to_show $hours ago in your {$hood_lower}
@@ -1994,11 +2101,13 @@ EOF;
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-    if (!empty($item->clan_acronym))
+    if (!empty($item->clan_acronym)) {
       $clan_acronym = "($item->clan_acronym)";
+    }
 
-    if ($item->is_clan_leader)
+    if ($item->is_clan_leader) {
       $clan_acronym .= '*';
+    }
 
     if ($item->desc_short !== $old_item->desc_short) {
 
@@ -2013,9 +2122,9 @@ EOF;
         else {
           $instance_text = $time_prefix = '';
         }
-       $msg_shown = TRUE;
+        $msg_shown = TRUE;
 
-       $outcome_reason .=<<< EOF
+        $outcome_reason .= <<< EOF
   <div class="dateline">
     $time_prefix $old_display_time from $old_item->ep_name $old_item->username $old_clan_acronym
   </div>
@@ -2031,17 +2140,16 @@ EOF;
 
       // Now display current item.
       //        $outcome_reason .=<<< EOF
-      //<div class="dateline">
+      // <div class="dateline">
       //  $display_time from $item->ep_name $item->username $clan_acronym
-      //</div>
-      //<div class="message-body">
+      // </div>
+      // <div class="message-body">
       //  <p>($item->id) $item->desc_short</p>
       //  <div class="message-reply-wrapper"><div class="message-reply">
       //    <a href="/$game/user/$phone_id/$item->phone_id">View</a>
       //  </div></div>
-      //</div>
-      //EOF;
-
+      // </div>
+      // EOF;
       $instance_count = 1;
       $old_item = $item;
       $old_clan_acronym = $clan_acronym;
@@ -2064,8 +2172,12 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = $arg3;
@@ -2117,7 +2229,7 @@ function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
         expel this Level ' . $target_user->level . ' player.</div>';
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/action?destination=/' .  $game . '/actions/' . $phone_id .
+      $phone_id . '/action?destination=/' . $game . '/actions/' . $phone_id .
       '">Refill your Action (1&nbsp;Luck)</a></div></div>';
     return FALSE;
   }
@@ -2236,7 +2348,11 @@ function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
   return TRUE;
 }
 
-function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
+/**
+ *
+ */
+function _stlouis_action_count_your_votes_function(&$outcome_reason,
+ $target,
   &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -2273,7 +2389,7 @@ function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
 <div class="messages-title">
   Detailed Election Results
@@ -2285,16 +2401,18 @@ EOF;
     $display_time = game_format_date(strtotime($item->timestamp));
     $clan_acronym = '';
 
-    if (!empty($item->clan_acronym))
+    if (!empty($item->clan_acronym)) {
       $clan_acronym = "($item->clan_acronym)";
+    }
 
-    if ($item->is_clan_leader)
+    if ($item->is_clan_leader) {
       $clan_acronym .= '*';
+    }
 
     $desc_short = nl2br($item->desc_short);
     $desc_long = nl2br($item->desc_long);
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
 $display_time to $item->ep_name $item->username $clan_acronym
 </div>
@@ -2320,7 +2438,11 @@ EOF;
   return TRUE;
 }
 
-function _stlouis_action_get_challenge_results_function(&$outcome_reason, $target,
+/**
+ *
+ */
+function _stlouis_action_get_challenge_results_function(&$outcome_reason,
+ $target,
   &$can_do_again) {
 
   global $game, $phone_id;
@@ -2361,7 +2483,7 @@ function _stlouis_action_get_challenge_results_function(&$outcome_reason, $targe
     $data[] = $item;
   }
 
-  $outcome_reason .=<<< EOF
+  $outcome_reason .= <<< EOF
 <div class="news">
 <div class="messages-title">
   Detailed Election Results
@@ -2384,7 +2506,7 @@ EOF;
     $desc_short = nl2br($item->desc_short);
     $desc_long = nl2br($item->desc_long);
 
-    $outcome_reason .=<<< EOF
+    $outcome_reason .= <<< EOF
 <div class="dateline">
 $display_time from $item->ep_name $item->username $clan_acronym
 </div>
@@ -2409,6 +2531,9 @@ EOF;
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_check_for_friendly_hood() {
   global $game, $phone_id;
   $fetch_user = '_' . $game . '_fetch_user';
@@ -2428,7 +2553,11 @@ function _stlouis_check_for_friendly_hood() {
   return ($item->fkey_values_id == $game_user->fkey_values_id);
 }
 
-function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $target,
+/**
+ *
+ */
+function _stlouis_action_clear_clan_announcements_function(&$outcome_reason,
+ $target,
   &$can_do_again) {
 
   global $game, $phone_id;
@@ -2442,7 +2571,7 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
 
   $sql = 'SELECT id FROM {clan_members} c
   WHERE c.fkey_users_id = %d AND c.fkey_clans_id = %d AND c.is_clan_leader = 1';
-  $is_clan_leader = db_result(db_query($sql, (int)$game_user->id, (int)$game_user->fkey_clans_id));
+  $is_clan_leader = db_result(db_query($sql, (int) $game_user->id, (int) $game_user->fkey_clans_id));
 
   if (empty($is_clan_leader)) {
     $outcome_reason = '<div class="land-failed">' .
@@ -2467,16 +2596,20 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
           '">No, I\'m not sure</a>
         </div>
       </div>';
-      return FALSE;
+    return FALSE;
   }
 
   $sql = 'DELETE FROM clan_messages WHERE fkey_neighborhoods_id = %d AND is_announcement = 1';
-  $result = db_query($sql, (int)$game_user->fkey_clans_id);
+  $result = db_query($sql, (int) $game_user->fkey_clans_id);
   return !empty($result) ? TRUE : FALSE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_support_your_local_official_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
@@ -2506,8 +2639,13 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   }
 }
 
+/**
+ *
+ */
 function _stlouis_action_support_your_party_official_function(
-  &$outcome_reason, $target, &$can_do_again) {
+  &$outcome_reason,
+ $target,
+ &$can_do_again) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
@@ -2537,8 +2675,12 @@ function _stlouis_action_support_your_party_official_function(
   }
 }
 
+/**
+ *
+ */
 function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
 
   // One hour ago, since we are ET.
   $st_time = date('g:i:s A', REQUEST_TIME - 3600);
@@ -2548,8 +2690,12 @@ function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
   return TRUE;
 }
 
+/**
+ *
+ */
 function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
-  $target, &$can_do_again) {
+  $target,
+ &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $action_id = $arg3;
@@ -2608,7 +2754,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
         expel these ' . $num_users . ' players.</div>';
     $outcome_reason .= '<div class="try-an-election-wrapper"><div
       class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/action?destination=/' .  $game . '/actions/' . $arg2 .
+      $phone_id . '/action?destination=/' . $game . '/actions/' . $arg2 .
       '">Refill your Action (1&nbsp;Luck)</a></div></div>';
     return FALSE;
   }
@@ -2661,449 +2807,460 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   return TRUE;
 }
 
-  function _stlouis_action_don_a_different_costume_function(&$outcome_reason,
-    $target, &$can_do_again) {
+/**
+ *
+ */
+function _stlouis_action_don_a_different_costume_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-/*
-    $sql = 'update users set username =
-      concat(elt(floor (rand() * 13) + 1,
-      "Happy", "Scary", "Funny", "Undead", "Rainbow", "Hero", "Gothic",
-      "Frightening", "Sexy", "Fierce", "Skinny", "Elderly", "Plump"),
-      elt(floor (rand() * 28) + 1,
-      "Elf", "Ghost", "Witch", "Pirate", "Zombie", "Princess", "Monster",
-      "Fairy", "Werewolf", "Pumpkin", "Spider", "Wrestler",  "Dictator",
-      "Vampire", "Cowboy", "Cowgirl", "Gypsy", "King", "Queen", "Alien",
-      "Bee", "Devil", "Elvis", "Baby", "Man", "Woman", "Lizard", "Dinosaur"),
-      floor(rand() * 9999))
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  /*
+  $sql = 'update users set username =
+  concat(elt(floor (rand() * 13) + 1,
+  "Happy", "Scary", "Funny", "Undead", "Rainbow", "Hero", "Gothic",
+  "Frightening", "Sexy", "Fierce", "Skinny", "Elderly", "Plump"),
+  elt(floor (rand() * 28) + 1,
+  "Elf", "Ghost", "Witch", "Pirate", "Zombie", "Princess", "Monster",
+  "Fairy", "Werewolf", "Pumpkin", "Spider", "Wrestler",  "Dictator",
+  "Vampire", "Cowboy", "Cowgirl", "Gypsy", "King", "Queen", "Alien",
+  "Bee", "Devil", "Elvis", "Baby", "Man", "Woman", "Lizard", "Dinosaur"),
+  floor(rand() * 9999))
+  where id = %d';
+  $result = db_query($sql, $game_user->id);
+
+  $game_user = $fetch_user();
+   */
+  $outcome_reason = '<div class="title">Halloween is over!</div>';
+
+  return FALSE;
+
+}
+
+/**
+ *
+ */
+function _stlouis_action_remove_your_costume_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
+
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  $old_username = $game_user->username;
+  $can_do_again = FALSE;
+
+  $sql = 'update users set username = real_username
       where id = %d';
-    $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $game_user->id);
 
-    $game_user = $fetch_user();
-*/
-    $outcome_reason = '<div class="title">Halloween is over!</div>';
+  $game_user = $fetch_user();
+  $new_username = $game_user->username;
+
+  if ($old_username != $new_username) {
+
+    $outcome_reason .= '<div class="subtitle">You are now known as</div>
+        <div class="title">' . $game_user->username . '</div>';
+
+    return TRUE;
+
+  }
+  else {
+
+    switch (mt_rand(0, 1)) {
+
+      case 0:
+        $outcome_reason = '<div class="title">Sadly</div>
+            <div class="subtitle">You are not wearing a costume :-(((</div>';
+        break;
+
+      case 1:
+        $outcome_reason = '<div class="title">What?</div>
+            <div class="subtitle">You want to go around naked???</div>';
+        break;
+
+    }
 
     return FALSE;
 
   }
 
+}
 
-  function _stlouis_action_remove_your_costume_function(&$outcome_reason,
-    $target, &$can_do_again) {
+/**
+ *
+ */
+function _stlouis_action_trick_or_treat_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    $old_username = $game_user->username;
-    $can_do_again = FALSE;
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  $old_username = $game_user->username;
+  // $can_do_again = FALSE;
+  // No costume!
+  if ($game_user->username == $game_user->real_username) {
 
-    $sql = 'update users set username = real_username
-      where id = %d';
-    $result = db_query($sql, $game_user->id);
-
-    $game_user = $fetch_user();
-    $new_username = $game_user->username;
-
-    if ($old_username != $new_username) {
-
-      $outcome_reason .= '<div class="subtitle">You are now known as</div>
-        <div class="title">' . $game_user->username . '</div>';
-
-      return TRUE;
-
-    }
-    else {
-
-      switch(mt_rand(0, 1)) {
-
-        case 0:
-          $outcome_reason = '<div class="title">Sadly</div>
-            <div class="subtitle">You are not wearing a costume :-(((</div>';
-        break;
-
-        case 1:
-          $outcome_reason = '<div class="title">What?</div>
-            <div class="subtitle">You want to go around naked???</div>';
-        break;
-
-      }
-
-      return FALSE;
-
-    }
+    $outcome_reason = '<div class="title">Huh?</div>
+        <div class="subtitle">You can\'t go out without a costume!</div>';
+    return FALSE;
 
   }
 
+  $sql = 'select name, special_int from neighborhoods where id = %d;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  // Limited to 1 in db;
+  $item = db_fetch_object($result);
 
-  function _stlouis_action_trick_or_treat_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  // Out of candy.
+  if ($item->special_int < 1) {
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-    $old_username = $game_user->username;
-//    $can_do_again = FALSE;
-
-    // No costume!
-    if ($game_user->username == $game_user->real_username) {
-
-      $outcome_reason = '<div class="title">Huh?</div>
-        <div class="subtitle">You can\'t go out without a costume!</div>';
-      return FALSE;
-
-    }
-
-    $sql = 'select name, special_int from neighborhoods where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $item = db_fetch_object($result); // limited to 1 in db;
-
-    // Out of candy.
-    if ($item->special_int < 1) {
-
-      $outcome_reason = '<div class="title">' . $item->name . '</div>
+    $outcome_reason = '<div class="title">' . $item->name . '</div>
         <div class="subtitle">is out of treats -- try another neighborhood</div>';
 
-      $sql = 'select count(name) as count
+    $sql = 'select count(name) as count
         from neighborhoods where special_int < 1;';
-      $result = db_query($sql);
-      $item2 = db_fetch_object($result); // limited to 1 in db;
+    $result = db_query($sql);
+    // Limited to 1 in db;
+    $item2 = db_fetch_object($result);
 
-//      mail('joseph@cheek.com', $item2->count . ' neighborhoods out of treats',
-//        'hopefully ' . $item->name . ' will get more soon!');
+    // mail('joseph@cheek.com', $item2->count . ' neighborhoods out of treats',
+    //        'hopefully ' . $item->name . ' will get more soon!');
+    return FALSE;
 
-      return FALSE;
+  }
 
-    }
+  $candy_used = FALSE;
 
-    $candy_used = FALSE;
+  switch (mt_rand(0, 90)) {
 
-    switch(mt_rand(0, 90)) {
-
-      case 0:
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-        $outcome_reason = '<div class="title"><img
+    case 0:
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+      $outcome_reason = '<div class="title"><img
           src="/sites/default/files/images/stlouis-angry-dog.png"></div>
           <div class="title">BARK BARK BARK!</div>
           <div class="subtitle">A scary dog chases you away</div>';
 
-        return TRUE;
+      return TRUE;
 
-        // Just for form.
-        break;
+    // Just for form.
+    break;
 
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-        $outcome_reason = '<div class="title">Sadly</div>
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+      $outcome_reason = '<div class="title">Sadly</div>
           <div class="subtitle">No one is home 8-(</div>';
 
-        return TRUE;
+      return TRUE;
 
-        // Just for form.
-        break;
+    // Just for form.
+    break;
 
-      case 10:
-      case 11:
-      case 12:
-      case 13:
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 19:
-        $outcome_reason .=
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+      $outcome_reason .=
           '<div class="title">You get your actions refilled!</div>';
 
-        $sql = 'update users set actions = actions_max + 1
+      $sql = 'update users set actions = actions_max + 1
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 20:
-      case 21:
-      case 22:
-      case 23:
-      case 24:
-      case 25:
-      case 26:
-      case 27:
-      case 28:
-      case 29:
-        $outcome_reason .=
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+      $outcome_reason .=
           '<div class="title">You get your energy refilled!</div>';
 
-        $sql = 'update users set energy = energy_max
+      $sql = 'update users set energy = energy_max
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 30:
-      case 31:
-      case 32:
-      case 33:
-      case 34:
-      case 35:
-      case 36:
-      case 37:
-      case 38:
-      case 39:
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
+    case 38:
+    case 39:
 
-        $money = floor(($game_user->income - $game_user->expenses) / 10);
-        $outcome_reason .=
+      $money = floor(($game_user->income - $game_user->expenses) / 10);
+      $outcome_reason .=
           '<div class="title">You get ' . $money . ' ' .
-          $game_user->values .'!</div>';
+          $game_user->values . '!</div>';
 
-        $sql = 'update users set money = money + %d
+      $sql = 'update users set money = money + %d
           where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
+      $result = db_query($sql, $money, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-      case 45:
-      case 46:
-      case 47:
-      case 48:
-      case 49:
-        $outcome_reason .=
+    case 40:
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+    case 45:
+    case 46:
+    case 47:
+    case 48:
+    case 49:
+      $outcome_reason .=
           '<div class="title">You get 5 actions!</div>';
 
-        $sql = 'update users set actions = actions + 6
+      $sql = 'update users set actions = actions + 6
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 50:
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
+    case 50:
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+      $outcome_reason .=
           '<div class="title">You get 100 influence!</div>';
 
-        $sql = 'update users set experience = experience + 100
+      $sql = 'update users set experience = experience + 100
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-        $outcome_reason .=
+    case 60:
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+      $outcome_reason .=
           '<div class="title">You get 1000 Influence!</div>';
 
-        $sql = 'update users set experience = experience + 1000
+      $sql = 'update users set experience = experience + 1000
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        $candy_used = TRUE;
+      $candy_used = TRUE;
 
-        // Just for form.
-        break;
+      // Just for form.
+      break;
 
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+      $outcome_reason .=
           '<div class="title">Ono!</div>
           <div class="subtitle">Your costume ripped and fell off</div>';
 
-        $sql = 'update users set username = real_username
+      $sql = 'update users set username = real_username
           where id = %d';
-        $result = db_query($sql, $game_user->id);
-        $can_do_again = FALSE;
+      $result = db_query($sql, $game_user->id);
+      $can_do_again = FALSE;
 
-        return TRUE;
+      return TRUE;
 
-        // Just for form.
-        break;
+    // Just for form.
+    break;
 
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-      case 75:
-      case 76:
-      case 77:
-      case 78:
-      case 79:
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $outcome_reason = '<div class="title">Unfortunately</div>
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+    case 75:
+    case 76:
+    case 77:
+    case 78:
+    case 79:
+    case 80:
+    case 81:
+    case 82:
+    case 83:
+    case 84:
+    case 85:
+    case 86:
+    case 87:
+    case 88:
+    case 89:
+      $outcome_reason = '<div class="title">Unfortunately</div>
           <div class="subtitle">This home is all out of treats!</div>
           <div class="subtitle">Try another</div>';
 
-        return TRUE;
+      return TRUE;
 
-        // Just for form.
-        break;
+    // Just for form.
+    break;
 
-/*
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $outcome_reason .= '<div class="title">A guy comes out</div>
-          <div class="title"><img
-            src="/sites/default/files/images/equipment/stlouis-26.png"/></div>
-          <div class="subtitle">and hands you a ticket</div>
-          <div class="subtitle">&quot;There\'s a party tonight
-          in Fountain Park,&quot; he says</div>';
+    /*
+    case 90:
+    case 91:
+    case 92:
+    case 93:
+    case 94:
+    case 95:
+    case 96:
+    case 97:
+    case 98:
+    case 99:
+    $outcome_reason .= '<div class="title">A guy comes out</div>
+    <div class="title"><img
+    src="/sites/default/files/images/equipment/stlouis-26.png"/></div>
+    <div class="subtitle">and hands you a ticket</div>
+    <div class="subtitle">&quot;There\'s a party tonight
+    in Fountain Park,&quot; he says</div>';
 
-        $sql = 'select quantity from equipment_ownership
-          where fkey_equipment_id = 26 and fkey_users_id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $data = db_fetch_object($result);
+    $sql = 'select quantity from equipment_ownership
+    where fkey_equipment_id = 26 and fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+    $data = db_fetch_object($result);
 
-        // Already a ticket.
-        if (!empty($data)) {
+    // Already a ticket.
+    if (!empty($data)) {
 
-          $sql = 'update equipment_ownership set quantity = 1
-            where fkey_equipment_id = 26 and fkey_users_id = %d;';
-          $result = db_query($sql, $game_user->id);
+    $sql = 'update equipment_ownership set quantity = 1
+    where fkey_equipment_id = 26 and fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
 
-          $outcome_reason .= '<div class="title">You already have one, but you
-            thank him anyway</div>';
-
-        }
-        else {
-
-          $sql = 'insert into equipment_ownership
-            (fkey_users_id, fkey_equipment_id, quantity) values
-            (%d, 26, 1);';
-          $result = db_query($sql, $game_user->id);
-
-          $outcome_reason .= '<div class="title">You take it.&nbsp; This
-            might be fun!</div>';
-
-        }
-
-        return TRUE;
-
-        // Just for form.
-        break;
-*/
-      default:
-        $outcome_reason .=
-          '<div class="title">You get 10 luck!</div>';
-
-        $sql = 'update users set luck = luck + 10
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
-
-        $candy_used = TRUE;
-
-        // Just for form.
-        break;
-
+    $outcome_reason .= '<div class="title">You already have one, but you
+    thank him anyway</div>';
 
     }
+    else {
 
-    if ($candy_used) {
+    $sql = 'insert into equipment_ownership
+    (fkey_users_id, fkey_equipment_id, quantity) values
+    (%d, 26, 1);';
+    $result = db_query($sql, $game_user->id);
 
-      $sql = 'update neighborhoods set special_int = special_int - 1
-        where id = %d;';
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+    $outcome_reason .= '<div class="title">You take it.&nbsp; This
+    might be fun!</div>';
 
     }
 
     return TRUE;
 
-  }
+    // Just for form.
+    break;
+     */
+    default:
+      $outcome_reason .=
+          '<div class="title">You get 10 luck!</div>';
 
-
-  function _stlouis_action_check_out_all_the_people_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    $outcome_reason = '<div class="title">Sorry</div>
-      <div class="subtitle">They\'ve all gone home</div>';
-    return FALSE;
-
-    // Real function below.
-
-    // No costume!
-    if ($game_user->username == $game_user->real_username) {
-
-      $outcome_reason = '<div class="title">Huh?</div>
-        <div class="subtitle">You can\'t party without a costume!</div>';
-      return FALSE;
-
-    }
-
-    $outcome_reason = '<div class="title">with the Jack-O\'-Lanterns</div>';
-
-    $outcome_reason .= '<div class="title"><img
-      src="/sites/default/files/images/actions/stlouis-53.png"/></div>';
-
-    $sql = 'select quantity from equipment_ownership
-      where fkey_equipment_id = 27 and fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $data = db_fetch_object($result);
-
-    // None yet -- give one.
-    if (empty($data)) {
-
-      $sql = 'insert into equipment_ownership
-        (fkey_users_id, fkey_equipment_id, quantity) values
-        (%d, 27, 1);';
+      $sql = 'update users set luck = luck + 10
+          where id = %d';
       $result = db_query($sql, $game_user->id);
 
-      $outcome_reason .= '<div class="subtitle">The ladies tell you that you
+      $candy_used = TRUE;
+
+      // Just for form.
+      break;
+
+  }
+
+  if ($candy_used) {
+
+    $sql = 'update neighborhoods set special_int = special_int - 1
+        where id = %d;';
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+
+  }
+
+  return TRUE;
+
+}
+
+/**
+ *
+ */
+function _stlouis_action_check_out_all_the_people_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
+
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $outcome_reason = '<div class="title">Sorry</div>
+      <div class="subtitle">They\'ve all gone home</div>';
+  return FALSE;
+
+  // Real function below.
+  // No costume!
+  if ($game_user->username == $game_user->real_username) {
+
+    $outcome_reason = '<div class="title">Huh?</div>
+        <div class="subtitle">You can\'t party without a costume!</div>';
+    return FALSE;
+
+  }
+
+  $outcome_reason = '<div class="title">with the Jack-O\'-Lanterns</div>';
+
+  $outcome_reason .= '<div class="title"><img
+      src="/sites/default/files/images/actions/stlouis-53.png"/></div>';
+
+  $sql = 'select quantity from equipment_ownership
+      where fkey_equipment_id = 27 and fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $data = db_fetch_object($result);
+
+  // None yet -- give one.
+  if (empty($data)) {
+
+    $sql = 'insert into equipment_ownership
+        (fkey_users_id, fkey_equipment_id, quantity) values
+        (%d, 27, 1);';
+    $result = db_query($sql, $game_user->id);
+
+    $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
         <div class="subtitle"><img
           src="/sites/default/files/images/equipment/stlouis-27.png"/></div>
@@ -3111,700 +3268,716 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
           by talking with them</div>
         <div class="title">So go meet someone new!</div>';
 
-    }
-    else if ($data->quantity >= 10) {
+  }
+  elseif ($data->quantity >= 10) {
 
-      // Already have ten.
-      $outcome_reason .= '<div class="subtitle">The ladies tell you that you
+    // Already have ten.
+    $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
         <div class="subtitle"><img
           src="/sites/default/files/images/equipment/stlouis-27.png"/></div>
         <div class="subtitle">But you already have ' . $data->quantity .
         '!</div><div class="title">So go meet someone new!</div>';
 
-      $can_do_again = FALSE;
+    $can_do_again = FALSE;
 
-    }
-    else {
+  }
+  else {
 
-      // Need one more.
-      $outcome_reason .= '<div class="subtitle">The ladies tell you that you
+    // Need one more.
+    $outcome_reason .= '<div class="subtitle">The ladies tell you that you
         get the Jack-O\'-Lanterns by talking to people at the party</div>
         <div class="subtitle"><img
           src="/sites/default/files/images/equipment/stlouis-27.png"/></div>
         <div class="subtitle">They give you one more</div>
         <div class="title">Then go meet someone new!</div>';
 
-      $sql = 'update equipment_ownership set quantity = quantity + 1
+    $sql = 'update equipment_ownership set quantity = quantity + 1
         where fkey_equipment_id = 27 and fkey_users_id = %d;';
-      $result = db_query($sql, $game_user->id);
-
-    }
-
-
-    return TRUE;
+    $result = db_query($sql, $game_user->id);
 
   }
+
+  return TRUE;
+
+}
 
 /*
-  function _stlouis_action_meet_someone_new_function(&$outcome_reason,
-    $target, &$can_do_again) {
-
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    // Not in Fountain Park?  Act as normal.
-    if ($game_user->fkey_neighborhoods_id != 80) return TRUE;
-
-    // Otherwise, we are in Fountain Park.
-
-    // No costume!
-    if ($game_user->username == $game_user->real_username) {
-
-      $outcome_reason = '<div class="title">Huh?</div>
-        <div class="subtitle">You\'re not getting a Jack-O\'-Lantern
-          without a costume!</div>';
-      return FALSE;
-
-    }
-
-    $outcome_reason .= '<div class="title">But...</div>
-      <div class="subtitle">To get the Jack-O\'-Lantern,<br/>you must post
-        on his or her wall!</div>';
-    return TRUE;
-
+function _stlouis_action_meet_someone_new_function(&$outcome_reason,
+  $target, &$can_do_again) {
+ 
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+ 
+  Not in Fountain Park?  Act as normal.
+  if ($game_user->fkey_neighborhoods_id != 80) return TRUE;
+ 
+  Otherwise, we are in Fountain Park.
+ 
+  No costume!
+  if ($game_user->username == $game_user->real_username) {
+ 
+  $outcome_reason = '<div class="title">Huh?</div>
+  <div class="subtitle">You\'re not getting a Jack-O\'-Lantern
+  without a costume!</div>';
+  return FALSE;
+ 
   }
-*/
+ 
+  $outcome_reason .= '<div class="title">But...</div>
+  <div class="subtitle">To get the Jack-O\'-Lantern,<br/>you must post
+  on his or her wall!</div>';
+  return TRUE;
+ 
+}
+ */
+function _stlouis_action_hunt_for_zombies_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-  function _stlouis_action_hunt_for_zombies_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-
-    $sql = 'select * from users where meta = "zombie"
+  $sql = 'select * from users where meta = "zombie"
       order by abs(level - %d) ASC
       limit 10;';
-    $result = db_query($sql, $game_user->level);
-    $data = array();
-    while ($item = db_fetch_object($result)) $data[] = $item;
+  $result = db_query($sql, $game_user->level);
+  $data = array();
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-    foreach ($data as $item) {
+  foreach ($data as $item) {
 
-      $sql = 'insert into user_messages (fkey_users_from_id,
+    $sql = 'insert into user_messages (fkey_users_from_id,
         fkey_users_to_id, message) values (%d, %d, "%s");';
-      $result = db_query($sql, $item->id, $game_user->id,
-        $item->username . ' ' . $item->id . ' loves politicsss...');
-
-    }
-
-    $num = count($data);
-
-    $outcome_reason .= '<div class="subtitle">' . $num .
-      ' Dead Presidents have posted on your wall</div>';
-    return TRUE;
+    $result = db_query($sql, $item->id, $game_user->id,
+    $item->username . ' ' . $item->id . ' loves politicsss...');
 
   }
 
+  $num = count($data);
 
-  function _stlouis_action_hunt_for_zombies_in_your_neighborhood_function
-    (&$outcome_reason, $target, &$can_do_again) {
+  $outcome_reason .= '<div class="subtitle">' . $num .
+      ' Dead Presidents have posted on your wall</div>';
+  return TRUE;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+}
 
-    $sql = 'select * from users
+/**
+ *
+ */
+function _stlouis_action_hunt_for_zombies_in_your_neighborhood_function(&$outcome_reason,
+ $target,
+ &$can_do_again) {
+
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+
+  $sql = 'select * from users
       where meta = "zombie" and fkey_neighborhoods_id = %d
       order by abs(level - %d) ASC
       limit 5;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id, $game_user->level);
-    $data = array();
-    while ($item = db_fetch_object($result)) $data[] = $item;
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id, $game_user->level);
+  $data = array();
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
-    foreach ($data as $item) {
+  foreach ($data as $item) {
 
-      $sql = 'insert into user_messages (fkey_users_from_id,
+    $sql = 'insert into user_messages (fkey_users_from_id,
         fkey_users_to_id, message) values (%d, %d, "%s");';
-      $result = db_query($sql, $item->id, $game_user->id,
-        $item->username . ' ' . $item->id . ' loves politicsss...');
-
-    }
-
-    $num = count($data);
-
-    $outcome_reason .= '<div class="subtitle">' . $num .
-      ' Dead Presidents have posted on your wall</div>';
-    return TRUE;
+    $result = db_query($sql, $item->id, $game_user->id,
+    $item->username . ' ' . $item->id . ' loves politicsss...');
 
   }
 
+  $num = count($data);
 
-  function _stlouis_action_sing_christmas_carols_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  $outcome_reason .= '<div class="subtitle">' . $num .
+      ' Dead Presidents have posted on your wall</div>';
+  return TRUE;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
-//    $can_do_again = FALSE;
+}
 
-    $sql = 'select name, special_int from neighborhoods where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $item = db_fetch_object($result); // limited to 1 in db;
+/**
+ *
+ */
+function _stlouis_action_sing_christmas_carols_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-    // Grinch!
-    if ($item->special_int < 0) {
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
+  // $can_do_again = FALSE;
+  $sql = 'select name, special_int from neighborhoods where id = %d;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  // Limited to 1 in db;
+  $item = db_fetch_object($result);
 
-      if ($item->special_int == -1) {
+  // Grinch!
+  if ($item->special_int < 0) {
 
-        $outcome_reason = '<div class="title">Oh no!</div>
+    if ($item->special_int == -1) {
+
+      $outcome_reason = '<div class="title">Oh no!</div>
           <div class="subtitle">The Grinch has visited ' .
           $item->name . '<br/>and taken all the presents!</div>
           <div class="subsubtitle">Carol ' . abs($item->special_int) .
           ' more time to bring back the Christmas spirit';
 
-        $sql = 'update neighborhoods
+      $sql = 'update neighborhoods
           set special_int = 50
           where id = %d;';
-        $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 
-      }
-      else {
+    }
+    else {
 
-        $outcome_reason = '<div class="title">Oh no!</div>
+      $outcome_reason = '<div class="title">Oh no!</div>
           <div class="subtitle">The Grinch has visited ' .
           $item->name . '<br/>and taken all the presents!</div>
           <div class="subsubtitle">Carol ' . abs($item->special_int) .
           ' more times to bring back the Christmas spirit';
 
-        $sql = 'update neighborhoods
+      $sql = 'update neighborhoods
           set special_int = special_int + 1
           where id = %d;';
-        $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-
-      }
-
-//      mail('joseph@cheek.com', 'The grinch has visited ' . $item->name,
-//        abs($item->special_int) . ' more carols until it has been restored!');
-
-      return TRUE;
+      $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 
     }
 
-    // Tired of carols.
-    if ($item->special_int == 0) {
+    // mail('joseph@cheek.com', 'The grinch has visited ' . $item->name,
+    //        abs($item->special_int) . ' more carols until it has been restored!');
+    return TRUE;
 
-      $outcome_reason = '<div class="subtitle">The people of ' .
+  }
+
+  // Tired of carols.
+  if ($item->special_int == 0) {
+
+    $outcome_reason = '<div class="subtitle">The people of ' .
         $item->name . '</div>
         <div class="subtitle">are tired of carolers
         &mdash; try another neighborhood</div>';
-/*
-      $sql = 'select count(name) as count
-        from neighborhoods where special_int < 1;';
-      $result = db_query($sql);
-      $item2 = db_fetch_object($result); // limited to 1 in db;
+    /*
+    $sql = 'select count(name) as count
+    from neighborhoods where special_int < 1;';
+    $result = db_query($sql);
+    $item2 = db_fetch_object($result); // limited to 1 in db;
 
-      mail('joseph@cheek.com', $item2->count .
-        ' neighborhoods tired of caroling',
-        'hopefully ' . $item->name . ' will get more soon!');
-*/
-      return FALSE;
+    mail('joseph@cheek.com', $item2->count .
+    ' neighborhoods tired of caroling',
+    'hopefully ' . $item->name . ' will get more soon!');
+     */
+    return FALSE;
 
-    }
+  }
 
-    switch(mt_rand(0, 140)) {
+  switch (mt_rand(0, 140)) {
 
-/*
-      case 0:
-        $outcome_reason .=
-          '<div class="title">You got 1 luck!</div>';
+    /*
+    case 0:
+    $outcome_reason .=
+    '<div class="title">You got 1 luck!</div>';
 
-        $sql = 'update users set luck = luck + 1
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
+    $sql = 'update users set luck = luck + 1
+    where id = %d';
+    $result = db_query($sql, $game_user->id);
 
-        break;
+    break;
 
-      case 1:
-        $outcome_reason .=
-          '<div class="title">You got 3 luck!</div>';
+    case 1:
+    $outcome_reason .=
+    '<div class="title">You got 3 luck!</div>';
 
-        $sql = 'update users set luck = luck + 3
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
+    $sql = 'update users set luck = luck + 3
+    where id = %d';
+    $result = db_query($sql, $game_user->id);
 
-        break;
+    break;
 
-      case 2:
-        $outcome_reason .=
-          '<div class="title">You got 5 luck!</div>';
+    case 2:
+    $outcome_reason .=
+    '<div class="title">You got 5 luck!</div>';
 
-        $sql = 'update users set luck = luck + 5
-          where id = %d';
-        $result = db_query($sql, $game_user->id);
+    $sql = 'update users set luck = luck + 5
+    where id = %d';
+    $result = db_query($sql, $game_user->id);
 
-        break;
-*/
-      case 3:
-        $outcome_reason .=
+    break;
+     */
+    case 3:
+      $outcome_reason .=
           '<div class="title">You got 10 luck!</div>';
 
-        $sql = 'update users set luck = luck + 10
+      $sql = 'update users set luck = luck + 10
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 4:
-      case 5:
-      case 6:
-      case 7:
-      case 8:
-      case 9:
-        $outcome_reason = '<div class="title"><img
+    case 4:
+    case 5:
+    case 6:
+    case 7:
+    case 8:
+    case 9:
+      $outcome_reason = '<div class="title"><img
           src="/sites/default/files/images/stlouis-angry-dog-snow.png"></div>
           <div class="title">BARK BARK BARK!</div>
           <div class="subtitle">A scary dog chases you away</div>';
 
-        return TRUE;
+      return TRUE;
 
-      case 10:
-      case 11:
-      case 12:
-      case 13:
-      case 14:
-      case 15:
-      case 16:
-      case 17:
-      case 18:
-      case 19:
-        $outcome_reason = '<div class="title">Sadly</div>
+    case 10:
+    case 11:
+    case 12:
+    case 13:
+    case 14:
+    case 15:
+    case 16:
+    case 17:
+    case 18:
+    case 19:
+      $outcome_reason = '<div class="title">Sadly</div>
           <div class="subtitle">No one is home 8-(</div>';
 
-        return TRUE;
+      return TRUE;
 
-      case 20:
-      case 21:
-      case 22:
-      case 23:
-      case 24:
-      case 25:
-      case 26:
-      case 27:
-      case 28:
-      case 29:
-        $outcome_reason .=
+    case 20:
+    case 21:
+    case 22:
+    case 23:
+    case 24:
+    case 25:
+    case 26:
+    case 27:
+    case 28:
+    case 29:
+      $outcome_reason .=
           '<div class="title">You got your actions refilled!</div>';
 
-        $sql = 'update users set actions = actions_max + 1
+      $sql = 'update users set actions = actions_max + 1
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 30:
-      case 31:
-      case 32:
-      case 33:
-      case 34:
-      case 35:
-      case 36:
-      case 37:
-      case 38:
-      case 39:
-        $outcome_reason .=
+    case 30:
+    case 31:
+    case 32:
+    case 33:
+    case 34:
+    case 35:
+    case 36:
+    case 37:
+    case 38:
+    case 39:
+      $outcome_reason .=
           '<div class="title">You got your energy refilled!</div>';
 
-        $sql = 'update users set energy = energy_max
+      $sql = 'update users set energy = energy_max
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 40:
-      case 41:
-      case 42:
-      case 43:
-      case 44:
-        $money = floor(($game_user->income - $game_user->expenses) / 8);
-        $outcome_reason .=
+    case 40:
+    case 41:
+    case 42:
+    case 43:
+    case 44:
+      $money = floor(($game_user->income - $game_user->expenses) / 8);
+      $outcome_reason .=
           '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
+          $game_user->values . '!</div>';
 
-        $sql = 'update users set money = money + %d
+      $sql = 'update users set money = money + %d
           where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
+      $result = db_query($sql, $money, $game_user->id);
 
-        break;
+      break;
 
-      case 45:
-      case 46:
-      case 47:
-        $money = floor(($game_user->income - $game_user->expenses) / 4);
-        $outcome_reason .=
+    case 45:
+    case 46:
+    case 47:
+      $money = floor(($game_user->income - $game_user->expenses) / 4);
+      $outcome_reason .=
           '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
+          $game_user->values . '!</div>';
 
-        $sql = 'update users set money = money + %d
+      $sql = 'update users set money = money + %d
           where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
+      $result = db_query($sql, $money, $game_user->id);
 
-        break;
+      break;
 
-      case 48:
-      case 49:
-        $money = floor(($game_user->income - $game_user->expenses) / 2);
-        $outcome_reason .=
+    case 48:
+    case 49:
+      $money = floor(($game_user->income - $game_user->expenses) / 2);
+      $outcome_reason .=
           '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
+          $game_user->values . '!</div>';
 
-        $sql = 'update users set money = money + %d
+      $sql = 'update users set money = money + %d
           where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
+      $result = db_query($sql, $money, $game_user->id);
 
-        break;
+      break;
 
-      case 50:
-        $money = floor(($game_user->income - $game_user->expenses));
-        $outcome_reason .=
+    case 50:
+      $money = floor(($game_user->income - $game_user->expenses));
+      $outcome_reason .=
           '<div class="title">You got ' . $money . ' ' .
-          $game_user->values .'!</div>';
+          $game_user->values . '!</div>';
 
-        $sql = 'update users set money = money + %d
+      $sql = 'update users set money = money + %d
           where id = %d';
-        $result = db_query($sql, $money, $game_user->id);
+      $result = db_query($sql, $money, $game_user->id);
 
-        break;
+      break;
 
-      case 51:
-      case 52:
-      case 53:
-      case 54:
-      case 55:
-      case 56:
-      case 57:
-      case 58:
-      case 59:
-        $outcome_reason .=
+    case 51:
+    case 52:
+    case 53:
+    case 54:
+    case 55:
+    case 56:
+    case 57:
+    case 58:
+    case 59:
+      $outcome_reason .=
           '<div class="title">You got 5 actions!</div>';
 
-        $sql = 'update users set actions = actions + 6
+      $sql = 'update users set actions = actions + 6
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 60:
-      case 61:
-      case 62:
-      case 63:
-      case 64:
-      case 65:
-      case 66:
-      case 67:
-      case 68:
-      case 69:
-        $outcome_reason .=
+    case 60:
+    case 61:
+    case 62:
+    case 63:
+    case 64:
+    case 65:
+    case 66:
+    case 67:
+    case 68:
+    case 69:
+      $outcome_reason .=
           '<div class="title">You got 100 influence!</div>';
 
-        $sql = 'update users set experience = experience + 100
+      $sql = 'update users set experience = experience + 100
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 70:
-      case 71:
-      case 72:
-      case 73:
-      case 74:
-        $outcome_reason .=
+    case 70:
+    case 71:
+    case 72:
+    case 73:
+    case 74:
+      $outcome_reason .=
           '<div class="title">You got 500 Influence!</div>';
 
-        $sql = 'update users set experience = experience + 500
+      $sql = 'update users set experience = experience + 500
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 75:
-      case 76:
-      case 77:
-      case 78:
-      case 79:
-        $outcome_reason .=
+    case 75:
+    case 76:
+    case 77:
+    case 78:
+    case 79:
+      $outcome_reason .=
           '<div class="title">You got 1000 Influence!</div>';
 
-        $sql = 'update users set experience = experience + 1000
+      $sql = 'update users set experience = experience + 1000
           where id = %d';
-        $result = db_query($sql, $game_user->id);
+      $result = db_query($sql, $game_user->id);
 
-        break;
+      break;
 
-      case 80:
-      case 81:
-      case 82:
-      case 83:
-      case 84:
-      case 85:
-      case 86:
-      case 87:
-      case 88:
-      case 89:
-        $outcome_reason .= '<div class="title">A guy comes out</div>
+    case 80:
+    case 81:
+    case 82:
+    case 83:
+    case 84:
+    case 85:
+    case 86:
+    case 87:
+    case 88:
+    case 89:
+      $outcome_reason .= '<div class="title">A guy comes out</div>
           <div class="subtitle">and hands you a gingerbread cookie (+10 End)</div>
           <div class="title"><img
             src="/sites/default/files/images/equipment/stlouis-29.png"/></div>
           <div class="subtitle">&quot;You must be hungry!&quot; he says</div>';
 
-        $sql = 'select quantity from equipment_ownership
+      $sql = 'select quantity from equipment_ownership
           where fkey_equipment_id = 29 and fkey_users_id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $data = db_fetch_object($result);
+      $result = db_query($sql, $game_user->id);
+      $data = db_fetch_object($result);
 
-        // Already a cookie.
-        if (!empty($data)) {
+      // Already a cookie.
+      if (!empty($data)) {
 
-          $sql = 'update equipment_ownership set quantity = quantity + 1
+        $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 29 and fkey_users_id = %d;';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
-        else {
+      }
+      else {
 
-          $sql = 'insert into equipment_ownership
+        $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
             (%d, 29, 1);';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
+      }
 
-        break;
+      break;
 
-      case 90:
-      case 91:
-      case 92:
-      case 93:
-      case 94:
-      case 95:
-      case 96:
-      case 97:
-      case 98:
-      case 99:
-        $outcome_reason .= '<div class="title">A lady comes out</div>
+    case 90:
+    case 91:
+    case 92:
+    case 93:
+    case 94:
+    case 95:
+    case 96:
+    case 97:
+    case 98:
+    case 99:
+      $outcome_reason .= '<div class="title">A lady comes out</div>
           <div class="subtitle">and hands you a mug of hot apple cider
             (+10 Elo)</div>
           <div class="title"><img
             src="/sites/default/files/images/equipment/stlouis-30.png"/></div>
           <div class="subtitle">&quot;You must be cold!&quot; she says</div>';
 
-        $sql = 'select quantity from equipment_ownership
+      $sql = 'select quantity from equipment_ownership
           where fkey_equipment_id = 30 and fkey_users_id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $data = db_fetch_object($result);
+      $result = db_query($sql, $game_user->id);
+      $data = db_fetch_object($result);
 
-        // Already a mug.
-        if (!empty($data)) {
+      // Already a mug.
+      if (!empty($data)) {
 
-          $sql = 'update equipment_ownership set quantity = quantity + 1
+        $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 30 and fkey_users_id = %d;';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
-        else {
+      }
+      else {
 
-          $sql = 'insert into equipment_ownership
+        $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
             (%d, 30, 1);';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
+      }
 
-        break;
+      break;
 
-      case 100:
-      case 101:
-      case 102:
-      case 103:
-      case 104:
-      case 105:
-      case 106:
-      case 107:
-      case 108:
-      case 109:
-        $outcome_reason .= '<div class="title">A kid comes out</div>
+    case 100:
+    case 101:
+    case 102:
+    case 103:
+    case 104:
+    case 105:
+    case 106:
+    case 107:
+    case 108:
+    case 109:
+      $outcome_reason .= '<div class="title">A kid comes out</div>
           <div class="subtitle">and hands you a candy cane
             (+10 Init)</div>
           <div class="title"><img
             src="/sites/default/files/images/equipment/stlouis-31.png"/></div>
           <div class="subtitle">&quot;You must be tired!&quot; he says</div>';
 
-        $sql = 'select quantity from equipment_ownership
+      $sql = 'select quantity from equipment_ownership
           where fkey_equipment_id = 31 and fkey_users_id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $data = db_fetch_object($result);
+      $result = db_query($sql, $game_user->id);
+      $data = db_fetch_object($result);
 
-        // Already a candy cane.
-        if (!empty($data)) {
+      // Already a candy cane.
+      if (!empty($data)) {
 
-          $sql = 'update equipment_ownership set quantity = quantity + 1
+        $sql = 'update equipment_ownership set quantity = quantity + 1
             where fkey_equipment_id = 31 and fkey_users_id = %d;';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
-        else {
+      }
+      else {
 
-          $sql = 'insert into equipment_ownership
+        $sql = 'insert into equipment_ownership
             (fkey_users_id, fkey_equipment_id, quantity) values
             (%d, 31, 1);';
-          $result = db_query($sql, $game_user->id);
+        $result = db_query($sql, $game_user->id);
 
-        }
+      }
 
-        break;
+      break;
 
-      default:
-        $outcome_reason = '<div class="title">Beaming with happiness</div>
+    default:
+      $outcome_reason = '<div class="title">Beaming with happiness</div>
           <div class="subtitle">the family seems to enjoy your vocals</div>';
 
-    }
-
-    $sql = 'update neighborhoods set special_int = special_int - 1
-      where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-
-    return TRUE;
-
   }
 
+  $sql = 'update neighborhoods set special_int = special_int - 1
+      where id = %d;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 
-  function _stlouis_action_throw_a_snowball_function(&$outcome_reason,
+  return TRUE;
+
+}
+
+/**
+ *
+ */
+function _stlouis_action_throw_a_snowball_function(&$outcome_reason,
     $target) {
 
-    global $game, $phone_id;
+  global $game, $phone_id;
 
-    $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+  $game_user = $fetch_user();
 
-    $outcome_reason .= '<div class="action-effect">' .
+  $outcome_reason .= '<div class="action-effect">' .
       t('Poof!') . '</div>';
 
-    $sql = 'update neighborhoods set special_int = special_int - 3
+  $sql = 'update neighborhoods set special_int = special_int - 3
       where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 
-    return TRUE;
+  return TRUE;
 
-  }
+}
 
-  function _stlouis_action_spend_some_funds_function(&$outcome_reason,
-    $target, &$can_do_again) {
+/**
+ *
+ */
+function _stlouis_action_spend_some_funds_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-    global $game, $phone_id;
-firep($target);
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  global $game, $phone_id;
+  firep($target);
+  $fetch_user = '_' . arg(0) . '_fetch_user';
 
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $action_id = arg(3);
-//    $can_do_again = FALSE;
+  $game_user = $fetch_user();
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $action_id = arg(3);
+  // $can_do_again = FALSE;
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
-
-    $sql = 'SELECT count(*) as count FROM `challenge_history`
+  $sql = 'SELECT count(*) as count FROM `challenge_history`
       WHERE fkey_from_users_id = %d
       and fkey_to_users_id = %d
       and type = "gift"
       and timestamp like "%s";';
-    $result = db_query($sql, $game_user->id, $target_id, date('Y-m-d%'));
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->id, $target_id, date('Y-m-d%'));
+  $item = db_fetch_object($result);
 
-    // Can only do it six times per day.
-    if ($item->count >= 6) {
+  // Can only do it six times per day.
+  if ($item->count >= 6) {
 
-      $outcome_reason = '<div class="action-effect">' . $target_name .
+    $outcome_reason = '<div class="action-effect">' . $target_name .
         ' has received too many funds today.&nbsp; Please try again another
         day.';
 
-      return FALSE;
-
-    }
-
-    $sql = 'select count(id) as count from users
-      where fkey_neighborhoods_id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $item = db_fetch_object($result);
-
-    $money = floor(10000 / $item->count);
-
-    $sql = 'update users set money = money + %d where id = %d;';
-    $result = db_query($sql, $money, $target_id);
-    $outcome_reason .= '<div class="action-effect">' . $target_name . '\'s ' .
-      $game_user->values . ' is increased by ' . $money . ' (' .
-      $item->count . ' players here)</div>';
-
-    $sql = 'insert into challenge_history
-      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
-      fkey_elected_positions_id, won, desc_short, desc_long) values
-      ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
-    $result = db_query($sql, $game_user->id, $target_id,
-      $game_user->fkey_neighborhoods_id, $target->ep_id, 0,
-      "$game_user->username spent some funds for $target_name.",
-      "$game_user->username spent $money $game_user->values for " .
-      $target_name . '.');
-
-    return TRUE;
+    return FALSE;
 
   }
 
+  $sql = 'select count(id) as count from users
+      where fkey_neighborhoods_id = %d;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  $item = db_fetch_object($result);
 
-  function _stlouis_action_tag_a_player_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  $money = floor(10000 / $item->count);
 
-    global $game, $phone_id;
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  $sql = 'update users set money = money + %d where id = %d;';
+  $result = db_query($sql, $money, $target_id);
+  $outcome_reason .= '<div class="action-effect">' . $target_name . '\'s ' .
+      $game_user->values . ' is increased by ' . $money . ' (' .
+      $item->count . ' players here)</div>';
 
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $arg2 = check_plain(arg(2));
-    $action_id = arg(3);
-    $can_do_again = FALSE;
+  $sql = 'insert into challenge_history
+      (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
+      fkey_elected_positions_id, won, desc_short, desc_long) values
+      ("gift", %d, %d, %d, %d, %d, "%s", "%s");';
+  $result = db_query($sql, $game_user->id, $target_id,
+  $game_user->fkey_neighborhoods_id, $target->ep_id, 0,
+  "$game_user->username spent some funds for $target_name.",
+  "$game_user->username spent $money $game_user->values for " .
+  $target_name . '.');
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
+  return TRUE;
 
-    // In a taggable hood?
-/* nowhere is safe
-    if ($game_user->fkey_neighborhoods_id == 37 ||
-      $game_user->fkey_neighborhoods_id > 79) {
+}
 
-      $outcome_reason = '<div class="title">No tagging here</div>
-        <div class="subtitle">Try another neighborhood</div>';
+/**
+ *
+ */
+function _stlouis_action_tag_a_player_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
 
-      return FALSE;
+  global $game, $phone_id;
+  $fetch_user = '_' . arg(0) . '_fetch_user';
 
-    }
-*/
+  $game_user = $fetch_user();
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $arg2 = check_plain(arg(2));
+  $action_id = arg(3);
+  $can_do_again = FALSE;
 
-    // Out of ammo?
-    $sql = 'select quantity from equipment_ownership
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
+
+  // In a taggable hood?
+  /* nowhere is safe
+  if ($game_user->fkey_neighborhoods_id == 37 ||
+  $game_user->fkey_neighborhoods_id > 79) {
+
+  $outcome_reason = '<div class="title">No tagging here</div>
+  <div class="subtitle">Try another neighborhood</div>';
+
+  return FALSE;
+
+  }
+   */
+
+  // Out of ammo?
+  $sql = 'select quantity from equipment_ownership
       where fkey_users_id = %d and fkey_equipment_id = 40;';
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
 
-    if ($item->quantity <= 0) {
+  if ($item->quantity <= 0) {
 
-      $outcome_reason = '<div class="title">No Ammunition!</div>
+    $outcome_reason = '<div class="title">No Ammunition!</div>
         <div class="subtitle">Go to Midtown to get some more</div>';
 
-      return FALSE;
+    return FALSE;
 
-    }
+  }
 
-    // No target specified.
-    if ($target_id == '') {
+  // No target specified.
+  if ($target_id == '') {
 
-      $data = array();
-      $sql = 'SELECT users.username, users.id,
+    $data = array();
+    $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
         FROM users
@@ -3817,143 +3990,148 @@ firep($target);
         AND users.last_access > "2013-02-01"
         ORDER BY RAND() LIMIT 20;';
 
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->fkey_values_id);
-      while ($user = db_fetch_object($result)) $data[] = $user;
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id);
+    while ($user = db_fetch_object($result)) {
+      $data[] = $user;
+    }
 
-      $outcome_reason = '<div class="title">Whom Would You Like to Tag?</div>';
+    $outcome_reason = '<div class="title">Whom Would You Like to Tag?</div>';
 
-      foreach ($data as $user) {
+    foreach ($data as $user) {
 
-        $outcome_reason .= <<< EOF
+      $outcome_reason .= <<< EOF
 <div class="subtitle"><a href=
 "/$game/actions_do/$arg2/$action_id?target=$user->id">$user->username</a></div>
 EOF;
 
-      }
-
-      return FALSE;
-
     }
 
-    // Camouflage?
-    $sql = 'select quantity from equipment_ownership
-      where fkey_users_id = %d and fkey_equipment_id = 42;';
-    $result = db_query($sql, $target_id);
-    $item = db_fetch_object($result);
-
-    if ($item->quantity > 0) {
-
-      $sql = 'update equipment_ownership set quantity = quantity - 1
-        where fkey_users_id = %d and fkey_equipment_id = 42;';
-      $result = db_query($sql, $target_id);
-
-      // Miss.
-      if (mt_rand(1, 3) < 3) {
-
-        $outcome_reason = '<div class="subsubtitle">You had ' . $target_name .
-          ' in your sights, but lost him or her in the camouflage.</div>';
-
-        return FALSE;
-
-      }
-
-    }
-
-    // Tag the player!
-
-    // Create entry for tagger, taggee, if needed.
-    $sql = 'select id from event_points where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-    $row = db_fetch_object($result);
-
-    if (empty($row)) {
-
-      $sql = 'insert into event_points set fkey_users_id = %d;';
-      $result = db_query($sql, $target_id);
-
-    }
-
-    $sql = 'select * from event_points where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $row = db_fetch_object($result);
-
-    if (empty($row)) {
-
-      $sql = 'insert into event_points set fkey_users_id = %d;';
-      $result = db_query($sql, $game_user->id);
-
-    }
-
-    // Mark as frozen, reset tags_con and heals_con.
-    $sql = 'update users set meta = "frozen" where id = %d;';
-    $result = db_query($sql, $target_id);
-
-    $sql = 'update event_points set tags_con = 0, heals_con = 0
-      where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-
-    // Update points.
-    $tags_con = $row->tags_con + 1;
-    $points = $row->points + min($tags_con, 20);
-
-    $sql = 'update event_points set tags_con = %d, points = %d
-      where fkey_users_id = %d;';
-    $result = db_query($sql, $tags_con, $points, $game_user->id);
-
-    $outcome_reason .= '<div class="subsubtitle">You have ' . $tags_con .
-      ' consecutive tag(s) and ' . $points . ' point(s)</div>';
-
-    // Use up ammo.
-    $sql = 'update equipment_ownership set quantity = quantity - 1
-      where fkey_users_id = %d and fkey_equipment_id = 40;';
-    $result = db_query($sql, $game_user->id);
-
-    // Add tag message.
-    $sql = 'insert into challenge_messages
-      (fkey_users_from_id, fkey_users_to_id, message)
-      values (%d, %d, "%s");';
-    $message = t('%user tagged you!',
-      array('%user' => $game_user->username));
-    $result = db_query($sql, $game_user->id, $target_id, $message);
-
-    return TRUE;
+    return FALSE;
 
   }
 
-  function _stlouis_action_unfreeze_a_player_function(&$outcome_reason,
-    $target, &$can_do_again) {
+  // Camouflage?
+  $sql = 'select quantity from equipment_ownership
+      where fkey_users_id = %d and fkey_equipment_id = 42;';
+  $result = db_query($sql, $target_id);
+  $item = db_fetch_object($result);
 
-    global $game, $phone_id;
-    $fetch_user = '_' . arg(0) . '_fetch_user';
+  if ($item->quantity > 0) {
 
-    $game_user = $fetch_user();
-    include drupal_get_path('module', $game) . '/game_defs.inc';
-    $arg2 = check_plain(arg(2));
-    $action_id = arg(3);
-    $can_do_again = FALSE;
+    $sql = 'update equipment_ownership set quantity = quantity - 1
+        where fkey_users_id = %d and fkey_equipment_id = 42;';
+    $result = db_query($sql, $target_id);
 
-    $target_name = $target->ep_name . ' ' . $target->username;
-    $target_id = $_GET['target'];
-/*
+    // Miss.
+    if (mt_rand(1, 3) < 3) {
 
-    // In a taggable hood?
-    if ($game_user->fkey_neighborhoods_id == 37 ||
-      $game_user->fkey_neighborhoods_id > 79) {
-
-      $outcome_reason = '<div class="title">No unfreezing here</div>
-        <div class="subtitle">Try another neighborhood</div>';
+      $outcome_reason = '<div class="subsubtitle">You had ' . $target_name .
+          ' in your sights, but lost him or her in the camouflage.</div>';
 
       return FALSE;
 
     }
-*/
 
-    // No target specified.
-    if ($target_id == '') {
+  }
 
-      $data = array();
-      $sql = 'SELECT users.username, users.id,
+  // Tag the player!
+  // Create entry for tagger, taggee, if needed.
+  $sql = 'select id from event_points where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+  $row = db_fetch_object($result);
+
+  if (empty($row)) {
+
+    $sql = 'insert into event_points set fkey_users_id = %d;';
+    $result = db_query($sql, $target_id);
+
+  }
+
+  $sql = 'select * from event_points where fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $row = db_fetch_object($result);
+
+  if (empty($row)) {
+
+    $sql = 'insert into event_points set fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+
+  }
+
+  // Mark as frozen, reset tags_con and heals_con.
+  $sql = 'update users set meta = "frozen" where id = %d;';
+  $result = db_query($sql, $target_id);
+
+  $sql = 'update event_points set tags_con = 0, heals_con = 0
+      where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+
+  // Update points.
+  $tags_con = $row->tags_con + 1;
+  $points = $row->points + min($tags_con, 20);
+
+  $sql = 'update event_points set tags_con = %d, points = %d
+      where fkey_users_id = %d;';
+  $result = db_query($sql, $tags_con, $points, $game_user->id);
+
+  $outcome_reason .= '<div class="subsubtitle">You have ' . $tags_con .
+      ' consecutive tag(s) and ' . $points . ' point(s)</div>';
+
+  // Use up ammo.
+  $sql = 'update equipment_ownership set quantity = quantity - 1
+      where fkey_users_id = %d and fkey_equipment_id = 40;';
+  $result = db_query($sql, $game_user->id);
+
+  // Add tag message.
+  $sql = 'insert into challenge_messages
+      (fkey_users_from_id, fkey_users_to_id, message)
+      values (%d, %d, "%s");';
+  $message = t('%user tagged you!',
+  array('%user' => $game_user->username));
+  $result = db_query($sql, $game_user->id, $target_id, $message);
+
+  return TRUE;
+
+}
+
+/**
+ *
+ */
+function _stlouis_action_unfreeze_a_player_function(&$outcome_reason,
+    $target,
+ &$can_do_again) {
+
+  global $game, $phone_id;
+  $fetch_user = '_' . arg(0) . '_fetch_user';
+
+  $game_user = $fetch_user();
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+  $arg2 = check_plain(arg(2));
+  $action_id = arg(3);
+  $can_do_again = FALSE;
+
+  $target_name = $target->ep_name . ' ' . $target->username;
+  $target_id = $_GET['target'];
+  /*
+
+  // In a taggable hood?
+  if ($game_user->fkey_neighborhoods_id == 37 ||
+  $game_user->fkey_neighborhoods_id > 79) {
+
+  $outcome_reason = '<div class="title">No unfreezing here</div>
+  <div class="subtitle">Try another neighborhood</div>';
+
+  return FALSE;
+
+  }
+   */
+
+  // No target specified.
+  if ($target_id == '') {
+
+    $data = array();
+    $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
         FROM users
@@ -3965,27 +4143,31 @@ EOF;
         AND users.meta = "frozen"
         ORDER BY RAND() LIMIT 20;';
 
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->fkey_values_id);
-      while ($user = db_fetch_object($result)) $data[] = $user;
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id);
+    while ($user = db_fetch_object($result)) {
+      $data[] = $user;
+    }
 
-      $outcome_reason = '<div class="title">Frozen Players
+    $outcome_reason = '<div class="title">Frozen Players
         in your Neighborhood</div>';
 
-      foreach ($data as $user) {
+    foreach ($data as $user) {
 
-        $outcome_reason .= <<< EOF
+      $outcome_reason .= <<< EOF
 <div class="subtitle"><a href=
 "/$game/actions_do/$arg2/$action_id?target=$user->id">$user->username</a></div>
 EOF;
 
-      }
+    }
 
-      if (empty($data)) $outcome_reason .= '<div class="subtitle">
+    if (empty($data)) {
+      $outcome_reason .= '<div class="subtitle">
         None</div>';
+    }
 
-      $data = array();
-      $sql = 'SELECT users.username, users.id,
+    $data = array();
+    $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name,
         neighborhoods.name as hood, neighborhoods.id as hood_id
@@ -4001,98 +4183,101 @@ EOF;
         AND users.meta = "frozen"
         ORDER BY RAND() LIMIT 20;';
 
-      $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->fkey_values_id);
-      while ($user = db_fetch_object($result)) $data[] = $user;
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id,
+    $game_user->fkey_values_id);
+    while ($user = db_fetch_object($result)) {
+      $data[] = $user;
+    }
 
-      $outcome_reason .= '<div class="title">Frozen Players
+    $outcome_reason .= '<div class="title">Frozen Players
         in other Neighborhoods</div>';
 
-      foreach ($data as $user) {
+    foreach ($data as $user) {
 
-        $outcome_reason .= <<< EOF
+      $outcome_reason .= <<< EOF
 <div class="subtitle"><a href=
 "/$game/actions_do/$arg2/$action_id?target=$user->id">$user->username</a>
 <a href="/$game/move/$arg2/$user->hood_id">($user->hood)</a></div>
 EOF;
 
-      }
+    }
 
-      if (empty($data)) $outcome_reason .= '<div class="subtitle">
+    if (empty($data)) {
+      $outcome_reason .= '<div class="subtitle">
         None</div>';
+    }
 
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
+    $outcome_reason .= '<div class="try-an-election-wrapper"><div
         class="try-an-election"><a
         href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
         '">Check the list again</a></div></div>';
 
-      return FALSE;
-
-    }
-
-    // Not in same hood.
-    if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
-
-      $outcome_reason = '<div class="title">Not in same neighborhood!</div>
-        <div class="subtitle">You must be in the same hood to unfreeze</div>';
-
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-        class="try-an-election"><a
-        href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
-        '">Check the list again</a></div></div>';
-
-      return FALSE;
-
-    }
-
-    // Unfreeze the player.
-
-    // Create entry for tagger, taggee, if needed.
-    $sql = 'select id from event_points where fkey_users_id = %d;';
-    $result = db_query($sql, $target_id);
-    $row = db_fetch_object($result);
-
-    if (empty($row)) {
-
-      $sql = 'insert into event_points set fkey_users_id = %d;';
-      $result = db_query($sql, $target_id);
-
-    }
-
-    $sql = 'select * from event_points where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-    $row = db_fetch_object($result);
-
-    if (empty($row)) {
-
-      $sql = 'insert into event_points set fkey_users_id = %d;';
-      $result = db_query($sql, $game_user->id);
-
-    }
-
-    // Mark as unfrozen.
-    $sql = 'update users set meta = "" where id = %d;';
-    $result = db_query($sql, $target_id);
-
-    // Update points.
-    $heals_con = $row->heals_con + 1;
-    $points = $row->points + min($heals_con, 20) + 1;
-
-    $sql = 'update event_points set heals_con = %d, points = %d
-      where fkey_users_id = %d;';
-    $result = db_query($sql, $heals_con, $points, $game_user->id);
-
-    $outcome_reason .= '<div class="subsubtitle">You have ' . $heals_con .
-      ' consecutive heal(s) and ' . $points . ' point(s)</div>';
-
-    // Add unfreeze message.
-    $sql = 'insert into challenge_messages
-      (fkey_users_from_id, fkey_users_to_id, message)
-      values (%d, %d, "%s");';
-    $message = t('%user unfroze you!',
-      array('%user' => $game_user->username));
-    $result = db_query($sql, $game_user->id, $target_id, $message);
-
-   return TRUE;
+    return FALSE;
 
   }
+
+  // Not in same hood.
+  if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
+
+    $outcome_reason = '<div class="title">Not in same neighborhood!</div>
+        <div class="subtitle">You must be in the same hood to unfreeze</div>';
+
+    $outcome_reason .= '<div class="try-an-election-wrapper"><div
+        class="try-an-election"><a
+        href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
+        '">Check the list again</a></div></div>';
+
+    return FALSE;
+
+  }
+
+  // Unfreeze the player.
+  // Create entry for tagger, taggee, if needed.
+  $sql = 'select id from event_points where fkey_users_id = %d;';
+  $result = db_query($sql, $target_id);
+  $row = db_fetch_object($result);
+
+  if (empty($row)) {
+
+    $sql = 'insert into event_points set fkey_users_id = %d;';
+    $result = db_query($sql, $target_id);
+
+  }
+
+  $sql = 'select * from event_points where fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $row = db_fetch_object($result);
+
+  if (empty($row)) {
+
+    $sql = 'insert into event_points set fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+
+  }
+
+  // Mark as unfrozen.
+  $sql = 'update users set meta = "" where id = %d;';
+  $result = db_query($sql, $target_id);
+
+  // Update points.
+  $heals_con = $row->heals_con + 1;
+  $points = $row->points + min($heals_con, 20) + 1;
+
+  $sql = 'update event_points set heals_con = %d, points = %d
+      where fkey_users_id = %d;';
+  $result = db_query($sql, $heals_con, $points, $game_user->id);
+
+  $outcome_reason .= '<div class="subsubtitle">You have ' . $heals_con .
+      ' consecutive heal(s) and ' . $points . ' point(s)</div>';
+
+  // Add unfreeze message.
+  $sql = 'insert into challenge_messages
+      (fkey_users_from_id, fkey_users_to_id, message)
+      values (%d, %d, "%s");';
+  $message = t('%user unfroze you!',
+  array('%user' => $game_user->username));
+  $result = db_query($sql, $game_user->id, $target_id, $message);
+
+  return TRUE;
+
+}

@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_ai.inc
- * Stlouis ai
+ * @file Stlouis_ai.inc
+ * Stlouis ai.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
 define('CONSERVE_ACTIONS', 1);
@@ -18,7 +18,7 @@ function game_move_ai() {
 
   global $game, $ai_output, $bt_skip;
 
-  // $game = check_plain(arg(0));.
+  // $game = check_plain(arg(0));
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
 
@@ -58,7 +58,7 @@ function game_move_ai() {
   //  game_ai_do('have_num_interns', 21) && game_ai_do('build');
   //  game_ai_do('have_num_members', 18) && game_ai_do('build');
   //  game_ai_do('have_num_treasurers', 2) && game_ai_do('build');
-  //  game_ai_do('have_num_alders', 1) && game_ai_do('build');.
+  //  game_ai_do('have_num_alders', 1) && game_ai_do('build');
   // From player?  send to firep.
   if ($game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
     firep($ai_output, 'ai output');
@@ -105,7 +105,7 @@ function game_ai_out($output) {
   // Failsafe hack.
   // Too long -- kill script.
   if (strlen($ai_output) > 25000) {
-    // mail('joseph@ziquid.com', 'ai output too long!', $ai_output);.
+    // mail('joseph@ziquid.com', 'ai output too long!', $ai_output);
     db_set_active('default');
     return;
   }
@@ -607,7 +607,7 @@ function _ai_have_num_alders($num_alders) {
   game_ai_out("Want $num_alders alders, have $item->count");
 
   if ($item->count >= $num_alders) {
-    // game_ai_out('woohoo!  we have enough alders!  returning TRUE');.
+    // game_ai_out('woohoo!  we have enough alders!  returning TRUE');
     return TRUE;
   }
 
@@ -762,7 +762,7 @@ function game_ai_have_num_players($num_players) {
   game_ai_out("want $num_players players, have $count");
 
   if ($count >= $num_players) {
-    // game_ai_out('woohoo!  we have enough players!  returning TRUE');.
+    // game_ai_out('woohoo!  we have enough players!  returning TRUE');
     return TRUE;
   }
 
@@ -795,7 +795,7 @@ function game_ai_create_new_player() {
 
   $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-  // $response = game_ai_web_request($id_to_check, 'home');.
+  // $response = game_ai_web_request($id_to_check, 'home');
   game_ai_out($response);
 
   game_ai_out('updating record to make this a ToxiCorp Employee');
@@ -803,7 +803,7 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
-  // mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);.
+  // mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);
   slack_send_message($ai_output);
 }
 
@@ -826,7 +826,7 @@ function _ai_have_num_type_level_min_max_players($num_players,
   game_ai_out("want $num_players {$type}s, have $item->count");
 
   if ($item->count >= $num_players) {
-    // game_ai_out('woohoo!  we have enough players!  returning TRUE');.
+    // game_ai_out('woohoo!  we have enough players!  returning TRUE');
     return TRUE;
   }
 
@@ -1213,7 +1213,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
     if (!empty($item)) {
 
-      // game_ai_out("Highest quest I can do is #$item->id, $item->name");.
+      // game_ai_out("Highest quest I can do is #$item->id, $item->name");
       if (game_ai_do('do quest', $ai_id, $item->id)) {
         return TRUE;
       }
@@ -1416,7 +1416,7 @@ function _ai_hood_seat_challenge($ai_id, $seat_min, $seat_max) {
   game_ai_out('Looking for occupied seats to challenge... *FIXME* -- stub @ '
     . __LINE__);
 
-  // game_ai_out('Checking for empty seats in other hoods...');.
+  // game_ai_out('Checking for empty seats in other hoods...');
   $sql = 'select DISTINCT fkey_neighborhoods_id as hood_id,
     neighborhoods.has_elections from users
     left join neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
@@ -1610,10 +1610,10 @@ function _ai_move($ai_id, $hood) {
       // game_ai_out("Hood #$item->id, $item->name, is closer to $there->name " .
       //          "than I am now in $here->name " .
       //          "($distance_to_dest vs. $distance_now).  Its distance from me is " .
-      //          "$distance_from_me.");.
+      //          "$distance_from_me.");
       if ($distance_from_me < $winning_distance) {
         // game_ai_out("New candidate for closest hood!  $distance_from_me < " .
-        //            $winning_distance);.
+        //            $winning_distance);
         $winning_distance = $distance_from_me;
         $winning_hood = $item->id;
         $winning_name = $item->name;
@@ -1712,12 +1712,12 @@ function game_ai_increase_elocution_stats($ai_id) {
 
   if ($can_buy > 0) {
     // game_ai_out("I have $ai_user->money money, " .
-    //        "so I can buy aide #$can_buy...");.
+    //        "so I can buy aide #$can_buy...");
     $ai_response = game_ai_web_request($ai_id, 'equipment_buy', "$can_buy/1");
     return TRUE;
   }
   // game_ai_out("I have $ai_user->money money, " .
-  //        "so I can't buy any elocution aides!");.
+  //        "so I can't buy any elocution aides!");
   return FALSE;
 }
 
@@ -1758,7 +1758,7 @@ function _ai_increase_speed_stats($ai_id) {
   else {
 
     // game_ai_out("I have $ai_user->money money, " .
-    //        "so I can't buy any speed aides!");.
+    //        "so I can't buy any speed aides!");
   }
 
   return FALSE;
@@ -1851,22 +1851,22 @@ function game_ai_debate_players($ai_id, $num_debates = 99) {
     $ai_response = game_ai_web_request($ai_id, 'debates_challenge', $item->id);
 
     if ($ai_response == 'debate-won') {
-      // game_ai_out('Woohoo!  Player debated and won!');.
+      // game_ai_out('Woohoo!  Player debated and won!');
       $successful_debate = TRUE;
     }
 
     if ($ai_response == 'debate-lost') {
-      // game_ai_out('Egads!  Player debated and lost');.
+      // game_ai_out('Egads!  Player debated and lost');
       game_ai_do('increase elocution stats', $ai_id);
     }
 
     if ($ai_response == 'debate-no-action') {
-      // game_ai_out('Egads!  Out of Action!');.
+      // game_ai_out('Egads!  Out of Action!');
       break;
     }
 
     if ($ai_response == 'debate-must-wait') {
-      // game_ai_out("Must wait to debate $item->username");.
+      // game_ai_out("Must wait to debate $item->username");
       continue;
     }
   }
@@ -1920,7 +1920,7 @@ function game_ai_fetch_user($ai_id) {
  *   Output from the web request.
  */
 function game_ai_join_clan($ai_id, $clan = 'TC1') {
-  // FIXME: game_find_action_by_id('join a clan');.
+  // FIXME: game_find_action_by_id('join a clan');
   $action_id = 2;
   return game_ai_web_request($ai_id, 'actions_do', $action_id . '?acronym=' . $clan);
 }
@@ -1998,8 +1998,7 @@ function game_ai_list_all_ais() {
 
   // Now show stats.
   // Or not.
-//  return;
-
+  //  return;
   $data = [];
   $sql = 'select users.*, clan_members.fkey_clans_id
     from users

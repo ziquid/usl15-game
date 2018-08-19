@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_actions_list.tpl.php
- * List of actions
+ * @file Stlouis_actions_list.tpl.php
+ * List of actions.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -48,8 +48,9 @@ EOF;
 
   $fetch_header($game_user);
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
   $sql = 'select name, district from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -78,7 +79,7 @@ EOF;
 
   }
 
-//  if ($game == 'stlouis') {
+// if ($game == 'stlouis') {
 //
 //    if (arg(3) == 'banking') {
 //      $banking_active = 'active';
@@ -89,16 +90,13 @@ EOF;
 //      $actions_type = 'Normal';
 //      $order_by = 'required_level DESC';
 //    }
-
-//    echo <<< EOF
-//<!--<div class="news">
+// echo <<< EOF
+// <!--<div class="news">
 //  <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
 //  <a href="/$game/actions/$arg2/banking" class="button $banking_active">Banking</a>
-//</div>-->`
-//EOF;
-
-//  }
-
+// </div>-->`
+// EOF;
+// }
   if ($game_user->level < 20) {
     echo <<< EOF
 <ul>
@@ -158,8 +156,9 @@ EOF;
     }
 
     if (is_file($_SERVER['DOCUMENT_ROOT'] .
-      "/sites/default/files/images/actions/$game-{$item->id}.png"))
+      "/sites/default/files/images/actions/$game-{$item->id}.png")) {
       $image = "/sites/default/files/images/actions/$game-$item->id.png";
+    }
 
     if ($item->target == 'none') {
       $target = t('Your');
@@ -172,7 +171,8 @@ EOF;
       array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
       $item->name);
 
-    if ($item->active == 0) $name .= ' (inactive)';
+    if ($item->active == 0) {$name .= ' (inactive)';
+    }
 
     echo <<< EOF
 <div class="land">
@@ -364,7 +364,6 @@ EOF;
 EOF;
 
       // Which target?
-
       // Expensive query - goes to slave.
 //      db_set_active('game_' . $game . '_slave1');
       switch ($item->target) {
@@ -426,7 +425,9 @@ EOF;
 
           $result = db_query($sql, $game_user->fkey_neighborhoods_id,
             $game_user->fkey_values_id);
-          while ($official = db_fetch_object($result)) $data2[] = $official;
+          while ($official = db_fetch_object($result)) {
+            $data2[] = $official;
+          }
 
           break;
 
@@ -456,7 +457,9 @@ EOF;
             ORDER BY elected_positions.energy_bonus DESC, ep_id ASC;';
 
           $result = db_query($sql, $game_user->fkey_values_id);
-          while ($official = db_fetch_object($result)) $data2[] = $official;
+          while ($official = db_fetch_object($result)) {
+            $data2[] = $official;
+          }
 
           break;
 
@@ -476,7 +479,9 @@ EOF;
             ORDER BY username ASC;';
 
           $result = db_query($sql, $game_user->fkey_values_id, $game_user->id);
-          while ($user = db_fetch_object($result)) $data2[] = $user;
+          while ($user = db_fetch_object($result)) {
+            $data2[] = $user;
+          }
 
           break;
 
@@ -508,7 +513,9 @@ EOF;
             ORDER BY username ASC ;';
 
           $result = db_query($sql, $game_user->id, $game_user->id);
-          while ($user = db_fetch_object($result)) $data2[] = $user;
+          while ($user = db_fetch_object($result)) {
+            $data2[] = $user;
+          }
 
           break;
 
@@ -516,14 +523,14 @@ EOF;
 
       // Reset to master.
 //      db_set_active('game_' . $game);
-
       // Too many to list?  Separate by first letter.
       if ($phone_id == 'abc123' &&
         count($data2) > 250) {
 
-        $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',
+        $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H' . 'I', 'J',
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-          'X', 'Y', 'Z', 'Others');
+          'X', 'Y', 'Z', 'Others',
+        );
 
         // Show mini list.
         foreach ($letters as $letter) {
@@ -539,14 +546,15 @@ EOF;
         // Full list foreach().
         foreach ($data2 as $user) {
 // firep($user);
-
           $clan_acronym = '';
 
-          if (!empty($user->clan_acronym))
+          if (!empty($user->clan_acronym)) {
             $clan_acronym = "($user->clan_acronym)";
+          }
 
-          if ($user->is_clan_leader)
+          if ($user->is_clan_leader) {
             $clan_acronym .= '*';
+          }
 
           echo '<option value="' . $user->id . '">' .
             substr($user->ep_name . ' ' . $user->username . ' ' . $clan_acronym,

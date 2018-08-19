@@ -1,11 +1,11 @@
 <?php
 
 /**
- * @file stlouis_elders_set_password.tpl.php
- * Stlouis elders set password
+ * @file Stlouis_elders_set_password.tpl.php
+ * Stlouis elders set password.
  *
  * Synced with CG: no
- * Synced with 2114: no
+ * Synced with 2114: no.
  */
 
   global $game, $phone_id;
@@ -52,7 +52,9 @@ EOF;
   // If they have chosen a password.
   if ($password != '') {
 
-    if ($password == 'delete') $password = '';
+    if ($password == 'delete') {
+      $password = '';
+    }
 
     $sql = 'update users set password = "%s" where id = %d;';
     $result = db_query($sql, $password, $game_user->id);
