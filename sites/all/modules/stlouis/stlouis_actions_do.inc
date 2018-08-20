@@ -272,7 +272,7 @@ EOF;
 
   // Prohibited from joining for a time?
   $join_allowed_time = $get_value($game_user->id, 'cant_join_clan', 0);
-  $now = time();
+  $now = REQUEST_TIME;
 firep($join_allowed_time, 'allowed time');
 firep($now, 'time now');
 
@@ -426,7 +426,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
   db_query($sql, $target_id);
 
-  $set_value($target_id, 'cant_join_clan', time() + 7200);
+  $set_value($target_id, 'cant_join_clan', REQUEST_TIME + 7200);
 
   $sql = 'insert into clan_messages (fkey_users_from_id,
     fkey_neighborhoods_id, message) values (%d, %d, "%s");';
@@ -792,7 +792,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   // Set major_action counter for three minutes.
   if ($ep_type > 1) {
     $set_value = '_' . $game . '_set_value';
-    $set_value($game_user->id, 'next_major_action', time() + 180);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 180);
   }
 
   $outcome_reason .= '<div class="action-effect">' . $target_user->username .
@@ -843,8 +843,8 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
     and meta <> "admin"
     ORDER by users.experience DESC;';
 
-  $result = db_query($sql, date('Y-m-d', time() - 1728000),
-    date('Y-m-d', time() - 1728000), $game_user->fkey_neighborhoods_id);
+  $result = db_query($sql, date('Y-m-d', REQUEST_TIME - 1728000),
+    date('Y-m-d', REQUEST_TIME - 1728000), $game_user->fkey_neighborhoods_id);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -955,8 +955,8 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
       and username <> ""
       ORDER by users.experience DESC;';
 
-    $result = db_query($sql, date('Y-m-d', time() - 1200),
-      date('Y-m-d', time() - 1200), $game_user->fkey_values_id);
+    $result = db_query($sql, date('Y-m-d', REQUEST_TIME - 1200),
+      date('Y-m-d', REQUEST_TIME - 1200), $game_user->fkey_values_id);
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     $outcome_reason .=<<< EOF
@@ -1036,7 +1036,7 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   db_query($sql, $game_user->id);
 
   $sql = 'update users set debates_last_time = "%s" where id = %d;';
-  db_query($sql, date('Y-m-d H:i:s', time()), $game_user->id);
+  db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME), $game_user->id);
   return TRUE;
 }
 
@@ -1163,7 +1163,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   // Start the energy clock, if needed.
   if ($game_user->energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 300),
       $game_user->id);
   }
 
@@ -1192,7 +1192,7 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
   // Start the energy clock, if needed.
   if ($game_user->energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 300),
       $game_user->id);
   }
   $outcome_reason .= '<div class="action-effect">' .
@@ -1207,10 +1207,10 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
       You need to sit down for a few minutes.
     </div>';
 
-    $set_value($game_user->id, 'next_major_action', time() + 180);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 180);
   }
   else {
-    $set_value($game_user->id, 'next_major_action', time() + 30);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 30);
   }
 
   if ($game_user->energy > $game_user->energy_max) {
@@ -1234,10 +1234,10 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
       t('Low Blood Sugar!') .
       '</div><div class="action-effect">You need to sit down for a few minutes.</div>';
 
-    $set_value($game_user->id, 'next_major_action', time() + 300);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 300);
   }
   else {
-    $set_value($game_user->id, 'next_major_action', time() + 60);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 60);
   }
 
   $sql = 'update users set actions = actions + 50, energy = energy - 500 where id = %d;';
@@ -1246,14 +1246,14 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
   // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {
     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
       $game_user->id);
   }
 
   // Start the energy clock, if needed.
   if ($game_user->energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 300),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 300),
       $game_user->id);
   }
 
@@ -1403,7 +1403,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   $item = db_fetch_object($result);
 
   $actions_next_gain = strtotime($item->actions_next_gain);
-  $secs_until = $actions_next_gain - time();
+  $secs_until = $actions_next_gain - REQUEST_TIME;
 
   // Make actions current.  If this didn't happen, you could give actions to a
   // user that would be swallowed up by time if s/he was low on actions and not
@@ -1429,7 +1429,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
 
   // Now current with actions?  Bring the date current too.
   if ($item->actions == $item->actions_max) {
-    $actions_next_gain = time();
+    $actions_next_gain = REQUEST_TIME;
   }
 
   // Save in db.
@@ -1732,7 +1732,7 @@ function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &
       order by challenge_history.timestamp DESC;';
 
   $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s',
-    time() - 86400));
+    REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -1809,7 +1809,7 @@ function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
     order by timestamp DESC;';
 
   $result = db_query($sql, $game_user->id,
-    date('Y-m-d H:i:s', time() - 86400));
+    date('Y-m-d H:i:s', REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) $data[] = $item;
 
   $outcome_reason .=<<< EOF
@@ -1902,8 +1902,8 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
     order by challenge_history.timestamp DESC;';
 
   $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-    date('Y-m-d H:i:s', time() - ($hour_to_show * 3600) - 3600),
-    date('Y-m-d H:i:s', time() - ($hour_to_show * 3600)));
+    date('Y-m-d H:i:s', REQUEST_TIME - ($hour_to_show * 3600) - 3600),
+    date('Y-m-d H:i:s', REQUEST_TIME - ($hour_to_show * 3600)));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -2140,7 +2140,7 @@ function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
   $ep_name = $data->ep_name;
 
   $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'next_major_action', time() + 7200);
+  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 7200);
 
   $sql = "select party_title from `values` where id = '%d';";
   $result = db_query($sql, $game_user->fkey_values_id);
@@ -2268,7 +2268,7 @@ function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
     where fkey_from_users_id = %d and challenge_history.type = "election"
     order by timestamp DESC limit 1;';
 
-  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -2356,7 +2356,7 @@ function _stlouis_action_get_challenge_results_function(&$outcome_reason, $targe
     where fkey_to_users_id = %d and challenge_history.type = "election"
     order by timestamp DESC limit 5;';
 
-  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', time() - 86400));
+  $result = db_query($sql, $game_user->id, date('Y-m-d H:i:s', REQUEST_TIME - 86400));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -2646,7 +2646,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   // Save as major action.
   $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'next_major_action', time() + 900);
+  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 900);
 
   // Deduct your Action, money.
   $sql = 'update users set money = money - %d where id = %d;';

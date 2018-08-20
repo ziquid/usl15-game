@@ -124,7 +124,7 @@
         if ($game_user->actions == $game_user->actions_max) {
 
           $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-          $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+          $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
             $game_user->id);
 
         }
@@ -149,7 +149,7 @@
         if ($game_user->actions == $game_user->actions_max) {
 
           $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-          $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+          $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
             $game_user->id);
 
         }

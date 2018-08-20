@@ -83,9 +83,9 @@ if ($game_user->actions == 0) {
 //  if ($debate == 'Box') $debate_wait_time = 900;
 
 if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
-  (time() - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
+  (REQUEST_TIME - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
   ($item->meta == 'zombie' &&
-  (time() - strtotime($item->debates_last_time)) <= $zombie_debate_wait)) {
+  (REQUEST_TIME - strtotime($item->debates_last_time)) <= $zombie_debate_wait)) {
 
   // Not long enough.
   $fetch_header($game_user);
@@ -242,7 +242,7 @@ if ($won) {
   $result = db_query($sql, $money_change, $experience_gained, $game_user->id);
   $sql = 'update users set money = money - %d, debates_lost = debates_lost + 1,
     debates_last_time = "%s" where id = %d;';
-  $result = db_query($sql, $money_change, date('Y-m-d H:i:s', time()), $item->id);
+  $result = db_query($sql, $money_change, date('Y-m-d H:i:s', REQUEST_TIME), $item->id);
 
   // Boxing day? Add boxing stats.
   if ($debate == 'Box') {
@@ -259,7 +259,7 @@ if ($won) {
   // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
   }
 
@@ -565,7 +565,7 @@ else {
     experience = experience + %d, debates_won = debates_won + 1,
     debates_last_time = "%s" where id = %d;';
   $result = db_query($sql, $money_change, $experience_gained,
-    date('Y-m-d H:i:s', time()), $item->id);
+    date('Y-m-d H:i:s', REQUEST_TIME), $item->id);
 
   // Boxing day?  Add boxing stats.
   if ($debate == 'Box') {
@@ -587,7 +587,7 @@ else {
   if ($game_user->actions == $game_user->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
 
   }
