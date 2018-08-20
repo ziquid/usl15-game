@@ -775,7 +775,7 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
     // Start the energy clock, if needed.
     if ($game_user->energy == $game_user->energy_max) {
       $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-      db_query($sql, date('Y-m-d H:i:s', time() + 300),
+      db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 300),
         $game_user->id);
     }
 

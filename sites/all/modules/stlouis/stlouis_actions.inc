@@ -270,7 +270,7 @@ function game_action_target_list($target, $game_user) {
         LIMIT 3;';
 
       $result = db_query($sql, $game_user->fkey_neighborhoods_id,
-        $game_user->level, date('Y-m-d H:i:s', time() - $debate_time),
+        $game_user->level, date('Y-m-d H:i:s', REQUEST_TIME - $debate_time),
         $game_user->id, $game_user->fkey_clans_id, $game_user->id,
         $game_user->id);
       while ($user = db_fetch_object($result)) $data2[] = $user;

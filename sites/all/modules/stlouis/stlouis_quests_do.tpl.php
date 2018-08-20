@@ -324,7 +324,7 @@ if ($quest_succeeded) {
   // Start the energy clock again.
   if ($old_energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + $energy_wait), $game_user->id);
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + $energy_wait), $game_user->id);
   }
 
   // Update percentage completion.

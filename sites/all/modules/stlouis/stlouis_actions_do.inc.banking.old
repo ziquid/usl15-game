@@ -2476,7 +2476,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
     $get_value($game_user->id, 'next_major_action', 0);
 
   // Egads! Hacking!
-  if ($next_major_action_time > time()) {
+  if ($next_major_action_time > REQUEST_TIME) {
 
     $sql = 'update users set karma = karma - 50 where id = %d;';
     $result = db_query($sql, $game_user->id);
@@ -2498,7 +2498,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
       <div class="subtitle">That\'s 45 minutes that you will never
       get back</div>';
 
-    $set_value($game_user->id, 'next_major_action', time() + 2700);
+    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 2700);
 
     return TRUE;
 
@@ -2553,7 +2553,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   }
 
   $set_value($game_user->id, 'next_major_action',
-    time() + $major_action_timer);
+    REQUEST_TIME + $major_action_timer);
 
   return TRUE;
 

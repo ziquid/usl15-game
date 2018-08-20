@@ -2001,7 +2001,7 @@ function _stlouis_header($game_user) {
     $energy_bonus++;
   }
   if ($game_user->energy != $game_user->energy_max) {
-    $energy_secs_until = strtotime($game_user->energy_next_gain) - time();
+    $energy_secs_until = strtotime($game_user->energy_next_gain) - REQUEST_TIME;
     $energy_minutes = (string) (int) ($energy_secs_until / 60);
     $energy_seconds = sprintf('%02d', (int) ($energy_secs_until % 60));
     $energy_text = ($game_user->energy > $game_user->energy_max ? '-' : '+') .
@@ -2017,7 +2017,7 @@ function _stlouis_header($game_user) {
 
   if ($game_user->actions != $game_user->actions_max) {
 
-    $actions_secs_until = strtotime($game_user->actions_next_gain) - time();
+    $actions_secs_until = strtotime($game_user->actions_next_gain) - REQUEST_TIME;
 // firep('secs_until now at ' . $secs_until);
 
     $actions_minutes = (string) (int) ($actions_secs_until / 60);
@@ -2041,7 +2041,7 @@ function _stlouis_header($game_user) {
 
     $income_str = $income_bonus . '';
 
-    $money_secs_until = strtotime($game_user->income_next_gain) - time();
+    $money_secs_until = strtotime($game_user->income_next_gain) - REQUEST_TIME;
     //firep('income secs_until now at ' . $money_secs_until);
 
     $money_minutes = (string) (int) ($money_secs_until / 60);

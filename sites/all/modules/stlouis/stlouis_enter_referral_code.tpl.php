@@ -64,7 +64,7 @@ EOF;
       AND datetime >= "%s"
       AND referred_by <> "";';
     $result = db_query($sql, $_SERVER['REMOTE_ADDR'],
-      date('Y-m-d', time() - 86400));
+      date('Y-m-d', REQUEST_TIME - 86400));
     $item2 = db_fetch_object($result);
 
     if (!empty($item->referred_by) ||

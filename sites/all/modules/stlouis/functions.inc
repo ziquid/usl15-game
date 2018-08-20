@@ -2576,7 +2576,7 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
     // Start the energy clock, if needed.
     if ($game_user->energy == $game_user->energy_max) {
       $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-      db_query($sql, date('Y-m-d H:i:s', time() + 300),
+      db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 300),
         $game_user->id);
     }
 
@@ -2776,7 +2776,7 @@ function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 3600),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 3600),
       $game_user->id);
   }
 
@@ -2834,7 +2834,7 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   // Start the income clock, if needed.
   if (substr($game_user->income_next_gain, 0, 4) == '0000') {
     $sql = 'update users set income_next_gain = "%s" where id = %d;';
-    db_query($sql, date('Y-m-d H:i:s', time() + 3600),
+    db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 3600),
       $game_user->id);
   }
 

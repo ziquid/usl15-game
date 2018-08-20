@@ -209,7 +209,7 @@ if (empty($item->id)) {
   // Start the actions clock, if needed.
   if ($game_user->actions == $game_user->actions_max) {
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
   }
 
@@ -557,7 +557,7 @@ firep($item->username . ' votes for her/himself');
       order by timestamp DESC
       limit 1;';
     $result = db_query($sql, $voter->id, $game_user->id,
-      date('Y-m-d H:i:s', time() - 259200));
+      date('Y-m-d H:i:s', REQUEST_TIME - 259200));
     $challenger_wall = db_fetch_object($result);
 if (!empty($challenger_wall)) {
 firep('voter posted to challenger:');
@@ -569,7 +569,7 @@ firep($challenger_wall);
       order by timestamp DESC
       limit 1;';
     $result = db_query($sql, $voter->id, $item->id,
-      date('Y-m-d H:i:s', time() - 259200));
+      date('Y-m-d H:i:s', REQUEST_TIME - 259200));
     $incumbent_wall = db_fetch_object($result);
 if (!empty($incumbent_wall)) {
 firep('voter posted to incumbent:');
@@ -595,7 +595,7 @@ firep($voter->username .
     // Recent wall post to incumbent.
     if (!empty($incumbent_wall) &&
       empty($challenger_wall) &&
-      ((strtotime($incumbent_wall->timestamp) + 259200) > time()) &&
+      ((strtotime($incumbent_wall->timestamp) + 259200) > REQUEST_TIME) &&
       (mt_rand(-50,50) <= $voter->level)) {
 
       // Vote for opponent.
@@ -655,7 +655,7 @@ firep($voter->username . ' (' . $voter->fkey_neighborhoods_id . ') votes for ' .
       order by timestamp DESC
       limit 1;';
     $result = db_query($sql, $voter->id, $game_user->id,
-      date('Y-m-d H:i:s', time() - 604800));
+      date('Y-m-d H:i:s', REQUEST_TIME - 604800));
     $challenger_wall = db_fetch_object($result);
 if (!empty($challenger_wall)) {
 firep('challenger posted to voter:');
@@ -668,7 +668,7 @@ firep($challenger_wall);
       order by timestamp DESC
       limit 1;';
     $result = db_query($sql, $voter->id, $item->id,
-      date('Y-m-d H:i:s', time() - 604800));
+      date('Y-m-d H:i:s', REQUEST_TIME - 604800));
     $incumbent_wall = db_fetch_object($result);
 if (!empty($incumbent_wall)) {
 firep('incumbent posted to voter:');
@@ -877,7 +877,7 @@ if ($votes < 0) {
   if ($item->actions == $item->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $item->id);
 
   }
@@ -905,7 +905,7 @@ if ($votes < 0) {
   if ($game_user->actions == $game_user->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
 
   }
@@ -954,7 +954,7 @@ else {
   if ($game_user->actions == $game_user->actions_max) {
 
      $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', time() + 180),
+    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
        $game_user->id);
 
   }

@@ -88,7 +88,7 @@ if ($clan_id != 0) {
 
   // Add 24-hour waiting period on major actions.
   $set_value = '_' . arg(0) . '_set_value';
-  $set_value($game_user->id, 'next_major_action', time() + 86400);
+  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
 
   // First time choosing? Go to debates.
   if ($game_user->fkey_values_id == 0)
