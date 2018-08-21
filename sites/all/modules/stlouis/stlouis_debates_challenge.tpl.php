@@ -664,7 +664,7 @@ echo '<div class="subtitle">
 
 echo "<div class=\"subtitle\">You used</div><div class=\"debate-used-wrapper\">";
 
-$data = array();
+$data = [];
 $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   "equipment" as type, equipment_ownership.quantity
   FROM equipment
@@ -711,7 +711,7 @@ EOF;
 echo "</div><div class=\"subtitle\">$username used</div>
   <div class=\"debate-used-wrapper\">";
 
-$data = array();
+$data = [];
 $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   "equipment" as type, equipment_ownership.quantity
   FROM equipment

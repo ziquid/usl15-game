@@ -103,7 +103,7 @@ EOF;
   $result = db_query($sql, $clan_id);
   $msg_shown = FALSE;
 
-  $data = array();
+  $data = [];
   while ($item = db_fetch_object($result)) $data[] = $item;
 
   foreach ($data as $item) {

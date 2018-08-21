@@ -3609,7 +3609,7 @@ EOF;
   }
 
   // Grab each action for the equipment.
-  $data2 = array();
+  $data2 = [];
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
 

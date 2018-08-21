@@ -305,7 +305,7 @@ EOF;
   // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
 
-  $data = array();
+  $data = [];
   $sql = 'select * from quests ' . $sql_quest_neighborhood .
     ' and required_level = %d ' . $active_quests .
     ' order by required_level ASC;';

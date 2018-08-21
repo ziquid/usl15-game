@@ -31,7 +31,7 @@
 <div class="title">Top Clans</div>
 EOF;
   
-  $data = array();
+  $data = [];
   $sql = 'SELECT fkey_clans_id, clans.name, clans.acronym,
     COUNT( users.id ) AS size, SUM( experience ) AS experience,
     `values`.clan_title, `values`.clan_icon

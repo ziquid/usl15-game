@@ -706,7 +706,7 @@ function _ai_find_free_player($type, $level_min, $level_max, $min_actions = 0) {
   // If not: do we have a player of $type that is a lower level?
   // If so, we can just boost.
   game_ai_out("Still no free $type ... boosting one");
-  $data = array();
+  $data = [];
 
   $sql = 'select phone_id, level, energy, actions from users
     where meta like "%s"

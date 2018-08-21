@@ -156,7 +156,7 @@ $sql = 'SELECT * FROM  `values`
    where `values`.`user_selectable` = 1
    order by rand()';
 $result = db_query($sql);
-$data = array();
+$data = [];
 
 while ($item = db_fetch_object($result)) $data[] = $item;
 firep($data, 'values');
