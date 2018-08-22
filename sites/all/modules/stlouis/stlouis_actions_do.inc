@@ -3186,7 +3186,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       order by abs(level - %d) ASC
       limit 10;';
     $result = db_query($sql, $game_user->level);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $item) {
@@ -3218,7 +3218,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       order by abs(level - %d) ASC
       limit 5;';
     $result = db_query($sql, $game_user->fkey_neighborhoods_id, $game_user->level);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $item) {
@@ -3803,7 +3803,7 @@ firep($target);
     // No target specified.
     if ($target_id == '') {
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -3952,7 +3952,7 @@ EOF;
     // No target specified.
     if ($target_id == '') {
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -3984,7 +3984,7 @@ EOF;
       if (empty($data)) $outcome_reason .= '<div class="subtitle">
         None</div>';
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name,

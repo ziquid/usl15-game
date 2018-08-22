@@ -20,7 +20,7 @@
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $phone_id);
 	
-  $data = array();
+  $data = [];
   $sql = 'SELECT username, experience, initiative, endurance, 
   	elocution, debates_won, debates_lost, skill_points, luck,
   	debates_last_time, users.fkey_values_id, level, phone_id,

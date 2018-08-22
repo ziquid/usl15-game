@@ -399,7 +399,7 @@ EOF;
         case 'officials_type_1':
 
           // Type 1 elected officials only.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
             elected_positions.name AS ep_name, blah.*,
@@ -433,7 +433,7 @@ EOF;
         case 'officials_type_2':
 
           // Type 2 elected officials only.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
             elected_positions.name AS ep_name, blah.*,
@@ -463,7 +463,7 @@ EOF;
         case 'party':
 
           // Users in your political party.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT users.username, users.id,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym,
             NULL as ep_name
@@ -483,7 +483,7 @@ EOF;
         case 'wall_no_official':
 
           // Users on your wall who aren't officials.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT DISTINCT user_messages.fkey_users_from_id AS id,
             users.username, clan_members.is_clan_leader,
             clans.acronym AS clan_acronym, NULL AS ep_name

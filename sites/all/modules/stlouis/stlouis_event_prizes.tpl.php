@@ -66,7 +66,7 @@ EOF;
 
       limit %d;';
     $result = db_query($sql, $top);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $user) {

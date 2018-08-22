@@ -112,7 +112,7 @@ EOF;
 
 }
 
-$data = array();
+$data = [];
 $sql = 'SELECT elected_positions.id AS ep_id,
   elected_positions.group as ep_group,
   elected_positions.name AS ep_name, elected_positions.energy_bonus,

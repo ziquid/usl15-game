@@ -600,7 +600,7 @@ EOF;
           // Staff bonus.
           if ($st_id > 0) {
 
-            $data = array();
+            $data = [];
             $sql = 'SELECT staff.*, staff_ownership.quantity
               FROM staff
 
@@ -1333,7 +1333,7 @@ EOF;
   // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
 
-  $data = array();
+  $data = [];
   $sql = 'select * from quests where `group` = %d and required_level = %d
     and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = %d)
     and active = 1 order by required_level ASC;';
