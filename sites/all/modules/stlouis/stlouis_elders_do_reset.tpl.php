@@ -10,12 +10,9 @@
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $game_user = $fetch_user();
-//  $fetch_header($game_user);
-  $arg2 = check_plain(arg(2));
+  $fetch_header($game_user);
 
   $reset_me = check_plain(trim($_GET['reset_me']));
 

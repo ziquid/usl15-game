@@ -10,11 +10,10 @@
 
 global $game, $phone_id, $purchasing_luck;
 
-$fetch_user = '_' . arg(0) . '_fetch_user';
-$fetch_header = '_' . arg(0) . '_header';
-
+include drupal_get_path('module', $game) . '/game_defs.inc' ;
 $purchasing_luck = TRUE;
 $game_user = $fetch_user();
+$fetch_header($game_user);
 
 if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
   ($_SERVER['REMOTE_ADDR'] == '173.0.81.1') ||

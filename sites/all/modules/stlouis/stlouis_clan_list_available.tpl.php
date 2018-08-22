@@ -10,11 +10,8 @@
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
-  $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
+  $game_user = $fetch_user();
   $fetch_header($game_user);
 
   if (empty($game_user->username))
