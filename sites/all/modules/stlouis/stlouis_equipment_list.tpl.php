@@ -13,6 +13,7 @@ global $game, $phone_id;
 // ------ CONTROLLER ------
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
+$fetch_header($game_user);
 $ai_output = 'equipment-prices';
 
 // Fix expenses in case they are out of whack.

@@ -10,11 +10,9 @@
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
-  $game = check_plain(arg(0));
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
+  $game_user = $fetch_user();
+  $fetch_header($game_user);
 //  $game_user = $fetch_user();
 
  /* if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
