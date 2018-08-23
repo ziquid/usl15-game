@@ -11,10 +11,11 @@
 global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
-$game = check_plain(arg(0));
+include drupal_get_path('module', $game) . '/game_defs.inc' ;
+$game_user = $fetch_user();
+$fetch_header($game_user);
 $get_phoneid = '_' . $game . '_get_phoneid';
 $phone_id = $get_phoneid();
-$arg2 = check_plain(arg(2));
 $ip_address = ip_address();
 
 db_set_active('game_' . $game);
