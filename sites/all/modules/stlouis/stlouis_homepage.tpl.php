@@ -14,7 +14,6 @@ global $game, $phone_id;
 
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
 $message = check_plain($_GET['message']);
 
 game_competency_gain($game_user, 'where the heart is');

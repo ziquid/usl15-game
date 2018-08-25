@@ -12,7 +12,6 @@ global $game, $phone_id;
 
 include drupal_get_path('module', arg(0)) . '/game_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
 
 $sql = 'select name from neighborhoods where id = %d;';
 $result = db_query($sql, $game_user->fkey_neighborhoods_id);
