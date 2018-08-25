@@ -504,7 +504,7 @@ function stlouis_init() {
 
 function _stlouis_filter_profanity($message) {
 
-  $profanity = array(
+  $profanity = [
 	'4r5e',
 	'5h1t',
 	'5hit',
@@ -1049,11 +1049,11 @@ function _stlouis_filter_profanity($message) {
 	'wetback',
 	'whoar',
 	'whore',
-	);
+	];
 
   $msg = str_replace(
-    array('@', '$', "'", '.', '&#039;', '&quot;'),
-    array('a', 's', ' ', ' ', ' ', ' '),
+    ['@', '$', "'", '.', '&#039;', '&quot;'],
+    ['a', 's', ' ', ' ', ' ', ' '],
     $message);
 
   setlocale(LC_ALL, 'en_US');
@@ -1083,25 +1083,25 @@ function game_format_date($epoch) {
     return t('A few seconds ago');
   }
   else if ($time_diff < 60) {
-    return t('@time seconds ago', array('@time' => $time_diff));
+    return t('@time seconds ago', ['@time' => $time_diff]);
   }
   else if ($time_diff < 120) {
     return t('1 minute ago');
   }
   else if ($time_diff < 3600) {
-    return t('@time minutes ago', array('@time' => floor($time_diff / 60)));
+    return t('@time minutes ago', ['@time' => floor($time_diff / 60)]);
   }
   else if ($time_diff < 7200) {
     return t('1 hour ago');
   }
   else if ($time_diff < 86400) {
-    return t('@time hours ago', array('@time' => floor($time_diff / 3600)));
+    return t('@time hours ago', ['@time' => floor($time_diff / 3600)]);
   }
   else if ($time_diff < 172800) {
     return t('A day ago');
   }
   else if ($time_diff < 1728000) {
-    return t('@time days ago', array('@time' => floor($time_diff / 86400)));
+    return t('@time days ago', ['@time' => floor($time_diff / 86400)]);
   }
   else {
     return date('d M Y', $epoch);
@@ -1483,11 +1483,11 @@ function _stlouis_get_fbid() {
   }
 
   // First, try normal facebook getUser().  If that works, awesome.
-  $facebook = new Facebook(array(
+  $facebook = new Facebook([
     'appId'  => $app_id,
     'secret' => $secret,
     'cookie' => TRUE,
-  ));
+  ]);
 
 //  echo '<pre>'; print_r($_SERVER); echo '</pre>';
   $signed_request = $_REQUEST['signed_request'];

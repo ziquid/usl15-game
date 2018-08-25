@@ -168,8 +168,8 @@ EOF;
       $target = t('Target\'s');
     }
 
-    $name = str_replace(array('%clan', '%subclan', '%value'),
-      array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
+    $name = str_replace(['%clan', '%subclan', '%value'],
+      ["<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values],
       $item->name);
 
     if ($item->active == 0) $name .= ' (inactive)';
@@ -521,9 +521,9 @@ EOF;
       if ($phone_id == 'abc123' &&
         count($data2) > 250) {
 
-        $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',
+        $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-          'X', 'Y', 'Z', 'Others');
+          'X', 'Y', 'Z', 'Others'];
 
         // Show mini list.
         foreach ($letters as $letter) {
