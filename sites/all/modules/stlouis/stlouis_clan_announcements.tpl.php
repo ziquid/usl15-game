@@ -13,7 +13,6 @@
   $game_user = $fetch_user();
   $fetch_header($game_user);
   
-
   if (empty($game_user->username))
     drupal_goto($game . '/choose_name/' . $arg2);
 
