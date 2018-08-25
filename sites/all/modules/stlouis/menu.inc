@@ -66,14 +66,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/class_list/%/%'] = array(
-    'title' => 'St. Louis Class List Page',
-    'page callback' => 'stlouis_class_list_callback',
-    'page arguments' => array(2, 3),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['stlouis/block_user_toggle/%/%'] = array(
     'title' => 'St. Louis Block User Toggle',
     'page callback' => 'stlouis_block_user_toggle_callback',
@@ -282,14 +274,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['stlouis/top20_2114/%'] = array(
-    'title' => 'St. Louis Top 20 2114',
-    'page callback' => 'stlouis_top20_2114_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['stlouis/top_aldermen/%'] = array(
     'title' => 'St. Louis Top Aldermen List',
     'page callback' => 'stlouis_top_aldermen_list_callback',
@@ -317,14 +301,6 @@ function stlouis_menu() {
   $items['stlouis/enter_referral_code/%'] = array(
     'title' => 'St. Louis Enter Referral Code',
     'page callback' => 'stlouis_enter_referral_code_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/aides/%'] = array(
-    'title' => 'St. Louis Aides',
-    'page callback' => 'stlouis_aides_callback',
     'page arguments' => array(2),
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
@@ -446,13 +422,6 @@ function stlouis_menu() {
     'title' => 'St. Louis Authenticate',
     'page callback' => 'stlouis_authenticate_callback',
     'page arguments' => array(2),
-    'access arguments' => array('access stlouis content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['stlouis/playbook_NULL'] = array(
-    'title' => 'St. Louis device unauthorized',
-    'page callback' => 'stlouis_playbook_NULL_callback',
     'access arguments' => array('access stlouis content'),
     'type' => MENU_CALLBACK,
   );
@@ -584,17 +553,6 @@ function stlouis_clan_announcements_callback($phone_id, $clan_id) {
   }
 
   return theme('stlouis_clan_announcements', $phone_id, $clan_id);
-
-}
-
-
-function stlouis_class_list_callback($phone_id, $class_id) {
-
-  if (empty($phone_id) || !is_numeric($class_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_class_list', $phone_id, $class_id);
 
 }
 
@@ -881,13 +839,6 @@ function stlouis_top20_list_callback($phone_id) {
   return theme('stlouis_top20_list', $phone_id);
 }
 
-function stlouis_top20_2114_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_top20_2114', $phone_id);
-}
-
 function stlouis_top_aldermen_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -928,17 +879,6 @@ function stlouis_enter_referral_code_callback($phone_id) {
   }
 
   return theme('stlouis_enter_referral_code', $phone_id);
-
-}
-
-
-function stlouis_aides_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_aides', $phone_id);
 
 }
 
@@ -1087,15 +1027,6 @@ function stlouis_authenticate_callback($phone_id) {
   return theme('stlouis_authenticate', $phone_id);
 }
 
-/**
- * Used for playbooks that didn't authorize the app
- */
-function stlouis_playbook_NULL_callback() {
-
-  return theme('stlouis_playbook_NULL');
-
-}
-
 function stlouis_bounce_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1215,14 +1146,6 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
         'clan_id' => NULL,
-      )
-    ),
-
-    'stlouis_class_list' => array(
-      'template' => 'stlouis_class_list',
-      'arguments' => array(
-        'phone_id' => NULL,
-        'class_id' => NULL,
       )
     ),
 
@@ -1416,13 +1339,6 @@ function stlouis_theme() {
       )
     ),
 
-    'stlouis_top20_2114' => array(
-      'template' => 'stlouis_top20_2114',
-      'arguments' => array(
-        'phone_id' => NULL,
-      )
-    ),
-
     'stlouis_top_aldermen_list' => array(
       'template' => 'stlouis_top_aldermen_list',
       'arguments' => array(
@@ -1446,13 +1362,6 @@ function stlouis_theme() {
 
     'stlouis_enter_referral_code' => array(
       'template' => 'stlouis_enter_referral_code',
-      'arguments' => array(
-        'phone_id' => NULL,
-      )
-    ),
-
-    'stlouis_aides' => array(
-      'template' => 'stlouis_aides',
       'arguments' => array(
         'phone_id' => NULL,
       )
@@ -1578,10 +1487,6 @@ function stlouis_theme() {
       'arguments' => array(
         'phone_id' => NULL,
       )
-    ),
-
-    'stlouis_playbook_NULL' => array(
-      'template' => 'stlouis_playbook_NULL',
     ),
 
     'stlouis_bounce' => array(
