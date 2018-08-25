@@ -13,7 +13,6 @@ global $game, $phone_id;
 // ------ CONTROLLER ------
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-
 $title = t('Hire @staff and @agents', [
   '@staff' => $game_text['staff'],
   '@agents' => $game_text['agents'],
