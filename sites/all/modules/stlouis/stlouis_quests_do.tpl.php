@@ -242,7 +242,7 @@ if (($game_quest->group > 0) && ($game_quest->fkey_neighborhoods_id != 0) &&
 
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">'
-  . t('Wrong @hood!', array('@hood' => $hood_lower))
+  . t('Wrong @hood!', ['@hood' => $hood_lower])
   . '</div>
       <p>This ' . $quest_lower . ' can only be completed in '
       . $game_quest->hood . '.

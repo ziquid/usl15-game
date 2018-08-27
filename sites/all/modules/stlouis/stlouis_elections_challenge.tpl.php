@@ -165,7 +165,7 @@ EOF;
     '</div>';
   echo '<div class="election-continue"><a href="/' . $game . '/elders_do_fill/'
     . $arg2 . '/action?destination=/' . $game . '/elections/' . $arg2 .
-    '">' . t('Refill your Action (1&nbsp;@luck)', array('@luck' => $luck)) .
+    '">' . t('Refill your Action (1&nbsp;@luck)', ['@luck' => $luck]) .
     '</a></div>';
 
   if (substr($phone_id, 0, 3) == 'ai-')
@@ -891,8 +891,8 @@ if ($votes < 0) {
     values (%d, %d, "%s");';
   $message = t('%user has successfully challenged you for your office!  ' .
     'You are no longer %office and lost @exp influence.',
-    array('%user' => $game_user->username, '%office' => $item->ep_name,
-      '@exp' => $experience_change));
+    ['%user' => $game_user->username, '%office' => $item->ep_name,
+      '@exp' => $experience_change]);
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set experience = experience + %d,
@@ -938,8 +938,8 @@ else {
     values (%d, %d, "%s");';
   $message = t('You have successfully defended yourself against a challenge ' .
     'from %user.  You remain %office and gain @exp influence.',
-    array('%user' => $game_user->username, '%office' => $item->ep_name,
-      '@exp' => $experience_change));
+    ['%user' => $game_user->username, '%office' => $item->ep_name,
+      '@exp' => $experience_change]);
   $result = db_query($sql, $game_user->id, $item->id, $message,
     $experience_change);
 
@@ -972,8 +972,8 @@ EOF;
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
   echo "<div class=\"subtitle\">You lost to $item->username by $votes" .
     " vote(s)</div><div class=\"action-effect\">" .
-    t('You lost @exp @influence', array('@exp' => $experience_change,
-      '@influence' => $experience_lower)) .
+    t('You lost @exp @influence', ['@exp' => $experience_change,
+      '@influence' => $experience_lower]) .
     '</div>';
 
 }
