@@ -6,7 +6,7 @@ include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
 $game_user = $fetch_user();
 
-if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+if ($game_user->meta == 'frozen') {
 
     $fetch_header($game_user);
 

@@ -65,7 +65,7 @@ EOF;
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
-  if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+  if ($game_user->meta == 'frozen') {
 
     echo <<< EOF
 <div class="title">Frozen!</div>
@@ -518,7 +518,7 @@ EOF;
 //      db_set_active('game_' . $game);
 
       // Too many to list?  Separate by first letter.
-      if ($phone_id == 'abc123' &&
+      if ($game_user->meta == 'admin' &&
         count($data2) > 250) {
 
         $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',

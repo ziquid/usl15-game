@@ -43,7 +43,7 @@
     ($clan_player->fkey_clans_id > 0) &&
     ($zombie->fkey_values_id == $game_user->fkey_values_id) &&
     ($zombie->meta == 'zombie'))
-    || $phone_id == 'abc1234') {
+    || $game_user->meta == 'admin') {
 
       $sql = 'update users set fkey_neighborhoods_id = %d
         where id = %d;';
