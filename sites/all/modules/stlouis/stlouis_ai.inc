@@ -408,12 +408,12 @@ function _ai_have_num_clan_leaders($num_leaders) {
     game_ai_out('Checking for necessary equipment ' . "(money: $ai_user->money)");
 
     // equip_id => level.
-    $stuff_to_get = array(
+    $stuff_to_get = [
       2 => 20,
       7 => 40,
       12 => 60,
       17 => 80,
-    );
+    ];
 
     $sql = 'select quantity from equipment_ownership
       where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -1251,11 +1251,11 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
       "(money: $ai_user->money)");
 
     // equip_id => level.
-    $stuff_to_get = array(
+    $stuff_to_get = [
       5 => 16,
       8 => 12,
       13 => 23,
-    );
+    ];
 
     $sql = 'select quantity from equipment_ownership
       where fkey_equipment_id = %d and fkey_users_id = %d;';
@@ -1292,9 +1292,9 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
     game_ai_out('Checking for necessary staff/agents...');
 
     // staff_id => level.
-    $staff_to_get = array(
+    $staff_to_get = [
       9 => 25,
-    );
+    ];
 
     $sql = 'select quantity from staff_ownership
       where fkey_staff_id = %d and fkey_users_id = %d;';

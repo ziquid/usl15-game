@@ -27,6 +27,18 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Aug 27, 2018
+  </div>
+  <ul>
+    <li>
+      Level 121
+    </li>
+    <li>
+      Hot Dog Stand
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Aug 15, 2018
   </div>
   <ul>

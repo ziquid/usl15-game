@@ -69,18 +69,18 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
 
         // FIXME remove special characters from text here.
         t('∆ @value <span>Insufficient</span> ∆',
-        array('@value' => $game_user->values)) . '
+        ['@value' => $game_user->values]) . '
       </div>
       <div class="try-an-election-wrapper">
         <div class="try-an-election">
           <a href="/' . $game . '/elders_do_fill/' . $arg2 .
               '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
             t('Receive @offer @values (1&nbsp;@luck',
-            array(
+            [
             '@offer' => $offer,
             '@values' => $game_user->values,
             '@luck' => $luck,
-            )) . ')
+            ]) . ')
           </a>
         </div>
       </div>';
@@ -120,7 +120,7 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
     case 'failed not-required-party':
       $header = '<div class="title">' .
         t('∆ @party <span>Incorrect</span> ∆',
-        array('@party' => $party)) .
+        ['@party' => $party]) .
         '</div>';
       $failed = 'failed';
       break;
