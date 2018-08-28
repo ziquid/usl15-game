@@ -74,7 +74,7 @@ switch ($fill_type) {
     if ($game_user->luck < 1) {
       $fetch_header($game_user);
 
-      echo '<div class="land-failed">' . t('Out of @s!', array('@s' => $luck))
+      echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
       echo '<div class="try-an-election-wrapper"><div
         class="try-an-election"><a href="/' . $game .
@@ -100,7 +100,7 @@ switch ($fill_type) {
     if ($game_user->luck < 1) {
       $fetch_header($game_user);
 
-      echo '<div class="land-failed">' . t('Out of @s!', array('@s' => $luck))
+      echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
       echo '<div class="try-an-election-wrapper"><div
         class="try-an-election"><a href="/' . $game .
@@ -126,7 +126,7 @@ switch ($fill_type) {
     if ($game_user->luck < 1) {
       $fetch_header($game_user);
 
-      echo '<div class="land-failed">' . t('Out of @s!', array('@s' => $luck))
+      echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
       echo '<div class="try-an-election-wrapper"><div
         class="try-an-election"><a href="/' . $game .

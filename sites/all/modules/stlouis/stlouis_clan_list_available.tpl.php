@@ -31,7 +31,7 @@
 <div class="clan-list">
 EOF;
 	
-  $data = array();
+  $data = [];
   $sql = 'SELECT count( clan_members.id ) AS members, clans.name, clans.acronym,
     clans.rules
     FROM clan_members

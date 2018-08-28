@@ -59,7 +59,7 @@ EOF;
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
 
-  if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+  if ($game_user->meta == 'frozen') {
 
     echo <<< EOF
 <div class="title">Frozen!</div>
@@ -162,8 +162,8 @@ EOF;
       $target = t('Target\'s');
     }
 
-    $name = str_replace(array('%clan', '%subclan', '%value'),
-      array("<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values),
+    $name = str_replace(['%clan', '%subclan', '%value'],
+      ["<em>$party_title</em>", "<em>$subclan_name</em>", $game_user->values],
       $item->name);
 
     if ($item->active == 0) $name .= ' (inactive)';
@@ -393,7 +393,7 @@ EOF;
         case 'officials_type_1':
 
           // Type 1 elected officials only.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
             elected_positions.name AS ep_name, blah.*,
@@ -427,7 +427,7 @@ EOF;
         case 'officials_type_2':
 
           // Type 2 elected officials only.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
             elected_positions.name AS ep_name, blah.*,
@@ -457,7 +457,7 @@ EOF;
         case 'party':
 
           // Users in your political party.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT users.username, users.id,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym,
             NULL as ep_name
@@ -477,7 +477,7 @@ EOF;
         case 'wall_no_official':
 
           // Users on your wall who aren't officials.
-          $data2 = array();
+          $data2 = [];
           $sql = 'SELECT DISTINCT user_messages.fkey_users_from_id AS id,
             users.username, clan_members.is_clan_leader,
             clans.acronym AS clan_acronym, NULL AS ep_name
@@ -512,12 +512,12 @@ EOF;
 //      db_set_active('game_' . $game);
 
       // Too many to list?  Separate by first letter.
-      if ($phone_id == 'abc123' &&
+      if ($game_user->meta == 'admin' &&
         count($data2) > 250) {
 
-        $letters = array('A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',
+        $letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'. 'I', 'J',
           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-          'X', 'Y', 'Z', 'Others');
+          'X', 'Y', 'Z', 'Others'];
 
         // Show mini list.
         foreach ($letters as $letter) {

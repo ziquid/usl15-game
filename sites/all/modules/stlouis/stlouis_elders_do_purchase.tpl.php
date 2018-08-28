@@ -27,13 +27,13 @@ if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
   if (arg(4) == 'withAppleReceipt') {
 
     $receipt_data = $_POST['receiptdata'];
-    $receipt_json = json_encode(array('receipt-data' => $receipt_data));
+    $receipt_json = json_encode(['receipt-data' => $receipt_data]);
     $appleURL = 'https://buy.itunes.apple.com/verifyReceipt';
 
-    $params = array('http' => array(
+    $params = ['http' => [
       'method' => 'POST',
       'content' => $receipt_json,
-    ));
+    ]];
 
     $ctx = stream_context_create($params);
     $fp = fopen($appleURL, 'rb', FALSE, $ctx);

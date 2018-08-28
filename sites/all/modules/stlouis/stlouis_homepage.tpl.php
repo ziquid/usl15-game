@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-$version = 'v0.6.0, Aug 15 2018';
+$version = 'v0.6.0, Aug 27 2018';
 
 global $game, $phone_id;
 
@@ -307,11 +307,11 @@ switch($event_type) {
           <a href="/' . $game . '/elders_do_fill/' . $arg2 .
             '/money?destination=/' . $game . '/home/' . $arg2 . '">' .
             t('Receive @offer @values NOW (1&nbsp;@luck',
-              array(
+              [
                 '@offer' => game_luck_money_offer($game_user),
                 '@values' => $game_user->values,
                 '@luck' => $luck,
-              )) . ')
+              ]) . ')
           </a>
         </div>
       </div>';
