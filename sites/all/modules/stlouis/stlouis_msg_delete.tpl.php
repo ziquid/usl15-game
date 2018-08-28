@@ -12,7 +12,6 @@ global $game, $phone_id;
 
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
 
 // Check permissions.
 $sql = 'select fkey_users_from_id, fkey_users_to_id
