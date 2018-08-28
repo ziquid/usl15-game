@@ -504,7 +504,7 @@ function stlouis_init() {
 
 function _stlouis_filter_profanity($message) {
 
-  $profanity = array(
+  $profanity = [
 	'4r5e',
 	'5h1t',
 	'5hit',
@@ -1049,11 +1049,11 @@ function _stlouis_filter_profanity($message) {
 	'wetback',
 	'whoar',
 	'whore',
-	);
+	];
 
   $msg = str_replace(
-    array('@', '$', "'", '.', '&#039;', '&quot;'),
-    array('a', 's', ' ', ' ', ' ', ' '),
+    ['@', '$', "'", '.', '&#039;', '&quot;'],
+    ['a', 's', ' ', ' ', ' ', ' '],
     $message);
 
   setlocale(LC_ALL, 'en_US');
@@ -1083,25 +1083,25 @@ function game_format_date($epoch) {
     return t('A few seconds ago');
   }
   else if ($time_diff < 60) {
-    return t('@time seconds ago', array('@time' => $time_diff));
+    return t('@time seconds ago', ['@time' => $time_diff]);
   }
   else if ($time_diff < 120) {
     return t('1 minute ago');
   }
   else if ($time_diff < 3600) {
-    return t('@time minutes ago', array('@time' => floor($time_diff / 60)));
+    return t('@time minutes ago', ['@time' => floor($time_diff / 60)]);
   }
   else if ($time_diff < 7200) {
     return t('1 hour ago');
   }
   else if ($time_diff < 86400) {
-    return t('@time hours ago', array('@time' => floor($time_diff / 3600)));
+    return t('@time hours ago', ['@time' => floor($time_diff / 3600)]);
   }
   else if ($time_diff < 172800) {
     return t('A day ago');
   }
   else if ($time_diff < 1728000) {
-    return t('@time days ago', array('@time' => floor($time_diff / 86400)));
+    return t('@time days ago', ['@time' => floor($time_diff / 86400)]);
   }
   else {
     return date('d M Y', $epoch);
@@ -1483,11 +1483,11 @@ function _stlouis_get_fbid() {
   }
 
   // First, try normal facebook getUser().  If that works, awesome.
-  $facebook = new Facebook(array(
+  $facebook = new Facebook([
     'appId'  => $app_id,
     'secret' => $secret,
     'cookie' => TRUE,
-  ));
+  ]);
 
 //  echo '<pre>'; print_r($_SERVER); echo '</pre>';
   $signed_request = $_REQUEST['signed_request'];
@@ -2161,7 +2161,6 @@ firep('a prize is deserved!');
           (fkey_users_id, fkey_equipment_id, quantity)
           values
           (%d, %d, 1);';
-// if ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
       }
@@ -2173,7 +2172,6 @@ firep('a prize is deserved!');
           set quantity = quantity + 1
           where fkey_users_id = %d
           and fkey_equipment_id = %d;';
-// if ($phone_id == 'abc123')
         $result = db_query($sql, $game_user->id, $prize_id);
 
       }
@@ -2181,7 +2179,6 @@ firep('a prize is deserved!');
       // Update record of user getting this present.
       $sql = 'update event_points set last_goal_achieved = %d
         where fkey_users_id = %d;';
-// if ($phone_id == 'abc123')
       $result = db_query($sql, $goal_obj->points, $game_user->id);
 
       // Get present title.
@@ -2191,7 +2188,6 @@ firep('a prize is deserved!');
       $equip_obj = db_fetch_object($result);
       $equip_name = str_replace(' ', '&nbsp;', strtolower($equip_obj->name));
 
-// if ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
         $new_goal_obj->points . ' points
@@ -2215,7 +2211,6 @@ firep('a prize is deserved!');
     else {
 
       // User doesn't get a prize.
-// if ($phone_id == 'abc123')
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
         $goal_obj->points . ' points

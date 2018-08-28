@@ -349,9 +349,9 @@ EOF;
 
   if (empty($item->title)) $item->title = t('None');
 
-  $description = t($item->description, array(
+  $description = t($item->description, [
     '@level' => $game_user->level,
-  ));
+  ]);
 
   echo <<< EOF
 <div class="goals $current">
@@ -639,18 +639,18 @@ function game_show_land($game_user, $item, $options = []) {
 
           // FIXME remove special characters from text here.
           t('∆ @value <span>Insufficient</span> ∆',
-            array('@value' => $game_user->values)) . '
+            ['@value' => $game_user->values]) . '
         </div>
         <div class="try-an-election-wrapper">
           <div class="try-an-election">
             <a href="/' . $game . '/elders_do_fill/' . $arg2 .
               '/money?destination=/' . $game . '/land/' . $arg2 . '">' .
               t('Receive @offer @values (1&nbsp;@luck',
-                array(
+                [
                   '@offer' => $offer,
                   '@values' => $game_user->values,
                   '@luck' => $luck,
-                )) . ')
+                ]) . ')
             </a>
           </div>
         </div>';
@@ -693,7 +693,7 @@ function game_show_land($game_user, $item, $options = []) {
     case 'failed not-required-party':
       $header = '<div class="title">' .
         t('∆ @party <span>Incorrect</span> ∆',
-          array('@party' => $party)) .
+          ['@party' => $party]) .
         '</div>';
       $failed = 'failed';
       break;
@@ -971,7 +971,7 @@ EOF;
     <div class="quantity">
       <select name="quantity">
 EOF;
-      foreach (array(1, 5, 10, 25, 50, 100) as $option) {
+      foreach ([1, 5, 10, 25, 50, 100] as $option) {
         if ($option == $orig_quantity) {
           echo '<option selected="selected" value="' . $option . '">' .
             $option . '</option>';
@@ -1221,18 +1221,18 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
 
         // FIXME remove special characters from text here.
         t('∆ @value <span>Insufficient</span> ∆',
-          array('@value' => $game_user->values)) . '
+          ['@value' => $game_user->values]) . '
         </div>
         <div class="try-an-election-wrapper">
           <div class="try-an-election">
             <a href="/' . $game . '/elders_do_fill/' . $arg2 .
         '/money?destination=/' . $game . '/equipment/' . $arg2 . '">' .
         t('Receive @offer @values (1&nbsp;@luck',
-          array(
+          [
             '@offer' => $offer,
             '@values' => $game_user->values,
             '@luck' => $luck,
-          )) . ')
+          ]) . ')
             </a>
           </div>
         </div>';
@@ -1272,7 +1272,7 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
     case 'failed not-required-party':
       $header = '<div class="title">' .
         t('∆ @party <span>Incorrect</span> ∆',
-          array('@party' => $party)) .
+          ['@party' => $party]) .
         '</div>';
       $failed = 'failed';
       break;
@@ -2057,21 +2057,21 @@ function game_show_quest($game_user, $item, $percentage_target,
   if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
   if (substr($item->description, -1) != '>') $raquo = '&raquo;';
 
-  $name = t($item->name, array(
+  $name = t($item->name, [
     '@clan' => $game_user->clan_name,
     '@hood' => $hood,
     '@location' => $location,
     '%party' => $party_title,
     '@username' => $game_user->username,
-  ));
+  ]);
 
-  $description = t($item->description, array(
+  $description = t($item->description, [
     '@clan' => $game_user->clan_name,
     '@hood' => $hood,
     '@location' => $location,
     '%party' => $party_title,
     '@username' => $game_user->username,
-  ));
+  ]);
 
   if (empty($item->percent_complete)) $item->percent_complete = 0;
 
@@ -2345,22 +2345,22 @@ function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
   if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
   if (substr($item->description, -1) != '>') $raquo = '&raquo;';
 
-  $name = t($item->name, array(
+  $name = t($item->name, [
     '%party' => $party_title,
     '@username' => $game_user->username,
     '@hood' => $hood,
     '@location' => $location,
-  ));
+  ]);
 
   if (($view == 'runner') || ($view == 'perform'))
     $item->initiator_description = $item->runner_description;
 
-  $description = t($item->initiator_description, array(
+  $description = t($item->initiator_description, [
     '%party' => $party_title,
     '@username' => $game_user->username,
     '@hood' => $hood,
     '@location' => $location,
-  ));
+  ]);
 
   $active = ($item->active) ? '' : ' (inactive)';
 
@@ -2606,7 +2606,7 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
     if (($eq->quantity_limit > 0) &&
       (($eo->quantity + $quantity) > $eq->quantity_limit))
-      return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+      return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
 
     $sql = 'update clan_equipment_ownership set quantity = quantity + %d
       where fkey_equipment_id = %d and fkey_clans_id = %d;';
@@ -2616,7 +2616,7 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   else {
 
     if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
-      return array(FALSE, 'quantity-exceeded', $eq->quantity_limit);
+      return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
 
     $sql = 'insert into clan_equipment_ownership
       (fkey_clans_id, fkey_equipment_id, quantity) values
@@ -2625,7 +2625,7 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
   }
 
-  return array(TRUE, 'success', 0);
+  return [TRUE, 'success', 0];
 
 }
 
@@ -3251,9 +3251,9 @@ function NO_hierarchy_status($game_user, $level) {
 
   $ret->target[0] =
     t('Attainment: <span>Level @level</span>',
-      array('@level' => $req->min_level));
+      ['@level' => $req->min_level]);
   $ret->progress[0] = t('Attainment: <span>Level @level</span>',
-    array('@level' => $game_user->level));
+    ['@level' => $game_user->level]);
   $ret->passed[0] = ($game_user->level >= $req->min_level);
 
   switch ($level) {
@@ -3284,21 +3284,21 @@ function NO_hierarchy_status($game_user, $level) {
         t('Favors Completed: <span>10</span>');
       $ret->progress[] =
         t('Favors Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_completed));
+        ['@c' => $game_user->favors_completed]);
       $ret->passed[] = ($game_user->favors_completed >= 10);
 
       $ret->target[] =
         t('Initiated Favors Completed: <span>10</span>');
       $ret->progress[] =
         t('Initiated Favors Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_asked_completed));
+        ['@c' => $game_user->favors_asked_completed]);
       $ret->passed[] = ($game_user->favors_asked_completed >= 10);
 
       $ret->target[] =
         t('Initiated Favors Not Completed: <span>5</span>');
       $ret->progress[] =
         t('Initiated Favors Not Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_asked_noncompleted));
+        ['@c' => $game_user->favors_asked_noncompleted]);
       $ret->passed[] = ($game_user->favors_asked_noncompleted >= 5);
 
       $ret->qualified = $ret->passed[0] & $ret->passed[1] & $ret->passed[2] &
@@ -3319,44 +3319,44 @@ function NO_hierarchy_status($game_user, $level) {
 
       $ret->target[] = t('Clan membership: <span>TRUE</span>');
       $ret->progress[] = t('Clan membership: <span>@m (@c)</span>',
-        array(
+        [
           '@m' => ($game_user->fkey_clans_id > 0) ? 'TRUE' : 'FALSE',
           '@c' => $game_user->clan_acronym,
-        )
+        ]
       );
       $ret->passed[] = ($game_user->debates_won >= 10);
 
       $ret->target[] = t('@debate Wins: <span>10</span>',
-        array('@debate' => $debate));
+        ['@debate' => $debate]);
       $ret->progress[] = t('@debate Wins: <span>@c</span>',
-        array('@debate' => $debate, '@c' => $game_user->debates_won));
+        ['@debate' => $debate, '@c' => $game_user->debates_won]);
       $ret->passed[] = ($game_user->debates_won >= 10);
 
       $ret->target[] = t('@debate Losses: <span>5</span>',
-        array('@debate' => $debate));
+        ['@debate' => $debate]);
       $ret->progress[] = t('@debate Losses: <span>@c</span>',
-        array('@debate' => $debate, '@c' => $game_user->debates_lost));
+        ['@debate' => $debate, '@c' => $game_user->debates_lost]);
       $ret->passed[] = ($game_user->debates_lost >= 5);
 
       $ret->target[] =
         t('Favors Completed: <span>30</span>');
       $ret->progress[] =
         t('Favors Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_completed));
+        ['@c' => $game_user->favors_completed]);
       $ret->passed[] = ($game_user->favors_completed >= 30);
 
       $ret->target[] =
         t('Initiated Favors Completed: <span>30</span>');
       $ret->progress[] =
         t('Initiated Favors Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_asked_completed));
+        ['@c' => $game_user->favors_asked_completed]);
       $ret->passed[] = ($game_user->favors_asked_completed >= 30);
 
       $ret->target[] =
         t('Initiated Favors Not Completed: <span>15</span>');
       $ret->progress[] =
         t('Initiated Favors Not Completed: <span>@c</span>',
-        array('@c' => $game_user->favors_asked_noncompleted));
+        ['@c' => $game_user->favors_asked_noncompleted]);
       $ret->passed[] = ($game_user->favors_asked_noncompleted >= 15);
 
       $ret->qualified = $ret->passed[0] & $ret->passed[1] & $ret->passed[2] &
@@ -3386,28 +3386,28 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
   $target =
     t('@name Competency:<br/>' .
       '<span>@comp (Level @l)</span>',
-      array(
+      [
         '@name' => $req_comp,
         '@comp' => game_competency_level_name($req_level),
         '@l' => $req_level,
-      )
+      ]
     );
   $progress =
     t('@name Competency:<br/><span>@comp (Level @l)</span>',
-      array(
+      [
         '@name' => $req_comp,
         '@comp' => $check->level_name,
         '@l' => $check->level
-      )
+      ]
     );
   $passed = ($check->level >= $req_level);
 
-  return array($target, $progress, $passed);
+  return [$target, $progress, $passed];
 
 }
 
 
-function show_equipment($game_user, $item, $options = array()) {
+function show_equipment($game_user, $item, $options = []) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -3609,7 +3609,7 @@ EOF;
   }
 
   // Grab each action for the equipment.
-  $data2 = array();
+  $data2 = [];
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
 
@@ -3805,7 +3805,7 @@ firep($eq->name . ' wore out!');
     }
     else {
       $failure_reason = t('Your @stuff has/have worn out',
-        array('@stuff' => $stuff));
+        ['@stuff' => $stuff]);
     }
   }
 

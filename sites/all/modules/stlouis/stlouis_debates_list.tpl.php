@@ -110,7 +110,7 @@ EOF;
 //  $debate_wait_time = 1200;
 //  if ($debate == 'Box') $debate_wait_time = 900;
 
-$data = array();
+$data = [];
 $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
   users.id, users.phone_id, clan_members.is_clan_leader, users.meta,
   clans.acronym AS clan_acronym, neighborhoods.name as neighborhood

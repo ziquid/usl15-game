@@ -17,7 +17,7 @@
   $fetch_header($game_user);
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if ($phone_id != 'abc123') {
+  if ($game_user->meta == 'admin') {
     db_set_active('default');
     return;
   }
@@ -28,23 +28,23 @@
 </div>
 EOF;
 
-  $prizes = array(
-    array(100, 1, 37),
-    array(80, 1, 37),
-    array(60, 3, 37),
-    array(50, 5, 37),
-    array(40, 10, 37),
-    array(30, 30, 37),
-    array(25, 1, 38),
-    array(20, 1, 38),
-    array(15, 3, 38),
-    array(10, 5, 38),
-    array(5, 10, 38),
-    array(4, 10, 38),
-    array(3, 10, 38),
-    array(2, 10, 38),
-    array(1, 50, 38),
-  );
+  $prizes = [
+    [100, 1, 37],
+    [80, 1, 37],
+    [60, 3, 37],
+    [50, 5, 37],
+    [40, 10, 37],
+    [30, 30, 37],
+    [25, 1, 38],
+    [20, 1, 38],
+    [15, 3, 38],
+    [10, 5, 38],
+    [5, 10, 38],
+    [4, 10, 38],
+    [3, 10, 38],
+    [2, 10, 38],
+    [1, 50, 38],
+  ];
 
   foreach ($prizes as $prize) {
 // top $top get $quantity gifts #$prize_id
@@ -66,7 +66,7 @@ EOF;
 
       limit %d;';
     $result = db_query($sql, $top);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $user) {

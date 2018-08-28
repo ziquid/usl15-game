@@ -28,7 +28,7 @@ echo <<< EOF
 <!--<div class="subtitle">$item->count Dead Presidents left</div>-->
 EOF;
   
-  $data = array();
+  $data = [];
 
     $sql = 'SELECT username, experience, initiative, endurance, 
       elocution, debates_won, debates_lost, skill_points, luck,

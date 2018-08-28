@@ -37,7 +37,7 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
 <div class="title">Clan List</div>
 EOF;
 
-  $data = array();
+  $data = [];
   $sql = 'SELECT username, experience, initiative, endurance, 
   	elocution, debates_won, debates_lost, skill_points, luck,
   	debates_last_time, users.fkey_values_id, level, phone_id,

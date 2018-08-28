@@ -6,7 +6,7 @@ include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
 $game_user = $fetch_user();
 
-if (($game_user->meta == 'frozen') && ($phone_id != 'abc123')) {
+if ($game_user->meta == 'frozen') {
 
     $fetch_header($game_user);
 
@@ -116,7 +116,7 @@ EOF;
 
     $action_succeeded = FALSE;
     $outcome_reason = '<div class="land-failed">' .
-    t('Out of @value!', array('@value' => $game_user->values)) .
+    t('Out of @value!', ['@value' => $game_user->values]) .
       '</div>';
 
     if (substr($phone_id, 0, 3) == 'ai-')
@@ -392,7 +392,7 @@ firep($eq);
       else {
         $outcome_reason .= '<div class="subtitle">' .
           t('Your @stuff has/have worn out',
-          array('@stuff' => $stuff)) . '</div>';
+          ['@stuff' => $stuff]) . '</div>';
       }
 
       $sql = 'select quantity from equipment_ownership
@@ -522,7 +522,7 @@ EOF;
 
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"$ai_output " .
-    filter_xss($outcome_reason, array()) .
+    filter_xss($outcome_reason, []) .
     " \"/>\n-->";
 
   db_set_active('default');

@@ -174,7 +174,7 @@ firep($item);
   // Clan does not exist.
   if (empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
-      t('The %clan clan does not exist', array('%clan' => $clan_acronym)) .
+      t('The %clan clan does not exist', ['%clan' => $clan_acronym]) .
       '</div><div class="action-effect">Please check that you entered the
       clan\'s three letters correctly and try again</div>
       <div class="try-an-election-wrapper"><div
@@ -232,7 +232,7 @@ firep($item);
       '</div><div class="action-effect">' .
       t('There is no room for new members in this clan.  ' .
         'This clan can only hold @num members.',
-        array('@num' => $max_clan_size)) . '</div>';
+        ['@num' => $max_clan_size]) . '</div>';
     return FALSE;
   }
 
@@ -286,7 +286,7 @@ firep($now, 'time now');
       t('Too soon!') .
       '</div><div class="action-effect">' .
       t('You can join a clan in @min minutes and @sec seconds',
-        array('@min' => $min, '@sec' => $sec))
+        ['@min' => $min, '@sec' => $sec])
       . '</div>';
 
     return FALSE;
@@ -436,7 +436,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
 
   $outcome_reason .= '<div class="action-effect">' .
     t('@name has been removed from your clan',
-    array('@name' => $target_name)) . '</div>';
+    ['@name' => $target_name]) . '</div>';
 
   return TRUE;
 }
@@ -509,7 +509,7 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
 
   $outcome_reason .= '<div class="action-effect">' .
     t('@name has been made the leader of your clan',
-    array('@name' => $target_name)) . '</div>';
+    ['@name' => $target_name]) . '</div>';
 
   return TRUE;
 }
@@ -692,7 +692,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   if (!_stlouis_check_for_friendly_hood()) {
     $outcome_reason = '<div class="land-failed">' .
       t('Not in a friendly @hood!',
-        array('@hood' => $hood_lower)) .
+        ['@hood' => $hood_lower]) .
       '</div><div class="action-effect">You must be in friendly territory to
         perform this action.</div>';
     return FALSE;
@@ -748,7 +748,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
   if ($game_user->money < $money_required) {
     $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
-      t('Not enough @value', array('@value' => $game_user->values)) .
+      t('Not enough @value', ['@value' => $game_user->values]) .
       '</div><div class="action-effect">You do not have enough ' .
       $game_user->values . ' to declare this Level ' . $target_user->level .
       ' player <em>persona non grata</em>.</div>
@@ -1145,7 +1145,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
 
     $outcome_reason .= '<div class="action-effect">' .
       t('You have transferred 10 of your Luck to @name',
-      array('@name' => $target_name)) . '</div>';
+      ['@name' => $target_name]) . '</div>';
 
     return TRUE;
   }
@@ -1312,7 +1312,7 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
   if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
     $outcome_reason .= '<div class="action-effect">' .
       t('Sorry!&nbsp; You two are no longer in the same @hood',
-      array('@hood' => $hood_lower)) . '</div>';
+      ['@hood' => $hood_lower]) . '</div>';
     return FALSE;
   }
 
@@ -1863,7 +1863,7 @@ function _stlouis_action_check_security_cameras_function(&$outcome_reason, $targ
   if (!_stlouis_check_for_friendly_hood()) {
     $outcome_reason = '<div class="land-failed">' .
       t('Not in a friendly @hood!',
-        array('@hood' => $hood_lower)) .
+        ['@hood' => $hood_lower]) .
       '</div><div class="action-effect">You must be in friendly territory to
         perform this action.</div>';
     return FALSE;
@@ -3186,7 +3186,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       order by abs(level - %d) ASC
       limit 10;';
     $result = db_query($sql, $game_user->level);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $item) {
@@ -3218,7 +3218,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       order by abs(level - %d) ASC
       limit 5;';
     $result = db_query($sql, $game_user->fkey_neighborhoods_id, $game_user->level);
-    $data = array();
+    $data = [];
     while ($item = db_fetch_object($result)) $data[] = $item;
 
     foreach ($data as $item) {
@@ -3803,7 +3803,7 @@ firep($target);
     // No target specified.
     if ($target_id == '') {
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -3914,7 +3914,7 @@ EOF;
       (fkey_users_from_id, fkey_users_to_id, message)
       values (%d, %d, "%s");';
     $message = t('%user tagged you!',
-      array('%user' => $game_user->username));
+      ['%user' => $game_user->username]);
     $result = db_query($sql, $game_user->id, $target_id, $message);
 
     return TRUE;
@@ -3952,7 +3952,7 @@ EOF;
     // No target specified.
     if ($target_id == '') {
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name
@@ -3984,7 +3984,7 @@ EOF;
       if (empty($data)) $outcome_reason .= '<div class="subtitle">
         None</div>';
 
-      $data = array();
+      $data = [];
       $sql = 'SELECT users.username, users.id,
         clan_members.is_clan_leader, clans.acronym AS clan_acronym,
         NULL as ep_name,
@@ -4090,7 +4090,7 @@ EOF;
       (fkey_users_from_id, fkey_users_to_id, message)
       values (%d, %d, "%s");';
     $message = t('%user unfroze you!',
-      array('%user' => $game_user->username));
+      ['%user' => $game_user->username]);
     $result = db_query($sql, $game_user->id, $target_id, $message);
 
    return TRUE;

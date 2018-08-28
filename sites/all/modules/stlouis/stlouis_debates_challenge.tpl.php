@@ -46,7 +46,7 @@ if ($item->id == $game_user->id) {
 
   echo "<div class=\"title\">$title</div>";
   echo '<div class="subtitle">' . t('You cannot @debate yourself.',
-    array('@debate' => $debate_lower)) . '</div>';
+    ['@debate' => $debate_lower]) . '</div>';
   echo '<div class="subtitle">
     <a href="/' . $game . '/debates/' . $arg2 . '">
       <img src="/sites/default/files/images/' . $game . '_continue.png"/>
@@ -93,7 +93,7 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   echo "<div class=\"title\">$title</div>";
   echo '<div class="subtitle">' .
     t('You must wait longer to @debate this player',
-    array('@debate' => $debate_lower)) . '</div>';
+    ['@debate' => $debate_lower]) . '</div>';
   echo '<div class="subtitle">
     <a href="/' . $game . '/debates/' . $arg2 . '">
       <img src="/sites/default/files/images/' . $game . '_continue.png"/>
@@ -233,8 +233,8 @@ if ($won) {
     values (%d, %d, "%s");';
   $message = t('%user has successfully @debated you!  ' .
     'You lost @money @value.',
-    array('%user' => $game_user->username, '@money' => $money_change,
-      '@value' => $item->values, '@debated' => "{$debate_lower}d"));
+    ['%user' => $game_user->username, '@money' => $money_change,
+      '@value' => $item->values, '@debated' => "{$debate_lower}d"]);
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set money = money + %d, experience = experience + %d,
@@ -553,9 +553,9 @@ else {
     values (%d, %d, "%s");';
   $message = t('You have successfully defended yourself against a @debate ' .
     'from %user.  You gained @money @value and @exp @experience.',
-    array('%user' => $game_user->username, '@money' => $money_change,
+    ['%user' => $game_user->username, '@money' => $money_change,
       '@value' => $item->values, '@experience' => $experience,
-      '@exp' => $experience_gained, '@debate' => $debate_lower));
+      '@exp' => $experience_gained, '@debate' => $debate_lower]);
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set money = money - %d, actions = actions - 1,
@@ -622,8 +622,8 @@ else {
   echo "<div class=\"subtitle\">You lost to
   <a href=\"/$game/user/$arg2/$item->phone_id\">$item->username</a></div>
     <div class=\"action-effect\">" .
-    t('You lost @money @value' . $gain_extra, array('@money' => $money_change,
-      '@value' => $game_user->values)) .
+    t('You lost @money @value' . $gain_extra, ['@money' => $money_change,
+      '@value' => $game_user->values]) .
     '</div>';
 
   if (substr($phone_id, 0, 3) == 'ai-')
@@ -664,7 +664,7 @@ echo '<div class="subtitle">
 
 echo "<div class=\"subtitle\">You used</div><div class=\"debate-used-wrapper\">";
 
-$data = array();
+$data = [];
 $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   "equipment" as type, equipment_ownership.quantity
   FROM equipment
@@ -711,7 +711,7 @@ EOF;
 echo "</div><div class=\"subtitle\">$username used</div>
   <div class=\"debate-used-wrapper\">";
 
-$data = array();
+$data = [];
 $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   "equipment" as type, equipment_ownership.quantity
   FROM equipment
