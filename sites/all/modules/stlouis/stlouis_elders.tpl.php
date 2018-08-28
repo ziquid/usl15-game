@@ -12,7 +12,6 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
-
 $get_value = '_' . $game . '_get_value';
 
 if (substr($phone_id, 0, 3) == 'ai-') {
