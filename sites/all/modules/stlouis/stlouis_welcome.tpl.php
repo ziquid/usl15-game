@@ -11,7 +11,7 @@
 global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
-include drupal_get_path('module', $game) . '/game_defs.inc' ;
+$game = check_plain(arg(0));
 $game_user = $fetch_user();
 $fetch_header($game_user);
 $get_phoneid = '_' . $game . '_get_phoneid';
