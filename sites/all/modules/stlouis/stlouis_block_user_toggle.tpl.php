@@ -6,6 +6,7 @@
  *
  * Synced with CG: no
  * Synced with 2114: yes
+ * Ready for phpcbf: no
  */
 
 global $game, $phone_id;
