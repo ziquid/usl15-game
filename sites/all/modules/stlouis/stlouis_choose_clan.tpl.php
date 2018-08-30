@@ -17,6 +17,7 @@ if ($clan_id != 0) {
 
   // No change?  Just show stats.
   if ($clan_id == $game_user->fkey_values_id)
+    db_set_active('default');
     drupal_goto($game . '/user/' . $arg2);
 
   // Changing clans? Dock experience, bring level down to match.
@@ -92,9 +93,11 @@ if ($clan_id != 0) {
 
   // First time choosing? Go to debates.
   if ($game_user->fkey_values_id == 0)
+    db_set_active('default');
     drupal_goto($game . '/debates/' . $arg2);
 
   // Otherwise show your character profile.
+  db_set_active('default');
   drupal_goto($game . '/user/' . $arg2);
 
 }

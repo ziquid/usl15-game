@@ -20,6 +20,7 @@ $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
 
 if (empty($game_user->username)) {
+  db_set_active('default');
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 

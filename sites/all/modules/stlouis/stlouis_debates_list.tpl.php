@@ -20,6 +20,7 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
 }
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
+  db_set_active('default');
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
