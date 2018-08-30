@@ -19,6 +19,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $arg2 = check_plain(arg(2));
 
 if (empty($game_user->username)) {
+  db_set_active('default');
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 

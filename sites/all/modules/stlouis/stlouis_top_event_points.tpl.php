@@ -19,6 +19,7 @@
   $arg2 = check_plain(arg(2));
 
   if (empty($game_user->username))
+    db_set_active('default');
     drupal_goto($game . '/choose_name/' . $arg2);
 
   $sql = 'select count(id) as count from users

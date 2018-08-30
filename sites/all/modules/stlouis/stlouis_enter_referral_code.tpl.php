@@ -50,6 +50,7 @@ EOF;
 
     // No change?  Just show stats.
     if ($referral_code == $game_user->referral_code)
+      db_set_active('default');
       drupal_goto($game . '/user/' . $arg2);
 
     // Have they already used that code?
