@@ -6,6 +6,7 @@
  *
  * Synced with CG: yes
  * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 $version = 'v0.6.0, Aug 27 2018';
