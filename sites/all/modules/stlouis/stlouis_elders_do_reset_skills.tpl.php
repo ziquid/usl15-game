@@ -3,7 +3,6 @@
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $game_user = $fetch_user();
-  $fetch_header($game_user);
 
   $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
     left outer join quests
