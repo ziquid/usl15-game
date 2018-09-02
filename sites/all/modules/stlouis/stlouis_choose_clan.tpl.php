@@ -16,9 +16,10 @@ $game_user = $fetch_user();
 if ($clan_id != 0) {
 
   // No change?  Just show stats.
-  if ($clan_id == $game_user->fkey_values_id)
+  if ($clan_id == $game_user->fkey_values_id) {
     db_set_active('default');
     drupal_goto($game . '/user/' . $arg2);
+  }
 
   // Changing clans? Dock experience, bring level down to match.
   $new_experience = floor($game_user->experience * 0.75);
@@ -92,9 +93,10 @@ if ($clan_id != 0) {
   $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
 
   // First time choosing? Go to debates.
-  if ($game_user->fkey_values_id == 0)
+  if ($game_user->fkey_values_id == 0) {
     db_set_active('default');
     drupal_goto($game . '/debates/' . $arg2);
+  }
 
   // Otherwise show your character profile.
   db_set_active('default');

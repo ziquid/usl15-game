@@ -17,9 +17,10 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $fetch_header($game_user);
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
     db_set_active('default');
     drupal_goto($game . '/choose_name/' . $phone_id);
+  }
 
   $sql = 'SELECT clan_title from `values`
     where id = %d;';
