@@ -13,7 +13,6 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  
   if ($game_user->meta == 'admin') {
     db_set_active('default');
     return;

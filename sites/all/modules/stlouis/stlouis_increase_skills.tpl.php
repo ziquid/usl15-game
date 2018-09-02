@@ -12,7 +12,6 @@
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
-  
   $ai_output = 'increase-skill-failed';
 
   switch ($skill) {
