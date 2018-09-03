@@ -6,16 +6,14 @@
  *
  * Synced with CG: no
  * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
   global $game, $phone_id;
 
-  $fetch_user = '_' . arg(0) . '_fetch_user';
-  $fetch_header = '_' . arg(0) . '_header';
-
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  include drupal_get_path('module', $game) . '/game_defs.inc';
 
 /*  if ($game == 'stlouis') {
 
