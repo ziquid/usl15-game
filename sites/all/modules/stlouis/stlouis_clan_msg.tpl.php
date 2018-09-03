@@ -18,6 +18,7 @@
   if (empty($game_user->username)) {
     db_set_active('default');
     drupal_goto($game . '/choose_name/' . $arg2);
+    
   }
   // Save the message, if any.
   $message_orig = check_plain($_GET['message']);
