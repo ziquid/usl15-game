@@ -52,8 +52,8 @@ EOF;
     if ($referral_code == $game_user->referral_code) {
       db_set_active('default');
       drupal_goto($game . '/user/' . $arg2);
+
     }
-    
     // Have they already used that code?
     $sql = 'select referred_by from user_creations
       where phone_id = "%s" and referred_by <> "";';
