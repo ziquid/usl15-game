@@ -43,8 +43,10 @@ EOF;
 
   $fetch_header($game_user);
 
-  if (empty($game_user->username))
+  if (empty($game_user->username)) {
+    db_set_active('default');
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
   $sql = 'select name, district from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);

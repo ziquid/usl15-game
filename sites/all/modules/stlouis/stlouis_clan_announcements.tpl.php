@@ -13,8 +13,11 @@
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
   $fetch_header($game_user);
-  if (empty($game_user->username))
+
+  if (empty($game_user->username)) {
+    db_set_active('default');
     drupal_goto($game . '/choose_name/' . $arg2);
+  }
 
     // Save the message, if any.
     $message = check_plain($_GET['message']);
@@ -30,8 +33,10 @@ firep($message);
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
-  if ($item->fkey_clans_id != $clan_id)
+  if ($item->fkey_clans_id != $clan_id) {
+    db_set_active('default');
     drupal_goto($game . '/home/' . $arg2);
+  }
 
   if (!empty($message)) {
 

@@ -115,11 +115,12 @@
       WHERE id = %d;";
     $result = db_query($sql, $default_neighborhood, $default_value,
       $luck_in_sql, $game_user->id);
-
+    db_set_active('default');
     drupal_goto($game . '/welcome/' . $arg2);
 
   }
   else {
+    db_set_active('default');
     drupal_goto($game . '/elders_ask_reset/' . $arg2,'msg=error');
     //drupal_goto($game . '/user/' . $arg2);
   }

@@ -13,8 +13,10 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-if (empty($game_user->username))
+if (empty($game_user->username)) {
+  db_set_active('default');
   drupal_goto($game . '/choose_name/' . $arg2);
+}
 
 $sql = 'SELECT users.*,  elected_positions.name as ep_name,
   clan_members.is_clan_leader,
