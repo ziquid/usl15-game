@@ -629,6 +629,7 @@ EOF;
 function _stlouis_action_change_clan_password_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $game_user = _stlouis_fetch_user();
   $action_id = arg(3);
 
@@ -1027,7 +1028,7 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   $can_do_again = FALSE;
@@ -1044,7 +1045,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   global $game, $phone_id;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
@@ -1153,7 +1154,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
@@ -1182,6 +1183,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 
 function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   $set_value = '_' . $game . '_set_value';
@@ -1222,6 +1224,7 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
 
 function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   $set_value = '_' . $game . '_set_value';
@@ -1263,7 +1266,7 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
 function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   $can_do_again = TRUE;
@@ -1303,7 +1306,7 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1323,7 +1326,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
   $target, &$can_do_again, &$action) {
 
   global $game;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
@@ -1353,6 +1356,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
 
 function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
@@ -1381,7 +1385,7 @@ function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, 
 function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id, $action;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $get_value = '_' . $game . '_get_value';
   $game_user = $fetch_user();
@@ -1623,6 +1627,7 @@ EOF;
 function _stlouis_action_critique_last_debates_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
   $msg_shown = FALSE;
@@ -2324,7 +2329,7 @@ function _stlouis_action_get_challenge_results_function(&$outcome_reason, $targe
   &$can_do_again) {
 
   global $game, $phone_id;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
@@ -2411,6 +2416,7 @@ EOF;
 
 function _stlouis_check_for_friendly_hood() {
   global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = $fetch_user();
 
@@ -2432,7 +2438,7 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
   &$can_do_again) {
 
   global $game, $phone_id;
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $fetch_user = '_' . $game . '_fetch_user';
 
   $game_user = $fetch_user();
@@ -2663,7 +2669,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_don_a_different_costume_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 /*
@@ -2691,7 +2697,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_remove_your_costume_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
     $old_username = $game_user->username;
@@ -2737,7 +2743,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_trick_or_treat_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
     $old_username = $game_user->username;
@@ -3066,7 +3072,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_check_out_all_the_people_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 
@@ -3178,7 +3184,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_hunt_for_zombies_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 
@@ -3209,7 +3215,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_hunt_for_zombies_in_your_neighborhood_function
     (&$outcome_reason, $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 
@@ -3241,7 +3247,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   function _stlouis_action_sing_christmas_carols_function(&$outcome_reason,
     $target, &$can_do_again) {
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 //    $can_do_again = FALSE;
@@ -3680,7 +3686,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
     $target) {
 
     global $game, $phone_id;
-
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $fetch_user = '_' . arg(0) . '_fetch_user';
     $game_user = $fetch_user();
 
