@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file stlouis_elders_do_reset_skills.tpl.php
+ * Template for resetting skills.
+ */
+
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc' ;
   $game_user = $fetch_user();

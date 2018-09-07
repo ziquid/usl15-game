@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file stlouis_bounce.tpl.php
+ * Template for bounce.
+ */
+
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
   $get_id = '_' . $game . '_get_fbid';

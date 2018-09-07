@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file stlouis_actions_do.tpl.php
+ * Template for special actions.
+ */
+
 global $game, $phone_id, $action;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
