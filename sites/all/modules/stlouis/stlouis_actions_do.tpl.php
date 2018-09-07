@@ -35,7 +35,7 @@ EOF;
     // Hacking!
     (substr($arg2, 0, 3) != 'ai-')) {
 
-    game_karma($game_user, "No action found", -20);
+    game_karma($game_user, "Trying to perform action that is not available", -20);
 
     db_set_active('default');
     drupal_goto($game . '/home/' . $arg2);

@@ -45,7 +45,7 @@ EOF;
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
 
-  game_karma($game_user, "Election failed", -25);
+  game_karma($game_user, "No elections in current hood", -25);
 
   db_set_active('default');
   return;

@@ -2478,7 +2478,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   // Egads! Hacking!
   if ($next_major_action_time > REQUEST_TIME) {
 
-    game_user($game_user, "Exploiting seat", -50);
+    game_user($game_user, "Exploiting seat too soon!", -50);
 
     $outcome_reason = '<div class="title error">--&gt; h4x0r &lt;--</div>';
 
