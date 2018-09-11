@@ -77,8 +77,10 @@ EOF;
 }
 
 if ($game_user->fkey_values_id == 0 && $game_user->level >= 6 &&
-  $game_user->level <= 25)
+  $game_user->level <= 25) {
+  db_set_active('default');
   drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
+}
 
 // Don't let them do quests at levels 6-25 without being in a party.
 if (!$game_user->seen_neighborhood_quests && $game_user->level >= 6) {

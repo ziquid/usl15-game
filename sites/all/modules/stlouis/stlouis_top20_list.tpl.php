@@ -15,6 +15,7 @@ $show_where = check_plain($_GET['where']);
 $show_what = check_plain($_GET['what']);
 
 if (empty($game_user->username)) {
+  db_set_active('default');
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
