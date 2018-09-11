@@ -46,8 +46,7 @@ EOF;
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
 
-  $sql = 'update users set karma = karma - 25 where id = %d;';
-  $result = db_query($sql, $game_user->id);
+  game_karma($game_user, "No elections in current hood", -25);
 
   db_set_active('default');
   return;

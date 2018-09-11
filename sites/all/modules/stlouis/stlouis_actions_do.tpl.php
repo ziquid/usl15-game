@@ -35,9 +35,7 @@ EOF;
     // Hacking!
     (substr($arg2, 0, 3) != 'ai-')) {
 
-    $sql = 'update users set karma = karma - 20
-      where id = %d;';
-    db_query($sql, $game_user->id);
+    game_karma($game_user, "Trying to perform action that is not available", -20);
 
     db_set_active('default');
     drupal_goto($game . '/home/' . $arg2);

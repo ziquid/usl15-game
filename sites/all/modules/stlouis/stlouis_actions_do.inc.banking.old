@@ -2478,8 +2478,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   // Egads! Hacking!
   if ($next_major_action_time > REQUEST_TIME) {
 
-    $sql = 'update users set karma = karma - 50 where id = %d;';
-    $result = db_query($sql, $game_user->id);
+    game_user($game_user, "Exploiting seat too soon!", -50);
 
     $outcome_reason = '<div class="title error">--&gt; h4x0r &lt;--</div>';
 
