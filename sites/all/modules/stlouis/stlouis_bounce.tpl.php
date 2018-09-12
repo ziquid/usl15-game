@@ -3,6 +3,10 @@
 /**
  * @file stlouis_bounce.tpl.php
  * Template for bounce.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
   $game = check_plain(arg(0));

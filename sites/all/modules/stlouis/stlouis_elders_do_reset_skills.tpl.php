@@ -3,6 +3,10 @@
 /**
  * @file stlouis_elders_do_reset_skills.tpl.php
  * Template for resetting skills.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
   global $game, $phone_id;

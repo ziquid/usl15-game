@@ -3,6 +3,10 @@
 /**
  * @file stlouis_move_do.tpl.php
  * Template for doing movement.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 global $game, $phone_id;

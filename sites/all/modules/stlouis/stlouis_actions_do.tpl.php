@@ -3,6 +3,10 @@
 /**
  * @file stlouis_actions_do.tpl.php
  * Template for special actions.
+ *
+ * Synced with CG: no
+ * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 global $game, $phone_id, $action;
