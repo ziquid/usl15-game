@@ -20,7 +20,7 @@ require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
 require_once drupal_get_path('module', 'stlouis') . '/functions.inc';
 
 /**
- * Implementaiton of hook_cron().
+ * Implements hook_cron().
  */
 function stlouis_cron() {
   global $game;
@@ -372,7 +372,7 @@ function stlouis_cron() {
 }
 
 /**
- * Implementation of hook_init().
+ * Implements hook_init().
  */
 function stlouis_init() {
   global $custom_theme, $conf;
@@ -390,6 +390,7 @@ function stlouis_init() {
     drupal_add_js($module_path . '/isotope.pkgd.min.js');
     drupal_add_js($module_path . '/js.cookie.js');
     drupal_add_js($module_path . '/' . $game . '.js');
+    jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
     $custom_theme = 'cdc_games';
     drupal_add_css($module_path . '/' . $game . '.css');
