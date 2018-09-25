@@ -22,6 +22,11 @@ function game_move_ai() {
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
 
+  // No need to do AI moves on a Windows Platform.
+  if (!function_exists('sys_getloadavg')) {
+    return;
+  }
+
   // No AI moves if load is too high.
   $load = sys_getloadavg();
 
