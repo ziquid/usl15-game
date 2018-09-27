@@ -27,6 +27,11 @@ function game_move_ai() {
     return;
   }
 
+  // Nor on local.
+  if ($_SERVER['HTTP_HOST'] == 'usl15.dd') {
+    return;
+  }
+
   // No AI moves if load is too high.
   $load = sys_getloadavg();
 

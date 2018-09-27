@@ -1,0 +1,14 @@
+body.beta,
+body.party-unaffiliated.beta,
+body.party-anarchists.beta,
+body.party-docs.beta,
+body.party-economic.beta,
+body.party-faith.beta,
+body.party-guns.beta,
+body.party-mafia.beta,
+body.party-intelligentsia.beta,
+body.party-workers.beta,
+body.party-toxicorp.beta {
+  background-color: rgb(180, 200, 180);
+  background-image: none;
+}
