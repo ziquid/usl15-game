@@ -5,7 +5,8 @@ Drupal.behaviors.stlouis = function (context) {
   }
 
   if (Drupal.settings.stlouis.meta == 'beta' ||
-    Drupal.settings.stlouis.meta == 'admin') {
+    Drupal.settings.stlouis.meta == 'admin' ||
+    Drupal.settings.stlouis.meta == 'toxiboss') {
     var level = parseInt(Drupal.settings.stlouis.level);
     var red = 180;
     var green = Math.floor(200 - (level / 2));
