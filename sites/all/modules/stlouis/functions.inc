@@ -1092,11 +1092,14 @@ function game_fetch_quest_groups($game_user) {
     }
 
     // Clickable?  Grab quest images to show.
-    $result = db_query($sql_quests, $game_user->id, $item->id);
-    $item->q = [];
-    while ($q = db_fetch_object($result)) {
-      list($q->rgb, $q->width) = game_get_quest_completion($q, $item->percentage_target, $item->percentage_divisor);
-      $item->q[] = $q;
+    if (strpos($item->class, 'clickable') !== FALSE) {
+      $result = db_query($sql_quests, $game_user->id, $item->id);
+      $item->q = [];
+      while ($q = db_fetch_object($result)) {
+        list($q->rgb, $q->width) = game_get_quest_completion($q,
+          $item->percentage_target, $item->percentage_divisor);
+        $item->q[] = $q;
+      }
     }
 
   }
