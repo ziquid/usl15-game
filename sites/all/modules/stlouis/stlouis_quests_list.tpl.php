@@ -205,21 +205,8 @@ foreach ($data as $item) {
   $description = str_replace('%party', "<em>$party_title</em>",
     $item->description);
 
-  if (empty($item->percent_complete)) {
-    $item->percent_complete = 0;
-  }
-
-  if ($item->percent_complete > floor($percentage_target / 2)) {
-    $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
-      (4 * $percentage_divisor))) . 'c0';
-  }
-  else {
-    $rgb = 'c' . dechex(floor(($item->percent_complete) /
-      (4 * $percentage_divisor))) . '0';
-  }
-
-  $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
-// firep($rgb);
+  list($rgb, $width) = game_get_quest_completion($item, $percentage_target, $percentage_divisor);
+  // firep($rgb);
 
   $active = ($item->active) ? '' : ' (inactive)';
 

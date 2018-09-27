@@ -1025,11 +1025,15 @@ EOF;
  */
 function game_fetch_quest_groups($game_user) {
   $data = [];
-  $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
-    left join quests q on q.group = qg.id
-    where q.required_level <= %d
-    group by qg.id';
-  $result = db_query($sql, $game_user->level);
+  $sql = 'SELECT qg.* FROM `quest_groups` qg
+    order by qg.id ASC';
+  $sql_quests = 'select quests.*, quest_completion.percent_complete
+  from quests
+  LEFT OUTER JOIN quest_completion
+  ON quest_completion.fkey_quests_id = quests.id
+  AND quest_completion.fkey_users_id = %d
+  where `group` = %d;';
+  $result = db_query($sql);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -1043,6 +1047,58 @@ function game_fetch_quest_groups($game_user) {
       $item->percentage_divisor,
       $item->next_group_html) =
     game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
+
+    $show = FALSE;
+
+    // Always show basic missions.
+    if ($item->id == 0) {
+      $show = TRUE;
+    }
+
+    // If they have finished the previous <1000 group, show this one.
+    if ($item->id < 1000 && $item->id > 0) {
+      $last = $data[$item->id - 1];
+      if ($last->quest_completion->completed == $last->quest_completion->total) {
+        $show = TRUE;
+      }
+    }
+
+    // Highlighted in this hood?  Show it.
+    if ($item->highlight_in_hood == $game_user->fkey_neighborhoods_id) {
+      $show = TRUE;
+    }
+
+    if (!$show) {
+      if ($game_user->meta == 'admin') {
+        $item->class = 'obfuscate admin-obfuscate clickable';
+      }
+      else {
+        $item->class = 'obfuscate';
+
+        // Normal group?  Obduscate.  Otherwise, hide.
+        if ($item->id < 1000) {
+          $item->name = '???';
+          $item->description = '???';
+          $item->quest_completion->completed = '???';
+          $item->quest_completion->total = '???';
+        }
+        else {
+          $item->class = 'hidden';
+        }
+      }
+    }
+    else {
+      $item->class = 'clickable';
+    }
+
+    // Clickable?  Grab quest images to show.
+    $result = db_query($sql_quests, $game_user->id, $item->id);
+    $item->q = [];
+    while ($q = db_fetch_object($result)) {
+      list($q->rgb, $q->width) = game_get_quest_completion($q, $item->percentage_target, $item->percentage_divisor);
+      $item->q[] = $q;
+    }
+
   }
   firep($data, 'quest group data');
   return $data;
@@ -1113,20 +1169,44 @@ function game_show_quest_group_slide($game_user, $qgo) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
+  if (strpos($qgo->class, 'hidden') !== FALSE) {
+    return;
+  }
+
+  if (strpos($qgo->class, 'clickable') !== FALSE) {
+    $onclick =<<< EOF
+onclick="window.location.href='/$game/quests/$arg2/$qgo->id';"
+EOF;
+  }
+  else {
+    $onclick = '';
+  }
+
   echo <<< EOF
-<div class="swiper-slide" onclick="window.location.href='/$game/quests/$arg2/$qgo->id';">
-  <span class="subtitle">
-    <a href="/$game/quests/$arg2/$qgo->id">$qgo->name {$quest}s</a>
+<div class="swiper-slide" $onclick>
+  <span class="title">
+    <a href="/$game/quests/$arg2/$qgo->id" class="$qgo->class">$qgo->name {$quest}s</a>
     <div class="quest-group-completion">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
       {$quest}s complete $qgo->next_group_html</div>
-    <br>
     <div class="description">
       $qgo->description
     </div>
-  </span>
-</div>
 EOF;
+
+  // Show any quest images.
+  if (isset($qgo->q)) {
+    echo '<div class="quest-images">';
+    foreach ($qgo->q as $q) {
+      echo <<< EOF
+<img src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+  style="box-shadow: #{$q->rgb} 3px 3px 6px; border-color: #{$q->rgb}">
+EOF;
+    }
+    echo '</div>';
+  }
+
+  echo '</span></div>';
 }
 
 /**
@@ -1171,6 +1251,39 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
 
   return [$quest_group, $percentage_target, $percentage_divisor, $next_group_html];
 }
+
+/**
+ * Get the percentage complete for a quest.
+ *
+ * @param \stdClass $q
+ *   The quest object.
+ * @param int $percentage_target
+ *   Which percentage is considered fully complete.
+ * @param int $percentage_divisor
+ *   The divisor to get the percentage_target down to 100.
+ *
+ * @return array
+ *   The RGB value corresponding to the percentage done and the width of a
+ * progress bar.
+ */
+function game_get_quest_completion($q, $percentage_target, $percentage_divisor) {
+  if (empty($q->percent_complete)) {
+    $q->percent_complete = 0;
+  }
+
+  if ($q->percent_complete > floor($percentage_target / 2)) {
+    $rgb = dechex(floor(($percentage_target - $q->percent_complete) /
+        (4 * $percentage_divisor))) . 'c0';
+  }
+  else {
+    $rgb = 'c' . dechex(floor(($q->percent_complete) /
+        (4 * $percentage_divisor))) . '0';
+  }
+
+  $width = floor($q->percent_complete * 94 / $percentage_target) + 2;
+  return [$rgb, $width];
+}
+
 /**
  * Fetch the list of equipment to show.
  *
@@ -4227,13 +4340,15 @@ function game_includes_add($include_file, $type) {
 
   // Already in include list; return.
   if (in_array($type . '/' . $include_file, $game_include_list)) {
-//    dpm($game_include_list, $type . '/' . $include_file . ' is already in game include list, not adding again');
+//    dpm($game_include_list, $type . '/' . $include_file .
+// ' is already in game include list, not adding again');
     return;
   }
 
   // Already in missing list; return.
   if (in_array($type . '/' . $include_file, $game_include_missing)) {
-//    dpm($game_include_missing, $type . '/' . $include_file . ' is already in game include missing list, not adding again');
+//    dpm($game_include_missing, $type . '/' . $include_file .
+// ' is already in game include missing list, not adding again');
     return;
   }
 

@@ -28,7 +28,7 @@ function game_move_ai() {
   }
 
   // Nor on local.
-  if ($_SERVER['HTTP_HOST'] == 'usl15.dd') {
+  if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083') {
     return;
   }
 

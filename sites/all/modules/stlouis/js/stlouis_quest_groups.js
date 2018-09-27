@@ -1,5 +1,8 @@
 Drupal.behaviors.stlouis_quest_groups = function (context) {
   var swiper = new Swiper('.swiper-container', {
+    hashNavigation: {
+      watchState: true
+    },
     pagination: {
       el: '.swiper-pagination',
       dynamicBullets: true
