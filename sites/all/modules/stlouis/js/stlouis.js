@@ -9,8 +9,8 @@ Drupal.behaviors.stlouis = function (context) {
     Drupal.settings.stlouis.meta == 'toxiboss') {
     var level = parseInt(Drupal.settings.stlouis.level);
     var red = 180;
-    var green = Math.floor(200 - (level / 2));
-    var blue = Math.floor(180 - (level / 4));
+    var green = Math.floor(210 - (level / 3));
+    var blue = Math.floor(180 - (level / 5));
     $('body').addClass('beta');
     $('body.beta').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
