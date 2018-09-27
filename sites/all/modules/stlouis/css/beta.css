@@ -12,3 +12,7 @@ body.party-toxicorp.beta {
   background-color: rgb(180, 200, 180);
   background-image: none;
 }
+
+.beta .quest-group-completion {
+  color: #dddedf;
+}
