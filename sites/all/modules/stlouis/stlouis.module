@@ -387,13 +387,16 @@ function stlouis_init() {
     $conf['cache'] = FALSE;
 
     $module_path = drupal_get_path('module', $game);
-    drupal_add_js($module_path . '/isotope.pkgd.min.js');
-    drupal_add_js($module_path . '/js.cookie.js');
-    drupal_add_js($module_path . '/' . $game . '.js');
+    drupal_add_js($module_path . '/js/isotope.pkgd.min.js');
+    drupal_add_js($module_path . '/js/js.cookie.js');
+    drupal_add_js($module_path . '/js/swiper.min.js');
+//    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js');
+    drupal_add_js($module_path . '/js/' . $game . '.js');
     jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
     $custom_theme = 'cdc_games';
-    drupal_add_css($module_path . '/' . $game . '.css');
+    drupal_add_css($module_path . '/css/' . $game . '.css');
+    drupal_add_css($module_path . '/css/swiper.min.css');
     include $module_path . '/game_defs.inc';
 
     // BB Z10.
@@ -2029,9 +2032,7 @@ function _stlouis_header($game_user) {
 
   }
   else {
-
     $actions_minutes = $actions_seconds = 0;
-
   }
 
   // Income.
@@ -2059,9 +2060,7 @@ function _stlouis_header($game_user) {
 
   }
   else {
-
     $money_minutes = $money_seconds = 0;
-
   }
 
   $money_str = $game_user->money . '';
@@ -2073,22 +2072,16 @@ function _stlouis_header($game_user) {
     $money_str = substr($money_str, 0, strlen($money_str) - 3) . 'K';
   }
 
-
   // More skill points?
   if ($game_user->skill_points > 0) {
-
     $level_text = '<div class="level"><strong><a href="/' . $game .
       '/increase_skills/' . check_plain(arg(2)) . '/none">' . $game_user->level .
       '!</a></strong><div class="level-text">Level</div></div>';
-
   }
   else {
-
     $level_text = '<div class="level"><strong>' . $game_user->level .
       '</strong><div class="level-text">Level</div></div>';
-
   }
-
 
   // Experience.
   $experience_str = $game_user->experience . '';
@@ -2162,13 +2155,10 @@ firep('a prize is deserved!');
           (fkey_users_id, fkey_equipment_id, quantity)
           values
           (%d, %d, 1);';
-        $result = db_query($sql, $game_user->id, $prize_id);
-
+        db_query($sql, $game_user->id, $prize_id);
       }
-
-      // Update record.
       else {
-
+        // Update record.
         $sql = 'update equipment_ownership
           set quantity = quantity + 1
           where fkey_users_id = %d
@@ -2207,18 +2197,13 @@ firep('a prize is deserved!');
       </div>';
 
     }
-
-
     else {
-
       // User doesn't get a prize.
       $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
         $goal_obj->points . ' points
       </div>';
-
     }
-
   }
 
   // Show it!

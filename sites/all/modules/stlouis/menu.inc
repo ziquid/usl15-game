@@ -98,6 +98,14 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
+  $items['stlouis/quest_groups/%'] = [
+    'title' => 'St. Louis Quest Groups List',
+    'page callback' => 'stlouis_quest_groups_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access stlouis content'],
+    'type' => MENU_CALLBACK,
+  ];
+
   $items['stlouis/quests/%'] = [
     'title' => 'St. Louis Quests List',
     'page callback' => 'stlouis_quests_list_callback',
@@ -598,9 +606,18 @@ function stlouis_increase_skills_callback($phone_id, $skill) {
   }
 
   return theme('stlouis_increase_skills', $phone_id, $skill);
-
 }
 
+function stlouis_quest_groups_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  $module_path = drupal_get_path('module', arg(0));
+  drupal_add_js($module_path . '/js/stlouis_quest_groups.js', 'module', 'footer');
+  return theme('stlouis_quest_groups', $phone_id);
+}
 
 function stlouis_quests_list_callback($phone_id) {
 
@@ -609,9 +626,7 @@ function stlouis_quests_list_callback($phone_id) {
   }
 
   return theme('stlouis_quests_list', $phone_id);
-
 }
-
 
 function stlouis_quests_do_callback($phone_id, $quest_id) {
 
@@ -1177,6 +1192,13 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'skill' => NULL,
+      ]
+    ],
+
+    'stlouis_quest_groups' => [
+      'template' => 'stlouis_quest_groups',
+      'arguments' => [
+        'phone_id' => NULL
       ]
     ],
 

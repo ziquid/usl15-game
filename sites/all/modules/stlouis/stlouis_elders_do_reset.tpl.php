@@ -11,7 +11,7 @@
 
   global $game, $phone_id;
 
-  include drupal_get_path('module', $game) . '/game_defs.inc' ;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
 
   $reset_me = check_plain(trim($_GET['reset_me']));

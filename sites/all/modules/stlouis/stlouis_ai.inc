@@ -55,8 +55,8 @@ function game_move_ai() {
 
   game_ai_do('have num players', 12);
   game_ai_do('build');
-  game_ai_do('build');
-  game_ai_do('build');
+//  game_ai_do('build');
+//  game_ai_do('build');
   // game_ai_do('build');
   //  game_ai_do('build');
   //  game_ai_do('have_num_clan_leaders', 1) && game_ai_do('build');

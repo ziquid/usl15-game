@@ -10,7 +10,7 @@
  */
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc' ;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
 
   $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
@@ -24,10 +24,8 @@
   $skill_points = ($game_user->level * 4) + $item->bonus - 20;
 
   if ($game_user->skill_points == $skill_points) {
-
     db_set_active('default');
     drupal_goto($game . '/user/' . $arg2);
-
   }
 
   // Update his/her user entry.

@@ -168,38 +168,8 @@ EOF;
 // Admin?  Show all quests.
 $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
 
-// Get quest group stats.
-$sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
-  FROM `quests`
-  left outer join quest_completion
-  on quest_completion.fkey_quests_id = quests.id
-  and fkey_users_id = %d
-  where `group` = %d ' . $active_quests . ';';
-$result = db_query($sql, $game_user->id, $group_to_show);
-
-$quest_group = db_fetch_object($result);
-//firep($quest_group, 'quest group object');
-
-// Haha! Typecasting!
-$quest_group->completed += 0;
-
-$sql = 'SELECT times_completed FROM `quest_group_completion`
-  where fkey_users_id = %d and fkey_quest_groups_id = %d;';
-$result = db_query($sql, $game_user->id, $group_to_show);
-$quest_group_completion = db_fetch_object($result);
-
-$percentage_target = 100;
-$percentage_divisor = 1;
-
-if ($quest_group_completion->times_completed > 0) {
-
-  $next_group_html = t('(2nd round)');
-  $percentage_target = 200;
-  $percentage_divisor = 2;
-  $quest_group->completed -=
-    ($quest_group->total * min($quest_group_completion->times_completed, 1));
-
-}
+list($quest_group, $percentage_target, $percentage_divisor, $next_group_html) =
+  game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show);
 
 echo <<< EOF
 <div class="quest-group-completion">

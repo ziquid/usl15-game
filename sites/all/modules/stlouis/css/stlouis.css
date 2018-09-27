@@ -561,3 +561,47 @@ textarea {
   margin-top: 60px;
   display: block !important;
 }
+
+.swiper-container {
+  width: 100%;
+  height: 400px;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  /* Center slide text vertically */
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  align-items: start;
+}
+
+.swiper-pagination-bullet {
+  background: white !important;
+}
+
+.swiper-slide .subtitle {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.swiper-slide .subtitle a {
+  text-decoration: none;
+  display: block;
+}
+
+.swiper-slide .description {
+  color: #999;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: normal;
+}
