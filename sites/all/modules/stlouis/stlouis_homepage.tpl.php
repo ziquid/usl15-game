@@ -415,10 +415,16 @@ usemap="#new_main_menu"/>
 <map name="new_main_menu">
 EOF;
 
- $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
+$coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
+if ($game_user->meta == 'beta') {
+  $link = 'quest_groups';
+}
+else {
+  $link = 'quests';
+}
 
- echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Missions" href="/$game/quests/$arg2" />
+echo <<< EOF
+  <area shape="rect" coords="$coords" alt="Missions" href="/$game/$link/$arg2" />
 EOF;
 
  $coords = _stlouis_scale_coords($coefficient, 42, 72, 122, 92);
