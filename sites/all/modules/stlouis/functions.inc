@@ -1200,11 +1200,18 @@ EOF;
   // Show any quest images.
   if (isset($qgo->q)) {
     echo '<div class="quest-images">';
+    $first = TRUE;
     foreach ($qgo->q as $q) {
-      echo <<< EOF
+      if ($first) {
+        game_show_quest($game_user, $q, $q->percentage_target, $q->percentage_divisor);
+        $first = FALSE;
+      }
+      else {
+        echo <<< EOF
 <img src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
   style="box-shadow: #{$q->rgb} 3px 3px 6px; border-color: #{$q->rgb}">
 EOF;
+      }
     }
     echo '</div>';
   }
@@ -2184,9 +2191,7 @@ function game_show_elections_menu($game_user) {
 EOF;
 
   _show_goal($game_user);
-
 }
-
 
 function game_show_profile_menu($game_user) {
 
@@ -2214,9 +2219,7 @@ function game_show_profile_menu($game_user) {
 EOF;
 
   _show_goal($game_user);
-
 }
-
 
 function NO_show_clan_menu($game_user) {
 
@@ -2274,8 +2277,12 @@ function game_show_quest($game_user, $item, $percentage_target,
   $data = db_fetch_object($result);
   $seq_num = $item->id - $data->id;
 
-  if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
-  if (substr($item->description, -1) != '>') $raquo = '&raquo;';
+  if (substr($item->description, 0, 3) != '<p ') {
+    $laquo = '&laquo;';
+  }
+  if (substr($item->description, -1) != '>') {
+    $raquo = '&raquo;';
+  }
 
   $name = t($item->name, [
     '@clan' => $game_user->clan_name,
