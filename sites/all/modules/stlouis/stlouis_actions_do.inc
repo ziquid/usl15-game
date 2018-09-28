@@ -1071,6 +1071,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
   function _stlouis_action_give_luck_to_a_clan_member_function(&$outcome_reason, $target) {
 
     global $game, $phone_id;
+    include drupal_get_path('module', $game) . '/game_defs.inc' ;
     $game_user = _stlouis_fetch_user();
     $action_id = arg(3);
     $target_name = $target->ep_name . ' ' . $target->username;
@@ -2521,7 +2522,8 @@ function _stlouis_action_support_your_party_official_function(
 
 function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
   $target, &$can_do_again) {
-
+  include drupal_get_path('module', $game) . '/game_defs.inc' ;
+  
   // One hour ago, since we are ET.
   $st_time = date('g:i:s A', REQUEST_TIME - 3600);
   $outcome_reason .= '<div class="title">Current Time in St. Louis</div>
