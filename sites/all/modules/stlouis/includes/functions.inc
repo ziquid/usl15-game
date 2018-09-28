@@ -9,7 +9,7 @@
  * Synced with 2114: no
  */
 
-require_once drupal_get_path('module', 'stlouis') . '/functions-staff.inc';
+require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
 
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
@@ -27,10 +27,9 @@ function game_button($link = 'home', $type = 'continue', $extra_link = '') {
   </a>
 </div>
 EOF;
-    break;
+      break;
 
   }
-
 }
 
 function NO_sound($name) {
@@ -46,7 +45,6 @@ echo <<< EOF
     mp3.play();
   </script>
 EOF;
-
   return;
 
   echo <<< EOF
@@ -54,42 +52,6 @@ EOF;
   <embed src="/sites/default/files/sounds/{$game}_$name.mp3" autostart="true"
     loop="false" hidden="true"/>
 </audio>
-EOF;
-
-}
-
-
-function game_required_staff($game_user, $staff_id, $req_quantity) {
-
-  global $game;
-  $arg2 = check_plain(arg(2));
-
-  $sql = 'select quantity from staff_ownership
-    where fkey_staff_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $staff_id, $game_user->id);
-  $quantity = db_fetch_object($result);
-
-  if ($quantity->quantity >= $req_quantity) {
-    $not_yet = $a_start = $a_end = '';
-  }
-  else {
-    $not_yet = 'not-yet';
-    $a_start = '<a href="/' . $game . '/staff_buy/' .
-      $arg2 . '/' . $staff_id . '/' .
-      ($req_quantity - $quantity->quantity) . '">';
-    $a_end = '</a>';
-  }
-
-  echo <<< EOF
-<div class="quest-required_stuff">Requires
-  <div class="quest-required_equipment">
-    $a_start
-      <img class="$not_yet"
-        src="/sites/default/files/images/staff/$game-$staff_id.png"
-        width="48">
-    $a_end
-  </div>&nbsp;x$req_quantity
-</div>
 EOF;
 }
 
@@ -106,8 +68,8 @@ EOF;
 function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity) {
 
   global $game;
-  $arg2 = check_plain(arg(2));
-firep('game_required_equipment called for equip_id ' . $equipment_id . ' and req quantity ' . $req_quantity);
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
   $sql = 'select quantity from equipment_ownership
     where fkey_equipment_id = %d and fkey_users_id = %d;';
   $result = db_query($sql, $equipment_id, $game_user->id);
@@ -136,7 +98,6 @@ firep('game_required_equipment called for equip_id ' . $equipment_id . ' and req
     </div>
 EOF;
 }
-
 
 function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 

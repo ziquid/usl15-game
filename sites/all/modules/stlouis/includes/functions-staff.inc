@@ -797,14 +797,14 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
  * @param int $id
  *   The staff ID.
  * @param int $quantity
- *   Number of people to lose/fire
+ *   Number of people to lose/fire.
  * @param int $st_price
  *   Amount of compensation to receive for sale.
  *
  * @return bool
  *   Whether the sale succeeded or not.
  */
-function game_staff_lose(&$game_user, $id, $quantity, $st_price = 0) {
+function game_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -841,4 +841,47 @@ function game_staff_lose(&$game_user, $id, $quantity, $st_price = 0) {
   game_recalc_income($game_user);
   $game_user = $fetch_user();
   return TRUE;
+}
+
+/**
+ * Show a picture of required staff.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $staff_id
+ *   The staff id.
+ * @param int $req_quantity
+ *   The quantity required.
+ */
+function game_required_staff(\stdClass $game_user, $staff_id, $req_quantity) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  $sql = 'select quantity from staff_ownership
+    where fkey_staff_id = %d and fkey_users_id = %d;';
+  $result = db_query($sql, $staff_id, $game_user->id);
+  $quantity = db_fetch_object($result);
+
+  if ($quantity->quantity >= $req_quantity) {
+    $not_yet = $a_start = $a_end = '';
+  }
+  else {
+    $not_yet = 'not-yet';
+    $a_start = '<a href="/' . $game . '/staff_buy/' .
+      $arg2 . '/' . $staff_id . '/' .
+      ($req_quantity - $quantity->quantity) . '">';
+    $a_end = '</a>';
+  }
+
+  echo <<< EOF
+<div class="quest-required_stuff">Requires
+  <div class="quest-required_equipment">
+    $a_start
+      <img class="$not_yet"
+        src="/sites/default/files/images/staff/$game-$staff_id.png"
+        width="48">
+    $a_end
+  </div>&nbsp;x$req_quantity
+</div>
+EOF;
 }

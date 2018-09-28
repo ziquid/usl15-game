@@ -5,7 +5,7 @@ function stlouis_help($path, $arg) {
 
   switch ($path) {
     case "admin/help#stlouis":
-      $output = '<p>'.  t('Back end for <em>Uprising: St. Louis</em> game') .'</p>';
+      $output = '<p>' .  t('Back end for <em>Uprising: St. Louis</em> game') . '</p>';
       break;
   }
 
@@ -16,8 +16,8 @@ function stlouis_perm() {
   return ['access stlouis content'];
 }
 
-require_once drupal_get_path('module', 'stlouis') . '/menu.inc';
-require_once drupal_get_path('module', 'stlouis') . '/functions.inc';
+require_once drupal_get_path('module', 'stlouis') . '/includes/menu.inc';
+require_once drupal_get_path('module', 'stlouis') . '/includes/functions.inc';
 
 /**
  * Implements hook_cron().
@@ -402,50 +402,37 @@ function stlouis_init() {
 
     // BB Z10.
     if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
-
-        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
+      drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
-
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') !== FALSE) {
       // Playbook CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
-
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'ipad') !== FALSE) {
       // IPad CSS.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/ipad.css');
     }
-    else if (substr(arg(2), 0, 4) == 'nkc ') {
-
+    elseif (substr(arg(2), 0, 4) == 'nkc ') {
       // Nook css.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/playbook.css');
     }
-    else if (substr(arg(2), 0, 8) == 'facebook') {
-
+    elseif (substr(arg(2), 0, 8) == 'facebook') {
       // Facebook.
       drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/facebook.css');
     }
-    else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
-
+    elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=') !== FALSE) {
       if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=853') !== FALSE) {
-
         // 853dip width display
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width853.css');
-
       }
-      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
-
+      elseif (stripos($_SERVER['HTTP_USER_AGENT'], 'width=800') !== FALSE) {
         // 800dip width display
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width800.css');
-
       }
-      else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
-
-        // 768dip width display.
+      elseif ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=768') !== FALSE)
         || (substr(arg(2), 0, 3) === 'ms=')) {
-
+        // 768dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width768.css');
-
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=600') !== FALSE) {
 

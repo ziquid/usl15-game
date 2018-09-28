@@ -584,9 +584,7 @@ function stlouis_msg_delete_callback($phone_id, $msg_id) {
   }
 
   return theme('stlouis_msg_delete', $phone_id, $msg_id);
-
 }
-
 
 function stlouis_party_msg_callback($phone_id) {
 
@@ -595,9 +593,7 @@ function stlouis_party_msg_callback($phone_id) {
   }
 
   return theme('stlouis_party_msg', $phone_id);
-
 }
-
 
 function stlouis_increase_skills_callback($phone_id, $skill) {
 
@@ -635,9 +631,7 @@ function stlouis_quests_do_callback($phone_id, $quest_id) {
   }
 
   return theme('stlouis_quests_do', $phone_id, $quest_id);
-
 }
-
 
 function stlouis_elders_callback($phone_id) {
 

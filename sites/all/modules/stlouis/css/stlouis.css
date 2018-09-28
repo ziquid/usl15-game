@@ -644,7 +644,7 @@ textarea {
   padding: 0 16px;
   display: flex;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.17);
 }
 
 .swiper-slide.overview .quests {
@@ -657,6 +657,18 @@ textarea {
   margin-right: 0;
   border: none;
   -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+}
+
+.swiper-slide .quests .quest-name a {
+  color: #3fd453;
+}
+
+.swiper-slide .quests .quest-experience,
+.swiper-slide .quests .quest-money,
+.swiper-slide .quests .quest-required_energy,
+.swiper-slide .quests .quest-required_stuff,
+.swiper-slide .quests .quest-payout {
+  color: #3fd453;
 }
 
 .swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {

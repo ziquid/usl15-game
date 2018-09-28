@@ -19,8 +19,8 @@ $quest_groups = game_fetch_quest_groups($game_user);
 
 // ------ VIEW ------
 $fetch_header($game_user);
-db_set_active('default');
 ?>
+
 <div class="swiper-container">
   <div class="swiper-wrapper">
     <?php
@@ -35,3 +35,6 @@ db_set_active('default');
   <div class="swiper-button-prev"></div>
   <div class="swiper-button-next"></div>
 </div>
+
+<?php
+db_set_active('default');
