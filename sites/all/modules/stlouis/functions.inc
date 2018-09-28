@@ -93,12 +93,21 @@ function game_required_staff($game_user, $staff_id, $req_quantity) {
 EOF;
 }
 
-
-function game_required_equipment($game_user, $equipment_id, $req_quantity) {
+/**
+ * Show a piece of required equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $equipment_id
+ *   The equipment id.
+ * @param int $req_quantity
+ *   The quantity needed.
+ */
+function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity) {
 
   global $game;
   $arg2 = check_plain(arg(2));
-
+firep('game_required_equipment called for equip_id ' . $equipment_id . ' and req quantity ' . $req_quantity);
   $sql = 'select quantity from equipment_ownership
     where fkey_equipment_id = %d and fkey_users_id = %d;';
   $result = db_query($sql, $equipment_id, $game_user->id);
@@ -124,7 +133,7 @@ function game_required_equipment($game_user, $equipment_id, $req_quantity) {
           width="48">
         $a_end
       </div>&nbsp;x$req_quantity
-  </div>
+    </div>
 EOF;
 }
 
@@ -1103,7 +1112,7 @@ function game_fetch_quest_groups($game_user) {
     }
 
   }
-  firep($data, 'quest group data');
+//  firep($data, 'quest group data');
   return $data;
 }
 
@@ -2689,9 +2698,10 @@ EOF;
 EOF;
 
       // Required land.
-      if ($item->land_required_quantity > 0)
+      if ($item->land_required_quantity > 0) {
         _required_land($game_user, $item->fkey_land_required_id,
           $item->land_required_quantity);
+      }
 
       // Required equipment.
       if ($item->equipment_1_required_quantity +
@@ -2701,9 +2711,10 @@ EOF;
 
         echo '<div class="quest-required_stuff">';
 
-        if ($item->equipment_1_required_quantity > 0)
+        if ($item->equipment_1_required_quantity > 0) {
           game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
             $item->equipment_1_required_quantity);
+        }
 
         if ($item->equipment_2_required_quantity > 0)
           game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
