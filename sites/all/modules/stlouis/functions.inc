@@ -1178,7 +1178,7 @@ function game_show_quest_group_slide($game_user, $qgo) {
 
   if (strpos($qgo->class, 'clickable') !== FALSE) {
     $onclick =<<< EOF
-onclick="window.location.href='/$game/quests/$arg2/$qgo->id';"
+onclick="jQuery(this).toggleClass('overview');"
 EOF;
   }
   else {
@@ -1186,9 +1186,9 @@ EOF;
   }
 
   echo <<< EOF
-<div class="swiper-slide" $onclick>
+<div class="swiper-slide overview" $onclick>
   <span class="title">
-    <a href="/$game/quests/$arg2/$qgo->id" class="$qgo->class">$qgo->name {$quest}s</a>
+    <div class="quest-group-name $qgo->class">$qgo->name {$quest}s</div>
     <div class="quest-group-completion">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
       {$quest}s complete $qgo->next_group_html</div>
@@ -1200,18 +1200,12 @@ EOF;
   // Show any quest images.
   if (isset($qgo->q)) {
     echo '<div class="quest-images">';
-    $first = TRUE;
     foreach ($qgo->q as $q) {
-      if ($first) {
-        game_show_quest($game_user, $q, $q->percentage_target, $q->percentage_divisor);
-        $first = FALSE;
-      }
-      else {
-        echo <<< EOF
-<img src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+      echo <<< EOF
+<img class="image-overview" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
   style="box-shadow: #{$q->rgb} 3px 3px 6px; border-color: #{$q->rgb}">
 EOF;
-      }
+      game_show_quest_slide($game_user, $q);
     }
     echo '</div>';
   }
@@ -1283,11 +1277,11 @@ function game_get_quest_completion($q, $percentage_target, $percentage_divisor) 
 
   if ($q->percent_complete > floor($percentage_target / 2)) {
     $rgb = dechex(floor(($percentage_target - $q->percent_complete) /
-        (4 * $percentage_divisor))) . 'c0';
+      (4 * $percentage_divisor))) . 'c0';
   }
   else {
     $rgb = 'c' . dechex(floor(($q->percent_complete) /
-        (4 * $percentage_divisor))) . '0';
+      (4 * $percentage_divisor))) . '0';
   }
 
   $width = floor($q->percent_complete * 94 / $percentage_target) + 2;
@@ -2016,7 +2010,6 @@ function game_recalc_income(&$game_user) {
   $game_user->expenses = $item->expenses;
 }
 
-
 function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
@@ -2249,7 +2242,6 @@ EOF;
   _show_goal($game_user);
 
 }
-
 
 function game_show_quest($game_user, $item, $percentage_target,
   $percentage_divisor, $quest_group, $party_title, $outcome = '',
@@ -2541,6 +2533,261 @@ EOF;
 </div>
 EOF;
 
+}
+
+function game_show_quest_slide($game_user, $item, $party_title, $outcome = '',
+  $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
+  $consumption_html = '', $disbursement_html = '',
+  $quest_completion_html = '') {
+
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  $sql = 'select id from quests where `group` = %d
+    order by id asc limit 1;';
+  $result = db_query($sql, $item->group);
+  $data = db_fetch_object($result);
+  $seq_num = $item->id - $data->id;
+
+  if (substr($item->description, 0, 3) != '<p ') {
+    $laquo = '&laquo;';
+  }
+  if (substr($item->description, -1) != '>') {
+    $raquo = '&raquo;';
+  }
+
+  $name = t($item->name, [
+    '@clan' => $game_user->clan_name,
+    '@hood' => $hood,
+    '@location' => $game_user->location,
+    '%party' => $party_title,
+    '@username' => $game_user->username,
+  ]);
+
+  $description = t($item->description, [
+    '@clan' => $game_user->clan_name,
+    '@hood' => $hood,
+    '@location' => $game_user->location,
+    '%party' => $party_title,
+    '@username' => $game_user->username,
+  ]);
+
+  if (empty($item->percent_complete)) {
+    $item->percent_complete = 0;
+  }
+
+  $active = ($item->active) ? '' : ' (inactive)';
+
+  if (strpos($item->meta, 'use_job_picture') !== FALSE) {
+    $sql = 'SELECT land.id FROM `land_ownership`
+      LEFT JOIN land ON fkey_land_id = land.id
+      WHERE fkey_users_id = %d
+      AND land.type = "job";';
+    $result = db_query($sql, $game_user->id);
+    $job = db_fetch_object($result);
+    $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
+  }
+  else {
+    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
+
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
+      $img = $icon_path . '.jpg';
+    }
+    else {
+      $img = $icon_path . '.png';
+    }
+  }
+
+  echo <<< EOF
+$outcome
+<div class="quests">
+  <div class="quest-icon">
+    <a href="/$game/quests_do/$arg2/$item->id">
+      <img src="$img" border="0" width="96" class="round4">
+    </a>
+    <div class="quest-complete">
+      <div class="quest-complete-percentage"
+        style="background-color: #{$item->rgb}; width: {$item->width}px">
+        &nbsp;
+      </div>
+      <div class="quest-complete-text">
+        $item->percent_complete% complete
+      </div>
+    </div>
+  </div>
+
+  <div class="quest-details">
+    <div class="quest-num">$item->group.$seq_num</div>
+    <div class="quest-name">
+      <a href="/$game/quests_do/$arg2/$item->id">
+        $name $active
+      </a>
+    </div>
+    <div class="quest-description">
+      $description
+    </div>
+EOF;
+
+  // Quest performed?
+  if (empty($exp_added_str)) {
+
+    // No quest performed -- show disbursements and requirements.
+    echo <<< EOF
+    <div class="quest-disbursements">
+      // Disbursements //
+    </div>
+    <div class="quest-experience">
+      +$item->experience $experience, 
+      +$item->min_money to $item->max_money $game_user->values
+    </div>
+EOF;
+
+    $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
+
+    if ($chance_of_loot > 0) {
+
+      $chance_modifier = '';
+      if ($chance_of_loot <= 20) {
+        $chance_modifier = t('Low');
+      }
+      else if ($chance_of_loot >= 40) {
+        $chance_modifier = t('High');
+      }
+      echo <<< EOF
+  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
+EOF;
+    }
+
+    echo <<< EOF
+    <div class="quest-requisites">
+      // Consumptions //
+    </div>
+    <div class="quest-required_energy">
+      Requires $item->required_energy ${game_text['energy']}
+    </div>
+EOF;
+
+    if ($item->clan_equipment_1_consumed_quantity > 0) {
+      echo '<div class="quest-required_stuff">';
+      _clan_required_equipment($game_user,
+        $item->fkey_clan_equipment_1_consumed_id,
+        $item->clan_equipment_1_consumed_quantity);
+      echo '</div>';
+    }
+
+    if ($item->land_required_quantity +
+      $item->equipment_1_required_quantity +
+      $item->equipment_2_required_quantity +
+      $item->equipment_3_required_quantity +
+      $item->clan_equipment_1_required_quantity +
+      $item->staff_required_quantity > 0) {
+
+      echo <<< EOF
+    <div class="quest-requisites">
+      // Requisites //
+    </div>
+EOF;
+
+      // Required land.
+      if ($item->land_required_quantity > 0)
+        _required_land($game_user, $item->fkey_land_required_id,
+          $item->land_required_quantity);
+
+      // Required equipment.
+      if ($item->equipment_1_required_quantity +
+        $item->equipment_2_required_quantity +
+        $item->equipment_3_required_quantity +
+        $item->clan_equipment_1_required_quantity > 0) {
+
+        echo '<div class="quest-required_stuff">';
+
+        if ($item->equipment_1_required_quantity > 0)
+          game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
+            $item->equipment_1_required_quantity);
+
+        if ($item->equipment_2_required_quantity > 0)
+          game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
+            $item->equipment_2_required_quantity);
+
+        if ($item->equipment_3_required_quantity > 0)
+          game_required_equipment($game_user, $item->fkey_equipment_3_required_id,
+            $item->equipment_3_required_quantity);
+
+        if ($item->clan_equipment_1_required_quantity > 0)
+          _clan_required_equipment($game_user,
+            $item->fkey_clan_equipment_1_required_id,
+            $item->clan_equipment_1_required_quantity);
+
+        echo '</div>';
+      }
+
+      // Required staff.
+      if ($item->staff_required_quantity > 0)
+        game_required_staff($game_user, $item->fkey_staff_required_id,
+          $item->staff_required_quantity);
+
+      // Required party.
+      if ($item->need_party > 0)
+        echo <<< EOF
+    <div class="quest-required_energy">
+      You must belong to a non-Underground $party_lower
+    </div>
+EOF;
+
+      // Required clan.
+      if ($item->need_clan > 0)
+        echo <<< EOF
+    <div class="quest-required_energy">
+      You must belong to a clan
+    </div>
+EOF;
+
+      // Required job.
+      if ($item->need_job > 0)
+        echo <<< EOF
+    <div class="quest-required_energy">
+      You must have a job
+    </div>
+EOF;
+
+    }
+  }
+  else {
+
+    // Quest performed -- show accomplishments.
+    echo <<< EOF
+    <div class="quest-requisites">
+      // Consumed By You //
+    </div>
+    <div class="quest-required_energy">
+      $item->required_energy ${game_text['energy']}
+    </div>
+    $consumption_html
+    <div class="quest-disbursements">
+      // Disbursed To You //
+    </div>
+    <div class="quest-experience">
+      $exp_added_str $experience $disbursements_doubled
+    </div>
+    <div class="quest-experience">
+      $money_added_str $game_user->values $disbursements_doubled
+    </div>
+  </div>
+  $disbursement_html
+  $quest_completion_html
+  <div class="quest-do-again">
+    <div class="quest-do-again-inside">
+      <a href="/$game/quests_do/$arg2/$item->id">
+        Do Again
+      </a>
+    </div>
+EOF;
+  }
+
+  echo <<< EOF
+  </div>
+</div>
+EOF;
 }
 
 function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {

@@ -134,6 +134,10 @@ li {
 
 .quests, .land {
   background-color: #0d0f0d;
+  font-weight: normal;
+  font-size: initial;
+  text-shadow: none;
+  text-align: left;
 }
 
 .quests .quest-experience, .quests .quest-money,
@@ -564,7 +568,6 @@ textarea {
 
 .swiper-container {
   width: 100%;
-  height: 440px;
 }
 
 .swiper-slide {
@@ -596,23 +599,27 @@ textarea {
 }
 
 .swiper-slide .quest-images {
-  height: 256px;
-  overflow: hidden;
-  margin: 0 32px;
-}
+  margin: 0 18px;
+  border-left: solid 1px rgba(224, 255, 240, 0.8);
+  border-right: solid 1px rgba(224, 255, 240, 0.8);}
 
-.swiper-slide .title a {
-  text-decoration: none;
+.swiper-slide .title .quest-group-name {
   display: block;
   -webkit-text-stroke: 2px rgba(0, 0, 0, 0.15);
+  -webkit-text-fill-color: limegreen;
   text-shadow: 2px 2px 6px black;
 }
 
-.swiper-slide .title a.admin-obfuscate {
+.swiper-slide .title .quest-group-name.admin-obfuscate {
   text-decoration: line-through;
 }
 
-.swiper-slide .title img {
+.swiper-slide .title img.image-overview {
+  display: none;
+}
+
+.swiper-slide.overview .title img.image-overview {
+  display: inline-block;
   width: 68px;
   margin: 3px 5px;
   box-shadow: green 3px 3px 6px;
@@ -622,6 +629,10 @@ textarea {
 }
 
 .swiper-slide .description {
+  display: none;
+}
+
+.swiper-slide.overview .description {
   color: #e0e8ee;
   font-size: 12px;
   font-style: italic;
@@ -629,8 +640,25 @@ textarea {
   margin: 16px 20px 10px;
   height: 84px;
   border-left: solid 1px rgba(224, 255, 240, 0.8);
-  border-right: solid 1px rgba(224, 255, 240, 0.8);;
+  border-right: solid 1px rgba(224, 255, 240, 0.8);
   padding: 0 8px;
   display: flex;
   align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.swiper-slide.overview .quests {
+  display: none;
+}
+
+.swiper-slide .quests {
+  background-color: rgba(10, 20, 15, 0.25);
+  margin-left: 0;
+  margin-right: 0;
+  border: none;
+  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+}
+
+.swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
+  top: 25px;
 }
