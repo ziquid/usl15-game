@@ -202,10 +202,18 @@ EOF;
       array('@stuff' => strtolower($eq->name))) . '</div>';
   }
 
+  if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
+    || $game_user->meta == 'toxiboss') {
+    $link = 'quest_groups';
+  }
+  else {
+    $link = 'quests';
+  }
+
   echo <<< EOF
 <div class="try-an-election-wrapper">
 <div class="try-an-election">
-  <a href="/$game/quests/$arg2">
+  <a href="/$game/$link/$arg2#group-{$game_user->fkey_last_played_quest_groups_id}">
     Continue to ${quest}s
   </a>
 </div>
@@ -295,7 +303,8 @@ EOF;
 
 }
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"move-succeeded\"/>\n-->";
+}
 
  db_set_active('default');

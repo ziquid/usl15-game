@@ -91,7 +91,8 @@ EOF;
   game_alter('actions_to_move', $game_user, $actions_to_move);
 
   echo <<< EOF
-<div class="title">$verb from $cur_hood->name to $new_hood->name</div>
+<div class="title">$verb from <span class="nowrap highlight">$cur_hood->name</span>
+  to <span class="nowrap highlight">$new_hood->name</span>?</div>
 <div class="subtitle">It will cost $actions_to_move Actions to move</div>
 <div class="try-an-election-wrapper"><div
 class="try-an-election"><a href="/$game/move_do/$arg2/$neighborhood_id">Yes,

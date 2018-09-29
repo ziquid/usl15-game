@@ -995,21 +995,31 @@ EOF;
  */
 function game_fetch_quest_groups($game_user) {
   $data = [];
-  $sql = 'SELECT qg.* FROM `quest_groups` qg
-    order by qg.id ASC';
-  $sql_quests = 'select quests.*, quest_completion.percent_complete
+
+  // Admin?  Show all quests.
+  $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
+
+  // SQL for quests.
+  $sql_quests = 'select quests.*, quest_completion.percent_complete,
+  neighborhoods.name as hood, comp1.name as competency_name_1
   from quests
+  LEFT OUTER JOIN neighborhoods
+  ON quests.fkey_neighborhoods_id = neighborhoods.id
   LEFT OUTER JOIN quest_completion
   ON quest_completion.fkey_quests_id = quests.id
   AND quest_completion.fkey_users_id = %d
-  where `group` = %d;';
+  LEFT JOIN competencies as comp1
+  ON fkey_enhanced_competencies_id = comp1.id
+  where `group` = %d
+  ' . $active_quests . '
+  order by required_level ASC;';
+
+  $sql = 'SELECT qg.* FROM `quest_groups` qg
+    order by qg.id ASC';
   $result = db_query($sql);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
-
-  // Admin?  Show all quests.
-  $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
 
   foreach ($data as &$item) {
     list($item->quest_completion,
@@ -1028,9 +1038,11 @@ function game_fetch_quest_groups($game_user) {
     // If they have finished the previous <1000 group, show this one.
     if ($item->id < 1000 && $item->id > 0) {
       $last = $data[$item->id - 1];
+//      firep($last, 'last quest group');
       if (is_numeric($last->quest_completion->completed) &&
-        $last->quest_completion->completed > 0 &&
-        $last->quest_completion->completed == $last->quest_completion->total) {
+        ($last->quest_completion->completed > 0 &&
+        $last->quest_completion->completed == $last->quest_completion->total) ||
+        ($last->percentage_divisor > 1)) {
         $show = TRUE;
       }
     }
@@ -1050,7 +1062,7 @@ function game_fetch_quest_groups($game_user) {
         // Normal group?  Obduscate.  Otherwise, hide.
         if ($item->id < 1000) {
           $item->name = '???';
-          $item->description = '';
+          $item->description = t('Complete a previous mission group to see this one.');
           $item->quest_completion->completed = '???';
           $item->quest_completion->total = '???';
         }
@@ -1063,12 +1075,12 @@ function game_fetch_quest_groups($game_user) {
       $item->class = 'clickable';
     }
 
-    // Clickable?  Grab quest images to show.
+    // Clickable?  Grab quest objects to show.
     if (strpos($item->class, 'clickable') !== FALSE) {
       $result = db_query($sql_quests, $game_user->id, $item->id);
       $item->q = [];
       while ($q = db_fetch_object($result)) {
-        list($q->rgb, $q->width) = game_get_quest_completion($q,
+        list($q->rgb, $q->width) = game_get_quest_completion($q->percent_complete,
           $item->percentage_target, $item->percentage_divisor);
         $item->q[] = $q;
       }
@@ -1174,8 +1186,16 @@ EOF;
   if (isset($qgo->q)) {
     echo '<div class="quest-images">';
     foreach ($qgo->q as $q) {
+
+      // Mark quests that can't be performed in this hood.
+      $wrong_hood = '';
+      if ($q->fkey_neighborhoods_id &&
+        ($q->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
+        $wrong_hood = 'wrong-hood';
+      }
+
       echo <<< EOF
-<img class="image-overview" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+<img class="image-overview $wrong_hood" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
   style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
       game_show_quest_slide($game_user, $q);
@@ -1230,10 +1250,10 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
 }
 
 /**
- * Get the percentage complete for a quest.
+ * Get the percentage complete visual cues for a quest.
  *
- * @param \stdClass $q
- *   The quest object.
+ * @param int $percent_complete
+ *   The percentage complete.
  * @param int $percentage_target
  *   Which percentage is considered fully complete.
  * @param int $percentage_divisor
@@ -1243,21 +1263,21 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
  *   The RGB value corresponding to the percentage done and the width of a
  * progress bar.
  */
-function game_get_quest_completion($q, $percentage_target, $percentage_divisor) {
-  if (empty($q->percent_complete)) {
-    $q->percent_complete = 0;
+function game_get_quest_completion($percent_complete, $percentage_target, $percentage_divisor) {
+  if (empty($percent_complete)) {
+    $percent_complete = 0;
   }
 
-  if ($q->percent_complete > floor($percentage_target / 2)) {
-    $rgb = dechex(floor(($percentage_target - $q->percent_complete) /
-      (4 * $percentage_divisor))) . 'c0';
+  if ($percent_complete > floor($percentage_target / 2)) {
+    $rgb = dechex(floor(($percentage_target - $percent_complete) /
+      (3 * $percentage_divisor) + 3)) . 'c0';
   }
   else {
-    $rgb = 'c' . dechex(floor(($q->percent_complete) /
+    $rgb = 'c' . dechex(floor(($percent_complete) /
       (4 * $percentage_divisor))) . '0';
   }
 
-  $width = floor($q->percent_complete * 94 / $percentage_target) + 2;
+  $width = floor($percent_complete * 94 / $percentage_target) + 2;
   return [$rgb, $width];
 }
 
@@ -2593,14 +2613,34 @@ function game_show_quest_slide($game_user, $item, $outcome = '',
     }
   }
 
+  $wrong_hood = $comment_start = $comment_end = $go_there = '';
+
+  // Need a specific hood?  Tell him/her to move.
+  if ($item->fkey_neighborhoods_id &&
+      ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
+    $wrong_hood = 'wrong-hood';
+    $description = t('This @quest can only be completed in %hood.',
+      ['@quest' => $game_text['quest_lower'], '%hood' => $item->hood]);
+    $comment_start = '<!-- ';
+    $comment_end = ' -->';
+    $go_there = <<< EOF
+<form action="/$game/move/$arg2/$item->fkey_neighborhoods_id">
+  <div class="quests-perform-button-wrapper">
+    <input class="quests-perform-button" type="submit" value="Go there"/>
+  </div>
+</form>
+EOF;
+  }
+
+
   echo <<< EOF
 $outcome
-<div class="quests">
+<div class="quests $wrong_hood">
   <div class="quest-icon">
-    <a href="/$game/quests_do/$arg2/$item->id">
+    {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
       <img src="$img" border="0" width="96" class="round4"
       style="box-shadow: #{$item->rgb} 3px 3px 6px; border-color: #{$item->rgb}">
-    </a>
+    {$comment_start}</a>{$comment_end}
     <div class="quest-complete">
       <div class="quest-complete-percentage"
         style="background-color: #{$item->rgb}; width: {$item->width}px">
@@ -2615,18 +2655,19 @@ $outcome
   <div class="quest-details">
     <div class="quest-num">$item->group.$seq_num</div>
     <div class="quest-name">
-      <a href="/$game/quests_do/$arg2/$item->id">
+      {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
         $name $active
-      </a>
+      {$comment_start}</a>{$comment_end}
     </div>
     <div class="quest-description">
       $description
     </div>
 EOF;
 
-  // Quest performed?
-  if (empty($exp_added_str)) {
-
+  if (strlen($wrong_hood)) {
+    // Wrong hood?  Show nothing.
+  }
+  elseif (empty($exp_added_str)) {
     // No quest performed -- show disbursements and requirements.
     echo <<< EOF
     <div class="quest-disbursements">
@@ -2751,7 +2792,6 @@ EOF;
     }
   }
   else {
-
     // Quest performed -- show accomplishments.
     echo <<< EOF
     <div class="quest-requisites">
@@ -2784,6 +2824,7 @@ EOF;
 
   echo <<< EOF
   </div>
+  $go_there
 </div>
 EOF;
 }

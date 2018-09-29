@@ -11,6 +11,7 @@ body.party-workers.beta,
 body.party-toxicorp.beta {
   background-color: rgb(180, 200, 180);
   background-image: none;
+  color: #f8fefb;
 }
 
 .beta .quest-group-completion {
@@ -21,6 +22,12 @@ body.party-toxicorp.beta {
 
 .beta a.version, .beta .location, .beta .news .dateline {
   color: #101814;
+}
+
+.beta .highlight {
+  color: #f0fef8 !important;
+  -webkit-text-stroke: 0.4px rgba(104, 28, 20, 0.8);
+  -webkit-text-fill-color: #f0fef8;
 }
 
 .beta .news .message-body {

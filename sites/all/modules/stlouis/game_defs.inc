@@ -241,6 +241,8 @@ $game_text = [
   'job_plural' => 'Jobs',
   'land' => 'Income',
   'mayor' => 'Mayor',
+  'quest' => 'Mission',
+  'quest_lower' => 'mission',
   'staff' => 'Staff',
 ];
 

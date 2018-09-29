@@ -45,10 +45,7 @@ else {
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
 }
 
-$sql = 'select name from neighborhoods where id = %d;';
-$result = db_query($sql, $game_user->fkey_neighborhoods_id);
-$data = db_fetch_object($result);
-$location = $data->name;
+$location = $game_user->location;
 
 $sql = 'select party_title from `values` where id = %d;';
 $result = db_query($sql, $game_user->fkey_values_id);
@@ -106,7 +103,9 @@ EOF;
 }
 
 // Keep location from user.
-if ($game_user->level < 6) $location = '';
+if ($game_user->level < 6) {
+  $location = '';
+}
 
 if ($game_user->level < 6 and $game_user->experience > 0) {
 
@@ -126,7 +125,9 @@ $qg = db_fetch_object($result);
 
 $location = str_replace('%location', $location, $qg->name);
 
-if ($game_user->level < 6) $location = '';
+if ($game_user->level < 6) {
+  $location = '';
+}
 
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $group_to_show - 1);
@@ -135,7 +136,7 @@ $qgo = db_fetch_object($result);
 if (!empty($qgo->name) && ($group_to_show <= 1000)) {
 
   $older_group = $group_to_show - 1;
-  $older_missions_html =<<< EOF
+  $older_missions_html = <<< EOF
 <a href="/$game/quests/$arg2/$older_group">&lt;&lt;</a>
 EOF;
 
@@ -151,7 +152,7 @@ if (!empty($item->min) && ($item->min <= $game_user->level + 1) &&
   ($group_to_show <= 1000)) {
 
   $newer_group = $group_to_show + 1;
-  $newer_missions_html =<<< EOF
+  $newer_missions_html = <<< EOF
 <a href="/$game/quests/$arg2/$newer_group">&gt;&gt;</a>
 EOF;
 
@@ -205,7 +206,8 @@ foreach ($data as $item) {
   $description = str_replace('%party', "<em>$party_title</em>",
     $item->description);
 
-  list($rgb, $width) = game_get_quest_completion($item, $percentage_target, $percentage_divisor);
+  list($rgb, $width) = game_get_quest_completion($item->percent_complete,
+    $percentage_target, $percentage_divisor);
   // firep($rgb);
 
   $active = ($item->active) ? '' : ' (inactive)';

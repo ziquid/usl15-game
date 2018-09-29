@@ -572,9 +572,10 @@ a.crafting-submit-button {
 }
 
 .news .title {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #d0dfd8;
   text-align: right;
   padding-top: 0px;
+  margin-top: 0px;
   margin-bottom: 2px;
   font-weight: normal;
   font-size: 13px;
@@ -1116,5 +1117,5 @@ img.round4 {
 }
 
 .highlight {
-  color: #cc0 !important;
+  color: #cc0;
 }
