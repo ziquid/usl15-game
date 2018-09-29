@@ -187,7 +187,7 @@ EOF;
 
 }
 
-  function NO_is_quest_complete($game_user, $quest_id) {
+function NO_is_quest_complete($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
   where fkey_users_id = %d and fkey_quests_id = %d;';
@@ -198,7 +198,7 @@ EOF;
 
 }
 
-  function NO_is_quest_started($game_user, $quest_id) {
+function NO_is_quest_started($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
   where fkey_users_id = %d and fkey_quests_id = %d;';
@@ -209,13 +209,13 @@ EOF;
 
 }
 
-  function NO_on_screen($screen) {
+function NO_on_screen($screen) {
 
   return (arg(1) == $screen);
 
 }
 
-  function NO_has_job($game_user) {
+function NO_has_job($game_user) {
 
   $sql = 'SELECT sum(payout) as job_income
   FROM land_ownership AS lo
@@ -229,7 +229,7 @@ EOF;
 
 }
 
-  function NO_has_sent_message($game_user) {
+function NO_has_sent_message($game_user) {
 
   $sql = 'SELECT count(id) as count
   FROM user_messages
@@ -241,7 +241,7 @@ EOF;
 
 }
 
-  function NO_has_equipment($game_user, $id, $quantity) {
+function NO_has_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
   FROM equipment_ownership
@@ -254,7 +254,7 @@ EOF;
 
 }
 
-  function NO_has_clan_equipment($game_user, $id, $quantity) {
+function NO_has_clan_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
   FROM clan_equipment_ownership
@@ -265,9 +265,9 @@ EOF;
 
   return ($item->quantity >= $quantity);
 
- }
+}
 
-  function NO_show_actions_menu($game_user) {
+function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -287,7 +287,7 @@ _show_goal($game_user);
 
 }
 
-  function NO_show_clan_menu($game_user) {
+function NO_show_clan_menu($game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
