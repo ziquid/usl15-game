@@ -4282,6 +4282,7 @@ firep($eq->name . ' wore out!');
  *   or whether ALL messages succeeded or not (for an array of uids).
  */
 function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
+  $message = nl2br($message);
   if (is_array($to) && is_numeric($to[0])) {
     $result = TRUE;
     foreach ($to as $item) {
