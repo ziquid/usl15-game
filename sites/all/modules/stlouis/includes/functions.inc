@@ -3646,6 +3646,8 @@ function game_fetch_user_by_id($id) {
     clans.id as fkey_clans_id,
     event_points.points,
 
+    user_creations.datetime as creation_date,
+
     neighborhoods.name as location
 
     FROM `users`
