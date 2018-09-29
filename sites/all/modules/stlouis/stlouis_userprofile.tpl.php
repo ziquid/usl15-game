@@ -519,7 +519,7 @@ else {
 }
 
 $last_access = game_format_date(strtotime($item->last_access));
-$startDate = game_format_date(strtotime($item->creation_date));
+$startDate = game_format_date(strtotime($item->startdate));
 $details_last_access = <<< EOF
 <div class="heading">Start Date:</div>
 <div class="value">$startDate</div><br>

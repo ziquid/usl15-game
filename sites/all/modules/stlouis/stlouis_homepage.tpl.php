@@ -9,7 +9,7 @@
  * Ready for phpcbf: no
  */
 
-$version = 'v0.6.0, Aug 27 2018';
+$version = 'v0.7.0, Sep 30 2018';
 
 global $game, $phone_id;
 
@@ -425,7 +425,8 @@ else {
 }
 
 echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Missions" href="/$game/$link/$arg2" />
+  <area shape="rect" coords="$coords" alt="Missions"
+  href="/$game/$link/$arg2#group-{$game_user->fkey_last_played_quest_groups_id}" />
 EOF;
 
  $coords = _stlouis_scale_coords($coefficient, 42, 72, 122, 92);

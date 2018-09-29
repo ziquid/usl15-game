@@ -1677,7 +1677,7 @@ function _stlouis_fetch_user() {
     elected_positions.max_level as max_level_for_office,
     elected_positions.name as ep_name,
     CURRENT_TIMESTAMP as time_now, neighborhoods.name as location,
-    `values`.party_icon
+    `values`.party_title, `values`.party_icon
 
     from users
 

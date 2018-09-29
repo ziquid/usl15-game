@@ -1020,7 +1020,7 @@ function game_fetch_quest_groups($game_user) {
 
     $show = FALSE;
 
-    // Always show basic missions.
+    // Always show Introductory missions.
     if ($item->id == 0) {
       $show = TRUE;
     }
@@ -1028,7 +1028,9 @@ function game_fetch_quest_groups($game_user) {
     // If they have finished the previous <1000 group, show this one.
     if ($item->id < 1000 && $item->id > 0) {
       $last = $data[$item->id - 1];
-      if ($last->quest_completion->completed == $last->quest_completion->total) {
+      if (is_numeric($last->quest_completion->completed) &&
+        $last->quest_completion->completed > 0 &&
+        $last->quest_completion->completed == $last->quest_completion->total) {
         $show = TRUE;
       }
     }
@@ -1048,7 +1050,7 @@ function game_fetch_quest_groups($game_user) {
         // Normal group?  Obduscate.  Otherwise, hide.
         if ($item->id < 1000) {
           $item->name = '???';
-          $item->description = '???';
+          $item->description = '';
           $item->quest_completion->completed = '???';
           $item->quest_completion->total = '???';
         }
@@ -1073,7 +1075,6 @@ function game_fetch_quest_groups($game_user) {
     }
 
   }
-//  firep($data, 'quest group data');
   return $data;
 }
 
@@ -1155,14 +1156,16 @@ EOF;
     $onclick = '';
   }
 
+  $description_class = strlen($qgo->description) ? '' : 'empty';
+
   echo <<< EOF
-<div class="swiper-slide overview" $onclick>
+<div class="swiper-slide overview" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
     <div class="quest-group-name $qgo->class">$qgo->name {$quest}s</div>
     <div class="quest-group-completion">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
       {$quest}s complete $qgo->next_group_html</div>
-    <div class="description">
+    <div class="description $description_class">
       $qgo->description
     </div>
 EOF;
@@ -1173,7 +1176,7 @@ EOF;
     foreach ($qgo->q as $q) {
       echo <<< EOF
 <img class="image-overview" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
-  style="box-shadow: #{$q->rgb} 3px 3px 6px; border-color: #{$q->rgb}">
+  style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
       game_show_quest_slide($game_user, $q);
     }
@@ -2505,7 +2508,29 @@ EOF;
 
 }
 
-function game_show_quest_slide($game_user, $item, $party_title, $outcome = '',
+/**
+ * Show the quest group as a slide.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The quest group.
+ * @param string $outcome
+ *   Quest outcome, if any.
+ * @param string $exp_added_str
+ *   Experience added, if any.
+ * @param string $money_added_str
+ *   Money added, if any.
+ * @param string $disbursements_doubled
+ *   Disbursements doubled text, if any.
+ * @param string $consumption_html
+ *   Consumption html, if any.
+ * @param string $disbursement_html
+ *   Disbursement html, if any.
+ * @param string $quest_completion_html
+ *   Quest completion html, if any.
+ */
+function game_show_quest_slide($game_user, $item, $outcome = '',
   $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
   $consumption_html = '', $disbursement_html = '',
   $quest_completion_html = '') {
@@ -2528,17 +2553,17 @@ function game_show_quest_slide($game_user, $item, $party_title, $outcome = '',
 
   $name = t($item->name, [
     '@clan' => $game_user->clan_name,
-    '@hood' => $hood,
+    '@hood' => $game_text['hood'],
     '@location' => $game_user->location,
-    '%party' => $party_title,
+    '%party' => $game_user->party_title,
     '@username' => $game_user->username,
   ]);
 
   $description = t($item->description, [
     '@clan' => $game_user->clan_name,
-    '@hood' => $hood,
+    '@hood' => $game_text['hood'],
     '@location' => $game_user->location,
-    '%party' => $party_title,
+    '%party' => $game_user->party_title,
     '@username' => $game_user->username,
   ]);
 
@@ -2573,7 +2598,8 @@ $outcome
 <div class="quests">
   <div class="quest-icon">
     <a href="/$game/quests_do/$arg2/$item->id">
-      <img src="$img" border="0" width="96" class="round4">
+      <img src="$img" border="0" width="96" class="round4"
+      style="box-shadow: #{$item->rgb} 3px 3px 6px; border-color: #{$item->rgb}">
     </a>
     <div class="quest-complete">
       <div class="quest-complete-percentage"
@@ -3635,7 +3661,7 @@ function game_fetch_user_by_id($id) {
 
   $sql = 'SELECT users.*,
     user_creations.datetime as startdate,
-    `values`.party_title, `values`.party_icon, `values`.name,
+    `values`.party_title, `values`.party_icon,
     elected_positions.name as ep_name,
     elected_positions.id as ep_level,
     elected_officials.approval_rating,
@@ -3645,8 +3671,6 @@ function game_fetch_user_by_id($id) {
     clans.name as clan_name, clans.acronym as clan_acronym,
     clans.id as fkey_clans_id,
     event_points.points,
-
-    user_creations.datetime as creation_date,
 
     neighborhoods.name as location
 
