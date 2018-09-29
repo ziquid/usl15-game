@@ -8,8 +8,6 @@
  * Synced with 2114: no
  */
 
-require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
-
 function NO_sound($name) {
 
 global $game;
