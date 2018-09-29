@@ -142,9 +142,7 @@ $party_title = preg_replace('/^The /', '', $item->party_title);
 $private = check_plain($_GET['private']) == '1' ? 1 : 0;
 
 if (!empty($message)) {
-  $sql = 'insert into user_messages (fkey_users_from_id,
-    fkey_users_to_id, private, message) values (%d, %d, %d, "%s");';
-  $result = db_query($sql, $game_user->id, $item->id, $private, $message);
+  game_send_user_message($game_user->id, $item->id, $private, $message);
   $message_orig = '';
   game_competency_gain($game_user, 'talkative');
 }
