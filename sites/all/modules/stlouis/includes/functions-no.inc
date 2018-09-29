@@ -2,7 +2,7 @@
 
 /**
  * @file functions-no.inc
- * Misc no function for Ziquid games.
+ * Misc NO functions for Ziquid games.
  *
  * Synced with CG: yes
  * Synced with 2114: no
