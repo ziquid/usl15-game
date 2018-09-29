@@ -9,7 +9,7 @@
  * Synced with 2114: no
  */
 
-require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
+require_once drupal_get_path('module', 'stlouis') . '/includes/functions-no.inc';
 
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
