@@ -9,7 +9,7 @@
  * Ready for phpcbf: no
  */
 
-$version = 'v0.7.0, Sep 30 2018';
+$version = 'v0.7.0, Oct 1 2018';
 
 global $game, $phone_id;
 

@@ -28,6 +28,18 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 1, 2018
+  </div>
+  <ul>
+    <li>
+      Cars icons to indicate quests in other hoods
+    </li>
+    <li>
+      City Elder allows access to pre-release features
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Sep 29, 2018
   </div>
   <ul>
