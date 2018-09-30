@@ -1702,7 +1702,6 @@ function _stlouis_fetch_user() {
   if (strlen($game_user->meta)) {
     game_includes_add('user_meta_' . $game_user->meta, 'user_meta');
   }
-  game_alter('game_fetch_user_post', $game_user);
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
@@ -1771,7 +1770,6 @@ function _stlouis_fetch_user() {
   // Staff.
   $st = db_fetch_object($result);
   $game_user->st_energy_increase = $st->energy_increase;
-  firep($game_user, 'game_user at fetch_user');
 
   // Add includes and process init() for staff, if any.
   $sql = 'SELECT LOWER(s.name) as name from staff_ownership so
@@ -1787,6 +1785,9 @@ function _stlouis_fetch_user() {
   foreach ($staff_list as $staff) {
     game_includes_add('staff_' . $staff, 'staff');
   }
+
+  // Run fetch_user_post alter hooks.
+  game_alter('game_fetch_user_post', $game_user);
 
   $sql = 'select experience from levels where level = %d;';
   $result = db_query($sql, $game_user->level + 1);
@@ -1990,6 +1991,7 @@ function _stlouis_fetch_user() {
   }
 
   game_alter('game_fetch_user_end', $game_user);
+  firep($game_user, 'game_user at fetch_user');
   return $game_user;
 }
 

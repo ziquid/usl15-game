@@ -1145,12 +1145,21 @@ function game_show_quest_group($game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
+  if (game_get_value($game_user, 'enabled_alpha')) {
+    $link = 'quest_groups';
+  }
+  else {
+    $link = 'quests';
+  }
+
   echo <<< EOF
-  <div class="subtitle">
-    <a href="/$game/quests/$arg2/$item->id">
-      $item->name
-    </a>
-  </div>
+  <span class="title">
+    <div class="quest-group-name">
+      <a href="/$game/$link/$arg2/$item->id#group-{$item->id}">
+        $item->name
+      </a>
+    </div>
+  </span>
 EOF;
 }
 
@@ -4695,7 +4704,7 @@ function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 =
  */
 function game_includes_add($include_file, $type) {
   global $game;
-
+//dpm ($include_file, 'calling game_includes_add for ' . $type . ' file');
   $game_include_list = &drupal_static('game_include_list', []);
   $game_include_missing = &drupal_static('game_include_missing', []);
   $module_path = drupal_get_path('module', $game);
@@ -4726,7 +4735,6 @@ function game_includes_add($include_file, $type) {
     }
   }
   else {
-
     // File does not exist; add to missing list.
     $game_include_missing[] = $type . '/' . $include_file;
   }

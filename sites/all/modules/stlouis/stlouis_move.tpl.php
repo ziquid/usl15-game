@@ -238,7 +238,7 @@ if (game_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
         echo <<< EOF
 <br>
 <div class="title">
-  Useful Equipment in <span class="nowrap">$game_user->location</span>
+  Useful Equipment in <span class="highlight nowrap">$game_user->location</span>
 </div>
 EOF;
         $title_shown = TRUE;
@@ -258,7 +258,7 @@ EOF;
         echo <<< EOF
 <br>
 <div class="title">
-  Useful Staff and Aides in <span class="nowrap">$game_user->location</span>
+  Useful Staff and Aides in <span class="highlight nowrap">$game_user->location</span>
 </div>
 EOF;
         $title_shown = TRUE;
@@ -276,12 +276,12 @@ EOF;
       echo <<< EOF
 <br>
 <div class="title">
-  Useful Missions in <span class="nowrap">$game_user->location</span>
+  Useful Missions in <span class="highlight nowrap">$game_user->location</span>
 </div>
 EOF;
       $title_shown = TRUE;
-      game_show_quest_group($game_user, $item, $ai_output);
     }
+    game_show_quest_group($game_user, $item, $ai_output);
   }
 }
 
