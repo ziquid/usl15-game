@@ -14,4 +14,13 @@ Drupal.behaviors.stlouis = function (context) {
     $('body.alpha').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
+  jQuery(".fit-box").each(function() {
+    var innerWidth = $(this).innerWidth();
+    var scrollWidth = $(this)[0].scrollWidth;
+    if (scrollWidth > innerWidth) {
+      var scale = innerWidth / scrollWidth;
+      $(this).css({'-webkit-transform': 'scale(' + scale + ')'});
+    }
+  });
+
 };

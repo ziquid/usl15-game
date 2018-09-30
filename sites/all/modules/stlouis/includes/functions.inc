@@ -1200,9 +1200,9 @@ EOF;
   $description_class = strlen($qgo->description) ? '' : 'empty';
 
   echo <<< EOF
-<div class="swiper-slide $overview" data-hash="group-{$qgo->id}" $onclick>
+<div class="swiper-slide $overview quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
-    <div class="quest-group-name $qgo->class">$qgo->name {$quest}s</div>
+    <div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
     <div class="quest-group-completion">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
       {$quest}s complete $qgo->next_group_html</div>
