@@ -1018,7 +1018,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
   order by required_level ASC;';
 
   // Fetch a single group or all quest groups.
-  if ($id) {
+  if (is_numeric($id)) {
     $sql = 'SELECT qg.* FROM `quest_groups` qg
       where qg.id = %d;';
   }
@@ -1039,7 +1039,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
     game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
 
     // Show?  if a specific group was requested, always show it.
-    $show = $id ? TRUE : FALSE;
+    $show = is_numeric($id) ? TRUE : FALSE;
 
     // Always show Introductory missions.
     if ($item->id == 0) {
@@ -1098,7 +1098,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
     }
 
   }
-  return $id ? $data[0] : $data;
+  return is_numeric($id) ? $data[0] : $data;
 }
 
 /**
