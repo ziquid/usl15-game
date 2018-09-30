@@ -3,6 +3,7 @@ Drupal.behaviors.stlouis_quest_groups = function (context) {
     hashNavigation: {
       watchState: true
     },
+    effect: 'coverflow', // 'cube', // 'coverflow', // 'flip',
     pagination: {
       el: '.swiper-pagination',
       dynamicBullets: true

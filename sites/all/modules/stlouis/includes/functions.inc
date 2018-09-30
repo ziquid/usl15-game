@@ -1002,7 +1002,8 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
   $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
 
   // SQL for quests.
-  $sql_quests = 'select quests.*, quest_completion.percent_complete,
+  $sql_quests = 'select quests.*,
+  quest_completion.percent_complete as completed_percent,
   neighborhoods.name as hood, comp1.name as competency_name_1
   from quests
   LEFT OUTER JOIN neighborhoods
@@ -1090,7 +1091,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
       $item->q = [];
       $result = db_query($sql_quests, $game_user->id, $item->id);
       while ($q = db_fetch_object($result)) {
-        list($q->rgb, $q->width) = game_get_quest_completion($q->percent_complete,
+        list($q->rgb, $q->width) = game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
         $item->q[$q->id] = $q;
       }
@@ -2605,8 +2606,8 @@ function game_show_quest_slide($game_user, $item, $outcome = '',
     '@username' => $game_user->username,
   ]);
 
-  if (empty($item->percent_complete)) {
-    $item->percent_complete = 0;
+  if (empty($item->completed_percent)) {
+    $item->completed_percent = 0;
   }
 
   $active = ($item->active) ? '' : ' (inactive)';
@@ -2665,7 +2666,7 @@ $outcome
         &nbsp;
       </div>
       <div class="quest-complete-text">
-        $item->percent_complete% complete
+        $item->completed_percent% complete
       </div>
     </div>
   </div>

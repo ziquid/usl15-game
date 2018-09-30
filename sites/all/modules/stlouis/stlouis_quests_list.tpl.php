@@ -181,7 +181,7 @@ EOF;
 
 // Show each quest.
 $data = [];
-$sql = 'select quests.*, quest_completion.percent_complete,
+$sql = 'select quests.*, quest_completion.percent_complete as completed_percent,
   neighborhoods.name as hood, comp1.name as competency_name_1
   from quests
   LEFT OUTER JOIN neighborhoods
@@ -201,7 +201,7 @@ while ($item = db_fetch_object($result)) {
 }
 
 foreach ($data as $item) {
-  list($item->rgb, $item->width) = game_get_quest_completion($item->percent_complete,
+  list($item->rgb, $item->width) = game_get_quest_completion($item->completed_percent,
     $percentage_target, $percentage_divisor);
   game_alter('quest_item', $game_user, $item);
   //    if ($event_type == EVENT_QUESTS_100)

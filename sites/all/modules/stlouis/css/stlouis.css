@@ -604,6 +604,7 @@ textarea {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: start;
+  min-height: 440px;
 }
 
 .swiper-pagination .swiper-pagination-bullet {

@@ -14,7 +14,7 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
+if (TRUE || $game_user->meta == 'beta' || $game_user->meta == 'admin'
   || $game_user->meta == 'toxiboss') {
   $sql = 'select `group` from quests where quests.id = %d;';
   $result = db_query($sql, $quest_id);
@@ -278,14 +278,14 @@ $sql = 'select percent_complete, bonus_given from quest_completion
   where fkey_users_id = %d and fkey_quests_id = %d;';
 $result = db_query($sql, $game_user->id, $quest_id);
 $pc = db_fetch_object($result);
-//firep($pc);
+//firep($pc, 'percent complete');
 
 // Get quest completion stats.
 $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
   $result = db_query($sql, $game_user->id, $game_quest->group);
   $quest_group_completion = db_fetch_object($result);
-//firep($quest_group_completion);
+//firep($quest_group_completion, 'quest group completion');
 
   $percentage_target = 100;
   $percentage_divisor = 1;
@@ -774,16 +774,6 @@ EOF;
 
   list($rgb, $width) = game_get_quest_completion($percent_complete, $percentage_target, $percentage_divisor);
 
-//  if ($percent_complete > floor($percentage_target / 2)) {
-//    $rgb = dechex(floor(($percentage_target - $percent_complete) /
-//      (4 * $percentage_divisor))) . 'c0';
-//  }
-//  else {
-//    $rgb = 'c' . dechex(floor(($percent_complete) /
-//      (4 * $percentage_divisor))) . '0';
-//  }
-//  $width = floor($percent_complete * 94 / $percentage_target) + 2;
-
   // Check for loot -- equipment.
   $sql = 'SELECT equipment.quantity_limit, equipment_ownership.quantity
     FROM equipment
@@ -1207,7 +1197,7 @@ EOF;
 
 // Show each quest.
 $data = [];
-$sql = 'select quests.*, quest_completion.percent_complete,
+$sql = 'select quests.*, quest_completion.percent_complete as completed_percent,
   neighborhoods.name as hood from quests
   LEFT OUTER JOIN neighborhoods
   ON quests.fkey_neighborhoods_id = neighborhoods.id
@@ -1224,7 +1214,7 @@ while ($item = db_fetch_object($result)) {
 }
 
 foreach ($data as $item) {
-  list($item->rgb, $item->width) = game_get_quest_completion($item->percent_complete,
+  list($item->rgb, $item->width) = game_get_quest_completion($item->completed_percent,
     $percentage_target, $percentage_divisor);
   game_alter('quest_item', $game_user, $item);
   //    if ($event_type == EVENT_QUESTS_100)
