@@ -1208,16 +1208,50 @@ EOF;
     foreach ($qgo->q as $q) {
 
       // Mark quests that can't be performed in this hood.
-      $wrong_hood = '';
+      $q->wrong_hood = '';
       if ($q->fkey_neighborhoods_id &&
         ($q->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
-        $wrong_hood = 'wrong-hood';
+        $q->wrong_hood = 'wrong-hood';
+        list( , , $q->actions_to_move, ) = game_get_actions_to_move($game_user,
+          $game_user->fkey_neighborhoods_id, $q->fkey_neighborhoods_id);
+
+        // Color code the wrong-hood icon.
+        if ($q->actions_to_move > $game_user->actions) {
+          $q->wrong_hood_color = 'red';
+        }
+        elseif ($q->actions_to_move > ($game_user->actions / 2)) {
+          $q->wrong_hood_color = 'orange';
+        }
+        elseif ($q->actions_to_move > ($game_user->actions / 4)) {
+          $q->wrong_hood_color = 'yellow';
+        }
+        else {
+          $q->wrong_hood_color = 'green';
+        }
+
+        // 6 Actions or less and the user has 6 available?  Make it green.
+        if ($q->actions_to_move <= 6 && $game_user->actions >= 6) {
+          $q->wrong_hood_color = 'green';
+        }
       }
 
+      if (strlen($q->wrong_hood)) {
+        echo <<< EOF
+          <div class="wrong-hood-wrapper overview-only">
+EOF;
+      }
       echo <<< EOF
-<img class="image-overview $wrong_hood" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+<img class="overview-only {$q->wrong_hood}" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
   style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
+      if (strlen($q->wrong_hood)) {
+        echo <<< EOF
+          <img class="wrong-hood-overlay colorize-{$q->wrong_hood_color}"
+            src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
+            alt="{$q->actions_to_move} actions to move">
+        </div>
+EOF;
+      }
       game_show_quest_slide($game_user, $q);
     }
     echo '</div>';
@@ -2632,33 +2666,46 @@ function game_show_quest_slide($game_user, $item, $outcome = '',
     }
   }
 
-  $wrong_hood = $comment_start = $comment_end = $go_there = '';
+  $wrong_hood = $wrong_hood_wrapper = $wrong_hood_overlay = $comment_start
+    = $comment_end = $go_there = '';
 
   // Need a specific hood?  Tell him/her to move.
   if ($item->fkey_neighborhoods_id &&
       ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
     $wrong_hood = 'wrong-hood';
+    $wrong_hood_wrapper = 'wrong-hood-wrapper';
     $description = t('This @quest can only be completed in %hood.',
       ['@quest' => $game_text['quest_lower'], '%hood' => $item->hood]);
     $comment_start = '<!-- ';
     $comment_end = ' -->';
+    $wrong_hood_overlay = <<< EOF
+<img class="wrong-hood-overlay colorize-{$item->wrong_hood_color}"
+  src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
+  alt="{$item->actions_to_move} actions to move">
+EOF;
+    $go_there = t('Go there');
+    if ($item->actions_to_move > 0) {
+      $go_there .= " ({$item->actions_to_move}@)";
+    }
     $go_there = <<< EOF
 <form action="/$game/move/$arg2/$item->fkey_neighborhoods_id">
-  <div class="quests-perform-button-wrapper">
-    <input class="quests-perform-button" type="submit" value="Go there"/>
+  <div class="quests-perform-button-wrapper $wrong_hood_wrapper">
+    <input class="quests-perform-button $wrong_hood" type="submit" value="{$go_there}"/>
+    $wrong_hood_overlay
   </div>
 </form>
 EOF;
   }
 
-
+  // Show the quest!
   echo <<< EOF
 $outcome
-<div class="quests $wrong_hood">
-  <div class="quest-icon">
+<div class="quests">
+  <div class="quest-icon $wrong_hood_wrapper">
     {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
-      <img src="$img" border="0" width="96" class="round4"
+      <img src="$img" border="0" width="96" class="round4 $wrong_hood"
       style="box-shadow: #{$item->rgb} 3px 3px 6px; border-color: #{$item->rgb}">
+      {$comment_start}$wrong_hood_overlay{$comment_end}
     {$comment_start}</a>{$comment_end}
     <div class="quest-complete">
       <div class="quest-complete-percentage"
@@ -4729,4 +4776,57 @@ function game_user_has_trait($game_user, $trait) {
     $game_user->traits[$trait])) {
     return TRUE;
   }
+}
+
+/**
+ * How many actions necessary to move to a new hood?
+ *
+ * Also returns hood objects for from and to hood and verb used.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $from_id
+ *   The id of the hood moving from.
+ * @param int $to_id
+ *   The id of the hood moving to.
+ *
+ * @return array
+ *   Returns the from hood object, the to hood object, the number of actions to
+ * move, and the verb used to display the move.
+ */
+function game_get_actions_to_move($game_user, $from_id, $to_id) {
+  $sql = 'select * from neighborhoods where id = %d;';
+  $result = db_query($sql, $from_id);
+  $from_hood = db_fetch_object($result);
+  $result = db_query($sql, $to_id);
+  $to_hood = db_fetch_object($result);
+
+  $distance = floor(sqrt(pow($from_hood->xcoor - $to_hood->xcoor, 2) +
+    pow($from_hood->ycoor - $to_hood->ycoor, 2)));
+  $actions_to_move = floor($distance / 8);
+  $verb = t('Walk');
+
+  // Find player's fastest equipment.
+  $sql = 'SELECT equipment.speed_increase as speed_increase,
+    action_verb from equipment
+
+    left join equipment_ownership
+      on equipment_ownership.fkey_equipment_id = equipment.id
+      and equipment_ownership.fkey_users_id = %d
+
+    where equipment_ownership.quantity > 0
+
+    order by equipment.speed_increase DESC limit 1;';
+  $result = db_query($sql, $game_user->id);
+  $eq = db_fetch_object($result);
+
+  if ($eq->speed_increase > 0) {
+    $verb = t($eq->action_verb);
+    game_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
+    $actions_to_move -= $eq->speed_increase;
+  }
+
+  $actions_to_move = max($actions_to_move, 6);
+  game_alter('actions_to_move', $game_user, $actions_to_move);
+  return [$from_hood, $to_hood, $actions_to_move, $verb];
 }

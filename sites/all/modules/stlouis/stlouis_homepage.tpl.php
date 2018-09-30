@@ -416,8 +416,7 @@ usemap="#new_main_menu"/>
 EOF;
 
 $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
-if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
-  || $game_user->meta == 'toxiboss') {
+if (game_get_value($game_user, 'enabled_alpha')) {
   $link = 'quest_groups';
 }
 else {

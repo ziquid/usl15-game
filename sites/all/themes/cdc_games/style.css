@@ -177,8 +177,8 @@ li {
 }
 
 .quests .quest-icon {
-  width: 96px;
-  height: 60px;
+  width: 97px;
+  height: 62px;
   padding-right: 5px;
   border: 0px;
   float: left;
@@ -186,8 +186,8 @@ li {
 }
 
 .quests.wrong-hood .quest-icon {
-  -webkit-filter: grayscale(70%);
-  filter: grayscale(70%);
+  -webkit-filter: grayscale(40%);
+  filter: grayscale(40%);
 }
 
 .quests .quest-complete {

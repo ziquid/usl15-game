@@ -14,8 +14,8 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-if (TRUE || $game_user->meta == 'beta' || $game_user->meta == 'admin'
-  || $game_user->meta == 'toxiboss') {
+//if (TRUE || $game_user->meta == 'beta' || $game_user->meta == 'admin'
+//  || $game_user->meta == 'toxiboss') {
   $sql = 'select `group` from quests where quests.id = %d;';
   $result = db_query($sql, $quest_id);
   $data = db_fetch_object($result);
@@ -23,26 +23,26 @@ if (TRUE || $game_user->meta == 'beta' || $game_user->meta == 'admin'
   $qgo = game_fetch_quest_groups($game_user, $group_id);
 //  firep($qgo, 'quest group object');
   $game_quest = &$qgo->q[$quest_id];
-}
-else {
-  $sql = 'select name from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $data = db_fetch_object($result);
-  $location = $data->name;
-
-  $sql = 'select party_title from `values` where id = %d;';
-  $result = db_query($sql, $game_user->fkey_values_id);
-  $data = db_fetch_object($result);
-  $party_title = preg_replace('/^The /', '', $data->party_title);
-
-  $data = [];
-  $sql = 'select quests.*, neighborhoods.name as hood from quests
-  LEFT OUTER JOIN neighborhoods
-  ON quests.fkey_neighborhoods_id = neighborhoods.id
-  where quests.id = %d;';
-  $result = db_query($sql, $quest_id);
-  $game_quest = db_fetch_object($result); // limited to 1 in DB
-}
+//}
+//else {
+//  $sql = 'select name from neighborhoods where id = %d;';
+//  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+//  $data = db_fetch_object($result);
+//  $location = $data->name;
+//
+//  $sql = 'select party_title from `values` where id = %d;';
+//  $result = db_query($sql, $game_user->fkey_values_id);
+//  $data = db_fetch_object($result);
+//  $party_title = preg_replace('/^The /', '', $data->party_title);
+//
+//  $data = [];
+//  $sql = 'select quests.*, neighborhoods.name as hood from quests
+//  LEFT OUTER JOIN neighborhoods
+//  ON quests.fkey_neighborhoods_id = neighborhoods.id
+//  where quests.id = %d;';
+//  $result = db_query($sql, $quest_id);
+//  $game_quest = db_fetch_object($result); // limited to 1 in DB
+//}
 //firep($game_quest, 'game_quest object');
 
 
@@ -278,14 +278,12 @@ $sql = 'select percent_complete, bonus_given from quest_completion
   where fkey_users_id = %d and fkey_quests_id = %d;';
 $result = db_query($sql, $game_user->id, $quest_id);
 $pc = db_fetch_object($result);
-//firep($pc, 'percent complete');
 
 // Get quest completion stats.
 $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
   $result = db_query($sql, $game_user->id, $game_quest->group);
   $quest_group_completion = db_fetch_object($result);
-//firep($quest_group_completion, 'quest group completion');
 
   $percentage_target = 100;
   $percentage_divisor = 1;
@@ -1121,8 +1119,7 @@ if (!empty($qgoo->name) && ($game_quest->group <= 1000)) {
 <a href="/$game/quests/$arg2/$older_group">&lt;&lt;</a>
 EOF;
 
-  if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
-    || $game_user->meta == 'toxiboss') {
+  if (game_get_value($game_user, 'enabled_alpha')) {
     $older_missions_html = <<< EOF
 <a href="/$game/quest_groups/$arg2#group-{$older_group}">&lt;&lt;</a>
 EOF;
@@ -1143,8 +1140,7 @@ if (!empty($qgno->min) && ($qgno->min <= $game_user->level + 1) &&
 <a href="/$game/quests/$arg2/$newer_group">&gt;&gt;</a>
 EOF;
 
-  if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
-    || $game_user->meta == 'toxiboss') {
+  if (game_get_value($game_user, 'enabled_alpha')) {
     $newer_missions_html = <<< EOF
 <a href="/$game/quest_groups/$arg2#group-{$newer_group}">&gt;&gt;</a>
 EOF;
@@ -1153,8 +1149,7 @@ EOF;
 
 $loc_quests = t('@location @quests', ['@location' => $location, '@quests' => "{$quest}s"]);
 
-if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
-  || $game_user->meta == 'toxiboss') {
+if (game_get_value($game_user, 'enabled_alpha')) {
   $loc_quests = <<< EOF
 <a href="/$game/quest_groups/$arg2#group-{$game_quest->group}">$loc_quests</a>
 EOF;
@@ -1223,8 +1218,7 @@ foreach ($data as $item) {
   game_show_quest_slide($game_user, $item);
 }
 
-if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
-  || $game_user->meta == 'toxiboss') {
+if (game_get_value($game_user, 'enabled_alpha')) {
   echo <<< EOF
 <div class="swiper-container">
   <div class="swiper-wrapper">

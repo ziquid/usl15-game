@@ -1,0 +1,41 @@
+body.alpha,
+body.party-unaffiliated.alpha,
+body.party-anarchists.alpha,
+body.party-docs.alpha,
+body.party-economic.alpha,
+body.party-faith.alpha,
+body.party-guns.alpha,
+body.party-mafia.alpha,
+body.party-intelligentsia.alpha,
+body.party-workers.alpha,
+body.party-toxicorp.alpha {
+  background-color: rgb(180, 200, 180);
+  background-image: none;
+  color: #f8fefb;
+}
+
+.alpha .quest-group-completion {
+  color: #334438;
+  text-shadow: 1px 1px 3px #dddfde;
+  margin-bottom: 22px;
+}
+
+.alpha a.version, .alpha .location, .alpha .news .dateline {
+  color: #101814;
+}
+
+.alpha .highlight {
+  color: #f0fef8 !important;
+  -webkit-text-stroke: 0.4px rgba(104, 28, 20, 0.8);
+  -webkit-text-fill-color: #f0fef8;
+}
+
+.alpha .news .message-body {
+  background-color: rgba(16, 24, 20, 0.8) !important;
+  border: rgba(16, 24, 20, 0.5) !important;
+  box-shadow: 2px 2px 5px #000;
+}
+
+.alpha p {
+  margin: 16px 8px 16px 16px;
+}

@@ -396,7 +396,7 @@ function stlouis_init() {
 
     $custom_theme = 'cdc_games';
     drupal_add_css($module_path . '/css/' . $game . '.css');
-    drupal_add_css($module_path . '/css/beta.css');
+    drupal_add_css($module_path . '/css/alpha.css');
     drupal_add_css($module_path . '/css/swiper.min.css');
     include $module_path . '/game_defs.inc';
 
@@ -1738,12 +1738,13 @@ function _stlouis_fetch_user() {
     $saved_party_icon = TRUE;
   }
 
-  static $saved_meta = FALSE;
-  if (!$saved_meta) {
-    if (strlen($game_user->meta)) {
-      drupal_add_js(['stlouis' => ['meta' => $game_user->meta]], 'setting');
+  // Tell JS that we have Alpha enabled.
+  static $enabled_alpha = FALSE;
+  if (!$enabled_alpha) {
+    if (game_get_value($game_user, 'enabled_alpha')) {
+      drupal_add_js(['stlouis' => ['enabled_alpha' => TRUE]], 'setting');
     }
-    $saved_meta = TRUE;
+    $enabled_alpha = TRUE;
   }
 
   $sql = 'select sum(equipment.energy_increase * equipment_ownership.quantity)

@@ -33,43 +33,8 @@ EOF;
 
 if ($neighborhood_id > 0) {
 
-  $sql = 'select * from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $cur_hood = db_fetch_object($result);
-//firep($cur_hood);
-
-  $sql = 'select * from neighborhoods where id = %d;';
-  $result = db_query($sql, $neighborhood_id);
-  $new_hood = db_fetch_object($result);
-//firep($new_hood);
-
-  $distance = floor(sqrt(pow($cur_hood->xcoor - $new_hood->xcoor, 2) +
-    pow($cur_hood->ycoor - $new_hood->ycoor, 2)));
-
-  $actions_to_move = floor($distance / 8);
-  $verb = t('Walk');
-
-  $sql = 'SELECT equipment.speed_increase as speed_increase, 
-    action_verb from equipment 
-
-    left join equipment_ownership
-      on equipment_ownership.fkey_equipment_id = equipment.id
-      and equipment_ownership.fkey_users_id = %d
-      
-    where equipment_ownership.quantity > 0
-      
-    order by equipment.speed_increase DESC limit 1;';
-
-  $result = db_query($sql, $game_user->id);
-  $eq = db_fetch_object($result);
-
-  if ($eq->speed_increase > 0) {
-    $verb = t($eq->action_verb);
-    game_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
-    $actions_to_move -= $eq->speed_increase;
-  }
-
-  $actions_to_move = max($actions_to_move, 6);
+  list($cur_hood, $new_hood, $actions_to_move, $verb) =
+    game_get_actions_to_move($game_user, $game_user->fkey_neighborhoods_id, $neighborhood_id);
 
   if (($game_user->meta == 'frozen') && ($actions_to_move > 6)) {
 
@@ -87,8 +52,6 @@ EOF;
     db_set_active('default');
     return;
   }
-
-  game_alter('actions_to_move', $game_user, $actions_to_move);
 
   echo <<< EOF
 <div class="title">$verb from <span class="nowrap highlight">$cur_hood->name</span>

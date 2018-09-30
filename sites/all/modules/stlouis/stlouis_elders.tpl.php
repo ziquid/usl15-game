@@ -143,9 +143,23 @@ if ((($game == 'stlouis') &&
 <div class="menu-option"><a href="http://$new_host/$game/home/$arg2">Switch
 games</a></div>
 EOF;
-
 }
 
-echo '</div><br/><br/>';
+if (game_get_value($game_user, 'enabled_alpha')) {
+  $enable = 'Disable';
+}
+else {
+  $enable = 'Enable';
+}
+echo <<< EOF
+<div class="menu-option">
+  <a href="/$game/elders_enable_alpha/$arg2">
+    $enable pre-release (Alpha) features (Free)
+  </a>
+</div>
+EOF;
 
 db_set_active('default');
+?>
+</div><br><br>
+

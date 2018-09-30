@@ -324,7 +324,7 @@ li {
 .land .land-sell-button, .land .land-perform-button,
 .send-message-send-wrapper .send-message-send,
 .quests .quests-perform-button, .crafting-submit-button {
-  padding: 3px 12px;
+  padding: 3px 20px 3px 12px;
   background-color: #188433;
   border: 1px solid #188433;
   border-radius: 4px;
@@ -640,11 +640,15 @@ textarea {
   text-decoration: line-through;
 }
 
-.swiper-slide .title img.image-overview {
+.swiper-slide .title .overview-only {
   display: none;
 }
 
-.swiper-slide.overview .title img.image-overview {
+.swiper-slide.overview .title .overview-only {
+  display: inline-block;
+}
+
+.swiper-slide.overview .title img.overview-only {
   display: inline-block;
   width: 68px;
   margin: 3px 5px;
@@ -654,8 +658,37 @@ textarea {
   border-radius: 6px;
 }
 
-.swiper-slide.overview .title img.image-overview.wrong-hood {
-  filter: grayscale(70%);
+.wrong-hood-wrapper {
+  position: relative;
+}
+
+div + .wrong-hood-wrapper {
+  width: 77px;
+  display: inline-block;
+}
+
+.quest-icon .wrong-hood-wrapper {
+  width: 100px;
+}
+
+img.wrong-hood {
+  filter: grayscale(60%);
+}
+
+input.wrong-hood {
+  text-align: left;
+}
+
+input + img.wrong-hood-overlay {
+  bottom: 8px;
+}
+
+img.wrong-hood-overlay {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 .swiper-slide .description {
@@ -724,4 +757,33 @@ textarea {
   -webkit-text-stroke: 0.2px #f0fef8;
   -webkit-text-fill-color: #101814;
   font-weight: bold;
+}
+
+/* based on https://codepen.io/stilllife00/pen/avXpgJ */
+.colorize-blue {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-red {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-orange {
+  filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(-25deg) saturate(1000%) contrast(0.7);
+}
+
+.colorize-yellow {
+  filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(5deg) saturate(1000%) contrast(0.7);
+}
+
+.colorize-green {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-grey, .colorize-gray {
+  filter: grayscale(100%) brightness(110%) contrast(0.9);
+}
+
+.colorize-black {
+  filter: invert(30%) grayscale(100%) brightness(70%) contrast(4);
 }
