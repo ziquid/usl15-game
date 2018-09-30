@@ -989,11 +989,13 @@ EOF;
  *
  * @param \stdClass $game_user
  *   The game user object.
+ * @param null|int $id
+ *   Which group to fetch, or all if null.
  *
- * @return \stdClass[]
- *   The array of quest group objects.
+ * @return \stdClass|\stdClass[]
+ *   A quest group object or the entire array of quest group objects.
  */
-function game_fetch_quest_groups($game_user) {
+function game_fetch_quest_groups($game_user, $id = NULL) {
   $data = [];
 
   // Admin?  Show all quests.
@@ -1014,9 +1016,16 @@ function game_fetch_quest_groups($game_user) {
   ' . $active_quests . '
   order by required_level ASC;';
 
-  $sql = 'SELECT qg.* FROM `quest_groups` qg
+  // Fetch a single group or all quest groups.
+  if ($id) {
+    $sql = 'SELECT qg.* FROM `quest_groups` qg
+      where qg.id = %d;';
+  }
+  else {
+    $sql = 'SELECT qg.* FROM `quest_groups` qg
     order by qg.id ASC';
-  $result = db_query($sql);
+  }
+  $result = db_query($sql, $id);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -1028,7 +1037,8 @@ function game_fetch_quest_groups($game_user) {
       $item->next_group_html) =
     game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
 
-    $show = FALSE;
+    // Show?  if a specific group was requested, always show it.
+    $show = $id ? TRUE : FALSE;
 
     // Always show Introductory missions.
     if ($item->id == 0) {
@@ -1077,17 +1087,17 @@ function game_fetch_quest_groups($game_user) {
 
     // Clickable?  Grab quest objects to show.
     if (strpos($item->class, 'clickable') !== FALSE) {
-      $result = db_query($sql_quests, $game_user->id, $item->id);
       $item->q = [];
+      $result = db_query($sql_quests, $game_user->id, $item->id);
       while ($q = db_fetch_object($result)) {
         list($q->rgb, $q->width) = game_get_quest_completion($q->percent_complete,
           $item->percentage_target, $item->percentage_divisor);
-        $item->q[] = $q;
+        $item->q[$q->id] = $q;
       }
     }
 
   }
-  return $data;
+  return $id ? $data[0] : $data;
 }
 
 /**
@@ -1150,8 +1160,10 @@ EOF;
  *   The game user object.
  * @param \stdClass $qgo
  *   The quest group object.
+ * @param array $options
+ *   Various options to control the display.
  */
-function game_show_quest_group_slide($game_user, $qgo) {
+function game_show_quest_group_slide($game_user, $qgo, $options = []) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1168,10 +1180,17 @@ EOF;
     $onclick = '';
   }
 
+  if (array_key_exists('showExpanded', $options) && $options['showExpanded']) {
+    $overview = '';
+  }
+  else {
+    $overview = 'overview';
+  }
+
   $description_class = strlen($qgo->description) ? '' : 'empty';
 
   echo <<< EOF
-<div class="swiper-slide overview" data-hash="group-{$qgo->id}" $onclick>
+<div class="swiper-slide $overview" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
     <div class="quest-group-name $qgo->class">$qgo->name {$quest}s</div>
     <div class="quest-group-completion">
@@ -1267,10 +1286,9 @@ function game_get_quest_completion($percent_complete, $percentage_target, $perce
   if (empty($percent_complete)) {
     $percent_complete = 0;
   }
-
   if ($percent_complete > floor($percentage_target / 2)) {
     $rgb = dechex(floor(($percentage_target - $percent_complete) /
-      (3 * $percentage_divisor) + 3)) . 'c0';
+      (6 * $percentage_divisor) + 4)) . 'c0';
   }
   else {
     $rgb = 'c' . dechex(floor(($percent_complete) /

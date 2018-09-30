@@ -720,7 +720,7 @@ textarea {
 
 .highlight {
   color: #101814 !important;
-  -webkit-text-stroke: 0.14px #f0fef8;
+  -webkit-text-stroke: 0.2px #f0fef8;
   -webkit-text-fill-color: #101814;
   font-weight: bold;
 }

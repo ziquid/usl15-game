@@ -11,27 +11,40 @@
 
 global $game, $phone_id;
 
-include drupal_get_path('module', arg(0)) . '/game_defs.inc';
+include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-$sql = 'select name from neighborhoods where id = %d;';
-$result = db_query($sql, $game_user->fkey_neighborhoods_id);
-$data = db_fetch_object($result);
-$location = $data->name;
+if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
+  || $game_user->meta == 'toxiboss') {
+  $sql = 'select `group` from quests where quests.id = %d;';
+  $result = db_query($sql, $quest_id);
+  $data = db_fetch_object($result);
+  $group_id = $data->group;
+  $qgo = game_fetch_quest_groups($game_user, $group_id);
+//  firep($qgo, 'quest group object');
+  $game_quest = &$qgo->q[$quest_id];
+}
+else {
+  $sql = 'select name from neighborhoods where id = %d;';
+  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+  $data = db_fetch_object($result);
+  $location = $data->name;
 
-$sql = 'select party_title from `values` where id = %d;';
-$result = db_query($sql, $game_user->fkey_values_id);
-$data = db_fetch_object($result);
-$party_title = preg_replace('/^The /', '', $data->party_title);
+  $sql = 'select party_title from `values` where id = %d;';
+  $result = db_query($sql, $game_user->fkey_values_id);
+  $data = db_fetch_object($result);
+  $party_title = preg_replace('/^The /', '', $data->party_title);
 
-$data = [];
-$sql = 'select quests.*, neighborhoods.name as hood from quests
+  $data = [];
+  $sql = 'select quests.*, neighborhoods.name as hood from quests
   LEFT OUTER JOIN neighborhoods
   ON quests.fkey_neighborhoods_id = neighborhoods.id
   where quests.id = %d;';
-$result = db_query($sql, $quest_id);
-$game_quest = db_fetch_object($result); // limited to 1 in DB
-//firep($game_quest);
+  $result = db_query($sql, $quest_id);
+  $game_quest = db_fetch_object($result); // limited to 1 in DB
+}
+//firep($game_quest, 'game_quest object');
+
 
 //   if ($event_type == EVENT_QUESTS_100)
 //     $game_quest->required_energy = min($game_quest->required_energy, 100);
@@ -112,7 +125,7 @@ if ($game_quest->equipment_1_required_quantity > 0) {
       ($game_quest->equipment_1_required_quantity - $quantity->quantity) .
       '"><img src="/sites/default/files/images/equipment/' .
       $game . '-' . $game_quest->fkey_equipment_1_required_id . '.png"
-      width="48"></a></div>&nbsp;x' .
+      width="48" class="not-yet"></a></div>&nbsp;x' .
       $game_quest->equipment_1_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-equipment-' .
@@ -141,7 +154,7 @@ if ($game_quest->equipment_2_required_quantity > 0) {
       ($game_quest->equipment_2_required_quantity - $quantity->quantity) . '"><img
       src="/sites/default/files/images/equipment/' .
       $game . '-' . $game_quest->fkey_equipment_2_required_id . '.png"
-      width="48"></a></div>&nbsp;x' . $game_quest->equipment_2_required_quantity .
+      width="48" class="not-yet"></a></div>&nbsp;x' . $game_quest->equipment_2_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_2_required_id;
@@ -170,7 +183,7 @@ if ($game_quest->equipment_3_required_quantity > 0) {
       ($game_quest->equipment_3_required_quantity - $quantity->quantity) . '"><img
       src="/sites/default/files/images/equipment/' .
       $game . '-' . $game_quest->fkey_equipment_3_required_id . '.png"
-      width="48"></a></div>&nbsp;x' . $game_quest->equipment_3_required_quantity .
+      width="48" class="not-yet"></a></div>&nbsp;x' . $game_quest->equipment_3_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_3_required_id;
@@ -197,7 +210,7 @@ if ($game_quest->staff_required_quantity > 0) {
       <div class="quest-required_equipment"><img
       src="/sites/default/files/images/staff/' .
       $game . '-' . $game_quest->fkey_staff_required_id . '.png"
-      width="48"></div>&nbsp;x' . $game_quest->staff_required_quantity .
+      width="48" class="not-yet"></div>&nbsp;x' . $game_quest->staff_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-staff-' .
       $game_quest->fkey_staff_required_id;
@@ -226,13 +239,12 @@ if ($game_quest->land_required_quantity > 0) {
       ($game_quest->land_required_quantity - $quantity->quantity) . '"><img
       src="/sites/default/files/images/land/' .
       $game . '-' . $game_quest->fkey_land_required_id . '.png"
-      width="48"></a></div>&nbsp;x' . $game_quest->land_required_quantity .
+      width="48" class="not-yet"></a></div>&nbsp;x' . $game_quest->land_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-land-' .
       $game_quest->fkey_land_required_id;
 
     game_competency_gain($game_user, 'homeless');
-
   }
 
 }
@@ -1069,61 +1081,19 @@ EOF;
 
 }
 else {
-
-      // Failed!
-      $fetch_header($game_user);
+  // Failed!
+  $fetch_header($game_user);
 
   if ($game_user->level < 6 and $game_user->experience > 0) {
-
     echo <<< EOF
 <ul>
 <li>Each $quest_lower gives you more $game_user->values and $experience</li>
 <li>Wait and rest for a few minutes if you run out of Energy</li>
 </ul>
 EOF;
-
   }
 
-  $sql = 'SELECT times_completed FROM `quest_group_completion`
-    where fkey_users_id = %d and fkey_quest_groups_id = %d;';
-  $result = db_query($sql, $game_user->id, $game_quest->group);
-  $quest_group_completion = db_fetch_object($result);
-
-  $percentage_target = 100;
-  $percentage_divisor = 1;
-
-  if ($quest_group_completion->times_completed > 0) {
-    $percentage_target = 200;
-    $percentage_divisor = 2;
-  }
-
-  $percent_complete = $pc->percent_complete + 0;
-  list($rgb, $width) = game_get_quest_completion($percent_complete, $percentage_target, $percentage_divisor);
-
-  echo <<< EOF
-<div class="quests">
-$outcome_reason
-<div class="quest-icon"><a
-  href="/$game/quests_do/$arg2/$game_quest->id"><img
-  src="/sites/default/files/images/quests/$game-$game_quest->id.png"
-  border="0" width="96"></a>
-  <div class="quest-complete"><div class="quest-complete-percentage"
-    style="background-color: #$rgb; width: {$width}px">&nbsp;</div>
-    <div class="quest-complete-text">$percent_complete%
-      complete</div></div></div>
-<div class="quest-details">
-  <div class="quest-name"><a
-    href="/$game/quests_do/$arg2/$game_quest->id">$game_quest->name</a></div>
-  <div class="quest-experience">+$game_quest->experience $experience,
-  +$game_quest->min_money to $game_quest->max_money $game_user->values</div>
-  <div class="quest-required_energy">Requires $game_quest->required_energy
-    Energy</div>
-  $extra_html
-  <br/><br/>
-</div>
-</div>
-EOF;
-
+  game_show_quest_slide($game_user, $game_quest, $outcome_reason);
 }
 
 if (substr($phone_id, 0, 3) == 'ai-') {
@@ -1152,9 +1122,9 @@ else {
 
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $game_quest->group - 1);
-$qgo = db_fetch_object($result);
+$qgoo = db_fetch_object($result);
 
-if (!empty($qgo->name) && ($game_quest->group <= 1000)) {
+if (!empty($qgoo->name) && ($game_quest->group <= 1000)) {
 
   $older_group = $game_quest->group - 1;
   $older_missions_html = <<< EOF
@@ -1172,11 +1142,11 @@ EOF;
 $sql = 'select min(required_level) as min from quests
   where `group` = %d;';
 $result = db_query($sql, $game_quest->group + 1);
-$item = db_fetch_object($result);
-firep($item);
+$qgno = db_fetch_object($result);
+//firep($item);
 
-if (!empty($item->min) && ($item->min <= $game_user->level + 1) &&
-  ($group_to_show <= 1000)) {
+if (!empty($qgno->min) && ($qgno->min <= $game_user->level + 1) &&
+  ($game_quest->group <= 1000)) {
 
   $newer_group = $game_quest->group + 1;
   $newer_missions_html = <<< EOF
@@ -1191,11 +1161,20 @@ EOF;
   }
 }
 
-$quests = "{$quest}s";
+$loc_quests = t('@location @quests', ['@location' => $location, '@quests' => "{$quest}s"]);
+
+if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
+  || $game_user->meta == 'toxiboss') {
+  $loc_quests = <<< EOF
+<a href="/$game/quest_groups/$arg2#group-{$game_quest->group}">$loc_quests</a>
+EOF;
+}
+
+$title = "$older_missions_html $loc_quests $newer_missions_html";
 
 echo <<< EOF
 <div class="title">
-$older_missions_html $location $quests $newer_missions_html
+  $title
 </div>
 EOF;
 
@@ -1207,7 +1186,6 @@ $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
   and fkey_users_id = %d
   where `group` = %d and quests.active = 1;';
 $result = db_query($sql, $game_user->id, $game_quest->group);
-
 $quest_group = db_fetch_object($result);
 //firep($quest_group);
 
@@ -1215,11 +1193,9 @@ $quest_group = db_fetch_object($result);
 $quest_group->completed += 0;
 
 if ($quest_group_completion->times_completed > 0) {
-
   $next_group_html = t('(2nd round)');
   $quest_group->completed -=
     ($quest_group->total * min($quest_group_completion->times_completed, 1));
-
 }
 
 echo <<< EOF
@@ -1243,82 +1219,34 @@ $sql = 'select quests.*, quest_completion.percent_complete,
 $result = db_query($sql, $game_user->id, $game_quest->group,
   $game_user->level);
 
-while ($item = db_fetch_object($result)) $data[] = $item;
-
-foreach ($data as $item) {
-
-//    if ($event_type == EVENT_QUESTS_100)
-//      $item->required_energy = min($item->required_energy, 100);
-
-  $description = str_replace('%party', "<em>$party_title</em>",
-    $item->description);
-
-  if (empty($item->percent_complete)) $item->percent_complete = 0;
-
-  if ($item->percent_complete > floor($percentage_target / 2)) {
-
-    $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
-      (4 * $percentage_divisor))) . 'c0';
-
-  }
-  else {
-
-    $rgb = 'c' . dechex(floor(($item->percent_complete) /
-      (4 * $percentage_divisor))) . '0';
-
-  }
-
-  $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
-  game_alter('quest_item', $game_user, $item);
-
-// firep($rgb);
-
-  if (($game_quest->group > 0) &&
-    (($item->fkey_neighborhoods_id != 0) &&
-    ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
-
-    // Show quests in other hoods?
-    echo <<< EOF
-<div class="quests wrong-hood">
-  <div class="quest-icon">
-    <img src="/sites/default/files/images/quests/$game-$item->id.png"
-      border="0" width="96"/>
-    <div class="quest-complete">
-      <div class="quest-complete-percentage"
-        style="background-color: #$rgb; width: {$width}px">
-        &nbsp;
-      </div>
-      <div class="quest-complete-text">
-        $item->percent_complete% complete
-      </div>
-    </div>
-  </div>
-  <div class="quest-details">
-    <div class="quest-name">
-      $item->name $active
-    </div>
-    <div class="quest-description">
-      This $quest_lower can only be completed in $item->hood.
-    </div>
-  </div>
-  <form action="/$game/move/$arg2/$item->fkey_neighborhoods_id">
-    <div class="quests-perform-button-wrapper">
-      <input class="quests-perform-button" type="submit" value="Go there"/>
-    </div>
-  </form>
-</div>
-EOF;
-
-  }
-  else {
-
-    // Quest in my hood.
-    game_show_quest($game_user, $item, $percentage_target,
-      $percentage_divisor, $quest_group, $party_title);
-  }
-
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
 }
 
+foreach ($data as $item) {
+  list($item->rgb, $item->width) = game_get_quest_completion($item->percent_complete,
+    $percentage_target, $percentage_divisor);
+  game_alter('quest_item', $game_user, $item);
+  //    if ($event_type == EVENT_QUESTS_100)
+  //      $item->required_energy = min($item->required_energy, 100);
+
+  game_show_quest_slide($game_user, $item);
+}
+
+if ($game_user->meta == 'beta' || $game_user->meta == 'admin'
+  || $game_user->meta == 'toxiboss') {
+  echo <<< EOF
+<div class="swiper-container">
+  <div class="swiper-wrapper">
+EOF;
+
+game_show_quest_group_slide($game_user, $qgo, ['showExpanded' => TRUE]);
+
+  echo <<< EOF
+  </div>
+</div>
+EOF;
+}
   // Don't show extra quests at first.
 //  if ($game_user->level > 1) {
 
@@ -1329,17 +1257,16 @@ EOF;
   $result = db_query($sql, $game_quest->group, $game_user->level + 1,
     $game_user->fkey_neighborhoods_id);
 
-  while ($item = db_fetch_object($result)) $data[] = $item;
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
 
   foreach ($data as $item) {
-
-//      if ($event_type == EVENT_QUESTS_100)
-//        $item->required_energy = min($item->required_energy, 100);
-
     $description = str_replace('%party', "<em>$party_title</em>",
       $item->description);
-firep($description);
     game_alter('quest_item', $game_user, $item);
+    //      if ($event_type == EVENT_QUESTS_100)
+    //        $item->required_energy = min($item->required_energy, 100);
 
     echo <<< EOF
 <div class="quests-soon">

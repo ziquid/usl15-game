@@ -21,7 +21,9 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
   game_move_ai();
 }
 
-if (is_numeric(arg(3))) $group_to_show = arg(3);
+if (is_numeric($arg3)) {
+  $group_to_show = $arg3;
+}
 
 if (is_numeric($group_to_show)) {
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
@@ -32,14 +34,12 @@ else if ($game_user->level < 6) {
   $group_to_show = '0';
   $sql_quest_neighborhood = 'where `group` = 0';
 }
-
-// Cinco De Mayo Quests.
 else if ($event_type == EVENT_CINCO_DE_MAYO && $game_user->fkey_neighborhoods_id == 30) {
+  // Cinco De Mayo Quests.
   $group_to_show = '1100';
   $sql_quest_neighborhood = 'where `group` = 1100';
 }
 else {
-
   // Show the group for which the player last successfully completed a quest.
   $group_to_show = $game_user->fkey_last_played_quest_groups_id;
   $sql_quest_neighborhood = 'where `group` = ' . $group_to_show;
@@ -196,72 +196,18 @@ $sql = 'select quests.*, quest_completion.percent_complete,
 //firep($sql);
 $result = db_query($sql, $game_user->id, $game_user->level);
 
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 
 foreach ($data as $item) {
-
-//  if ($event_type == EVENT_QUESTS_100)
-//    $item->required_energy = min($item->required_energy, 100);
-
-  $description = str_replace('%party', "<em>$party_title</em>",
-    $item->description);
-
-  list($rgb, $width) = game_get_quest_completion($item->percent_complete,
+  list($item->rgb, $item->width) = game_get_quest_completion($item->percent_complete,
     $percentage_target, $percentage_divisor);
-  // firep($rgb);
-
-  $active = ($item->active) ? '' : ' (inactive)';
-
   game_alter('quest_item', $game_user, $item);
-  firep($item, 'quest item');
+  //    if ($event_type == EVENT_QUESTS_100)
+  //      $item->required_energy = min($item->required_energy, 100);
 
-  if (($group_to_show > 0) &&
-    (($item->fkey_neighborhoods_id != 0) &&
-      ($item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id))) {
-
-    // Show quests in other hoods?
-//    game_show_quest($game_user, $item, $percentage_target,
-//      $percentage_divisor, $quest_group, $party_title);
-
-    echo <<< EOF
-<div class="quests wrong-hood">
-  <div class="quest-icon">
-    <img src="/sites/default/files/images/quests/$game-$item->id.png"
-      border="0" width="96"/>
-    <div class="quest-complete">
-      <div class="quest-complete-percentage"
-        style="background-color: #$rgb; width: {$width}px">
-        &nbsp;
-      </div>
-      <div class="quest-complete-text">
-        $item->percent_complete% complete
-      </div>
-    </div>
-  </div>
-  <div class="quest-details">
-    <div class="quest-name">
-      $item->name $active
-    </div>
-    <div class="quest-description">
-      This $quest_lower can only be completed in $item->hood.
-    </div>
-  </div>
-  <form action="/$game/move/$arg2/$item->fkey_neighborhoods_id">
-    <div class="quests-perform-button-wrapper">
-      <input class="quests-perform-button" type="submit" value="Go there"/>
-    </div>
-  </form>
-</div>
-EOF;
-
-  }
-  else {
-
-    // Quest in my hood.
-    game_show_quest($game_user, $item, $percentage_target,
-      $percentage_divisor, $quest_group, $party_title);
-  }
-
+  game_show_quest_slide($game_user, $item);
 }
 
   // Don't show extra quests at first.
