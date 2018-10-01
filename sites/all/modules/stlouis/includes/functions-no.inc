@@ -373,14 +373,14 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
   if ($eo->quantity < $quantity) return FALSE;
 
   // Using all?  Remove entry.
-  if ($eo->quantity == $quantity){
+  if ($eo->quantity == $quantity) {
 
     $sql = 'delete from clan_equipment_ownership
       where fkey_clans_id = %d and fkey_equipment_id = %d;';
     $result = db_query($sql, $game_user->fkey_clans_id, $id);
 
   }
-  else{
+  else {
 
     $sql = 'update clan_equipment_ownership set quantity = quantity - %d
       where fkey_equipment_id = %d and fkey_clans_id = %d;';
