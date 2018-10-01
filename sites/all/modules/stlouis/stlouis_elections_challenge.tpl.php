@@ -510,15 +510,15 @@ $ip_array[$ip_key]++;
     // Move to FP, zero actions.
     if ($game == 'stlouis') {
       $sql = 'update users set fkey_neighborhoods_id = 81, actions = 0,
-        actions_next_gain = "%s", karma = karma - 100
-        where id = %d;';
+        actions_next_gain = "%s" where id = %d;';
+        game_user($game_user, "Number of players allowed exceeds the limit", -100);
     }
     else {
 
       // CG -- move to zagros.
       $sql = 'update users set fkey_neighborhoods_id = 11, actions = 0,
-        actions_next_gain = "%s", karma = karma - 100
-        where id = %d;';
+        actions_next_gain = "%s" where id = %d;';
+      game_user($game_user, "Number of players allowed exceeds the limit", -100);
     }
 
     db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180), $voter->id);
