@@ -767,9 +767,9 @@ img.wrong-hood-overlay {
 }
 
 .highlight {
-  color: #101814 !important;
-  -webkit-text-stroke: 0.2px #f0fef8;
-  -webkit-text-fill-color: #101814;
+  color: #f0fef8 !important;
+  -webkit-text-stroke: 0.2px #101814;
+  -webkit-text-fill-color: #f0fef8;
   font-weight: bold;
 }
 
