@@ -62,3 +62,11 @@ db_set_active('default');
   </div>
 </div>
 
+<div class="message-title">If you enable pre-release features, you can further customize your game experience by entering a code here:</div>
+<div class="send-message">
+  <form method="get" action="">
+    <input type="text" class="message-textarea" name="code"/>
+    <input class="send-message-send" type="submit" value="send"/>
+  </form>
+</div>
+
