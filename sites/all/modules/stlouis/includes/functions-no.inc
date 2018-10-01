@@ -10,16 +10,16 @@
 
 function NO_sound($name) {
 
-global $game;
+  global $game;
 
 echo <<< EOF
-<script type="text/javascript">
-  var mp3 = document.createElement("audio");
-  mp3.setAttribute('src', '/sites/default/files/sounds/{$game}_$name.mp3');
-  mp3.load();
-  document.documentElement.appendChild(mp3);
-  mp3.play();
-</script>
+  <script type="text/javascript">
+    var mp3 = document.createElement("audio");
+    mp3.setAttribute('src', '/sites/default/files/sounds/{$game}_$name.mp3');
+    mp3.load();
+    document.documentElement.appendChild(mp3);
+    mp3.play();
+  </script>
 EOF;
   return;
 
@@ -49,7 +49,7 @@ function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
     $a_start = $a_end = '';
     $not_yet = 'not-yet';
 
-}
+  }
 
   echo <<< EOF
 <div class="quest-required">
