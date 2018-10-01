@@ -1119,3 +1119,10 @@ img.round4 {
 .highlight {
   color: #cc0;
 }
+
+#copyright {
+  text-align: center;
+  color: #ccc;
+  margin: 20px 0 12px;
+  font-size: 10px;
+}

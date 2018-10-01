@@ -62,11 +62,13 @@ db_set_active('default');
   </div>
 </div>
 
-<div class="message-title">If you enable pre-release features, you can further customize your game experience by entering a code here:</div>
-<div class="send-message">
-  <form method="get" action="">
-    <input type="text" class="message-textarea" name="code"/>
-    <input class="send-message-send" type="submit" value="send"/>
+<div class="alpha-only">
+  <p>
+    If you enable pre-release features, you can further customize your game experience by entering a code here:
+  </p>
+
+  <form method="get" action="" class="ask-name">
+    <input type="text" name="code" width="20" maxlength="20">
+    <input class="crafting-submit-button" type="submit" value="Submit">
   </form>
 </div>
-

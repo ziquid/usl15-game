@@ -39,3 +39,11 @@ body.party-toxicorp.alpha {
 .alpha p {
   margin: 16px 8px 16px 16px;
 }
+
+.alpha-only {
+  display: none;
+}
+
+body.alpha .alpha-only {
+  display: inherit;
+}
