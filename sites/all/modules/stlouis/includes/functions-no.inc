@@ -21,12 +21,12 @@ echo <<< EOF
   mp3.play();
 </script>
 EOF;
-return;
+  return;
 
-echo <<< EOF
+  echo <<< EOF
 <audio src="/sites/default/files/sounds/{$game}_$name.mp3" autoplay="true">
-<embed src="/sites/default/files/sounds/{$game}_$name.mp3" autostart="true"
-loop="false" hidden="true"/>
+  <embed src="/sites/default/files/sounds/{$game}_$name.mp3" autostart="true"
+    loop="false" hidden="true"/>
 </audio>
 EOF;
 }
@@ -37,31 +37,31 @@ function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'select quantity from clan_equipment_ownership
-  where fkey_equipment_id = %d and fkey_clans_id = %d;';
+    where fkey_equipment_id = %d and fkey_clans_id = %d;';
   $result = db_query($sql, $equipment_id, $game_user->fkey_clans_id);
   $quantity = db_fetch_object($result);
 
-  if ($quantity->quantity >= $req_quantity){
-  $not_yet = $a_start = $a_end = '';
+  if ($quantity->quantity >= $req_quantity) {
+    $not_yet = $a_start = $a_end = '';
   }
-  else{
+  else {
 
-  $a_start = $a_end = '';
-  $not_yet = 'not-yet';
+    $a_start = $a_end = '';
+    $not_yet = 'not-yet';
 
 }
 
-echo <<< EOF
+  echo <<< EOF
 <div class="quest-required">
-$a_start
-  <img class="$not_yet"
-  src="/sites/default/files/images/equipment/$game-$equipment_id.png"
-  width="48">
+  $a_start
+    <img class="$not_yet"
+      src="/sites/default/files/images/equipment/$game-$equipment_id.png"
+      width="48">
   $a_end
   <div class="quest-required-num">
-  Clan
-  <br/>
-  x$req_quantity
+    Clan
+    <br/>
+    x$req_quantity
   </div>
 </div>
 EOF;
@@ -74,33 +74,33 @@ function NO_required_land($game_user, $land_id, $req_quantity) {
   $arg2 = check_plain(arg(2));
 
   $sql = 'select quantity from land_ownership
-  where fkey_land_id = %d and fkey_users_id = %d;';
+    where fkey_land_id = %d and fkey_users_id = %d;';
   $result = db_query($sql, $land_id, $game_user->id);
   $quantity = db_fetch_object($result);
 
-  if ($quantity->quantity >= $req_quantity){
+  if ($quantity->quantity >= $req_quantity) {
 
-  $not_yet = $a_start = $a_end = '';
+    $not_yet = $a_start = $a_end = '';
 
   }
-  else{
+  else {
 
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/land_buy/' .
-    $arg2 . '/' . $land_id . '/' .
-    ($req_quantity - $quantity->quantity) . '">';
+      $arg2 . '/' . $land_id . '/' .
+      ($req_quantity - $quantity->quantity) . '">';
     $a_end = '</a>';
 
   }
 
   echo <<< EOF
 <div class="quest-required_stuff">Requires
-<div class="quest-required_equipment">
-  $a_start
-  <img class="$not_yet"
-  src="/sites/default/files/images/land/$game-$land_id.png"
-  width="48">
-  $a_end
+  <div class="quest-required_equipment">
+    $a_start
+      <img class="$not_yet"
+        src="/sites/default/files/images/land/$game-$land_id.png"
+        width="48">
+    $a_end
   </div>&nbsp;x$req_quantity
 </div>
 EOF;
@@ -112,27 +112,27 @@ function NO_required_elected_position($game_user, $id, $name) {
   global $game;
   $arg2 = check_plain(arg(2));
 
-  if ($game_user->ep_level == $id){
+  if ($game_user->ep_level == $id) {
 
-  $not_yet = $a_start = $a_end = '';
+    $not_yet = $a_start = $a_end = '';
 
   }
-  else{
+  else {
 
-  $not_yet = 'not-yet';
-  $a_start = '<a href="/' . $game . '/hierarchies/' .
-  $arg2 . '">';
-  $a_end = '</a>';
+    $not_yet = 'not-yet';
+    $a_start = '<a href="/' . $game . '/hierarchies/' .
+      $arg2 . '">';
+    $a_end = '</a>';
 
   }
 
 echo <<< EOF
 <div class="quest-required_stuff">Requires
-<div class="quest-required_equipment">
-  $a_start
-  $ep_short: $name
-  $a_end
-</div>
+  <div class="quest-required_equipment">
+    $a_start
+      $ep_short: $name
+    $a_end
+  </div>
 </div>
 EOF;
 
@@ -146,28 +146,28 @@ function NO_required_competency($game_user, $id, $level, $name) {
   $check = game_competency_level($game_user, $id);
   $comp_name = game_competency_level_name($level, TRUE);
 
-  if ($check->level >= $level){
+  if ($check->level >= $level) {
 
-  $not_yet = $a_start = $a_end = '';
+    $not_yet = $a_start = $a_end = '';
 
   }
-  else{
+  else {
 
-  $not_yet = 'not-yet';
-  $a_start = '<a href="/' . $game . '/user_comp/' .
-  $arg2 . '">';
-  $a_end = '</a>';
+    $not_yet = 'not-yet';
+    $a_start = '<a href="/' . $game . '/user_comp/' .
+      $arg2 . '">';
+    $a_end = '</a>';
 
   }
 
 echo <<< EOF
 <div class="quest-required_stuff">Requires
-<div class="quest-required_equipment">
-  $a_start
-  $name Competency:<br/>
-  <span>$comp_name (Level $level)</span>
-  $a_end
-</div>
+  <div class="quest-required_equipment">
+    $a_start
+      $name Competency:<br/>
+      <span>$comp_name (Level $level)</span>
+    $a_end
+  </div>
 </div>
 EOF;
 
@@ -177,11 +177,11 @@ function NO_enhanced_competency($game_user, $id, $name) {
 
   global $game;
 
-echo <<< EOF
+  echo <<< EOF
 <div class="quest-payout">Competency Enhanced:<br/>
-<span class="highlight">
-  $name
-</span>
+  <span class="highlight">
+    $name
+  </span>
 </div>
 EOF;
 
@@ -190,7 +190,7 @@ EOF;
 function NO_is_quest_complete($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
-  where fkey_users_id = %d and fkey_quests_id = %d;';
+    where fkey_users_id = %d and fkey_quests_id = %d;';
   $result = db_query($sql, $game_user->id, $quest_id);
   $item = db_fetch_object($result);
 
@@ -201,7 +201,7 @@ function NO_is_quest_complete($game_user, $quest_id) {
 function NO_is_quest_started($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
-  where fkey_users_id = %d and fkey_quests_id = %d;';
+    where fkey_users_id = %d and fkey_quests_id = %d;';
   $result = db_query($sql, $game_user->id, $quest_id);
   $item = db_fetch_object($result);
 
@@ -232,8 +232,8 @@ function NO_has_job($game_user) {
 function NO_has_sent_message($game_user) {
 
   $sql = 'SELECT count(id) as count
-  FROM user_messages
-  WHERE fkey_users_from_id = %d;';
+    FROM user_messages
+    WHERE fkey_users_from_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
@@ -244,9 +244,9 @@ function NO_has_sent_message($game_user) {
 function NO_has_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
-  FROM equipment_ownership
-  WHERE fkey_users_id = %d
-  AND fkey_equipment_id = %d;';
+    FROM equipment_ownership
+    WHERE fkey_users_id = %d
+    AND fkey_equipment_id = %d;';
   $result = db_query($sql, $game_user->id, $id);
   $item = db_fetch_object($result);
 
@@ -257,9 +257,9 @@ function NO_has_equipment($game_user, $id, $quantity) {
 function NO_has_clan_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
-  FROM clan_equipment_ownership
-  WHERE fkey_clans_id = %d
-  AND fkey_equipment_id = %d;';
+    FROM clan_equipment_ownership
+    WHERE fkey_clans_id = %d
+    AND fkey_equipment_id = %d;';
   $result = db_query($sql, $game_user->fkey_clans_id, $id);
   $item = db_fetch_object($result);
 
@@ -276,14 +276,14 @@ function NO_show_actions_menu($game_user) {
   if (arg(3) == '') $normal_active = 'active';
   if (arg(3) == 'clan') $clan_active = 'active';
 
-echo <<< EOF
+  echo <<< EOF
 <div class="news">
-<a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
-<a href="/$game/actions/$arg2/clan" class="button $clan_active">Clan</a>
+  <a href="/$game/actions/$arg2" class="button $normal_active">Normal</a>
+  <a href="/$game/actions/$arg2/clan" class="button $clan_active">Clan</a>
 </div>
 EOF;
 
-_show_goal($game_user);
+  _show_goal($game_user);
 
 }
 
@@ -302,17 +302,17 @@ function NO_show_clan_menu($game_user) {
   echo <<< EOF
 <div class="news">
   <a href="/$game/clan_list/$arg2/$arg3"
-  class="button $list_active">Members</a>
+    class="button $list_active">Members</a>
   <a href="/$game/clan_msg/$arg2/$arg3"
-  class="button $msg_active">Messages</a>
+    class="button $msg_active">Messages</a>
   <a href="/$game/clan_announcements/$arg2/$arg3"
-  class="button $ann_active">Announcements</a>
+    class="button $ann_active">Announcements</a>
   <a href="/$game/clan_list/$arg2/$arg3"
-  class="button not-yet $admin_active">Admin</a>
+    class="button not-yet $admin_active">Admin</a>
 </div>
 EOF;
 
-_show_goal($game_user);
+  _show_goal($game_user);
 
 }
 
@@ -323,23 +323,23 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
   $eq = db_fetch_object($result);
 
   $sql = 'select * from clan_equipment_ownership
-  where fkey_equipment_id = %d and fkey_clans_id = %d;';
+    where fkey_equipment_id = %d and fkey_clans_id = %d;';
   $result = db_query($sql, $id, $game_user->fkey_clans_id);
   $eo = db_fetch_object($result);
 
   // Eo entry already there.
-  if (!empty($eo)){
+  if (!empty($eo)) {
 
     if (($eq->quantity_limit > 0) &&
       (($eo->quantity + $quantity) > $eq->quantity_limit))
       return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
 
     $sql = 'update clan_equipment_ownership set quantity = quantity + %d
-    where fkey_equipment_id = %d and fkey_clans_id = %d;';
+      where fkey_equipment_id = %d and fkey_clans_id = %d;';
     $result = db_query($sql, $quantity, $id, $game_user->fkey_clans_id);
 
   }
-  else{
+  else {
 
     if (($eq->quantity_limit > 0) && ($quantity > $eq->quantity_limit))
       return [FALSE, 'quantity-exceeded', $eq->quantity_limit];
