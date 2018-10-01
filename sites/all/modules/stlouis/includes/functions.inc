@@ -11,7 +11,7 @@
 
 require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
 require_once drupal_get_path('module', 'stlouis') . '/includes/functions-no.inc';
-require_once drupal_get_path('module', 'stlouis') . '/includes/functions-equipment.inc';
+require_once drupal_get_path('module', 'stlouis') . '/includes/functions-equip.inc';
 
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
