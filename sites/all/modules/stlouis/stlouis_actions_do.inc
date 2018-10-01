@@ -1027,7 +1027,7 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
   $game_user = $fetch_user();
   $can_do_again = FALSE;
 
-  game_user($game_user, "Stole some value!", -5);
+  game_karma($game_user, "Stole some value!", -5);
 
   $sql = 'update users set debates_last_time = "%s" where id = %d;';
   db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME), $game_user->id);
