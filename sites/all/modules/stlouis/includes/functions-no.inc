@@ -126,7 +126,7 @@ function NO_required_elected_position($game_user, $id, $name) {
 
   }
 
-echo <<< EOF
+  echo <<< EOF
 <div class="quest-required_stuff">Requires
   <div class="quest-required_equipment">
     $a_start
@@ -160,7 +160,7 @@ function NO_required_competency($game_user, $id, $level, $name) {
 
   }
 
-echo <<< EOF
+  echo <<< EOF
 <div class="quest-required_stuff">Requires
   <div class="quest-required_equipment">
     $a_start
@@ -218,10 +218,10 @@ function NO_on_screen($screen) {
 function NO_has_job($game_user) {
 
   $sql = 'SELECT sum(payout) as job_income
-  FROM land_ownership AS lo
-  LEFT JOIN land ON lo.fkey_land_id = land.id
-  WHERE fkey_users_id = %d
-  AND land.type = "job";';
+    FROM land_ownership AS lo
+    LEFT JOIN land ON lo.fkey_land_id = land.id
+    WHERE fkey_users_id = %d
+    AND land.type = "job";';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
