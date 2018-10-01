@@ -19,5 +19,9 @@
   <?php print $footer ?>
 </div>
 <?php print $closure ?>
+<div id="copyright">
+  Copyright &copy; 2013-2016 Ziquid Design Studio.&nbsp; All Rights Reserved.
+<br/><br/>&nbsp;
+</div>
 </body>
 </html>
