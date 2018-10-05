@@ -79,7 +79,7 @@ ob_end_clean();
 
   }
 
-  $luck = 10;
+  $luck = 1000;
 
   // FIXME: replace with switch().
 
