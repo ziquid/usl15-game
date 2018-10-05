@@ -74,12 +74,13 @@ ob_end_clean();
 
       // FIXME -- debit karma.
       echo 'NO';
+      $karma = 1000;
       exit;
     }
 
   }
 
-  $luck = 1000;
+  $luck = 10;
 
   // FIXME: replace with switch().
 
