@@ -12,6 +12,7 @@ body.party-toxicorp.alpha {
   background-color: rgb(180, 200, 180);
   background-image: none;
   color: #f8fefb;
+  margin: auto;
 }
 
 .alpha .quest-group-completion {

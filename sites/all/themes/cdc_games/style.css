@@ -1,5 +1,5 @@
 body {
-  margin: 0;
+  margin: auto;
   padding: 0;
   font: 12px Arial, Helvetica, sans-serif;
   color: #fff;
@@ -165,6 +165,7 @@ li {
   margin-left: 0;
   padding-left: 0;
   margin-bottom: 5px;
+  font-size: 11px;
 }
 
 .quests {
@@ -1122,7 +1123,11 @@ img.round4 {
 
 #copyright {
   text-align: center;
-  color: #ccc;
-  margin: 48px 0 12px;
+  color: #aaa;
+  margin: 72px 0 12px;
   font-size: 10px;
+}
+
+.center {
+  text-align: center;
 }

@@ -43,6 +43,9 @@ echo <<< EOF
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
+<div class="tagline">
+  &bull; Become the Mayor &bull;
+</div>
 EOF;
 
   switch ($_REQUEST['page']) {

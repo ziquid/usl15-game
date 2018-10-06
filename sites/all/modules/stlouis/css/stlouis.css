@@ -92,21 +92,28 @@ body.game-stlouis .welcome {
   border: 1px solid #f8fefb;
   color: #f8fefb;
   min-height: 150px;
+  box-shadow: 1px 1px 3px lightblue;
 }
 
 .welcome .subtitle {
   color: #1ca443;
   font-weight: bold;
   margin-top: 9px;
+  margin-bottom: 9px;
+  clear: none;
 }
 
 .welcome p + .subtitle {
-  margin-top: 20px;
+  margin-top: 18px;
 }
 
 .welcome-continue a, .election-continue a {
   border: 1px solid #1ca443;
   background-color: #1ca443;
+}
+
+.welcome ul {
+  clear: none;
 }
 
 .main-menu, .elders-menu {
@@ -320,6 +327,17 @@ body.game-stlouis .welcome {
   float: left;
   background-size: contain;
   margin-right: 12px;
+}
+
+.city-icon {
+  background-image: url('/sites/default/files/images/stlouis_city_icon.jpg');
+  background-repeat: no-repeat;
+  background-position: 0 1px;
+  width: 106px;
+  height: 164px;
+  float: left;
+  border-radius: 8px;
+  margin-right: 14px;
 }
 
 .username-error {
@@ -833,4 +851,13 @@ a.button.continue {
 
 .button-wrapper {
   text-align: center;
+}
+
+.tagline {
+  text-align: center;
+  color: #687;
+  text-transform: uppercase;
+  margin-top: -15px;
+  font-weight: bold;
+  letter-spacing: 4px;
 }
