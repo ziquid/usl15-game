@@ -15,23 +15,17 @@ require_once drupal_get_path('module', 'stlouis') . '/includes/functions-equip.i
 
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
-  global $game, $phone_id;
-  $arg2 = check_plain(arg(2));
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
   $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
 
-  switch ($type) {
-
-    case 'continue':
-      echo <<< EOF
-<div class="subtitle">
-  <a href="/$link">
-    <img src="/sites/default/files/images/{$game}_continue.png" width=266/>
+  echo <<< EOF
+<div class="button-wrapper">
+  <a class="continue button" href="/$link">
+    $type
   </a>
 </div>
 EOF;
-      break;
-
-  }
 }
 
 /**

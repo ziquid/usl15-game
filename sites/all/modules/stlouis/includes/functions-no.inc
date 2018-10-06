@@ -9,7 +9,7 @@
  */
 
 function NO_sound($name) {
-
+return;
   global $game;
 
 echo <<< EOF
