@@ -86,14 +86,14 @@ echo <<< EOF
 <ul>
   <li>Finish missions to earn skills and influence</li>
   <li>Cooperate and compete with other players to achieve your goals</li>
-  <li>Purchase equipment and businesses to win votes</li>
+  <li>Purchase equipment and investments to win votes</li>
   <li>Become a city elder, political party leader, and then mayor</li>
 </ul>
 </div>
-<div class="subtitle">
-<a href="/$game/quests/$arg2">
-  <img src="/sites/default/files/images/{$game}_continue.png"/>
-</a>
+<div class="button-wrapper">
+  <a class="continue button" href="/$game/quests/$arg2">
+    Continue
+  </a>
 </div>
 EOF;
 

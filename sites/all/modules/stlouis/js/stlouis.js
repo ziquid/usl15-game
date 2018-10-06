@@ -6,10 +6,16 @@ Drupal.behaviors.stlouis = function (context) {
 
   if (Drupal.settings.stlouis.enabled_alpha) {
     var level = parseInt(Drupal.settings.stlouis.level);
-    // level = 40;
-    var red = Math.floor(180 - (level / 5));
-    var green = Math.floor(200 - (level / 1.2));
-    var blue = Math.floor(180 - (level / 1.5));
+    // level = 1;
+    var red = Math.max(level - 100, 0);
+    var green = Math.max(Math.floor(100 - level), 0);
+    var blue = level;
+    if (blue > 100) {
+      blue = 200 - blue;
+    }
+    red = Math.floor(red * 0.6);
+    green = Math.floor(green * 0.6);
+    blue = Math.floor(blue * 0.6);
     $('body').addClass('alpha');
     $('body.alpha').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }

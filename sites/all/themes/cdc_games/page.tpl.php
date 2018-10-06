@@ -9,7 +9,7 @@
   <meta name="viewport" content="width=device-width, user-scalable=no">
 </head>
 
-<body <?php print theme("onload_attribute"); ?>>
+<body <?php print theme("onload_attribute"); ?> class="<?php print $body_classes; ?>">
 <?php if ($messages != ""): ?>
   <div id="message"><?php print $messages ?></div>
 <?php endif; ?>

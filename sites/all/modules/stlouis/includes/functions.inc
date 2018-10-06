@@ -2302,7 +2302,22 @@ function game_action_use(&$game_user, $quantity = 1) {
   return TRUE;
 }
 
+/**
+ * Update a user's karma.
+ *
+ * @param \stdClass() $game_user
+ *   The game user object.
+ * @param string $text
+ *   Explanatory text.
+ * @param int $quantity
+ *   How much karma to add (subtract).
+ *
+ * @return bool
+ *   Whether the update was successful or not.
+ */
 function game_karma($game_user, $text, $quantity) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'update users set karma = karma + %d where id = %d;';
   db_query($sql, $quantity, $game_user->id);
@@ -2313,6 +2328,46 @@ function game_karma($game_user, $text, $quantity) {
     "$game_user->username gained/lost $quantity karma " .
     "(was: $game_user->karma) for: $text", $quantity);
 
+  // Reprocess user object.
+  $game_user = $fetch_user();
+  return TRUE;
+}
+
+/**
+ * Update a user's luck.  Log to the appropriate database.
+ *
+ * @param \stdClass() $game_user
+ *   The game user object.
+ * @param int $quantity
+ *   The amount of luck to credit (debit).
+ * @param string $text
+ *   Explanatory text.
+ * @param string $type
+ *   Type of update: purchase, use, system_gift.
+ * @param string $subtype
+ *   Subtype of $type.
+ */
+function game_luck($game_user, $quantity, $text, $type, $subtype) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  $sql = 'update users set luck = luck + %d
+    where id = %d;';
+  $result = db_query($sql, $quantity, $game_user->id);
+
+  switch ($type) {
+
+    case 'purchase':
+      $sql = 'insert into purchases (fkey_users_id, amount_now, amount_purchased, purchase)
+        values (%d, %d, %d, "%s");';
+      db_query($sql, $game_user->id, $game_user->luck, $quantity, $text);
+      mail('joseph@ziquid.com', $game . ' Luck purchase', $text);
+      break;
+
+  }
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
   return TRUE;
 }
 
