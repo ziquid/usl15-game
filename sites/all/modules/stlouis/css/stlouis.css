@@ -101,7 +101,7 @@ body.game-stlouis .welcome {
 }
 
 .welcome p + .subtitle {
-  margin-top: 22px;
+  margin-top: 20px;
 }
 
 .welcome-continue a, .election-continue a {

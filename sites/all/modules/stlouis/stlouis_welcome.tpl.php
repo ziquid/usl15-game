@@ -68,9 +68,8 @@ game_send_user_message($game_user->id, $data, 0, $msg, 'user');
 // Show welcome message.
 echo <<< EOF
 <div class="title">
-<img src="/sites/default/files/images/{$game}_title.png"/>
+  <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
-<p>&nbsp;</p>
 <div class="welcome">
 <div class="wise_old_man_large">
 </div>
@@ -87,7 +86,7 @@ echo <<< EOF
   <li>Finish missions to earn skills and influence</li>
   <li>Cooperate and compete with other players to achieve your goals</li>
   <li>Purchase equipment and investments to win votes</li>
-  <li>Become a city elder, political party leader, and then mayor</li>
+  <li>Become a city elder, political party leader, and mayor</li>
 </ul>
 </div>
 <div class="button-wrapper">
