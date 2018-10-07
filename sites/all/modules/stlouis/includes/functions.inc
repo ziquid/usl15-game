@@ -715,7 +715,8 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
   $data = [];
 
   // Admin?  Show all quests.
-  $active_quests = ($game_user->meta == 'admin') ? '' : 'and quests.active = 1';
+  $active_quests = ($game_user->meta == 'admin') ? '' :
+    'and quests.active = 1 and required_level <= %d';
 
   // SQL for quests.
   $sql_quests = 'select quests.*,
@@ -805,7 +806,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
     // Clickable?  Grab quest objects to show.
     if (strpos($item->class, 'clickable') !== FALSE) {
       $item->q = [];
-      $result = db_query($sql_quests, $game_user->id, $item->id);
+      $result = db_query($sql_quests, $game_user->id, $item->id, $game_user->level + 1);
       while ($q = db_fetch_object($result)) {
         list($q->rgb, $q->width) = game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
@@ -813,7 +814,13 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
       }
     }
 
+    // Allow altering of individual qgos.
+    game_alter('fetch_quest_group_' . $item->id, $game_user, $item);
+
   }
+
+  // Allow altering of full qgo object.
+  game_alter('fetch_quest_groups', $game_user, $data);
   return is_numeric($id) ? $data[0] : $data;
 }
 
@@ -838,7 +845,9 @@ function game_fetch_visible_quest_groups($game_user) {
   }
 
   foreach ($data as $item) {
-    // FIXME: create hook to allow altering data.
+    // Allow altering of qgos.
+    game_alter('fetch_quest_group', $game_user, $item);
+
     if ($item->highlight_in_hood == $game_user->fkey_neighborhoods_id) {
       $data2[] = $item;
     }
@@ -899,14 +908,14 @@ function game_show_quest_group_slide($game_user, $qgo, $options = []) {
 
   if (strpos($qgo->class, 'clickable') !== FALSE) {
     $onclick =<<< EOF
-onclick="jQuery(this).toggleClass('overview');"
+onclick="jQuery(this).removeClass('overview');"
 EOF;
   }
   else {
     $onclick = '';
   }
 
-  if (array_key_exists('showExpanded', $options) && $options['showExpanded']) {
+  if ($qgo->showExpanded) {
     $overview = '';
   }
   else {
@@ -914,12 +923,20 @@ EOF;
   }
 
   $description_class = strlen($qgo->description) ? '' : 'empty';
+  if ($qgo->descriptionShowExpanded) {
+    $description_class .= ' show-expanded';
+  }
+  if (!strlen($qgo->titleHtml)) {
+    $qgo->titleHtml = <<< EOF
+<div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
+EOF;
+  }
 
   echo <<< EOF
 <div class="swiper-slide $overview quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
-    <div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
-    <div class="quest-group-completion">
+    {$qgo->titleHtml}
+    <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
       {$quest}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
@@ -933,7 +950,7 @@ EOF;
     foreach ($qgo->q as $q) {
 
       // Mark quests that can't be performed in this hood.
-      $q->wrong_hood = '';
+      $q->wrong_hood = $q->not_yet = '';
       if ($q->fkey_neighborhoods_id &&
         ($q->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
         $q->wrong_hood = 'wrong-hood';
@@ -960,13 +977,20 @@ EOF;
         }
       }
 
-      if (strlen($q->wrong_hood)) {
+      if ($q->required_level > $game_user->level) {
+        $q->not_yet = 'not-yet';
+        // Not yet trumps wrong hood.
+        $q->wrong_hood = '';
+      }
+
+      if (strlen($q->wrong_hood) || strlen($q->not_yet)) {
         echo <<< EOF
-          <div class="wrong-hood-wrapper overview-only">
+          <div class="{$q->not_yet}{$q->wrong_hood}-wrapper overview-only">
 EOF;
       }
       echo <<< EOF
-<img class="overview-only {$q->wrong_hood}" src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+<img class="overview-only {$q->wrong_hood}{$q->not_yet}"
+  src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
   style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
       if (strlen($q->wrong_hood)) {
@@ -974,6 +998,12 @@ EOF;
           <img class="wrong-hood-overlay colorize-{$q->wrong_hood_color}"
             src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
             alt="{$q->actions_to_move} actions to move">
+        </div>
+EOF;
+      }
+      if (strlen($q->not_yet)) {
+        echo <<< EOF
+          <span class="not-yet-overlay">Soon</span>
         </div>
 EOF;
       }
@@ -1687,6 +1717,22 @@ EOF;
   </div>
 </form>
 EOF;
+    $wrong_hood_overlay = $comment_start . $wrong_hood_overlay . $comment_end;
+  }
+
+  // Need a higher level?
+  if ($item->required_level > $game_user->level) {
+    $wrong_hood = 'not-yet';
+    $wrong_hood_wrapper = 'not-yet-wrapper';
+    $description .= '<div class="not-yet">' . t('Requires level @level',
+      ['@quest' => $game_text['quest_lower'], '@level' => $item->required_level]) .
+      '</div>';
+    $comment_start = '<!-- ';
+    $comment_end = ' -->';
+    $wrong_hood_overlay = <<< EOF
+<span class="not-yet-overlay">Soon</span>
+EOF;
+    $go_there = '';
   }
 
   // Show the quest!
@@ -1697,7 +1743,7 @@ $outcome
     {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
       <img src="$img" border="0" width="96" class="round4 $wrong_hood"
       style="box-shadow: #{$item->rgb} 3px 3px 6px; border-color: #{$item->rgb}">
-      {$comment_start}$wrong_hood_overlay{$comment_end}
+      $wrong_hood_overlay
     {$comment_start}</a>{$comment_end}
     <div class="quest-complete">
       <div class="quest-complete-percentage"
@@ -1712,12 +1758,12 @@ $outcome
 
   <div class="quest-details">
     <div class="quest-num">$item->group.$seq_num</div>
-    <div class="quest-name">
+    <div class="quest-name $wrong_hood">
       {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
         $name $active
       {$comment_start}</a>{$comment_end}
     </div>
-    <div class="quest-description">
+    <div class="quest-description {$wrong_hood}">
       $description
     </div>
 EOF;

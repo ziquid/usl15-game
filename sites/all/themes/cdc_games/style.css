@@ -1131,3 +1131,7 @@ img.round4 {
 .center {
   text-align: center;
 }
+
+.hide {
+  display: none;
+}

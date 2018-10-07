@@ -65,7 +65,7 @@ if ($game_user->experience == 0) {
   do now.&nbsp; I will come back later when you are ready for more.</p>
   <p class="second">&quot;To perform a mission, touch its picture or title.&quot;</p>
 <ul>
-  <li>Each quest completed gives you more $game_user->values and
+  <li>Each mission completed gives you more $game_user->values and
     $experience</li>
   <li>Wait and rest for a few minutes if you run out of Energy</li>
 </ul>

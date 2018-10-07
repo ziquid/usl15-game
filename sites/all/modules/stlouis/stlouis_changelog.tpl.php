@@ -28,6 +28,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 7, 2018
+  </div>
+  <ul>
+    <li>
+      Welcome wizard updates
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Oct 6, 2018
   </div>
   <ul>

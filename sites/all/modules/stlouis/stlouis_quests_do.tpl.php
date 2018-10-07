@@ -332,7 +332,8 @@ if ($quest_succeeded) {
   // Start the energy clock again.
   if ($old_energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + $energy_wait), $game_user->id);
+    $result = db_query($sql, date('Y-m-d H:i:s',
+      REQUEST_TIME + $energy_wait), $game_user->id);
   }
 
   // Update percentage completion.
@@ -1018,17 +1019,6 @@ EOF;
   $game_user = $fetch_user();
   $fetch_header($game_user);
 
-  if ($game_user->level < 6 and $game_user->experience > 0) {
-
-    echo <<< EOF
-<ul>
-<li>Each $quest_lower gives you more $game_user->values and $experience</li>
-<li>Wait and rest for a few minutes if you run out of Energy</li>
-</ul>
-EOF;
-
-  }
-
   $description = str_replace('%party', "<em>$party_title</em>",
     $game_quest->description);
 
@@ -1104,7 +1094,7 @@ else {
 
   // Show location-specific quests.
   $sql_quest_neighborhood = 'where ((fkey_neighborhoods_id = 0 and
-    required_level >= 6) or fkey_neighborhoods_id = ' .
+  required_level >= 6) or fkey_neighborhoods_id = ' .
     $game_user->fkey_neighborhoods_id . ')';
 }
 
@@ -1127,7 +1117,7 @@ EOF;
 }
 
 $sql = 'select min(required_level) as min from quests
-  where `group` = %d;';
+where `group` = %d;';
 $result = db_query($sql, $game_quest->group + 1);
 $qgno = db_fetch_object($result);
 //firep($item);
@@ -1147,7 +1137,10 @@ EOF;
   }
 }
 
-$loc_quests = t('@location @quests', ['@location' => $location, '@quests' => "{$quest}s"]);
+$loc_quests = t('@location @quests', [
+  '@location' => $location,
+  '@quests' => "{$quest}s"
+]);
 
 if (game_get_value($game_user, 'enabled_alpha')) {
   $loc_quests = <<< EOF
@@ -1157,115 +1150,23 @@ EOF;
 
 $title = "$older_missions_html $loc_quests $newer_missions_html";
 
-echo <<< EOF
-<div class="title">
-  $title
-</div>
-EOF;
-
-// Get quest group stats.
-$sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
-  FROM `quests`
-  left outer join quest_completion
-  on quest_completion.fkey_quests_id = quests.id
-  and fkey_users_id = %d
-  where `group` = %d and quests.active = 1;';
-$result = db_query($sql, $game_user->id, $game_quest->group);
-$quest_group = db_fetch_object($result);
-//firep($quest_group);
-
-// Haha! Typecasting!
-$quest_group->completed += 0;
-
-if ($quest_group_completion->times_completed > 0) {
-  $next_group_html = t('(2nd round)');
-  $quest_group->completed -=
-    ($quest_group->total * min($quest_group_completion->times_completed, 1));
+// Reread quest group object.
+$qgo = game_fetch_quest_groups($game_user, $group_id);
+$qgo->showExpanded = TRUE;
+if ($game_user->level >= 7) {
+  $qgo->titleHtml = $title;
 }
 
 echo <<< EOF
-<div class="quest-group-completion">
-<strong>$quest_group->completed</strong> of $quest_group->total {$quest}s
-complete $next_group_html
-</div>
-EOF;
-
-// Show each quest.
-$data = [];
-$sql = 'select quests.*, quest_completion.percent_complete as completed_percent,
-  neighborhoods.name as hood from quests
-  LEFT OUTER JOIN neighborhoods
-  ON quests.fkey_neighborhoods_id = neighborhoods.id
-  LEFT OUTER JOIN quest_completion
-  ON quest_completion.fkey_quests_id = quests.id
-  AND quest_completion.fkey_users_id = %d where `group` = %d
-  and required_level <= %d
-  and active = 1 order by required_level ASC;';
-$result = db_query($sql, $game_user->id, $game_quest->group,
-  $game_user->level);
-
-while ($item = db_fetch_object($result)) {
-  $data[] = $item;
-}
-
-foreach ($data as $item) {
-  list($item->rgb, $item->width) = game_get_quest_completion($item->completed_percent,
-    $percentage_target, $percentage_divisor);
-  game_alter('quest_item', $game_user, $item);
-  //    if ($event_type == EVENT_QUESTS_100)
-  //      $item->required_energy = min($item->required_energy, 100);
-
-  game_show_quest_slide($game_user, $item);
-}
-
-if (game_get_value($game_user, 'enabled_alpha')) {
-  echo <<< EOF
 <div class="swiper-container">
   <div class="swiper-wrapper">
 EOF;
 
-game_show_quest_group_slide($game_user, $qgo, ['showExpanded' => TRUE]);
+game_show_quest_group_slide($game_user, $qgo);
 
-  echo <<< EOF
+echo <<< EOF
   </div>
 </div>
 EOF;
-}
-  // Don't show extra quests at first.
-//  if ($game_user->level > 1) {
-
-  $data = [];
-  $sql = 'select * from quests where `group` = %d and required_level = %d
-    and (fkey_neighborhoods_id = 0 or fkey_neighborhoods_id = %d)
-    and active = 1 order by required_level ASC;';
-  $result = db_query($sql, $game_quest->group, $game_user->level + 1,
-    $game_user->fkey_neighborhoods_id);
-
-  while ($item = db_fetch_object($result)) {
-    $data[] = $item;
-  }
-
-  foreach ($data as $item) {
-    $description = str_replace('%party', "<em>$party_title</em>",
-      $item->description);
-    game_alter('quest_item', $game_user, $item);
-    //      if ($event_type == EVENT_QUESTS_100)
-    //        $item->required_energy = min($item->required_energy, 100);
-
-    echo <<< EOF
-<div class="quests-soon">
-<div class="quest-name">$item->name</div>
-<div class="quest-description">$description</div>
-<div class="quest-required_level">Requires level $item->required_level</div>
-<div class="quest-experience">+$item->min_money to $item->max_money
-  $game_user->values, +$item->experience $experience</div>
-<div class="quest-required_energy">Requires $item->required_energy
-  Energy</div>
-</div>
-EOF;
-
-  }
-
-//  }
 
 db_set_active('default');

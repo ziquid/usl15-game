@@ -1,13 +1,12 @@
 <?php
 
 /**
+ * @file
  * List of quest groups.
- *
- * @file stlouis_quest_groups.tpl.php
  *
  * Synced with CG: N/A
  * Synced with 2114: N/A
- * Ready for phpcbf: yes
+ * Ready for phpcbf: done!
  */
 
 global $game, $phone_id;
@@ -16,6 +15,10 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $quest_groups = game_fetch_quest_groups($game_user);
+
+if (strlen($expanded = $_GET['show_expanded'])) {
+  $quest_groups[$expanded]->showExpanded = TRUE;
+}
 
 // ------ VIEW ------
 $fetch_header($game_user);
@@ -31,9 +34,9 @@ $fetch_header($game_user);
       endforeach;
     ?>
   </div>
-  <div class="swiper-pagination"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
+  <div class="swiper-pagination <?php print $quest_groups[0]->swiperPaginationClasses; ?>"></div>
+  <div class="swiper-button-prev <?php print $quest_groups[0]->swiperArrowClasses; ?>"></div>
+  <div class="swiper-button-next <?php print $quest_groups[0]->swiperArrowClasses; ?>"></div>
 </div>
 
 <?php
