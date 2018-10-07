@@ -9,7 +9,7 @@
  * Ready for phpcbf: no
  */
 
-$version = 'v0.7.0, Oct 1 2018';
+$version = 'v0.7.0, Oct 6 2018';
 
 global $game, $phone_id;
 
@@ -25,6 +25,9 @@ if (FALSE && $game_user->level < 6) {
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
+<div class="tagline">
+  &bull; Become the Mayor &bull;
+</div>
 <p>&nbsp;</p>
 <div class="welcome">
 <div class="wise_old_man_small">
@@ -35,14 +38,12 @@ Come back at level 6.&quot;</p>
 <p class="second">&nbsp;</p>
 <p class="second">&nbsp;</p>
 </div>
-<div class="subtitle"><a
-href="/$game/quests/$arg2"><img
-  src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
 if (substr($phone_id, 0, 3) == 'ai-')
   echo "<!--\n<ai \"home not-yet\"/>\n-->";
 
+game_button('quests');
 db_set_active('default');
 return;
 
@@ -400,19 +401,22 @@ game_alter('homepage_event_notice', $game_user,$event_text);
 echo <<< EOF
 $extra_bonus
 <div class="title">
-<img src="/sites/default/files/images/{$game}_title.png"/>
+  <img src="/sites/default/files/images/{$game}_title.png">
+</div>
+<div class="tagline">
+  &bull; Become the Mayor &bull;
+</div>
 <a class="version" href="/$game/changelog/$arg2">
   $version
 </a>
-</div>
 <div class="new-main-menu">
-<img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
-usemap="#new_main_menu"/>
-<a class="elections-menu" href="/$game/elections/$arg2">
-  $election_tab
-</a>
+  <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
+    usemap="#new_main_menu">
+  <a class="elections-menu" href="/$game/elections/$arg2">
+    $election_tab
+  </a>
 
-<map name="new_main_menu">
+  <map name="new_main_menu">
 EOF;
 
 $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);

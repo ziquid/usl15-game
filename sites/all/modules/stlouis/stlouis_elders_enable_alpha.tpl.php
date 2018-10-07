@@ -30,11 +30,27 @@ else {
 }
 $enable_lower = drupal_strtolower($enable);
 
+// Did the player enter a code?  Save it.
+if (strlen($code = $_GET['code'])) {
+  if ($code[0] === '-') {
+    // Allow for removal of codes already set.
+    game_remove_value($game_user, substr($code, 1));
+    $code_response = '<div class="system-message-response">' .
+      t('Your code has been removed.') . '</div>';
+  }
+  game_set_value($game_user, $code);
+  $code_response = '<div class="system-message-response">' .
+    t('Code %code has been activated.', ['%code' => $code]) . '</div>';
+}
+else {
+  $code_response = '';
+}
+
 // ------ VIEW ------
 $fetch_header($game_user);
 db_set_active('default');
 ?>
-
+<?php print $code_response; ?>
 <div class="title">
   <?php print $enable; ?> Alpha access?
 </div>
@@ -64,7 +80,8 @@ db_set_active('default');
 
 <div class="alpha-only">
   <p>
-    If you enable pre-release features, you can further customize your game experience by entering a code here:
+    If you enable pre-release features, you can further customize
+    your game experience by entering a code here:
   </p>
 
   <form method="get" action="" class="ask-name">

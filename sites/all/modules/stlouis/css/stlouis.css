@@ -483,6 +483,7 @@ body.game-stlouis .welcome {
 a.version {
   color: #aa6;
   text-decoration: none;
+  text-align: center;
 }
 
 .new-main-menu .elections-menu {
@@ -859,5 +860,17 @@ a.button.continue {
   text-transform: uppercase;
   margin-top: -15px;
   font-weight: bold;
-  letter-spacing: 4px;
+  letter-spacing: 5px;
+  text-shadow: 0 0.9px 0 beige;
+  font-size: 11px;
+  margin-bottom: 4px;
+}
+
+.system-message-response {
+  background-color: green;
+  text-align: center;
+  padding: 4px;
+  border: solid 1px #f8fefc;
+  border-radius: 3px;
+  margin: 6px 2px 4px;
 }

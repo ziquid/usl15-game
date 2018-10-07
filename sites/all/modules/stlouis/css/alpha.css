@@ -16,13 +16,13 @@ body.party-toxicorp.alpha {
 }
 
 .alpha .quest-group-completion {
-  color: #334438;
-  text-shadow: 1px 1px 3px #dddfde;
+  color: #cfd5d1;
+  text-shadow: 0 0.15px 0 #dddfde;
   margin-bottom: 22px;
 }
 
 .alpha a.version, .alpha .location, .alpha .news .dateline {
-  color: #101814;
+  color: #cfd5d1;
 }
 
 .alpha .highlight {

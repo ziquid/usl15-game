@@ -28,6 +28,18 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 6, 2018
+  </div>
+  <ul>
+    <li>
+      Added a tagline
+    </li>
+    <li>
+      Enabled code: GiveMeMyTongue
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Oct 1, 2018
   </div>
   <ul>

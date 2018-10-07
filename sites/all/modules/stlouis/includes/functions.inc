@@ -1,12 +1,13 @@
 <?php
 
 /**
- * @file functions.inc
- *
  * Misc functions for Ziquid games.
+ *
+ * @file
  *
  * Synced with CG: yes
  * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
@@ -26,6 +27,18 @@ function game_button($link = 'home', $type = 'continue', $extra_link = '') {
   </a>
 </div>
 EOF;
+}
+
+function game_speech($game_user, $text) {
+//  global $game;
+//  include drupal_get_path('module', $game) . '/game_defs.inc';
+  if (game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
+    drupal_add_js([
+      'stlouis' => [
+        'speech' => $text,
+      ],
+    ], 'setting');
+  }
 }
 
 /**
@@ -2809,7 +2822,7 @@ function game_get_value($game_user, $key, $default = NULL) {
  * @return bool
  *   TRUE if the set succeeded; FALSE otherwise.
  */
-function game_set_value($game_user, $key, $value) {
+function game_set_value($game_user, $key, $value = "set") {
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
