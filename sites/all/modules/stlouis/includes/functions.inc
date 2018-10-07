@@ -482,7 +482,7 @@ EOF;
     }
     else {
       $can_work_again = game_can_do_yet($game_user, 'can_work_again');
-      firep($can_work_again, 'can work again');
+//      firep($can_work_again, 'can work again');
       if ($can_work_again->allowed) {
         $apply_button = <<< EOF
 <div class="land-buy-button">
@@ -594,7 +594,7 @@ EOF;
 
     $check = game_competency_level($game_user,
       (int) $item->fkey_required_competencies_id);
-firep($check);
+//firep($check);
     $comp_name = game_competency_level_name($item->required_competencies_level,
       TRUE);
 
@@ -787,7 +787,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
       else {
         $item->class = 'obfuscate';
 
-        // Normal group?  Obduscate.  Otherwise, hide.
+        // Normal group?  Obfuscate.  Otherwise, hide.
         if ($item->id < 1000) {
           $item->name = '???';
           $item->description = t('Complete a previous mission group to see this one.');
@@ -812,8 +812,12 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
           $item->percentage_target, $item->percentage_divisor);
         $item->q[$q->id] = $q;
       }
+      if (!count($item->q)) {
+        $item->class = 'hidden';
+      }
     }
 
+//firep($item, 'items');
     // Allow altering of individual qgos.
     game_alter('fetch_quest_group_' . $item->id, $game_user, $item);
 
@@ -821,6 +825,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
 
   // Allow altering of full qgo object.
   game_alter('fetch_quest_groups', $game_user, $data);
+//  firep($data, 'data');
   return is_numeric($id) ? $data[0] : $data;
 }
 
@@ -931,18 +936,13 @@ EOF;
 <div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
 EOF;
   }
-
+//firep($qgo, 'quest group object');
   echo <<< EOF
 <div class="swiper-slide $overview quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
-    {$qgo->titleHtml}
-    <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
-      <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
-    <div class="description $description_class">
-      $qgo->description
-    </div>
 EOF;
+
+  $titleShown = FALSE;
 
   // Show any quest images.
   if (isset($qgo->q)) {
@@ -983,6 +983,19 @@ EOF;
         $q->wrong_hood = '';
       }
 
+      if (!$titleShown && !$q->optionShowBeforeTitle) {
+        echo <<< EOF
+      {$qgo->titleHtml}
+      <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
+      <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
+      {$quest}s complete $qgo->next_group_html</div>
+    <div class="description $description_class">
+      $qgo->description
+    </div>
+EOF;
+        $titleShown = TRUE;
+      }
+
       if (strlen($q->wrong_hood) || strlen($q->not_yet)) {
         echo <<< EOF
           <div class="{$q->not_yet}{$q->wrong_hood}-wrapper overview-only">
@@ -1012,6 +1025,19 @@ EOF;
     echo '</div>';
   }
 
+  if (!$titleShown) {
+    echo <<< EOF
+      {$qgo->titleHtml}
+      <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
+      <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
+      {$quest}s complete $qgo->next_group_html</div>
+    <div class="description $description_class">
+      $qgo->description
+    </div>
+EOF;
+    $titleShown = TRUE;
+  }
+
   echo '</span></div>';
 }
 
@@ -1034,7 +1060,7 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
     on quest_completion.fkey_quests_id = quests.id
     and fkey_users_id = %d
     where `group` = %d ' . $active_quests . ';';
-  $result = db_query($sql, $game_user->id, $group_to_show);
+  $result = db_query($sql, $game_user->id, $group_to_show, $game_user->level);
   $quest_group = db_fetch_object($result);
   $quest_group->completed += 0;
 
@@ -1061,7 +1087,7 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
 /**
  * Get the percentage complete visual cues for a quest.
  *
- * @param int $percent_complete
+ * @param int $completed_percent
  *   The percentage complete.
  * @param int $percentage_target
  *   Which percentage is considered fully complete.
@@ -1072,20 +1098,20 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
  *   The RGB value corresponding to the percentage done and the width of a
  * progress bar.
  */
-function game_get_quest_completion($percent_complete, $percentage_target, $percentage_divisor) {
-  if (empty($percent_complete)) {
-    $percent_complete = 0;
+function game_get_quest_completion($completed_percent, $percentage_target, $percentage_divisor) {
+  if (empty($completed_percent)) {
+    $completed_percent = 0;
   }
-  if ($percent_complete > floor($percentage_target / 2)) {
-    $rgb = dechex(floor(($percentage_target - $percent_complete) /
+  if ($completed_percent > floor($percentage_target / 2)) {
+    $rgb = dechex(floor(($percentage_target - $completed_percent) /
       (6 * $percentage_divisor) + 4)) . 'c0';
   }
   else {
-    $rgb = 'c' . dechex(floor(($percent_complete) /
+    $rgb = 'c' . dechex(floor(($completed_percent) /
       (4 * $percentage_divisor))) . '0';
   }
 
-  $width = floor($percent_complete * 94 / $percentage_target) + 2;
+  $width = floor($completed_percent * 94 / $percentage_target) + 2;
   return [$rgb, $width];
 }
 
@@ -1320,16 +1346,7 @@ function game_show_quest($game_user, $item, $percentage_target,
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  static $location;
-
-  if (empty($location)) {
-
-    $sql = 'select name from `neighborhoods` where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $data = db_fetch_object($result);
-    $location = preg_replace('/^The /', '', $data->name);
-
-  }
+  $location = preg_replace('/^The /', '', $game_user->location);
 
   $sql = 'select id from quests where `group` = %d
     order by id asc limit 1;';
@@ -1337,12 +1354,12 @@ function game_show_quest($game_user, $item, $percentage_target,
   $data = db_fetch_object($result);
   $seq_num = $item->id - $data->id;
 
-  if (substr($item->description, 0, 3) != '<p ') {
-    $laquo = '&laquo;';
-  }
-  if (substr($item->description, -1) != '>') {
-    $raquo = '&raquo;';
-  }
+//  if (substr($item->description, 0, 3) != '<p ') {
+//    $laquo = '&laquo;';
+//  }
+//  if (substr($item->description, -1) != '>') {
+//    $raquo = '&raquo;';
+//  }
 
   $name = t($item->name, [
     '@clan' => $game_user->clan_name,
@@ -1360,40 +1377,20 @@ function game_show_quest($game_user, $item, $percentage_target,
     '@username' => $game_user->username,
   ]);
 
-  if (empty($item->percent_complete)) $item->percent_complete = 0;
-
-  if ($item->percent_complete > floor($percentage_target / 2)) {
-
-    $rgb = dechex(floor(($percentage_target - $item->percent_complete) /
-      (4 * $percentage_divisor))) . 'c0';
-
-  }
-  else {
-
-    $rgb = 'c' . dechex(floor(($item->percent_complete) /
-      (4 * $percentage_divisor))) . '0';
-
-  }
-
-  $width = floor($item->percent_complete * 94 / $percentage_target) + 2;
-
+  list($rgb, $width) = game_get_quest_completion($item->completed_percent, $percentage_target, $percentage_divisor);
   $active = ($item->active) ? '' : ' (inactive)';
 
   if (strpos($item->meta, 'use_job_picture') !== FALSE) {
-
     $sql = 'SELECT land.id FROM `land_ownership`
       LEFT JOIN land ON fkey_land_id = land.id
       WHERE fkey_users_id = %d
       AND land.type = "job";';
     $result = db_query($sql, $game_user->id);
     $job = db_fetch_object($result);
-
     $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
-
   }
   else {
     $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
-
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
       $img = $icon_path . '.jpg';
     }
@@ -1415,7 +1412,7 @@ $outcome
         &nbsp;
       </div>
       <div class="quest-complete-text">
-        $item->percent_complete% complete
+        $item->completed_percent% complete
       </div>
     </div>
   </div>
@@ -1570,18 +1567,17 @@ EOF;
     <div class="quest-requisites">
       // Consumed By You //
     </div>
-    <div class="quest-required_energy">
+    <!--<div class="quest-required_energy">
       $item->required_energy ${game_text['energy']}
-    </div>
+    </div>-->
     $consumption_html
     <div class="quest-disbursements">
       // Disbursed To You //
     </div>
     <div class="quest-experience">
-      $exp_added_str $experience $disbursements_doubled
-    </div>
-    <div class="quest-experience">
-      $money_added_str $game_user->values $disbursements_doubled
+      $money_added_str <strong>$game_user->values</strong> $disbursements_doubled
+    <br>
+      $exp_added_str <strong>$experience</strong> $disbursements_doubled
     </div>
   </div>
   $disbursement_html
@@ -1610,41 +1606,24 @@ EOF;
  *   The game user object.
  * @param \stdClass $item
  *   The quest group.
- * @param string $outcome
- *   Quest outcome, if any.
- * @param string $exp_added_str
- *   Experience added, if any.
- * @param string $money_added_str
- *   Money added, if any.
- * @param string $disbursements_doubled
- *   Disbursements doubled text, if any.
- * @param string $consumption_html
- *   Consumption html, if any.
- * @param string $disbursement_html
- *   Disbursement html, if any.
- * @param string $quest_completion_html
- *   Quest completion html, if any.
  */
-function game_show_quest_slide($game_user, $item, $outcome = '',
-  $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
-  $consumption_html = '', $disbursement_html = '',
-  $quest_completion_html = '') {
+function game_show_quest_slide($game_user, $item) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
-
+//firep($item, 'quest given to game_show_quest_slide()');
   $sql = 'select id from quests where `group` = %d
     order by id asc limit 1;';
   $result = db_query($sql, $item->group);
   $data = db_fetch_object($result);
   $seq_num = $item->id - $data->id;
 
-  if (substr($item->description, 0, 3) != '<p ') {
-    $laquo = '&laquo;';
-  }
-  if (substr($item->description, -1) != '>') {
-    $raquo = '&raquo;';
-  }
+//  if (substr($item->description, 0, 3) != '<p ') {
+//    $laquo = '&laquo;';
+//  }
+//  if (substr($item->description, -1) != '>') {
+//    $raquo = '&raquo;';
+//  }
 
   $name = t($item->name, [
     '@clan' => $game_user->clan_name,
@@ -1737,7 +1716,7 @@ EOF;
 
   // Show the quest!
   echo <<< EOF
-$outcome
+$item->outcome
 <div class="quests">
   <div class="quest-icon $wrong_hood_wrapper">
     {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
@@ -1771,7 +1750,7 @@ EOF;
   if (strlen($wrong_hood)) {
     // Wrong hood?  Show nothing.
   }
-  elseif (empty($exp_added_str)) {
+  elseif (empty($item->exp_added_str)) {
     // No quest performed -- show disbursements and requirements.
     echo <<< EOF
     <div class="quest-disbursements">
@@ -1898,25 +1877,14 @@ EOF;
   else {
     // Quest performed -- show accomplishments.
     echo <<< EOF
-    <div class="quest-requisites">
-      // Consumed By You //
-    </div>
-    <div class="quest-required_energy">
-      $item->required_energy ${game_text['energy']}
-    </div>
-    $consumption_html
-    <div class="quest-disbursements">
-      // Disbursed To You //
-    </div>
     <div class="quest-experience">
-      $exp_added_str $experience $disbursements_doubled
-    </div>
-    <div class="quest-experience">
-      $money_added_str $game_user->values $disbursements_doubled
+      $item->exp_added_str <strong>$experience</strong>
+    <br>
+      $item->money_added_str <strong>$game_user->values</strong>
     </div>
   </div>
-  $disbursement_html
-  $quest_completion_html
+  $item->loot_html
+  $item->quest_completion_html
   <div class="quest-do-again">
     <div class="quest-do-again-inside">
       <a href="/$game/quests_do/$arg2/$item->id">
@@ -2859,7 +2827,7 @@ function game_get_value($game_user, $key, $default = NULL) {
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
   $result = db_query($sql, (int) $game_user->id, $key);
   $item = db_fetch_object($result);
-  firep($item, 'user_attributes value for key ' . $key);
+//  firep($item, 'user_attributes value for key ' . $key);
 
   return !empty($item->value) ? $item->value : $default;
 }

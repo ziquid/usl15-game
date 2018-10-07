@@ -14,37 +14,15 @@ global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-//if (TRUE || $game_user->meta == 'beta' || $game_user->meta == 'admin'
-//  || $game_user->meta == 'toxiboss') {
-  $sql = 'select `group` from quests where quests.id = %d;';
-  $result = db_query($sql, $quest_id);
-  $data = db_fetch_object($result);
-  $group_id = $data->group;
-  $qgo = game_fetch_quest_groups($game_user, $group_id);
+$sql = 'select `group` from quests where quests.id = %d;';
+$result = db_query($sql, $quest_id);
+$data = db_fetch_object($result);
+$group_id = $data->group;
+$qgo = game_fetch_quest_groups($game_user, $group_id);
 //  firep($qgo, 'quest group object');
-  $game_quest = &$qgo->q[$quest_id];
-//}
-//else {
-//  $sql = 'select name from neighborhoods where id = %d;';
-//  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-//  $data = db_fetch_object($result);
-//  $location = $data->name;
-//
-//  $sql = 'select party_title from `values` where id = %d;';
-//  $result = db_query($sql, $game_user->fkey_values_id);
-//  $data = db_fetch_object($result);
-//  $party_title = preg_replace('/^The /', '', $data->party_title);
-//
-//  $data = [];
-//  $sql = 'select quests.*, neighborhoods.name as hood from quests
-//  LEFT OUTER JOIN neighborhoods
-//  ON quests.fkey_neighborhoods_id = neighborhoods.id
-//  where quests.id = %d;';
-//  $result = db_query($sql, $quest_id);
-//  $game_quest = db_fetch_object($result); // limited to 1 in DB
-//}
-//firep($game_quest, 'game_quest object');
+$game_quest = &$qgo->q[$quest_id];
 
+$quest_link = game_get_value($game_user, 'enabled_alpha') ? 'quest_groups' : 'quests';
 
 //   if ($event_type == EVENT_QUESTS_100)
 //     $game_quest->required_energy = min($game_quest->required_energy, 100);
@@ -78,7 +56,9 @@ if (($game_user->energy < $game_quest->required_energy) &&
     '</div><div class="try-an-election-wrapper">
     <div class="try-an-election"><a
     href="/' . $game . '/elders_do_fill/' . $arg2 . '/energy?destination=/' .
-    $game . '/quests/' . $arg2 . '/' . $game_quest->group . '">Refill
+    $game . '/' . $quest_link . '/' . $arg2 . '/' . $game_quest->group .
+    '?show_expanded=' . $game_quest->group . '#group-' .
+    $game_quest->group . '">Refill
     your Energy (1&nbsp;' . $luck . ')</a></div></div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
@@ -342,7 +322,7 @@ if ($quest_succeeded) {
     $sql = 'insert into quest_completion (fkey_users_id, fkey_quests_id,
       percent_complete) values (%d, %d, %d);';
     $result = db_query($sql, $game_user->id, $quest_id,
-     $game_quest->percent_complete);
+      $game_quest->percent_complete);
   }
   else {
     $sql = 'update quest_completion set percent_complete = least(
@@ -497,7 +477,7 @@ EOF;
             $result = db_query($sql, $game_user->id, $eq_id);
             $game_equipment = db_fetch_object($result); // limited to 1 in DB
 
-// give the stuff
+            // give the stuff
             // No record exists - insert one.
             if ($game_equipment->quantity == '') {
               $sql = 'insert into equipment_ownership
@@ -511,7 +491,7 @@ EOF;
               $result = db_query($sql, $eq_id, $game_user->id);
             }
 
-// tell the user about it
+            // tell the user about it
             $quest_completion_html .= <<< EOF
 <div class="quest-succeeded title loot">Congratulations!</div>
 <div class="subsubtitle">You have completed the second round of {$quest_lower}s!</div>
@@ -524,58 +504,46 @@ src="/sites/default/files/images/equipment/$game-{$eq_id}.png" width="96"></div>
 EOF;
 
             if ($game_equipment->energy_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Energy: +$game_equipment->energy_bonus immediate energy bonus
     </div>
 EOF;
-
             }
 
             if ($game_equipment->energy_increase > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Energy: +$game_equipment->energy_increase every $energy_wait_str
     </div>
 EOF;
-
             }
 
             if ($game_equipment->initiative_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">$initiative: +$game_equipment->initiative_bonus
     </div>
 EOF;
-
             }
 
             if ($game_equipment->endurance_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Endurance: +$game_equipment->endurance_bonus
     </div>
 EOF;
-
             }
 
             if ($game_equipment->elocution_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">$elocution: +$game_equipment->elocution_bonus
     </div>
 EOF;
-
             }
 
             if ($game_equipment->speed_increase > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Speed Increase: $game_equipment->speed_increase fewer Action
     needed to move to a new $hood_lower
     </div>
 EOF;
-
             }
 
             if ($game_equipment->upkeep > 0) {
@@ -586,17 +554,14 @@ EOF;
             }
 
             if ($game_equipment->chance_of_loss > 0) {
-
               $lifetime = floor(100 / $game_equipment->chance_of_loss);
               $use = ($lifetime == 1) ? 'use' : 'uses';
               $quest_completion_html .= <<< EOF
   <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
-
             }
 
             $quest_completion_html .= '</div>';
-
           }
 
           // FIXME: land bonus here
@@ -647,74 +612,58 @@ src="/sites/default/files/images/staff/$game-{$st_id}.png" width="96"></div>
 EOF;
 
             if ($game_staff->energy_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Energy: +$game_staff->energy_bonus immediate energy bonus
     </div>
 EOF;
-
             }
 
             if ($game_staff->energy_increase > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Energy: +$game_staff->energy_increase every $energy_wait_str
     </div>
 EOF;
-
             }
 
             if ($game_staff->initiative_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">$initiative: +$game_staff->initiative_bonus
     </div>
 EOF;
-
             }
 
             if ($game_staff->endurance_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">$endurance: +$game_staff->endurance_bonus
     </div>
 EOF;
-
             }
 
             if ($game_staff->elocution_bonus > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">$elocution: +$game_staff->elocution_bonus
     </div>
 EOF;
-
             }
 
             if ($game_staff->speed_increase > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Speed Increase: $game_staff->speed_increase fewer Action
     needed to move to a new $hood_lower
     </div>
 EOF;
-
             }
 
             if ($game_staff->extra_votes > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Extra Votes: $game_staff->extra_votes</div>
 EOF;
-
             }
 
             if ($game_staff->extra_defending_votes > 0) {
-
               $quest_completion_html .= <<< EOF
   <div class="quest-payout">Extra Defending Votes: $game_staff->extra_defending_votes</div>
 EOF;
-
             }
 
             if ($game_staff->upkeep > 0) {
@@ -725,28 +674,20 @@ EOF;
             }
 
             if ($game_staff->chance_of_loss > 0) {
-
               $lifetime = floor(100 / $game_staff->chance_of_loss);
               $use = ($lifetime == 1) ? 'use' : 'uses';
               $quest_completion_html .= <<< EOF
   <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
 EOF;
-
             }
 
             $quest_completion_html .= '</div>';
-
           }
 
-        // Update quest_groups_completion.
-        $sql = 'update quest_group_completion set times_completed = 2
+          // Update quest_groups_completion.
+          $sql = 'update quest_group_completion set times_completed = 2
           where fkey_users_id = %d and fkey_quest_groups_id = %d;';
-        $result = db_query($sql, $game_user->id, $game_quest->group);
-
-//          $quest_group_completion->times_completed = 1;
-//          $percentage_target = 200;
-//          $percentage_divisor = 2;
-
+          $result = db_query($sql, $game_user->id, $game_quest->group);
         }
         else {
 
@@ -759,7 +700,7 @@ src="/sites/default/files/images/quests/stlouis-soon.png"></div>
 <div class="quest-name loot">You have completed all {$quest_lower}s in
   this group a second time!</div>
 <div class="quest-description">Unfortunately, we have nothing to give you
-  yet!&nbsp; We're still coding it!</div>
+  yet &mdash; we're still coding it!</div>
 <p class="second">&nbsp;</p>
 </div>
 EOF;
@@ -771,7 +712,9 @@ EOF;
 
   }
 
-  list($rgb, $width) = game_get_quest_completion($percent_complete, $percentage_target, $percentage_divisor);
+  $game_quest->completed_percent = $percent_complete;
+  list($game_quest->rgb, $game_quest->width) = game_get_quest_completion($game_quest->completed_percent,
+    $percentage_target, $percentage_divisor);
 
   // Check for loot -- equipment.
   $sql = 'SELECT equipment.quantity_limit, equipment_ownership.quantity
@@ -784,7 +727,7 @@ EOF;
     WHERE equipment.id = %d;';
   $result = db_query($sql, $game_user->id, $game_quest->fkey_loot_equipment_id);
   $game_equipment = db_fetch_object($result);
-  $limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
+  $under_limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
   // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
   if ($game_quest->chance_of_loot > 0 && $game_quest->chance_of_loot < 30
@@ -794,7 +737,7 @@ EOF;
 
   if ((($game_user->level <= 6 && $game_quest->chance_of_loot > 0)
       || $game_quest->chance_of_loot >= mt_rand(1, 99))
-    && ($limit || $game_equipment->quantity_limit == 0)) {
+    && ($under_limit || $game_equipment->quantity_limit == 0)) {
 
     $sql = 'select * from equipment where id = %d;';
     $result = db_query($sql, $game_quest->fkey_loot_equipment_id);
@@ -864,7 +807,7 @@ EOF;
       }
 
       $loot_html .= <<< EOF
-    <p class="second">&nbsp;</p>
+    <!--<p class="second">&nbsp;</p>-->
   </div>
 EOF;
 
@@ -921,11 +864,11 @@ EOF;
   $result = db_query($sql, $game_user->id,
     $game_quest->fkey_loot_staff_id);
   $game_staff = db_fetch_object($result);
-  $limit = $game_staff->quantity_limit > (int) $game_staff->quantity;
+  $under_limit = $game_staff->quantity_limit > (int) $game_staff->quantity;
 
   if ((($game_user->level <= 6 && $game_quest->chance_of_loot_staff > 0)
       || $game_quest->chance_of_loot_staff >= mt_rand(1, 99))
-    && ($limit || $game_staff->quantity_limit == 0)) {
+    && ($under_limit || $game_staff->quantity_limit == 0)) {
 
     $sql = 'select * from staff where id = %d;';
     $result = db_query($sql, $game_quest->fkey_loot_staff_id);
@@ -940,42 +883,36 @@ EOF;
   <div class="quest-description">$loot->description</div>
 EOF;
 
-  if ($loot->initiative_bonus > 0) {
-
-        $loot_html .= <<< EOF
+    if ($loot->initiative_bonus > 0) {
+      $loot_html .= <<< EOF
     <div class="quest-payout">$initiative: +$loot->initiative_bonus
       </div>
 EOF;
+    }
 
-  }
-
-  if ($loot->endurance_bonus > 0) {
-
-    $loot_html .= <<< EOF
+    if ($loot->endurance_bonus > 0) {
+      $loot_html .= <<< EOF
   <div class="quest-payout">$endurance: +$loot->endurance_bonus
     </div>
 EOF;
+    }
 
-  }
-
-  if ($loot->elocution_bonus > 0) {
-
-    $loot_html .= <<< EOF
+    if ($loot->elocution_bonus > 0) {
+      $loot_html .= <<< EOF
     <div class="quest-payout">$elocution: +$loot->elocution_bonus
       </div>
 EOF;
+    }
 
-  }
-
-  // Upkeep.
-  if ($loot->upkeep > 0) {
-    $loot_html .= <<< EOF
+    // Upkeep.
+    if ($loot->upkeep > 0) {
+      $loot_html .= <<< EOF
     <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
 EOF;
-  }
+    }
 
-  $loot_html .= <<< EOF
-    <p class="second">&nbsp;</p>
+    $loot_html .= <<< EOF
+    <!--<p class="second">&nbsp;</p>-->
   </div>
 EOF;
 
@@ -1016,67 +953,23 @@ EOF;
 
   }
 
+  // Refetch user object.
   $game_user = $fetch_user();
-  $fetch_header($game_user);
-
-  $description = str_replace('%party', "<em>$party_title</em>",
-    $game_quest->description);
-
-  echo <<< EOF
-<div class="quests">
-$outcome_reason
-<div class="quest-icon"><a
-  href="/$game/quests_do/$arg2/$game_quest->id"><img
-  src="/sites/default/files/images/quests/$game-$game_quest->id.png" width="96"
-  border="0"></a><div class="quest-complete"><div class="quest-complete-percentage"
-    style="background-color: #$rgb; width: {$width}px">&nbsp;</div>
-    <div class="quest-complete-text">$percent_complete%
-      complete</div></div></div>
-<div class="quest-details">
-  <div class="quest-name"><a
-    href="/$game/quests_do/$arg2/$game_quest->id">$game_quest->name</a></div>
-  <div class="quest-description">$description</div>
-  <div class="quest-experience">You gained <strong>$money_added
-    $game_user->values</strong></div>
-  <div class="quest-money">You gained <strong>$game_quest->experience
-    $experience</strong></div>
-    </div>
-  $loot_html
-  $quest_completion_html
-<div class="quest-do-again">
-  <div class="quest-do-again-inside"><a
-    href="/$game/quests_do/$arg2/$game_quest->id">Do
-    Again</a></div>
-</div>
-</div>
-EOF;
-
-//  game_show_quest($game_user, $game_quest, $percent_complete,
-//    $percentage_divisor, $quest_group, $party_title, $outcome_reason,
-//    "You gained <strong>$game_quest->experience</strong>",
-//    "You gained <strong>$money_added</strong>",'',
-//    '', $loot_html, $quest_completion_html);
-
+  $game_quest->exp_added_str = "You gained <strong>$game_quest->experience</strong>";
+  $game_quest->money_added_str = "You gained <strong>$money_added</strong>";
+  $game_quest->loot_html = $loot_html;
+  $game_quest->quest_completion_html = $quest_completion_html;
 }
 else {
-  // Failed!
-  $fetch_header($game_user);
-
-  if ($game_user->level < 6 and $game_user->experience > 0) {
-    echo <<< EOF
-<ul>
-<li>Each $quest_lower gives you more $game_user->values and $experience</li>
-<li>Wait and rest for a few minutes if you run out of Energy</li>
-</ul>
-EOF;
-  }
-
-  game_show_quest_slide($game_user, $game_quest, $outcome_reason);
+  $loot_html = $quest_completion_html = '';
 }
+$game_quest->outcome = $outcome_reason;
 
-if (substr($phone_id, 0, 3) == 'ai-') {
-  echo "<!--\n<ai \"$ai_output\"/>\n-->";
-}
+// ------ VIEW ------
+$fetch_header($game_user);
+game_show_ai_output($phone_id, $ai_output);
+
+// game_show_quest_slide($game_user, $game_quest);
 
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $game_quest->group);
@@ -1088,32 +981,19 @@ $location = str_replace('%location', $location, $qg->name);
 // Show beginning quests, keep location from user.
 if ($game_user->level < 6) {
   $location = $older_missions_html = $newer_missions_html = '';
-  $sql_quest_neighborhood = 'where fkey_neighborhoods_id = 0';
-}
-else {
-
-  // Show location-specific quests.
-  $sql_quest_neighborhood = 'where ((fkey_neighborhoods_id = 0 and
-  required_level >= 6) or fkey_neighborhoods_id = ' .
-    $game_user->fkey_neighborhoods_id . ')';
 }
 
+// FIXME: just show arrows if game_fetch_quest_groups() has groups before or
+// after this one.  don't query the db by hand.
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $game_quest->group - 1);
 $qgoo = db_fetch_object($result);
 
 if (!empty($qgoo->name) && ($game_quest->group <= 1000)) {
-
   $older_group = $game_quest->group - 1;
   $older_missions_html = <<< EOF
-<a href="/$game/quests/$arg2/$older_group">&lt;&lt;</a>
+<a href="/$game/$quest_link/$arg2/$older_group#group-{$older_group}">&lt;&lt;</a>
 EOF;
-
-  if (game_get_value($game_user, 'enabled_alpha')) {
-    $older_missions_html = <<< EOF
-<a href="/$game/quest_groups/$arg2#group-{$older_group}">&lt;&lt;</a>
-EOF;
-  }
 }
 
 $sql = 'select min(required_level) as min from quests
@@ -1124,22 +1004,15 @@ $qgno = db_fetch_object($result);
 
 if (!empty($qgno->min) && ($qgno->min <= $game_user->level + 1) &&
   ($game_quest->group <= 1000)) {
-
   $newer_group = $game_quest->group + 1;
   $newer_missions_html = <<< EOF
-<a href="/$game/quests/$arg2/$newer_group">&gt;&gt;</a>
+<a href="/$game/$quest_link/$arg2/$newer_group#group-{$newer_group}">&gt;&gt;</a>
 EOF;
-
-  if (game_get_value($game_user, 'enabled_alpha')) {
-    $newer_missions_html = <<< EOF
-<a href="/$game/quest_groups/$arg2#group-{$newer_group}">&gt;&gt;</a>
-EOF;
-  }
 }
 
 $loc_quests = t('@location @quests', [
   '@location' => $location,
-  '@quests' => "{$quest}s"
+  '@quests' => "{$quest}s",
 ]);
 
 if (game_get_value($game_user, 'enabled_alpha')) {
@@ -1148,22 +1021,23 @@ if (game_get_value($game_user, 'enabled_alpha')) {
 EOF;
 }
 
-$title = "$older_missions_html $loc_quests $newer_missions_html";
+$title = "<span class=\"quest-group-title\" $older_missions_html $loc_quests $newer_missions_html</span>";
 
 // Reread quest group object.
 $qgo = game_fetch_quest_groups($game_user, $group_id);
 $qgo->showExpanded = TRUE;
-if ($game_user->level >= 7) {
+//if ($game_user->level >= 6) {
   $qgo->titleHtml = $title;
-}
+//}
+
+$game_quest->optionShowBeforeTitle = TRUE;
+array_unshift($qgo->q, $game_quest);
 
 echo <<< EOF
 <div class="swiper-container">
   <div class="swiper-wrapper">
 EOF;
-
 game_show_quest_group_slide($game_user, $qgo);
-
 echo <<< EOF
   </div>
 </div>

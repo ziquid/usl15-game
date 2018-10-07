@@ -22,10 +22,12 @@ function game_new_user_fetch_quest_group_0($game_user, &$qg) {
 //  firep($qg, 'quest group sent to hook_fetch_quest_group');
 
   // Hide what you've got to hide.
-  $qg->name = '';
-  $qg->swiperPaginationClasses = $qg->swiperArrowClasses = 'hide';
-  if ($qg->quest_completion->completed === 0) {
-    $qg->questGroupCompletionClasses = 'hide';
+  if ($game_user->level < 6) {
+    $qg->name = '';
+    $qg->swiperPaginationClasses = $qg->swiperArrowClasses = 'hide';
+    if ($qg->quest_completion->completed === 0) {
+      $qg->questGroupCompletionClasses = 'hide';
+    }
   }
 
   // No experience: intro text, hide extra quests.
@@ -100,7 +102,7 @@ function game_new_user_fetch_quest_groups($game_user, &$qgs) {
 //  firep($qgs, 'quest group sent to hook_fetch_quest_group');
 
   // New user: hide extra groups.
-  if ($game_user->level <= 7) {
+  if ($game_user->level < 6) {
     foreach ($qgs as $k => &$qg) {
       if ($k > 0) {
         unset($qgs[$k]);
