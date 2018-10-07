@@ -95,7 +95,7 @@ EOF;
     game_send_user_message($game_user->id, $data, 0, $msg, 'user');
 
     game_button('quests');
-    game_speech($game_user, 'Get Ready');
+    game_speech($game_user, 'Get ready', TRUE);
     db_set_active('default');
     break;
 
@@ -114,11 +114,7 @@ EOF;
 EOF;
 
     game_button('welcome', 'continue', '?page=2');
-    drupal_add_js([
-      'stlouis' => [
-        'speech' => 'Hello there',
-      ],
-    ], 'setting');
+    game_speech($game_user, 'Hello there', TRUE);
     db_set_active('default');
     break;
 }

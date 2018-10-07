@@ -29,10 +29,21 @@ function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 EOF;
 }
 
-function game_speech($game_user, $text) {
+/**
+ * Tell the client to speak some text.
+ *
+ * @param \stdClass() $game_user
+ *   The game user object.
+ * @param string $text
+ *   The text to speak.
+ * @param bool $force
+ *   Force the code to instruct the client to speak even if user has not opted
+ * in.
+ */
+function game_speech($game_user, $text, $force = FALSE) {
 //  global $game;
 //  include drupal_get_path('module', $game) . '/game_defs.inc';
-  if (game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
+  if ($force || game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
     drupal_add_js([
       'stlouis' => [
         'speech' => $text,
