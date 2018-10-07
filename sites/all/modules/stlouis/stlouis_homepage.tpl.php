@@ -420,12 +420,12 @@ $extra_bonus
 EOF;
 
 $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
-if (game_get_value($game_user, 'enabled_alpha')) {
+//if (game_get_value($game_user, 'enabled_alpha')) {
   $link = 'quest_groups';
-}
-else {
-  $link = 'quests';
-}
+//}
+//else {
+//  $link = 'quests';
+//}
 
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Missions"

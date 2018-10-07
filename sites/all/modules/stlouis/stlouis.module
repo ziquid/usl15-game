@@ -1820,39 +1820,44 @@ function _stlouis_fetch_user() {
     $result = db_query($sql, $game_user->level + 1);
     $level = db_fetch_object($result);
     $next_level = $level->experience;
-    if ($next_level == 0) $next_level = 99999999;
-
-    $extra_messages .= '<div class="level-up">
-      <div class="wise_old_man happy"></div>
-      <div class="level-up-header">Congratulations!</div>
-      <div class="level-up-text">You have reached Level ' .
-    $game_user->level . '!</div>';
+    if ($next_level == 0) {
+      $next_level = 99999999;
+    }
 
     // Fast comps for the next five minutes.
     game_set_timer($game_user, 'fast_comps_15', 300);
 
-    if ($game_user->level >= 6) {
-      $extra_messages .= '<div class="level-up-text"><a href="/' . $game .
-        '/increase_skills/' . $arg2 . '/none">You have
+    // Show the user a message (unless at Level 2 -- don't overwhelm new users).
+    if ($game_user->level > 2) {
+      $extra_messages .= '<div class="level-up">
+      <div class="wise_old_man happy"></div>
+      <div class="level-up-header">Congratulations!</div>
+      <div class="level-up-text">You have reached Level ' .
+        $game_user->level . '!</div>';
+
+      if ($game_user->level >= 6) {
+        $extra_messages .= '<div class="level-up-text"><a href="/' . $game .
+          '/increase_skills/' . $arg2 . '/none">You have
         <strong>4</strong> new skill points to spend</a></div>
         <div class="level-up-text">For the next five minutes,
         competencies can be enhanced every 15 seconds</div>';
-    }
-    else {
-      $extra_messages .= '<div class="level-up-text">Keep going to reach
+      }
+      else {
+        $extra_messages .= '<div class="level-up-text">Keep going to reach
         Level 6!</div>';
-    }
+      }
 
-    if (!empty($game_user->max_level_for_office) &&
-      $game_user->level > $game_user->max_level_for_office) {
-      $sql = 'delete from elected_officials where fkey_users_id = %d;';
-      db_query($sql, $game_user->id);
-      $extra_messages .= '<div class="level-up-text">' .
-        t('You have become too influential to remain
+      if (!empty($game_user->max_level_for_office) &&
+        $game_user->level > $game_user->max_level_for_office) {
+        $sql = 'delete from elected_officials where fkey_users_id = %d;';
+        db_query($sql, $game_user->id);
+        $extra_messages .= '<div class="level-up-text">' .
+          t('You have become too influential to remain
         in your current office.&nbsp; You resign your position.') . '</div>';
-    }
+      }
 
-    $extra_messages .= '</div>';
+      $extra_messages .= '</div>';
+    }
   }
 
   // Calculate energy.

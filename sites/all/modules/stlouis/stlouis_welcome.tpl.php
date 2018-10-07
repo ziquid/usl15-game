@@ -93,12 +93,12 @@ EOF;
 
     $msg = 'I am a new user who has just joined the game.  Please welcome me.';
     game_send_user_message($game_user->id, $data, 0, $msg, 'user');
-    if (game_get_value($game_user, 'enabled_alpha')) {
+//    if (game_get_value($game_user, 'enabled_alpha')) {
       $links = 'quest_groups';
-    }
-    else {
-      $links = 'quests';
-    }
+//    }
+//    else {
+//      $links = 'quests';
+//    }
     game_button($links, 'continue', '?show_expanded=0');
     game_speech($game_user, 'Get ready to become Mayor!', TRUE);
     db_set_active('default');

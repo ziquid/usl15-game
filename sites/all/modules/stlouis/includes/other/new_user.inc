@@ -30,6 +30,9 @@ function game_new_user_fetch_quest_group_0($game_user, &$qg) {
     }
   }
 
+  $newUserHelpShown = game_get_value($game_user, 'newUserHelpShown', []);
+  firep($newUserHelpShown, 'new user help shown');
+
   // No experience: intro text, hide extra quests.
   if ($game_user->experience == 0) {
     $qg->description = <<< EOF
@@ -46,6 +49,8 @@ EOF;
     unset($qg->q[2], $qg->q[3], $qg->q[4]);
   }
   elseif ($game_user->level == 1) {
+
+    // Have done a quest once.
     $qg->description = <<< EOF
 <div class="new-user">
 <div class="wise_old_man_small">
@@ -58,12 +63,26 @@ EOF;
     $qg->descriptionShowExpanded = TRUE;
     unset($qg->q[3], $qg->q[4]);
   }
-  elseif ($game_user->level == 2) {
+  elseif (!array_key_exists('01SecondMission', $newUserHelpShown)) {
     $qg->description = <<< EOF
 <div class="new-user">
   <div class="wise_old_man_small">
   </div>
-  <p>&quot;You have attained Level 2!</p>
+  <p>&quot;You have finished a mission!</p>
+  <p class="second">&quot;blah.&quot;</p>
+</div>
+EOF;
+    $qg->descriptionShowExpanded = TRUE;
+    $newUserHelpShown['01SecondMission'] = TRUE;
+    game_set_value($game_user, 'newUserHelpShown', $newUserHelpShown);
+  }
+
+  elseif ($game_user->level == 3) {
+    $qg->description = <<< EOF
+<div class="new-user">
+  <div class="wise_old_man_small">
+  </div>
+  <p>&quot;You have attained Level 3!</p>
   <p class="second">&quot;Each time you level up, your Energy and Actions refill.&nbsp;
     Your first mission is complete, so perform the next mission by touching it.&quot;</p>
 </div>

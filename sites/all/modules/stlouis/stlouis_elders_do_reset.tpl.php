@@ -52,23 +52,22 @@
 
     // Clan leader? Delete entire clan.
     if ($item->is_clan_leader) {
-
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
       $result = db_query($sql, $game_user->fkey_clans_id);
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $item->id);
       $sql = 'delete from clans where id = %d;';
       $result = db_query($sql, $item->id);
-
     }
     else {
-
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       $result = db_query($sql, $game_user->id);
-
     }
 
     $sql = 'delete from quest_completion where fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+
+    $sql = 'delete from {user_attributes} where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
 
     $default_neighborhood = 81;

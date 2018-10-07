@@ -202,12 +202,12 @@ EOF;
       array('@stuff' => strtolower($eq->name))) . '</div>';
   }
 
-  if (game_get_value($game_user, 'enabled_alpha')) {
+//  if (game_get_value($game_user, 'enabled_alpha')) {
     $link = 'quest_groups';
-  }
-  else {
-    $link = 'quests';
-  }
+//  }
+//  else {
+//    $link = 'quests';
+//  }
 
   echo <<< EOF
 <div class="try-an-election-wrapper">

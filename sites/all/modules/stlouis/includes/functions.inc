@@ -875,12 +875,12 @@ function game_show_quest_group($game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if (game_get_value($game_user, 'enabled_alpha')) {
+//  if (game_get_value($game_user, 'enabled_alpha')) {
     $link = 'quest_groups';
-  }
-  else {
-    $link = 'quests';
-  }
+//  }
+//  else {
+//    $link = 'quests';
+//  }
 
   echo <<< EOF
   <span class="title">
@@ -2829,6 +2829,11 @@ function game_get_value($game_user, $key, $default = NULL) {
   $item = db_fetch_object($result);
 //  firep($item, 'user_attributes value for key ' . $key);
 
+  // Serialized data?  Undo it.
+  if (substr($item->value, 0, 11) == 'serialized:') {
+    return unserialize(substr($item->value, 11));
+  }
+
   return !empty($item->value) ? $item->value : $default;
 }
 
@@ -2848,6 +2853,11 @@ function game_get_value($game_user, $key, $default = NULL) {
  *   TRUE if the set succeeded; FALSE otherwise.
  */
 function game_set_value($game_user, $key, $value = "set") {
+
+  // Array?  Serialize the data before storing.
+  if (is_array($value)) {
+    $value = 'serialized:' . serialize($value);
+  }
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';

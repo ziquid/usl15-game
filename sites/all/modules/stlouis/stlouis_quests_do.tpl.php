@@ -19,10 +19,9 @@ $result = db_query($sql, $quest_id);
 $data = db_fetch_object($result);
 $group_id = $data->group;
 $qgo = game_fetch_quest_groups($game_user, $group_id);
-//  firep($qgo, 'quest group object');
 $game_quest = &$qgo->q[$quest_id];
 
-$quest_link = game_get_value($game_user, 'enabled_alpha') ? 'quest_groups' : 'quests';
+$quest_link = /*game_get_value($game_user, 'enabled_alpha') ?*/ 'quest_groups'/* : 'quests'*/;
 
 //   if ($event_type == EVENT_QUESTS_100)
 //     $game_quest->required_energy = min($game_quest->required_energy, 100);
@@ -1015,20 +1014,20 @@ $loc_quests = t('@location @quests', [
   '@quests' => "{$quest}s",
 ]);
 
-if (game_get_value($game_user, 'enabled_alpha')) {
+//if (game_get_value($game_user, 'enabled_alpha')) {
   $loc_quests = <<< EOF
 <a href="/$game/quest_groups/$arg2#group-{$game_quest->group}">$loc_quests</a>
 EOF;
-}
+//}
 
 $title = "<span class=\"quest-group-title\" $older_missions_html $loc_quests $newer_missions_html</span>";
 
 // Reread quest group object.
 $qgo = game_fetch_quest_groups($game_user, $group_id);
 $qgo->showExpanded = TRUE;
-//if ($game_user->level >= 6) {
+if ($game_user->level >= 6) {
   $qgo->titleHtml = $title;
-//}
+}
 
 $game_quest->optionShowBeforeTitle = TRUE;
 array_unshift($qgo->q, $game_quest);
