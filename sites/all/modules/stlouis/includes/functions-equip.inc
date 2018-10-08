@@ -8,6 +8,16 @@
  * Synced with 2114: no
  */
 
+/**
+ * Show a piece of required equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $equipment_id
+ *   The equipment id.
+ * @param int $req_quantity
+ *   The quantity needed.
+ */
 function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity) {
 
   global $game;
