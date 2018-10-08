@@ -109,59 +109,73 @@ ob_end_clean();
   }
   if (arg(3) == 'com.ziquid.celestialglory.luck.35') {
     $luck = 35;
+    $subtype = 'apple';
   }
   if (arg(3) == 'com.ziquid.celestial_glory.luck.35') {
     $luck = 35;
+    $subtype = 'apple';
   }
 
   // Blackberry.
   if (arg(3) == 'buy_luck_120') {
     $luck = 120;
+    $subtype = 'blackberry';
   }
 
   // Paypal.
   if (arg(3) == '130') {
     $luck = 130;
+    $subtype = 'paypal';
   }
   if (arg(3) == '150') {
     $luck = 150;
+    $subtype = 'paypal';
   }
 
   // Google.
   if (arg(3) == 'luck.150') {
     $luck = 150;
+    $subtype = 'google';
   }
 
   // Apple.
   if (arg(3) == 'com.ziquid.uslce.luck.150') {
     $luck = 150;
+    $subtype = 'apple';
   }
   if (arg(3) == 'com.ziquid.celestialglory.luck.150') {
     $luck = 150;
+    $subtype = 'apple';
   }
   if (arg(3) == 'com.ziquid.celestial_glory.luck.150') {
     $luck = 150;
+    $subtype = 'apple';
   }
 
   // Paypal.
   if (arg(3) == '320') {
     $luck = 320;
+    $subtype = 'paypal';
   }
 
   // Google.
   if (arg(3) == 'luck.320') {
     $luck = 320;
+    $subtype = 'google';
   }
 
   // Paypal.
   if (arg(3) == '700') {
     $luck = 700;
+    $subtype = 'paypal';
   }
   if (arg(3) == '1000') {
     $luck = 1000;
+    $subtype = 'paypal';
   }
   if (arg(3) == '4500') {
     $luck = 4500;
+    $subtype = 'paypal';
   }
 
   // Stop iOS luck hacking.
