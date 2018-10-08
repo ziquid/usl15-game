@@ -726,6 +726,17 @@ EOF;
   echo '</div>';
 }
 
+/**
+ * Show a piece of required equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $equipment_id
+ *   The equipment id.
+ * @param int $req_quantity
+ *   The quantity needed.
+ */
+
 function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';

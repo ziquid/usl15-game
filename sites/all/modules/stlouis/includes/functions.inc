@@ -53,17 +53,6 @@ function game_speech($game_user, $text, $force = FALSE) {
 }
 
 /**
- * Show a piece of required equipment.
- *
- * @param \stdClass $game_user
- *   The game user object.
- * @param int $equipment_id
- *   The equipment id.
- * @param int $req_quantity
- *   The quantity needed.
- */
-
-/**
  * Fetch the list of land to show.
  *
  * @param \stdClass $game_user
