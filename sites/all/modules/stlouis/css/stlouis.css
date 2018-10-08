@@ -937,3 +937,25 @@ div.new-user .wise_old_man_small {
   background-position: 0 1px;
   height: 80px;
 }
+
+.quests .quest-icon {
+  position: relative;
+}
+
+.quests .quest-icon-baseline-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 94px;
+  height: 58px;
+  border-radius: 4px;
+}
+
+.quests .quest-icon-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 92px;
+  height: 56px;
+  border-radius: 4px;
+}

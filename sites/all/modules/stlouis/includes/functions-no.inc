@@ -8,26 +8,110 @@
  * Synced with 2114: no
  */
 
-function NO_sound($name) {
-return;
+function NO_show_goal($game_user) {
+
   global $game;
 
-echo <<< EOF
-  <script type="text/javascript">
-    var mp3 = document.createElement("audio");
-    mp3.setAttribute('src', '/sites/default/files/sounds/{$game}_$name.mp3');
-    mp3.load();
-    document.documentElement.appendChild(mp3);
-    mp3.play();
-  </script>
+  $sql = 'select goals.* from goals
+    left join goals_achieved on fkey_goals_id = goals.id
+    and fkey_users_id = %d
+    where goals_achieved.id is NULL
+    order by goals.id asc limit 1;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
+
+  if (substr(arg(1), 0, strlen($item->type)) == $item->type) {
+    $current = 'current';
+  }
+
+  $finished = eval($item->code_to_check);
+
+  if ($finished) {
+
+    // Save an entry showing that this goal has been achieved.
+    $sql = 'insert into goals_achieved
+      (fkey_users_id, fkey_goals_id)
+      values (%d, %d);';
+    $result = db_query($sql, $game_user->id, $item->id);
+
+    // Congratulate user.
+    $extra_title = <<< EOF
+<div class="title goal-achieved">
+  Goal Achievement
+  <span class="arrows">&raquo; </span>
+  <span class="nowrap">$item->title</span>
+</div>
 EOF;
-  return;
+
+    $next = t('Next Goal');
+    $current = 'current';
+
+    // Find next goal.
+    $sql = 'select goals.* from goals
+      left join goals_achieved on fkey_goals_id = goals.id
+      and fkey_users_id = %d
+      where goals_achieved.id is NULL
+      order by goals.id asc limit 1;';
+    $result = db_query($sql, $game_user->id);
+    $item = db_fetch_object($result);
+
+  }
+  else {
+
+    $extra_title = '';
+    $next = t('Current Goal');
+
+  }
+
+  // No goal.
+  if (empty($item->title) && empty($extra_title)) {
+    return;
+  }
+
+  if (empty($item->title)) {
+    $item->title = t('None');
+  }
+
+  $description = t($item->description, [
+    '@level' => $game_user->level,
+  ]);
 
   echo <<< EOF
-<audio src="/sites/default/files/sounds/{$game}_$name.mp3" autoplay="true">
-  <embed src="/sites/default/files/sounds/{$game}_$name.mp3" autostart="true"
-    loop="false" hidden="true"/>
-</audio>
+<div class="goals $current">
+  $extra_title
+  <div class="title">$next <span class="arrows">&raquo; </span>
+    <span class="nowrap">$item->title</span>
+  </div>
+  <div class="desc-wrapper">
+    <a class="toggle" onClick="javascript:toggle_goal_desc(); return false;"
+      href="#">
+      +
+    </a>
+    <p id="goal-desc">$description</p>
+  </div>
+</div>
+
+<script type="text/javascript">
+Element.prototype.hasClass = function(cName) {
+  return this.className &&
+    new RegExp('(^|\\\\s)' + cName + '(\\\\s|$)').test(this.className);
+};
+Element.prototype.removeClass = function(className) {
+  this.className = this.className.replace(
+    new RegExp('(^|\\\\s)' + className + '(\\\\s|$)', 'm'), ''
+  );
+};
+
+  function toggle_goal_desc() {
+    var d = document.getElementById('goal-desc');
+    if (d.hasClass('show')) {
+      d.removeClass('show');
+    }
+    else {
+      d.className = d.className + ' show';
+    }
+  }
+</script>
 EOF;
 }
 
@@ -609,4 +693,200 @@ firep($eq->name . ' wore out!');
   $eo = db_fetch_object($result);
 
   return [$lost, $failure_reason, $eo->quantity];
+}
+
+function NO_show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
+
+  global $game, $phone_id;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  static $location, $party_title;
+
+  if (empty($location)) {
+
+    $sql = 'select name from `neighborhoods` where id = %d;';
+    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
+    $data = db_fetch_object($result);
+    $location = preg_replace('/^The /', '', $data->name);
+
+  }
+
+  if (empty($party_title)) {
+
+    $sql = 'select party_title from `values` where id = %d;';
+    $result = db_query($sql, $game_user->fkey_values_id);
+    $data = db_fetch_object($result);
+    $party_title = preg_replace('/^The /', '', $data->party_title);
+
+  }
+
+  if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
+  if (substr($item->description, -1) != '>') $raquo = '&raquo;';
+
+  $name = t($item->name, [
+    '%party' => $party_title,
+    '@username' => $game_user->username,
+    '@hood' => $hood,
+    '@location' => $location,
+  ]);
+
+  if (($view == 'runner') || ($view == 'perform'))
+    $item->initiator_description = $item->runner_description;
+
+  $description = t($item->initiator_description, [
+    '%party' => $party_title,
+    '@username' => $game_user->username,
+    '@hood' => $hood,
+    '@location' => $location,
+  ]);
+
+  $active = ($item->active) ? '' : ' (inactive)';
+
+  if (!empty($item->favor_id)) {
+    $item->req_id = $item->id;
+    $item->id = $item->favor_id;
+  }
+
+  switch ($view) {
+
+    case 'initiator':
+
+      $a_start = "<a href=\"/$game/favors_selected/$arg2/$item->id\">";
+      $a_end = '</a>';
+      $link_text = 'Select &raquo;&raquo;';
+      break;
+
+    case 'runner':
+
+      $a_start = "<a href=\"/$game/favor_perform/$arg2/$item->req_id\">";
+      $a_end = '</a>';
+      $link_text = 'Perform';
+      break;
+
+    case 'perform':
+
+      $a_start = $a_end = $link_text = '';
+      break;
+
+  }
+
+  echo <<< EOF
+<div class="quests">
+  <div class="quest-icon">
+    $a_start
+      <img src="/sites/default/files/images/favors/$game-$item->id.png?0"
+        border="0" width="96"/>
+    $a_end
+  </div>
+
+  <div class="quest-details">
+    <div class="quest-name">
+      $a_start
+        $active $name
+      $a_end
+    </div>
+    <div class="quest-description">
+      $laquo $description $raquo
+    </div>
+EOF;
+
+  if ($view == 'initiator') echo <<< EOF
+    <div class="quest-requisites">
+      // Initiator Requisites //
+    </div>
+    <div class="quest-experience">
+      $game_user->values: $item->values_cost
+    </div>
+    <div class="quest-experience">
+      {$actions}: $item->actions_cost
+    </div>
+EOF;
+
+  if ($view != 'perform') {
+
+    echo <<< EOF
+    <div class="quest-requisites">
+      // Runner Requisites //
+    </div>
+    <div class="quest-experience">
+      {$actions}: $item->runner_actions_cost
+    </div>
+EOF;
+
+    // Due date.
+    if (!empty($item->time_due)) {
+
+      $time_due = game_format_date(strtotime($item->time_due));
+
+      echo <<< EOF
+    <div class="quest-experience">
+      Perform By: <span class="highlight">$time_due</span>
+    </div>
+EOF;
+
+    }
+
+    // Required elected position.
+    if ($item->fkey_required_elected_positions_id > 0) {
+
+      _required_elected_position($game_user,
+        $item->fkey_required_elected_positions_id, $item->ep_name);
+
+    }
+
+    // Required competencies.
+    if ($item->fkey_required_competencies_id > 0 &&
+      $item->required_competencies_level > 0) {
+
+      _required_competency($game_user, $item->fkey_required_competencies_id,
+        $item->required_competencies_level, $item->cr_name);
+
+    }
+
+  }
+
+  echo <<< EOF
+    <div class="quest-requisites">
+      // Runner Disbursements //
+    </div>
+EOF;
+
+  // Enhanced competencies.
+  if ($item->fkey_enhanced_competencies_id > 0) {
+
+    _enhanced_competency($game_user, $item->fkey_enhanced_competencies_id,
+      $item->ce_name);
+
+  }
+
+  if ($view != 'perform') {
+
+    $bounty_values_min = floor($item->values_cost / 2);
+    $bounty_values_max = $item->values_cost * 5;
+    $bounty = "$bounty_values_min to $bounty_values_max";
+
+  }
+
+  echo <<< EOF
+    $no_reqs
+    <div class="quest-disbursements">
+      // Bounty //
+    </div>
+    <div class="quest-experience">
+      $bounty $game_user->values
+    </div>
+  </div>
+EOF;
+
+  if ($view != 'perform') echo <<< EOF
+  <div class="quest-perform-button-wrapper">
+    <div class="quest-perform-button">
+      $a_start
+        $link_text
+      $a_end
+    </div>
+  </div>
+EOF;
+
+  echo '</div>';
 }

@@ -712,7 +712,8 @@ EOF;
   }
 
   $game_quest->completed_percent = $percent_complete;
-  list($game_quest->rgb, $game_quest->width) = game_get_quest_completion($game_quest->completed_percent,
+  list($game_quest->rgb, $game_quest->width, $game_quest->completed_percent_overlay) =
+    game_get_quest_completion($game_quest->completed_percent,
     $percentage_target, $percentage_divisor);
 
   // Check for loot -- equipment.

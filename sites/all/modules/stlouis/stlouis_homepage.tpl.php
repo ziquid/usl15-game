@@ -426,10 +426,10 @@ $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
 //else {
 //  $link = 'quests';
 //}
-
+$show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Missions"
-  href="/$game/$link/$arg2#group-{$game_user->fkey_last_played_quest_groups_id}" />
+  href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}" />
 EOF;
 
  $coords = _stlouis_scale_coords($coefficient, 42, 72, 122, 92);

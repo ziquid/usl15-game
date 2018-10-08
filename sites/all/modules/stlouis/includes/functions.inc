@@ -22,7 +22,7 @@ function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
   echo <<< EOF
 <div class="button-wrapper">
-  <a class="continue button" href="/$link">
+  <a class="button-$type button" href="/$link">
     $type
   </a>
 </div>
@@ -32,13 +32,13 @@ EOF;
 /**
  * Tell the client to speak some text.
  *
- * @param \stdClass() $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  * @param string $text
  *   The text to speak.
  * @param bool $force
  *   Force the code to instruct the client to speak even if user has not opted
- * in.
+ *   in.
  */
 function game_speech($game_user, $text, $force = FALSE) {
 //  global $game;
@@ -63,109 +63,6 @@ function game_speech($game_user, $text, $force = FALSE) {
  *   The quantity needed.
  */
 
-function _show_goal($game_user) {
-return;
-  global $game;
-
-  $sql = 'select goals.* from goals
-    left join goals_achieved on fkey_goals_id = goals.id
-    and fkey_users_id = %d
-    where goals_achieved.id is NULL
-    order by goals.id asc limit 1;';
-  $result = db_query($sql, $game_user->id);
-  $item = db_fetch_object($result);
-
-  if (substr(arg(1), 0, strlen($item->type)) == $item->type)
-    $current = 'current';
-
-  $finished = eval($item->code_to_check);
-
-  if ($finished) {
-
-    // Save an entry showing that this goal has been achieved.
-    $sql = 'insert into goals_achieved
-      (fkey_users_id, fkey_goals_id)
-      values (%d, %d);';
-    $result = db_query($sql, $game_user->id, $item->id);
-
-    // Congratulate user.
-    $extra_title =<<< EOF
-<div class="title goal-achieved">
-  Goal Achievement
-  <span class="arrows">&raquo; </span>
-  <span class="nowrap">$item->title</span>
-</div>
-EOF;
-
-    $next = t('Next Goal');
-    $current = 'current';
-
-    // Find next goal.
-    $sql = 'select goals.* from goals
-      left join goals_achieved on fkey_goals_id = goals.id
-      and fkey_users_id = %d
-      where goals_achieved.id is NULL
-      order by goals.id asc limit 1;';
-    $result = db_query($sql, $game_user->id);
-    $item = db_fetch_object($result);
-
-  }
-  else {
-
-    $extra_title = '';
-    $next = t('Current Goal');
-
-  }
-
-  // No goal.
-  if (empty($item->title) && empty($extra_title)) return;
-
-  if (empty($item->title)) $item->title = t('None');
-
-  $description = t($item->description, [
-    '@level' => $game_user->level,
-  ]);
-
-  echo <<< EOF
-<div class="goals $current">
-  $extra_title
-  <div class="title">$next <span class="arrows">&raquo; </span>
-    <span class="nowrap">$item->title</span>
-  </div>
-  <div class="desc-wrapper">
-    <a class="toggle" onClick="javascript:toggle_goal_desc(); return false;"
-      href="#">
-      +
-    </a>
-    <p id="goal-desc">$description</p>
-  </div>
-</div>
-
-<script type="text/javascript">
-Element.prototype.hasClass = function(cName) {
-  return this.className &&
-    new RegExp('(^|\\\\s)' + cName + '(\\\\s|$)').test(this.className);
-};
-Element.prototype.removeClass = function(className) {
-  this.className = this.className.replace(
-    new RegExp('(^|\\\\s)' + className + '(\\\\s|$)', 'm'), ''
-  );
-};
-
-  function toggle_goal_desc() {
-    var d = document.getElementById('goal-desc');
-    if (d.hasClass('show')) {
-      d.removeClass('show');
-    }
-    else {
-      d.className = d.className + ' show';
-    }
-  }
-</script>
-EOF;
-
-}
-
 /**
  * Fetch the list of land to show.
  *
@@ -175,7 +72,7 @@ EOF;
  * @return \stdClass[]
  *   The array of land objects.
  */
-function game_fetch_visible_land($game_user) {
+function game_fetch_visible_land(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE land.id > 0';
   }
@@ -229,10 +126,11 @@ function game_fetch_visible_land($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
- * @return \stdClass[]
+ *
+ * @return \stdClass
  *   The next land item to show, if any.
  */
-function game_fetch_next_land($game_user) {
+function game_fetch_next_land(\stdClass $game_user) {
   $sql = 'SELECT land.*, land_ownership.quantity
   FROM land
 
@@ -269,7 +167,7 @@ function game_fetch_next_land($game_user) {
  * @return \stdClass
  *   The land item, if any.
  */
-function game_fetch_land_by_id($game_user, $land_id) {
+function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   $sql = 'SELECT land.*, land_ownership.quantity,
   competencies.name as competency, comp1.name as competency_name_1
   FROM land
@@ -404,46 +302,56 @@ function game_show_land($game_user, $item, $options = []) {
     $item->description);
 
   $quantity = $item->quantity;
-  if (empty($quantity)) $quantity = t('None');
+  if (empty($quantity)) {
+    $quantity = t('None');
+  }
 
   $land_price = $item->price + ($item->quantity *
     $item->price_increase);
 
-  if (($land_price % 1000) == 0)
+  if (($land_price % 1000) == 0) {
     $land_price = ($land_price / 1000) . 'K';
+  }
 
   $payout = $item->payout;
 
-  if ((($payout % 1000) == 0) && ($payout > 0))
+  if ((($payout % 1000) == 0) && ($payout > 0)) {
     $payout = ($payout / 1000) . 'K';
+  }
 
   $can_buy = $can_sell = TRUE;
 
   // FIXME firep() all reason why can't buy nor sell.
   if ($item->fkey_neighborhoods_id != 0 &&
-    $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)
+    $item->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
     $can_buy = FALSE;
+  }
 
   if ($item->fkey_values_id != 0 &&
-    $item->fkey_values_id != $game_user->fkey_values_id)
+    $item->fkey_values_id != $game_user->fkey_values_id) {
     $can_buy = FALSE;
+  }
 
-  if ($item->required_level > $game_user->level)
+  if ($item->required_level > $game_user->level) {
     $can_buy = FALSE;
+  }
 
   if (!$item->active) {
     $can_buy = FALSE;
     firep('Cannot buy because ACTIVE is FALSE', $item->name);
   }
 
-  if ($item->is_loot != 0)
+  if ($item->is_loot != 0) {
     $can_buy = FALSE;
+  }
 
-  if ($item->can_sell != 1)
+  if ($item->can_sell != 1) {
     $can_sell = FALSE;
+  }
 
-  if ($item->quantity < 1)
+  if ($item->quantity < 1) {
     $can_sell = FALSE;
+  }
 
   $current = ($item->type == 'job' && $item->quantity > 0) ? t('Current') : '';
   $inactive = ($item->active) ? '' : t('(Inactive)');
@@ -586,9 +494,11 @@ EOF;
 EOF;
   }
 
-  if ($game_user->level < $item->required_level) $reqs .= <<< EOF
+  if ($game_user->level < $item->required_level) {
+    $reqs .= <<< EOF
     <div class="land-required_level">Player: Level $item->required_level</div>
 EOF;
+  }
 
   if ($item->fkey_required_competencies_id > 0) {
 
@@ -607,10 +517,12 @@ EOF;
 
   }
 
-  if (!empty($reqs)) echo <<< EOF
+  if (!empty($reqs)) {
+    echo <<< EOF
     <!--<div class="land-requisites">// Requisites //</div>-->
     $reqs
 EOF;
+  }
 
   echo <<< EOF
     <div class="land-disbursements">
@@ -647,7 +559,7 @@ EOF;
   </div>
 EOF;
   }
-  else if ($item->type == 'investment') {
+  elseif ($item->type == 'investment') {
 
     // Attempt to buy.
     if ($options['land-buy-succeeded']) {
@@ -689,8 +601,8 @@ EOF;
   }
   else {
 
-      // Job.
-      echo <<< EOF
+    // Job.
+    echo <<< EOF
   <div class="land-button-wrapper">
     $apply_button
   </div>
@@ -711,7 +623,7 @@ EOF;
  * @return \stdClass|\stdClass[]
  *   A quest group object or the entire array of quest group objects.
  */
-function game_fetch_quest_groups($game_user, $id = NULL) {
+function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   $data = [];
 
   // Admin?  Show all quests.
@@ -808,7 +720,8 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
       $item->q = [];
       $result = db_query($sql_quests, $game_user->id, $item->id, $game_user->level + 1);
       while ($q = db_fetch_object($result)) {
-        list($q->rgb, $q->width) = game_get_quest_completion($q->completed_percent,
+        list($q->rgb, $q->width, $q->completed_percent_overlay) =
+          game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
         $item->q[$q->id] = $q;
       }
@@ -838,7 +751,7 @@ function game_fetch_quest_groups($game_user, $id = NULL) {
  * @return \stdClass[]
  *   The array of quest group objects.
  */
-function game_fetch_visible_quest_groups($game_user) {
+function game_fetch_visible_quest_groups(\stdClass $game_user) {
   $data = $data2 = [];
   $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
     left join quests q on q.group = qg.id
@@ -869,9 +782,9 @@ function game_fetch_visible_quest_groups($game_user) {
  * @param \stdClass $item
  *   The quest group object.
  * @param string $ai_output
- *   unused.
+ *   Unused.
  */
-function game_show_quest_group($game_user, $item, &$ai_output) {
+function game_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -903,7 +816,7 @@ EOF;
  * @param array $options
  *   Various options to control the display.
  */
-function game_show_quest_group_slide($game_user, $qgo, $options = []) {
+function game_show_quest_group_slide(\stdClass $game_user, \stdClass $qgo, $options = []) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1050,8 +963,9 @@ EOF;
  *   Which group to show.
  *
  * @return array
+ *   Quest group stats array.
  */
-function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show) {
+function game_fetch_quest_group_stats(\stdClass $game_user, $active_quests, $group_to_show) {
 
   // Get quest group stats.
   $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
@@ -1081,7 +995,12 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
       ($quest_group->total * min($quest_group_completion->times_completed, 1));
   }
 
-  return [$quest_group, $percentage_target, $percentage_divisor, $next_group_html];
+  return [
+    $quest_group,
+    $percentage_target,
+    $percentage_divisor,
+    $next_group_html
+  ];
 }
 
 /**
@@ -1095,8 +1014,8 @@ function game_fetch_quest_group_stats($game_user, $active_quests, $group_to_show
  *   The divisor to get the percentage_target down to 100.
  *
  * @return array
- *   The RGB value corresponding to the percentage done and the width of a
- * progress bar.
+ *   The RGB value corresponding to the percentage done, the width of a
+ *   progress bar, and some CSS.
  */
 function game_get_quest_completion($completed_percent, $percentage_target, $percentage_divisor) {
   if (empty($completed_percent)) {
@@ -1111,12 +1030,74 @@ function game_get_quest_completion($completed_percent, $percentage_target, $perc
       (4 * $percentage_divisor))) . '0';
   }
 
+  if ($completed_percent == 100) {
+    $css_overlay = '';
+  }
+  elseif ($completed_percent == 0) {
+    $css_overlay = 'clip-path: circle(1%);';
+  }
+  else {
+    // Figure out overlay.
+    $pts = [[50, 0]];
+    $cp = $completed_percent;
+    if ($cp >= 12.5) {
+      $pts[] = [100, 0];
+    }
+    else {
+      $pts[] = [50 + $cp * 4, 0];
+    }
+
+    if ($cp >= 37.5) {
+      $pts[] = [100, 100];
+    }
+    elseif ($cp > 12.5) {
+      $pts[] = [100, ($cp - 12.5) * 4];
+    }
+
+    if ($cp >= 62.5) {
+      $pts[] = [0, 100];
+    }
+    elseif ($cp > 37.5) {
+      $pts[] = [(62.5 - $cp) * 4, 100];
+    }
+
+    if ($cp >= 87.5) {
+      $pts[] = [0, 0];
+    }
+    elseif ($cp > 62.5) {
+      $pts[] = [0, (87.5 - $cp) * 4, 100];
+    }
+
+    if ($cp > 87.5) {
+      $pts[] = [($cp - 87.5) * 4, 0];
+    }
+
+    $css_overlay = 'clip-path: polygon(50% 50%';
+    foreach ($pts as $pt) {
+      $x = floor($pt[0]);
+      $y = floor($pt[1]);
+      if ($x == 100) {
+        $x = 110;
+      }
+      if ($y == 100) {
+        $y = 110;
+      }
+      $css_overlay .= ', ' . $x . '% ' . $y . '%';
+    }
+    $css_overlay .= ');';
+  }
   $width = floor($completed_percent * 94 / $percentage_target) + 2;
-  return [$rgb, $width];
+  firep($css_overlay, 'css overlay');
+  return [$rgb, $width, $css_overlay];
 }
 
-// Sometimes the income gets hacked -- fix here.
-function game_recalc_income(&$game_user) {
+/**
+ * Recalc the income and expenses for a user.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ */
+function game_recalc_income(\stdClass $game_user) {
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -1153,7 +1134,7 @@ function game_recalc_income(&$game_user) {
   $game_user->expenses = $item->expenses;
 }
 
-function game_show_aides_menu($game_user) {
+function game_show_aides_menu(\stdClass $game_user) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1180,7 +1161,7 @@ function game_show_aides_menu($game_user) {
     $title = t('Hire @staff and @agents', [
       '@staff' => $game_text['staff'],
       '@agents' => $game_text['agents'],
-      ]);
+    ]);
   }
 
   echo <<< EOF
@@ -1264,18 +1245,18 @@ EOF;
       . '/game_show_aides_menu_staff.js', 'module', 'footer');
   }
 
-  _show_goal($game_user);
+//  _show_goal($game_user);
 
- if (!empty($title)) echo <<< EOF
+ if (!empty($title)) {
+   echo <<< EOF
 <div class="title">
   $title
 </div>
 EOF;
-
+  }
 }
 
-
-function game_show_elections_menu($game_user) {
+function game_show_elections_menu(\stdClass $game_user) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1306,23 +1287,29 @@ function game_show_elections_menu($game_user) {
 </div>
 EOF;
 
-  _show_goal($game_user);
+//  _show_goal($game_user);
 }
 
-function game_show_profile_menu($game_user) {
+function game_show_profile_menu(\stdClass $game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
-  if (arg(1) == 'user') $user_active = 'active';
-  if (arg(1) == 'user_favors') $favor_active = 'active';
+  if (arg(1) == 'user') {
+    $user_active = 'active';
+  }
+  if (arg(1) == 'user_favors') {
+    $favor_active = 'active';
+  }
   if (arg(1) == 'favor_perform') {
     $favor_active = 'active';
     $arg3 = '';
   }
-  if (arg(1) == 'user_comp') $comp_active = 'active';
+  if (arg(1) == 'user_comp') {
+    $comp_active = 'active';
+  }
 
   echo <<< EOF
 <div class="news">
@@ -1334,280 +1321,18 @@ function game_show_profile_menu($game_user) {
 </div>
 EOF;
 
-  _show_goal($game_user);
-}
-
-function game_show_quest($game_user, $item, $percentage_target,
-  $percentage_divisor, $quest_group, $party_title, $outcome = '',
-  $exp_added_str = '', $money_added_str = '', $disbursements_doubled = '',
-  $consumption_html = '', $disbursement_html = '',
-  $quest_completion_html = '') {
-
-  global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-
-  $location = preg_replace('/^The /', '', $game_user->location);
-
-  $sql = 'select id from quests where `group` = %d
-    order by id asc limit 1;';
-  $result = db_query($sql, $item->group);
-  $data = db_fetch_object($result);
-  $seq_num = $item->id - $data->id;
-
-//  if (substr($item->description, 0, 3) != '<p ') {
-//    $laquo = '&laquo;';
-//  }
-//  if (substr($item->description, -1) != '>') {
-//    $raquo = '&raquo;';
-//  }
-
-  $name = t($item->name, [
-    '@clan' => $game_user->clan_name,
-    '@hood' => $hood,
-    '@location' => $location,
-    '%party' => $party_title,
-    '@username' => $game_user->username,
-  ]);
-
-  $description = t($item->description, [
-    '@clan' => $game_user->clan_name,
-    '@hood' => $hood,
-    '@location' => $location,
-    '%party' => $party_title,
-    '@username' => $game_user->username,
-  ]);
-
-  list($rgb, $width) = game_get_quest_completion($item->completed_percent, $percentage_target, $percentage_divisor);
-  $active = ($item->active) ? '' : ' (inactive)';
-
-  if (strpos($item->meta, 'use_job_picture') !== FALSE) {
-    $sql = 'SELECT land.id FROM `land_ownership`
-      LEFT JOIN land ON fkey_land_id = land.id
-      WHERE fkey_users_id = %d
-      AND land.type = "job";';
-    $result = db_query($sql, $game_user->id);
-    $job = db_fetch_object($result);
-    $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
-  }
-  else {
-    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
-      $img = $icon_path . '.jpg';
-    }
-    else {
-      $img = $icon_path . '.png';
-    }
-  }
-
-  echo <<< EOF
-$outcome
-<div class="quests">
-  <div class="quest-icon">
-    <a href="/$game/quests_do/$arg2/$item->id">
-      <img src="$img" border="0" width="96" class="round4">
-    </a>
-    <div class="quest-complete">
-      <div class="quest-complete-percentage"
-        style="background-color: #$rgb; width: {$width}px">
-        &nbsp;
-      </div>
-      <div class="quest-complete-text">
-        $item->completed_percent% complete
-      </div>
-    </div>
-  </div>
-
-  <div class="quest-details">
-    <div class="quest-num">$item->group.$seq_num</div>
-    <div class="quest-name">
-      <a href="/$game/quests_do/$arg2/$item->id">
-        $name $active
-      </a>
-    </div>
-    <div class="quest-description">
-      $description
-    </div>
-EOF;
-
-  // Quest performed?
-  if (empty($exp_added_str)) {
-
-    // No quest performed -- show disbursements and requirements.
-    echo <<< EOF
-    <div class="quest-disbursements">
-      // Disbursements //
-    </div>
-    <div class="quest-experience">
-      +$item->experience $experience, 
-      +$item->min_money to $item->max_money $game_user->values
-    </div>
-EOF;
-
-    $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
-
-    if ($chance_of_loot > 0) {
-
-      $chance_modifier = '';
-      if ($chance_of_loot <= 20) {
-        $chance_modifier = t('Low');
-      }
-      else if ($chance_of_loot >= 40) {
-        $chance_modifier = t('High');
-      }
-      echo <<< EOF
-  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
-EOF;
-    }
-
-    echo <<< EOF
-    <div class="quest-requisites">
-      // Consumptions //
-    </div>
-    <div class="quest-required_energy">
-      Requires $item->required_energy ${game_text['energy']}
-    </div>
-EOF;
-
-  if ($item->clan_equipment_1_consumed_quantity > 0) {
-
-    echo '<div class="quest-required_stuff">';
-
-    _clan_required_equipment($game_user,
-      $item->fkey_clan_equipment_1_consumed_id,
-      $item->clan_equipment_1_consumed_quantity);
-
-    echo '</div>';
-
-  }
-
-  if ($item->land_required_quantity +
-    $item->equipment_1_required_quantity +
-    $item->equipment_2_required_quantity +
-    $item->equipment_3_required_quantity +
-    $item->clan_equipment_1_required_quantity +
-    $item->staff_required_quantity > 0) {
-
-      echo <<< EOF
-    <div class="quest-requisites">
-      // Requisites //
-    </div>
-EOF;
-
-      // Required land.
-      if ($item->land_required_quantity > 0)
-        _required_land($game_user, $item->fkey_land_required_id,
-          $item->land_required_quantity);
-
-      // Required equipment.
-      if ($item->equipment_1_required_quantity +
-        $item->equipment_2_required_quantity +
-        $item->equipment_3_required_quantity +
-        $item->clan_equipment_1_required_quantity > 0) {
-
-        echo '<div class="quest-required_stuff">';
-
-        if ($item->equipment_1_required_quantity > 0)
-          game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
-            $item->equipment_1_required_quantity);
-
-        if ($item->equipment_2_required_quantity > 0)
-          game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
-            $item->equipment_2_required_quantity);
-
-        if ($item->equipment_3_required_quantity > 0)
-          game_required_equipment($game_user, $item->fkey_equipment_3_required_id,
-            $item->equipment_3_required_quantity);
-
-        if ($item->clan_equipment_1_required_quantity > 0)
-          _clan_required_equipment($game_user,
-            $item->fkey_clan_equipment_1_required_id,
-            $item->clan_equipment_1_required_quantity);
-
-        echo '</div>';
-
-      }
-
-      // Required staff.
-      if ($item->staff_required_quantity > 0)
-        game_required_staff($game_user, $item->fkey_staff_required_id,
-          $item->staff_required_quantity);
-
-      // Required party.
-      if ($item->need_party > 0)
-        echo <<< EOF
-    <div class="quest-required_energy">
-      You must belong to a non-Underground $party_lower
-    </div>
-EOF;
-
-      // Required clan.
-      if ($item->need_clan > 0)
-        echo <<< EOF
-    <div class="quest-required_energy">
-      You must belong to a clan
-    </div>
-EOF;
-
-      // Required job.
-      if ($item->need_job > 0)
-        echo <<< EOF
-    <div class="quest-required_energy">
-      You must have a job
-    </div>
-EOF;
-
-    }
-
-  }
-
-  // Quest performed -- show accomplishments.
-  else {
-
-    echo <<< EOF
-    <div class="quest-requisites">
-      // Consumed By You //
-    </div>
-    <!--<div class="quest-required_energy">
-      $item->required_energy ${game_text['energy']}
-    </div>-->
-    $consumption_html
-    <div class="quest-disbursements">
-      // Disbursed To You //
-    </div>
-    <div class="quest-experience">
-      $money_added_str <strong>$game_user->values</strong> $disbursements_doubled
-    <br>
-      $exp_added_str <strong>$experience</strong> $disbursements_doubled
-    </div>
-  </div>
-  $disbursement_html
-  $quest_completion_html
-  <div class="quest-do-again">
-    <div class="quest-do-again-inside">
-      <a href="/$game/quests_do/$arg2/$item->id">
-        Do Again
-      </a>
-    </div>
-EOF;
-
-  }
-
-  echo <<< EOF
-  </div>
-</div>
-EOF;
-
+//  _show_goal($game_user);
 }
 
 /**
- * Show the quest group as a slide.
+ * Show the quest as a slide.
  *
  * @param \stdClass $game_user
  *   The game user object.
  * @param \stdClass $item
- *   The quest group.
+ *   The quest object.
  */
-function game_show_quest_slide($game_user, $item) {
+function game_show_quest_slide(\stdClass $game_user, \stdClass $item) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1617,13 +1342,6 @@ function game_show_quest_slide($game_user, $item) {
   $result = db_query($sql, $item->group);
   $data = db_fetch_object($result);
   $seq_num = $item->id - $data->id;
-
-//  if (substr($item->description, 0, 3) != '<p ') {
-//    $laquo = '&laquo;';
-//  }
-//  if (substr($item->description, -1) != '>') {
-//    $raquo = '&raquo;';
-//  }
 
   $name = t($item->name, [
     '@clan' => $game_user->clan_name,
@@ -1723,6 +1441,8 @@ $item->outcome
       <img src="$img" border="0" width="96" class="round4 $wrong_hood"
       style="box-shadow: #{$item->rgb} 3px 3px 6px; border-color: #{$item->rgb}">
       $wrong_hood_overlay
+      <div class="quest-icon-baseline-overlay"></div>
+      <div class="quest-icon-overlay" style="$item->completed_percent_overlay"></div>
     {$comment_start}</a>{$comment_end}
     <div class="quest-complete">
       <div class="quest-complete-percentage"
@@ -1770,7 +1490,7 @@ EOF;
       if ($chance_of_loot <= 20) {
         $chance_modifier = t('Low');
       }
-      else if ($chance_of_loot >= 40) {
+      elseif ($chance_of_loot >= 40) {
         $chance_modifier = t('High');
       }
       echo <<< EOF
@@ -1901,204 +1621,6 @@ EOF;
 EOF;
 }
 
-function _show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
-
-  global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  $arg2 = check_plain(arg(2));
-
-  static $location, $party_title;
-
-  if (empty($location)) {
-
-    $sql = 'select name from `neighborhoods` where id = %d;';
-    $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-    $data = db_fetch_object($result);
-    $location = preg_replace('/^The /', '', $data->name);
-
-  }
-
-  if (empty($party_title)) {
-
-    $sql = 'select party_title from `values` where id = %d;';
-    $result = db_query($sql, $game_user->fkey_values_id);
-    $data = db_fetch_object($result);
-    $party_title = preg_replace('/^The /', '', $data->party_title);
-
-  }
-
-  if (substr($item->description, 0, 3) != '<p ') $laquo = '&laquo;';
-  if (substr($item->description, -1) != '>') $raquo = '&raquo;';
-
-  $name = t($item->name, [
-    '%party' => $party_title,
-    '@username' => $game_user->username,
-    '@hood' => $hood,
-    '@location' => $location,
-  ]);
-
-  if (($view == 'runner') || ($view == 'perform'))
-    $item->initiator_description = $item->runner_description;
-
-  $description = t($item->initiator_description, [
-    '%party' => $party_title,
-    '@username' => $game_user->username,
-    '@hood' => $hood,
-    '@location' => $location,
-  ]);
-
-  $active = ($item->active) ? '' : ' (inactive)';
-
-  if (!empty($item->favor_id)) {
-    $item->req_id = $item->id;
-    $item->id = $item->favor_id;
-  }
-
-  switch ($view) {
-
-    case 'initiator':
-
-      $a_start = "<a href=\"/$game/favors_selected/$arg2/$item->id\">";
-      $a_end = '</a>';
-      $link_text = 'Select &raquo;&raquo;';
-      break;
-
-    case 'runner':
-
-      $a_start = "<a href=\"/$game/favor_perform/$arg2/$item->req_id\">";
-      $a_end = '</a>';
-      $link_text = 'Perform';
-      break;
-
-    case 'perform':
-
-      $a_start = $a_end = $link_text = '';
-      break;
-
-  }
-
-  echo <<< EOF
-<div class="quests">
-  <div class="quest-icon">
-    $a_start
-      <img src="/sites/default/files/images/favors/$game-$item->id.png?0"
-        border="0" width="96"/>
-    $a_end
-  </div>
-
-  <div class="quest-details">
-    <div class="quest-name">
-      $a_start
-        $active $name
-      $a_end
-    </div>
-    <div class="quest-description">
-      $laquo $description $raquo
-    </div>
-EOF;
-
-  if ($view == 'initiator') echo <<< EOF
-    <div class="quest-requisites">
-      // Initiator Requisites //
-    </div>
-    <div class="quest-experience">
-      $game_user->values: $item->values_cost
-    </div>
-    <div class="quest-experience">
-      {$actions}: $item->actions_cost
-    </div>
-EOF;
-
-  if ($view != 'perform') {
-
-    echo <<< EOF
-    <div class="quest-requisites">
-      // Runner Requisites //
-    </div>
-    <div class="quest-experience">
-      {$actions}: $item->runner_actions_cost
-    </div>
-EOF;
-
-    // Due date.
-    if (!empty($item->time_due)) {
-
-    $time_due = game_format_date(strtotime($item->time_due));
-
-    echo <<< EOF
-    <div class="quest-experience">
-      Perform By: <span class="highlight">$time_due</span>
-    </div>
-EOF;
-
-    }
-
-    // Required elected position.
-    if ($item->fkey_required_elected_positions_id > 0) {
-
-      _required_elected_position($game_user,
-        $item->fkey_required_elected_positions_id, $item->ep_name);
-
-    }
-
-    // Required competencies.
-    if ($item->fkey_required_competencies_id > 0 &&
-      $item->required_competencies_level > 0) {
-
-      _required_competency($game_user, $item->fkey_required_competencies_id,
-        $item->required_competencies_level, $item->cr_name);
-
-    }
-
-  }
-
-  echo <<< EOF
-    <div class="quest-requisites">
-      // Runner Disbursements //
-    </div>
-EOF;
-
-  // Enhanced competencies.
-  if ($item->fkey_enhanced_competencies_id > 0) {
-
-    _enhanced_competency($game_user, $item->fkey_enhanced_competencies_id,
-      $item->ce_name);
-
-  }
-
-  if ($view != 'perform') {
-
-    $bounty_values_min = floor($item->values_cost / 2);
-    $bounty_values_max = $item->values_cost * 5;
-    $bounty = "$bounty_values_min to $bounty_values_max";
-
-  }
-
-  echo <<< EOF
-    $no_reqs
-    <div class="quest-disbursements">
-      // Bounty //
-    </div>
-    <div class="quest-experience">
-      $bounty $game_user->values
-    </div>
-  </div>
-EOF;
-
-  if ($view != 'perform') echo <<< EOF
-  <div class="quest-perform-button-wrapper">
-    <div class="quest-perform-button">
-      $a_start
-        $link_text
-      $a_end
-    </div>
-  </div>
-EOF;
-
-  echo '</div>';
-
-}
-
 /**
  * Use one or more pieces equipment.
  *
@@ -2110,13 +1632,13 @@ EOF;
  * @param int $id
  *   The equipment ID.
  * @param int $quantity
- *   Number of pieces to lose/sell
+ *   Number of pieces to lose/sell.
  *
  * @return bool
  *   Whether the sale succeeded or not.
  */
 
-function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
+function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
 
@@ -2155,7 +1677,7 @@ function game_land_gain(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
+function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2209,7 +1731,7 @@ function game_land_lose(&$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function game_competency_gain($game_user, $id, $level = 1) {
+function game_competency_gain(\stdClass $game_user, $id, $level = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2307,7 +1829,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
  * @return bool
  *   Whether the action(s) could be debited from the game user.
  */
-function game_action_use(&$game_user, $quantity = 1) {
+function game_action_use(\stdClass $game_user, $quantity = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2337,7 +1859,7 @@ function game_action_use(&$game_user, $quantity = 1) {
 /**
  * Update a user's karma.
  *
- * @param \stdClass() $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  * @param string $text
  *   Explanatory text.
@@ -2347,7 +1869,7 @@ function game_action_use(&$game_user, $quantity = 1) {
  * @return bool
  *   Whether the update was successful or not.
  */
-function game_karma($game_user, $text, $quantity) {
+function game_karma(\stdClass $game_user, $text, $quantity) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2368,7 +1890,7 @@ function game_karma($game_user, $text, $quantity) {
 /**
  * Update a user's luck.  Log to the appropriate database.
  *
- * @param \stdClass() $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  * @param int $quantity
  *   The amount of luck to credit (debit).
@@ -2379,7 +1901,7 @@ function game_karma($game_user, $text, $quantity) {
  * @param string $subtype
  *   Subtype of $type.
  */
-function game_luck($game_user, $quantity, $text, $type, $subtype) {
+function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2403,7 +1925,7 @@ function game_luck($game_user, $quantity, $text, $type, $subtype) {
   return TRUE;
 }
 
-function game_competency_level($game_user, $id) {
+function game_competency_level(\stdClass $game_user, $id) {
 
   // Return the user's competency level [0..5] for a given competency.
   include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
@@ -2480,7 +2002,7 @@ function game_competency_level($game_user, $id) {
  * @param int $level_needed
  *   The comp. level needed.
  */
-function game_show_by_level($game_user, $text, $level_obtained, $level_needed = 0) {
+function game_show_by_level(\stdClass $game_user, $text, $level_obtained, $level_needed = 0) {
   if ($level_obtained >= $level_needed) {
     if ($game_user->meta == 'admin') {
       $level_debug = ' (' . $level_obtained . ':' . $level_needed . ')';
