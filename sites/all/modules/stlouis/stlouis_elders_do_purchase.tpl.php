@@ -73,6 +73,7 @@ ob_end_clean();
       // Uhoh! Hack!
 
       // FIXME -- debit karma.
+      game_karma($game_user, "Trying to perform luck hacking.", -1000);
       echo 'NO';
       $karma = 1000;
       exit;
@@ -126,7 +127,10 @@ ob_end_clean();
   if (arg(3) == '4500') $luck = 4500;
 
   // Stop iOS luck hacking.
-  if (arg(4) == 'abc123') $luck = 0;
+  if (arg(4) == 'abc123') {
+  	game_karma($game_user, "Trying to perform luck hacking.", -1000);
+  	$luck = 0;
+  }
 
   $sql = 'update users set luck = luck + %d
     where id = %d;';
