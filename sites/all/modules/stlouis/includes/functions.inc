@@ -1610,23 +1610,6 @@ EOF;
 EOF;
 }
 
-/**
- * Use one or more pieces equipment.
- *
- * Same as Losing/Selling except no compensation is made, and the quantity used
- * is tracked in the database.
- *
- * @param \stdClass $game_user
- *   The game user object.
- * @param int $id
- *   The equipment ID.
- * @param int $quantity
- *   Number of pieces to lose/sell.
- *
- * @return bool
- *   Whether the sale succeeded or not.
- */
-
 function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';

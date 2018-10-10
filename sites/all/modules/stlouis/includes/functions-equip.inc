@@ -866,6 +866,22 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
   return TRUE;
 }
 
+/**
+ * Use one or more pieces equipment.
+ *
+ * Same as Losing/Selling except no compensation is made, and the quantity used
+ * is tracked in the database.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The equipment ID.
+ * @param int $quantity
+ *   Number of pieces to lose/sell.
+ *
+ * @return bool
+ *   Whether the sale succeeded or not.
+ */
 function game_equipment_use(&$game_user, $id, $quantity) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
