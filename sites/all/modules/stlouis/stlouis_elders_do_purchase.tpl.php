@@ -75,7 +75,6 @@ ob_end_clean();
       // FIXME -- debit karma.
       game_karma($game_user, "Trying to perform luck hacking.", -1000);
       echo 'NO';
-      $karma = 1000;
       exit;
     }
 
