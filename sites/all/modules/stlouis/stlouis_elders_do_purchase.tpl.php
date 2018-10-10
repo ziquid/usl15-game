@@ -72,6 +72,7 @@ ob_end_clean();
     if (substr($response->receipt->bid, 0, 11) !== 'com.ziquid.') {
       // Uhoh! Hack!  FIXME -- debit karma.
       echo 'NO';
+      $karma = 1000;
       exit;
     }
   }
