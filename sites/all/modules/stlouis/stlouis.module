@@ -1790,6 +1790,21 @@ function _stlouis_fetch_user() {
     game_includes_add('staff_' . $staff, 'staff');
   }
 
+  // Add includes and process init() for land, if any.
+  $sql = 'SELECT LOWER(l.name) as name from land_ownership lo
+    left join land l on l.id = lo.fkey_land_id
+    left join users u on lo.fkey_users_id = u.id
+    where u.id = %d and lo.quantity > 0;';
+  $result = db_query($sql, $game_user->id);
+  $land_list = [];
+  while ($item = db_fetch_object($result)) {
+    $land_list[] = str_replace(' ', '_', $item->name);
+  }
+
+  foreach ($land_list as $land) {
+    game_includes_add('land_' . $land, 'land');
+  }
+
   // Run fetch_user_post alter hooks.
   game_alter('game_fetch_user_post', $game_user);
 

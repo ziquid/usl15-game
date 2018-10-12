@@ -681,6 +681,9 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $show = TRUE;
     }
 
+    // Allow altering of show flag.
+    $show |= game_alter('flag_show_quest_group_' . $item->id, $game_user, $item);
+
     if (!$show) {
       if ($game_user->meta == 'admin') {
         $item->class = 'obfuscate admin-obfuscate clickable';
@@ -1072,7 +1075,7 @@ function game_get_quest_completion($completed_percent, $percentage_target, $perc
     $css_overlay .= ');';
   }
   $width = floor($completed_percent * 94 / $percentage_target) + 2;
-  firep($css_overlay, 'css overlay');
+//  firep($css_overlay, 'css overlay');
   return [$rgb, $width, $css_overlay];
 }
 
