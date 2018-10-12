@@ -176,17 +176,14 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
-function game_show_land($game_user, $item, $options = []) {
+function game_show_land(\stdClass $game_user, $item, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   static $party_title;
 
   if (empty($party_title)) {
-    $sql = 'select party_title from `values` where id = %d;';
-    $result = db_query($sql, $game_user->fkey_values_id);
-    $data = db_fetch_object($result);
-    $party_title = preg_replace('/^The /', '', $data->party_title);
+    $party_title = preg_replace('/^The /', '', $game_user->party_title);
   }
 
   $soon = ($options['soon']) ? 'soon' : '';
@@ -474,6 +471,7 @@ EOF;
 EOF;
   }
 
+  $reqs = '';
   if ($item->type == 'investment') {
     echo <<< EOF
     <div class="land-owned">Owned: $quantity</div>
@@ -490,9 +488,8 @@ EOF;
   }
 
   if ($item->fkey_required_competencies_id > 0) {
-
-    $check = game_competency_level($game_user,
-      (int) $item->fkey_required_competencies_id);
+//    $check = game_competency_level($game_user,
+//      (int) $item->fkey_required_competencies_id);
 //firep($check);
     $comp_name = game_competency_level_name($item->required_competencies_level,
       TRUE);
@@ -1623,9 +1620,9 @@ function game_get_icon_path(\stdClass $game_user, \stdClass $qo) {
   }
 }
 
-function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
+function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
-  $fetch_user = '_' . $game . '_fetch_user';
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'select * from land_ownership
     where fkey_land_id = %d and fkey_users_id = %d;';
@@ -1892,7 +1889,7 @@ function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
 
   $sql = 'update users set luck = luck + %d
     where id = %d;';
-  $result = db_query($sql, $quantity, $game_user->id);
+  db_query($sql, $quantity, $game_user->id);
 
   switch ($type) {
 
