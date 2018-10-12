@@ -655,6 +655,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $item->percentage_divisor,
       $item->next_group_html) =
     game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
+    game_get_icon_path($game_user, $item);
 
     // Show?  if a specific group was requested, always show it.
     $show = is_numeric($id) ? TRUE : FALSE;
@@ -1353,26 +1354,7 @@ function game_show_quest_slide(\stdClass $game_user, \stdClass $item) {
   }
 
   $active = ($item->active) ? '' : ' (inactive)';
-
-  if (strpos($item->meta, 'use_job_picture') !== FALSE) {
-    $sql = 'SELECT land.id FROM `land_ownership`
-      LEFT JOIN land ON fkey_land_id = land.id
-      WHERE fkey_users_id = %d
-      AND land.type = "job";';
-    $result = db_query($sql, $game_user->id);
-    $job = db_fetch_object($result);
-    $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
-  }
-  else {
-    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
-
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
-      $img = $icon_path . '.jpg';
-    }
-    else {
-      $img = $icon_path . '.png';
-    }
-  }
+  $img = $item->icon_path;
 
   $wrong_hood = $wrong_hood_wrapper = $wrong_hood_overlay = $comment_start
     = $comment_end = $go_there = '';
@@ -1608,6 +1590,39 @@ EOF;
   $go_there
 </div>
 EOF;
+}
+
+/**
+ * Find the icon path for a given quest.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $quest
+ *   The quest object.
+ */
+function game_get_icon_path(\stdClass $game_user, \stdClass $quest) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  if (strpos($quest->meta, 'use_job_picture') !== FALSE) {
+    $sql = 'SELECT land.id FROM `land_ownership`
+      LEFT JOIN land ON fkey_land_id = land.id
+      WHERE fkey_users_id = %d
+      AND land.type = "job";';
+    $result = db_query($sql, $game_user->id);
+    $job = db_fetch_object($result);
+    $quest->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
+  }
+  else {
+    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $quest->id;
+
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
+      $quest->icon_path = $icon_path . '.jpg';
+    }
+    else {
+      $quest->icon_path = $icon_path . '.png';
+    }
+  }
 }
 
 function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
