@@ -655,7 +655,6 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $item->percentage_divisor,
       $item->next_group_html) =
     game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
-    game_get_icon_path($game_user, $item);
 
     // Show?  if a specific group was requested, always show it.
     $show = is_numeric($id) ? TRUE : FALSE;
@@ -713,6 +712,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
         list($q->rgb, $q->width, $q->completed_percent_overlay) =
           game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
+        game_get_icon_path($game_user, $q);
         $item->q[$q->id] = $q;
       }
       if (!count($item->q)) {
@@ -778,12 +778,7 @@ function game_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-//  if (game_get_value($game_user, 'enabled_alpha')) {
-    $link = 'quest_groups';
-//  }
-//  else {
-//    $link = 'quests';
-//  }
+  $link = 'quest_groups';
 
   echo <<< EOF
   <span class="title">
@@ -906,7 +901,7 @@ EOF;
       }
       echo <<< EOF
 <img class="overview-only {$q->wrong_hood}{$q->not_yet}"
-  src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+  src="{$q->icon_path}"
   style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
       if (strlen($q->wrong_hood)) {
@@ -1597,30 +1592,30 @@ EOF;
  *
  * @param \stdClass $game_user
  *   The game user object.
- * @param \stdClass $quest
+ * @param \stdClass $qo
  *   The quest object.
  */
-function game_get_icon_path(\stdClass $game_user, \stdClass $quest) {
+function game_get_icon_path(\stdClass $game_user, \stdClass $qo) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if (strpos($quest->meta, 'use_job_picture') !== FALSE) {
+  if (strpos($qo->meta, 'use_job_picture') !== FALSE) {
     $sql = 'SELECT land.id FROM `land_ownership`
       LEFT JOIN land ON fkey_land_id = land.id
       WHERE fkey_users_id = %d
       AND land.type = "job";';
     $result = db_query($sql, $game_user->id);
     $job = db_fetch_object($result);
-    $quest->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
+    $qo->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
   }
   else {
-    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $quest->id;
+    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $qo->id;
 
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
-      $quest->icon_path = $icon_path . '.jpg';
+      $qo->icon_path = $icon_path . '.jpg';
     }
     else {
-      $quest->icon_path = $icon_path . '.png';
+      $qo->icon_path = $icon_path . '.png';
     }
   }
 }
