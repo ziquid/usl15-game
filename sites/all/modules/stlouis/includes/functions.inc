@@ -646,7 +646,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   }
   $result = db_query($sql, $id);
   while ($item = db_fetch_object($result)) {
-    $data[] = $item;
+    $data[$item->id] = $item;
   }
 
   foreach ($data as &$item) {
@@ -732,7 +732,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   // Allow altering of full qgo object.
   game_alter('fetch_quest_groups', $game_user, $data);
 //  firep($data, 'data');
-  return is_numeric($id) ? $data[0] : $data;
+  return is_numeric($id) ? $data[$id] : $data;
 }
 
 /**
@@ -834,12 +834,12 @@ EOF;
   }
   if (!strlen($qgo->titleHtml)) {
     $qgo->titleHtml = <<< EOF
-<div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
+<div class="quest-group-name fit-box $qgo->class">$qgo->name {$game_text['quest']}s</div>
 EOF;
   }
 //firep($qgo, 'quest group object');
   echo <<< EOF
-<div class="swiper-slide $overview quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
+<div class="swiper-slide {$overview} quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
 EOF;
 

@@ -28,6 +28,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 12, 2018
+  </div>
+  <ul>
+    <li>
+      Lemonade Stand quests
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Oct 7, 2018
   </div>
   <ul>

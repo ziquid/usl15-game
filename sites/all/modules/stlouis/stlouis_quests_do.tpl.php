@@ -56,7 +56,7 @@ if (($game_user->energy < $game_quest->required_energy) &&
     <div class="try-an-election"><a
     href="/' . $game . '/elders_do_fill/' . $arg2 . '/energy?destination=/' .
     $game . '/' . $quest_link . '/' . $arg2 . '/' . $game_quest->group .
-    '?show_expanded=' . $game_quest->group . '#group-' .
+    '%3fshow_expanded=' . $game_quest->group . '%23group-' .
     $game_quest->group . '">Refill
     your Energy (1&nbsp;' . $luck . ')</a></div></div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
