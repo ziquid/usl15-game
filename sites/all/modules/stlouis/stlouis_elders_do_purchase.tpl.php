@@ -73,7 +73,7 @@ ob_end_clean();
       // Uhoh! Hack!
 
       // FIXME -- debit karma.
-      game_karma($game_user, "Trying to perform luck hacking.", -1000);
+      game_karma($game_user, 'Trying to perform luck hacking.', -1000);
       echo 'NO';
       exit;
     }
@@ -127,7 +127,7 @@ ob_end_clean();
 
   // Stop iOS luck hacking.
   if (arg(4) == 'abc123') {
-  	game_karma($game_user, "Trying to perform luck hacking.", -1000);
+  	game_karma($game_user, 'Trying to perform luck hacking.', -1000);
   	$luck = 0;
   }
 
