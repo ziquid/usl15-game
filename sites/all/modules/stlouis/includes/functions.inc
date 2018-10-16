@@ -835,7 +835,7 @@ EOF;
   }
   if (!strlen($qgo->titleHtml)) {
     $qgo->titleHtml = <<< EOF
-<div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
+<div class="quest-group-name fit-box $qgo->class">$qgo->name {$game_text['quest']}s</div>
 EOF;
   }
 //firep($qgo, 'quest group object');
@@ -890,7 +890,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
@@ -932,7 +932,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
