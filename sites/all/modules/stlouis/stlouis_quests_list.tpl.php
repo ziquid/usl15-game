@@ -88,10 +88,10 @@ if (!$game_user->seen_neighborhood_quests && $game_user->level >= 6) {
 <div class="wise_old_man_small">
 </div>
 <!--<p>&quot;A wise choice &mdash; that party will serve you well.</p>-->
-<p>&quot;Some of your {$quest}s now depend on the part of the $city_lower in
+<p>&quot;Some of your {$game_text['quest']}s now depend on the part of the $city_lower in
   which you are located.&nbsp; You are now in the <strong>$location</strong>
   $hood_lower.&nbsp;
-  You will find more {$quest}s as you move to different parts of the
+  You will find more {$game_text['quest']}s as you move to different parts of the
   $city_lower.&quot;</p>
 <br/>
 </div>
@@ -111,7 +111,7 @@ if ($game_user->level < 6 and $game_user->experience > 0) {
 
   echo <<< EOF
 <ul>
-<li>Each $quest gives you more $game_user->values and $experience</li>
+<li>Each {$game_text['quest']} gives you more $game_user->values and $experience</li>
 <li>Wait and rest for a few minutes if you run out of Energy</li>
 </ul>
 EOF;
@@ -158,7 +158,7 @@ EOF;
 
 }
 
-$quests = "{$quest}s";
+$quests = "{$game_text['quest']}s";
 
 echo <<< EOF
 <div class="title">

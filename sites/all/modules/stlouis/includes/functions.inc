@@ -885,7 +885,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
@@ -927,7 +927,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
