@@ -357,7 +357,7 @@ if ($quest_succeeded) {
       $result = db_query($sql, $game_user->id, $quest_id);
 
       $quest_completion_html .= <<< EOF
-<div class="title loot">$quest Completed!</div>
+<div class="title loot">$game_text['quest'] Completed!</div>
 <p>You have completed this $quest_lower and gained an extra $money_added
   $game_user->values and $game_quest->experience $experience!&nbsp; Complete
   all ${quest_lower}s in this group for an extra reward.</p>
@@ -1012,7 +1012,7 @@ EOF;
 
 $loc_quests = t('@location @quests', [
   '@location' => $location,
-  '@quests' => "{$quest}s",
+  '@quests' => "{$game_text['quest']}s",
 ]);
 
 //if (game_get_value($game_user, 'enabled_alpha')) {

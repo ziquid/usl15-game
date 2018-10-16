@@ -44,9 +44,9 @@ Gain experience by completing {$quest_lower}s and participating in
 {$debate_lower}s.</p>
 
 <div class="subtitle">
-$game_text['quest']
+{$game_text['quest']}s
 </div>
-<p>$game_text['quest'] help you become more experienced, both in $game_user->values
+<p>{$game_text['quest']}s help you become more experienced, both in $game_user->values
 and in $experience.</p>
 
 <div class="subtitle">
