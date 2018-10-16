@@ -176,7 +176,7 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
-function game_show_land(\stdClass $game_user, $item, $options = []) {
+function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -292,8 +292,7 @@ function game_show_land(\stdClass $game_user, $item, $options = []) {
     $quantity = t('None');
   }
 
-  $land_price = $item->price + ($item->quantity *
-    $item->price_increase);
+  $land_price = $item->price + ($item->quantity * $item->price_increase);
 
   if (($land_price % 1000) == 0) {
     $land_price = ($land_price / 1000) . 'K';
