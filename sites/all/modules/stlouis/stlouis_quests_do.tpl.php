@@ -357,7 +357,7 @@ if ($quest_succeeded) {
       $result = db_query($sql, $game_user->id, $quest_id);
 
       $quest_completion_html .= <<< EOF
-<div class="title loot">$game_text['quest'] Completed!</div>
+<div class="title loot">{$game_text['quest']} Completed!</div>
 <p>You have completed this $quest_lower and gained an extra $money_added
   $game_user->values and $game_quest->experience $experience!&nbsp; Complete
   all ${quest_lower}s in this group for an extra reward.</p>

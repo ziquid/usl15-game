@@ -111,7 +111,7 @@ if ($game_user->level < 6 and $game_user->experience > 0) {
 
   echo <<< EOF
 <ul>
-<li>Each $game_text['quest'] gives you more $game_user->values and $experience</li>
+<li>Each {$game_text['quest']} gives you more $game_user->values and $experience</li>
 <li>Wait and rest for a few minutes if you run out of Energy</li>
 </ul>
 EOF;
