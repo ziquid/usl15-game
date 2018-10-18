@@ -6,12 +6,12 @@
  *
  * Synced with CG: yes
  * Synced with 2114: N/A
- * Ready for phpcbf: yes
+ * Ready for phpcbf: done
  */
 
 global $game, $phone_id;
 
-include drupal_get_path('module', arg(0)) . '/game_defs.inc';
+require drupal_get_path('module', arg(0)) . '/game_defs.inc';
 $game_user = $fetch_user();
 $fetch_header($game_user);
 db_set_active('default');
