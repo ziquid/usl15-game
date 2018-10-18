@@ -8,6 +8,12 @@
  * Synced with 2114: no
  */
 
+/**
+ * Show goals
+ *
+ * @param $game_user
+ *   The game user object
+*/
 function NO_show_goal($game_user) {
 
   global $game;
@@ -115,6 +121,16 @@ Element.prototype.removeClass = function(className) {
 EOF;
 }
 
+/**
+ * Required clan equipment
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $equipment_id
+ *   The object id for equipment.
+ * @param int $req_quantity
+ *   The number of items required.
+*/
 function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
@@ -152,6 +168,16 @@ EOF;
 
 }
 
+/**
+ * Required land
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $land_id
+ *   The land id.
+ * @param $req_quantity
+ *   The number of items required.
+*/
 function NO_required_land($game_user, $land_id, $req_quantity) {
 
   global $game;
@@ -191,6 +217,16 @@ EOF;
 
 }
 
+/**
+ * NO elected position
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $id
+ *   The object id.
+ * @param $name
+ *   The name of the object.
+*/
 function NO_required_elected_position($game_user, $id, $name) {
 
   global $game;
@@ -222,6 +258,18 @@ EOF;
 
 }
 
+/**
+ * NO competency
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $id
+ *   The object id.
+ * @param int $level
+ *   The comp. level.
+ * @param $name
+ *   The name of the object.
+*/
 function NO_required_competency($game_user, $id, $level, $name) {
 
   global $game;
@@ -257,6 +305,16 @@ EOF;
 
 }
 
+/**
+ * NO enhanced competency
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $id
+ *   The object id.
+ * @param $name
+ *   The name of the object.
+*/
 function NO_enhanced_competency($game_user, $id, $name) {
 
   global $game;
@@ -271,6 +329,14 @@ EOF;
 
 }
 
+/**
+ * NO is the quest complete?
+ *
+ * @param $guest_user
+ *   The game user object
+ * @param int $quest_id
+ *   The id for quest
+*/
 function NO_is_quest_complete($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
@@ -282,6 +348,14 @@ function NO_is_quest_complete($game_user, $quest_id) {
 
 }
 
+/**
+ * NO is the quest started?
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $quest_id
+ *   The id for quest
+*/
 function NO_is_quest_started($game_user, $quest_id) {
 
   $sql = 'select percent_complete from quest_completion
@@ -293,12 +367,24 @@ function NO_is_quest_started($game_user, $quest_id) {
 
 }
 
+/**
+ * NO on screen
+ *
+ * @param $screen
+ * 
+*/
 function NO_on_screen($screen) {
 
   return (arg(1) == $screen);
 
 }
 
+/**
+ * NO job
+ *
+ * @param $game_user
+ *   The game user object
+*/
 function NO_has_job($game_user) {
 
   $sql = 'SELECT sum(payout) as job_income
@@ -313,6 +399,12 @@ function NO_has_job($game_user) {
 
 }
 
+/**
+ * NO message sent
+ *
+ * @param $game_user
+ *   The game user object
+*/
 function NO_has_sent_message($game_user) {
 
   $sql = 'SELECT count(id) as count
@@ -325,6 +417,16 @@ function NO_has_sent_message($game_user) {
 
 }
 
+/**
+ * NO equipment
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function NO_has_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
@@ -338,6 +440,16 @@ function NO_has_equipment($game_user, $id, $quantity) {
 
 }
 
+/**
+ * NO clan equipment
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function NO_has_clan_equipment($game_user, $id, $quantity) {
 
   $sql = 'SELECT quantity
@@ -351,6 +463,12 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
 
 }
 
+/**
+ * NO show actions menu
+ *
+ * @param $game_user
+ *   The game user object
+*/
 function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
@@ -371,6 +489,12 @@ EOF;
 
 }
 
+/**
+ * NO show clan menu
+ *
+ * @param $game_user
+ *   The game user object
+*/
 function NO_show_clan_menu($game_user) {
 
   global $game, $phone_id;
@@ -400,6 +524,16 @@ EOF;
 
 }
 
+/**
+ * NO clan equipment gain
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -439,6 +573,16 @@ function NO_clan_equipment_gain(&$game_user, $id, $quantity) {
 
 }
 
+/**
+ * NO clan equipment lose
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -476,6 +620,14 @@ function NO_clan_equipment_lose(&$game_user, $id, $quantity) {
 
 }
 
+/**
+ * NO election won
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+*/
 function NO_election_won($game_user, $id) {
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
   db_query($sql, $game_user->id);
@@ -488,6 +640,14 @@ function NO_election_won($game_user, $id) {
   return TRUE;
 }
 
+/**
+ * NO hierarchy
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $level
+ *   The level of the object
+*/
 function NO_hierarchy_status($game_user, $level) {
 
   global $game, $phone_id;
@@ -629,6 +789,16 @@ function NO_hierarchy_status($game_user, $level) {
 
 }
 
+/**
+ * NO hierarchy comp check
+ *
+ * @param $game_user
+ *   The game user object
+ * @param $req_comp
+ *   The required competency
+ * @param int $req_level
+ *   The required level
+*/
 function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 
   $check = game_competency_level($game_user, $req_comp);
@@ -655,6 +825,14 @@ function NO_hierarchy_competency_check($game_user, $req_comp, $req_level = 1) {
 
 }
 
+/**
+ * NO equipment wear
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+*/
 function NO_equipment_check_wear_out(&$game_user, $id) {
 
   $sql = 'select * from equipment where id = %d;';
@@ -695,6 +873,16 @@ firep($eq->name . ' wore out!');
   return [$lost, $failure_reason, $eo->quantity];
 }
 
+/**
+ * NO show favor
+ *
+ * @param $game_user
+ *   The game user object
+ * @param $item
+ *   The favor object
+ * @param $view
+ *   The role of the object
+*/
 function NO_show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   global $game, $phone_id;

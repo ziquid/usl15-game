@@ -736,6 +736,16 @@ EOF;
   echo '</div>';
 }
 
+/**
+ * Equipment gains
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -866,6 +876,16 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
   return TRUE;
 }
 
+/**
+ * Use of equipments
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $quantity
+ *   The number of object
+*/
 function game_equipment_use(&$game_user, $id, $quantity) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -881,6 +901,16 @@ function game_equipment_use(&$game_user, $id, $quantity) {
   }
 }
 
+/**
+ * NO clan equipment gain
+ *
+ * @param $game_user
+ *   The game user object
+ * @param $item
+ *   The description of the item
+ * @return $options
+ *   The entire array of options
+*/
 function show_equipment($game_user, $item, $options = []) {
 
   global $game, $phone_id;

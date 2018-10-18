@@ -176,6 +176,14 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
+/**
+ * Show specified land/
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param $item
+ *   The land object.
+*/
 function game_show_land($game_user, $item, $options = []) {
 
   global $game;
@@ -1123,6 +1131,12 @@ function game_recalc_income(\stdClass $game_user) {
   $game_user->expenses = $item->expenses;
 }
 
+/**
+ * Show aides menu.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+*/
 function game_show_aides_menu(\stdClass $game_user) {
 
   global $game;
@@ -1245,6 +1259,12 @@ EOF;
   }
 }
 
+/**
+ * Show elections menu.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+*/
 function game_show_elections_menu(\stdClass $game_user) {
 
   global $game;
@@ -1279,6 +1299,12 @@ EOF;
 //  _show_goal($game_user);
 }
 
+/**
+ * Show profile menu
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+*/
 function game_show_profile_menu(\stdClass $game_user) {
 
   global $game, $phone_id;
@@ -1666,6 +1692,18 @@ function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
+/**
+ * Selling of land.
+ * @param $game_user
+ *   The game user object.
+ * @param int $id
+ *   The equipment id.
+ * @param $quantity
+ *   Number of objects to be sold.
+ *
+ * @return bool
+ *   Whether the sale succeeded or not.  
+*/
 function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1720,6 +1758,16 @@ function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
+/**
+ * Gaining competencies
+ *
+ * @param $game_user
+ *   The game user object
+ * @param int $id
+ *   The object id
+ * @param int $level
+ *   The comp. level
+*/
 function game_competency_gain(\stdClass $game_user, $id, $level = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1914,6 +1962,14 @@ function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   return TRUE;
 }
 
+/**
+ *Show competency level
+ *
+ * @param $game_user
+ *   The game user object.
+ * @param int $id
+ *   The object id.
+*/
 function game_competency_level(\stdClass $game_user, $id) {
 
   // Return the user's competency level [0..5] for a given competency.
@@ -2043,7 +2099,11 @@ function competency_min_count($level, $comp_level) {
   return $min_count[$comp_level][$level];
 }
 
-
+/**
+ * Competency levels
+ * @param int $id
+ *   The object id
+*/
 function game_competency_level_name($id, $req = FALSE) {
 
   if ($req) {
@@ -2070,6 +2130,12 @@ function game_competency_level_name($id, $req = FALSE) {
   return $competencies[$id];
 }
 
+/**
+ * Select competency
+ *
+ * @param $comp
+ *   The competency name
+*/
 function game_competency_name($comp) {
   $comps = &drupal_static(__FUNCTION__, []);
 
@@ -2085,6 +2151,12 @@ function game_competency_name($comp) {
   return $comps[$comp];
 }
 
+/**
+ * Show users profile through their id
+ *
+ * @param int $id
+ *   The object id.
+*/
 function game_fetch_user_by_id($id) {
 
   // Simple per-page cache.
@@ -2208,6 +2280,10 @@ function game_send_system_message($from, $message, $subtype = 'system') {
   return db_query($sql, $subtype, $from, $message);
 }
 
+/**
+ * Zombie names
+ *
+*/
 function game_zombie_name() {
 
   $first = [
