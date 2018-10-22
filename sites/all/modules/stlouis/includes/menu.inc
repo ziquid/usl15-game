@@ -1111,6 +1111,9 @@ function stlouis_event_prizes_callback($phone_id) {
 }
 
 function stlouis_error_callback($phone_id, $error_code) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
   return theme('stlouis_error', $phone_id, $error_code);
 }
 
@@ -1587,8 +1590,8 @@ function stlouis_theme() {
       ]
     ],
 
-    'celestial_glory_error' => [
-      'template' => 'celestial_glory_error',
+    'stlouis_error' => [
+      'template' => 'stlouis_error',
       'arguments' => [
         'phone_id' => NULL,
         'error_code' => NULL,
