@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @file Stlouis_changelog.tpl.php
+ * @file
  * The game's changelog.
  *
  * Synced with CG: yes
  * Synced with 2114: N/A
- * Ready for phpcbf: done.
+ * Ready for phpcbf: done
  */
 
 global $game, $phone_id;
