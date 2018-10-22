@@ -498,6 +498,14 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
+  $items['stlouis/error/%/%'] = [
+    'title' => 'St. Louis Error Page',
+    'page callback' => 'stlouis_error_callback',
+    'page arguments' => [2, 3],
+    'access arguments' => ['access stlouis content'],
+    'type' => MENU_CALLBACK,
+  ];
+
   return $items;
 }
 
@@ -1102,10 +1110,14 @@ function stlouis_event_prizes_callback($phone_id) {
   return theme('stlouis_event_prizes', $phone_id);
 }
 
+function stlouis_error_callback($phone_id, $error_code) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+  return theme('stlouis_error', $phone_id, $error_code);
+}
+
 function stlouis_changelog_callback($phone_id) {
-
-  global $user;
-
   if (empty($phone_id)) {
     return drupal_access_denied();
   }
@@ -1572,6 +1584,14 @@ function stlouis_theme() {
       'template' => 'stlouis_changelog',
       'arguments' => [
         'phone_id' => NULL,
+      ]
+    ],
+
+    'stlouis_error' => [
+      'template' => 'stlouis_error',
+      'arguments' => [
+        'phone_id' => NULL,
+        'error_code' => NULL,
       ]
     ],
 

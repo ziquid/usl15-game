@@ -7,6 +7,7 @@
  * Synced with CG: N/A
  * Synced with 2114: N/A
  * Ready for phpcbf: yes
+ * Ready for MVC separation: no
  */
 
 // ------ CONTROLLER ------
