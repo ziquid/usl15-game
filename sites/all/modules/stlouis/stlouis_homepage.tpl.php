@@ -7,6 +7,7 @@
  * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
+ * Ready for MVC separation: no
  */
 
 $version = 'v0.7.0, Oct 7 2018';
