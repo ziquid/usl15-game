@@ -1,13 +1,19 @@
 <?php
 
-global $game;
+/**
+ * @file
+ * The game's error screen.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: N/A
+ * Ready for phpcbf: done
+ */
 
-$game = check_plain(arg(0));
-$get_phoneid = '_' . $game . '_get_phoneid';
-$phone_id = $get_phoneid();
-$arg2 = check_plain(arg(2));
+global $game, $phone_id;
 
-include(drupal_get_path('module', $game) . '/game_defs.inc');
+include drupal_get_path('module', arg(0) . '/game_defs.inc');
+$game_user = $fetch_user();
+db_set_active('default');
 
 echo <<< EOF
   <div class="title">
