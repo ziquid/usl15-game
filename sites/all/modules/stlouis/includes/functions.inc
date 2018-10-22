@@ -176,17 +176,14 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
-function game_show_land($game_user, $item, $options = []) {
+function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   static $party_title;
 
   if (empty($party_title)) {
-    $sql = 'select party_title from `values` where id = %d;';
-    $result = db_query($sql, $game_user->fkey_values_id);
-    $data = db_fetch_object($result);
-    $party_title = preg_replace('/^The /', '', $data->party_title);
+    $party_title = preg_replace('/^The /', '', $game_user->party_title);
   }
 
   $soon = ($options['soon']) ? 'soon' : '';
@@ -295,8 +292,7 @@ function game_show_land($game_user, $item, $options = []) {
     $quantity = t('None');
   }
 
-  $land_price = $item->price + ($item->quantity *
-    $item->price_increase);
+  $land_price = $item->price + ($item->quantity * $item->price_increase);
 
   if (($land_price % 1000) == 0) {
     $land_price = ($land_price / 1000) . 'K';
@@ -474,6 +470,7 @@ EOF;
 EOF;
   }
 
+  $reqs = '';
   if ($item->type == 'investment') {
     echo <<< EOF
     <div class="land-owned">Owned: $quantity</div>
@@ -490,9 +487,8 @@ EOF;
   }
 
   if ($item->fkey_required_competencies_id > 0) {
-
-    $check = game_competency_level($game_user,
-      (int) $item->fkey_required_competencies_id);
+//    $check = game_competency_level($game_user,
+//      (int) $item->fkey_required_competencies_id);
 //firep($check);
     $comp_name = game_competency_level_name($item->required_competencies_level,
       TRUE);
@@ -646,7 +642,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   }
   $result = db_query($sql, $id);
   while ($item = db_fetch_object($result)) {
-    $data[] = $item;
+    $data[$item->id] = $item;
   }
 
   foreach ($data as &$item) {
@@ -681,6 +677,9 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $show = TRUE;
     }
 
+    // Allow altering of show flag.
+    $show |= game_alter('flag_show_quest_group_' . $item->id, $game_user, $item);
+
     if (!$show) {
       if ($game_user->meta == 'admin') {
         $item->class = 'obfuscate admin-obfuscate clickable';
@@ -712,6 +711,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
         list($q->rgb, $q->width, $q->completed_percent_overlay) =
           game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
+        game_get_icon_path($game_user, $q);
         $item->q[$q->id] = $q;
       }
       if (!count($item->q)) {
@@ -728,7 +728,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   // Allow altering of full qgo object.
   game_alter('fetch_quest_groups', $game_user, $data);
 //  firep($data, 'data');
-  return is_numeric($id) ? $data[0] : $data;
+  return is_numeric($id) ? $data[$id] : $data;
 }
 
 /**
@@ -777,12 +777,7 @@ function game_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-//  if (game_get_value($game_user, 'enabled_alpha')) {
-    $link = 'quest_groups';
-//  }
-//  else {
-//    $link = 'quests';
-//  }
+  $link = 'quest_groups';
 
   echo <<< EOF
   <span class="title">
@@ -835,12 +830,12 @@ EOF;
   }
   if (!strlen($qgo->titleHtml)) {
     $qgo->titleHtml = <<< EOF
-<div class="quest-group-name fit-box $qgo->class">$qgo->name {$quest}s</div>
+<div class="quest-group-name fit-box $qgo->class">$qgo->name {$game_text['quest']}s</div>
 EOF;
   }
 //firep($qgo, 'quest group object');
   echo <<< EOF
-<div class="swiper-slide $overview quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
+<div class="swiper-slide {$overview} quest-group-{$qgo->id}" data-hash="group-{$qgo->id}" $onclick>
   <span class="title">
 EOF;
 
@@ -890,7 +885,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
@@ -905,7 +900,7 @@ EOF;
       }
       echo <<< EOF
 <img class="overview-only {$q->wrong_hood}{$q->not_yet}"
-  src="/sites/default/files/images/quests/{$game}-{$q->id}.png"
+  src="{$q->icon_path}"
   style="box-shadow: #{$q->rgb} 2px 2px 4px; border-color: #{$q->rgb}">
 EOF;
       if (strlen($q->wrong_hood)) {
@@ -932,7 +927,7 @@ EOF;
       {$qgo->titleHtml}
       <div class="quest-group-completion {$qgo->questGroupCompletionClasses}">
       <strong>{$qgo->quest_completion->completed}</strong> of {$qgo->quest_completion->total}
-      {$quest}s complete $qgo->next_group_html</div>
+      {$game_text['quest']}s complete $qgo->next_group_html</div>
     <div class="description $description_class">
       $qgo->description
     </div>
@@ -1076,7 +1071,7 @@ function game_get_quest_completion($completed_percent, $percentage_target, $perc
     $css_overlay .= ');';
   }
   $width = floor($completed_percent * 94 / $percentage_target) + 2;
-  firep($css_overlay, 'css overlay');
+//  firep($css_overlay, 'css overlay');
   return [$rgb, $width, $css_overlay];
 }
 
@@ -1353,26 +1348,7 @@ function game_show_quest_slide(\stdClass $game_user, \stdClass $item) {
   }
 
   $active = ($item->active) ? '' : ' (inactive)';
-
-  if (strpos($item->meta, 'use_job_picture') !== FALSE) {
-    $sql = 'SELECT land.id FROM `land_ownership`
-      LEFT JOIN land ON fkey_land_id = land.id
-      WHERE fkey_users_id = %d
-      AND land.type = "job";';
-    $result = db_query($sql, $game_user->id);
-    $job = db_fetch_object($result);
-    $img = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
-  }
-  else {
-    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $item->id;
-
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
-      $img = $icon_path . '.jpg';
-    }
-    else {
-      $img = $icon_path . '.png';
-    }
-  }
+  $img = $item->icon_path;
 
   $wrong_hood = $wrong_hood_wrapper = $wrong_hood_overlay = $comment_start
     = $comment_end = $go_there = '';
@@ -1611,25 +1587,41 @@ EOF;
 }
 
 /**
- * Use one or more pieces equipment.
- *
- * Same as Losing/Selling except no compensation is made, and the quantity used
- * is tracked in the database.
+ * Find the icon path for a given quest.
  *
  * @param \stdClass $game_user
  *   The game user object.
- * @param int $id
- *   The equipment ID.
- * @param int $quantity
- *   Number of pieces to lose/sell.
- *
- * @return bool
- *   Whether the sale succeeded or not.
+ * @param \stdClass $qo
+ *   The quest object.
  */
-
-function game_land_gain(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
+function game_get_icon_path(\stdClass $game_user, \stdClass $qo) {
   global $game;
-  $fetch_user = '_' . $game . '_fetch_user';
+  include drupal_get_path('module', $game) . '/game_defs.inc';
+
+  if (strpos($qo->meta, 'use_job_picture') !== FALSE) {
+    $sql = 'SELECT land.id FROM `land_ownership`
+      LEFT JOIN land ON fkey_land_id = land.id
+      WHERE fkey_users_id = %d
+      AND land.type = "job";';
+    $result = db_query($sql, $game_user->id);
+    $job = db_fetch_object($result);
+    $qo->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
+  }
+  else {
+    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $qo->id;
+
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
+      $qo->icon_path = $icon_path . '.jpg';
+    }
+    else {
+      $qo->icon_path = $icon_path . '.png';
+    }
+  }
+}
+
+function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
+  global $game;
+  include drupal_get_path('module', $game) . '/game_defs.inc';
 
   $sql = 'select * from land_ownership
     where fkey_land_id = %d and fkey_users_id = %d;';
@@ -1896,7 +1888,7 @@ function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
 
   $sql = 'update users set luck = luck + %d
     where id = %d;';
-  $result = db_query($sql, $quantity, $game_user->id);
+  db_query($sql, $quantity, $game_user->id);
 
   switch ($type) {
 

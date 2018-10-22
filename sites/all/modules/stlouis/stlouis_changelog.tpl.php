@@ -1,13 +1,13 @@
 <?php
 
 /**
- * @file stlouis_changelog.tpl.php
+ * @file
  * The game's changelog.
  *
  * Synced with CG: yes
  * Synced with 2114: N/A
- * Ready for phpcbf: yes
- * Ready for MVC separation: no
+ * Ready for phpcbf: done
+ * Ready for MVC separation: yes
  */
 
 global $game, $phone_id;
@@ -27,6 +27,15 @@ db_set_active('default');
   <div class="title">
     Uprising: St. Louis Changelog
   </div>
+
+  <div class="subtitle">
+    Oct 12, 2018
+  </div>
+  <ul>
+    <li>
+      Lemonade Stand quests
+    </li>
+  </ul>
 
   <div class="subtitle">
     Oct 7, 2018

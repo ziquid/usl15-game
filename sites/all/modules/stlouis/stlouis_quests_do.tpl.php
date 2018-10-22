@@ -57,7 +57,7 @@ if (($game_user->energy < $game_quest->required_energy) &&
     <div class="try-an-election"><a
     href="/' . $game . '/elders_do_fill/' . $arg2 . '/energy?destination=/' .
     $game . '/' . $quest_link . '/' . $arg2 . '/' . $game_quest->group .
-    '?show_expanded=' . $game_quest->group . '#group-' .
+    '%3fshow_expanded=' . $game_quest->group . '%23group-' .
     $game_quest->group . '">Refill
     your Energy (1&nbsp;' . $luck . ')</a></div></div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
@@ -358,7 +358,7 @@ if ($quest_succeeded) {
       $result = db_query($sql, $game_user->id, $quest_id);
 
       $quest_completion_html .= <<< EOF
-<div class="title loot">$quest Completed!</div>
+<div class="title loot">{$game_text['quest']} Completed!</div>
 <p>You have completed this $quest_lower and gained an extra $money_added
   $game_user->values and $game_quest->experience $experience!&nbsp; Complete
   all ${quest_lower}s in this group for an extra reward.</p>
@@ -1013,7 +1013,7 @@ EOF;
 
 $loc_quests = t('@location @quests', [
   '@location' => $location,
-  '@quests' => "{$quest}s",
+  '@quests' => "{$game_text['quest']}s",
 ]);
 
 //if (game_get_value($game_user, 'enabled_alpha')) {

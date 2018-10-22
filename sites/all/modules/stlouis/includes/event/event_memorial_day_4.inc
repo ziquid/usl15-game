@@ -14,7 +14,7 @@ function game_event_memorial_day_4_init() {
 
 // HOOKS
 
-function game_event_memorial_day_4_homepage_event_notice($game_user, &$event_text) {
+function game_event_memorial_day_4_homepage_event_notice(\stdClass $game_user, &$event_text) {
   $event_text .= '
 <div class="event">
   <div class="event-title">
@@ -35,7 +35,7 @@ function game_event_memorial_day_4_homepage_event_notice($game_user, &$event_tex
 </div>';
 }
 
-function game_event_memorial_day_4_quest_item($game_user, $quest_item) {
+function game_event_memorial_day_4_quest_item(\stdClass $game_user, \stdClass $quest_item) {
 
   // Talk to disabled vets mission, 50 energy.
   if ($quest_item->id == 24) {
@@ -43,7 +43,7 @@ function game_event_memorial_day_4_quest_item($game_user, $quest_item) {
   }
 }
 
-function game_event_memorial_day_4_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
+function game_event_memorial_day_4_extra_votes(\stdClass $game_user, &$extra_votes, &$extra_defending_votes) {
 
   // Every 50 DAVs is an extra vote.
   $divisor = 50;
@@ -53,7 +53,8 @@ function game_event_memorial_day_4_extra_votes($game_user, &$extra_votes, &$extr
   $vets = db_fetch_object($result);
   $vet_bonus = floor($vets->quantity / $divisor);
 
-  // Add it to extra votes or extra defending votes, depending on whether seated or not.
+  // Add it to extra votes or extra defending votes,
+  // depending on whether seated or not.
   if ($game_user->ep_name) {
     $extra_defending_votes += $vet_bonus;
     $defending = 'defending';
@@ -68,7 +69,7 @@ function game_event_memorial_day_4_extra_votes($game_user, &$extra_votes, &$extr
   firep($message, 'memorial_day extra_votes.');
 }
 
-function game_event_memorial_day_4_actions_to_move($game_user, &$actions_to_move) {
+function game_event_memorial_day_4_actions_to_move(\stdClass $game_user, &$actions_to_move) {
 
   // Every 50 DAVs reduces actions to move, min 2.
   $divisor = 50;
@@ -81,7 +82,7 @@ function game_event_memorial_day_4_actions_to_move($game_user, &$actions_to_move
   $actions_to_move = max($actions_to_move - $vet_bonus, 2);
 }
 
-function game_event_memorial_day_4_png_cost($game_user, &$money_required, &$actions_required) {
+function game_event_memorial_day_4_png_cost(\stdClass $game_user, &$money_required, &$actions_required) {
 
   // Halve the money and actions required.
   $money_required = floor($money_required / 2);

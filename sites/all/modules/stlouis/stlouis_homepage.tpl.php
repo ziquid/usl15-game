@@ -10,7 +10,7 @@
  * Ready for MVC separation: no
  */
 
-$version = 'v0.7.0, Oct 7 2018';
+$version = 'v0.7.0, Oct 12 2018';
 
 global $game, $phone_id;
 

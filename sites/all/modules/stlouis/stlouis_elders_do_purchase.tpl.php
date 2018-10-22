@@ -72,6 +72,7 @@ ob_end_clean();
 
     if (substr($response->receipt->bid, 0, 11) !== 'com.ziquid.') {
       // Uhoh! Hack!  FIXME -- debit karma.
+      game_karma($game_user, 'Trying to do luck hacking.', -1000);
       echo 'NO';
       exit;
     }
@@ -182,6 +183,7 @@ ob_end_clean();
   // Stop iOS luck hacking.
   if (arg(4) == 'abc123') {
     // Uhoh! Hack!  FIXME -- debit karma.
+    game_karma($game_user, 'Trying to do luck hacking.', -1000);
     echo 'NO';
     exit;
   }

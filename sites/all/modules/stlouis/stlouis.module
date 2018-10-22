@@ -1270,122 +1270,62 @@ function _stlouis_check_authKey($game_user) {
   global $purchasing_luck, $user;
 
   // Web access trumps this.
-  if ($user->roles[4] == 'web game access') return;
+  if ($user->roles[4] == 'web game access') {
+    return;
+  }
 
   // Loading luck does too.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
   $authKey = '';
 
   if (substr(arg(2), 0, 3) == 'ms=') {
-
     $authKey = substr(arg(2), 21);
-
   }
-
-
   else {
 
     // Authkey in user agent.
     $agentBits = explode(' ', $_SERVER['HTTP_USER_AGENT']);
 
     foreach ($agentBits as $agentBit) {
-
-      if (substr($agentBit, 0, 8) == 'authKey=')
+      if (substr($agentBit, 0, 8) == 'authKey=') {
         $authKey = substr($agentBit, 8, strlen($agentBit) - 9);
-
+        break;
+      }
     }
-
   }
 
   // An authKey sent.
   if ($authKey != '') {
 
-    if ($game_user->authKey == $authKey) return;
-
     // Keys match, all is good in the world.
+    if ($game_user->authKey == $authKey) {
+      return;
+    }
 
     // New authKey -- save it.
     if ($game_user->authKey == '') {
-
       $game_user->authKey = $authKey;
-      $sql = 'UPDATE users set authKey = "%s"
-        WHERE id = %d;';
-      $result = db_query($sql, $authKey, $game_user->id);
-
+      $sql = 'UPDATE users set authKey = "%s" WHERE id = %d;';
+      db_query($sql, $authKey, $game_user->id);
       return;
-
     }
 
     // Uhoh!  Wrong authKey!
     if ($game_user->authKey != $authKey) {
-
-      // Wrong authkey.
       echo 'Error E-1017: ' . $game_user->referral_code;
       exit;
-
     }
 
   }
-
-
   else {
 
-   // No authkey sent.
-
-   // No key sent.
-    if ($game_user->authKey == $authKey) {
-
-      if (arg(0) == 'celestial_glory') {
-
-        if ((substr(arg(2), 0, 3) != 'ai-') &&
-          (arg(2) != '-use-ms-id-') &&
-          (arg(2) != 'facebook') &&
-          (_stlouis_get_value($game_user->id, 'allow_null_authkey', 0) == 0) &&
-          (mt_rand(0, 99) < 2)) {
-
-          echo 'A new version of Celestial Glory exists!&nbsp;
-            Please update your game client from the App Store
-            to continue playing.<br/><br/>
-            If you need the Android version, you can download it from
-            www.cheek.com/Celestial%20Glory.apk.';
-          exit;
-
-        }
-
-      }
-      else {
-
-        if ((stripos($_SERVER['HTTP_USER_AGENT'], 'playbook') === FALSE) &&
-          (substr(arg(2), 0, 3) != 'ai-') &&
-          (arg(2) != '-use-ms-id-') &&
-          (arg(2) != 'facebook') &&
-          (_stlouis_get_value($game_user->id, 'allow_null_authkey', 0) == 0) &&
-          (mt_rand(0, 99) < 2)) {
-
-          echo 'A new version of Uprising: St. Louis exists!&nbsp;
-            Please update your game client to continue playing.<br/><br/>
-            If you need the Android version, you can download it from
-            www.cheek.com/StLouis.apk.';
-          exit;
-
-        }
-
-      }
-
-      // No key sent, no key saved -- all is good in USL.
-      return;
-
-    }
-
     // Otherwise, client doesn't have an authkey... someone is hacking!
-
-    // No authkey.
     echo 'Error E-0922: ' . $game_user->referral_code;
     exit;
-
   }
-
 }
 
 function _stlouis_get_value($fkey_users_id, $key, $default = NULL) {
@@ -1788,6 +1728,21 @@ function _stlouis_fetch_user() {
 
   foreach ($staff_list as $staff) {
     game_includes_add('staff_' . $staff, 'staff');
+  }
+
+  // Add includes and process init() for land, if any.
+  $sql = 'SELECT LOWER(l.name) as name from land_ownership lo
+    left join land l on l.id = lo.fkey_land_id
+    left join users u on lo.fkey_users_id = u.id
+    where u.id = %d and lo.quantity > 0;';
+  $result = db_query($sql, $game_user->id);
+  $land_list = [];
+  while ($item = db_fetch_object($result)) {
+    $land_list[] = str_replace(' ', '_', $item->name);
+  }
+
+  foreach ($land_list as $land) {
+    game_includes_add('land_' . $land, 'land');
   }
 
   // Run fetch_user_post alter hooks.

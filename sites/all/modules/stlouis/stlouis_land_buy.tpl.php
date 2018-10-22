@@ -123,7 +123,6 @@ if ($options['land-buy-succeeded'] == 'buy-success') {
   if ($game_land->type == 'investment') {
     game_competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
   }
-
   game_land_gain($game_user, $land_id, $quantity, $land_price);
 }
 else {
@@ -138,24 +137,21 @@ $next = game_fetch_next_land($game_user);
 $fetch_header($game_user);
 game_show_aides_menu($game_user);
 game_show_land($game_user, $game_land, $options);
-
-echo <<< EOF
+?>
 <div class="title">
-Available $land_plural
+  Available <?php print $land_plural; ?>
 </div>
-EOF;
-
-game_show_ai_output($phone_id, $ai_output);
-
-echo '<div id="all-land">';
-
-foreach ($data as $item) {
-  game_show_land($game_user, $item);
-}
-
-if (!empty($next)) {
-  game_show_land($game_user, $next, ['soon' => TRUE]);
-}
-
-echo '</div>';
-db_set_active('default');
+<?php
+  game_show_ai_output($phone_id, $ai_output);
+?>
+<div id="all-land">
+  <?php
+    foreach ($data as $item):
+      game_show_land($game_user, $item);
+    endforeach;
+    if (!empty($next)):
+      game_show_land($game_user, $next, ['soon' => TRUE]);
+    endif;
+    db_set_active('default');
+  ?>
+</div>
