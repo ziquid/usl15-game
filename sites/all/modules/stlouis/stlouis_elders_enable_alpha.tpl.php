@@ -1,15 +1,15 @@
 <?php
 
 /**
+ * @file
  * Template for enabling/disabling prerelease/alpha access.
- * @file stlouis_elders_enable_alpha.tpl.php
  *
  * Synced with CG: N/A
  * Synced with 2114: N/A
- * Ready for phpcbf: yes
+ * Ready for phpcbf: done
  */
 
-// ------ CONTROLLER ------
+/* ------ CONTROLLER ------ */
 global $game, $phone_id;
 
 include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -46,7 +46,7 @@ else {
   $code_response = '';
 }
 
-// ------ VIEW ------
+/* ------ VIEW ------ */
 $fetch_header($game_user);
 db_set_active('default');
 ?>
