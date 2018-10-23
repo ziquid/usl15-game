@@ -185,14 +185,17 @@ switch($today) {
 
   case '2018-10-23':
   case '2018-10-24':
-    $month_mission = MISSION_OCT;
+  case '2018-10-25':
+  case '2018-10-26':
+  case '2018-10-27':
+  case '2018-10-28':
+  case '2018-10-29':
+  case '2018-10-30':
+  case '2018-10-31':
+//    $month_mission = MISSION_OCT;
     $event_type = EVENT_HALLOWEEN;
     break;
 }
-
-//if (arg(2) == 'abc123') {
-//  $event_type = EVENT_MEMORIAL_DAY_4;
-//}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
@@ -221,7 +224,6 @@ $luck = 'Luck';
 $party = 'Political Party';
 $party_small = 'Party';
 $politics = 'Politics';
-$quest = 'Mission';
 $residence = 'Residence';
 $system = 'System';
 $top20 = 'Top 20';

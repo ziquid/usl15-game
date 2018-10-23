@@ -29,6 +29,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 24, 2018
+  </div>
+  <ul>
+    <li>
+      Dressing up for Halloween
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Oct 12, 2018
   </div>
   <ul>

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_homepage.tpl.php
+ * @file
  * The game's main screen.
  *
  * Synced with CG: yes
@@ -10,7 +10,7 @@
  * Ready for MVC separation: no
  */
 
-$version = 'v0.7.0, Oct 12 2018';
+$version = 'v0.7.0, Oct 24 2018';
 
 global $game, $phone_id;
 
@@ -424,12 +424,7 @@ $extra_bonus
 EOF;
 
 $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
-//if (game_get_value($game_user, 'enabled_alpha')) {
-  $link = 'quest_groups';
-//}
-//else {
-//  $link = 'quests';
-//}
+$link = 'quest_groups';
 $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Missions"
