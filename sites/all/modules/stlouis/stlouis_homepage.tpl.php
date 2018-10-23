@@ -41,17 +41,17 @@ Come back at level 6.&quot;</p>
 </div>
 EOF;
 
-if (substr($phone_id, 0, 3) == 'ai-')
-  echo "<!--\n<ai \"home not-yet\"/>\n-->";
-
-game_button('quests');
-db_set_active('default');
-return;
-
+  if (substr($phone_id, 0, 3) == 'ai-') {
+    echo "<!--\n<ai \"home not-yet\"/>\n-->";
+  }
+  game_button('quests');
+  db_set_active('default');
+  return;
 }
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"home\"/>\n-->";
+}
 
 $today = date('Y-m-d');
 
@@ -397,7 +397,10 @@ if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 */
 
 // Add event text, if any.
-game_alter('homepage_event_notice', $game_user,$event_text);
+game_alter('homepage_event_notice', $game_user, $event_text);
+
+// Alter menu.
+game_alter('homepage_menu', $game_user, $extra_menu);
 
 echo <<< EOF
 $extra_bonus

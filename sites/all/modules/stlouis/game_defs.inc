@@ -22,6 +22,8 @@ define(EVENT_DOUBLE_LUCK_MONEY, 9);
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
 define(EVENT_FLAG_DAY, 'event_flag_day');
 
+define(EVENT_HALLOWEEN, 'event_halloween');
+
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
 define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
@@ -36,6 +38,7 @@ define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
 define(MISSION_JUL, 1007);
+define(MISSION_OCT, 1010);
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
@@ -178,6 +181,12 @@ switch($today) {
   case '2018-07-10':
   case '2018-07-11':
     $event_type = EVENT_ROT13_COMPS;
+    break;
+
+  case '2018-10-23':
+  case '2018-10-24':
+    $month_mission = MISSION_OCT;
+    $event_type = EVENT_HALLOWEEN;
     break;
 }
 
