@@ -2522,6 +2522,7 @@ function _stlouis_action_support_your_party_official_function(
 
 function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
   $target, &$can_do_again) {
+  global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc' ;
   
   // One hour ago, since we are ET.
