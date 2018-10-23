@@ -222,18 +222,22 @@ $game_settings = [
 ];
 
 $game_text = [
+  'action' => 'Action',
   'actions' => 'Actions',
   'actions_short' => 'Acts',
   'agents' => 'Agents',
   'clan_eq' => 'Clan Equipment',
   'clan_eq_short' => 'Clan Eqp',
+  'elocution' => 'Elocution',
   'elocution_short' => 'Elo',
+  'endurance' => 'Endurance',
   'endurance_short' => 'End',
   'energy' => 'Energy',
   'experience' => 'Influence',
   'experience_short' => 'Inf',
   'hood' => 'Neighborhood',
   'hood_short' => '\'hood',
+  'initiative' => 'Initiative',
   'initiative_short' => 'Ini',
   'investment' => 'Investment',
   'investment_plural' => 'Investments',
