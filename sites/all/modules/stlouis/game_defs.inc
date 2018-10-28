@@ -224,6 +224,7 @@ $luck = 'Luck';
 $party = 'Political Party';
 $party_small = 'Party';
 $politics = 'Politics';
+$quest = 'Mission';
 $residence = 'Residence';
 $system = 'System';
 $top20 = 'Top 20';

@@ -711,7 +711,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
         list($q->rgb, $q->width, $q->completed_percent_overlay) =
           game_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
-        game_get_icon_path($game_user, $q);
+        game_get_icon_path($game_user, $q, 'quests');
         $item->q[$q->id] = $q;
       }
       if (!count($item->q)) {
@@ -1587,34 +1587,36 @@ EOF;
 }
 
 /**
- * Find the icon path for a given quest.
+ * Find the icon path for a given type.
  *
  * @param \stdClass $game_user
  *   The game user object.
- * @param \stdClass $qo
- *   The quest object.
+ * @param \stdClass $obj
+ *   The quest, etc. object.
+ * @param string $type
+ *   The type of object.
  */
-function game_get_icon_path(\stdClass $game_user, \stdClass $qo) {
+function game_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  if (strpos($qo->meta, 'use_job_picture') !== FALSE) {
+  if (strpos($obj->meta, 'use_job_picture') !== FALSE) {
     $sql = 'SELECT land.id FROM `land_ownership`
       LEFT JOIN land ON fkey_land_id = land.id
       WHERE fkey_users_id = %d
       AND land.type = "job";';
     $result = db_query($sql, $game_user->id);
     $job = db_fetch_object($result);
-    $qo->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
+    $obj->icon_path = '/sites/default/files/images/land/' . "$game-$job->id.png?3";
   }
   else {
-    $icon_path = base_path() . file_directory_path() . '/images/quests/' . $game . '-' . $qo->id;
+    $icon_path = base_path() . file_directory_path() . '/images/' . $type . '/' . $game . '-' . $obj->id;
 
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . $icon_path . '.jpg')) {
-      $qo->icon_path = $icon_path . '.jpg';
+      $obj->icon_path = $icon_path . '.jpg';
     }
     else {
-      $qo->icon_path = $icon_path . '.png';
+      $obj->icon_path = $icon_path . '.png';
     }
   }
 }
