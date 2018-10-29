@@ -564,6 +564,18 @@ EOF;
   echo '</div>';
 }
 
+/**
+ * Gaining of land.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The land id.
+ * @param int $quantity
+ *   The number of land.
+ * @param $ex_price
+ *   The price of the land.
+ */
 function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -603,6 +615,18 @@ function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
+/**
+ * Lose of land.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The land id.
+ * @param int $quantity
+ *   The number of land.
+ * @param $ex_price
+ *   The price of the land.
+ */
 function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
