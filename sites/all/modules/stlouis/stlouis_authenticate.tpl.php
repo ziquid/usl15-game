@@ -60,7 +60,8 @@ if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
 }
 
 $password = trim(check_plain($_GET['password']));
-if ($password == trim($game_user->password)) {
+
+if ($password == trim($game_user->password) || password_hash($password, PASSWORD_BCRYPT) == trim($game_user->password)) {
   $user_agent = $_SERVER['HTTP_USER_AGENT'];
   $ip_addr = ip_address();
 

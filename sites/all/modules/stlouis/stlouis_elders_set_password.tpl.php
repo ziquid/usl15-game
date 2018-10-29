@@ -45,7 +45,6 @@ return;
 }
 
 $password = trim(check_plain($_GET['password']));
-
 if (strlen($password) > 0 and strlen($password) < 6) {
   $error_msg .= '<div class="username-error">Your password must be at least 6
     characters long.</div>';
@@ -60,7 +59,7 @@ if ($password != '') {
   }
 
   $sql = 'update users set password = "%s" where id = %d;';
-  $result = db_query($sql, $password, $game_user->id);
+  $result = db_query($sql, password_hash($password, PASSWORD_BCRYPT), $game_user->id);
 
   echo <<< EOF
 <div class="title">
