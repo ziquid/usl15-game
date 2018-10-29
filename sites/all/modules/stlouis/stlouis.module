@@ -1279,16 +1279,16 @@ function _stlouis_check_authKey($game_user) {
 
     // Uhoh!  Wrong authKey!
     if ($game_user->authKey != $authKey) {
-      echo 'Error E-1017: ' . $game_user->referral_code;
-      exit;
+      db_set_active('default');
+      drupal_goto(arg(0) . '/error/' . arg(2) . '/E-1017');
     }
 
   }
   else {
 
     // Otherwise, client doesn't have an authkey... someone is hacking!
-    echo 'Error E-0922: ' . $game_user->referral_code;
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0922');
   }
 }
 
@@ -1515,8 +1515,8 @@ function _stlouis_fetch_user() {
     ($user->roles[4] != 'web game access')) {
 
       // Ai access from a different host.
-      echo 'Error E-4713';
-      exit;
+      db_set_active('default');
+      drupal_goto(arg(0) . '/error/' . arg(2) . '/E-4713');
     }
   }
 
@@ -1538,8 +1538,8 @@ function _stlouis_fetch_user() {
     $blocked_user->phone_id == $phone_id) {
 
     // Banned by phone ID.
-    echo 'Error E-0467';
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0467');
   }
 
   // Check for banned users -- ip address.
@@ -1552,8 +1552,8 @@ function _stlouis_fetch_user() {
   if (!empty($blocked_ip)) {
 
     // Banned by IP.
-    echo 'Error E-0468';
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0468');
   }
 
   // Nook Color 1.4.1 removes the 'nkc+' prefix -- fix our db.
