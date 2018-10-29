@@ -57,7 +57,7 @@ if ($password != '') {
   if ($password == 'delete') {
     $password = '';
   }
-  
+
   $sql = 'update users set password = "%s" where id = %d;';
   $result = db_query($sql, password_hash($password, PASSWORD_BCRYPT), $game_user->id);
 
