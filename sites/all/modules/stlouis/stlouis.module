@@ -1574,7 +1574,6 @@ function _stlouis_fetch_user() {
     $blocked_user->phone_id == $phone_id) {
 
     // Banned by phone ID.
-    echo 'Error E-0467';
     db_set_active('default');
     drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0467');
   }
