@@ -134,15 +134,15 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
 }
 
 /**
- * Show available lands
+ * Show available lands.
  *
  * @param \stdClass $game_user
  *   The game user object.
  * @param \stdClass $item
- *   The land item
+ *   The land item.
  * @param array $options
- *   Various options to control display
-*/
+ *   Various options to control display.
+ */
 function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
