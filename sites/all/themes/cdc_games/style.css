@@ -1135,3 +1135,36 @@ img.round4 {
 .hide {
   display: none;
 }
+
+.speech-bubble {
+  position: relative;
+  background-color: #107014;
+  border: 1px solid #f8fefc;
+  border-radius: 4px;
+  box-shadow: 0 0 10px #c1c1c1;
+  margin-left: 65px;
+}
+
+/* LEFT */
+.speech-bubble:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: -30px;
+  top: 40px;
+  border: 10px solid transparent;
+  border-right: 20px solid #f8fefc;
+  z-index: 2;
+}
+.speech-bubble:after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  left: -27px;
+  top: 40px;
+  border: 10px solid transparent;
+  border-right: 20px solid #107014;
+  z-index: 3;
+}

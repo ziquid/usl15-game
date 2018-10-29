@@ -1399,6 +1399,7 @@ EOF;
 
   // Show the quest!
   echo <<< EOF
+$item->quest_completion_html
 $item->outcome
 <div class="quests">
   <div class="quest-icon $wrong_hood_wrapper">
@@ -1569,7 +1570,6 @@ EOF;
     </div>
   </div>
   $item->loot_html
-  $item->quest_completion_html
   <div class="quest-do-again">
     <div class="quest-do-again-inside">
       <a href="/$game/quests_do/$arg2/$item->id">

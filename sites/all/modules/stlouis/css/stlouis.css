@@ -150,7 +150,7 @@ body.game-stlouis .welcome {
 }
 
 .quests, .land {
-  background-color: #0d0f0d;
+  background-color: rgba(13, 15, 13, 0.25);
   text-shadow: none;
   text-align: left;
 }
@@ -309,7 +309,7 @@ body.game-stlouis .welcome {
   float: left;
 }
 
-.wise_old_man_small {
+.wise_old_man_small, .wise_old_man.small {
   background-image: url('/sites/default/files/images/stlouis_wise_old_man_small.png');
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -926,15 +926,29 @@ a.button-continue {
   margin: 6px 2px 4px;
 }
 
-div.new-user {
+div.description-speech-bubble-wrapper {
   font-size: 11px;
   text-align: left;
   font-style: normal;
-  margin-left: -12px;
+  margin-left: -22px;
+  margin-right: -22px;
+  height: 84px;
 }
 
-div.new-user .wise_old_man_small {
-  background-position: 0 1px;
+div.speech-bubble-wrapper {
+  font-size: 11px;
+  text-align: left;
+  font-style: normal;
+  margin: 8px 0;
+}
+
+div.description-speech-bubble-wrapper .wise_old_man {
+  background-position: 0 0;
+  height: 80px;
+}
+
+div.speech-bubble-wrapper .wise_old_man {
+  background-position: 0 0;
   height: 80px;
 }
 
@@ -962,4 +976,13 @@ div.new-user .wise_old_man_small {
 
 .new-main-menu img {
   width: 310px;
+}
+
+.bonus-text {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 150%;
+  color: yellow;
+  text-shadow: 1px 1px 4px #0d0f0d;
 }

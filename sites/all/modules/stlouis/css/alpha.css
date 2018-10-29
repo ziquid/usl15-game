@@ -41,16 +41,12 @@ body.party-toxicorp.alpha {
   margin: 9px 8px 9px 14px;
 }
 
-.alpha .description .new-user p {
-   margin-right: 0;
- }
-
 .alpha p:first-of-type {
   margin-top: 0;
 }
 
-.alpha .description .new-user p:last-of-type {
-  margin-bottom: 0;
+.alpha .speech-bubble p:first-of-type {
+  margin-top: 9px;
 }
 
 .alpha-only {

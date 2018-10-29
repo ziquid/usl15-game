@@ -19,6 +19,7 @@ Drupal.behaviors.stlouis = function (context) {
       blue = Math.floor(blue * 0.6);
       $('body').addClass('alpha');
       $('body.alpha').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
+      $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
     }
   }
 

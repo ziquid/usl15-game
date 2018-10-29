@@ -465,103 +465,37 @@ EOF;
           // Equipment bonus.
           if ($eq_id > 0) {
 
-            $data = [];
-            $sql = 'SELECT equipment.*, equipment_ownership.quantity
-              FROM equipment
+            $game_equipment = game_fetch_equip_by_id($game_user->id, $eq_id);
+            list($eq_success, $eq_reason, $eq_details) =
+              game_equipment_gain($game_user, $eq_id, 1, 0);
 
-              LEFT OUTER JOIN equipment_ownership
-              ON equipment_ownership.fkey_equipment_id = equipment.id
-              AND equipment_ownership.fkey_users_id = %d
-
-              WHERE equipment.id = %d;';
-            $result = db_query($sql, $game_user->id, $eq_id);
-            $game_equipment = db_fetch_object($result); // limited to 1 in DB
-
-            // give the stuff
-            // No record exists - insert one.
-            if ($game_equipment->quantity == '') {
-              $sql = 'insert into equipment_ownership
-                (fkey_equipment_id, fkey_users_id, quantity)
-                values (%d, %d, %d);';
-              $result = db_query($sql, $eq_id, $game_user->id, 1);
-            }
-            else { // existing record - update it
-              $sql = 'update equipment_ownership set quantity = quantity + 1
-                where fkey_equipment_id = %d and fkey_users_id = %d;';
-              $result = db_query($sql, $eq_id, $game_user->id);
+            if (!$eq_success) {
+              slack_send_message('could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+                " due to $eq_success, $eq_reason, $eq_details",
+                $slack_channel);
+              $response = slack_send_message($game_user, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
+              $response = slack_send_message($game_quest, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
+              $response = slack_send_message($game_equipment, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
             }
 
-            // tell the user about it
-            $quest_completion_html .= <<< EOF
-<div class="quest-succeeded title loot">Congratulations!</div>
-<div class="subsubtitle">You have completed the second round of {$quest_lower}s!</div>
-<div class="subsubtitle">Here is your bonus:</div>
-<div class="quest-icon"><img
-src="/sites/default/files/images/equipment/$game-{$eq_id}.png" width="96"></div>
-<div class="quest-details">
-<div class="quest-name loot">$game_equipment->name</div>
-<div class="quest-description">$game_equipment->description</div>
-EOF;
-
-            if ($game_equipment->energy_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Energy: +$game_equipment->energy_bonus immediate energy bonus
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->energy_increase > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Energy: +$game_equipment->energy_increase every $energy_wait_str
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->initiative_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">$initiative: +$game_equipment->initiative_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->endurance_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Endurance: +$game_equipment->endurance_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->elocution_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">$elocution: +$game_equipment->elocution_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->speed_increase > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Speed Increase: $game_equipment->speed_increase fewer Action
-    needed to move to a new $hood_lower
-    </div>
-EOF;
-            }
-
-            if ($game_equipment->upkeep > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout negative">Upkeep: $game_equipment->upkeep every 60 minutes</div>
-EOF;
-              game_recalc_income($game_user);
-            }
-
-            if ($game_equipment->chance_of_loss > 0) {
-              $lifetime = floor(100 / $game_equipment->chance_of_loss);
-              $use = ($lifetime == 1) ? 'use' : 'uses';
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
-EOF;
-            }
-
-            $quest_completion_html .= '</div>';
+            $quest_completion_html .= game_render_equip($game_user,
+              $game_equipment,
+              $ai_output,
+              [
+                'equipment-succeeded' => 'quest-bonus',
+                'quest-do-again-id' => $game_quest->id,
+              ]
+            );
+            $outcome_reason = '';
           }
 
           // FIXME: land bonus here
@@ -569,119 +503,37 @@ EOF;
           // Staff bonus.
           if ($st_id > 0) {
 
-            $data = [];
-            $sql = 'SELECT staff.*, staff_ownership.quantity
-              FROM staff
+            $game_staff = game_fetch_staff_by_id($game_user, $st_id);
+            list($st_success, $st_reason, $st_details) =
+              game_staff_gain($game_user, $st_id, 1, 0);
 
-              LEFT OUTER JOIN staff_ownership
-              ON staff_ownership.fkey_staff_id = staff.id
-              AND staff_ownership.fkey_users_id = %d
-
-              WHERE staff.id = %d;';
-            $result = db_query($sql, $game_user->id, $st_id);
-
-            // Limited to 1 in DB.
-            $game_staff = db_fetch_object($result);
-
-            // Give the stuff.
-            // No record exists - insert one.
-            if ($game_staff->quantity == '') {
-              $sql = 'insert into staff_ownership
-                (fkey_staff_id, fkey_users_id, quantity)
-                values (%d, %d, %d);';
-              $result = db_query($sql, $st_id, $game_user->id, 1);
-            }
-            else {
-
-              // Existing record - update it.
-              $sql = 'update staff_ownership set quantity = quantity + 1 where
-                fkey_staff_id = %d and fkey_users_id = %d;';
-              $result = db_query($sql, $st_id, $game_user->id);
+            if (!$st_success) {
+              slack_send_message('could not give 2nd-round st bonus for quest ' . $game_quest->id .
+                " due to $st_success, $st_reason, $st_details",
+                $slack_channel);
+              $response = slack_send_message($game_user, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
+              $response = slack_send_message($game_quest, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
+              $response = slack_send_message($game_staff, $slack_channel);
+              if ($response !== TRUE) {
+                firep($response, 'slack response');
+              }
             }
 
-            // Tell the user about it.
-            $quest_completion_html .= <<< EOF
-<div class="quest-succeeded title loot">Congratulations!</div>
-<div class="subsubtitle">You have completed the second round of {$quest_lower}s!</div>
-<div class="subsubtitle">Here is your bonus:</div>
-<div class="quest-icon"><img
-src="/sites/default/files/images/staff/$game-{$st_id}.png" width="96"></div>
-<div class="quest-details">
-<div class="quest-name loot">$game_staff->name</div>
-<div class="quest-description">$game_staff->description</div>
-EOF;
-
-            if ($game_staff->energy_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Energy: +$game_staff->energy_bonus immediate energy bonus
-    </div>
-EOF;
-            }
-
-            if ($game_staff->energy_increase > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Energy: +$game_staff->energy_increase every $energy_wait_str
-    </div>
-EOF;
-            }
-
-            if ($game_staff->initiative_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">$initiative: +$game_staff->initiative_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_staff->endurance_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">$endurance: +$game_staff->endurance_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_staff->elocution_bonus > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">$elocution: +$game_staff->elocution_bonus
-    </div>
-EOF;
-            }
-
-            if ($game_staff->speed_increase > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Speed Increase: $game_staff->speed_increase fewer Action
-    needed to move to a new $hood_lower
-    </div>
-EOF;
-            }
-
-            if ($game_staff->extra_votes > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Extra Votes: $game_staff->extra_votes</div>
-EOF;
-            }
-
-            if ($game_staff->extra_defending_votes > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout">Extra Defending Votes: $game_staff->extra_defending_votes</div>
-EOF;
-            }
-
-            if ($game_staff->upkeep > 0) {
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout negative">Upkeep: $game_staff->upkeep every 60 minutes</div>
-EOF;
-              game_recalc_income($game_user);
-            }
-
-            if ($game_staff->chance_of_loss > 0) {
-              $lifetime = floor(100 / $game_staff->chance_of_loss);
-              $use = ($lifetime == 1) ? 'use' : 'uses';
-              $quest_completion_html .= <<< EOF
-  <div class="quest-payout negative">Expected Lifetime: $lifetime $use</div>
-EOF;
-            }
-
-            $quest_completion_html .= '</div>';
+            $quest_completion_html .= game_render_equip($game_user,
+              $game_staff,
+              $ai_output,
+              [
+                'equipment-succeeded' => 'quest-bonus',
+                'quest-do-again-id' => $game_quest->id,
+              ]
+            );
+            $outcome_reason = '';
           }
 
           // Update quest_groups_completion.

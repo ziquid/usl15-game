@@ -101,14 +101,18 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $result = db_query($sql, $money, $today, $game_user->id);
   $game_user = $fetch_user();
 
-  $extra_bonus = '<div class="level-up happy">
-      <div class="level-up-header">Daily Bonus!</div>
-      <div class="level-up-text">You have received a bonus of ' .
-        number_format($money) . ' ' . $game_user->values . '!</div>' .
-        $extra_text .
-      '<div class="level-up-text">For the next three minutes, competencies can be enhanced every 15 seconds</div>
-      <div class="level-up-text">Come back tomorrow for another bonus</div>
-    </div>';
+  $extra_bonus = '<div class="speech-bubble-wrapper background-color">
+  <div class="wise_old_man happy">
+  </div>
+  <div class="speech-bubble">
+    <p class="bonus-text">Daily Bonus!</p>
+    <p>You have received <strong>' .
+    number_format($money) . ' ' . $game_user->values . '</strong>!</p>' .
+    $extra_text .
+      '<p>For the next three minutes, competencies can be enhanced every 15 seconds.</p>
+      <p>Come back tomorrow for another bonus!</p>
+  </div>
+</div>';
 
   // Fast comps for the next three minutes.
   game_set_timer($game_user, 'fast_comps_15', 180);
@@ -403,7 +407,6 @@ game_alter('homepage_event_notice', $game_user, $event_text);
 game_alter('homepage_menu', $game_user, $extra_menu);
 
 echo <<< EOF
-$extra_bonus
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png">
 </div>
@@ -413,6 +416,7 @@ $extra_bonus
 <a class="version" href="/$game/changelog/$arg2">
   $version
 </a>
+$extra_bonus
 <div class="new-main-menu">
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
     usemap="#new_main_menu">
