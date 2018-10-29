@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_elders_do_fill.tpl.php
+ * @file
  * Fill your stats by using Luck.
  *
  * Synced with CG: yes
@@ -114,7 +114,8 @@ switch ($fill_type) {
     }
 
     if ($game_user->energy < $game_user->energy_max) {
-      $sql = 'update users set energy = energy_max, luck = luck - 1
+      $sql = 'update users set energy = LEAST(energy + energy_max, energy_max * 2),
+        luck = luck - 1
         where id = %d;';
       db_query($sql, $game_user->id);
       $amount_filled = $game_user->energy_max;
