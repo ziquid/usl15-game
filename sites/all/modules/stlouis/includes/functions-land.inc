@@ -1,9 +1,8 @@
 <?php
 
 /**
- * Land functions for Ziquid games.
- *
  * @file
+ * Land functions for Ziquid games.
  *
  * Synced with CG: yes
  * Synced with 2114: no
@@ -134,6 +133,16 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
+/**
+ * Show available lands
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The land item
+ * @param array $options
+ *   Various options to control display
+*/
 function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
