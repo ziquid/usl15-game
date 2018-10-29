@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_homepage.tpl.php
+ * @file
  * The game's main screen.
  *
  * Synced with CG: yes
@@ -10,7 +10,7 @@
  * Ready for MVC separation: no
  */
 
-$version = 'v0.7.0, Oct 12 2018';
+$version = 'v0.7.0, Oct 29 2018';
 
 global $game, $phone_id;
 
@@ -41,17 +41,17 @@ Come back at level 6.&quot;</p>
 </div>
 EOF;
 
-if (substr($phone_id, 0, 3) == 'ai-')
-  echo "<!--\n<ai \"home not-yet\"/>\n-->";
-
-game_button('quests');
-db_set_active('default');
-return;
-
+  if (substr($phone_id, 0, 3) == 'ai-') {
+    echo "<!--\n<ai \"home not-yet\"/>\n-->";
+  }
+  game_button('quests');
+  db_set_active('default');
+  return;
 }
 
-if (substr($phone_id, 0, 3) == 'ai-')
+if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"home\"/>\n-->";
+}
 
 $today = date('Y-m-d');
 
@@ -101,14 +101,18 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $result = db_query($sql, $money, $today, $game_user->id);
   $game_user = $fetch_user();
 
-  $extra_bonus = '<div class="level-up happy">
-      <div class="level-up-header">Daily Bonus!</div>
-      <div class="level-up-text">You have received a bonus of ' .
-        number_format($money) . ' ' . $game_user->values . '!</div>' .
-        $extra_text .
-      '<div class="level-up-text">For the next three minutes, competencies can be enhanced every 15 seconds</div>
-      <div class="level-up-text">Come back tomorrow for another bonus</div>
-    </div>';
+  $extra_bonus = '<div class="speech-bubble-wrapper background-color">
+  <div class="wise_old_man happy">
+  </div>
+  <div class="speech-bubble">
+    <p class="bonus-text">Daily Bonus!</p>
+    <p>You have received <strong>' .
+    number_format($money) . ' ' . $game_user->values . '</strong>!</p>' .
+    $extra_text .
+      '<p>For the next three minutes, competencies can be enhanced every 15 seconds.</p>
+      <p>Come back tomorrow for another bonus!</p>
+  </div>
+</div>';
 
   // Fast comps for the next three minutes.
   game_set_timer($game_user, 'fast_comps_15', 180);
@@ -397,10 +401,12 @@ if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 */
 
 // Add event text, if any.
-game_alter('homepage_event_notice', $game_user,$event_text);
+game_alter('homepage_event_notice', $game_user, $event_text);
+
+// Alter menu.
+game_alter('homepage_menu', $game_user, $extra_menu);
 
 echo <<< EOF
-$extra_bonus
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png">
 </div>
@@ -410,6 +416,7 @@ $extra_bonus
 <a class="version" href="/$game/changelog/$arg2">
   $version
 </a>
+$extra_bonus
 <div class="new-main-menu">
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
     usemap="#new_main_menu">
@@ -421,12 +428,7 @@ $extra_bonus
 EOF;
 
 $coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
-//if (game_get_value($game_user, 'enabled_alpha')) {
-  $link = 'quest_groups';
-//}
-//else {
-//  $link = 'quests';
-//}
+$link = 'quest_groups';
 $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Missions"

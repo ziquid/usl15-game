@@ -1135,14 +1135,15 @@ function _stlouis_save_user_agent($game_user) {
 
   global $purchasing_luck, $user;
 
-  $user_agent = $_SERVER['HTTP_USER_AGENT'];
-
   // Loading luck doesn't count.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
-   // Admin access.
-//  if ($user->roles[4] == 'web game access') return;
+  // Admin access.
+  //  if ($user->roles[4] == 'web game access') return;
 
+  $user_agent = $_SERVER['HTTP_USER_AGENT'];
   $extra_stuff_pos = stripos($user_agent, '(com.ziquid');
 
   // Remove our added stuff, if present.
@@ -1164,7 +1165,6 @@ function _stlouis_save_user_agent($game_user) {
   else {
 
     // Existing entry.
-
     // New User Agent!
     if ($user_list->value != $user_agent) {
 
@@ -1173,7 +1173,6 @@ function _stlouis_save_user_agent($game_user) {
         _stlouis_set_value($game_user->id, 'user_agent', $user_agent);
       }
       else {
-
         // New user_agent and a password -- gotta authenticate!
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
@@ -1182,9 +1181,7 @@ function _stlouis_save_user_agent($game_user) {
 
     }
     return TRUE;
-
   }
-
 }
 
 function _stlouis_save_user_IP($game_user) {
@@ -1195,7 +1192,9 @@ function _stlouis_save_user_IP($game_user) {
   $ip_addr = ip_address();
 
   // Loading luck doesn't count.
-  if ($purchasing_luck) return;
+  if ($purchasing_luck) {
+    return;
+  }
 
   // Admin access.
 //  if ($user->roles[4] == 'web game access') return;
@@ -1204,15 +1203,10 @@ function _stlouis_save_user_IP($game_user) {
 
   // No entry?  Create one!
   if ($last_ip == '') {
-
     _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
     return TRUE;
-
   }
-
-
   else {
-
     // Existing entry.
     $old_ip = substr($last_ip, 0, 6);
     $new_ip = substr($ip_addr, 0, 6);
@@ -1222,47 +1216,17 @@ function _stlouis_save_user_IP($game_user) {
 
       // No password?  Update automatically.
       if (empty($game_user->password)) {
-
         _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
-/*
-        mail('joseph@cheek.com', 'new IP address',
-          'The IP address of passwordless player ' .
-          $game_user->username . ' has just changed from
-
-' . $last_ip . '
-
-to
-
-' . $ip_addr);
-*/
       }
-
       else {
-
-          // New ip address and a password -- gotta authenticate!
-/*
-          mail('joseph@cheek.com', 'new IP address hacking attempt?',
-            'The IP address of PASSWORDED player ' .
-            $game_user->username . ' has just changed from
-
-' . $last_ip . '
-
-to
-
-' . $ip_addr);
-*/
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
         drupal_goto("$game/authenticate/$arg2");
-
       }
-
     }
 
     return TRUE;
-
   }
-
 }
 
 function _stlouis_check_authKey($game_user) {
@@ -1315,16 +1279,16 @@ function _stlouis_check_authKey($game_user) {
 
     // Uhoh!  Wrong authKey!
     if ($game_user->authKey != $authKey) {
-      echo 'Error E-1017: ' . $game_user->referral_code;
-      exit;
+      db_set_active('default');
+      drupal_goto(arg(0) . '/error/' . arg(2) . '/E-1017');
     }
 
   }
   else {
 
     // Otherwise, client doesn't have an authkey... someone is hacking!
-    echo 'Error E-0922: ' . $game_user->referral_code;
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0922');
   }
 }
 
@@ -1551,8 +1515,8 @@ function _stlouis_fetch_user() {
     ($user->roles[4] != 'web game access')) {
 
       // Ai access from a different host.
-      echo 'Error E-4713';
-      exit;
+      db_set_active('default');
+      drupal_goto(arg(0) . '/error/' . arg(2) . '/E-4713');
     }
   }
 
@@ -1574,8 +1538,8 @@ function _stlouis_fetch_user() {
     $blocked_user->phone_id == $phone_id) {
 
     // Banned by phone ID.
-    echo 'Error E-0467';
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0467');
   }
 
   // Check for banned users -- ip address.
@@ -1588,8 +1552,8 @@ function _stlouis_fetch_user() {
   if (!empty($blocked_ip)) {
 
     // Banned by IP.
-    echo 'Error E-0468';
-    exit;
+    db_set_active('default');
+    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0468');
   }
 
   // Nook Color 1.4.1 removes the 'nkc+' prefix -- fix our db.

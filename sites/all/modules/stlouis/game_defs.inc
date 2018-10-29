@@ -22,6 +22,8 @@ define(EVENT_DOUBLE_LUCK_MONEY, 9);
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
 define(EVENT_FLAG_DAY, 'event_flag_day');
 
+define(EVENT_HALLOWEEN, 'event_halloween');
+
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
 define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
@@ -36,6 +38,7 @@ define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
 define(MISSION_JUN, 1006);
 define(MISSION_JUL, 1007);
+define(MISSION_OCT, 1010);
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
@@ -179,11 +182,20 @@ switch($today) {
   case '2018-07-11':
     $event_type = EVENT_ROT13_COMPS;
     break;
-}
 
-//if (arg(2) == 'abc123') {
-//  $event_type = EVENT_MEMORIAL_DAY_4;
-//}
+  case '2018-10-23':
+  case '2018-10-24':
+  case '2018-10-25':
+  case '2018-10-26':
+  case '2018-10-27':
+  case '2018-10-28':
+  case '2018-10-29':
+  case '2018-10-30':
+  case '2018-10-31':
+//    $month_mission = MISSION_OCT;
+    $event_type = EVENT_HALLOWEEN;
+    break;
+}
 
 $alderman = 'Alderman';
 $aldermen = 'Aldermen';
@@ -222,18 +234,22 @@ $game_settings = [
 ];
 
 $game_text = [
+  'action' => 'Action',
   'actions' => 'Actions',
   'actions_short' => 'Acts',
   'agents' => 'Agents',
   'clan_eq' => 'Clan Equipment',
   'clan_eq_short' => 'Clan Eqp',
+  'elocution' => 'Elocution',
   'elocution_short' => 'Elo',
+  'endurance' => 'Endurance',
   'endurance_short' => 'End',
   'energy' => 'Energy',
   'experience' => 'Influence',
   'experience_short' => 'Inf',
   'hood' => 'Neighborhood',
   'hood_short' => '\'hood',
+  'initiative' => 'Initiative',
   'initiative_short' => 'Ini',
   'investment' => 'Investment',
   'investment_plural' => 'Investments',

@@ -14,7 +14,7 @@ function game_land_lemonade_stand_init() {
 //  firep('init lemonade stand!');
 }
 
-// HOOKS
+/* HOOKS */
 
 /**
  * Implements hook_flag_show_quest_group_ID().

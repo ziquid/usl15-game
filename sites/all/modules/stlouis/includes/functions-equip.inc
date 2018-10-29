@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @file functions-equipment.inc
+ * @file
  * Misc Equipment functions for Ziquid games.
  *
  * Synced with CG: yes
  * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 /**
@@ -61,7 +62,7 @@ EOF;
  * @return \stdClass[]
  *   The array of equipment objects.
  */
-function game_fetch_visible_equip($game_user) {
+function game_fetch_visible_equip(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE equipment.id > 0';
   }
@@ -98,8 +99,9 @@ function game_fetch_visible_equip($game_user) {
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
 
-  while ($item = db_fetch_object($result)) {
-    $data[] = $item;
+  while ($eq = db_fetch_object($result)) {
+    game_get_icon_path($game_user, $eq, 'equipment');
+    $data[] = $eq;
   }
   return $data;
 }
@@ -109,10 +111,11 @@ function game_fetch_visible_equip($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
+ *
  * @return \stdClass
  *   The next equipment item to show, if any.
  */
-function game_fetch_next_equip($game_user) {
+function game_fetch_next_equip(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'AND equipment.id > 0';
   }
@@ -142,7 +145,9 @@ function game_fetch_next_equip($game_user) {
   ORDER BY required_level ASC LIMIT 1';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
-  return db_fetch_object($result);
+  $eq = db_fetch_object($result);
+  game_get_icon_path($game_user, $eq, 'equipment');
+  return $eq;
 }
 
 /**
@@ -165,7 +170,9 @@ function game_fetch_equip_by_id($game_user, $equip_id) {
 
   WHERE equipment.id = %d;';
   $result = db_query($sql, $game_user->id, $equip_id);
-  return db_fetch_object($result);
+  $eq = db_fetch_object($result);
+  game_get_icon_path($game_user, $eq, 'equipment');
+  return $eq;
 }
 
 /**
@@ -179,13 +186,45 @@ function game_fetch_equip_by_id($game_user, $equip_id) {
  *   AI output.
  * @param array $options
  *   Options that modify the display behavior.
+ *
+ * @return string
+ *   The rendered HTML.
  */
-function game_show_equip($game_user, $item, &$ai_output, $options = []) {
+function game_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
+  $html = game_render_equip($game_user, $item, $ai_output, $options);
+  print $html;
+  return $html;
+}
+
+/**
+ * Render (without showing) a piece of equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The equipment item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ *
+ * @return string
+ *   The rendered HTML.
+ */
+function game_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
   static $party_title;
   $classes = [];
+  $header = '';
+
+  if (array_key_exists('prefix', $options)) {
+    $output = $options['prefix'];
+  }
+else {
+    $output = '';
+  }
 
   if (empty($party_title)) {
     $sql = 'select party_title from `values` where id = %d;';
@@ -195,8 +234,20 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
   }
 
   $soon = ($options['soon']) ? 'soon' : '';
-  $header = ($options['equipment-succeeded'] == 'success') ?
-    '<div class="land-succeeded">Success</div>' : '';
+  if ($options['equipment-succeeded'] == 'success') {
+    $header = '<div class="land-succeeded">Success</div>';
+  }
+  elseif ($options['equipment-succeeded'] == 'quest-bonus') {
+    $output .= '<div class="speech-bubble-wrapper background-color">
+  <div class="wise_old_man happy">
+  </div>
+  <div class="speech-bubble">
+    <p class="bonus-text">Congratulations!</p>
+    <p>You have completed the second round of ' . $quest_lower . 's!</p>' .
+    '<p>Here is your bonus:</p>
+  </div>
+</div>';
+  }
 
   switch ($options['equipment-buy-succeeded']) {
 
@@ -286,8 +337,7 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
     $quantity = '<em>' . t('None') . '</em>';
   }
 
-  $equipment_price = $item->price + ($item->quantity *
-      $item->price_increase);
+  $equipment_price = $item->price + ($item->quantity * $item->price_increase);
 
   if (!$item->is_loot) {
     $ai_output .= " $item->id=$equipment_price";
@@ -351,8 +401,7 @@ function game_show_equip($game_user, $item, &$ai_output, $options = []) {
   if ($can_buy) {
     $icon_button = <<< EOF
 <a href="/$game/equipment_buy/$arg2/$item->id/1">
-  <img src="/sites/default/files/images/equipment/$game-$item->id.png?2" width="96"
-    border="0">
+  <img src="$item->icon_path" class="round4" width="96" border="0">
 </a>
 EOF;
     $name_link = <<< EOF
@@ -374,8 +423,7 @@ EOF;
   else {
     // Can't buy.
     $icon_button = <<< EOF
-  <img src="/sites/default/files/images/equipment/$game-$item->id.png?2" width="96"
-    border="0">
+  <img src="$item->icon_path" class="round4" width="96" border="0">
 EOF;
     $name_link = <<< EOF
 <span class="type">
@@ -407,7 +455,7 @@ EOF;
 EOF;
   }
 
-  // grab each action for the equipment
+  // Grab each action for the equipment.
   $acts_arr = [];
   $sql = 'select * from actions where fkey_equipment_id = %d;';
   $result = db_query($sql, $item->id);
@@ -454,7 +502,7 @@ EOF;
   $class_str = implode(' ', $classes);
 
   if ($soon) {
-    echo <<< EOF
+    $output .= <<< EOF
 <div class="land $soon $failed $class_str">
   <div class="land-icon">
       <img src="/sites/default/files/images/equipment/$game-soon.png?1" width=96
@@ -469,7 +517,7 @@ EOF;
 EOF;
   }
 else {
-    echo <<< EOF
+    $output .= <<< EOF
 <div class="land $failed $class_str">
   $header
   <div class="land-icon">
@@ -483,12 +531,17 @@ else {
 EOF;
   }
 
-  echo <<< EOF
+  if ($options['equipment-succeeded'] == 'quest-bonus') {
+    $reqs = '';
+  }
+  else {
+    $output .= <<< EOF
     <div class="land-owned">Owned: $quantity $quantity_limit</div>
 EOF;
-  $reqs = <<< EOF
+    $reqs = <<< EOF
     <div class="land-cost">Cost: $equipment_price $game_user->values</div>
 EOF;
+  }
 
   if ($game_user->level < $item->required_level) {
     $reqs .= <<< EOF
@@ -497,14 +550,14 @@ EOF;
   }
 
   if (!empty($reqs)) {
-    echo <<< EOF
+    $output .= <<< EOF
     <!--<div class="land-requisites">// Requisites //</div>-->
     $reqs
 EOF;
   }
 
   if ($item->energy_bonus > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     Energy: +$item->energy_bonus immediate energy bonus
   </div>
@@ -512,7 +565,7 @@ EOF;
   }
 
   if ($item->energy_increase > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     Energy: +$item->energy_increase every 5 minutes
   </div>
@@ -520,14 +573,14 @@ EOF;
   }
 
   if ($item->initiative_bonus > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     $initiative: +$item->initiative_bonus
   </div>
 EOF;
   }
 else if ($item->initiative_bonus < 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout negative">
     $initiative: $item->initiative_bonus
   </div>
@@ -535,14 +588,14 @@ EOF;
   }
 
   if ($item->endurance_bonus > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     $endurance: +$item->endurance_bonus
   </div>
 EOF;
   }
 else if ($item->endurance_bonus < 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout negative">
     $endurance: $item->endurance_bonus
   </div>
@@ -550,7 +603,7 @@ EOF;
   }
 
   if ($item->elocution_bonus > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     $elocution: +$item->elocution_bonus
   </div>
@@ -562,7 +615,7 @@ EOF;
 
   }
 else if ($item->elocution_bonus < 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout negative">
     $elocution: $item->elocution_bonus
   </div>
@@ -574,7 +627,7 @@ EOF;
   }
 
   if ($item->speed_increase > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout">
     Speed Increase: $item->speed_increase fewer Action
     needed to move to a new $hood_lower
@@ -588,7 +641,7 @@ EOF;
   }
 
   if ($item->upkeep > 0) {
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout negative">
     Upkeep: $item->upkeep every 60 minutes
   </div>
@@ -598,7 +651,7 @@ EOF;
   if ($item->chance_of_loss > 0) {
     $lifetime = floor(100 / $item->chance_of_loss);
     $use = ($lifetime == 1) ? 'use' : 'uses';
-    echo <<< EOF
+    $output .= <<< EOF
   <div class="land-payout negative">
     Expected Lifetime: $lifetime $use
   </div>
@@ -614,13 +667,13 @@ EOF;
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
-    echo '<div class="land-action">Action: ' . $name . '</div>';
-    echo '<div class="land-description">' . $action->description . '</div>';
-    echo '<div class="land-action-cost">' . $cost . '</div>';
+    $output .= '<div class="land-action">Action: ' . $name . '</div>';
+    $output .= '<div class="land-description">' . $action->description . '</div>';
+    $output .= '<div class="land-action-cost">' . $cost . '</div>';
 
     if ($action->influence_change < 0) {
       $inf_change = -$action->influence_change;
-      echo <<< EOF
+      $output .= <<< EOF
         <div class="land-payout negative">Effect: Target's
           {$experience_lower} is reduced by $inf_change</div>
 EOF;
@@ -630,13 +683,13 @@ EOF;
       $rat_change = abs($action->rating_change);
 
       if ($action->rating_change < 0.0) {
-        echo <<< EOF
+        $output .= <<< EOF
     <div class="land-payout negative">Effect: $target approval rating is
       reduced by $rat_change%</div>
 EOF;
       }
       else {
-        echo <<< EOF
+        $output .= <<< EOF
     <div class="land-payout">Effect: $target approval rating is
       increased by $rat_change%</div>
 EOF;
@@ -646,7 +699,7 @@ EOF;
 
     if ($action->rating_change >= 0.10) {
       $rat_change = $action->rating_change;
-      echo <<< EOF
+      $output .= <<< EOF
     <div class="land-payout">Effect: Your approval rating is
       increased by $rat_change%</div>
 EOF;
@@ -654,7 +707,7 @@ EOF;
 
     if ($action->neighborhood_rating_change < 0.0) {
       $rat_change = -$action->neighborhood_rating_change;
-      echo <<< EOF
+      $output .= <<< EOF
   <div class="land-payout negative">Effect: $hood $beauty_lower
     rating is reduced by $rat_change</div>
 EOF;
@@ -662,7 +715,7 @@ EOF;
 
     if ($action->neighborhood_rating_change > 0.0) {
       $rat_change = $action->neighborhood_rating_change;
-      echo <<< EOF
+      $output .= <<< EOF
   <div class="land-payout">Effect: $hood $beauty_lower rating is
     increased by $rat_change</div>
 EOF;
@@ -670,18 +723,21 @@ EOF;
 
     if ($action->values_change < 0) {
       $val_change = -$action->values_change;
-      echo <<< EOF
+      $output .= <<< EOF
         <div class="land-payout negative">Effect: Target's $game_user->values is
           reduced by $val_change</div>
 EOF;
     }
   }
 
-  echo '</div>';
+  $output .= '</div>';
 
   // BUY buttons.
-  if ($soon) {
-    echo <<< EOF
+  if ($options['equipment-succeeded'] == 'quest-bonus') {
+    // No buy nor sell buttions.
+  }
+  elseif ($soon) {
+    $output .= <<< EOF
   <div class="land-button-wrapper">
     <div class="land-buy-button not-yet">
       Can't Buy
@@ -696,7 +752,7 @@ EOF;
 
     // Attempt to buy.
     if ($options['equipment-buy-succeeded']) {
-      echo <<< EOF
+      $output .= <<< EOF
 <div class="land-button-wrapper">
   <form action="/$game/equipment_buy/$arg2/$item->id/use-quantity">
     <div class="quantity">
@@ -704,14 +760,14 @@ EOF;
 EOF;
       foreach ([1, 5, 10, 25, 50, 100] as $option) {
         if ($option == $options['orig-quantity']) {
-          echo '<option selected="selected" value="' . $option . '">' .
+          $output .= '<option selected="selected" value="' . $option . '">' .
             $option . '</option>';
         }
         else {
-          echo '<option value="' . $option . '">' . $option . '</option>';
+          $output .= '<option value="' . $option . '">' . $option . '</option>';
         }
       }
-      echo <<< EOF
+      $output .= <<< EOF
       </select>
     </div>
     <input class="land-buy-button" type="submit" Value="Buy"/>
@@ -723,7 +779,7 @@ EOF;
 
     // Normal show.
     else {
-      echo <<< EOF
+      $output .= <<< EOF
   <div class="land-button-wrapper">
     $buy_button
     $sell_button
@@ -733,10 +789,26 @@ EOF;
 
   }
 
-  echo '</div>';
+  $output .= '</div>';
+  return $output;
 }
 
-function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
+/**
+ * Gain (buy) piece(s) of equipment for a price.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $id
+ *   The equipment id.
+ * @param int $quantity
+ *   The quantity to gain.
+ * @param int $eq_price
+ *   The total price.
+ *
+ * @return array
+ *   Whether the gain succeeded or not.
+ */
+function game_equipment_gain(\stdClass $game_user, $id, $quantity = 1, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -788,9 +860,10 @@ function game_equipment_gain(&$game_user, $id, $quantity, $eq_price = 0) {
   }
 
   // Pay for the equipment, if needed.
-  // FIXME: don't process if eq_price is 0.
-  $sql = 'update users set money = money - %d where id = %d;';
-  db_query($sql, $eq_price, $game_user->id);
+  if ($eq_price != 0) {
+    $sql = 'update users set money = money - %d where id = %d;';
+    db_query($sql, $eq_price, $game_user->id);
+  }
 
   // Give energy bonus, if needed.
   if ($eq->energy_bonus > 0) {

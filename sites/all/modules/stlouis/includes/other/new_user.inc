@@ -36,13 +36,13 @@ function game_new_user_fetch_quest_group_0($game_user, &$qg) {
   // No experience: intro text, hide extra quests.
   if ($game_user->experience == 0) {
     $qg->description = <<< EOF
-<div class="new-user">
-<div class="wise_old_man_small">
-</div>
-<p>The city elder continues.</p>
-<p class="second">&quot;If you wish to lead this city,
-  you must learn more about it.</p>
-<p class="second">&quot;Perform your first mission by touching its picture or title.&quot;</p>
+<div class="description-speech-bubble-wrapper background-color">
+  <div class="wise_old_man small">
+  </div>
+  <div class="speech-bubble">
+    <p>If you wish to lead this city, you must learn more about it.</p>
+    <p>Perform your first mission by touching its picture or title.</p>
+  </div>
 </div>
 EOF;
     $qg->descriptionShowExpanded = TRUE;

@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @file functions-staff.inc
+ * @file
  * Misc staff functions for Ziquid games.
  *
  * Synced with CG: yes
  * Synced with 2114: no
+ * Ready for phpcbf: no
  */
 
 /**
@@ -28,7 +29,9 @@ function game_fetch_staff_by_id($game_user, $staff_id) {
 
   WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
-  return db_fetch_object($result);
+  $st = db_fetch_object($result);
+  game_get_icon_path($game_user, $st, 'staff');
+  return $st;
 }
 
 /**
@@ -765,9 +768,10 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
   }
 
   // Pay for the staff, if needed.
-  // FIXME: don't process if st_price is 0.
-  $sql = 'update users set money = money - %d where id = %d;';
-  db_query($sql, $st_price, $game_user->id);
+  if ($st_price != 0) {
+    $sql = 'update users set money = money - %d where id = %d;';
+    db_query($sql, $st_price, $game_user->id);
+  }
 
   // Give energy bonus, if needed.
   if ($st->energy_bonus > 0) {

@@ -28,6 +28,25 @@ db_set_active('default');
     Uprising: St. Louis Changelog
   </div>
 
+    <div class="subtitle">
+      Oct 29, 2018
+    </div>
+    <ul>
+      <li>
+        Refilling Energy via Luck adds to your existing Energy, so that you can
+          have more than your max Energy.
+      </li>
+    </ul>
+
+  <div class="subtitle">
+    Oct 24, 2018
+  </div>
+  <ul>
+    <li>
+      Dressing up for Halloween
+    </li>
+  </ul>
+
   <div class="subtitle">
     Oct 12, 2018
   </div>

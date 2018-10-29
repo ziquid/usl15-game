@@ -1,12 +1,12 @@
 <?php
 
 /**
- * @file stlouis_top20_list.tpl.php
+ * @file
  * Show the top 20 players.
  *
  * Synced with CG: yes
  * Synced with 2114: yes
- * Ready for phpcbf: yes
+ * Ready for phpcbf: done
  * Ready for MVC separation: no
  */
 
@@ -24,17 +24,17 @@ if (empty($game_user->username)) {
 if ($debate == 'Box') {
   $title = 'Top Boxers';
 }
-//elseif ($event_type == EVENT_GATHER_AMETHYST
-//|| $event_type == EVENT_AMETHYST_DONE) {
-//  $title = 'Top 20 Gatherers';
-//}
+/* elseif ($event_type == EVENT_GATHER_AMETHYST
+ || $event_type == EVENT_AMETHYST_DONE) {
+  $title = 'Top 20 Gatherers';
+ } */
 else {
   $title = 'Top 20 Players';
 }
 
 $data = [];
 
-//if ($event_type == EVENT_GATHER_AMETHYST  || $event_type == EVENT_AMETHYST_DONE) {
+// if ($event_type == EVENT_GATHER_AMETHYST  || $event_type == EVENT_AMETHYST_DONE) {
 //
 //  $sql = 'SELECT username, experience, initiative, endurance,
 //    elocution, debates_won, debates_lost, skill_points, luck,
@@ -76,7 +76,7 @@ $data = [];
 //    $data[] = $item;
 //  }
 //
-//}
+// }
 /*else*/ if ($debate == 'Box') {
 
   $already_listed = [];
@@ -621,7 +621,7 @@ if (!$actions_paid) {
   $data = [];
 }
 
-// ------ VIEW ------
+/* ------ VIEW ------ */
 $fetch_header($game_user);
 game_show_elections_menu($game_user);
 
@@ -683,7 +683,7 @@ $last_rank = 0;
 foreach ($data as $rank => $item) {
 firep($item, 'rank ' . $rank);
 
-//  if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+/*  if (empty($item->ep_name)) $item->ep_name = 'Subjugate'; */
 
   $username = $item->username;
   $action_class = '';
@@ -722,10 +722,11 @@ firep($item, 'rank ' . $rank);
     $experience = 'Boxing Points';
   }
 
-//  if ($event_type == EVENT_GATHER_AMETHYST  || $event_type == EVENT_AMETHYST_DONE) {
-//    $exp = $item->meta_int;
-//    $experience = 'Raw Amethyst';
-//  }
+/*
+  if ($event_type == EVENT_GATHER_AMETHYST  || $event_type == EVENT_AMETHYST_DONE) {
+    $exp = $item->meta_int;
+    $experience = 'Raw Amethyst';
+  } */
 
   // What to show.
   switch ($show_what) {
@@ -798,10 +799,10 @@ firep($item, 'rank ' . $rank);
     echo '</div><div class="elections">';
   }
 
-//  if (($event_type == EVENT_GATHER_AMETHYST
-//  || $event_type == EVENT_AMETHYST_DONE)
-//  && $count == 20)
-//    echo '</div><div class="title">The Rest</div><div class="elections">';
+/*  if (($event_type == EVENT_GATHER_AMETHYST
+  || $event_type == EVENT_AMETHYST_DONE)
+  && $count == 20)
+    echo '</div><div class="title">The Rest</div><div class="elections">'; */
 
   if ($rank != $last_rank + 1) {
     echo <<< EOF
