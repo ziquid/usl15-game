@@ -983,6 +983,18 @@ div.speech-bubble-wrapper .wise_old_man {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 150%;
-  color: yellow;
+  color: #d4c41c;
   text-shadow: 1px 1px 4px #0d0f0d;
+}
+
+.lesser-bonus-text {
+  text-align: center;
+  font-weight: bold;
+  font-size: 140%;
+  color: #d4c41c;
+  text-shadow: 1px 1px 4px #0d0f0d;
+}
+
+div.lesser-bonus-text {
+  margin: 12px 0;
 }

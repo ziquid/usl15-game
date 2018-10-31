@@ -248,6 +248,9 @@ else {
   </div>
 </div>';
   }
+  elseif ($options['equipment-succeeded'] == 'loot') {
+    $output .= '<div class="lesser-bonus-text">You Found</div>';
+  }
 
   switch ($options['equipment-buy-succeeded']) {
 
@@ -531,7 +534,8 @@ else {
 EOF;
   }
 
-  if ($options['equipment-succeeded'] == 'quest-bonus') {
+  if ($options['equipment-succeeded'] == 'quest-bonus' ||
+    $options['equipment-succeeded'] == 'loot') {
     $reqs = '';
   }
   else {
@@ -733,7 +737,8 @@ EOF;
   $output .= '</div>';
 
   // BUY buttons.
-  if ($options['equipment-succeeded'] == 'quest-bonus') {
+  if ($options['equipment-succeeded'] == 'quest-bonus' ||
+    $options['equipment-succeeded'] == 'loot') {
     // No buy nor sell buttions.
   }
   elseif ($soon) {
@@ -808,7 +813,7 @@ EOF;
  * @return array
  *   Whether the gain succeeded or not.
  */
-function game_equipment_gain(\stdClass $game_user, $id, $quantity = 1, $eq_price = 0) {
+function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 

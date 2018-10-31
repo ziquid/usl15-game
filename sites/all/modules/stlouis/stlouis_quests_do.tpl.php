@@ -592,10 +592,7 @@ EOF;
       || $game_quest->chance_of_loot >= mt_rand(1, 99))
     && ($under_limit || $game_equipment->quantity_limit == 0)) {
 
-    $sql = 'select * from equipment where id = %d;';
-    $result = db_query($sql, $game_quest->fkey_loot_equipment_id);
-    $loot = db_fetch_object($result);
-
+    $loot = game_fetch_equip_by_id($game_user, $game_quest->fkey_loot_equipment_id);
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
@@ -604,105 +601,12 @@ EOF;
         game_competency_gain($game_user, 'drunk');
       }
 
-      $loot_html = <<< EOF
-<div class="title loot">You Found</div>
-<div class="quest-icon"><img
- src="/sites/default/files/images/equipment/$game-$loot->id.png" width="96"></div>
-<div class="quest-details">
-  <div class="quest-name loot">$loot->name</div>
-  <div class="quest-description">$loot->description</div>
-EOF;
-
-      if ($loot->initiative_bonus > 0) {
-        $loot_html .= <<< EOF
-    <div class="quest-payout">$initiative: +$loot->initiative_bonus
-      </div>
-EOF;
-      }
-      elseif ($loot->initiative_bonus < 0) {
-        $loot_html .= <<< EOF
-    <div class="quest-payout negative">$initiative: $loot->initiative_bonus
-      </div>
-EOF;
-      }
-
-      if ($loot->endurance_bonus > 0) {
-        $loot_html .= <<< EOF
-  <div class="quest-payout">$endurance: +$loot->endurance_bonus
-    </div>
-EOF;
-      }
-      elseif ($loot->endurance_bonus < 0) {
-        $loot_html .= <<< EOF
-  <div class="quest-payout negative">$endurance: $loot->endurance_bonus
-    </div>
-EOF;
-      }
-
-      if ($loot->elocution_bonus > 0) {
-        $loot_html .= <<< EOF
-    <div class="quest-payout">$elocution: +$loot->elocution_bonus
-      </div>
-EOF;
-      }
-      elseif ($loot->elocution_bonus < 0) {
-        $loot_html .= <<< EOF
-    <div class="quest-payout negative">$elocution: $loot->elocution_bonus
-      </div>
-EOF;
-      }
-
-      // Upkeep.
-      if ($loot->upkeep > 0) {
-        $loot_html .= <<< EOF
-    <div class="quest-payout negative">Upkeep: $loot->upkeep every 60 minutes</div>
-EOF;
-      }
-
-      $loot_html .= <<< EOF
-    <!--<p class="second">&nbsp;</p>-->
-  </div>
-EOF;
-
-      // Add/update db entry.
+      game_equipment_gain($game_user, $game_quest->fkey_loot_equipment_id);
       game_competency_gain($game_user, 'looter');
-
-      $sql = 'SELECT equipment.*, equipment_ownership.quantity
-        FROM equipment
-
-        LEFT OUTER JOIN equipment_ownership
-        ON equipment_ownership.fkey_equipment_id = equipment.id
-        AND equipment_ownership.fkey_users_id = %d
-
-        WHERE equipment.id = %d;';
-      $result = db_query($sql, $game_user->id,
-        $game_quest->fkey_loot_equipment_id);
-
-      // Limited to 1 in DB.
-      $game_equipment = db_fetch_object($result);
-
-      // No record exists - insert one.
-      if ($game_equipment->quantity == '') {
-        $sql = 'insert into equipment_ownership (fkey_equipment_id,
-          fkey_users_id, quantity) values (%d, %d, 1);';
-        $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
-          $game_user->id);
-      }
-      else {
-
-        // Existing record - update it.
-        $sql = 'update equipment_ownership set quantity = quantity + 1 where
-          fkey_equipment_id = %d and fkey_users_id = %d;';
-        $result = db_query($sql, $game_quest->fkey_loot_equipment_id,
-          $game_user->id);
-      }
-
-      if ($loot->upkeep > 0) {
-        game_recalc_income($game_user);
-      }
+      $loot_html = game_render_equip($game_user, $loot, $ai_output,
+        ['equipment-succeeded' => 'loot']);
 
     }
-
   }
 
   // Check for loot -- staff.

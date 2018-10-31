@@ -1401,6 +1401,7 @@ EOF;
   echo <<< EOF
 $item->quest_completion_html
 $item->outcome
+$item->loot_html
 <div class="quests">
   <div class="quest-icon $wrong_hood_wrapper">
     {$comment_start}<a href="/$game/quests_do/$arg2/$item->id">{$comment_end}
@@ -1569,7 +1570,7 @@ EOF;
       $item->money_added_str <strong>$game_user->values</strong>
     </div>
   </div>
-  $item->loot_html
+  <!--$item->loot_html-->
   <div class="quest-do-again">
     <div class="quest-do-again-inside">
       <a href="/$game/quests_do/$arg2/$item->id">
