@@ -19,24 +19,21 @@
  * @param int $req_quantity
  *   The quantity needed.
  */
-function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity) {
+function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
-  $sql = 'select quantity from equipment_ownership
-    where fkey_equipment_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $equipment_id, $game_user->id);
-  $quantity = db_fetch_object($result);
+  $eo = game_fetch_equip_by_id($game_user, $equipment_id);
 
-  if ($quantity->quantity >= $req_quantity) {
+  if ($eo->quantity >= $req_quantity) {
     $not_yet = $a_start = $a_end = '';
   }
   else {
     $not_yet = 'not-yet';
     $a_start = '<a href="/' . $game . '/equipment_buy/' .
       $arg2 . '/' . $equipment_id . '/' .
-      ($req_quantity - $quantity->quantity) . '">';
+      ($req_quantity - $eo->quantity) . '">';
     $a_end = '</a>';
   }
 
@@ -44,9 +41,7 @@ function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quant
     <div class="quest-required_stuff">Requires
       <div class="quest-required_equipment">
         $a_start
-        <img class="$not_yet"
-          src="/sites/default/files/images/equipment/$game-$equipment_id.png"
-          width="48">
+          <img class="$not_yet" src="$eo->icon_path" width="48">
         $a_end
       </div>&nbsp;x$req_quantity
     </div>
@@ -161,7 +156,7 @@ function game_fetch_next_equip(\stdClass $game_user) {
  * @return \stdClass
  *   The equipment item, if any.
  */
-function game_fetch_equip_by_id($game_user, $equip_id) {
+function game_fetch_equip_by_id(\stdClass $game_user, $equip_id) {
   $sql = 'SELECT equipment.*, equipment_ownership.quantity
   FROM equipment
 
