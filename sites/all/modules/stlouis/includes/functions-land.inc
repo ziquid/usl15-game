@@ -575,6 +575,9 @@ EOF;
  *   The number of land.
  * @param $ex_price
  *   The price of the land.
+ *
+ * @return bool
+ *   Returns a true value.
  */
 function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
@@ -626,6 +629,9 @@ function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
  *   The number of land.
  * @param $ex_price
  *   The price of the land.
+ *
+ * @return bool
+ *   Checks whether is there a land to lose or not.
  */
 function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
