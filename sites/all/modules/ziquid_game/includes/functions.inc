@@ -2709,8 +2709,8 @@ function zg_get_html($key) {
     $sql = 'insert into html_well
       (html_key, html_value, comment)
       values ("%s", "%s", "FIXME -- automatically-generated value");';
-    db_query($sql, $key, "Wonderland " . $key);
-    return "Wonderland " . $key;
+    db_query($sql, $key, 'Wonderland ' . $key);
+    return 'Wonderland ' . $key;
   }
 
   return FALSE;
