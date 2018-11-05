@@ -10,14 +10,7 @@
 
 function stlouis_menu() {
 
-  $items['stlouis/home/%'] = [
-    'title' => 'St. Louis Home Page',
-    'page callback' => 'stlouis_homepage_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
+  $items = [];
   $items['stlouis/user/%'] = [
     'title' => 'St. Louis User Profile Page',
     'page callback' => 'stlouis_userprofile_callback',
@@ -226,14 +219,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/welcome/%'] = [
-    'title' => 'St. Louis Welcome',
-    'page callback' => 'stlouis_welcome_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/choose_clan/%/%'] = [
     'title' => 'St. Louis Choose Clan',
     'page callback' => 'stlouis_choose_clan_callback',
@@ -437,14 +422,6 @@ function stlouis_menu() {
   $items['stlouis/authenticate/%'] = [
     'title' => 'St. Louis Authenticate',
     'page callback' => 'stlouis_authenticate_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/bounce/%'] = [
-    'title' => 'St. Louis bounce',
-    'page callback' => 'stlouis_bounce_callback',
     'page arguments' => [2],
     'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
@@ -1056,13 +1033,6 @@ function stlouis_authenticate_callback($phone_id) {
   return theme('stlouis_authenticate', $phone_id);
 }
 
-function stlouis_bounce_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_bounce', $phone_id);
-}
-
 function stlouis_bounce_040_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1531,13 +1501,6 @@ function stlouis_theme() {
 
     'stlouis_authenticate' => [
       'template' => 'stlouis_authenticate',
-      'arguments' => [
-        'phone_id' => NULL,
-      ]
-    ],
-
-    'stlouis_bounce' => [
-      'template' => 'stlouis_bounce',
       'arguments' => [
         'phone_id' => NULL,
       ]

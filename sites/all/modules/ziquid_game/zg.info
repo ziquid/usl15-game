@@ -1,0 +1,6 @@
+name = Ziquid Game Server
+description = Game server for all Ziquid Games
+package = ziquid games
+core = 6.x
+
+version = "6.x-0.70"

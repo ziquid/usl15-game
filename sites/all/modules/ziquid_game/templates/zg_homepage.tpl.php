@@ -13,8 +13,8 @@
 $version = 'v0.7.0, Oct 29 2018';
 
 global $game, $phone_id;
-
-include drupal_get_path('module', $game) . '/game_defs.inc';
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+firep(drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc', 'include file');
 $game_user = $fetch_user();
 $message = check_plain($_GET['message']);
 

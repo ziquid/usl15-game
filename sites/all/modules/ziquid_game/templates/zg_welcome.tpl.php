@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Stlouis welcome page.
+ * Game welcome page.
  *
  * Synced with CG: yes
  * Synced with 2114: yes
@@ -14,15 +14,15 @@ global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
 $game = check_plain(arg(0));
-$get_phoneid = '_' . $game . '_get_phoneid';
-$phone_id = $get_phoneid();
+$phone_id = zg_get_phoneid();
 $arg2 = check_plain(arg(2));
 $ip_address = ip_address();
 
 db_set_active('game_' . $game);
 
-$default_neighborhood = 81;
-$default_value = 'Greenbacks';
+$default_neighborhood = zg_get_default('initial_hood');
+$default_value = zg_get_default('initial_user_value');
+$tagline = zg_get_html('tagline');
 
 // Check to make sure not too many from the same IP address.
 $sql = 'select count(`value`) as count from user_attributes
@@ -45,7 +45,7 @@ echo <<< EOF
   <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
 <div class="tagline">
-  &bull; Become the Mayor &bull;
+  $tagline
 </div>
 EOF;
 
@@ -78,7 +78,7 @@ EOF;
       remote_ip = "%s";';
     $result = db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
 
-    $fetch_user = '_' . $game . '_fetch_user';
+    $fetch_user = 'zg_fetch_user';
     $game_user = $fetch_user();
 
     // Notify all party welcome comm members.
@@ -93,15 +93,10 @@ EOF;
     }
 
     $msg = 'I am a new user who has just joined the game.  Please welcome me.';
-    game_send_user_message($game_user->id, $data, 0, $msg, 'user');
-/*    if (game_get_value($game_user, 'enabled_alpha')) { */
+    zg_send_user_message($game_user->id, $data, 0, $msg, 'user');
       $links = 'quest_groups';
-/*    }
-    else {
-      $links = 'quests';
-    }*/
-    game_button($links, 'continue', '?show_expanded=0');
-    game_speech($game_user, 'Get ready to become Mayor!', TRUE);
+    zg_button($links, 'continue', '?show_expanded=0');
+    zg_speech($game_user, 'Get ready to become Mayor!', TRUE);
     db_set_active('default');
     break;
 
@@ -119,8 +114,8 @@ EOF;
 </div>
 EOF;
 
-    game_button('welcome', 'continue', '?page=2');
-    game_speech($game_user, 'Hello there', TRUE);
+    zg_button('welcome', 'continue', '?page=2');
+    zg_speech($game_user, 'Hello there', TRUE);
     db_set_active('default');
     break;
 }

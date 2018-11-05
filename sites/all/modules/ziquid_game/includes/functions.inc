@@ -1,20 +1,19 @@
 <?php
 
 /**
- * Misc functions for Ziquid games.
- *
  * @file
+ * Misc functions for Ziquid games.
  *
  * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
  */
 
-require_once drupal_get_path('module', 'stlouis') . '/includes/functions-staff.inc';
-//require_once drupal_get_path('module', 'stlouis') . '/includes/functions-no.inc';
-require_once drupal_get_path('module', 'stlouis') . '/includes/functions-equip.inc';
+require_once drupal_get_path('module', 'zg') . '/includes/functions-staff.inc';
+require_once drupal_get_path('module', 'zg') . '/includes/functions-no.inc';
+require_once drupal_get_path('module', 'zg') . '/includes/functions-equip.inc';
 
-function game_button($link = 'home', $type = 'continue', $extra_link = '') {
+function zg_button($link = 'home', $type = 'continue', $extra_link = '') {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -40,7 +39,7 @@ EOF;
  *   Force the code to instruct the client to speak even if user has not opted
  *   in.
  */
-function game_speech($game_user, $text, $force = FALSE) {
+function zg_speech($game_user, $text, $force = FALSE) {
 //  global $game;
 //  include drupal_get_path('module', $game) . '/game_defs.inc';
   if ($force || game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
@@ -61,7 +60,7 @@ function game_speech($game_user, $text, $force = FALSE) {
  * @return \stdClass[]
  *   The array of land objects.
  */
-function game_fetch_visible_land(\stdClass $game_user) {
+function zg_fetch_visible_land(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE land.id > 0';
   }
@@ -119,7 +118,7 @@ function game_fetch_visible_land(\stdClass $game_user) {
  * @return \stdClass
  *   The next land item to show, if any.
  */
-function game_fetch_next_land(\stdClass $game_user) {
+function zg_fetch_next_land(\stdClass $game_user) {
   $sql = 'SELECT land.*, land_ownership.quantity
   FROM land
 
@@ -156,7 +155,7 @@ function game_fetch_next_land(\stdClass $game_user) {
  * @return \stdClass
  *   The land item, if any.
  */
-function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
+function zg_fetch_land_by_id(\stdClass $game_user, $land_id) {
   $sql = 'SELECT land.*, land_ownership.quantity,
   competencies.name as competency, comp1.name as competency_name_1
   FROM land
@@ -176,7 +175,7 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
   return $item;
 }
 
-function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
+function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -608,7 +607,7 @@ EOF;
  * @return \stdClass|\stdClass[]
  *   A quest group object or the entire array of quest group objects.
  */
-function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
+function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
   $data = [];
 
   // Admin?  Show all quests.
@@ -740,7 +739,7 @@ function game_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
  * @return \stdClass[]
  *   The array of quest group objects.
  */
-function game_fetch_visible_quest_groups(\stdClass $game_user) {
+function zg_fetch_visible_quest_groups(\stdClass $game_user) {
   $data = $data2 = [];
   $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
     left join quests q on q.group = qg.id
@@ -773,7 +772,7 @@ function game_fetch_visible_quest_groups(\stdClass $game_user) {
  * @param string $ai_output
  *   Unused.
  */
-function game_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
+function zg_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -800,7 +799,7 @@ EOF;
  * @param array $options
  *   Various options to control the display.
  */
-function game_show_quest_group_slide(\stdClass $game_user, \stdClass $qgo, $options = []) {
+function zg_show_quest_group_slide(\stdClass $game_user, \stdClass $qgo, $options = []) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -949,7 +948,7 @@ EOF;
  * @return array
  *   Quest group stats array.
  */
-function game_fetch_quest_group_stats(\stdClass $game_user, $active_quests, $group_to_show) {
+function zg_fetch_quest_group_stats(\stdClass $game_user, $active_quests, $group_to_show) {
 
   // Get quest group stats.
   $sql = 'SELECT sum(bonus_given) as completed, count(quests.id) as total
@@ -1001,7 +1000,7 @@ function game_fetch_quest_group_stats(\stdClass $game_user, $active_quests, $gro
  *   The RGB value corresponding to the percentage done, the width of a
  *   progress bar, and some CSS.
  */
-function game_get_quest_completion($completed_percent, $percentage_target, $percentage_divisor) {
+function zg_get_quest_completion($completed_percent, $percentage_target, $percentage_divisor) {
   if (empty($completed_percent)) {
     $completed_percent = 0;
   }
@@ -1081,7 +1080,7 @@ function game_get_quest_completion($completed_percent, $percentage_target, $perc
  * @param \stdClass $game_user
  *   The game user object.
  */
-function game_recalc_income(\stdClass $game_user) {
+function zg_recalc_income(\stdClass $game_user) {
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -1118,7 +1117,7 @@ function game_recalc_income(\stdClass $game_user) {
   $game_user->expenses = $item->expenses;
 }
 
-function game_show_aides_menu(\stdClass $game_user) {
+function zg_show_aides_menu(\stdClass $game_user) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1240,7 +1239,7 @@ EOF;
   }
 }
 
-function game_show_elections_menu(\stdClass $game_user) {
+function zg_show_elections_menu(\stdClass $game_user) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1274,7 +1273,7 @@ EOF;
 //  _show_goal($game_user);
 }
 
-function game_show_profile_menu(\stdClass $game_user) {
+function zg_show_profile_menu(\stdClass $game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1316,7 +1315,7 @@ EOF;
  * @param \stdClass $item
  *   The quest object.
  */
-function game_show_quest_slide(\stdClass $game_user, \stdClass $item) {
+function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -1597,7 +1596,7 @@ EOF;
  * @param string $type
  *   The type of object.
  */
-function game_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
+function zg_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1622,7 +1621,7 @@ function game_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   }
 }
 
-function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
+function zg_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1661,7 +1660,7 @@ function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
+function zg_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1715,7 +1714,7 @@ function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   return TRUE;
 }
 
-function game_competency_gain(\stdClass $game_user, $id, $level = 1) {
+function zg_competency_gain(\stdClass $game_user, $id, $level = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1813,7 +1812,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
  * @return bool
  *   Whether the action(s) could be debited from the game user.
  */
-function game_action_use(\stdClass $game_user, $quantity = 1) {
+function zg_action_use(\stdClass $game_user, $quantity = 1) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1853,7 +1852,7 @@ function game_action_use(\stdClass $game_user, $quantity = 1) {
  * @return bool
  *   Whether the update was successful or not.
  */
-function game_karma(\stdClass $game_user, $text, $quantity) {
+function zg_karma(\stdClass $game_user, $text, $quantity) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1885,7 +1884,7 @@ function game_karma(\stdClass $game_user, $text, $quantity) {
  * @param string $subtype
  *   Subtype of $type.
  */
-function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
+function zg_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -1909,7 +1908,7 @@ function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   return TRUE;
 }
 
-function game_competency_level(\stdClass $game_user, $id) {
+function zg_competency_level(\stdClass $game_user, $id) {
 
   // Return the user's competency level [0..5] for a given competency.
   include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
@@ -1986,7 +1985,7 @@ function game_competency_level(\stdClass $game_user, $id) {
  * @param int $level_needed
  *   The comp. level needed.
  */
-function game_show_by_level(\stdClass $game_user, $text, $level_obtained, $level_needed = 0) {
+function zg_show_by_level(\stdClass $game_user, $text, $level_obtained, $level_needed = 0) {
   if ($level_obtained >= $level_needed) {
     if ($game_user->meta == 'admin') {
       $level_debug = ' (' . $level_obtained . ':' . $level_needed . ')';
@@ -2001,7 +2000,7 @@ function game_show_by_level(\stdClass $game_user, $text, $level_obtained, $level
   }
 }
 
-function game_competency_min_count($level, $comp_level) {
+function zg_competency_min_count($level, $comp_level) {
 
   // Return the minimum use count for a given level [0..5] and competency level.
   // [1..3].
@@ -2039,7 +2038,7 @@ function game_competency_min_count($level, $comp_level) {
 }
 
 
-function game_competency_level_name($id, $req = FALSE) {
+function zg_competency_level_name($id, $req = FALSE) {
 
   if ($req) {
     $competencies = [
@@ -2065,7 +2064,7 @@ function game_competency_level_name($id, $req = FALSE) {
   return $competencies[$id];
 }
 
-function game_competency_name($comp) {
+function zg_competency_name($comp) {
   $comps = &drupal_static(__FUNCTION__, []);
 
   if (!count($comps)) {
@@ -2080,7 +2079,7 @@ function game_competency_name($comp) {
   return $comps[$comp];
 }
 
-function game_fetch_user_by_id($id) {
+function zg_fetch_user_by_id($id) {
 
   // Simple per-page cache.
   static $user_cache;
@@ -2168,7 +2167,7 @@ firep($item, 'game_fetch_user_by_id for id ' . $id);
  *   Whether the user message succeeded or not (for a single uid),
  *   or whether ALL messages succeeded or not (for an array of uids).
  */
-function game_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
+function zg_send_user_message($from, $to, $private = 0, $message, $subtype = 'user') {
   $message = nl2br($message);
   if (is_array($to) && is_numeric($to[0])) {
     $result = TRUE;
@@ -2197,13 +2196,13 @@ function game_send_user_message($from, $to, $private = 0, $message, $subtype = '
  * @return bool
  *   Whether the message succeeded or not.
  */
-function game_send_system_message($from, $message, $subtype = 'system') {
+function zg_send_system_message($from, $message, $subtype = 'system') {
   $sql = 'insert into system_messages (subtype, fkey_users_from_id,
     fkey_users_to_id, message) values ("%s", %d, 0, "%s");';
   return db_query($sql, $subtype, $from, $message);
 }
 
-function game_zombie_name() {
+function zg_zombie_name() {
 
   $first = [
     'Angry',
@@ -2249,7 +2248,7 @@ function game_zombie_name() {
  *   An object with whether the action can be performed; if FALSE, also the
  *   hours, minutes, and seconds until action can be performed.
  */
-function game_can_do_yet($game_user, $key) {
+function zg_can_do_yet($game_user, $key) {
   $can_do = new stdClass();
   $can_do->time_ready = (int) game_get_value($game_user, $key, REQUEST_TIME);
   $can_do->time_remaining = $can_do->time_ready - REQUEST_TIME;
@@ -2282,7 +2281,7 @@ function game_can_do_yet($game_user, $key) {
  *   An object with whether a bonus is in effect and the hours, minutes, and
  *   seconds remaining, or FALSE.
  */
-function game_timed_bonus_in_effect($game_user, $bonus_key) {
+function zg_timed_bonus_in_effect($game_user, $bonus_key) {
   $in_effect = new stdClass();
   $in_effect->time_ready = (int) game_get_value($game_user, $bonus_key, REQUEST_TIME);
   $in_effect->time_remaining = $in_effect->time_ready - REQUEST_TIME;
@@ -2311,7 +2310,7 @@ function game_timed_bonus_in_effect($game_user, $bonus_key) {
  * @param int $time_secs
  *   The number of seconds to set for the timer.
  */
-function game_set_timer($game_user, $timer_key, $time_secs) {
+function zg_set_timer($game_user, $timer_key, $time_secs) {
   game_set_value($game_user, $timer_key, REQUEST_TIME + $time_secs);
 }
 
@@ -2328,7 +2327,7 @@ function game_set_timer($game_user, $timer_key, $time_secs) {
  * @return mixed
  *   The value, if found, or $default, if not found.
  */
-function game_get_value($game_user, $key, $default = NULL) {
+function zg_get_value($game_user, $key, $default = NULL) {
   $sql = 'SELECT `value` FROM {user_attributes}
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
   $result = db_query($sql, (int) $game_user->id, $key);
@@ -2358,7 +2357,7 @@ function game_get_value($game_user, $key, $default = NULL) {
  * @return bool
  *   TRUE if the set succeeded; FALSE otherwise.
  */
-function game_set_value($game_user, $key, $value = "set") {
+function zg_set_value($game_user, $key, $value = "set") {
 
   // Array?  Serialize the data before storing.
   if (is_array($value)) {
@@ -2381,7 +2380,7 @@ function game_set_value($game_user, $key, $value = "set") {
  * @return bool
  *   Whether the removal succeeded or not.
  */
-function game_remove_value($game_user, $key) {
+function zg_remove_value($game_user, $key) {
   $sql = 'delete from {user_attributes}
     where `fkey_users_id` = %d and `key` = "%s";';
   return db_query($sql, $game_user->id, $key);
@@ -2396,7 +2395,7 @@ function game_remove_value($game_user, $key) {
  * @return int
  *   The offer.
  */
-function game_luck_money_offer($game_user) {
+function zg_luck_money_offer($game_user) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -2425,7 +2424,7 @@ function game_luck_money_offer($game_user) {
  * @return bool
  *   TRUE if any hooks exist and returned TRUE.  FALSE otherwise.
  */
-function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
+function zg_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
   global $game;
 
   $retval = FALSE;
@@ -2457,7 +2456,7 @@ function game_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 =
  * @param string $type
  *   The type file inclusion.
  */
-function game_includes_add($include_file, $type) {
+function zg_includes_add($include_file, $type) {
   global $game;
 //dpm ($include_file, 'calling game_includes_add for ' . $type . ' file');
   $game_include_list = &drupal_static('game_include_list', []);
@@ -2501,7 +2500,7 @@ function game_includes_add($include_file, $type) {
  * @return string[]
  *   The list of includes.
  */
-function game_includes_get() {
+function zg_includes_get() {
   $game_include_list = &drupal_static('game_include_list', []);
   return $game_include_list;
 }
@@ -2514,7 +2513,7 @@ function game_includes_get() {
  * @param $ai_output
  *   The output to show.
  */
-function game_show_ai_output($phone_id, $ai_output) {
+function zg_show_ai_output($phone_id, $ai_output) {
   if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
   }
@@ -2533,7 +2532,7 @@ function game_show_ai_output($phone_id, $ai_output) {
  * @return bool
  *   Whether the user has that trait or not.
  */
-function game_user_has_trait($game_user, $trait) {
+function zg_user_has_trait($game_user, $trait) {
   if ($game_user->meta == 'admin' ||
     (array_key_exists($trait, $game_user->traits) &&
     $game_user->traits[$trait])) {
@@ -2557,7 +2556,7 @@ function game_user_has_trait($game_user, $trait) {
  *   Returns the from hood object, the to hood object, the number of actions to
  * move, and the verb used to display the move.
  */
-function game_get_actions_to_move($game_user, $from_id, $to_id) {
+function zg_get_actions_to_move($game_user, $from_id, $to_id) {
   $sql = 'select * from neighborhoods where id = %d;';
   $result = db_query($sql, $from_id);
   $from_hood = db_fetch_object($result);
@@ -2592,4 +2591,121 @@ function game_get_actions_to_move($game_user, $from_id, $to_id) {
   $actions_to_move = max($actions_to_move, 6);
   game_alter('actions_to_move', $game_user, $actions_to_move);
   return [$from_hood, $to_hood, $actions_to_move, $verb];
+}
+
+/**
+ * Get the list of supported game machine names.
+ *
+ * @return string[]
+ *   The list of game machine names.
+ */
+function zg_get_game_list() {
+  return [
+    'stlouis',
+    'wonderland',
+  ];
+}
+
+function zg_get_fbid() {
+
+  require_once 'fb/facebook.php';
+
+  // Facebook configuration.
+  if (arg(0) == 'stlouis') {
+    $app_id = '234564386596716';
+    $secret = '0b631d36aaba590fe31b2f1b9392aad7';
+    $canvas_page = 'https://apps.facebook.com/uprisingstlouis/';
+  }
+  else if (arg(0) == 'celestial_glory') {
+    $app_id = '315942001775829';
+    $secret = '648a1945d57bdad144677f5cfd045f62';
+    $canvas_page = 'https://apps.facebook.com/celestial_glory/';
+  }
+  else {
+    echo 'uhoh!  which game am i?'; exit;
+  }
+
+  // First, try normal facebook getUser().  If that works, awesome.
+  $facebook = new Facebook([
+    'appId'  => $app_id,
+    'secret' => $secret,
+    'cookie' => TRUE,
+  ]);
+
+  //  echo '<pre>'; print_r($_SERVER); echo '</pre>';
+  $signed_request = $_REQUEST['signed_request'];
+  //  echo '<pre>'; print_r($signed_request); echo '</pre>';
+
+  // Get User ID.
+  $user = $facebook->getUser();
+  if ($user != '0') {
+    return 'fb=' . $user;
+  }
+
+  // GetUser() didn't work.  Try oAuth.  Maybe user needs to log in or
+  // authorize the game?
+  $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
+    . $app_id . '&redirect_uri=' . urlencode($canvas_page);
+
+  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
+  $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
+
+  if (empty($data["user_id"])) {
+    echo '<a target="_top" href="' . $auth_url . '">Login to Facebook</a>';
+    exit;
+    //    echo("<script> top.location.href='" . $auth_url . "'</script>");
+  }
+  else {
+    //    echo ("Welcome User: " . $data["user_id"]);
+    return 'fb=' . $data['user_id'];
+  }
+}
+
+/**
+ * Get a bit of HTML from the html well.
+ *
+ * @param string $key
+ *   The key of the KVP pair.
+ *
+ * @return string|bool
+ *   The resultant HTML, or FALSE if not found.
+ */
+function zg_get_html($key) {
+  $sql = 'select html_value from html_well where html_key = "%s";';
+  $result = db_query($sql, $key);
+  $item = db_fetch_object($result);
+  if (is_object($item)) {
+    return $item->html_value;
+  }
+  return FALSE;
+}
+
+/**
+ * Get a default value for the current game.
+ *
+ * @param string $key
+ *   The key of the KVP pair.
+ *
+ * @return mixed
+ *   The resultant value, or FALSE if not found.
+ */
+function zg_get_default($key) {
+  $sql = 'select game_value, value_type from game_defaults where game_key = "%s";';
+  $result = db_query($sql, $key);
+  $item = db_fetch_object($result);
+  if (is_object($item)) {
+    switch ($item->value_type) {
+      case 'int':
+        return (int) $item->game_value;
+      case 'text':
+        return $item->game_value;
+      case 'serialized':
+        return unserialize($item->game_value);
+      case 'float':
+        return (float) $item->game_value;
+      case 'bool':
+        return (bool) $item->game_value;
+    }
+  }
+  return FALSE;
 }

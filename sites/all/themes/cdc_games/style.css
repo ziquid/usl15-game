@@ -4,6 +4,7 @@ body {
   font: 12px Arial, Helvetica, sans-serif;
   color: #fff;
   max-width: 320px;
+  background-color: black;
 }
 
 h3, h4 {
@@ -524,6 +525,7 @@ a.crafting-submit-button {
 }
 
 .welcome-continue a, .election-continue a {
+  border: 1px solid #1ca443;
   border-radius: 4px;
   -moz-border-radius: 4px;
   padding: 3px;
@@ -621,24 +623,36 @@ a.crafting-submit-button {
   color: red;
 }
 
-.news .message-body.system {
+.news .message-body.mayor {
   color: green;
 }
 
+.news .message-body.mayor.mayor-system {
+}
+
+.news .message-body.mayor.mayor-mayor {
+}
+
 .news .message-body.user {
-  color: #aab030;
+color: #aab030;
+}
+
+.news .message-body.user.user-png {
+}
+
+.news .message-body.user.user-comp {
 }
 
 .news .message-body.challenge {
-  color: #9f7b36;
+color: #9f7b36;
 }
 
 .news .message-body.party {
-  color: #aaa;
+color: #aaa;
 }
 
 .news .message-body.values {
-  color: #5abafe;
+color: #5abafe;
 }
 
 .news p {
@@ -724,6 +738,9 @@ a.crafting-submit-button {
 
 .news-item {
   width: 100%;
+}
+
+.location + .news {
 }
 
 .user-profile .action {
@@ -936,6 +953,12 @@ a.try-an-election, input.try-an-election {
 .send-message .block-user {
   float: left;
   margin: 9px 3px 3px 3px;
+  border: 1px solid #188433;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.send-message .block-user a {
 }
 
 .action-effect {
@@ -1167,4 +1190,395 @@ img.round4 {
   border: 10px solid transparent;
   border-right: 20px solid #107014;
   z-index: 3;
+}
+
+/* based on https://codepen.io/stilllife00/pen/avXpgJ */
+.colorize-blue {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-red {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-orange {
+  filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(-25deg) saturate(1000%) contrast(0.7);
+}
+
+.colorize-yellow {
+  filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(5deg) saturate(1000%) contrast(0.7);
+}
+
+.colorize-green {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
+}
+
+.colorize-grey, .colorize-gray {
+  filter: grayscale(100%) brightness(110%) contrast(0.9);
+}
+
+.colorize-black {
+  filter: invert(30%) grayscale(100%) brightness(70%) contrast(4);
+}
+
+a.button-continue {
+  border: 1px solid #4d1;
+  display: inline-block;
+  font-family: Helvetica, Arial, "Verdana", "sans-serif";
+  border-radius: 6px;
+}
+
+.button-wrapper {
+  text-align: center;
+}
+
+.tagline {
+  text-align: center;
+  font-weight: bold;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+}
+
+.welcome .subtitle {
+}
+
+.welcome p + .subtitle {
+}
+
+.welcome ul {
+}
+
+.main-menu .menu-option {
+  border: 2px solid white;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.elders-menu .menu-option {
+  border: 2px solid white;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  text-align: center;
+}
+
+.menu-option a {
+}
+
+.menu-option.not-yet {
+}
+
+.quests, .land {
+  text-align: left;
+}
+
+.quests .quest-required_stuff.missing {
+}
+
+.quests .quest-payout.negative,
+.land .land-payout.negative, .land-soon .land-payout.negative {
+}
+
+.quests .quest-description, .land .land-description {
+}
+
+.quests .quest-description .not-yet, .land .land-description .not-yet {
+}
+
+.quests .quest-required_stuff .quest-required_equipment img.not-yet {
+  border: solid 0.5px #c00;
+}
+
+.quests .quest-required_stuff .quest-required_equipment img {
+  border: solid 0.5px #0c0;
+}
+
+.quest-failed, .election-failed, .land-failed, .title.failed {
+}
+
+.quest-do-again, .land-buy-again {
+  text-align: right;
+}
+
+.quest-do-again-inside, .land-buy-again-inside {
+  border: 1px solid #1ca443;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.quest-do-again a, .land-buy-again a {
+}
+
+.quests .quest-name.loot {
+}
+
+.quests .quest-name.not-yet {
+}
+
+.quests .quest-num, .quests .quest-requisites, .quests .quest-disbursements {
+  display: none;
+}
+
+.land .land-owned {
+}
+
+.level-up.happy {
+}
+
+.choose-clan-name {
+}
+
+.choose-clan-name a {
+}
+
+.choose-clan-slogan {
+}
+
+.wise_old_man_large, .wise_old_man {
+}
+
+.wise_old_man_small, .wise_old_man.small {
+}
+
+.wise_old_man.sad {
+}
+
+.wise_old_man.happy {
+}
+
+.city-icon {
+  border-radius: 8px;
+}
+
+.elections .election-details .action, .land .land-buy-button,
+.land .land-sell-button, .land .land-perform-button,
+.send-message-send-wrapper .send-message-send,
+.quests .quests-perform-button, .crafting-submit-button {
+  border: 1px solid #188433;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+}
+
+.elections .election-details .action.not-yet, .land .land-buy-button.not-yet,
+.land .land-sell-button.not-yet {
+  border: 1px solid #333833;
+}
+
+.elections .election-details .action a, .land .land-buy-button a,
+.land .land-sell-button a, .land form input.land-buy-button {
+}
+
+.user-profile .event-status {
+}
+
+.highlighted {
+}
+
+.event-info .subtitle {
+}
+
+.event-info .subsubtitle {
+}
+
+a.version {
+  text-align: center;
+}
+
+.new-main-menu .elections-menu {
+  font-family: Georgia, "times new roman", serif;
+}
+
+.too-soon {
+}
+
+.competency-tag {
+  border-radius: 4px;
+  font-family: "times new roman", Roman, Serif;
+}
+
+textarea {
+}
+
+#drupalforfirebug_general {
+  display: block !important;
+}
+
+.swiper-container {
+}
+
+.swiper-slide {
+  text-align: center;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+}
+
+.swiper-slide .title {
+}
+
+.swiper-slide .title.loot {
+}
+
+.swiper-slide .quest-images {
+}
+
+.swiper-slide.overview .quest-images {
+  border-left: solid 1px rgba(224, 255, 240, 0.8);
+  border-right: solid 1px rgba(224, 255, 240, 0.8);
+}
+
+.quest-group-name, .quest-group-title {
+  display: block;
+}
+
+.quest-group-name a, .quest-group-title a {
+}
+
+.swiper-slide .title .quest-group-name {
+}
+
+.swiper-slide .title .quest-group-title {
+}
+
+.fit-box {
+}
+
+.swiper-slide .title .quest-group-name.admin-obfuscate {
+}
+
+.swiper-slide .title .overview-only {
+  display: none;
+}
+
+.swiper-slide.overview .title .overview-only {
+  display: inline-block;
+}
+
+.swiper-slide.overview .title img.overview-only {
+  display: inline-block;
+  border: 0.5px solid #3c0;
+  border-radius: 6px;
+}
+
+.wrong-hood-wrapper,  .not-yet-wrapper {
+}
+
+div + .wrong-hood-wrapper {
+  display: inline-block;
+}
+
+.quest-icon .wrong-hood-wrapper {
+}
+
+img.wrong-hood {
+}
+
+input.wrong-hood {
+  text-align: left;
+}
+
+input + img.wrong-hood-overlay {
+}
+
+img.wrong-hood-overlay {
+}
+
+.not-yet-wrapper img.not-yet {
+}
+
+span.not-yet-overlay {
+}
+
+.quests span.not-yet-overlay {
+}
+
+.swiper-slide .description {
+  display: none;
+  border-left: solid 1px rgba(224, 255, 240, 0.8);
+  border-right: solid 1px rgba(224, 255, 240, 0.8);
+}
+
+.swiper-slide.overview .description, .swiper-slide .description.show-expanded {
+  display: flex;
+}
+
+.swiper-slide.overview .description.empty {
+  border-left: none;
+  border-right: none;
+}
+
+.swiper-slide.overview .quests {
+  display: none;
+}
+
+.swiper-slide .quests {
+  border: none;
+  -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
+}
+
+.swiper-slide .quests .quest-name a {
+}
+
+.swiper-slide .quests .quest-experience,
+.swiper-slide .quests .quest-money,
+.swiper-slide .quests .quest-required_energy,
+.swiper-slide .quests .quest-required_stuff,
+.swiper-slide .quests .quest-payout {
+}
+
+.swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
+}
+
+.swiper-container .swiper-button-prev, .swiper-container .swiper-container-rtl .swiper-button-next {
+}
+
+.swiper-container .swiper-button-next, .swiper-container .swiper-container-rtl .swiper-button-prev {
+}
+
+.system-message-response {
+  text-align: center;
+  border: solid 1px #f8fefc;
+  border-radius: 3px;
+}
+
+div.description-speech-bubble-wrapper {
+  text-align: left;
+}
+
+div.speech-bubble-wrapper {
+  text-align: left;
+}
+
+div.description-speech-bubble-wrapper .wise_old_man {
+}
+
+div.speech-bubble-wrapper .wise_old_man {
+}
+
+.quests .quest-icon-baseline-overlay {
+  border-radius: 4px;
+}
+
+.quests .quest-icon-overlay {
+  border-radius: 4px;
+}
+
+.bonus-text {
+  text-align: center;
+}
+
+.lesser-bonus-text {
+  text-align: center;
+}
+
+div.lesser-bonus-text {
 }

@@ -19,7 +19,7 @@
  * @param int $req_quantity
  *   The quantity needed.
  */
-function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
+function zg_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -57,7 +57,7 @@ EOF;
  * @return \stdClass[]
  *   The array of equipment objects.
  */
-function game_fetch_visible_equip(\stdClass $game_user) {
+function zg_fetch_visible_equip(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE equipment.id > 0';
   }
@@ -110,7 +110,7 @@ function game_fetch_visible_equip(\stdClass $game_user) {
  * @return \stdClass
  *   The next equipment item to show, if any.
  */
-function game_fetch_next_equip(\stdClass $game_user) {
+function zg_fetch_next_equip(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'AND equipment.id > 0';
   }
@@ -156,7 +156,7 @@ function game_fetch_next_equip(\stdClass $game_user) {
  * @return \stdClass
  *   The equipment item, if any.
  */
-function game_fetch_equip_by_id(\stdClass $game_user, $equip_id) {
+function zg_fetch_equip_by_id(\stdClass $game_user, $equip_id) {
   $sql = 'SELECT equipment.*, equipment_ownership.quantity
   FROM equipment
 
@@ -185,7 +185,7 @@ function game_fetch_equip_by_id(\stdClass $game_user, $equip_id) {
  * @return string
  *   The rendered HTML.
  */
-function game_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
+function zg_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
   $html = game_render_equip($game_user, $item, $ai_output, $options);
   print $html;
   return $html;
@@ -206,7 +206,7 @@ function game_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $op
  * @return string
  *   The rendered HTML.
  */
-function game_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
+function zg_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
 
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
@@ -808,7 +808,7 @@ EOF;
  * @return array
  *   Whether the gain succeeded or not.
  */
-function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_price = 0) {
+function zg_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -900,7 +900,7 @@ function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_pric
  * @return bool
  *   Whether the sale succeeded or not.
  */
-function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
+function zg_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -955,7 +955,7 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
  * @return bool
  *   Whether the sale succeeded or not.
  */
-function game_equipment_use(&$game_user, $id, $quantity) {
+function zg_equipment_use(&$game_user, $id, $quantity) {
   global $game;
   include drupal_get_path('module', $game) . '/game_defs.inc';
 
@@ -970,7 +970,7 @@ function game_equipment_use(&$game_user, $id, $quantity) {
   }
 }
 
-function game_show_equipment(\stdClass $game_user, \stdClass $item, $options = []) {
+function zg_show_equipment(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc';

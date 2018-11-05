@@ -6,7 +6,7 @@
 *
 * Synced with CG: yes
 * Synced with 2114: yes
-* Ready for phpcbf: no
+* Ready for phpcbf: yes
 * Ready for MVC separation: no
 */
 
@@ -15,8 +15,7 @@ $arg2 = check_plain(arg(2));
 
 if ($arg2 == 'facebook') {
 
-  $get_id = '_' . $game . '_get_fbid';
-  $phone_id = $get_id();
+  $phone_id = zg_get_fbid();
 // echo $phone_id;
   echo <<< EOF
 <form method=post action="/$game/home/$arg2">
@@ -29,4 +28,4 @@ EOF;
 }
 
 db_set_active('default');
-drupal_goto($game . '/home/' . $phone_id);
+drupal_goto($game . '/home/' . $arg2);
