@@ -7,7 +7,7 @@
  * Synced with CG: yes
  * Synced with 2114: yes
  * Ready for phpcbf: done
- * Ready for MVC separation: no
+ * Ready for MVC separation: yes
  */
 
 global $game, $phone_id;
@@ -19,10 +19,6 @@ $arg2 = check_plain(arg(2));
 $ip_address = ip_address();
 
 db_set_active('game_' . $game);
-
-$default_neighborhood = zg_get_default('initial_hood');
-$default_value = zg_get_default('initial_user_value');
-$tagline = zg_get_html('tagline');
 
 // Check to make sure not too many from the same IP address.
 $sql = 'select count(`value`) as count from user_attributes
@@ -39,47 +35,46 @@ if ($item->count > 5) {
   }
 }
 
+$d = zg_get_default(
+  [
+    'initial_hood',
+    'initial_user_value',
+    'new_user_comm_member_msg',
+    'welcome_page_1_speech',
+    'welcome_page_2_speech',
+  ]
+) + zg_get_html(
+  [
+    'tagline',
+    'welcome_page_1',
+    'welcome_page_2',
+  ]
+);
+
 // Show welcome message.
 echo <<< EOF
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
 <div class="tagline">
-  $tagline
+  {$d['tagline']}
 </div>
 EOF;
 
 switch ($_REQUEST['page']) {
 
   case 2:
-    echo <<< EOF
-<div class="welcome">
-<div class="city-icon">
-</div>
-<div class="subtitle">
-  How to play
-</div>
-<ul>
-  <li>Finish missions to earn skills and influence</li>
-  <li>Cooperate and compete with other players to achieve your goals</li>
-  <li>Purchase investments and equipment to earn money and win votes</li>
-  <li>Become a city elder, political party leader, and then mayor</li>
-</ul>
-</div>
-EOF;
 
     $sql = 'insert into users set phone_id = "%s", username = "(new player)",
       experience = 0, level = 1, fkey_neighborhoods_id = %d, fkey_values_id = 0,
       `values` = "%s", money = 500, energy = 200, energy_max = 200';
-    $result = db_query($sql, $phone_id, $default_neighborhood,
-      $default_value);
+    db_query($sql, $phone_id, $d['initial_hood'], $d['initial_user_value']);
 
     $sql = 'insert into user_creations set datetime = "%s", phone_id = "%s",
       remote_ip = "%s";';
-    $result = db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
+    db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
 
-    $fetch_user = 'zg_fetch_user';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     // Notify all party welcome comm members.
     $sql = 'SELECT users.id FROM `users`
@@ -92,30 +87,19 @@ EOF;
       $data[] = $item->id;
     }
 
-    $msg = 'I am a new user who has just joined the game.  Please welcome me.';
-    zg_send_user_message($game_user->id, $data, 0, $msg, 'user');
-      $links = 'quest_groups';
-    zg_button($links, 'continue', '?show_expanded=0');
-    zg_speech($game_user, 'Get ready to become Mayor!', TRUE);
-    db_set_active('default');
+    zg_send_user_message($game_user->id, $data, 0,
+      $d['new_user_comm_member_msg'], 'user');
+
+    print $d['welcome_page_2'];
+    zg_button('quest_groups', 'continue', '?show_expanded=0');
+    zg_speech($game_user, $d['welcome_page_2_speech'], TRUE);
     break;
 
   default:
-    echo <<< EOF
-<div class="welcome">
-<div class="wise_old_man_large point">
-</div>
-<p>A wizened old man comes up to you.&nbsp; You recognize him as one of the
-  elders of the city.</p>
-<p class="second">&quot;I've been watching you for some time,
-  and I like what I see.&nbsp; I think you have the potential for
-  greatness.&nbsp; Maybe you could even lead this city.&quot;</p>
-<p class="second">Could you?</p>
-</div>
-EOF;
-
+    print $d['welcome_page_1'];
     zg_button('welcome', 'continue', '?page=2');
-    zg_speech($game_user, 'Hello there', TRUE);
-    db_set_active('default');
+    zg_speech($game_user, $d['welcome_page_1_speech'], TRUE);
     break;
 }
+
+db_set_active('default');
