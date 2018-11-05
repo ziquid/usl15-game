@@ -39,12 +39,12 @@ EOF;
  *   Force the code to instruct the client to speak even if user has not opted
  *   in.
  */
-function zg_speech($game_user, $text, $force = FALSE) {
+function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 //  global $game;
 //  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  if ($force || game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
+  if ($force || zg_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
     drupal_add_js([
-      'stlouis' => [
+      'zg' => [
         'speech' => $text,
       ],
     ], 'setting');
@@ -102,8 +102,8 @@ function zg_fetch_visible_land(\stdClass $game_user) {
     $game_user->fkey_values_id, $game_user->level);
 
   while ($item = db_fetch_object($result)) {
-    $item->competency = game_competency_name($item->competency);
-    $item->competency_name_1 = game_competency_name($item->competency_name_1);
+    $item->competency = zg_competency_name($item->competency);
+    $item->competency_name_1 = zg_competency_name($item->competency_name_1);
     $data[] = $item;
   }
   return $data;
@@ -170,8 +170,8 @@ function zg_fetch_land_by_id(\stdClass $game_user, $land_id) {
   WHERE land.id = %d;';
   $result = db_query($sql, $game_user->id, $land_id);
   $item = db_fetch_object($result);
-  $item->competency = game_competency_name($item->competency);
-  $item->competency_name_1 = game_competency_name($item->competency_name_1);
+  $item->competency = zg_competency_name($item->competency);
+  $item->competency_name_1 = zg_competency_name($item->competency_name_1);
   return $item;
 }
 
@@ -203,7 +203,7 @@ function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
       break;
 
     case 'failed no-money':
-      $offer = game_luck_money_offer($game_user);
+      $offer = zg_luck_money_offer($game_user);
       $header = '<div class="title">' .
 
           // FIXME remove special characters from text here.
@@ -246,7 +246,7 @@ function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
         t('Insufficient Competency') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'incompetent');
+      zg_competency_gain($game_user, 'incompetent');
       break;
 
     case 'failed not-required-hood':
@@ -256,7 +256,7 @@ function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'lost');
+      zg_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':
@@ -373,7 +373,7 @@ EOF;
 EOF;
     }
     else {
-      $can_work_again = game_can_do_yet($game_user, 'can_work_again');
+      $can_work_again = zg_can_do_yet($game_user, 'can_work_again');
 //      firep($can_work_again, 'can work again');
       if ($can_work_again->allowed) {
         $apply_button = <<< EOF
@@ -486,10 +486,10 @@ EOF;
   }
 
   if ($item->fkey_required_competencies_id > 0) {
-//    $check = game_competency_level($game_user,
+//    $check = zg_competency_level($game_user,
 //      (int) $item->fkey_required_competencies_id);
 //firep($check);
-    $comp_name = game_competency_level_name($item->required_competencies_level,
+    $comp_name = zg_competency_level_name($item->required_competencies_level,
       TRUE);
 
     $reqs .= <<< EOF
@@ -649,7 +649,7 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $item->percentage_target,
       $item->percentage_divisor,
       $item->next_group_html) =
-    game_fetch_quest_group_stats($game_user, $active_quests, $item->id);
+    zg_fetch_quest_group_stats($game_user, $active_quests, $item->id);
 
     // Show?  if a specific group was requested, always show it.
     $show = is_numeric($id) ? TRUE : FALSE;
@@ -677,7 +677,7 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
     }
 
     // Allow altering of show flag.
-    $show |= game_alter('flag_show_quest_group_' . $item->id, $game_user, $item);
+    $show |= zg_alter('flag_show_quest_group_' . $item->id, $game_user, $item);
 
     if (!$show) {
       if ($game_user->meta == 'admin') {
@@ -708,9 +708,9 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
       $result = db_query($sql_quests, $game_user->id, $item->id, $game_user->level + 1);
       while ($q = db_fetch_object($result)) {
         list($q->rgb, $q->width, $q->completed_percent_overlay) =
-          game_get_quest_completion($q->completed_percent,
+          zg_get_quest_completion($q->completed_percent,
           $item->percentage_target, $item->percentage_divisor);
-        game_get_icon_path($game_user, $q, 'quests');
+        zg_get_icon_path($game_user, $q, 'quests');
         $item->q[$q->id] = $q;
       }
       if (!count($item->q)) {
@@ -720,12 +720,12 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
 
 //firep($item, 'items');
     // Allow altering of individual qgos.
-    game_alter('fetch_quest_group_' . $item->id, $game_user, $item);
+    zg_alter('fetch_quest_group_' . $item->id, $game_user, $item);
 
   }
 
   // Allow altering of full qgo object.
-  game_alter('fetch_quest_groups', $game_user, $data);
+  zg_alter('fetch_quest_groups', $game_user, $data);
 //  firep($data, 'data');
   return is_numeric($id) ? $data[$id] : $data;
 }
@@ -752,7 +752,7 @@ function zg_fetch_visible_quest_groups(\stdClass $game_user) {
 
   foreach ($data as $item) {
     // Allow altering of qgos.
-    game_alter('fetch_quest_group', $game_user, $item);
+    zg_alter('fetch_quest_group', $game_user, $item);
 
     if ($item->highlight_in_hood == $game_user->fkey_neighborhoods_id) {
       $data2[] = $item;
@@ -850,7 +850,7 @@ EOF;
       if ($q->fkey_neighborhoods_id &&
         ($q->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
         $q->wrong_hood = 'wrong-hood';
-        list( , , $q->actions_to_move, ) = game_get_actions_to_move($game_user,
+        list( , , $q->actions_to_move, ) = zg_get_actions_to_move($game_user,
           $game_user->fkey_neighborhoods_id, $q->fkey_neighborhoods_id);
 
         // Color code the wrong-hood icon.
@@ -916,7 +916,7 @@ EOF;
         </div>
 EOF;
       }
-      game_show_quest_slide($game_user, $q);
+      zg_show_quest_slide($game_user, $q);
     }
     echo '</div>';
   }
@@ -1168,7 +1168,7 @@ EOF;
 EOF;
 
     drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/game_show_aides_menu_land.js', 'module', 'footer');
+      . '/zg_show_aides_menu_land.js', 'module', 'footer');
   }
 
   if ($equip_active && $game_user->level >= 25) {
@@ -1196,7 +1196,7 @@ EOF;
 EOF;
 
     drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/game_show_aides_menu_equip.js', 'module', 'footer');
+      . '/zg_show_aides_menu_equip.js', 'module', 'footer');
   }
 
   if ($staff_active && $game_user->level >= 25) {
@@ -1224,7 +1224,7 @@ EOF;
 EOF;
 
     drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/game_show_aides_menu_staff.js', 'module', 'footer');
+      . '/zg_show_aides_menu_staff.js', 'module', 'footer');
   }
 
 //  _show_goal($game_user);
@@ -1318,7 +1318,7 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-//firep($item, 'quest given to game_show_quest_slide()');
+//firep($item, 'quest given to zg_show_quest_slide()');
   $sql = 'select id from quests where `group` = %d
     order by id asc limit 1;';
   $result = db_query($sql, $item->group);
@@ -1508,17 +1508,17 @@ EOF;
         echo '<div class="quest-required_stuff">';
 
         if ($item->equipment_1_required_quantity > 0) {
-          game_required_equipment($game_user, $item->fkey_equipment_1_required_id,
+          zg_required_equipment($game_user, $item->fkey_equipment_1_required_id,
             $item->equipment_1_required_quantity);
         }
 
         if ($item->equipment_2_required_quantity > 0) {
-          game_required_equipment($game_user, $item->fkey_equipment_2_required_id,
+          zg_required_equipment($game_user, $item->fkey_equipment_2_required_id,
             $item->equipment_2_required_quantity);
         }
 
         if ($item->equipment_3_required_quantity > 0) {
-          game_required_equipment($game_user, $item->fkey_equipment_3_required_id,
+          zg_required_equipment($game_user, $item->fkey_equipment_3_required_id,
             $item->equipment_3_required_quantity);
         }
 
@@ -1533,7 +1533,7 @@ EOF;
 
       // Required staff.
       if ($item->staff_required_quantity > 0) {
-        game_required_staff($game_user, $item->fkey_staff_required_id,
+        zg_required_staff($game_user, $item->fkey_staff_required_id,
           $item->staff_required_quantity);
       }
 
@@ -1661,7 +1661,7 @@ function zg_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   db_query($sql, $ex_price, $game_user->id);
 
   // Reprocess user object.
-  game_recalc_income($game_user);
+  zg_recalc_income($game_user);
   $game_user = $fetch_user();
   return TRUE;
 }
@@ -1670,7 +1670,7 @@ function zg_land_lose(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  // FIXME: refactor to use game_fetch_land_by_id().
+  // FIXME: refactor to use zg_fetch_land_by_id().
   $sql = 'select * from land where id = %d;';
   $result = db_query($sql, $id);
   $land = db_fetch_object($result);
@@ -1715,7 +1715,7 @@ function zg_land_lose(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   }
 
   // Reprocess user object.
-  game_recalc_income($game_user);
+  zg_recalc_income($game_user);
   $game_user = $fetch_user();
   return TRUE;
 }
@@ -1756,10 +1756,10 @@ function zg_competency_gain(\stdClass $game_user, $id, $level = 1) {
   $result = db_query($sql, $id, $game_user->id);
   $data = db_fetch_object($result);
 
-  if (game_timed_bonus_in_effect($game_user, 'fast_comps_30')->allowed) {
+  if (zg_timed_bonus_in_effect($game_user, 'fast_comps_30')->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 30);
   }
-  if (game_timed_bonus_in_effect($game_user, 'fast_comps_15')->allowed) {
+  if (zg_timed_bonus_in_effect($game_user, 'fast_comps_15')->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 15);
   }
 
@@ -1771,15 +1771,15 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
   // Already there.
   if (!empty($data)) {
 
-    $comp_before = game_competency_level($game_user, $id);
+    $comp_before = zg_competency_level($game_user, $id);
     $sql = 'update user_competencies set use_count = use_count + 1
       where fkey_competencies_id = %d and fkey_users_id = %d;';
     db_query($sql, $id, $game_user->id);
-    $comp_after = game_competency_level($game_user, $id);
+    $comp_after = zg_competency_level($game_user, $id);
 
     // Leveled up!
     if ($comp_after->level > $comp_before->level) {
-      game_send_user_message(1, $game_user->id, 1,
+      zg_send_user_message(1, $game_user->id, 1,
         'You have increased your competency &quot;<span class="initial-caps">'
       . $item->name . '</span>&quot;!&nbsp; You are now '
       . $comp_after->level_name_2 . ' and have gained '
@@ -1798,7 +1798,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       (%d, %d, 1);';
     db_query($sql, $game_user->id, $id);
     if ($game_user->level > 6) {
-      game_send_user_message(1, $game_user->id, 1,
+      zg_send_user_message(1, $game_user->id, 1,
       'You have started learning a new competency, &quot;<span class="initial-caps">'
       . $item->name . '</span>&quot;!', 'comp');
     }
@@ -1917,7 +1917,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $text, $type, $subtype) {
 function zg_competency_level(\stdClass $game_user, $id) {
 
   // Return the user's competency level [0..5] for a given competency.
-  include drupal_get_path('module', check_plain(arg(0))) . '/game_defs.inc';
+  include drupal_get_path('module', check_plain(arg(0))) . '/zg_defs.inc';
 
   // Find id from string.
   if (gettype($id) == 'string') {
@@ -1953,8 +1953,8 @@ function zg_competency_level(\stdClass $game_user, $id) {
 
   while ($level <= 5) {
 
-    $min = game_competency_min_count($level, $item->level);
-    $max = game_competency_min_count($level + 1, $item->level);
+    $min = zg_competency_min_count($level, $item->level);
+    $max = zg_competency_min_count($level + 1, $item->level);
 
     if ($comp->use_count >= $min && $comp->use_count < $max) {
       $comp->level = $level;
@@ -1974,8 +1974,8 @@ function zg_competency_level(\stdClass $game_user, $id) {
 
   }
 
-  $comp->level_name = game_competency_level_name($comp->level, TRUE);
-  $comp->level_name_2 = game_competency_level_name($comp->level);
+  $comp->level_name = zg_competency_level_name($comp->level, TRUE);
+  $comp->level_name_2 = zg_competency_level_name($comp->level);
   return $comp;
 }
 
@@ -1983,7 +1983,7 @@ function zg_competency_level(\stdClass $game_user, $id) {
  * Show text if certain comp. level has been obtained.
  *
  * @param \stdClass $game_user
- *   The game_user object.
+ *   The zg_user object.
  * @param string $text
  *   The text to show.
  * @param int $level_obtained
@@ -2081,7 +2081,7 @@ function zg_competency_name($comp) {
     }
   }
 
-  game_alter('comp_names_alter', NULL, $comps);
+  zg_alter('comp_names_alter', NULL, $comps);
   return $comps[$comp];
 }
 
@@ -2151,7 +2151,7 @@ function zg_fetch_user_by_id($id) {
   }
   $user_cache[$id] = $item;
 
-firep($item, 'game_fetch_user_by_id for id ' . $id);
+firep($item, 'zg_fetch_user_by_id for id ' . $id);
   return $item;
 }
 
@@ -2178,7 +2178,7 @@ function zg_send_user_message($from, $to, $private, $message, $subtype = 'user')
   if (is_array($to) && is_numeric($to[0])) {
     $result = TRUE;
     foreach ($to as $item) {
-      $result &= game_send_user_message($from, $item, $private, $message, $subtype);
+      $result &= zg_send_user_message($from, $item, $private, $message, $subtype);
     }
     return $result;
   }
@@ -2263,7 +2263,7 @@ function zg_zombie_name() {
  */
 function zg_can_do_yet(\stdClass $game_user, $key) {
   $can_do = new stdClass();
-  $can_do->time_ready = (int) game_get_value($game_user, $key, REQUEST_TIME);
+  $can_do->time_ready = (int) zg_get_value($game_user, $key, REQUEST_TIME);
   $can_do->time_remaining = $can_do->time_ready - REQUEST_TIME;
 
   if ($can_do->time_remaining > 0) {
@@ -2283,7 +2283,7 @@ function zg_can_do_yet(\stdClass $game_user, $key) {
 /**
  * Timed bonus still in effect?
  *
- * Logically the opposite of game_can_do_yet().
+ * Logically the opposite of zg_can_do_yet().
  *
  * @param \stdClass $game_user
  *   The user object.
@@ -2296,7 +2296,7 @@ function zg_can_do_yet(\stdClass $game_user, $key) {
  */
 function zg_timed_bonus_in_effect($game_user, $bonus_key) {
   $in_effect = new stdClass();
-  $in_effect->time_ready = (int) game_get_value($game_user, $bonus_key, REQUEST_TIME);
+  $in_effect->time_ready = (int) zg_get_value($game_user, $bonus_key, REQUEST_TIME);
   $in_effect->time_remaining = $in_effect->time_ready - REQUEST_TIME;
 
   if ($in_effect->time_remaining > 0) {
@@ -2324,14 +2324,14 @@ function zg_timed_bonus_in_effect($game_user, $bonus_key) {
  *   The number of seconds to set for the timer.
  */
 function zg_set_timer(\stdClass $game_user, $timer_key, $time_secs) {
-  game_set_value($game_user, $timer_key, REQUEST_TIME + $time_secs);
+  zg_set_value($game_user, $timer_key, REQUEST_TIME + $time_secs);
 }
 
 /**
  * Return the value for the key in the db if found, or $default if not found.
  *
  * @param \stdClass $game_user
- *   The game_user object.
+ *   The zg_user object.
  * @param string $key
  *   The key to use for the query.
  * @param mixed $default
@@ -2440,12 +2440,12 @@ function zg_alter($hook, \stdClass $game_user, &$garg2 = NULL, &$garg3 = NULL, &
   global $game;
 
   $retval = FALSE;
-  $game_include_list = game_includes_get();
+  $game_include_list = zg_includes_get();
 
   // Find and call hook(s).
   foreach ($game_include_list as $type_include_file) {
     $include_file = substr($type_include_file, strpos($type_include_file, '/') + 1);
-    $function_name = 'game_' . $include_file . '_' . $hook;
+    $function_name = 'zg_' . $include_file . '_' . $hook;
     if (function_exists($function_name)) {
 //      dpm('calling ' . $function_name);
       $retval |= $function_name($game_user, $garg2, $garg3, $garg4);
@@ -2470,9 +2470,9 @@ function zg_alter($hook, \stdClass $game_user, &$garg2 = NULL, &$garg3 = NULL, &
  */
 function zg_includes_add($include_file, $type) {
   global $game;
-//dpm ($include_file, 'calling game_includes_add for ' . $type . ' file');
-  $game_include_list = &drupal_static('game_include_list', []);
-  $game_include_missing = &drupal_static('game_include_missing', []);
+//dpm ($include_file, 'calling zg_includes_add for ' . $type . ' file');
+  $game_include_list = &drupal_static('zg_include_list', []);
+  $game_include_missing = &drupal_static('zg_include_missing', []);
   $module_path = drupal_get_path('module', $game);
   $file_to_include = $module_path . '/includes/' . $type . '/' . $include_file . '.inc';
 
@@ -2494,7 +2494,7 @@ function zg_includes_add($include_file, $type) {
     $game_include_list[] = $type . '/' . $include_file;
     include_once $file_to_include;
 //    dpm('including file ' . $file_to_include);
-    $function_name = 'game_' . $include_file . '_init';
+    $function_name = 'zg_' . $include_file . '_init';
     if (function_exists($function_name)) {
 //      dpm('calling ' . $function_name);
       $function_name();
@@ -2513,7 +2513,7 @@ function zg_includes_add($include_file, $type) {
  *   The list of includes.
  */
 function zg_includes_get() {
-  $game_include_list = &drupal_static('game_include_list', []);
+  $game_include_list = &drupal_static('zg_include_list', []);
   return $game_include_list;
 }
 
@@ -2537,7 +2537,7 @@ function zg_show_ai_output($phone_id, $ai_output) {
  * Admin users automatically have all traits.
  *
  * @param \stdClass $game_user
- *   The game_user object.
+ *   The zg_user object.
  * @param string $trait
  *   The trait for which to check.
  *
@@ -2597,12 +2597,12 @@ function zg_get_actions_to_move($game_user, $from_id, $to_id) {
 
   if ($eq->speed_increase > 0) {
     $verb = t($eq->action_verb);
-    game_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
+    zg_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
     $actions_to_move -= $eq->speed_increase;
   }
 
   $actions_to_move = max($actions_to_move, 6);
-  game_alter('actions_to_move', $game_user, $actions_to_move);
+  zg_alter('actions_to_move', $game_user, $actions_to_move);
   return [$from_hood, $to_hood, $actions_to_move, $verb];
 }
 
@@ -2739,38 +2739,38 @@ function zg_get_default($key) {
     return $values;
   }
 
-  $sql = 'select game_value, value_type from game_defaults where game_key = "%s";';
+  $sql = 'select zg_value, value_type from zg_defaults where zg_key = "%s";';
   $result = db_query($sql, $key);
   $item = db_fetch_object($result);
   if (is_object($item)) {
     switch ($item->value_type) {
       case 'int':
-        return (int) $item->game_value;
+        return (int) $item->zg_value;
       case 'text':
-        return $item->game_value;
+        return $item->zg_value;
       case 'serialized':
-        return unserialize($item->game_value);
+        return unserialize($item->zg_value);
       case 'float':
-        return (float) $item->game_value;
+        return (float) $item->zg_value;
       case 'bool':
-        return (bool) $item->game_value;
+        return (bool) $item->zg_value;
     }
   }
 
   // Wonderland and value doesn't exist?  Copy value from St Louis.
   if ($game == 'wonderland') {
-    db_set_active('game_stlouis');
-    $sql = 'select game_value, value_type from game_defaults where game_key = "%s";';
+    db_set_active('zg_stlouis');
+    $sql = 'select zg_value, value_type from zg_defaults where zg_key = "%s";';
     $result = db_query($sql, $key);
     $item = db_fetch_object($result);
-    db_set_active('game_wonderland');
+    db_set_active('zg_wonderland');
 
     if (is_object($item)) {
-      $sql = 'insert into game_defaults
-        (game_key, game_value, value_type, comment)
+      $sql = 'insert into zg_defaults
+        (zg_key, zg_value, value_type, comment)
         values ("%s", "%s", "%s", "FIXME -- automatic import from St. Louis");';
-      db_query($sql, $key, $item->game_value, $item->value_type);
-      return $item->game_value;
+      db_query($sql, $key, $item->zg_value, $item->value_type);
+      return $item->zg_value;
     }
   }
 

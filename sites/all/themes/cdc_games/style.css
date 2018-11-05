@@ -1404,6 +1404,7 @@ textarea {
 }
 
 .swiper-container {
+  width: 100%;
 }
 
 .swiper-slide {
@@ -1443,13 +1444,16 @@ textarea {
 .quest-group-name a, .quest-group-title a {
 }
 
-.swiper-slide .title .quest-group-name {
-}
-
 .swiper-slide .title .quest-group-title {
+}
+.swiper-slide .title .quest-group-name {
+  margin: auto;
+  width: 248px;
 }
 
 .fit-box {
+  white-space: nowrap;
+  -webkit-transform-origin: top left;
 }
 
 .swiper-slide .title .quest-group-name.admin-obfuscate {
@@ -1536,6 +1540,7 @@ span.not-yet-overlay {
 }
 
 .swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
+  top: 25px;
 }
 
 .swiper-container .swiper-button-prev, .swiper-container .swiper-container-rtl .swiper-button-next {

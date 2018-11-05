@@ -9,6 +9,9 @@
  * Ready for phpcbf: no
  */
 
+/**
+ * Implements hook_menu().
+ */
 function zg_menu() {
 
   $items = [];
@@ -25,6 +28,14 @@ function zg_menu() {
     $items[$game . '/home/%'] = [
       'title' => 'Ziquid Game Home Page',
       'page callback' => 'zg_homepage_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/quest_groups/%'] = [
+      'title' => 'Ziquid Game Quest Groups List',
+      'page callback' => 'zg_quest_groups_callback',
       'page arguments' => [2],
       'access arguments' => ['access game content'],
       'type' => MENU_CALLBACK,
@@ -117,14 +128,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Increase Skills Page',
     'page callback' => 'zg_increase_skills_callback',
     'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/quest_groups/%'] = [
-    'title' => 'Ziquid Game Quest Groups List',
-    'page callback' => 'zg_quest_groups_callback',
-    'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -625,7 +628,7 @@ function zg_quest_groups_callback($phone_id) {
     return drupal_access_denied();
   }
 
-  $module_path = drupal_get_path('module', arg(0));
+  $module_path = drupal_get_path('module', 'zg');
   drupal_add_js($module_path . '/js/zg_quest_groups.js', 'module', 'footer');
   return theme('zg_quest_groups', $phone_id);
 }
@@ -1211,7 +1214,7 @@ function zg_theme() {
     ],
 
     'zg_quest_groups' => [
-      'template' => 'zg_quest_groups',
+      'template' => 'templates/zg_quest_groups',
       'arguments' => [
         'phone_id' => NULL
       ]

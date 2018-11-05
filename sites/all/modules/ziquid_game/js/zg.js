@@ -1,12 +1,12 @@
-Drupal.behaviors.stlouis = function (context) {
+Drupal.behaviors.zg = function (context) {
 
-  if (Drupal.settings.stlouis) {
-    if (Drupal.settings.stlouis.party_icon) {
-      $('body').addClass('party-' + Drupal.settings.stlouis.party_icon);
+  if (Drupal.settings.zg) {
+    if (Drupal.settings.zg.party_icon) {
+      $('body').addClass('party-' + Drupal.settings.zg.party_icon);
     }
 
-    if (Drupal.settings.stlouis.enabled_alpha) {
-      var level = parseInt(Drupal.settings.stlouis.level);
+    if (Drupal.settings.zg.enabled_alpha) {
+      var level = parseInt(Drupal.settings.zg.level);
       // level = 1;
       var red = Math.max(level - 100, 0);
       var green = Math.max(Math.floor(100 - level), 0);

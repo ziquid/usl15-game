@@ -14,19 +14,19 @@ require_once drupal_get_path('module', 'zg') . '/includes/profanity.inc';
 function zg_cron() {
   global $game;
   define('REQUEST_TIME', time());
-  foreach (zg_get_game_list() as $game) {
+  foreach (zg_get_zg_list() as $game) {
 
     // Module has its own cron?  Skip it.
     if (function_exists($cron = $game . '_cron')) {
       continue;
     }
 
-    db_set_active('game_' . $game);
-    include drupal_get_path('module', $game) . '/game_defs.inc';
+    db_set_active('zg_' . $game);
+    include drupal_get_path('module', $game) . '/zg_defs.inc';
 
     // AI moves.
     include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
-    game_move_ai();
+    zg_move_ai();
 
     // Save old approval ratings.
     $sql = 'update elected_officials set approval_45 = approval_30,
@@ -56,27 +56,27 @@ function zg_cron() {
     set approval_rating = 100 where approval_rating > 100;';
     db_query($sql);
     /*
-    
+
       // < 9AM -- 10 carolers every 15 mins.
       if (date('H') < 9) {
         $carolers_wanted = 20;
       }
       elseif (date('H') < 17) {
-    
+
         // < 5PM -- 25 carolers.
         $carolers_wanted = 35;
       }
       else {
-    
+
         // >= 5PM -- 50 carolers.
         $carolers_wanted = 55;
       }
-    
+
       // Enjoy caroling?
       $sql = 'update neighborhoods
         set special_int = %d where special_int >= 0;';
       $result = db_query($sql, $carolers_wanted);
-    
+
       // The grinch!
       $sql = 'update neighborhoods
         set special_int = -50
@@ -289,13 +289,13 @@ function zg_cron() {
       $file_to_include = $module_path . '/events/' . $event_type . '.inc';
       if (file_exists($file_to_include)) {
         include_once $file_to_include;
-        $function_name = 'game_' . $event_type . '_init';
+        $function_name = 'zg_' . $event_type . '_init';
         if (function_exists($function_name)) {
           $function_name();
         }
       }
     }
-    game_alter('cron', NULL);
+    zg_alter('cron', NULL);
 
     if ($month_mission == MISSION_JUN) {
       $sql = 'update quests set fkey_neighborhoods_id =
@@ -329,7 +329,7 @@ function zg_cron() {
 
         // Change each user to a zombie.
         foreach ($zombie_users as $zombie) {
-          $name = game_zombie_name();
+          $name = zg_zombie_name();
           if ($zombie->level < 25) {
             $zombie->level += 25 + mt_rand(0, 50);
           }
@@ -339,7 +339,7 @@ function zg_cron() {
         }
 
         // Notify the game players.
-        game_send_system_message(1,
+        zg_send_system_message(1,
           'Grrrr!&nbsp; Zombies have sprung up everywhere!');
       }
     }
@@ -354,7 +354,7 @@ function zg_init() {
   global $custom_theme, $conf;
 
   $game = arg(0);
-  if (in_array($game, zg_get_game_list())) {
+  if (in_array($game, zg_get_zg_list())) {
 
     define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 
@@ -366,7 +366,7 @@ function zg_init() {
     drupal_add_js($module_path . '/js/js.cookie.js');
     drupal_add_js($module_path . '/js/swiper.min.js');
 //    drupal_add_js('https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js');
-    drupal_add_js($module_path . '/js/' . $game . '.js');
+    drupal_add_js($module_path . '/js/zg.js');
     jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
     $custom_theme = 'cdc_games';
@@ -538,7 +538,7 @@ function zg_save_user_agent($game_user) {
   if (empty($user_list)) {
 
     // No entry?  Create one!
-    _stlouis_set_value($game_user->id, 'user_agent', $user_agent);
+    zg_set_value($game_user->id, 'user_agent', $user_agent);
     return TRUE;
   }
   else {
@@ -549,7 +549,7 @@ function zg_save_user_agent($game_user) {
 
       // No password?  Update automatically.
       if (empty($game_user->password)) {
-        _stlouis_set_value($game_user->id, 'user_agent', $user_agent);
+        zg_set_value($game_user->id, 'user_agent', $user_agent);
       }
       else {
         // New user_agent and a password -- gotta authenticate!
@@ -578,11 +578,11 @@ function zg_save_user_IP($game_user) {
   // Admin access.
 //  if ($user->roles[4] == 'web game access') return;
 
-  $last_ip = _stlouis_get_value($game_user->id, 'last_IP', '');
+  $last_ip = zg_get_value($game_user->id, 'last_IP', '');
 
   // No entry?  Create one!
   if ($last_ip == '') {
-    _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
+    zg_set_value($game_user->id, 'last_IP', $ip_addr);
     return TRUE;
   }
   else {
@@ -595,7 +595,7 @@ function zg_save_user_IP($game_user) {
 
       // No password?  Update automatically.
       if (empty($game_user->password)) {
-        _stlouis_set_value($game_user->id, 'last_IP', $ip_addr);
+        zg_set_value($game_user->id, 'last_IP', $ip_addr);
       }
       else {
         $game = check_plain(arg(0));
@@ -682,13 +682,13 @@ function zg_get_phoneid() {
   }
 
   if (arg(2) == 'facebook') {
-    return (_stlouis_get_fbid());
+    return (zg_get_fbid());
   }
-  else if (arg(2) === 'null') {
+  elseif (arg(2) === 'null') {
     drupal_goto('stlouis/playbook_null');
   }
-  else if (substr(arg(2), 0, 3) === 'ms=') {
-    return (_stlouis_get_msid());
+  elseif (substr(arg(2), 0, 3) === 'ms=') {
+    return (zg_get_msid());
   }
   else {
     return check_plain(arg(2));
@@ -765,13 +765,9 @@ function zg_fetch_user() {
   // Only allow access through authorized clients.
   if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
 
-    // Paypal IPN.
+    // Paypal IPN addresses.
     ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&
-
-    // Paypal IPN.
     ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') &&
-
-    // Paypal IPN.
     ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') &&
 
     // Web users.
@@ -789,7 +785,8 @@ function zg_fetch_user() {
     // Unidentified MS user.
     (substr(arg(2), 0, 3) != 'ms=')
   ) {
-    echo t('This game must be accessed through an authorized client.  ');
+    echo t('This game must be accessed through an authorized client.');
+    echo '&nbsp; ';
     echo t('Please e-mail zipport@ziquid.com if you have any questions.');
     exit;
   }
@@ -812,10 +809,10 @@ function zg_fetch_user() {
   $changes_made = FALSE;
 
   $game = check_plain(arg(0));
-  $phone_id = _stlouis_get_phoneid();
+  $phone_id = zg_get_phoneid();
   // if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
   $arg2 = check_plain(arg(2));
-  db_set_active('game_' . $game);
+  db_set_active('zg_' . $game);
 
   // Check for banned users -- phone_id.
   $sql = 'select * from user_blocks where phone_id = "%s";';
@@ -828,7 +825,7 @@ function zg_fetch_user() {
 
     // Banned by phone ID.
     db_set_active('default');
-    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0467');
+    drupal_goto($game . '/error/' . $arg2 . '/E-0467');
   }
 
   // Check for banned users -- ip address.
@@ -842,27 +839,7 @@ function zg_fetch_user() {
 
     // Banned by IP.
     db_set_active('default');
-    drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0468');
-  }
-
-  // Nook Color 1.4.1 removes the 'nkc+' prefix -- fix our db.
-  if (strpos($_SERVER['HTTP_USER_AGENT'], 'BNRV200') !== FALSE) {
-
-    $sql = 'select * from users where phone_id = "%s";';
-    $result = db_query($sql, 'nkc ' . $phone_id);
-    $game_user = db_fetch_object($result);
-
-    if (!empty($game_user)) {
-      $sql = 'delete from users where phone_id = "%s";';
-      db_query($sql, $phone_id);
-      $sql = 'update users set phone_id = "%s"
-        where phone_id = "%s";';
-      db_query($sql, $phone_id, 'nkc ' . $phone_id);
-
-//      mail('joseph@cheek.com', 'Nook Color Phone ID swap',
-//        "nkc $phone_id is now $phone_id");
-    }
-
+    drupal_goto($game . '/error/' . $arg2 . '/E-0468');
   }
 
   $sql = 'select users.*, elected_positions.energy_bonus as ep_energy_bonus,
@@ -894,10 +871,10 @@ function zg_fetch_user() {
   $game_user->traits = [];
 
   if (strlen($game_user->meta)) {
-    game_includes_add('user_meta_' . $game_user->meta, 'user_meta');
+    zg_includes_add('user_meta_' . $game_user->meta, 'user_meta');
   }
   if ($game_user->level <= 25) {
-    game_includes_add('new_user', 'other');
+    zg_includes_add('new_user', 'other');
   }
 
   // Start welcome wizard if user not in db.
@@ -915,19 +892,19 @@ function zg_fetch_user() {
   }
 
   // Save the IP address, user agent of user.
-  _stlouis_save_user_agent($game_user);
-  _stlouis_save_user_IP($game_user);
-  _stlouis_check_authKey($game_user);
+  zg_save_user_agent($game_user);
+  zg_save_user_IP($game_user);
+  zg_check_authKey($game_user);
 
   if (strpos($_SERVER['HTTP_USER_AGENT'], 'BlueStacks') !== FALSE) {
     if ($game_user->level <= 50) {
-      _stlouis_set_value($game_user->id, 'sdk', 1);
+      zg_set_value($game_user->id, 'sdk', 1);
     }
   }
 
   static $saved_party_icon = FALSE;
   if (!$saved_party_icon) {
-    drupal_add_js(['stlouis' => [
+    drupal_add_js(['zg' => [
       'party_icon' => $game_user->party_icon,
       'level' => $game_user->level,
     ]], 'setting');
@@ -937,8 +914,8 @@ function zg_fetch_user() {
   // Tell JS that we have Alpha enabled.
   static $enabled_alpha = FALSE;
   if (!$enabled_alpha) {
-    if (game_get_value($game_user, 'enabled_alpha')) {
-      drupal_add_js(['stlouis' => ['enabled_alpha' => TRUE]], 'setting');
+    if (zg_get_value($game_user, 'enabled_alpha')) {
+      drupal_add_js(['zg' => ['enabled_alpha' => TRUE]], 'setting');
     }
     $enabled_alpha = TRUE;
   }
@@ -980,7 +957,7 @@ function zg_fetch_user() {
   }
 
   foreach ($staff_list as $staff) {
-    game_includes_add('staff_' . $staff, 'staff');
+    zg_includes_add('staff_' . $staff, 'staff');
   }
 
   // Add includes and process init() for land, if any.
@@ -995,11 +972,11 @@ function zg_fetch_user() {
   }
 
   foreach ($land_list as $land) {
-    game_includes_add('land_' . $land, 'land');
+    zg_includes_add('land_' . $land, 'land');
   }
 
   // Run fetch_user_post alter hooks.
-  game_alter('game_fetch_user_post', $game_user);
+  zg_alter('zg_fetch_user_post', $game_user);
 
   $sql = 'select experience from levels where level = %d;';
   $result = db_query($sql, $game_user->level + 1);
@@ -1033,7 +1010,7 @@ function zg_fetch_user() {
     }
 
     // Fast comps for the next five minutes.
-    game_set_timer($game_user, 'fast_comps_15', 300);
+    zg_set_timer($game_user, 'fast_comps_15', 300);
 
     // Show the user a message (unless at Level 2 -- don't overwhelm new users).
     if ($game_user->level > 2) {
@@ -1207,8 +1184,8 @@ function zg_fetch_user() {
     drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
   }
 
-  game_alter('game_fetch_user_end', $game_user);
-  firep($game_user, 'game_user at fetch_user');
+  zg_alter('zg_fetch_user_end', $game_user);
+  firep($game_user, 'zg_user at fetch_user');
   return $game_user;
 }
 
@@ -1216,9 +1193,9 @@ function zg_fetch_user() {
  * Show the game header.
  *
  * @param \stdClass $game_user
- *   The game_user object.
+ *   The zg_user object.
  */
-function zg_header(\stdClass $game_user) {
+function zg_fetch_header(\stdClass $game_user) {
 
   global $game, $phone_id, $extra_messages, $next_level;
 
@@ -1641,4 +1618,3 @@ $extra_messages
 EOF;
 
 }
-
