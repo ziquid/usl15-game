@@ -123,6 +123,8 @@ EOF;
 
 if ($game_user->level <= 6) {
 
+  $referral_code_button = zg_render_button('enter_referral_code', 'I have a referral code');
+
   // New party.
   echo <<< EOF
 <div class="welcome">
@@ -137,11 +139,7 @@ if ($game_user->level <= 6) {
 <p class="second">&quot;Alternatively, you can continue on your own without a
   code.&nbsp; Which do you prefer?&quot;</p>
 </div>
-<div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/enter_referral_code/$arg2">I have a referral code</a>
-</div>
-</div>
+$referral_code_button
 <div class="choose-party">
 <div class="subtitle">If you don't have a referral code, you may<br/>
 instead choose a $party_small_lower:</div>
