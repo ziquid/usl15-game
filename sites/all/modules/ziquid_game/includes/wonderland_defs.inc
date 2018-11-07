@@ -221,7 +221,7 @@ $luck = 'Luck';
 $party = 'Political Party';
 $party_small = 'Party';
 $politics = 'Politics';
-$quest = 'Mission';
+$quest = 'Quest';
 $residence = 'Residence';
 $system = 'System';
 $top20 = 'Top 20';
@@ -237,6 +237,7 @@ $game_text = [
   'agents' => 'Agents',
   'clan_eq' => 'Clan Equipment',
   'clan_eq_short' => 'Clan Eqp',
+  'elders' => 'Caterpillar',
   'elocution' => 'Elocution',
   'elocution_short' => 'Elo',
   'endurance' => 'Endurance',
@@ -253,16 +254,12 @@ $game_text = [
   'job' => 'Job',
   'job_plural' => 'Jobs',
   'land' => 'Income',
-  'mayor' => 'Mayor',
-  'quest' => 'Mission',
-  'quest_lower' => 'mission',
+  'mayor' => 'Monarch',
+  'mayor_tab' => 'Monarchy',
+  'quest' => 'Quest',
+  'quest_lower' => 'quest',
   'staff' => 'Staff',
 ];
-
-if ($event_type == EVENT_NEW_NAMES) {
-  $game_settings['competencies']['uncouth'] = 'joelene';
-  $game_settings['competencies']['talkative'] = 'cunning linguist';
-}
 
 $beauty_lower = strtolower($beauty);
 $city_lower = strtolower($city);
@@ -290,7 +287,7 @@ if (arg(0) != 'node' && arg(0) != 'devel') {
 }
 $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
-$fetch_user = 'zg_fetch_user';
+$fetch_user = 'zg_user';
 $fetch_header = 'zg_header';
 
 // Add events to include list.

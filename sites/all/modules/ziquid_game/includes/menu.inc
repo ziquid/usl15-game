@@ -25,6 +25,39 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/choose_party/%/%'] = [
+      'title' => 'Ziquid Game Choose Party',
+      'page callback' => 'zg_choose_party_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/elders/%'] = [
+      'title' => 'Ziquid Game Elders',
+      'page callback' => 'zg_elders_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/elders_ask_reset/%'] = [
+      'title' => 'Ziquid Game Elders Ask Reset',
+      'page callback' => 'zg_elders_ask_reset_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/elders_do_reset/%'] = [
+      'title' => 'Ziquid Game Elders Do Reset',
+      'page callback' => 'zg_elders_do_reset_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/menu/zg_elders_do_reset.inc',
+    ];
+
     $items[$game . '/home/%'] = [
       'title' => 'Ziquid Game Home Page',
       'page callback' => 'zg_homepage_callback',
@@ -37,6 +70,14 @@ function zg_menu() {
       'title' => 'Ziquid Game Quest Groups List',
       'page callback' => 'zg_quest_groups_callback',
       'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/quests_do/%/%'] = [
+      'title' => 'Ziquid Game Quests Do',
+      'page callback' => 'zg_quests_do_callback',
+      'page arguments' => [2, 3],
       'access arguments' => ['access game content'],
       'type' => MENU_CALLBACK,
     ];
@@ -132,46 +173,6 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items[$game . '/quests/%'] = [
-    'title' => 'Ziquid Game Quests List',
-    'page callback' => 'zg_quests_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/quests_do/%/%'] = [
-    'title' => 'Ziquid Game Quests Do',
-    'page callback' => 'zg_quests_do_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/elders/%'] = [
-    'title' => 'Ziquid Game Elders',
-    'page callback' => 'zg_elders_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/elders_ask_reset/%'] = [
-    'title' => 'Ziquid Game Elders Ask Reset',
-    'page callback' => 'zg_elders_ask_reset_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/elders_do_reset/%'] = [
-    'title' => 'Ziquid Game Elders Do Reset',
-    'page callback' => 'zg_elders_do_reset_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items[$game . '/elders_ask_reset_skills/%'] = [
     'title' => 'Ziquid Game Elders Ask Reset Skills',
     'page callback' => 'zg_elders_ask_reset_skills_callback',
@@ -248,14 +249,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Elders Enable Alpha',
     'page callback' => 'zg_elders_enable_alpha_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/choose_clan/%/%'] = [
-    'title' => 'Ziquid Game Choose Clan',
-    'page callback' => 'zg_choose_clan_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -633,15 +626,6 @@ function zg_quest_groups_callback($phone_id) {
   return theme('zg_quest_groups', $phone_id);
 }
 
-function zg_quests_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('zg_quests_list', $phone_id);
-}
-
 function zg_quests_do_callback($phone_id, $quest_id) {
 
   if (empty($phone_id) || !is_numeric($quest_id)) {
@@ -658,9 +642,7 @@ function zg_elders_callback($phone_id) {
   }
 
   return theme('zg_elders', $phone_id);
-
 }
-
 
 function zg_elders_ask_reset_callback($phone_id) {
 
@@ -669,20 +651,7 @@ function zg_elders_ask_reset_callback($phone_id) {
   }
 
   return theme('zg_elders_ask_reset', $phone_id);
-
 }
-
-
-function zg_elders_do_reset_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('zg_elders_do_reset', $phone_id);
-
-}
-
 
 function zg_elders_ask_reset_skills_callback($phone_id) {
 
@@ -691,9 +660,7 @@ function zg_elders_ask_reset_skills_callback($phone_id) {
   }
 
   return theme('zg_elders_ask_reset_skills', $phone_id);
-
 }
-
 
 function zg_elders_do_reset_skills_callback($phone_id) {
 
@@ -702,9 +669,7 @@ function zg_elders_do_reset_skills_callback($phone_id) {
   }
 
   return theme('zg_elders_do_reset_skills', $phone_id);
-
 }
-
 
 function zg_elders_do_fill_callback($phone_id, $fill_type) {
 
@@ -713,7 +678,6 @@ function zg_elders_do_fill_callback($phone_id, $fill_type) {
   }
 
   return theme('zg_elders_do_fill', $phone_id, $fill_type);
-
 }
 
 function zg_elders_rename_callback($phone_id) {
@@ -750,9 +714,7 @@ function zg_elders_ask_purchase_callback($phone_id) {
   }
 
   return theme('zg_elders_ask_purchase', $phone_id);
-
 }
-
 
 function zg_elders_do_purchase_callback($phone_id) {
 
@@ -761,9 +723,7 @@ function zg_elders_do_purchase_callback($phone_id) {
   }
 
   return theme('zg_elders_do_purchase', $phone_id);
-
 }
-
 
 function zg_elders_check_receipt_callback($phone_id) {
 
@@ -772,9 +732,7 @@ function zg_elders_check_receipt_callback($phone_id) {
   }
 
   return theme('zg_elders_check_receipt', $phone_id);
-
 }
-
 
 function zg_google_checkout_callback($phone_id) {
 
@@ -783,9 +741,7 @@ function zg_google_checkout_callback($phone_id) {
   }
 
   return theme('zg_google_checkout', $phone_id);
-
 }
-
 
 function zg_welcome_callback($phone_id) {
 
@@ -793,19 +749,20 @@ function zg_welcome_callback($phone_id) {
     return drupal_access_denied();
   }
 
+  // Prime the cache.
+  drupal_get_path('module', 'zg');
+
   return theme('zg_welcome', $phone_id);
 }
 
-function zg_choose_clan_callback($phone_id, $clan_id) {
+function zg_choose_party_callback($phone_id, $party_id) {
 
-  if (empty($phone_id) || !is_numeric($clan_id)) {
+  if (empty($phone_id) || !is_numeric($party_id)) {
     return drupal_access_denied();
   }
 
-  return theme('zg_choose_clan', $phone_id, $clan_id);
-
+  return theme('zg_choose_party', $phone_id, $party_id);
 }
-
 
 function zg_help_callback($phone_id) {
 
@@ -814,9 +771,7 @@ function zg_help_callback($phone_id) {
   }
 
   return theme('zg_help', $phone_id);
-
 }
-
 
 function zg_debates_list_callback($phone_id) {
 
@@ -825,9 +780,7 @@ function zg_debates_list_callback($phone_id) {
   }
 
   return theme('zg_debates_list', $phone_id);
-
 }
-
 
 function zg_debates_challenge_callback($phone_id, $position_id) {
 
@@ -836,9 +789,7 @@ function zg_debates_challenge_callback($phone_id, $position_id) {
   }
 
   return theme('zg_debates_challenge', $phone_id, $position_id);
-
 }
-
 
 function zg_elections_list_callback($phone_id) {
 
@@ -847,9 +798,7 @@ function zg_elections_list_callback($phone_id) {
   }
 
   return theme('zg_elections_list', $phone_id);
-
 }
-
 
 function zg_elections_challenge_callback($phone_id, $position_id) {
 
@@ -858,7 +807,6 @@ function zg_elections_challenge_callback($phone_id, $position_id) {
   }
 
   return theme('zg_elections_challenge', $phone_id, $position_id);
-
 }
 
 function zg_top20_list_callback($phone_id) {
@@ -1063,13 +1011,6 @@ function zg_bounce_callback($phone_id) {
   return theme('zg_bounce', $phone_id);
 }
 
-function zg_bounce_040_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('zg_bounce_040', $phone_id);
-}
-
 function zg_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1077,7 +1018,6 @@ function zg_elders_preference_callback($phone_id) {
   }
 
   return theme('zg_elders_preferences', $phone_id);
-
 }
 
 function zg_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
@@ -1220,15 +1160,8 @@ function zg_theme() {
       ]
     ],
 
-    'zg_quests_list' => [
-      'template' => 'zg_quests_list',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
     'zg_quests_do' => [
-      'template' => 'zg_quests_do',
+      'template' => 'templates/zg_quests_do',
       'arguments' => [
         'phone_id' => NULL,
         'quest_id' => NULL,
@@ -1236,21 +1169,14 @@ function zg_theme() {
     ],
 
     'zg_elders' => [
-      'template' => 'zg_elders',
+      'template' => 'templates/zg_elders',
       'arguments' => [
         'phone_id' => NULL
       ]
     ],
 
     'zg_elders_ask_reset' => [
-      'template' => 'zg_elders_ask_reset',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
-    'zg_elders_do_reset' => [
-      'template' => 'zg_elders_do_reset',
+      'template' => 'templates/zg_elders_ask_reset',
       'arguments' => [
         'phone_id' => NULL
       ]
@@ -1334,11 +1260,11 @@ function zg_theme() {
       ]
     ],
 
-    'zg_choose_clan' => [
-      'template' => 'zg_choose_clan',
+    'zg_choose_party' => [
+      'template' => 'templates/zg_choose_party',
       'arguments' => [
         'phone_id' => NULL,
-        'clan_id' => NULL,
+        'party_id' => NULL,
       ]
     ],
 

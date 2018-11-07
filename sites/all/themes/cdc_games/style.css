@@ -1303,7 +1303,7 @@ a, a:link, a:visited, a:hover, a:active {
 .quest-do-again-inside, .land-buy-again-inside {
   border: 1px solid #1ca443;
   border-radius: 4px;
-  -moz-border-radius: 4px;
+  float: right;
 }
 
 .quest-do-again a, .land-buy-again a {
@@ -1421,6 +1421,8 @@ textarea {
 .swiper-container-horizontal>.swiper-pagination-bullets,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {
+  top: 56px;
+  height: 12px;
 }
 
 .swiper-slide .title {
@@ -1474,13 +1476,16 @@ textarea {
 }
 
 .wrong-hood-wrapper,  .not-yet-wrapper {
+  position: relative;
 }
 
 div + .wrong-hood-wrapper {
+  width: 77px;
   display: inline-block;
 }
 
 .quest-icon .wrong-hood-wrapper {
+  width: 100px;
 }
 
 img.wrong-hood {
@@ -1491,18 +1496,29 @@ input.wrong-hood {
 }
 
 input + img.wrong-hood-overlay {
+  bottom: 8px;
 }
 
 img.wrong-hood-overlay {
+  position: absolute;
+  bottom: 6px;
+  right: 8px;
+  width: 12px;
+  height: 12px;
 }
 
 .not-yet-wrapper img.not-yet {
 }
 
 span.not-yet-overlay {
+  position: absolute;
+  bottom: 14px;
+  right: 7px;
 }
 
 .quests span.not-yet-overlay {
+  bottom: 21px;
+  right: 21px;
 }
 
 .swiper-slide .description {

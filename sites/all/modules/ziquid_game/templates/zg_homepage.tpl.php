@@ -15,39 +15,16 @@ $version = 'v0.7.0, Oct 29 2018';
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 firep(drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc', 'include file');
-$game_user = $fetch_user();
+$game_user = zg_fetch_user();
 $message = check_plain($_GET['message']);
 
-game_competency_gain($game_user, 'where the heart is');
+$d = zg_get_html(
+  [
+    'tagline',
+  ]
+);
 
-if (FALSE && $game_user->level < 6) {
-
-  echo <<< EOF
-<div class="title">
-  <img src="/sites/default/files/images/{$game}_title.png"/>
-</div>
-<div class="tagline">
-  &bull; Become the Mayor &bull;
-</div>
-<p>&nbsp;</p>
-<div class="welcome">
-<div class="wise_old_man_small">
-</div>
-<p>&quot;You're not influential enough yet for the home page.&nbsp;
-Come back at level 6.&quot;</p>
-<p class="second">&nbsp;</p>
-<p class="second">&nbsp;</p>
-<p class="second">&nbsp;</p>
-</div>
-EOF;
-
-  if (substr($phone_id, 0, 3) == 'ai-') {
-    echo "<!--\n<ai \"home not-yet\"/>\n-->";
-  }
-  game_button('quests');
-  db_set_active('default');
-  return;
-}
+zg_competency_gain($game_user, 'where the heart is');
 
 if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"home\"/>\n-->";
@@ -99,7 +76,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $sql = 'update users set money = money + %d, last_bonus_date = "%s"
     where id = %d;';
   $result = db_query($sql, $money, $today, $game_user->id);
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $extra_bonus = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man happy">
@@ -115,7 +92,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
 </div>';
 
   // Fast comps for the next three minutes.
-  game_set_timer($game_user, 'fast_comps_15', 180);
+  zg_set_timer($game_user, 'fast_comps_15', 180);
 
   // Add competency for work.
   $sql = 'SELECT land.fkey_enhanced_competencies_id FROM `land`
@@ -126,7 +103,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $item = db_fetch_object($result);
 
   if (isset($item->fkey_enhanced_competencies_id)) {
-    game_competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
+    zg_competency_gain($game_user, (int) $item->fkey_enhanced_competencies_id);
   }
 
 }
@@ -142,15 +119,13 @@ firep($alder, 'values of current hood alder');
 $alder_values = drupal_strtolower($alder->values);
 $player_values = drupal_strtolower($game_user->values);
 
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 
 if (empty($game_user->referral_code)) {
-
   $good_code = FALSE;
   $count = 0;
 
   while (!$good_code && $count++ < 10) {
-
     $referral_code = '0000' .
       base_convert(mt_rand(0, pow(36, 5) - 1) . '', 10, 36);
     $referral_code = strtoupper(substr($referral_code,
@@ -163,16 +138,12 @@ firep($referral_code);
 
     // Code not already in use - use it!
     if (empty($item->referral_code)) {
-
       $good_code = TRUE;
       $sql = 'update users set referral_code = "%s" where id = %d;';
       $result = db_query($sql, $referral_code, $game_user->id);
       $game_user->referral_code = $referral_code;
-
     }
-
   }
-
 }
 
 if (substr(arg(2), 0, 4) == 'nkc ') {
@@ -315,7 +286,7 @@ switch($event_type) {
             '/money?destination=/' . $game . '/home/' . $arg2 . '">' .
             t('Receive @offer @values NOW (1&nbsp;@luck',
               [
-                '@offer' => game_luck_money_offer($game_user),
+                '@offer' => zg_luck_money_offer($game_user),
                 '@values' => $game_user->values,
                 '@luck' => $luck,
               ]) . ')
@@ -401,17 +372,17 @@ if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
 */
 
 // Add event text, if any.
-game_alter('homepage_event_notice', $game_user, $event_text);
+zg_alter('homepage_event_notice', $game_user, $event_text);
 
 // Alter menu.
-game_alter('homepage_menu', $game_user, $extra_menu);
+zg_alter('homepage_menu', $game_user, $extra_menu);
 
 echo <<< EOF
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png">
 </div>
 <div class="tagline">
-  &bull; Become the Mayor &bull;
+  {$d['tagline']}
 </div>
 <a class="version" href="/$game/changelog/$arg2">
   $version
@@ -427,7 +398,7 @@ $extra_bonus
   <map name="new_main_menu">
 EOF;
 
-$coords = _stlouis_scale_coords($coefficient, 107, 34, 210, 63);
+$coords = zg_scale_coords($coefficient, 107, 34, 210, 63);
 $link = 'quest_groups';
 $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 echo <<< EOF
@@ -435,14 +406,14 @@ echo <<< EOF
   href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}" />
 EOF;
 
- $coords = _stlouis_scale_coords($coefficient, 42, 72, 122, 92);
+ $coords = zg_scale_coords($coefficient, 42, 72, 122, 92);
 
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Debates" href="/$game/debates/$arg2" />
 EOF;
 
-$coords = _stlouis_scale_coords($coefficient, 197, 72, 257, 92);
-$coords2 = _stlouis_scale_coords($coefficient, 187, 93, 267, 115);
+$coords = zg_scale_coords($coefficient, 197, 72, 257, 92);
+$coords2 = zg_scale_coords($coefficient, 187, 93, 267, 115);
 
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Aides" href="/$game/land/$arg2" />
@@ -451,7 +422,7 @@ EOF;
 
 
   // Move.
-  $coords = _stlouis_scale_coords($coefficient, 131, 127, 183, 147);
+  $coords = zg_scale_coords($coefficient, 131, 127, 183, 147);
 
   echo <<< EOF
   <area shape="rect" coords="$coords" alt="Move" href="/$game/move/$arg2/0" />
@@ -459,15 +430,15 @@ EOF;
 
 
 // Elders, Profile.
-$coords = _stlouis_scale_coords($coefficient, 126, 155, 192, 180);
-$coords2 = _stlouis_scale_coords($coefficient, 45, 192, 100, 210);
+$coords = zg_scale_coords($coefficient, 126, 155, 192, 180);
+$coords2 = zg_scale_coords($coefficient, 45, 192, 100, 210);
 
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Elders" href="/$game/elders/$arg2" />
   <area shape="rect" coords="$coords2" alt="Profile" href="/$game/user/$arg2" />
 EOF;
 
-$coords = _stlouis_scale_coords($coefficient, 113, 192, 151, 210);
+$coords = zg_scale_coords($coefficient, 113, 192, 151, 210);
 
 if ($game_user->fkey_clans_id > 0) {
 
@@ -486,13 +457,13 @@ EOF;
 
 }
 
-  $coords = _stlouis_scale_coords($coefficient, 162, 192, 200, 210);
+  $coords = zg_scale_coords($coefficient, 162, 192, 200, 210);
 
   echo <<< EOF
   <area shape="rect" coords="$coords" alt="Help" href="/$game/help/$arg2" />
 EOF;
 
-  $coords = _stlouis_scale_coords($coefficient, 214, 192, 265, 210);
+  $coords = zg_scale_coords($coefficient, 214, 192, 265, 210);
 
   echo <<< EOF
   <area shape="rect" coords="$coords" alt="Forum"
@@ -512,7 +483,7 @@ $event_text
   <button id="news-user">Personal</button>
   <button id="news-challenge">{$election_tab}</button>
   <button id="news-clan">$party_small</button>
-  <button id="news-mayor">${game_text['mayor']}</button>
+  <button id="news-mayor">${game_text['mayor_tab']}</button>
 </div>
 <div id="all-text">
 EOF;
@@ -719,7 +690,7 @@ $data = [];
 
 if (TRUE/*$load_avg[0] <= 2.0*/) {
   // Expensive query - goes to slave.
-//   db_set_active('game_' . $game . '_slave1');
+//   db_set_active('zg_' . $game . '_slave1');
   $result = db_query($sql, $game_user->id, $limit,
     $game_user->id, 10, // challenge limit of 10
     $game_user->fkey_neighborhoods_id, $limit,
@@ -731,7 +702,7 @@ if (TRUE/*$load_avg[0] <= 2.0*/) {
   }
 
   // Reset to master.
-  db_set_active('game_' . $game);
+  db_set_active('zg_' . $game);
 }
 
 $msg_shown = FALSE;
@@ -770,7 +741,7 @@ EOF;
 foreach ($data as $item) {
 // firep($item);
 
-  $display_time = game_format_date(strtotime($item->timestamp));
+  $display_time = zg_format_date(strtotime($item->timestamp));
   $clan_acronym = '';
 
   if (!empty($item->clan_acronym))

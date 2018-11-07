@@ -7,12 +7,13 @@
  * Synced with CG: N/A
  * Synced with 2114: N/A
  * Ready for phpcbf: done!
- * Ready for MVC separation: no
+ * Ready for MVC separation: done
+ * .
  */
 
 global $game, $phone_id;
 
-// ------ CONTROLLER ------
+/* ------ CONTROLLER ------ */
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $quest_groups = zg_fetch_quest_groups($game_user);
@@ -21,7 +22,7 @@ if (strlen($expanded = $_GET['show_expanded'])) {
   $quest_groups[$expanded]->showExpanded = TRUE;
 }
 
-// ------ VIEW ------
+/* ------ VIEW ------ */
 zg_fetch_header($game_user);
 ?>
 

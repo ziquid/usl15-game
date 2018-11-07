@@ -91,49 +91,9 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/quest_groups/%'] = [
-    'title' => 'St. Louis Quest Groups List',
-    'page callback' => 'stlouis_quest_groups_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/quests/%'] = [
     'title' => 'St. Louis Quests List',
     'page callback' => 'stlouis_quests_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/quests_do/%/%'] = [
-    'title' => 'St. Louis Quests Do',
-    'page callback' => 'stlouis_quests_do_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/elders/%'] = [
-    'title' => 'St. Louis Elders',
-    'page callback' => 'stlouis_elders_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/elders_ask_reset/%'] = [
-    'title' => 'St. Louis Elders Ask Reset',
-    'page callback' => 'stlouis_elders_ask_reset_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/elders_do_reset/%'] = [
-    'title' => 'St. Louis Elders Do Reset',
-    'page callback' => 'stlouis_elders_do_reset_callback',
     'page arguments' => [2],
     'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
@@ -215,14 +175,6 @@ function stlouis_menu() {
     'title' => 'St. Louis Elders Enable Alpha',
     'page callback' => 'stlouis_elders_enable_alpha_callback',
     'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/choose_clan/%/%'] = [
-    'title' => 'St. Louis Choose Clan',
-    'page callback' => 'stlouis_choose_clan_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
   ];
@@ -597,17 +549,6 @@ function stlouis_increase_skills_callback($phone_id, $skill) {
   return theme('stlouis_increase_skills', $phone_id, $skill);
 }
 
-function stlouis_quest_groups_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  $module_path = drupal_get_path('module', arg(0));
-  drupal_add_js($module_path . '/js/stlouis_quest_groups.js', 'module', 'footer');
-  return theme('stlouis_quest_groups', $phone_id);
-}
-
 function stlouis_quests_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -617,48 +558,6 @@ function stlouis_quests_list_callback($phone_id) {
   return theme('stlouis_quests_list', $phone_id);
 }
 
-function stlouis_quests_do_callback($phone_id, $quest_id) {
-
-  if (empty($phone_id) || !is_numeric($quest_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_quests_do', $phone_id, $quest_id);
-}
-
-function stlouis_elders_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_elders', $phone_id);
-
-}
-
-
-function stlouis_elders_ask_reset_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_elders_ask_reset', $phone_id);
-
-}
-
-
-function stlouis_elders_do_reset_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_elders_do_reset', $phone_id);
-
-}
-
-
 function stlouis_elders_ask_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -666,9 +565,7 @@ function stlouis_elders_ask_reset_skills_callback($phone_id) {
   }
 
   return theme('stlouis_elders_ask_reset_skills', $phone_id);
-
 }
-
 
 function stlouis_elders_do_reset_skills_callback($phone_id) {
 
@@ -677,9 +574,7 @@ function stlouis_elders_do_reset_skills_callback($phone_id) {
   }
 
   return theme('stlouis_elders_do_reset_skills', $phone_id);
-
 }
-
 
 function stlouis_elders_do_fill_callback($phone_id, $fill_type) {
 
@@ -688,7 +583,6 @@ function stlouis_elders_do_fill_callback($phone_id, $fill_type) {
   }
 
   return theme('stlouis_elders_do_fill', $phone_id, $fill_type);
-
 }
 
 function stlouis_elders_rename_callback($phone_id) {
@@ -725,7 +619,6 @@ function stlouis_elders_ask_purchase_callback($phone_id) {
   }
 
   return theme('stlouis_elders_ask_purchase', $phone_id);
-
 }
 
 
@@ -736,7 +629,6 @@ function stlouis_elders_do_purchase_callback($phone_id) {
   }
 
   return theme('stlouis_elders_do_purchase', $phone_id);
-
 }
 
 
@@ -760,29 +652,6 @@ function stlouis_google_checkout_callback($phone_id) {
   return theme('stlouis_google_checkout', $phone_id);
 
 }
-
-
-function stlouis_welcome_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_welcome', $phone_id);
-
-}
-
-
-function stlouis_choose_clan_callback($phone_id, $clan_id) {
-
-  if (empty($phone_id) || !is_numeric($clan_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_choose_clan', $phone_id, $clan_id);
-
-}
-
 
 function stlouis_help_callback($phone_id) {
 
@@ -1100,13 +969,6 @@ function stlouis_theme() {
 
   return [
 
-    'stlouis_homepage' => [
-      'template' => 'stlouis_homepage',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
     'stlouis_userprofile' => [
       'template' => 'stlouis_userprofile',
       'arguments' => [
@@ -1183,44 +1045,8 @@ function stlouis_theme() {
       ]
     ],
 
-    'stlouis_quest_groups' => [
-      'template' => 'stlouis_quest_groups',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
     'stlouis_quests_list' => [
       'template' => 'stlouis_quests_list',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
-    'stlouis_quests_do' => [
-      'template' => 'stlouis_quests_do',
-      'arguments' => [
-        'phone_id' => NULL,
-        'quest_id' => NULL,
-      ]
-    ],
-
-    'stlouis_elders' => [
-      'template' => 'stlouis_elders',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
-    'stlouis_elders_ask_reset' => [
-      'template' => 'stlouis_elders_ask_reset',
-      'arguments' => [
-        'phone_id' => NULL
-      ]
-    ],
-
-    'stlouis_elders_do_reset' => [
-      'template' => 'stlouis_elders_do_reset',
       'arguments' => [
         'phone_id' => NULL
       ]
@@ -1301,14 +1127,6 @@ function stlouis_theme() {
       'template' => 'stlouis_welcome',
       'arguments' => [
         'phone_id' => NULL
-      ]
-    ],
-
-    'stlouis_choose_clan' => [
-      'template' => 'stlouis_choose_clan',
-      'arguments' => [
-        'phone_id' => NULL,
-        'clan_id' => NULL,
       ]
     ],
 

@@ -1,31 +1,45 @@
 <?php
 
 /**
- * @file stlouis_choose_clan.tpl.php
- * Stlouis choose clan
+ * @file
+ * Choose the player's political party.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
-// If they have chosen a clan.
-if ($clan_id != 0) {
+$d = zg_get_default(
+  [
+    'new_user_comm_member_msg',
+    'welcome_page_1_speech',
+    'welcome_page_2_speech',
+  ]
+) + zg_get_html(
+  [
+    'tagline',
+    'welcome_page_1',
+    'welcome_page_2',
+  ]
+);
+
+// If they have chosen a party.
+if ($party_id != 0) {
 
   // No change?  Just show stats.
-  if ($clan_id == $game_user->fkey_values_id) {
+  if ($party_id == $game_user->fkey_values_id) {
     db_set_active('default');
     drupal_goto($game . '/user/' . $arg2);
   }
 
-  // Changing clans? Dock experience, bring level down to match.
-  $new_experience = floor($game_user->experience * 0.75);
-  if ($new_experience < 75) $new_experience = 75;
+  // Changing parties? Dock experience, bring level down to match.
+  $new_experience = max(floor($game_user->experience * 0.75), 75);
 
   $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
   $result = db_query($sql, $new_experience);
@@ -42,7 +56,7 @@ if ($clan_id != 0) {
   $new_skill_points = ($new_level * 4) + $item->bonus - 20;
 
   $sql = 'select * from `values` where id = %d;';
-  $result = db_query($sql, $clan_id);
+  $result = db_query($sql, $party_id);
   $item = db_fetch_object($result);
 
   // Update his/her user entry.
@@ -51,16 +65,13 @@ if ($clan_id != 0) {
     skill_points = %d, initiative = 1, endurance = 1, actions = 3,
     actions_max = 3, elocution = 1
     where id = %d;';
-  $result = db_query($sql, $item->fkey_neighborhoods_id, $clan_id,
+  $result = db_query($sql, $item->fkey_neighborhoods_id, $party_id,
     $item->name, $new_level, $new_experience, $new_skill_points,
     $game_user->id);
 
-  // Remove Luck if changing clans.
+  // Remove Luck if changing parties.
   if ($game_user->fkey_values_id != 0) {
-
-    $sql = 'update users set luck = luck - 5 where id = %d;';
-    $result = db_query($sql, $game_user->id);
-
+    zg_luck($game_user, -5, 'changing parties to ' . $party_id, 'change_party', '');
   }
 
   // Also delete any offices s/he held.
@@ -72,56 +83,52 @@ if ($clan_id != 0) {
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
 
-  // Clan leader? Delete entire clan.
+  // clan leader? Delete entire clan.
   if ($item->is_clan_leader) {
-
     $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-    $result = db_query($sql, $game_user->fkey_clans_id);
+    db_query($sql, $game_user->fkey_clans_id);
     $sql = 'delete from clan_members where fkey_clans_id = %d;';
-    $result = db_query($sql, $item->fkey_clans_id);
+    db_query($sql, $item->fkey_clans_id);
     $sql = 'delete from clans where id = %d;';
-    $result = db_query($sql, $item->fkey_clans_id);
-
+    db_query($sql, $item->fkey_clans_id);
   }
   else {
-
     $sql = 'delete from clan_members where fkey_users_id = %d;';
-    $result = db_query($sql, $game_user->id);
-
+    db_query($sql, $game_user->id);
   }
 
   // Add 24-hour waiting period on major actions.
-  $set_value = '_' . arg(0) . '_set_value';
-  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
+  zg_set_timer($game_user, 'next_major_action', 86400);
+
+  db_set_active('default');
 
   // First time choosing? Go to debates.
   if ($game_user->fkey_values_id == 0) {
-    db_set_active('default');
     drupal_goto($game . '/debates/' . $arg2);
   }
 
   // Otherwise show your character profile.
-  db_set_active('default');
   drupal_goto($game . '/user/' . $arg2);
-
 }
 
-// Otherwise they have not chosen a clan or are rechoosing one.
+// Otherwise they have not chosen a party or are rechoosing one.
+echo <<< EOF
+<div class="title">
+  <img src="/sites/default/files/images/{$game}_title.png"/>
+</div>
+<div class="tagline">
+  {$d['tagline']}
+</div>
+EOF;
 
-// New clan.
 if ($game_user->level <= 6) {
 
-$elder = 'You are met by the city elder again';
-
-if ($game == 'celestial_glory')
-  $elder = 'You see Lehi in a vision again';
-
+  // New party.
   echo <<< EOF
-<p>&nbsp;</p>
 <div class="welcome">
 <div class="wise_old_man_large">
 </div>
-<p>$elder.&nbsp; &quot;Well done,&quot; he
+<p>You are met by the city elder again.&nbsp; &quot;Well done,&quot; he
   says.&nbsp; &quot;I am impressed by what you have learned.</p>
 <p class="second">&quot;In order to continue your journey, you will need a
   mentor.&nbsp; Your mentor will provide guidance and answer any questions
@@ -135,17 +142,14 @@ if ($game == 'celestial_glory')
   <a href="/$game/enter_referral_code/$arg2">I have a referral code</a>
 </div>
 </div>
-<div class="choose-clan">
+<div class="choose-party">
 <div class="subtitle">If you don't have a referral code, you may<br/>
 instead choose a $party_small_lower:</div>
 <br/>
 EOF;
-
 }
 else {
-
   echo <<< EOF
-<p>&nbsp;</p>
 <div class="welcome">
 <div class="wise_old_man_small">
 </div>
@@ -154,9 +158,8 @@ else {
   one, but that is your choice.</p>
 <p class="second">&quot;Which one do you prefer?&quot;</p>
 </div>
-<div class="choose-clan">
+<div class="choose-party">
 EOF;
-
 }
 
 $sql = 'SELECT * FROM  `values`
@@ -165,26 +168,33 @@ $sql = 'SELECT * FROM  `values`
 $result = db_query($sql);
 $data = [];
 
-while ($item = db_fetch_object($result)) $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
+db_set_active('default');
 firep($data, 'values');
+
 foreach ($data as $item) {
   $value = strtolower($item->name);
-  $icon = $game . '_clan_' . $item->party_icon . '.png';
+  $icon = $game . '_party_' . $item->party_icon . '.png';
 
   echo <<< EOF
 <div>
-<div class="choose-clan-icon"><img width="24"
-  src="/sites/default/files/images/$icon"/></div>
-<span class="choose-clan-name"><a
-href="/$game/choose_clan/$arg2/$item->id"
-style="color: #$item->color;">$item->party_title</a></span>
-value $value</div>
-<div class="choose-clan-slogan">$item->slogan</div>
+  <div class="choose-party-icon">
+    <img width="24" src="/sites/default/files/images/$icon">
+  </div>
+  <span class="choose-party-name">
+    <a href="/$game/choose_party/$arg2/$item->id"
+      style="color: #$item->color;">
+      $item->party_title
+    </a>
+  </span>
+  value $value
+</div>
+<div class="choose-party-slogan">
+  $item->slogan
+</div>
 EOF;
-
 }
 
 echo '</div>';
-
-db_set_active('default');
-

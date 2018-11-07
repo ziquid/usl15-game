@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_quests_do.tpl.php
+ * @file
  * Do a quest.
  *
  * Synced with CG: yes
@@ -12,17 +12,17 @@
 
 global $game, $phone_id;
 
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 $sql = 'select `group` from quests where quests.id = %d;';
 $result = db_query($sql, $quest_id);
 $data = db_fetch_object($result);
 $group_id = $data->group;
-$qgo = game_fetch_quest_groups($game_user, $group_id);
+$qgo = zg_fetch_quest_groups($game_user, $group_id);
 $game_quest = &$qgo->q[$quest_id];
 
-$quest_link = /*game_get_value($game_user, 'enabled_alpha') ?*/ 'quest_groups'/* : 'quests'*/;
+$quest_link = 'quest_groups';
 
 //   if ($event_type == EVENT_QUESTS_100)
 //     $game_quest->required_energy = min($game_quest->required_energy, 100);
@@ -38,7 +38,7 @@ $quest_link = /*game_get_value($game_user, 'enabled_alpha') ?*/ 'quest_groups'/*
 //     $game_quest->fkey_loot_equipment_id = $loot_april_fools->fkey_equipment_id;
 //   }
 
-game_alter('quest_item', $game_user, $game_quest);
+zg_alter('quest_item', $game_user, $game_quest);
 
 $quest_succeeded = TRUE;
 $outcome_reason = '<div class="quest-succeeded">' . t('Success!') .
@@ -63,27 +63,27 @@ if (($game_user->energy < $game_quest->required_energy) &&
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
 
-  game_competency_gain($game_user, 'too tired');
+  zg_competency_gain($game_user, 'too tired');
 }
 
 // Need to be drunk for quest 45!
-if ($quest_id == 45 && game_competency_level($game_user, 'drunk')->level == 0) {
+if ($quest_id == 45 && zg_competency_level($game_user, 'drunk')->level == 0) {
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not drunk enough!') .
     '</div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-drunk-enough';
-//  game_competency_gain($game_user, 'sober');
+//  zg_competency_gain($game_user, 'sober');
 }
 
 // Need to be sober for quest 46!
-if ($quest_id == 46 && game_competency_level($game_user, 'sober')->level == 0) {
+if ($quest_id == 46 && zg_competency_level($game_user, 'sober')->level == 0) {
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not sober enough!') .
     '</div>';
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-sober-enough';
-//  game_competency_gain($game_user, 'drunk');
+//  zg_competency_gain($game_user, 'drunk');
 }
 
 if ($game_quest->equipment_1_required_quantity > 0) {
@@ -111,9 +111,8 @@ if ($game_quest->equipment_1_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_1_required_id;
 
-    game_competency_gain($game_user, 'hole in pockets');
+    zg_competency_gain($game_user, 'hole in pockets');
   }
-
 }
 
 if ($game_quest->equipment_2_required_quantity > 0) {
@@ -139,10 +138,8 @@ if ($game_quest->equipment_2_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_2_required_id;
 
-    game_competency_gain($game_user, 'hole in pockets');
-
+    zg_competency_gain($game_user, 'hole in pockets');
   }
-
 }
 
 if ($game_quest->equipment_3_required_quantity > 0) {
@@ -168,10 +165,8 @@ if ($game_quest->equipment_3_required_quantity > 0) {
     $ai_output = 'quest-failed need-equipment-' .
       $game_quest->fkey_equipment_3_required_id;
 
-    game_competency_gain($game_user, 'hole in pockets');
-
+    zg_competency_gain($game_user, 'hole in pockets');
   }
-
 }
 
 if ($game_quest->staff_required_quantity > 0) {
@@ -195,10 +190,8 @@ if ($game_quest->staff_required_quantity > 0) {
     $ai_output = 'quest-failed need-staff-' .
       $game_quest->fkey_staff_required_id;
 
-    game_competency_gain($game_user, 'friendless');
-
+    zg_competency_gain($game_user, 'friendless');
   }
-
 }
 
 if ($game_quest->land_required_quantity > 0) {
@@ -224,9 +217,8 @@ if ($game_quest->land_required_quantity > 0) {
     $ai_output = 'quest-failed need-land-' .
       $game_quest->fkey_land_required_id;
 
-    game_competency_gain($game_user, 'homeless');
+    zg_competency_gain($game_user, 'homeless');
   }
-
 }
 
 // Wrong hood.
@@ -251,7 +243,7 @@ if (($game_quest->group > 0) && ($game_quest->fkey_neighborhoods_id != 0) &&
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed wrong-hood';
 
-  game_competency_gain($game_user, 'lost');
+  zg_competency_gain($game_user, 'lost');
 }
 
 $sql = 'select percent_complete, bonus_given from quest_completion
@@ -276,11 +268,11 @@ $sql = 'SELECT times_completed FROM `quest_group_completion`
 $quest_completion_html = '';
 
 if ($quest_succeeded) {
-  game_competency_gain($game_user, 'quester');
+  zg_competency_gain($game_user, 'quester');
 
   // Quest-specific competency to add?
   if ($game_quest->fkey_enhanced_competencies_id > 0) {
-    game_competency_gain($game_user, (int) $game_quest->fkey_enhanced_competencies_id);
+    zg_competency_gain($game_user, (int) $game_quest->fkey_enhanced_competencies_id);
   }
 
   $old_energy = $game_user->energy;
@@ -298,7 +290,6 @@ if ($quest_succeeded) {
       $game_quest->experience, $money_added, $game_user->id);
   }
   else {
-
     // Save all updated stats.
     $sql = 'update users set energy = energy - %d,
       experience = experience + %d, money = money + %d,
@@ -312,7 +303,7 @@ if ($quest_succeeded) {
   // Start the energy clock again.
   if ($old_energy == $game_user->energy_max) {
     $sql = 'update users set energy_next_gain = "%s" where id = %d;';
-    $result = db_query($sql, date('Y-m-d H:i:s',
+    db_query($sql, date('Y-m-d H:i:s',
       REQUEST_TIME + $energy_wait), $game_user->id);
   }
 
@@ -328,7 +319,7 @@ if ($quest_succeeded) {
     $sql = 'update quest_completion set percent_complete = least(
       percent_complete + %d, %d) where fkey_users_id = %d and
       fkey_quests_id = %d;';
-    $result = db_query($sql,
+    db_query($sql,
       floor($game_quest->percent_complete / $percentage_divisor),
       $percentage_target, $game_user->id, $quest_id);
   }
@@ -343,7 +334,7 @@ if ($quest_succeeded) {
 
     if ($pc->bonus_given < $percentage_divisor) {
 
-      game_competency_gain($game_user, 'quest finisher');
+      zg_competency_gain($game_user, 'quest finisher');
 
       $game_user->experience += $game_quest->experience;
       $game_user->money += $money_added;
@@ -363,7 +354,6 @@ if ($quest_succeeded) {
   $game_user->values and $game_quest->experience $experience!&nbsp; Complete
   all ${quest_lower}s in this group for an extra reward.</p>
 EOF;
-
     }
 
     // Did they complete all quests in the group?
@@ -401,7 +391,7 @@ points!</p>
 have <span class="highlighted">$quest_group->completed</span> new skill points
 to spend</a></p>
 EOF;
-        game_competency_gain($game_user, 'quest groupie');
+        zg_competency_gain($game_user, 'quest groupie');
 
         // Update user stats.
         $sql = 'update users set skill_points = skill_points + %d
@@ -424,7 +414,6 @@ EOF;
         $percentage_target = 200;
         $percentage_divisor = 2;
       }
-
     }
 
     // What? They've completed a 2nd time?
@@ -447,12 +436,9 @@ EOF;
       if ($quest_group->completed == ($quest_group->total * 2)) {
 
         // Woohoo! User just completed an entire group the second time!
-
         $sql = 'select * from quest_group_bonus
           where fkey_quest_groups_id = %d;';
         $result = db_query($sql, $game_quest->group);
-
-        // Limited to 1 in db.
         $item = db_fetch_object($result);
         $eq_id = $item->fkey_equipment_id;
         $land_id = $item->fkey_land_id;
@@ -460,14 +446,14 @@ EOF;
 
         // Anything to give him/her?
         if (($eq_id + $land_id + $st_id) > 0) {
-          game_competency_gain($game_user, 'second-mile saint');
+          zg_competency_gain($game_user, 'second-mile saint');
 
           // Equipment bonus.
           if ($eq_id > 0) {
 
-            $game_equipment = game_fetch_equip_by_id($game_user->id, $eq_id);
+            $game_equipment = zg_fetch_equip_by_id($game_user->id, $eq_id);
             list($eq_success, $eq_reason, $eq_details) =
-              game_equipment_gain($game_user, $eq_id, 1, 0);
+              zg_equipment_gain($game_user, $eq_id, 1, 0);
 
             if (!$eq_success) {
               slack_send_message('could not give 2nd-round eq bonus for quest ' . $game_quest->id .
@@ -487,7 +473,7 @@ EOF;
               }
             }
 
-            $quest_completion_html .= game_render_equip($game_user,
+            $quest_completion_html .= zg_render_equip($game_user,
               $game_equipment,
               $ai_output,
               [
@@ -503,9 +489,9 @@ EOF;
           // Staff bonus.
           if ($st_id > 0) {
 
-            $game_staff = game_fetch_staff_by_id($game_user, $st_id);
+            $game_staff = zg_fetch_staff_by_id($game_user, $st_id);
             list($st_success, $st_reason, $st_details) =
-              game_staff_gain($game_user, $st_id, 1, 0);
+              zg_staff_gain($game_user, $st_id, 1, 0);
 
             if (!$st_success) {
               slack_send_message('could not give 2nd-round st bonus for quest ' . $game_quest->id .
@@ -525,7 +511,7 @@ EOF;
               }
             }
 
-            $quest_completion_html .= game_render_equip($game_user,
+            $quest_completion_html .= zg_render_equip($game_user,
               $game_staff,
               $ai_output,
               [
@@ -542,7 +528,6 @@ EOF;
           $result = db_query($sql, $game_user->id, $game_quest->group);
         }
         else {
-
           // We don't have a bonus yet.
           $quest_completion_html .= <<< EOF
 <div class="title loot">Congratulations!</div>
@@ -557,16 +542,13 @@ src="/sites/default/files/images/quests/stlouis-soon.png"></div>
 </div>
 EOF;
         }
-
       }
-
     }
-
   }
 
   $game_quest->completed_percent = $percent_complete;
   list($game_quest->rgb, $game_quest->width, $game_quest->completed_percent_overlay) =
-    game_get_quest_completion($game_quest->completed_percent,
+    zg_get_quest_completion($game_quest->completed_percent,
     $percentage_target, $percentage_divisor);
 
   // Check for loot -- equipment.
@@ -592,18 +574,18 @@ EOF;
       || $game_quest->chance_of_loot >= mt_rand(1, 99))
     && ($under_limit || $game_equipment->quantity_limit == 0)) {
 
-    $loot = game_fetch_equip_by_id($game_user, $game_quest->fkey_loot_equipment_id);
+    $loot = zg_fetch_equip_by_id($game_user, $game_quest->fkey_loot_equipment_id);
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
       // Special case for Drunken Stupor.
       if ($game_quest->fkey_loot_equipment_id == 36) {
-        game_competency_gain($game_user, 'drunk');
+        zg_competency_gain($game_user, 'drunk');
       }
 
-      game_equipment_gain($game_user, $game_quest->fkey_loot_equipment_id);
-      game_competency_gain($game_user, 'looter');
-      $loot_html = game_render_equip($game_user, $loot, $ai_output,
+      zg_equipment_gain($game_user, $game_quest->fkey_loot_equipment_id);
+      zg_competency_gain($game_user, 'looter');
+      $loot_html = zg_render_equip($game_user, $loot, $ai_output,
         ['equipment-succeeded' => 'loot']);
 
     }
@@ -673,7 +655,8 @@ EOF;
   </div>
 EOF;
 
-    game_competency_gain($game_user, 'looter');
+    zg_staff_gain($game_user, $game_quest->fkey_loot_staff_id);
+    zg_competency_gain($game_user, 'looter');
 
     // Add/update db entry.
     $sql = 'SELECT staff.*, staff_ownership.quantity
@@ -705,13 +688,13 @@ EOF;
     }
 
     if ($loot->upkeep > 0) {
-      game_recalc_income($game_user);
+      zg_recalc_income($game_user);
     }
 
   }
 
   // Refetch user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $game_quest->exp_added_str = "You gained <strong>$game_quest->experience</strong>";
   $game_quest->money_added_str = "You gained <strong>$money_added</strong>";
   $game_quest->loot_html = $loot_html;
@@ -723,10 +706,10 @@ else {
 $game_quest->outcome = $outcome_reason;
 
 // ------ VIEW ------
-$fetch_header($game_user);
-game_show_ai_output($phone_id, $ai_output);
+zg_fetch_header($game_user);
+zg_show_ai_output($phone_id, $ai_output);
 
-// game_show_quest_slide($game_user, $game_quest);
+// zg_show_quest_slide($game_user, $game_quest);
 
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $game_quest->group);
@@ -740,7 +723,7 @@ if ($game_user->level < 6) {
   $location = $older_missions_html = $newer_missions_html = '';
 }
 
-// FIXME: just show arrows if game_fetch_quest_groups() has groups before or
+// FIXME: just show arrows if zg_fetch_quest_groups() has groups before or
 // after this one.  don't query the db by hand.
 $sql = 'select name from quest_groups where id = %s;';
 $result = db_query($sql, $game_quest->group - 1);
@@ -772,7 +755,7 @@ $loc_quests = t('@location @quests', [
   '@quests' => "{$game_text['quest']}s",
 ]);
 
-//if (game_get_value($game_user, 'enabled_alpha')) {
+//if (zg_get_value($game_user, 'enabled_alpha')) {
   $loc_quests = <<< EOF
 <a href="/$game/quest_groups/$arg2#group-{$game_quest->group}">$loc_quests</a>
 EOF;
@@ -781,7 +764,7 @@ EOF;
 $title = "<span class=\"quest-group-title\" $older_missions_html $loc_quests $newer_missions_html</span>";
 
 // Reread quest group object.
-$qgo = game_fetch_quest_groups($game_user, $group_id);
+$qgo = zg_fetch_quest_groups($game_user, $group_id);
 $qgo->showExpanded = TRUE;
 if ($game_user->level >= 6) {
   $qgo->titleHtml = $title;
@@ -794,7 +777,7 @@ echo <<< EOF
 <div class="swiper-container">
   <div class="swiper-wrapper">
 EOF;
-game_show_quest_group_slide($game_user, $qgo);
+zg_show_quest_group_slide($game_user, $qgo);
 echo <<< EOF
   </div>
 </div>

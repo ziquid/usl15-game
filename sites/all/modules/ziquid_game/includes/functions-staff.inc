@@ -20,7 +20,7 @@
  * @return \stdClass
  *   The staff/agent item, if any.
  */
-function zg_fetch_staff_by_id($game_user, $staff_id) {
+function zg_fetch_staff_by_id(\stdClass $game_user, $staff_id) {
   $sql = 'SELECT staff.*, staff_ownership.quantity
   FROM staff
 
@@ -30,26 +30,26 @@ function zg_fetch_staff_by_id($game_user, $staff_id) {
   WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
   $st = db_fetch_object($result);
-  game_get_icon_path($game_user, $st, 'staff');
+  zg_get_icon_path($game_user, $st, 'staff');
   return $st;
 }
 
 /**
-* Show a staff or agent.
-*
-* @param \stdClass $game_user
-*   The game user object.
-* @param \stdClass $item
-*   The staff item.
-* @param string $ai_output
-*   AI output.
-* @param array $options
-*   Options that modify the display behavior.
-*/
-function zg_show_staff($game_user, $item, &$ai_output, $options = []) {
+ * Show a staff or agent.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The staff item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ */
+function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   static $party_title;
   $classes = [];
 
@@ -67,7 +67,7 @@ function zg_show_staff($game_user, $item, &$ai_output, $options = []) {
   switch ($options['staff-buy-succeeded']) {
 
     case 'failed no-money':
-      $offer = game_luck_money_offer($game_user);
+      $offer = zg_luck_money_offer($game_user);
       $header = '<div class="title">' .
 
         // FIXME remove special characters from text here.
@@ -80,9 +80,9 @@ function zg_show_staff($game_user, $item, &$ai_output, $options = []) {
               '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
             t('Receive @offer @values (1&nbsp;@luck',
             [
-            '@offer' => $offer,
-            '@values' => $game_user->values,
-            '@luck' => $luck,
+              '@offer' => $offer,
+              '@values' => $game_user->values,
+              '@luck' => $luck,
             ]) . ')
           </a>
         </div>
@@ -117,7 +117,7 @@ function zg_show_staff($game_user, $item, &$ai_output, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'lost');
+      zg_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':
@@ -245,7 +245,7 @@ EOF;
 EOF;
   }
   else {
-  // Can't buy.
+    // Can't buy.
     $icon_button = <<< EOF
       <img src="/sites/default/files/images/staff/$game-$item->id.png?2" width="96"
            border="0">
@@ -280,7 +280,7 @@ EOF;
 EOF;
   }
 
-  // grab each action for the staff
+  // Grab each action for the staff.
   $acts_arr = [];
   $sql = 'select * from actions where fkey_staff_id = %d;';
   $result = db_query($sql, $item->id);
@@ -329,7 +329,7 @@ EOF;
   $class_str = implode(' ', $classes);
 
   if ($soon) {
-echo <<< EOF
+    echo <<< EOF
 <div class="land $soon $failed $class_str">
   <div class="land-icon">
     <img src="/sites/default/files/images/staff/$game-soon.png?1" width=96
@@ -401,7 +401,7 @@ EOF;
       </div>
 EOF;
   }
-  else if ($item->initiative_bonus < 0) {
+  elseif ($item->initiative_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $initiative: $item->initiative_bonus
@@ -416,7 +416,7 @@ EOF;
       </div>
 EOF;
   }
-  else if ($item->endurance_bonus < 0) {
+  elseif ($item->endurance_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $endurance: $item->endurance_bonus
@@ -435,7 +435,7 @@ EOF;
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
   }
-  else if ($item->elocution_bonus < 0) {
+  elseif ($item->elocution_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
         $elocution: $item->elocution_bonus
@@ -482,8 +482,9 @@ EOF;
   //    firep($action, 'action associated with staff');
 
     $cost = "Cost: $action->cost Action";
-    if ($action->values_cost > 0)
+    if ($action->values_cost > 0) {
       $cost .= ", $action->values_cost $game_user->values";
+    }
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
@@ -617,7 +618,7 @@ EOF;
  * @return \stdClass[]
  *   The array of staff objects.
  */
-function zg_fetch_visible_staff($game_user) {
+function zg_fetch_visible_staff(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'WHERE staff.id > 0';
   }
@@ -665,10 +666,11 @@ function zg_fetch_visible_staff($game_user) {
  *
  * @param \stdClass $game_user
  *   The game user object.
+ *
  * @return \stdClass
  *   The next staff item to show, if any.
  */
-function zg_fetch_next_staff($game_user) {
+function zg_fetch_next_staff(\stdClass $game_user) {
   if ($game_user->meta == 'admin') {
     $sql_to_add = 'AND staff.id > 0';
   }
@@ -705,7 +707,7 @@ function zg_fetch_next_staff($game_user) {
  * Gain (Hire, etc.) a staff member / agent.
  *
  * @param \stdClass $game_user
- *   The game_user object.
+ *   The zg_user object.
  * @param int $id
  *   The staff id.
  * @param int $quantity
@@ -716,9 +718,9 @@ function zg_fetch_next_staff($game_user) {
  * @return array
  *   An array with success or failure info.
  */
-function zg_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
+function zg_staff_gain(\stdClass &$game_user, $id, $quantity = 1, $st_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // BUG!  How do these get here?
   if ($id == 0) {
@@ -727,7 +729,7 @@ function zg_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
     return [FALSE, 'bad-id', 0];
   }
 
-  // FIXME: refactor to use game_fetch_staff_by_id().
+  // FIXME: refactor to use zg_fetch_staff_by_id().
   $sql = 'select * from staff where id = %d;';
   $result = db_query($sql, $id);
   $st = db_fetch_object($result);
@@ -788,8 +790,8 @@ function zg_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
   }
 
   // Reprocess user object.
-  game_recalc_income($game_user);
-  $game_user = $fetch_user();
+  zg_recalc_income($game_user);
+  $game_user = zg_fetch_user();
   return [TRUE, 'success', 0];
 }
 
@@ -808,11 +810,11 @@ function zg_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
  * @return bool
  *   Whether the sale succeeded or not.
  */
-function zg_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
+function zg_staff_lose(\stdClass &$game_user, $id, $quantity = 1, $st_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  // FIXME: refactor to use game_fetch_staff_by_id().
+  // FIXME: refactor to use zg_fetch_staff_by_id().
   $sql = 'select * from staff where id = %d;';
   $result = db_query($sql, $id);
   $st = db_fetch_object($result);
@@ -842,8 +844,8 @@ function zg_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
   db_query($sql, $st_price, $game_user->id);
 
   // Reprocess user object.
-  game_recalc_income($game_user);
-  $game_user = $fetch_user();
+  zg_recalc_income($game_user);
+  $game_user = zg_fetch_user();
   return TRUE;
 }
 
@@ -857,9 +859,9 @@ function zg_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
  * @param int $req_quantity
  *   The quantity required.
  */
-function zg_required_staff(\stdClass $game_user, $staff_id, $req_quantity) {
+function zg_required_staff(\stdClass $game_user, $staff_id, $req_quantity = 1) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'select quantity from staff_ownership
     where fkey_staff_id = %d and fkey_users_id = %d;';

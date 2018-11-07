@@ -192,7 +192,7 @@ ob_end_clean();
     ' Luck via ' . $subtype . ' (currently ' . $game_user->luck . ') at URL ' .
     $_SERVER['REQUEST_URI'] . ' (IP Address ' . $ip_address
     . ')';
-  game_luck_use($game_user, $luck, $msg, 'purchase', $subtype);
+  game_luck($game_user, $luck, $msg, 'purchase', $subtype);
 }
 
 echo 'YES';

@@ -354,12 +354,17 @@ function zg_init() {
   global $custom_theme, $conf;
 
   $game = arg(0);
-  if (in_array($game, zg_get_zg_list())) {
+  if (in_array($game, zg_get_game_list())) {
 
     define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 
     // Don't cache anything.
     $conf['cache'] = FALSE;
+
+    // Include TypeKit fonts.
+    if ($game == 'wonderland') {
+      drupal_set_html_head('<link rel="stylesheet" href="https://use.typekit.net/unw5gbe.css">');
+    }
 
     $module_path = drupal_get_path('module', 'zg');
     drupal_add_js($module_path . '/js/isotope.pkgd.min.js');
@@ -538,7 +543,7 @@ function zg_save_user_agent($game_user) {
   if (empty($user_list)) {
 
     // No entry?  Create one!
-    zg_set_value($game_user->id, 'user_agent', $user_agent);
+    zg_set_value($game_user, 'user_agent', $user_agent);
     return TRUE;
   }
   else {
@@ -549,7 +554,7 @@ function zg_save_user_agent($game_user) {
 
       // No password?  Update automatically.
       if (empty($game_user->password)) {
-        zg_set_value($game_user->id, 'user_agent', $user_agent);
+        zg_set_value($game_user, 'user_agent', $user_agent);
       }
       else {
         // New user_agent and a password -- gotta authenticate!
@@ -578,11 +583,11 @@ function zg_save_user_IP($game_user) {
   // Admin access.
 //  if ($user->roles[4] == 'web game access') return;
 
-  $last_ip = zg_get_value($game_user->id, 'last_IP', '');
+  $last_ip = zg_get_value($game_user, 'last_IP', '');
 
   // No entry?  Create one!
   if ($last_ip == '') {
-    zg_set_value($game_user->id, 'last_IP', $ip_addr);
+    zg_set_value($game_user, 'last_IP', $ip_addr);
     return TRUE;
   }
   else {
@@ -595,7 +600,7 @@ function zg_save_user_IP($game_user) {
 
       // No password?  Update automatically.
       if (empty($game_user->password)) {
-        zg_set_value($game_user->id, 'last_IP', $ip_addr);
+        zg_set_value($game_user, 'last_IP', $ip_addr);
       }
       else {
         $game = check_plain(arg(0));
@@ -751,10 +756,14 @@ function zg_reset_event_tags_con($id) {
 /**
  * Fetch the user object.
  *
+ * @param bool $force
+ *   TRUE if the user object must be read from the database (ie, the cache is
+ *   known to be bad).
+ *
  * @return bool|null|object|\stdClass
  *   The user object, if any.
  */
-function zg_fetch_user() {
+function zg_fetch_user($force = FALSE) {
 
   global $game, $phone_id, $extra_messages, $next_level, $user;
   // Running from drush cron?  There is no user to fetch, so return silently.
@@ -762,28 +771,32 @@ function zg_fetch_user() {
     return NULL;
   }
 
+  $arg2 = check_plain(arg(2));
+  $ip_addr = ip_address();
+
   // Only allow access through authorized clients.
-  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
+  if (((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) ||
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE)) &&
 
     // Paypal IPN addresses.
-    ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&
-    ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') &&
-    ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') &&
+    ($ip_addr != '66.211.170.66') &&
+    ($ip_addr != '173.0.81.1') &&
+    ($ip_addr != '173.0.81.33') &&
 
     // Web users.
     ($user->roles[4] != 'web game access') &&
 
     // Identified facebook user.
-    (substr(arg(2), 0, 3) != 'fb=') &&
+    (substr($arg2, 0, 3) != 'fb=') &&
 
     // AI player.
-    (substr(arg(2), 0, 3) != 'ai-') &&
+    (substr($arg2, 0, 3) != 'ai-') &&
 
     // Unidentified facebook user.
-    (arg(2) != 'facebook') &&
+    ($arg2 != 'facebook') &&
 
     // Unidentified MS user.
-    (substr(arg(2), 0, 3) != 'ms=')
+    (substr($arg2, 0, 3) != 'ms=')
   ) {
     echo t('This game must be accessed through an authorized client.');
     echo '&nbsp; ';
@@ -791,18 +804,14 @@ function zg_fetch_user() {
     exit;
   }
 
-  if (($user->uid != 0) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid') === FALSE)) {
-  }
-
   // AI player -- only allow from certain IPs.
   if (substr(arg(2), 0, 3) == 'ai-') {
-    if ((ip_address() != $_SERVER['SERVER_ADDR']) &&
+    if (($ip_addr != $_SERVER['SERVER_ADDR']) &&
     ($user->roles[4] != 'web game access')) {
 
       // Ai access from a different host.
       db_set_active('default');
-      drupal_goto(arg(0) . '/error/' . arg(2) . '/E-4713');
+      drupal_goto(arg(0) . '/error/' . $arg2 . '/E-4713');
     }
   }
 
@@ -811,8 +820,8 @@ function zg_fetch_user() {
   $game = check_plain(arg(0));
   $phone_id = zg_get_phoneid();
   // if (arg(2) == 'facebook') echo '$phone_id returned is ' . $phone_id . '<br/>';
-  $arg2 = check_plain(arg(2));
-  db_set_active('zg_' . $game);
+
+  db_set_active('game_' . $game);
 
   // Check for banned users -- phone_id.
   $sql = 'select * from user_blocks where phone_id = "%s";';
@@ -898,7 +907,7 @@ function zg_fetch_user() {
 
   if (strpos($_SERVER['HTTP_USER_AGENT'], 'BlueStacks') !== FALSE) {
     if ($game_user->level <= 50) {
-      zg_set_value($game_user->id, 'sdk', 1);
+      zg_set_value($game_user, 'sdk', 1);
     }
   }
 
@@ -1181,11 +1190,11 @@ function zg_fetch_user() {
   if ($leveled_up && ($game_user->level == 6) &&
     (substr($game_user->meta, 0, 3) !== 'ai_')) {
     db_set_active();
-    drupal_goto($game . '/choose_clan/' . $arg2 . '/0');
+    drupal_goto($game . '/choose_party/' . $arg2 . '/0');
   }
 
   zg_alter('zg_fetch_user_end', $game_user);
-  firep($game_user, 'zg_user at fetch_user');
+  firep($game_user, 'game_user at fetch_user');
   return $game_user;
 }
 
@@ -1193,11 +1202,11 @@ function zg_fetch_user() {
  * Show the game header.
  *
  * @param \stdClass $game_user
- *   The zg_user object.
+ *   The game user object.
  */
 function zg_fetch_header(\stdClass $game_user) {
 
-  global $game, $phone_id, $extra_messages, $next_level;
+  global $game, $extra_messages, $next_level;
 
   // Calculate energy change.
   $energy_bonus = 10 + $game_user->ep_energy_bonus +
@@ -1230,7 +1239,6 @@ function zg_fetch_header(\stdClass $game_user) {
 
     $actions_text = ($game_user->actions > $game_user->actions_max ? '-' : '+') .
       '1 in ' . $actions_minutes . ':' . $actions_seconds;
-
   }
   else {
     $actions_minutes = $actions_seconds = 0;
@@ -1258,7 +1266,6 @@ function zg_fetch_header(\stdClass $game_user) {
 
     $income_text = '+' . $income_str . ' in ' . $money_minutes .
       $money_secondsStr;
-
   }
   else {
     $money_minutes = $money_seconds = 0;
@@ -1307,7 +1314,9 @@ function zg_fetch_header(\stdClass $game_user) {
     $result = db_query($sql, $points_obj->last_goal_achieved);
     $goal_obj = db_fetch_object($result);
 
-    if ($goal_obj->points == 0) $goal_obj->points = 99999999;
+    if ($goal_obj->points == 0) {
+      $goal_obj->points = 99999999;
+    }
 
 firep('points: ' . $points_obj->points);
 firep('points for next prize: ' . $goal_obj->points);
@@ -1323,55 +1332,30 @@ firep('a prize is deserved!');
       $result = db_query($sql, $goal_obj->points);
       $new_goal_obj = db_fetch_object($result);
 
-      if ($new_goal_obj->points == 0) $new_goal_obj->points = 99999999;
+      if ($new_goal_obj->points == 0) {
+        $new_goal_obj->points = 99999999;
+      }
 
       // Which prize should be given?
       if ($goal_obj->points >= 50000) {
-
         // Large gift.
         $prize_id = 37;
       }
       else if ($goal_obj->points >= 5000) {
-
         // Med gift.
         $prize_id = 36;
       }
       else {
-
         // Small gift.
         $prize_id = 35;
       }
 
-      // Does user have any of this present?
-      $sql = 'select quantity from equipment_ownership
-        where fkey_users_id = %d
-        and fkey_equipment_id = %d;';
-      $result = db_query($sql, $game_user->id, $prize_id);
-      $equip_quantity = db_fetch_object($result);
-
-      // Create record.
-      if (empty($equip_quantity)) {
-
-        $sql = 'insert into equipment_ownership
-          (fkey_users_id, fkey_equipment_id, quantity)
-          values
-          (%d, %d, 1);';
-        db_query($sql, $game_user->id, $prize_id);
-      }
-      else {
-        // Update record.
-        $sql = 'update equipment_ownership
-          set quantity = quantity + 1
-          where fkey_users_id = %d
-          and fkey_equipment_id = %d;';
-        $result = db_query($sql, $game_user->id, $prize_id);
-
-      }
+      zg_equipment_gain($game_user, $prize_id);
 
       // Update record of user getting this present.
       $sql = 'update event_points set last_goal_achieved = %d
         where fkey_users_id = %d;';
-      $result = db_query($sql, $goal_obj->points, $game_user->id);
+      db_query($sql, $goal_obj->points, $game_user->id);
 
       // Get present title.
       $sql = 'select name from equipment
