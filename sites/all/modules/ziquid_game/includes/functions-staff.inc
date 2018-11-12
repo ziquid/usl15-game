@@ -7,6 +7,7 @@
  * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
+ * .
  */
 
 /**
@@ -607,6 +608,25 @@ EOF;
   }
 
   echo '</div>';
+}
+
+/**
+ * Render (without showing) a member of the staff.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The staff item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ *
+ * @return string
+ *   The rendered HTML.
+ */
+function zg_render_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
+  return zg_render_equip($game_user, $item, $ai_output, $options);
 }
 
 /**

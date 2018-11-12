@@ -7,6 +7,7 @@
  * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
+ * .
  */
 
 /**
@@ -20,10 +21,25 @@
  *   The quantity needed.
  */
 function zg_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
+  print zg_render_required_equipment($game_user, $equipment_id, $req_quantity);
+}
 
-  global $game;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-
+/**
+ * Show a piece of required equipment.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $equipment_id
+ *   The equipment id.
+ * @param int $req_quantity
+ *   The quantity needed.
+ *
+ * @return string
+ *   The rendered HTML.
+ */
+function zg_render_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
   $eo = zg_fetch_equip_by_id($game_user, $equipment_id);
 
   if ($eo->quantity >= $req_quantity) {
@@ -37,7 +53,7 @@ function zg_required_equipment(\stdClass $game_user, $equipment_id, $req_quantit
     $a_end = '</a>';
   }
 
-  echo <<< EOF
+  $output = <<< EOF
     <div class="quest-required_stuff">Requires
       <div class="quest-required_equipment">
         $a_start
@@ -46,6 +62,8 @@ function zg_required_equipment(\stdClass $game_user, $equipment_id, $req_quantit
       </div>&nbsp;x$req_quantity
     </div>
 EOF;
+
+  return $output;
 }
 
 /**

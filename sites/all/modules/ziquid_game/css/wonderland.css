@@ -16,7 +16,9 @@ body .title {
 .title.error {
 }
 
-.title.loot {
+body .title.loot {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 body .subtitle {
@@ -39,7 +41,7 @@ body .subsubtitle {
 }
 
 body .header {
-  background-color: rgba(0, 0, 0, 0.35) !important;
+  background-color: rgba(80, 0, 0, 0.80);
 }
 
 .header .money {
@@ -148,6 +150,7 @@ body .quests {
 
 .quests .quest-name {
   font-family: Adelle, serif;
+  color: limegreen;
 }
 
 .quests.wrong-hood .quest-name {
@@ -198,7 +201,10 @@ body .quests {
 .quests-soon .quest-required_level {
 }
 
-.quest-succeeded, .election-succeeded, .land-succeeded {
+.quest-succeeded, .quest-action-succeeded, .election-succeeded, .land-succeeded {
+  font-family: Adelle, serif;
+  font-size: 15px;
+  text-transform: none;
 }
 
 .quest-failed, .election-failed, .land-failed {
@@ -773,6 +779,14 @@ body a.button {
   text-align: center;
 }
 
+.quest-details .button-wrapper {
+  text-align: right;
+}
+
+.quest-details .button {
+  margin-bottom: 2px;
+}
+
 .button-wrapper.button-wrapper-do-again {
   text-align: right;
 }
@@ -793,7 +807,8 @@ a, a:link, a:visited, a:hover, a:active {
 .menu-option.not-yet {
 }
 
-.quests, .land {
+body .quests, body .land {
+  margin: 4px 3px 9px;
 }
 
 .quests .quest-required_stuff.missing {
@@ -815,7 +830,20 @@ a, a:link, a:visited, a:hover, a:active {
 .quests .quest-required_stuff .quest-required_equipment img {
 }
 
-.quest-failed, .election-failed, .land-failed, .title.failed {
+.quest-completed-wrapper p, .quest-failed-wrapper p {
+  text-transform: none;
+  margin: 4px 0;
+}
+
+.quest-failed-wrapper p:first-of-type {
+  margin-top: 0;
+}
+
+body .quest-failed, body .election-failed, body .land-failed, body .title.failed {
+  color: red;
+  font-size: 18px;
+  -webkit-text-stroke: 0.4px rgba(192, 192, 192, 0.8);
+  text-shadow: 0 0 2px rgba(192, 192, 192, 0.8);
 }
 
 .quest-do-again, .land-buy-again {
@@ -943,7 +971,9 @@ textarea {
 }
 
 .swiper-slide .title .quest-group-title {
+  margin: 8px 0 5px;
 }
+
 .swiper-slide .title .quest-group-name {
 }
 
@@ -1019,6 +1049,9 @@ span.not-yet-overlay {
 .swiper-slide .quests .quest-required_energy,
 .swiper-slide .quests .quest-required_stuff,
 .swiper-slide .quests .quest-payout {
+  margin-top: 2px;
+  font-size: 10px;
+  text-align: right;
 }
 
 .swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
