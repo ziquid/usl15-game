@@ -1146,7 +1146,7 @@ function zg_theme() {
     ],
 
     'zg_increase_skills' => [
-      'template' => 'zg_increase_skills',
+      'template' => 'templates/zg_increase_skills',
       'arguments' => [
         'phone_id' => NULL,
         'skill' => NULL,

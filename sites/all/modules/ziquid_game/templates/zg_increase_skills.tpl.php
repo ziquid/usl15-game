@@ -175,15 +175,17 @@
   <div class="title">
     Skill Points Remaining: $game_user->skill_points
   </div>
-  <p>
-    &raquo; Use skill points to increase your character's abilities
-  </p>
-  <p>
-    &raquo; All abilities cost 1 point to increase; Actions cost 2
-  </p>
-  <p>
-    &raquo; Once a skill point has been used, it cannot be undone
-  </p>
+  <ul>
+    <li>
+      Use skill points to increase your character's abilities
+    </li>
+    <li>
+      All abilities cost 1 point to increase; Actions cost 2
+    </li>
+    <li>
+      Once a skill point has been used, it cannot be undone
+    </li>
+  </ul>
 </div>
 <div class="user-profile">
 EOF;
