@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @file stlouis_increase_skills.tpl.php
- * Stlouis increase skills page
+ * @file
+ * Game increase skills page.
  *
- * Synced with CG: no
- * Synced with 2114: no
+ * Synced with CG: yes
+ * Synced with 2114: yes
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  $game_user = $fetch_user();
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $game_user = zg_fetch_user();
   $ai_output = 'increase-skill-failed';
 
   switch ($skill) {
@@ -26,7 +27,7 @@
         $sql = 'update users set %s = %s + 1, skill_points = skill_points - 1
           where id = %d;';
         $result = db_query($sql, $skill, $skill, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -41,7 +42,7 @@
 	  skill_points = skill_points - 10
           where id = %d;';
         $result = db_query($sql, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -56,14 +57,14 @@
 	  skill_points = skill_points - 10
           where id = %d;';
         $result = db_query($sql, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
 
       break;
 
-      case 'initiative_10':
+    case 'initiative_10':
 
       if ($game_user->skill_points >= 10) {
 
@@ -71,7 +72,7 @@
           skill_points = skill_points - 10
           where id = %d;';
         $result = db_query($sql, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -86,7 +87,7 @@
           energy_max = energy_max + 10, skill_points = skill_points - 1
           where id = %d;';
         $result = db_query($sql, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -101,7 +102,7 @@
           energy_max = energy_max + 100, skill_points = skill_points - 10
           where id = %d;';
         $result = db_query($sql, $game_user->id);
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -126,7 +127,7 @@
 
         }
 
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -151,7 +152,7 @@
 
         }
 
-        $game_user = $fetch_user();
+        $game_user = zg_fetch_user();
         $ai_output = 'increase-skill-succeeded';
 
       }
@@ -165,15 +166,24 @@
 
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
+
+  // _show_goal($game_user);
 
   echo <<< EOF
-<ul>
-  <li>Use skill points to increase your character's abilities</li>
-  <li>All abilities cost 1 point to increase; Actions cost 2</li>
-</ul>
-<div class="title">
-  Skill Points Remaining: $game_user->skill_points
+<div class="goals current">
+  <div class="title">
+    Skill Points Remaining: $game_user->skill_points
+  </div>
+  <p>
+    &raquo; Use skill points to increase your character's abilities
+  </p>
+  <p>
+    &raquo; All abilities cost 1 point to increase; Actions cost 2
+  </p>
+  <p>
+    &raquo; Once a skill point has been used, it cannot be undone
+  </p>
 </div>
 <div class="user-profile">
 EOF;
@@ -293,7 +303,8 @@ EOF;
 
   }
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"$ai_output\"/>\n-->";
+  }
 
   db_set_active('default');

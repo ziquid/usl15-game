@@ -1712,13 +1712,13 @@ function zg_luck_money_offer(\stdClass $game_user) {
  *
  * @param string $hook
  *   Which hook to call.
- * @param \stdClass $game_user
+ * @param \stdClass|null $game_user
  *   The game's user object.
  *
  * @return bool
  *   TRUE if any hooks exist and returned TRUE.  FALSE otherwise.
  */
-function zg_alter($hook, \stdClass $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
+function zg_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
   $retval = FALSE;
   $game_include_list = zg_includes_get();
 

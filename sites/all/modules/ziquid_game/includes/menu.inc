@@ -66,6 +66,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/increase_skills/%/%'] = [
+      'title' => 'Ziquid Game Increase Skills Page',
+      'page callback' => 'zg_increase_skills_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/quest_groups/%'] = [
       'title' => 'Ziquid Game Quest Groups List',
       'page callback' => 'zg_quest_groups_callback',
@@ -161,14 +169,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Party Message Page',
     'page callback' => 'zg_party_msg_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/increase_skills/%/%'] = [
-    'title' => 'Ziquid Game Increase Skills Page',
-    'page callback' => 'zg_increase_skills_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];

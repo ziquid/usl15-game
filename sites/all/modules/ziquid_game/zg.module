@@ -14,7 +14,7 @@ require_once drupal_get_path('module', 'zg') . '/includes/profanity.inc';
 function zg_cron() {
   global $game;
   define('REQUEST_TIME', time());
-  foreach (zg_get_zg_list() as $game) {
+  foreach (zg_get_game_list() as $game) {
 
     // Module has its own cron?  Skip it.
     if (function_exists($cron = $game . '_cron')) {
@@ -22,11 +22,11 @@ function zg_cron() {
     }
 
     db_set_active('zg_' . $game);
-    include drupal_get_path('module', $game) . '/zg_defs.inc';
+    include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
     // AI moves.
-    include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
-    zg_move_ai();
+    // include drupal_get_path('module', 'zg') . '/' . $game . '_ai.inc';
+    // zg_move_ai();
 
     // Save old approval ratings.
     $sql = 'update elected_officials set approval_45 = approval_30,
@@ -1187,7 +1187,7 @@ function zg_fetch_user($force = FALSE) {
     db_query($sql, $game_user->id);
   }
 
-  if ($leveled_up && ($game_user->level == 6) &&
+  if ($leveled_up && ($game_user->level == zg_get_default('must_choose_party_at_level')) &&
     (substr($game_user->meta, 0, 3) !== 'ai_')) {
     db_set_active();
     drupal_goto($game . '/choose_party/' . $arg2 . '/0');

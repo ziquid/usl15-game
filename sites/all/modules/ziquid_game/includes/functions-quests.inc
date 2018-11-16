@@ -130,8 +130,8 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
         zg_get_icon_path($game_user, $q, 'quests');
 
         $q->description = str_replace(
-          ['  ', '&th;'],
-          ['&nbsp; ', '<span class="thought">'],
+          ['  ', '&th;', '&q;'],
+          ['&nbsp; ', '<span class="thought">', '<div class="quote">'],
           $q->description);
 
         $q->order_in_group = ++$order_in_group;
@@ -624,10 +624,6 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
   $img = $item->icon_path;
   $dont_show_at_all = FALSE;
 
-  if ($item->optionShowBeforeTitle) {
-    $active .= ' (shownBeforeTitle)';
-  }
-
   $wrong_hood = $wrong_hood_wrapper = $wrong_hood_overlay = $comment_start
     = $comment_end = $go_there = '';
 
@@ -775,17 +771,14 @@ EOF;
     $chance_of_loot = $item->chance_of_loot + $item->chance_of_loot_staff;
 
     if ($chance_of_loot > 0) {
-
-      $chance_modifier = '';
+      $chance_of_loot_html = 'chance_of_loot';
       if ($chance_of_loot <= 20) {
-        $chance_modifier = t('Low');
+        $chance_of_loot_html = 'low_chance_of_loot';
       }
       elseif ($chance_of_loot >= 40) {
-        $chance_modifier = t('High');
+        $chance_of_loot_html = 'high_chance_of_loot';
       }
-      echo <<< EOF
-  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
-EOF;
+      echo zg_get_html($chance_of_loot_html);
     }
 
     echo <<< EOF
@@ -1034,29 +1027,26 @@ EOF;
     // Wrong hood?  Show nothing.
   }
   elseif (empty($qa->exp_added_str)) {
+
     // No quest performed -- show disbursements and requirements.
+    $chance_of_loot = $qa->chance_of_loot + $qa->chance_of_loot_staff;
+    if ($chance_of_loot > 0) {
+      $chance_of_loot_html = 'chance_of_loot';
+      if ($chance_of_loot <= 20) {
+        $chance_of_loot_html = 'low_chance_of_loot';
+      }
+      elseif ($chance_of_loot >= 40) {
+        $chance_of_loot_html = 'high_chance_of_loot';
+      }
+//      $output .= zg_get_html($chance_of_loot_html);
+    }
+
     $output .= <<< EOF
     <div class="quest-experience">
       Provides +$qa->experience $experience, 
       +$qa->min_money to $qa->max_money $game_user->values
     </div>
 EOF;
-
-    $chance_of_loot = $qa->chance_of_loot + $qa->chance_of_loot_staff;
-
-    if ($chance_of_loot > 0) {
-
-      $chance_modifier = '';
-      if ($chance_of_loot <= 20) {
-        $chance_modifier = t('Low');
-      }
-      elseif ($chance_of_loot >= 40) {
-        $chance_modifier = t('High');
-      }
-      $output .= <<< EOF
-  <div class="quest-loot">$chance_modifier Chance of Loot!</div>
-EOF;
-    }
 
     $output .= <<< EOF
     <div class="quest-required_energy">

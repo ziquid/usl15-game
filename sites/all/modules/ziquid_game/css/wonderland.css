@@ -1,5 +1,5 @@
-body {
-  background-color: rgb(0, 2, 37) !important;
+body.page-wonderland {
+  background-color: rgb(0, 2, 17);
   color: #f8f8f8;
 }
 
@@ -126,7 +126,8 @@ body .quests {
   min-height: 108px;
 }
 
-.quests .quest-icon {
+body .quests .quest-icon {
+  height: 100px;
 }
 
 .quests .quest-icon img {
@@ -145,7 +146,8 @@ body .quests {
 .quests .quest-complete-text {
 }
 
-.quests .quest-details {
+body .quests .quest-details {
+  display: grid;
 }
 
 .quests .quest-name {
@@ -180,6 +182,7 @@ body .quests {
 }
 
 .quests .quest-loot {
+  text-align: right;
 }
 
 .quests .quest-required_stuff.centered {
@@ -213,25 +216,50 @@ body .quests {
 .land {
 }
 
-.land .land-icon {
+body .land .land-icon {
+  width: 96px;
+  height: 96px;
 }
 
 .land .land-details {
 }
 
 .land .land-name {
+  font-family: Adelle, serif;
+  color: limegreen;
+  text-transform: none;
 }
 
 .land .land-name .type {
 }
 
-.land .land-description {
+body .land .land-description {
+  text-transform: none;
+  color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-family: jaf-facitweb, sans-serif;
+  font-size: 10px;
 }
 
 .land .land-owned, .land .land-action, .land-soon .land-action {
+  font-family: Adelle, serif;
+  color: lightskyblue;
+  text-transform: none;
+  font-size: 14px;
 }
 
-.land .land-action-cost, .land-soon .land-action-cost, .land-disbursements {
+body .land .land-action-cost,
+body .land-soon .land-action-cost,
+body .land-disbursements {
+  font-family: jaf-facitweb, sans-serif;
+  text-transform: none;
+  font-weight: normal;
+  color: #f8f8f8;
+  text-align: right;
+  font-size: 10px;
 }
 
 .land .land-cost {
@@ -809,6 +837,7 @@ a, a:link, a:visited, a:hover, a:active {
 
 body .quests, body .land {
   margin: 4px 3px 9px;
+  background-color: #000225;
 }
 
 .quests .quest-required_stuff.missing {
@@ -816,6 +845,17 @@ body .quests, body .land {
 
 .quests .quest-payout.negative,
 .land .land-payout.negative, .land-soon .land-payout.negative {
+  text-transform: none;
+  color: #f80808;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-family: jaf-facitweb, sans-serif;
+  font-size: 10px;
+  text-align: right;
+  -webkit-text-stroke: 0.4px rgba(192, 192, 2, 0.4);
+  text-shadow: 0 0 0.8px rgba(192, 192, 2, 0.4);
 }
 
 .quests .quest-description, .land .land-description {
@@ -862,6 +902,10 @@ body .quest-failed, body .election-failed, body .land-failed, body .title.failed
 }
 
 .quests .quest-num, .quests .quest-requisites, .quests .quest-disbursements {
+}
+
+body .land {
+  min-height: 96px;
 }
 
 .land .land-owned {
@@ -1088,6 +1132,8 @@ div.speech-bubble-wrapper .wise_old_man {
 }
 
 .lesser-bonus-text {
+  -webkit-text-stroke: 0.4px rgba(192, 192, 0, 0.4);
+  text-shadow: 0 0 0.8px rgba(192, 192, 0, 0.8);
 }
 
 div.lesser-bonus-text {
@@ -1108,3 +1154,16 @@ div.lesser-bonus-text {
   font-style: italic;
 }
 
+.quote {
+  margin: 6px;
+  color: limegreen;
+  text-align: center;
+}
+
+.quote:before {
+  content: "\201c";
+}
+
+.quote:after {
+  content: "\201d";
+}
