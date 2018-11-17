@@ -259,6 +259,7 @@ $game_text = [
   'mayor_tab' => 'Monarchy',
   'quest' => 'Quest',
   'quest_lower' => 'quest',
+  'quests_tab' => 'Quests',
   'staff' => 'Staff',
 ];
 

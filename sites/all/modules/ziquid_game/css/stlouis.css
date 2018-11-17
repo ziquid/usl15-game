@@ -509,6 +509,10 @@ a.version {
   text-shadow: 0 0 8px rgba(255, 255, 0, 0.01);
 }
 
+.new-main-menu .quests-menu {
+  display: none;
+}
+
 .competency-pip {
   border-right: solid 2px #693318 !important;
 }
