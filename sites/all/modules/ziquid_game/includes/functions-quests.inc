@@ -628,7 +628,7 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
     = $comment_end = $go_there = '';
 
   // Has quest actions?  Don't allow clicking on image or title.
-  if (property_exists($item, 'quest_actions')) {
+  if (property_exists($item, 'quest_actions') && is_array($item->quest_actions)) {
     $comment_start = '<!-- ';
     $comment_end = ' -->';
   }
@@ -751,7 +751,7 @@ EOF;
   if (strlen($wrong_hood)) {
     // Wrong hood?  Show nothing.
   }
-  elseif (property_exists($item, 'quest_actions')) {
+  elseif (property_exists($item, 'quest_actions') && is_array($item->quest_actions)) {
     // Quest actions?  Show them instead of disbursements and reqs.
     foreach ($item->quest_actions as $action) {
       print zg_render_quest_action($game_user, $action);
