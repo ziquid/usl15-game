@@ -58,6 +58,14 @@ function zg_menu() {
       'file' => 'includes/menu/zg_elders_do_reset.inc',
     ];
 
+    $items[$game . '/elders_enable_alpha/%'] = [
+      'title' => 'Ziquid Game Elders Enable Alpha',
+      'page callback' => 'zg_elders_enable_alpha_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/home/%'] = [
       'title' => 'Ziquid Game Home Page',
       'page callback' => 'zg_homepage_callback',
@@ -240,14 +248,6 @@ function zg_menu() {
   $items[$game . '/elders_rename/%'] = [
     'title' => 'Ziquid Game Elders Rename',
     'page callback' => 'zg_elders_rename_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/elders_enable_alpha/%'] = [
-    'title' => 'Ziquid Game Elders Enable Alpha',
-    'page callback' => 'zg_elders_enable_alpha_callback',
     'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
@@ -1212,7 +1212,7 @@ function zg_theme() {
     ],
 
     'zg_elders_enable_alpha' => [
-      'template' => 'zg_elders_enable_alpha',
+      'template' => 'templates/zg_elders_enable_alpha',
       'arguments' => [
         'phone_id' => NULL,
       ]

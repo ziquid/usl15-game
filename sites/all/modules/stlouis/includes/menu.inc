@@ -163,14 +163,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/elders_enable_alpha/%'] = [
-    'title' => 'St. Louis Elders Enable Alpha',
-    'page callback' => 'stlouis_elders_enable_alpha_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/help/%'] = [
     'title' => 'St. Louis Help',
     'page callback' => 'stlouis_help_callback',
@@ -575,15 +567,6 @@ function stlouis_elders_rename_callback($phone_id) {
   }
 
   return theme('stlouis_elders_rename', $phone_id);
-}
-
-function stlouis_elders_enable_alpha_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_elders_enable_alpha', $phone_id);
 }
 
 function stlouis_elders_set_password_callback($phone_id) {
@@ -1051,13 +1034,6 @@ function stlouis_theme() {
 
     'stlouis_elders_rename' => [
       'template' => 'stlouis_elders_rename',
-      'arguments' => [
-        'phone_id' => NULL,
-      ]
-    ],
-
-    'stlouis_elders_enable_alpha' => [
-      'template' => 'stlouis_elders_enable_alpha',
       'arguments' => [
         'phone_id' => NULL,
       ]

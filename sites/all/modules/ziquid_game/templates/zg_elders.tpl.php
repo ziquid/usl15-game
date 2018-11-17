@@ -146,6 +146,14 @@ echo <<< EOF
 </div>
 EOF;
 
+if (zg_get_value($game_user, 'NothingButFur', FALSE)) {
+  echo <<< EOF
+<div class="menu-option">
+  <a href="/wonderland/bounce/$arg2">
+    Go Down the Rabbit Hole (Free)
+  </a>
+</div>
+EOF;
+}
+
 db_set_active('default');
-?>
-</div><br><br>

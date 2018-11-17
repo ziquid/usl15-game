@@ -13,17 +13,17 @@
 /* ------ CONTROLLER ------ */
 global $game, $phone_id;
 
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 // User chose to toggle!
 if ($arg3 == 'yes') {
-  game_set_value($game_user, 'enabled_alpha', !game_get_value($game_user, 'enabled_alpha'));
+  zg_set_value($game_user, 'enabled_alpha', !game_get_value($game_user, 'enabled_alpha'));
   db_set_active();
   drupal_goto("/$game/elders/$arg2");
 }
 
-if (game_get_value($game_user, 'enabled_alpha')) {
+if (zg_get_value($game_user, 'enabled_alpha')) {
   $enable = 'Disable';
 }
 else {
@@ -35,11 +35,11 @@ $enable_lower = drupal_strtolower($enable);
 if (strlen($code = $_GET['code'])) {
   if ($code[0] === '-') {
     // Allow for removal of codes already set.
-    game_remove_value($game_user, substr($code, 1));
+    zg_remove_value($game_user, substr($code, 1));
     $code_response = '<div class="system-message-response">' .
       t('Your code has been removed.') . '</div>';
   }
-  game_set_value($game_user, $code);
+  zg_set_value($game_user, $code);
   $code_response = '<div class="system-message-response">' .
     t('Code %code has been activated.', ['%code' => $code]) . '</div>';
 }
@@ -48,7 +48,7 @@ else {
 }
 
 /* ------ VIEW ------ */
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 db_set_active('default');
 ?>
 <?php print $code_response; ?>

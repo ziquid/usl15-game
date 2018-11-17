@@ -6,307 +6,276 @@
  *
  * Synced with CG: yes
  * Synced with 2114: yes
- * Ready for phpcbf: no
+ * Ready for phpcbf: yes
  * Ready for MVC separation: no
  * .
  */
 
-  global $game, $phone_id;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
-  $ai_output = 'increase-skill-failed';
+global $game, $phone_id;
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+$ai_output = 'increase-skill-failed';
 
-  switch ($skill) {
+switch ($skill) {
 
-    case 'initiative':
-    case 'endurance':
-    case 'elocution':
+  case 'initiative':
+  case 'endurance':
+  case 'elocution':
 
-      if ($game_user->skill_points >= 1) {
+    if ($game_user->skill_points >= 1) {
+      $sql = 'update users set %s = %s + 1, skill_points = skill_points - 1
+        where id = %d;';
+      $result = db_query($sql, $skill, $skill, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
 
-        $sql = 'update users set %s = %s + 1, skill_points = skill_points - 1
-          where id = %d;';
-        $result = db_query($sql, $skill, $skill, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
+  case 'elocution_10':
 
+    if ($game_user->skill_points >= 10) {
+      $sql = 'update users set elocution = elocution + 10,
+  skill_points = skill_points - 10
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
+
+  case 'endurance_10':
+
+    if ($game_user->skill_points >= 10) {
+      $sql = 'update users set endurance = endurance + 10,
+  skill_points = skill_points - 10
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
+
+  case 'initiative_10':
+
+    if ($game_user->skill_points >= 10) {
+      $sql = 'update users set initiative = initiative + 10,
+        skill_points = skill_points - 10
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
+
+  case 'energy_max':
+
+    if ($game_user->skill_points >= 1) {
+      $sql = 'update users set energy = energy + 10,
+        energy_max = energy_max + 10, skill_points = skill_points - 1
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
+
+  case 'energy_100':
+
+    if ($game_user->skill_points >= 10) {
+      $sql = 'update users set energy = energy + 100,
+        energy_max = energy_max + 100, skill_points = skill_points - 10
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
+
+  case 'actions_5':
+
+    if ($game_user->skill_points >= 10) {
+      $sql = 'update users set actions = actions + 5,
+        actions_max = actions_max + 5, skill_points = skill_points - 10
+        where id = %d;';
+      $result = db_query($sql, $game_user->id);
+
+      // Start the actions clock if needed.
+      if ($game_user->actions == $game_user->actions_max) {
+        $sql = 'update users set actions_next_gain = "%s" where id = %d;';
+        $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
+          $game_user->id);
       }
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
 
-      break;
+  case 'actions':
 
-    case 'elocution_10':
+    if ($game_user->skill_points >= 2) {
+      $sql = 'update users set actions = actions + 1,
+        actions_max = actions_max + 1, skill_points = skill_points - 2
+        where id = %d;';
+      db_query($sql, $game_user->id);
 
-      if ($game_user->skill_points >= 10) {
-
-        $sql = 'update users set elocution = elocution + 10,
-	  skill_points = skill_points - 10
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
+      // Start the actions clock if needed.
+      if ($game_user->actions == $game_user->actions_max) {
+        $sql = 'update users set actions_next_gain = "%s" where id = %d;';
+        db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
+          $game_user->id);
       }
+      $game_user = zg_fetch_user();
+      $ai_output = 'increase-skill-succeeded';
+    }
+    break;
 
-      break;
+  case 'none':
 
-    case 'endurance_10':
+    $ai_output = 'increase-skill-shown';
+    break;
+}
 
-      if ($game_user->skill_points >= 10) {
+zg_fetch_header($game_user);
 
-        $sql = 'update users set endurance = endurance + 10,
-	  skill_points = skill_points - 10
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
+// _show_goal($game_user);
 
-      }
-
-      break;
-
-    case 'initiative_10':
-
-      if ($game_user->skill_points >= 10) {
-
-        $sql = 'update users set initiative = initiative + 10,
-          skill_points = skill_points - 10
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
-      }
-
-      break;
-
-    case 'energy_max':
-
-      if ($game_user->skill_points >= 1) {
-
-        $sql = 'update users set energy = energy + 10,
-          energy_max = energy_max + 10, skill_points = skill_points - 1
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
-      }
-
-      break;
-
-    case 'energy_100':
-
-      if ($game_user->skill_points >= 10) {
-
-        $sql = 'update users set energy = energy + 100,
-          energy_max = energy_max + 100, skill_points = skill_points - 10
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
-      }
-
-      break;
-
-    case 'actions_5':
-
-      if ($game_user->skill_points >= 10) {
-
-        $sql = 'update users set actions = actions + 5,
-          actions_max = actions_max + 5, skill_points = skill_points - 10
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-
-        // Start the actions clock if needed.
-        if ($game_user->actions == $game_user->actions_max) {
-
-          $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-          $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
-            $game_user->id);
-
-        }
-
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
-      }
-
-      break;
-
-    case 'actions':
-
-      if ($game_user->skill_points >= 2) {
-
-        $sql = 'update users set actions = actions + 1,
-          actions_max = actions_max + 1, skill_points = skill_points - 2
-          where id = %d;';
-        $result = db_query($sql, $game_user->id);
-
-        // Start the actions clock if needed.
-        if ($game_user->actions == $game_user->actions_max) {
-
-          $sql = 'update users set actions_next_gain = "%s" where id = %d;';
-          $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
-            $game_user->id);
-
-        }
-
-        $game_user = zg_fetch_user();
-        $ai_output = 'increase-skill-succeeded';
-
-      }
-
-      break;
-
-    case 'none':
-
-      $ai_output = 'increase-skill-shown';
-      break;
-
-  }
-
-  zg_fetch_header($game_user);
-
-  // _show_goal($game_user);
-
-  echo <<< EOF
+echo <<< EOF
 <div class="goals current">
-  <div class="title">
-    Skill Points Remaining: $game_user->skill_points
-  </div>
-  <ul>
-    <li>
-      Use skill points to increase your character's abilities
-    </li>
-    <li>
-      All abilities cost 1 point to increase; Actions cost 2
-    </li>
-    <li>
-      Once a skill point has been used, it cannot be undone
-    </li>
-  </ul>
+<div class="title">
+  Skill Points Remaining: $game_user->skill_points
+</div>
+<ul>
+  <li>
+    Use skill points to increase your character's abilities
+  </li>
+  <li>
+    All abilities cost 1 point to increase; Actions cost 2
+  </li>
+  <li>
+    Once a skill point has been used, it cannot be undone
+  </li>
+</ul>
 </div>
 <div class="user-profile">
 EOF;
 
-  if ($game_user->skill_points == 0) {
+if ($game_user->skill_points == 0) {
 
-    echo <<< EOF
-  <div class="heading">Energy:</div>
-  <div class="value">$game_user->energy_max <div class="action not-yet">Can't
-    increase Energy</div></div><br/>
+  echo <<< EOF
+<div class="heading">Energy:</div>
+<div class="value">$game_user->energy_max <div class="action not-yet">Can't
+  increase Energy</div></div><br/>
 
-  <div class="heading">$initiative:</div>
-  <div class="value">$game_user->initiative <div class="action not-yet">Can't
-    increase $initiative</div></div><br/>
+<div class="heading">$initiative:</div>
+<div class="value">$game_user->initiative <div class="action not-yet">Can't
+  increase $initiative</div></div><br/>
 
-  <div class="heading">$endurance:</div>
-  <div class="value">$game_user->endurance <div class="action not-yet">Can't
-    increase $endurance</div></div><br/>
+<div class="heading">$endurance:</div>
+<div class="value">$game_user->endurance <div class="action not-yet">Can't
+  increase $endurance</div></div><br/>
 
-  <div class="heading">$elocution:</div>
-  <div class="value">$game_user->elocution <div class="action not-yet">Can't
-    increase $elocution</div></div><br/>
-
-    <div class="heading">Actions:</div>
-  <div class="value">$game_user->actions_max <div class="action not-yet">Can't
-    increase Actions</div></div><br/>
-</div>
-EOF;
-
-  }
-  elseif ($game_user->skill_points == 1) {
-
-    echo <<< EOF
-  <div class="heading">Energy:</div>
-  <div class="value">$game_user->energy_max <div class="action"><a
-    href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
-
-  <div class="heading">$initiative:</div>
-  <div class="value">$game_user->initiative <div class="action"><a
-    href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
-
-  <div class="heading">$endurance:</div>
-  <div class="value">$game_user->endurance <div class="action"><a
-    href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
-
-  <div class="heading">$elocution:</div>
-  <div class="value">$game_user->elocution <div class="action"><a
-    href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
-
-    <div class="heading">Actions:</div>
-  <div class="value">$game_user->actions_max <div class="action not-yet">Can't
-    increase Actions</div></div><br/>
-</div>
-EOF;
-
-  }
-  elseif ($game_user->skill_points >= 10) {
-
-        echo <<< EOF
-  <div class="heading">Energy:</div>
-  <div class="value">$game_user->energy_max <div class="action"><a
-    href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div>
-  <div class="value"><div class="action"><a
-    href="/$game/increase_skills/$arg2/energy_100">Inc +100</a></div></div><br/>
-
-  <div class="heading">$initiative:</div>
-  <div class="value">$game_user->initiative <div class="action"><a
-    href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div>
-  <div class="value"><div class="action"><a
-    href="/$game/increase_skills/$arg2/initiative_10">Increase +10</a></div></div><br/>
-
-  <div class="heading">$endurance:</div>
-  <div class="value">$game_user->endurance <div class="action"><a
-    href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div>
-  <div class="value"><div class="action"><a
-    href="/$game/increase_skills/$arg2/endurance_10">Increase +10</a></div></div><br/>
-
-  <div class="heading">$elocution:</div>
-  <div class="value">$game_user->elocution <div class="action"><a
-    href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div>
-  <div class="value"><div class="action"><a
-    href="/$game/increase_skills/$arg2/elocution_10">Increase +10</a></div></div><br/>
+<div class="heading">$elocution:</div>
+<div class="value">$game_user->elocution <div class="action not-yet">Can't
+  increase $elocution</div></div><br/>
 
   <div class="heading">Actions:</div>
-  <div class="value">$game_user->actions_max <div class="action"><a
-    href="/$game/increase_skills/$arg2/actions">Increase</a></div></div>
-  <div class="value"><div class="action"><a
-    href="/$game/increase_skills/$arg2/actions_5">Increase +5</a></div></div><br/>
+<div class="value">$game_user->actions_max <div class="action not-yet">Can't
+  increase Actions</div></div><br/>
 </div>
 EOF;
 
-  }
-  elseif ($game_user->skill_points > 1) {
+}
+elseif ($game_user->skill_points == 1) {
 
-        echo <<< EOF
-  <div class="heading">Energy:</div>
-  <div class="value">$game_user->energy_max <div class="action"><a
-    href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
+  echo <<< EOF
+<div class="heading">Energy:</div>
+<div class="value">$game_user->energy_max <div class="action"><a
+  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
 
-  <div class="heading">$initiative:</div>
-  <div class="value">$game_user->initiative <div class="action"><a
-    href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
+<div class="heading">$initiative:</div>
+<div class="value">$game_user->initiative <div class="action"><a
+  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
 
-  <div class="heading">$endurance:</div>
-  <div class="value">$game_user->endurance <div class="action"><a
-    href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
+<div class="heading">$endurance:</div>
+<div class="value">$game_user->endurance <div class="action"><a
+  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
 
-  <div class="heading">$elocution:</div>
-  <div class="value">$game_user->elocution <div class="action"><a
-    href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
+<div class="heading">$elocution:</div>
+<div class="value">$game_user->elocution <div class="action"><a
+  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
 
   <div class="heading">Actions:</div>
-  <div class="value">$game_user->actions_max <div class="action"><a
-    href="/$game/increase_skills/$arg2/actions">Increase</a></div></div><br/>
+<div class="value">$game_user->actions_max <div class="action not-yet">Can't
+  increase Actions</div></div><br/>
 </div>
 EOF;
 
-  }
+}
+elseif ($game_user->skill_points >= 10) {
 
-  if (substr($phone_id, 0, 3) == 'ai-') {
-    echo "<!--\n<ai \"$ai_output\"/>\n-->";
-  }
+      echo <<< EOF
+<div class="heading">Energy:</div>
+<div class="value">$game_user->energy_max <div class="action"><a
+  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div>
+<div class="value"><div class="action"><a
+  href="/$game/increase_skills/$arg2/energy_100">Inc +100</a></div></div><br/>
 
-  db_set_active('default');
+<div class="heading">$initiative:</div>
+<div class="value">$game_user->initiative <div class="action"><a
+  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div>
+<div class="value"><div class="action"><a
+  href="/$game/increase_skills/$arg2/initiative_10">Increase +10</a></div></div><br/>
+
+<div class="heading">$endurance:</div>
+<div class="value">$game_user->endurance <div class="action"><a
+  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div>
+<div class="value"><div class="action"><a
+  href="/$game/increase_skills/$arg2/endurance_10">Increase +10</a></div></div><br/>
+
+<div class="heading">$elocution:</div>
+<div class="value">$game_user->elocution <div class="action"><a
+  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div>
+<div class="value"><div class="action"><a
+  href="/$game/increase_skills/$arg2/elocution_10">Increase +10</a></div></div><br/>
+
+<div class="heading">Actions:</div>
+<div class="value">$game_user->actions_max <div class="action"><a
+  href="/$game/increase_skills/$arg2/actions">Increase</a></div></div>
+<div class="value"><div class="action"><a
+  href="/$game/increase_skills/$arg2/actions_5">Increase +5</a></div></div><br/>
+</div>
+EOF;
+
+}
+elseif ($game_user->skill_points > 1) {
+
+      echo <<< EOF
+<div class="heading">Energy:</div>
+<div class="value">$game_user->energy_max <div class="action"><a
+  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
+
+<div class="heading">$initiative:</div>
+<div class="value">$game_user->initiative <div class="action"><a
+  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
+
+<div class="heading">$endurance:</div>
+<div class="value">$game_user->endurance <div class="action"><a
+  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
+
+<div class="heading">$elocution:</div>
+<div class="value">$game_user->elocution <div class="action"><a
+  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
+
+<div class="heading">Actions:</div>
+<div class="value">$game_user->actions_max <div class="action"><a
+  href="/$game/increase_skills/$arg2/actions">Increase</a></div></div><br/>
+</div>
+EOF;
+
+}
+
+if (substr($phone_id, 0, 3) == 'ai-') {
+  echo "<!--\n<ai \"$ai_output\"/>\n-->";
+}
+
+db_set_active('default');

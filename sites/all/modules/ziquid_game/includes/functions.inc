@@ -2109,7 +2109,8 @@ if (!function_exists('drupal_clean_css_identifier')) {
     // Use the advanced drupal_static() pattern, since this is called veryoften.
     static $drupal_static_fast;
     if (!isset($drupal_static_fast)) {
-      $drupal_static_fast['allow_css_double_underscores'] =& drupal_static(__FUNCTION__ . ':allow_css_double_underscores');
+      $drupal_static_fast['allow_css_double_underscores'] =&
+        drupal_static(__FUNCTION__ . ':allow_css_double_underscores');
     }
     $allow_css_double_underscores =& $drupal_static_fast['allow_css_double_underscores'];
     if (!isset($allow_css_double_underscores)) {
@@ -2132,7 +2133,9 @@ if (!function_exists('drupal_clean_css_identifier')) {
     // - 0-9 (U+0061 - U+007A)
     // - ISO 10646 characters U+00A1 and higher
     // We strip out any character not in the above list.
-    $identifier = preg_replace('/[^\\x{002D}\\x{0030}-\\x{0039}\\x{0041}-\\x{005A}\\x{005F}\\x{0061}-\\x{007A}\\x{00A1}-\\x{FFFF}]/u', '', $identifier);
+    $identifier = preg_replace(
+      '/[^\\x{002D}\\x{0030}-\\x{0039}\\x{0041}-\\x{005A}\\x{005F}\\x{0061}-\\x{007A}\\x{00A1}-\\x{FFFF}]/u',
+      '', $identifier);
     return $identifier;
   }
 
