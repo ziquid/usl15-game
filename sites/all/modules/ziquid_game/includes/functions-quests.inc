@@ -351,7 +351,7 @@ EOF;
   if (isset($qgo->q)) {
     echo '<div class="quest-images">';
     foreach ($qgo->q as $q) {
-firep($q, 'quest object');
+//firep($q, 'quest object');
       // Mark quests that can't be performed in this hood.
       $q->wrong_hood = $q->not_yet = '';
       if ($q->fkey_neighborhoods_id &&

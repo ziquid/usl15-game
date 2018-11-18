@@ -263,6 +263,7 @@ $game_text = [
   'quest' => 'Mission',
   'quest_lower' => 'mission',
   'staff' => 'Staff',
+  'staff_tab' => 'Staff/Agents',
 ];
 
 if ($event_type == EVENT_NEW_NAMES) {

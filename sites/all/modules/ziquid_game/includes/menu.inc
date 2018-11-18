@@ -66,6 +66,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/equipment/%'] = [
+      'title' => 'Ziquid Game Equipment',
+      'page callback' => 'zg_equipment_list_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/home/%'] = [
       'title' => 'Ziquid Game Home Page',
       'page callback' => 'zg_homepage_callback',
@@ -78,6 +86,14 @@ function zg_menu() {
       'title' => 'Ziquid Game Increase Skills Page',
       'page callback' => 'zg_increase_skills_callback',
       'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
+    $items[$game . '/land/%'] = [
+      'title' => 'Ziquid Game Land List',
+      'page callback' => 'zg_land_list_callback',
+      'page arguments' => [2],
       'access arguments' => ['access game content'],
       'type' => MENU_CALLBACK,
     ];
@@ -333,14 +349,6 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items[$game . '/land/%'] = [
-    'title' => 'Ziquid Game Land',
-    'page callback' => 'zg_land_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items[$game . '/land_buy/%/%/%'] = [
     'title' => 'Ziquid Game Land Buy',
     'page callback' => 'zg_land_buy_callback',
@@ -401,14 +409,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Actions Do',
     'page callback' => 'zg_actions_do_callback',
     'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/equipment/%'] = [
-    'title' => 'Ziquid Game Equipment',
-    'page callback' => 'zg_equipment_list_callback',
-    'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -845,9 +845,7 @@ function zg_choose_name_callback($phone_id) {
   }
 
   return theme('zg_choose_name', $phone_id);
-
 }
-
 
 function zg_enter_referral_code_callback($phone_id) {
 
@@ -856,9 +854,7 @@ function zg_enter_referral_code_callback($phone_id) {
   }
 
   return theme('zg_enter_referral_code', $phone_id);
-
 }
-
 
 function zg_land_list_callback($phone_id) {
 
@@ -867,9 +863,7 @@ function zg_land_list_callback($phone_id) {
   }
 
   return theme('zg_land_list', $phone_id);
-
 }
-
 
 function zg_land_buy_callback($phone_id, $land_id, $quantity) {
 
@@ -1341,7 +1335,7 @@ function zg_theme() {
     ],
 
     'zg_land_list' => [
-      'template' => 'zg_land_list',
+      'template' => 'templates/zg_land_list',
       'arguments' => [
         'phone_id' => NULL,
       ]
@@ -1415,7 +1409,7 @@ function zg_theme() {
     ],
 
     'zg_equipment_list' => [
-      'template' => 'zg_equipment_list',
+      'template' => 'templates/zg_equipment_list',
       'arguments' => [
         'phone_id' => NULL,
       ]

@@ -509,7 +509,7 @@ a.version {
   text-shadow: 0 0 8px rgba(255, 255, 0, 0.01);
 }
 
-.new-main-menu .quests-menu {
+.new-main-menu ul {
   display: none;
 }
 

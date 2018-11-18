@@ -710,8 +710,7 @@ function zg_show_aides_menu(\stdClass $game_user) {
   <a href="/$game/land/$arg2" class="button $land_active">$land_plural</a>
   <a href="/$game/equipment/$arg2" class="button $equip_active">$equipment</a>
   <a href="#" class="button not-yet $clan_eq_active">{$game_text['clan_eq_short']}</a>
-  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff']}/{$game_text['agents']}</a>
-  <!--<a href="/$game/agents/$arg2" class="button">Agents</a>-->
+  <a href="/$game/staff/$arg2" class="button $staff_active">{$game_text['staff_tab']}</a>
 </div>
 EOF;
 
@@ -1719,13 +1718,15 @@ function zg_luck_money_offer(\stdClass $game_user) {
  *   TRUE if any hooks exist and returned TRUE.  FALSE otherwise.
  */
 function zg_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
+  $game = check_plain(arg(0));
+
   $retval = FALSE;
   $game_include_list = zg_includes_get();
 
   // Find and call hook(s).
   foreach ($game_include_list as $type_include_file) {
     $include_file = substr($type_include_file, strpos($type_include_file, '/') + 1);
-    $function_name = 'zg_' . $include_file . '_' . $hook;
+    $function_name = $game . '_' . $include_file . '_' . $hook;
     if (function_exists($function_name)) {
       $retval |= $function_name($game_user, $garg2, $garg3, $garg4);
     }
@@ -1748,8 +1749,8 @@ function zg_includes_add($include_file, $type) {
   global $game;
   $game_include_list = &drupal_static('zg_include_list', []);
   $game_include_missing = &drupal_static('zg_include_missing', []);
-  $module_path = drupal_get_path('module', $game);
-  $file_to_include = $module_path . '/includes/' . $type . '/' . $include_file . '.inc';
+  $module_path = drupal_get_path('module', 'zg');
+  $file_to_include = $module_path . '/includes/' . $type . '/' . $game . '_' . $include_file . '.inc';
 
   // Already in include list; return.
   if (in_array($type . '/' . $include_file, $game_include_list)) {
@@ -1764,7 +1765,7 @@ function zg_includes_add($include_file, $type) {
   if (file_exists($file_to_include)) {
     $game_include_list[] = $type . '/' . $include_file;
     include_once $file_to_include;
-    $function_name = 'zg_' . $include_file . '_init';
+    $function_name = $game . '_' . $include_file . '_init';
     if (function_exists($function_name)) {
       $function_name();
     }
@@ -2134,7 +2135,8 @@ if (!function_exists('drupal_clean_css_identifier')) {
     // - ISO 10646 characters U+00A1 and higher
     // We strip out any character not in the above list.
     $identifier = preg_replace(
-      '/[^\\x{002D}\\x{0030}-\\x{0039}\\x{0041}-\\x{005A}\\x{005F}\\x{0061}-\\x{007A}\\x{00A1}-\\x{FFFF}]/u',
+      '/[^\\x{002D}\\x{0030}-\\x{0039}\\x{0041}-\\x{005A}\\x{005F}' .
+      '\\x{0061}-\\x{007A}\\x{00A1}-\\x{FFFF}]/u',
       '', $identifier);
     return $identifier;
   }

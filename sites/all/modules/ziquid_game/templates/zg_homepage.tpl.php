@@ -393,13 +393,25 @@ $extra_bonus
 <div class="new-main-menu">
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
     usemap="#new_main_menu">
-  <a class="quests-menu" href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}">
-    {$game_text['quests_tab']}
-  </a>
-  <a class="elections-menu" href="/$game/elections/$arg2">
-    $election_tab
-  </a>
+    <ul>
+      <li>
+        <a class="quests-menu" 
+          href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}">
+          {$game_text['quests_tab']}
+        </a>  
+      </li>
+      <li>
+        <a class="elections-menu" href="/$game/elections/$arg2">
+          $election_tab
+        </a>
+      </li>
 
+      <li>
+        <a class="aides-menu" href="/$game/land/$arg2">
+          {$game_text['aides_tab']}
+        </a>
+      </li>
+    </ul>
   <map name="new_main_menu">
 EOF;
 

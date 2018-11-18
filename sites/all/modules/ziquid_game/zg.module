@@ -21,7 +21,7 @@ function zg_cron() {
       continue;
     }
 
-    db_set_active('zg_' . $game);
+    db_set_active('game_' . $game);
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
     // AI moves.

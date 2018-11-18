@@ -243,14 +243,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/land/%'] = [
-    'title' => 'St. Louis Land',
-    'page callback' => 'stlouis_land_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/land_buy/%/%/%'] = [
     'title' => 'St. Louis Land Buy',
     'page callback' => 'stlouis_land_buy_callback',
@@ -311,14 +303,6 @@ function stlouis_menu() {
     'title' => 'St. Louis Actions Do',
     'page callback' => 'stlouis_actions_do_callback',
     'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/equipment/%'] = [
-    'title' => 'St. Louis Equipment',
-    'page callback' => 'stlouis_equipment_list_callback',
-    'page arguments' => [2],
     'access arguments' => ['access stlouis content'],
     'type' => MENU_CALLBACK,
   ];
@@ -723,18 +707,6 @@ function stlouis_enter_referral_code_callback($phone_id) {
 
 }
 
-
-function stlouis_land_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_land_list', $phone_id);
-
-}
-
-
 function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -810,15 +782,6 @@ function stlouis_actions_do_callback($phone_id, $action_id) {
   }
 
   return theme('stlouis_actions_do', $phone_id, $action_id);
-}
-
-function stlouis_equipment_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_equipment_list', $phone_id);
 }
 
 function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
@@ -1153,13 +1116,6 @@ function stlouis_theme() {
       ]
     ],
 
-    'stlouis_land_list' => [
-      'template' => 'stlouis_land_list',
-      'arguments' => [
-        'phone_id' => NULL,
-      ]
-    ],
-
     'stlouis_land_buy' => [
       'template' => 'stlouis_land_buy',
       'arguments' => [
@@ -1224,13 +1180,6 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'action_id' => NULL,
-      ]
-    ],
-
-    'stlouis_equipment_list' => [
-      'template' => 'stlouis_equipment_list',
-      'arguments' => [
-        'phone_id' => NULL,
       ]
     ],
 

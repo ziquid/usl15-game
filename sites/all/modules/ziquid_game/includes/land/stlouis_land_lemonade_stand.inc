@@ -8,18 +8,15 @@
  */
 
 /**
- * Init the include.
+ * Implements hook_init().
  */
-function game_land_lemonade_stand_init() {
-//  firep('init lemonade stand!');
+function stlouis_land_lemonade_stand_init() {
 }
-
-/* HOOKS */
 
 /**
  * Implements hook_flag_show_quest_group_ID().
  */
-function game_land_lemonade_stand_flag_show_quest_group_1105(\stdClass $game_user, \stdClass $qg) {
+function stlouis_land_lemonade_stand_flag_show_quest_group_1105(\stdClass $game_user, \stdClass $qg) {
 
   // If the player has a Lemonade Stand, show the Lemonade Stand quests.
   return TRUE;
