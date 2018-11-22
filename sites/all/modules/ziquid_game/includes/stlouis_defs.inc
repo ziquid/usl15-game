@@ -199,6 +199,7 @@ switch($today) {
     break;
 
   /* ------ NOVEMBER ------ */
+  case '2018-11-21':
   case '2018-11-22':
   case '2018-11-23':
   case '2018-11-24':
