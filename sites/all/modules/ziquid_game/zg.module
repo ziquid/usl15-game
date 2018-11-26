@@ -330,8 +330,8 @@ function zg_cron() {
         // Change each user to a zombie.
         foreach ($zombie_users as $zombie) {
           $name = zg_zombie_name();
-          if ($zombie->level < 25) {
-            $zombie->level += 25 + mt_rand(0, 50);
+          if ($zombie->level < 50) {
+            $zombie->level += 50 + mt_rand(0, 50);
           }
           $sql = 'update users set meta = "zombie", username = "%s", level = %d
           where id = %d;';
