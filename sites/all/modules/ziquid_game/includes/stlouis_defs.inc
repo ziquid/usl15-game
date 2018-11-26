@@ -33,6 +33,7 @@ define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
+define(EVENT_THANKSGIVING, 'event_thanksgiving');
 
 define(MISSION_NONE, 1000);
 define(MISSION_MAY, 1005);
@@ -170,7 +171,7 @@ switch($today) {
     $event_type = EVENT_STATS_ONLY_HOOD;
     break;
 
-  // ------ JULY ------
+  /* ------ JULY ------ */
   case '2018-07-01':
   case '2018-07-02':
   case '2018-07-03':
@@ -183,6 +184,7 @@ switch($today) {
     $event_type = EVENT_ROT13_COMPS;
     break;
 
+  /* ------ OCTOBER ------ */
   case '2018-10-23':
   case '2018-10-24':
   case '2018-10-25':
@@ -192,8 +194,22 @@ switch($today) {
   case '2018-10-29':
   case '2018-10-30':
   case '2018-10-31':
-//    $month_mission = MISSION_OCT;
+    //    $month_mission = MISSION_OCT;
     $event_type = EVENT_HALLOWEEN;
+    break;
+
+  /* ------ NOVEMBER ------ */
+  case '2018-11-21':
+  case '2018-11-22':
+  case '2018-11-23':
+  case '2018-11-24':
+  case '2018-11-25':
+  case '2018-11-26':
+  case '2018-11-27':
+  case '2018-11-28':
+  case '2018-11-29':
+  case '2018-11-30':
+    $event_type = EVENT_THANKSGIVING;
     break;
 }
 
