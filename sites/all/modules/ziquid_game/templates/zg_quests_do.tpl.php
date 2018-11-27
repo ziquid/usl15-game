@@ -581,7 +581,7 @@ EOF;
 
   // Check for loot -- staff.
   if ($quest_action->chance_of_loot_staff > 0 && $quest_action->chance_of_loot_staff < 30) {
-    $game_staff = zg_fetch_staff_by_id($game_user->id, $quest_action->fkey_loot_staff_id);
+    $game_staff = zg_fetch_staff_by_id($game_user, $quest_action->fkey_loot_staff_id);
     $under_limit = $game_staff->quantity_limit > (int) $game_staff->quantity;
 
     // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
