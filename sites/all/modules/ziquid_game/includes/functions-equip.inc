@@ -159,7 +159,9 @@ function zg_fetch_next_equip(\stdClass $game_user) {
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
   $eq = db_fetch_object($result);
-  zg_get_icon_path($game_user, $eq, 'equipment');
+  if (is_object($eq)) {
+    zg_get_icon_path($game_user, $eq, 'equipment');
+  }
   return $eq;
 }
 
