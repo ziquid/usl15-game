@@ -111,38 +111,7 @@ function game_fetch_visible_equip(\stdClass $game_user) {
  *   The next equipment item to show, if any.
  */
 function game_fetch_next_equip(\stdClass $game_user) {
-  if ($game_user->meta == 'admin') {
-    $sql_to_add = 'AND equipment.id > 0';
-  }
-  else {
-    $sql_to_add = 'AND active = 1
-      AND is_loot = 0';
-  }
-  $sql = 'SELECT equipment.*, equipment_ownership.quantity
-  FROM equipment
-
-  LEFT OUTER JOIN equipment_ownership ON equipment_ownership.fkey_equipment_id = equipment.id
-  AND equipment_ownership.fkey_users_id = %d
-
-  WHERE ((
-    fkey_neighborhoods_id = 0
-    OR fkey_neighborhoods_id = %d
-  )
-
-  AND
-  (
-    fkey_values_id = 0
-    OR fkey_values_id = %d
-  ))
-
-  AND required_level > %d
-  ' . $sql_to_add . '
-  ORDER BY required_level ASC LIMIT 1';
-  $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
-    $game_user->fkey_values_id, $game_user->level);
-  $eq = db_fetch_object($result);
-  game_get_icon_path($game_user, $eq, 'equipment');
-  return $eq;
+  return zg_fetch_next_equip($game_user);
 }
 
 /**

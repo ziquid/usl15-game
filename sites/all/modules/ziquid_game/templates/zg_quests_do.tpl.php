@@ -448,16 +448,18 @@ EOF;
 
         // Anything to give him/her?
         if (($eq_id + $land_id + $st_id) > 0) {
-          zg_competency_gain($game_user, 'second-mile saint');
 
           // Equipment bonus.
           if ($eq_id > 0) {
 
-            $game_equipment = zg_fetch_equip_by_id($game_user->id, $eq_id);
+            $game_equipment = zg_fetch_equip_by_id($game_user, $eq_id);
             list($eq_success, $eq_reason, $eq_details) =
               zg_equipment_gain($game_user, $eq_id, 1, 0);
 
-            if (!$eq_success) {
+            if ($eq_success) {
+              zg_competency_gain($game_user, 'second-mile saint');
+            }
+            else {
               slack_send_message('could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $eq_success, $eq_reason, $eq_details",
                 $slack_channel);
@@ -495,7 +497,10 @@ EOF;
             list($st_success, $st_reason, $st_details) =
               zg_staff_gain($game_user, $st_id, 1, 0);
 
-            if (!$st_success) {
+            if ($st_success) {
+              zg_competency_gain($game_user, 'second-mile saint');
+            }
+            else {
               slack_send_message('could not give 2nd-round st bonus for quest ' . $game_quest->id .
                 " due to $st_success, $st_reason, $st_details",
                 $slack_channel);
@@ -550,7 +555,7 @@ EOF;
 
   // Check for loot -- equipment.
   if ($quest_action->chance_of_loot > 0 && $quest_action->chance_of_loot < 30) {
-    $game_equipment = zg_fetch_equip_by_id($game_user->id, $quest_action->fkey_loot_equipment_id);
+    $game_equipment = zg_fetch_equip_by_id($game_user, $quest_action->fkey_loot_equipment_id);
     $under_limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
 
     // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.

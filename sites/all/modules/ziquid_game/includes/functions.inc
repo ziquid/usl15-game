@@ -725,8 +725,8 @@ EOF;
 </div>
 EOF;
 
-    drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/zg_show_aides_menu_land.js', 'module', 'footer');
+    drupal_add_js(drupal_get_path('module', 'zg')
+      . '/js/zg_show_aides_menu_land.js', 'module', 'footer');
   }
 
   if ($equip_active && $game_user->level >= 25) {
@@ -753,8 +753,8 @@ EOF;
 </div>
 EOF;
 
-    drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/zg_show_aides_menu_equip.js', 'module', 'footer');
+    drupal_add_js(drupal_get_path('module', 'zg')
+      . '/js/zg_show_aides_menu_equip.js', 'module', 'footer');
   }
 
   if ($staff_active && $game_user->level >= 25) {
@@ -781,8 +781,8 @@ EOF;
 </div>
 EOF;
 
-    drupal_add_js(drupal_get_path('module', 'stlouis')
-      . '/zg_show_aides_menu_staff.js', 'module', 'footer');
+    drupal_add_js(drupal_get_path('module', 'zg')
+      . '/js/zg_show_aides_menu_staff.js', 'module', 'footer');
   }
 
 //  _show_goal($game_user);
