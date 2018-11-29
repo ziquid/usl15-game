@@ -1813,13 +1813,10 @@ function _stlouis_fetch_user() {
     $secs_until += 300;
   }
 
-  if ($game_user->energy > ($game_user->energy_max * 2)) {
-
-    // Just in case.
+  // Can't go beyond max x 3.
+  if ($game_user->energy > ($game_user->energy_max * 3)) {
     $changes_made = TRUE;
-
-    // Can't go beyond max x 2.
-    $game_user->energy = $game_user->energy_max * 2;
+    $game_user->energy = $game_user->energy_max * 3;
   }
 
   // Calculate income.
@@ -2273,72 +2270,59 @@ $extra_messages
   function add_all_stuff() {
 
     if ((energy_seconds == 0) && (energy_minutes > 0)) {
-
       energy_seconds = 60;
-      energy_minutes -= 1;
-
+      energy_minutes--;
     }
 
     if ((money_seconds == 0) && (money_minutes > 0)) {
-
       money_seconds = 60;
-      money_minutes -= 1;
-
+      money_minutes--;
     }
 
     if ((actions_seconds == 0) && (actions_minutes > 0)) {
-
       actions_seconds = 60;
-      actions_minutes -= 1;
-
+      actions_minutes--;
     }
 
     energy_seconds--;
     actions_seconds--;
     money_seconds--;
 
-    if ((energy_seconds == 0) && (energy_minutes == 0)) {
-
-      energy += energy_to_add;
-      energy_seconds = energy_interval % 60;
-      energy_minutes = Math.floor(energy_interval / 60);
-
-    }
-
     if ((money_seconds == 0) && (money_minutes == 0)) {
-
       money += money_to_add;
       money_seconds = money_interval % 60;
       money_minutes = Math.floor(money_interval / 60);
-
     }
 
-    if ((actions_seconds == 0) && (actions_minutes == 0) &&
-      (actions < actions_max)) {
-
-      actions += actions_to_add;
+    if ((actions_seconds == 0) && (actions_minutes == 0)) {
+      if (actions < actions_max)) {
+        actions += actions_to_add;
+      }
+      elseif (actions > actions_max)) {
+        actions -= actions_to_add;
+      }
       actions_seconds = actions_interval % 60;
       actions_minutes = Math.floor(actions_interval / 60);
-
     }
 
-    if ((actions_seconds == 0) && (actions_minutes == 0) &&
-      (actions > actions_max)) {
-
-      actions -= actions_to_add;
-      actions_seconds = actions_interval % 60;
-      actions_minutes = Math.floor(actions_interval / 60);
-
+    if ((energy_seconds == 0) && (energy_minutes == 0)) {
+      if (energy < energy_max)) {
+        energy += energy_to_add;
+      }
+      elseif (energy > energy_max)) {
+        energy -= energy_to_add;
+      }
+      energy_seconds = energy_interval % 60;
+      energy_minutes = Math.floor(energy_interval / 60);
     }
 
-    if (energy >= (energy_max * 2)) {
-      energy = energy_max * 2;
+    if (energy >= (energy_max * 3)) {
+      energy = energy_max * 3;
     }
 
     display_energy();
     display_actions();
     display_money();
-
   }
 
   var interval_timer = setInterval('add_all_stuff()', 1000);
