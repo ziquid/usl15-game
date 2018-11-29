@@ -1557,10 +1557,10 @@ $extra_messages
     }
 
     if ((actions_seconds == 0) && (actions_minutes == 0)) {
-      if (actions < actions_max)) {
+      if (actions < actions_max) {
         actions += actions_to_add;
       }
-      elseif (actions > actions_max)) {
+      else if (actions > actions_max) {
         actions -= actions_to_add;
       }
       actions_seconds = actions_interval % 60;
@@ -1568,10 +1568,10 @@ $extra_messages
     }
 
     if ((energy_seconds == 0) && (energy_minutes == 0)) {
-      if (energy < energy_max)) {
+      if (energy < energy_max) {
         energy += energy_to_add;
       }
-      elseif (energy > energy_max)) {
+      else if (energy > energy_max) {
         energy -= energy_to_add;
       }
       energy_seconds = energy_interval % 60;
