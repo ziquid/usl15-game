@@ -413,14 +413,14 @@ EOF;
   if ($item->endurance_bonus > 0) {
     echo <<< EOF
       <div class="land-payout">
-        $game_text['endurance']: +$item->endurance_bonus
+        {$game_text['endurance']}: +$item->endurance_bonus
       </div>
 EOF;
   }
   elseif ($item->endurance_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
-        $game_text['endurance']: $item->endurance_bonus
+        {$game_text['endurance']}: $item->endurance_bonus
       </div>
 EOF;
   }
