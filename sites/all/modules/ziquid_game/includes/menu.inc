@@ -49,6 +49,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/elders_do_fill/%/%'] = [
+      'title' => 'Ziquid Game Elders Do Fill',
+      'page callback' => 'zg_elders_do_fill_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/elders_do_reset/%'] = [
       'title' => 'Ziquid Game Elders Do Reset',
       'page callback' => 'zg_elders_do_reset_callback',
@@ -241,14 +249,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Google Checkout',
     'page callback' => 'zg_google_checkout_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/elders_do_fill/%/%'] = [
-    'title' => 'Ziquid Game Elders Do Fill',
-    'page callback' => 'zg_elders_do_fill_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -1191,7 +1191,7 @@ function zg_theme() {
     ],
 
     'zg_elders_do_fill' => [
-      'template' => 'zg_elders_do_fill',
+      'template' => 'templates/zg_elders_do_fill',
       'arguments' => [
         'phone_id' => NULL,
         'fill_type' => NULL,

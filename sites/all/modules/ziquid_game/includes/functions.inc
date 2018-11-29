@@ -1160,6 +1160,12 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
  *   The game user object.
  * @param int $quantity
  *   The amount of luck to credit (debit).
+ * @param int $amount_before
+ *   The amount of $type that s/he had before this action.
+ * @param int $amount_filled
+ *   The amount of $type that s/he received for the luck, if any.
+ * @param int $amount_now
+ *   The amount of $type that s/he has now, if applicable.
  * @param string $text
  *   Explanatory text.
  * @param string $type
@@ -1167,9 +1173,9 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
  * @param string $subtype
  *   Subtype of $type.
  */
-function zg_luck(\stdClass &$game_user, $quantity, $text, $type, $subtype) {
-  global $game;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_filled, $amount_now, $text, $type, $subtype) {
+//  global $game;
+//  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'update users set luck = luck + %d where id = %d;';
   db_query($sql, $quantity, $game_user->id);
@@ -1184,10 +1190,12 @@ function zg_luck(\stdClass &$game_user, $quantity, $text, $type, $subtype) {
       break;
 
     case 'change_party':
+    case 'energy':
+      // FIXME: log amount_before and amount_now.
       $sql = 'insert into luck_use (fkey_users_id, use_type, amount_filled,
         luck_remaining, comment)
         values (%d, "%s", %d, %d, "%s");';
-      db_query($sql, $game_user->id, $type, 0, $game_user->luck + $quantity, $text);
+      db_query($sql, $game_user->id, $type, $amount_filled, $game_user->luck + $quantity, $text);
       break;
   }
 
@@ -1701,6 +1709,22 @@ function zg_luck_money_offer(\stdClass $game_user) {
   }
 
   return $offer;
+}
+
+/**
+ * Return the amount of energy the game offers for one Luck.
+ *
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return array
+ *   The offer as an integer and explanation text, if any.
+ */
+function zg_luck_energy_offer(\stdClass $game_user) {
+  $offer = $game_user->energy_max;
+  $comment = '';
+  zg_alter('luck_energy_offer', $game_user, $offer, $comment);
+  return [$offer, $comment];
 }
 
 /**

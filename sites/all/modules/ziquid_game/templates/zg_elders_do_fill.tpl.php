@@ -8,12 +8,13 @@
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
 global $game, $phone_id;
 
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 /*  if ($game == 'stlouis') {
 
@@ -74,7 +75,7 @@ switch ($fill_type) {
     }
 */
     if ($game_user->luck < 1) {
-      $fetch_header($game_user);
+      zg_fetch_header($game_user);
 
       echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
@@ -82,25 +83,29 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
+      // FIXME replace with zg_luck().
       db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
 
     if ($game_user->actions < $game_user->actions_max) {
-      $sql = 'update users set actions = actions_max, luck = luck - 1
-        where id = %d;';
-      db_query($sql, $game_user->id);
       $amount_filled = $game_user->actions_max;
-      $luck_remaining -= 1;
+      $sql = 'update users set actions = %d, luck = luck - 1
+        where id = %d;';
+      db_query($sql, $amount_filled, $game_user->id);
+      $luck_remaining--;
     }
+
+    // FIXME replace with zg_luck().
+    db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
 
     break;
 
   case 'energy':
 
     if ($game_user->luck < 1) {
-      $fetch_header($game_user);
+      zg_fetch_header($game_user);
 
       echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
@@ -108,18 +113,24 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
+      // FIXME replace with zg_luck().
       db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
 
     if ($game_user->energy < $game_user->energy_max) {
-      $sql = 'update users set energy = LEAST(energy + energy_max, energy_max * 2),
-        luck = luck - 1
+      $text = 'refilling energy';
+      list($amount_filled, $comment) = zg_luck_energy_offer($game_user);
+      if (strlen($comment)) {
+        $text .= ' (' . $comment . ')';
+      }
+      $sql = 'update users set energy = LEAST(energy + %d, energy_max * 3)
         where id = %d;';
-      db_query($sql, $game_user->id);
-      $amount_filled = $game_user->energy_max;
-      $luck_remaining -= 1;
+      db_query($sql, $amount_filled, $game_user->id);
+      zg_luck($game_user, -1, $game_user->energy, $amount_filled,
+        min($game_user->energy + $amount_filled, $game_user->energy_max * 3),
+        $text, $fill_type, '');
     }
 
     break;
@@ -127,7 +138,7 @@ switch ($fill_type) {
   case 'money':
 
     if ($game_user->luck < 1) {
-      $fetch_header($game_user);
+      zg_fetch_header($game_user);
 
       echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
         . '</div>';
@@ -135,21 +146,22 @@ switch ($fill_type) {
         class="try-an-election"><a href="/' . $game .
         '/elders_ask_purchase/' . $phone_id .
         '">Purchase more ' . $luck . '</div></div>';
+      // FIXME replace with zg_luck().
       db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
       db_set_active('default');
       return;
     }
 
-    $offer = game_luck_money_offer($game_user);
+    $amount_filled = zg_luck_money_offer($game_user);
     $sql = 'update users set money = money + %d, luck = luck - 1
       where id = %d;';
-    db_query($sql, $offer, $game_user->id);
-    $amount_filled = $offer;
-    $luck_remaining -= 1;
+    db_query($sql, $amount_filled, $game_user->id);
+    // FIXME replace with zg_luck().
+    $luck_remaining--;
+    db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
     break;
 
 }
 
-db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
 db_set_active('default');
-drupal_goto($game . '/user/' . $phone_id);
+drupal_goto($game . '/user/' . $arg2);

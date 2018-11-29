@@ -71,19 +71,19 @@ if ($party_id != 0) {
 
   // Remove Luck if changing parties.
   if ($game_user->fkey_values_id != 0) {
-    zg_luck($game_user, -5, 'changing parties to ' . $party_id, 'change_party', '');
+    zg_luck($game_user, -5, $game_user->fkey_values_id, 0, $party_id,
+      'changing parties to ' . $party_id . ' from ' . $game_user->fkey_values_id,
+      'change_party', '');
   }
 
   // Also delete any offices s/he held.
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
 
-  // And any clan memberships s/he had (disband the clan if s/he was the leader).
+  // And any clan memberships s/he had (disband if s/he was the leader).
   $sql = 'select * from clan_members where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $item = db_fetch_object($result);
+  $item = db_query($sql, $game_user->id)->fetch_object();
 
-  // clan leader? Delete entire clan.
   if ($item->is_clan_leader) {
     $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
     db_query($sql, $game_user->fkey_clans_id);
