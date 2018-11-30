@@ -398,14 +398,14 @@ EOF;
   if ($item->initiative_bonus > 0) {
     echo <<< EOF
       <div class="land-payout">
-        $initiative: +$item->initiative_bonus
+        {$game_text['initiative']}: +$item->initiative_bonus
       </div>
 EOF;
   }
   elseif ($item->initiative_bonus < 0) {
     echo <<< EOF
       <div class="land-payout negative">
-        $initiative: $item->initiative_bonus
+        {$game_text['initiative']}: $item->initiative_bonus
       </div>
 EOF;
   }

@@ -166,9 +166,9 @@ if ($game_user->skill_points == 0) {
 <div class="value">$game_user->energy_max <div class="action not-yet">Can't
   increase Energy</div></div><br/>
 
-<div class="heading">$initiative:</div>
+<div class="heading">{$game_text['initiative']}:</div>
 <div class="value">$game_user->initiative <div class="action not-yet">Can't
-  increase $initiative</div></div><br/>
+  increase {$game_text['initiative']}</div></div><br/>
 
 <div class="heading">$endurance:</div>
 <div class="value">$game_user->endurance <div class="action not-yet">Can't
@@ -192,7 +192,7 @@ elseif ($game_user->skill_points == 1) {
 <div class="value">$game_user->energy_max <div class="action"><a
   href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
 
-<div class="heading">$initiative:</div>
+<div class="heading">{$game_text['initiative']}:</div>
 <div class="value">$game_user->initiative <div class="action"><a
   href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
 
@@ -220,7 +220,7 @@ elseif ($game_user->skill_points >= 10) {
 <div class="value"><div class="action"><a
   href="/$game/increase_skills/$arg2/energy_100">Inc +100</a></div></div><br/>
 
-<div class="heading">$initiative:</div>
+<div class="heading">{$game_text['initiative']}:</div>
 <div class="value">$game_user->initiative <div class="action"><a
   href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div>
 <div class="value"><div class="action"><a
@@ -254,7 +254,7 @@ elseif ($game_user->skill_points > 1) {
 <div class="value">$game_user->energy_max <div class="action"><a
   href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
 
-<div class="heading">$initiative:</div>
+<div class="heading">{$game_text['initiative']}:</div>
 <div class="value">$game_user->initiative <div class="action"><a
   href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
 
