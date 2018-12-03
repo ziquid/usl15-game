@@ -1174,8 +1174,8 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
  *   Subtype of $type.
  */
 function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_filled, $amount_now, $text, $type, $subtype) {
-//  global $game;
-//  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'update users set luck = luck + %d where id = %d;';
   db_query($sql, $quantity, $game_user->id);
@@ -1183,6 +1183,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
   switch ($type) {
 
     case 'purchase':
+      // FIXME: amount_now really should be amount_before.
       $sql = 'insert into purchases (fkey_users_id, amount_now, amount_purchased, purchase)
         values (%d, %d, %d, "%s");';
       db_query($sql, $game_user->id, $game_user->luck, $quantity, $text);
@@ -1191,11 +1192,11 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
 
     case 'change_party':
     case 'energy':
-      // FIXME: log amount_before and amount_now.
-      $sql = 'insert into luck_use (fkey_users_id, use_type, amount_filled,
-        luck_remaining, comment)
-        values (%d, "%s", %d, %d, "%s");';
-      db_query($sql, $game_user->id, $type, $amount_filled, $game_user->luck + $quantity, $text);
+      $sql = 'insert into luck_use (fkey_users_id, use_type, amount_before, 
+        amount_filled, amount_now, luck_remaining, comment)
+        values (%d, "%s", %d, %d, %d, %d, "%s");';
+      db_query($sql, $game_user->id, $type, $amount_before, $amount_filled,
+        $amount_now, $game_user->luck + $quantity, $text);
       break;
   }
 
@@ -1204,10 +1205,20 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
   return TRUE;
 }
 
+/**
+ * Return the user's competency level [0..5] for a given competency.
+ *
+ * @param \stdClass $game_user
+ *   The game_user object.
+ * @param mixed $id
+ *   The competency, either as an integer or a string.
+ *
+ * @return bool|object|\stdClass|null
+ *   The competency object.
+ */
 function zg_competency_level(\stdClass $game_user, $id) {
-
-  // Return the user's competency level [0..5] for a given competency.
-  include drupal_get_path('module', check_plain(arg(0))) . '/zg_defs.inc';
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // Find id from string.
   if (gettype($id) == 'string') {
@@ -1261,7 +1272,6 @@ function zg_competency_level(\stdClass $game_user, $id) {
     }
 
     $level++;
-
   }
 
   $comp->level_name = zg_competency_level_name($comp->level, TRUE);

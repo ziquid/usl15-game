@@ -120,8 +120,9 @@ switch ($fill_type) {
     }
 
     if ($game_user->energy < $game_user->energy_max) {
-      $text = 'refilling energy';
       list($amount_filled, $comment) = zg_luck_energy_offer($game_user);
+      $amount_now = min($game_user->energy + $amount_filled, $game_user->energy_max * 3);
+      $text = "Player {$game_user->username} refilled energy (from $game_user->energy to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck before, now 1 less)";
       if (strlen($comment)) {
         $text .= ' (' . $comment . ')';
       }
@@ -129,8 +130,7 @@ switch ($fill_type) {
         where id = %d;';
       db_query($sql, $amount_filled, $game_user->id);
       zg_luck($game_user, -1, $game_user->energy, $amount_filled,
-        min($game_user->energy + $amount_filled, $game_user->energy_max * 3),
-        $text, $fill_type, '');
+        $amount_now, $text, $fill_type, '');
     }
 
     break;

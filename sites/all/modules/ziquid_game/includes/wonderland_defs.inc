@@ -293,6 +293,7 @@ $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
 $fetch_user = 'zg_user';
 $fetch_header = 'zg_header';
+$slack_channel = 'wonderland-data';
 
 // Add events to include list.
 if ($event_type !== EVENT_NONE) {
