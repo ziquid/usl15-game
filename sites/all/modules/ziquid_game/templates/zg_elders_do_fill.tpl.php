@@ -105,16 +105,20 @@ switch ($fill_type) {
   case 'energy':
 
     if ($game_user->luck < 1) {
-      zg_fetch_header($game_user);
+      $text = "Player {$game_user->username} attempted to refill $fill_type (currently: $game_user->energy) but only had $game_user->luck $luck.";
+      zg_luck($game_user, 0, $game_user->energy, 0,
+        $game_user->energy, $text, $fill_type, 'attempted fill');
 
-      echo '<div class="land-failed">' . t('Out of @s!', ['@s' => $luck])
-        . '</div>';
-      echo '<div class="try-an-election-wrapper"><div
-        class="try-an-election"><a href="/' . $game .
-        '/elders_ask_purchase/' . $phone_id .
-        '">Purchase more ' . $luck . '</div></div>';
-      // FIXME replace with zg_luck().
-      db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+      zg_fetch_header($game_user);
+      echo '<div class="speech-bubble-wrapper background-color">
+        <div class="wise_old_man sad"></div>
+        <div class="speech-bubble">
+          <p class="bonus-text">Out of ' . $luck . '!</p>
+          <p>Your ' . $luck . ' has run out.</p>
+          <p>Perhaps you would like to purchase some more?</p>
+        </div>
+      </div>';
+      zg_button('elders_ask_purchase', t('Purchase more @luck', ['@luck' => $luck]));
       db_set_active('default');
       return;
     }
@@ -122,7 +126,7 @@ switch ($fill_type) {
     if ($game_user->energy < $game_user->energy_max) {
       list($amount_filled, $comment) = zg_luck_energy_offer($game_user);
       $amount_now = min($game_user->energy + $amount_filled, $game_user->energy_max * 3);
-      $text = "Player {$game_user->username} refilled energy (from $game_user->energy to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck before, now 1 less)";
+      $text = "Player {$game_user->username} refilled energy (from $game_user->energy to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck before, now 1 less).";
       if (strlen($comment)) {
         $text .= ' (' . $comment . ')';
       }
@@ -130,7 +134,7 @@ switch ($fill_type) {
         where id = %d;';
       db_query($sql, $amount_filled, $game_user->id);
       zg_luck($game_user, -1, $game_user->energy, $amount_filled,
-        $amount_now, $text, $fill_type, '');
+        $amount_now, $text, $fill_type, 'fill');
     }
 
     break;

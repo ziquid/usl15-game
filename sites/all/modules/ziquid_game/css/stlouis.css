@@ -322,8 +322,8 @@ body.game-stlouis .welcome {
   background-image: url('/sites/default/files/images/stlouis_wise_old_man_sad.png');
   background-repeat: no-repeat;
   background-position: 0 0;
-  width: 90px;
-  height: 90px;
+  width: 54px;
+  height: 54px;
   float: left;
   background-size: contain;
   margin-right: 12px;
@@ -947,6 +947,11 @@ div.description-speech-bubble-wrapper .wise_old_man {
 
 div.speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
+  height: 80px;
+}
+
+div.speech-bubble-wrapper .wise_old_man.sad {
+  background-position: 0 9px;
   height: 80px;
 }
 
