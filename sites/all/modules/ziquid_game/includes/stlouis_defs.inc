@@ -53,9 +53,9 @@ $competency_gain_wait_time_str = '3 minutes';
 global $game;
 
 $today = date('Y-m-d', REQUEST_TIME - 3600);
-switch($today) {
+switch ($today) {
 
-  // ------ MARCH ------
+  /* ------ MARCH ------ */
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
     $debate_wait_time = 600; // 900; // 1200;
@@ -73,7 +73,7 @@ switch($today) {
     $event_type = EVENT_NEW_NAMES;
     break;
 
-  // ------ APRIL ------
+  /* ------ APRIL ------ */
   case '2018-04-01':
     $event_type = EVENT_APRIL_FOOLS;
     break;
@@ -82,7 +82,7 @@ switch($today) {
     $event_type = EVENT_PRE_MAY;
     break;
 
-  // ------ MAY -----
+  /* ------ MAY ----- */
   case '2018-05-01':
   case '2018-05-02':
   case '2018-05-03':
