@@ -8,9 +8,10 @@
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
-$version = 'v0.7.0, Oct 29 2018';
+$version = 'v0.9.0, Dec 06 2018';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';

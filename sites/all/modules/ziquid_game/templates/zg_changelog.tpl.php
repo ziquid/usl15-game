@@ -8,13 +8,14 @@
  * Synced with 2114: N/A
  * Ready for phpcbf: done
  * Ready for MVC separation: yes
+ * .
  */
 
 global $game, $phone_id;
 
-include drupal_get_path('module', arg(0)) . '/game_defs.inc';
-$game_user = $fetch_user();
-$fetch_header($game_user);
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+zg_fetch_header($game_user);
 db_set_active('default');
 
 ?>
@@ -25,18 +26,27 @@ db_set_active('default');
 
 <div class="help">
   <div class="title">
-    Uprising: St. Louis Changelog
+    <?php print $game_name_full; ?> Changelog
   </div>
 
-    <div class="subtitle">
-      Oct 29, 2018
-    </div>
-    <ul>
-      <li>
-        Refilling Energy via Luck adds to your existing Energy, so that you can
-          have more than your max Energy.
-      </li>
-    </ul>
+  <div class="subtitle">
+    Dec 06, 2018
+  </div>
+  <ul>
+    <li>
+      Dog Walking quests
+    </li>
+  </ul>
+
+  <div class="subtitle">
+    Oct 29, 2018
+  </div>
+  <ul>
+    <li>
+      Refilling Energy via Luck adds to your existing Energy, so that you can
+      have more than your max Energy.
+    </li>
+  </ul>
 
   <div class="subtitle">
     Oct 24, 2018

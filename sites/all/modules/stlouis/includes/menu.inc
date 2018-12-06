@@ -379,14 +379,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/changelog/%'] = [
-    'title' => 'St. Louis Changelog',
-    'page callback' => 'stlouis_changelog_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/error/%/%'] = [
     'title' => 'St. Louis Error Page',
     'page callback' => 'stlouis_error_callback',
@@ -868,14 +860,6 @@ function stlouis_error_callback($phone_id, $error_code) {
   return theme('stlouis_error', $phone_id, $error_code);
 }
 
-function stlouis_changelog_callback($phone_id) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_changelog', $phone_id);
-}
-
 function stlouis_theme() {
   // theme "A" uses template "B" with args "C"
 
@@ -884,15 +868,15 @@ function stlouis_theme() {
     'stlouis_userprofile' => [
       'template' => 'stlouis_userprofile',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'stlouis_user_competencies' => [
       'template' => 'stlouis_user_competencies',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'stlouis_clan_list' => [
@@ -900,14 +884,14 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_clan_list_available' => [
       'template' => 'stlouis_clan_list_available',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_clan_msg' => [
@@ -915,7 +899,7 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_clan_announcements' => [
@@ -923,7 +907,7 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_block_user_toggle' => [
@@ -1045,7 +1029,7 @@ function stlouis_theme() {
       'template' => 'stlouis_debates_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_debates_challenge' => [
@@ -1053,42 +1037,42 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_top20_list' => [
       'template' => 'stlouis_top20_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_top_aldermen_list' => [
       'template' => 'stlouis_top_aldermen_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_top_event_points' => [
       'template' => 'stlouis_top_event_points',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_choose_name' => [
       'template' => 'stlouis_choose_name',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_enter_referral_code' => [
       'template' => 'stlouis_enter_referral_code',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_land_buy' => [
@@ -1097,7 +1081,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_land_sell' => [
@@ -1231,13 +1215,6 @@ function stlouis_theme() {
 
     'stlouis_event_prizes' => [
       'template' => 'stlouis_event_prizes',
-      'arguments' => [
-        'phone_id' => NULL,
-      ]
-    ],
-
-    'stlouis_changelog' => [
-      'template' => 'stlouis_changelog',
       'arguments' => [
         'phone_id' => NULL,
       ]
