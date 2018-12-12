@@ -19,6 +19,8 @@ define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
+define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
+
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
 define(EVENT_FLAG_DAY, 'event_flag_day');
 
@@ -30,6 +32,7 @@ define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
 define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 define(EVENT_MOVE_3, 'event_move_3');
+
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
@@ -141,7 +144,7 @@ switch ($today) {
     $event_type = EVENT_MEMORIAL_DAY_4;
     break;
 
-  // ------ JUNE ------
+  /* ------ JUNE ------ */
   case '2018-06-01':
   case '2018-06-02':
   case '2018-06-03':
@@ -194,7 +197,6 @@ switch ($today) {
   case '2018-10-29':
   case '2018-10-30':
   case '2018-10-31':
-    //    $month_mission = MISSION_OCT;
     $event_type = EVENT_HALLOWEEN;
     break;
 
@@ -211,6 +213,17 @@ switch ($today) {
   case '2018-11-30':
     $event_type = EVENT_THANKSGIVING;
     break;
+
+  /* ------ DECEMBER ------ */
+  case '2018-12-12':
+  case '2018-12-13':
+  case '2018-12-14':
+  case '2018-12-15':
+  case '2018-12-16':
+  case '2018-12-17':
+    $event_type = EVENT_DOUBLE_LUCK_ENERGY;
+    break;
+
 }
 
 $alderman = 'Alderman';
@@ -328,5 +341,5 @@ $slack_channel = '#uslce-data';
 
 // Add events to include list.
 if ($event_type !== EVENT_NONE) {
-  game_includes_add($event_type, 'event');
+  zg_includes_add($event_type, 'event');
 }

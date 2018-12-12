@@ -30,11 +30,23 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Dec 12, 2018
+  </div>
+  <ul>
+    <li>
+      Double your Energy for one Luck, Dec 13-17!
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Dec 06, 2018
   </div>
   <ul>
     <li>
       Dog Walking quests
+    </li>
+    <li>
+      Redid how the Socialite invites you to a party
     </li>
   </ul>
 
