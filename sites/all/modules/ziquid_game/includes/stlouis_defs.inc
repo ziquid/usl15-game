@@ -19,6 +19,7 @@ define(EVENT_CINCO_DE_MAYO, 7);
 define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
+define(EVENT_CHRISTMAS, 'event_christmas');
 define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
 
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
@@ -222,6 +223,19 @@ switch ($today) {
   case '2018-12-16':
   case '2018-12-17':
     $event_type = EVENT_DOUBLE_LUCK_ENERGY;
+    break;
+
+  case '2018-12-22':
+  case '2018-12-23':
+  case '2018-12-24':
+  case '2018-12-25':
+  case '2018-12-26':
+  case '2018-12-27':
+  case '2018-12-28':
+  case '2018-12-29':
+  case '2018-12-30':
+  case '2018-12-31':
+    $event_type = EVENT_CHRISTMAS;
     break;
 
 }
