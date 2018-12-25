@@ -31,7 +31,9 @@ function zg_fetch_staff_by_id(\stdClass $game_user, $staff_id) {
   WHERE staff.id = %d;';
   $result = db_query($sql, $game_user->id, $staff_id);
   $st = db_fetch_object($result);
-  zg_get_icon_path($game_user, $st, 'staff');
+  if (is_object($st)) {
+    zg_get_icon_path($game_user, $st, 'staff');
+  }
   return $st;
 }
 
