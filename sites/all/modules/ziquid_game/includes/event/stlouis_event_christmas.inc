@@ -42,12 +42,20 @@ function stlouis_event_christmas_flag_show_quest_group_1013(\stdClass $game_user
  * Implements hook_flag_show_quest_group_ID().
  */
 function stlouis_event_christmas_flag_show_quest_group_1014(\stdClass $game_user, \stdClass $qg) {
-//  return TRUE;
+
+  // Show group 3 only if player has received 2nd-round bonus for group 2.
+  if (zg_fetch_equip_by_id($game_user, 71)->quantity) {
+    return TRUE;
+  }
 }
 
 /**
  * Implements hook_flag_show_quest_group_ID().
  */
 function stlouis_event_christmas_flag_show_quest_group_1015(\stdClass $game_user, \stdClass $qg) {
-//  return TRUE;
+
+  // Show group 4 only if player has received 2nd-round bonus for group 3.
+  if (zg_fetch_staff_by_id($game_user, 28)->quantity) {
+    return TRUE;
+  }
 }

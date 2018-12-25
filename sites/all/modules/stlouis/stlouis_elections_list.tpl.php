@@ -1,13 +1,14 @@
 <?php
 
 /**
- * @file stlouis_elections_list.tpl.php
- * Stlouis elections list
+ * @file
+ * StLouis elections list.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
 global $game, $phone_id;
