@@ -79,28 +79,22 @@ if ($quest_id == 46 && zg_competency_level($game_user, 'sober')->level == 0) {
 
 if ($game_quest->equipment_1_required_quantity > 0) {
 
-  $sql = 'select quantity from equipment_ownership
-    where fkey_equipment_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $game_quest->fkey_equipment_1_required_id,
-    $game_user->id);
-  $quantity = db_fetch_object($result);
-
-  if ($quantity->quantity < $game_quest->equipment_1_required_quantity) {
+  $eq = zg_fetch_equip_by_id($game_user, $game_quest->fkey_equipment_1_required_id);
+  if ($eq->quantity < $game_quest->equipment_1_required_quantity) {
 
     $quest_succeeded = FALSE;
     $outcome_reason = '<div class="quest-failed">' . t('Failed!') .
       '</div><div class="quest-required_stuff missing centered">Missing
       <div class="quest-required_equipment"><a href="/' . $game .
       '/equipment_buy/' .
-      $arg2 . '/' . $game_quest->fkey_equipment_1_required_id . '/' .
-      ($game_quest->equipment_1_required_quantity - $quantity->quantity) .
-      '"><img src="/sites/default/files/images/equipment/' .
-      $game . '-' . $game_quest->fkey_equipment_1_required_id . '.png"
+      $arg2 . '/' . $eq->id . '/' .
+      ($game_quest->equipment_1_required_quantity - $eq->quantity) .
+      '"><img src="' . $eq->icon_path . '"
       width="48" class="not-yet"></a></div>&nbsp;x' .
       $game_quest->equipment_1_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-equipment-' .
-      $game_quest->fkey_equipment_1_required_id;
+      $eq->id;
 
     zg_competency_gain($game_user, 'hole in pockets');
   }
@@ -108,26 +102,22 @@ if ($game_quest->equipment_1_required_quantity > 0) {
 
 if ($game_quest->equipment_2_required_quantity > 0) {
 
-  $sql = 'select quantity from equipment_ownership
-    where fkey_equipment_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $game_quest->fkey_equipment_2_required_id,
-    $game_user->id);
-  $quantity = db_fetch_object($result);
-
-  if ($quantity->quantity < $game_quest->equipment_2_required_quantity) {
+  $eq = zg_fetch_equip_by_id($game_user, $game_quest->fkey_equipment_2_required_id);
+  if ($eq->quantity < $game_quest->equipment_2_required_quantity) {
 
     $quest_succeeded = FALSE;
     $outcome_reason = '<div class="quest-failed">' . t('Failed!') .
       '</div><div class="quest-required_stuff missing centered">Missing
-      <div class="quest-required_equipment"><a href="/' . $game . '/equipment_buy/' .
-      $arg2 . '/' . $game_quest->fkey_equipment_2_required_id . '/' .
-      ($game_quest->equipment_2_required_quantity - $quantity->quantity) . '"><img
-      src="/sites/default/files/images/equipment/' .
-      $game . '-' . $game_quest->fkey_equipment_2_required_id . '.png"
-      width="48" class="not-yet"></a></div>&nbsp;x' . $game_quest->equipment_2_required_quantity .
+      <div class="quest-required_equipment"><a href="/' . $game .
+      '/equipment_buy/' .
+      $arg2 . '/' . $eq->id . '/' .
+      ($game_quest->equipment_2_required_quantity - $eq->quantity) .
+      '"><img src="' . $eq->icon_path . '"
+      width="48" class="not-yet"></a></div>&nbsp;x' .
+      $game_quest->equipment_2_required_quantity .
       '</div>';
     $ai_output = 'quest-failed need-equipment-' .
-      $game_quest->fkey_equipment_2_required_id;
+      $eq->id;
 
     zg_competency_gain($game_user, 'hole in pockets');
   }

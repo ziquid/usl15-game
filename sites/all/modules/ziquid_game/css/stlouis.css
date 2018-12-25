@@ -188,7 +188,7 @@ body.game-stlouis .welcome {
   margin-left: 10px;
 }
 
-.quests .quest-required_stuff .quest-required_equipment img.not-yet {
+.quest-required_stuff .quest-required_equipment img.not-yet {
   border: solid 0.5px #c00;
   box-shadow: 1px 1px 3px rgba(192, 0, 0, 0.6);
 }

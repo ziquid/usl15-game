@@ -184,9 +184,14 @@ function zg_fetch_equip_by_id(\stdClass $game_user, $equip_id) {
   AND equipment_ownership.fkey_users_id = %d
 
   WHERE equipment.id = %d;';
-  $result = db_query($sql, $game_user->id, $equip_id);
-  $eq = db_fetch_object($result);
+  $eq = db_query($sql, $game_user->id, $equip_id)->fetch_object();
+  if (!is_object($eq)) {
+    $eq = new stdClass();
+    $eq->id = $equip_id;
+    $eq->quantity = 0;
+  }
   zg_get_icon_path($game_user, $eq, 'equipment');
+
   return $eq;
 }
 

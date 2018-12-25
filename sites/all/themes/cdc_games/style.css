@@ -254,7 +254,7 @@ li {
   display: inline-block;
 }
 
-.quests .quest-required_equipment img.not-yet {
+.quest-required_equipment img.not-yet {
   border: 2px solid #a41c43;
   border-radius: 3px;
   -moz-border-radius: 3px;
@@ -1285,7 +1285,7 @@ a, a:link, a:visited, a:hover, a:active {
 .quests .quest-description .not-yet, .land .land-description .not-yet {
 }
 
-.quests .quest-required_stuff .quest-required_equipment img.not-yet {
+.quest-required_stuff .quest-required_equipment img.not-yet {
   border: solid 0.5px #c00;
 }
 
