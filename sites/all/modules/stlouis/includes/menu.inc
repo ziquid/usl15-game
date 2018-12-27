@@ -259,14 +259,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/staff/%'] = [
-    'title' => 'St. Louis Staff',
-    'page callback' => 'stlouis_staff_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/staff_hire/%/%/%'] = [
     'title' => 'St. Louis Staff Hire',
     'page callback' => 'stlouis_staff_hire_callback',
@@ -712,15 +704,6 @@ function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_work', $phone_id, $land_id, $quantity);
 }
 
-function stlouis_staff_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_staff_list', $phone_id);
-}
-
 function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -1099,13 +1082,6 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
-    ],
-
-    'stlouis_staff_list' => [
-      'template' => 'stlouis_staff_list',
-      'arguments' => [
-        'phone_id' => NULL,
       ]
     ],
 

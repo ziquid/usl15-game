@@ -84,19 +84,19 @@ function zg_fetch_visible_equip(\stdClass $game_user) {
     fkey_neighborhoods_id = 0
     OR fkey_neighborhoods_id = %d
     )
-  
+
     AND
-  
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
       AND required_level <= %d
       AND active = 1
       AND is_loot = 0
     )
-  
+
     OR equipment_ownership.quantity > 0 ';
   }
 
@@ -539,7 +539,7 @@ EOF;
     <div class="land-description">$description</div>
 EOF;
   }
-else {
+  else {
     $output .= <<< EOF
 <div class="land $failed $class_str">
   $header
@@ -603,7 +603,7 @@ EOF;
   </div>
 EOF;
   }
-else if ($item->initiative_bonus < 0) {
+elseif ($item->initiative_bonus < 0) {
     $output .= <<< EOF
   <div class="land-payout negative">
     {$game_text['initiative']}: $item->initiative_bonus
@@ -636,7 +636,6 @@ EOF;
     if (!$item->is_loot) {
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
-
   }
 else if ($item->elocution_bonus < 0) {
     $output .= <<< EOF
@@ -661,7 +660,6 @@ EOF;
     if ((!$item->is_loot) && ($item->quantity == 0)) {
       $ai_output .= "/+spd:$item->speed_increase";
     }
-
   }
 
   if ($item->upkeep > 0) {
@@ -719,7 +717,6 @@ EOF;
       increased by $rat_change%</div>
 EOF;
       }
-
     }
 
     if ($action->rating_change >= 0.10) {
@@ -784,6 +781,7 @@ EOF;
     <div class="quantity">
       <select name="quantity">
 EOF;
+
       foreach ([1, 5, 10, 25, 50, 100] as $option) {
         if ($option == $options['orig-quantity']) {
           $output .= '<option selected="selected" value="' . $option . '">' .
@@ -800,7 +798,6 @@ EOF;
   </form>
 </div>
 EOF;
-
     }
 
     // Normal show.

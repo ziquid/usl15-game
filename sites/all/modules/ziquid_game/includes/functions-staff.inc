@@ -48,13 +48,45 @@ function zg_fetch_staff_by_id(\stdClass $game_user, $staff_id) {
  *   AI output.
  * @param array $options
  *   Options that modify the display behavior.
+ *
+ * @return string
+ *   The rendered HTML.
  */
 function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
+  $html = zg_render_staff($game_user, $item, $ai_output, $options);
+  print $html;
+  return $html;
+}
+
+/**
+ * Render (without showing) a member of the staff.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param \stdClass $item
+ *   The staff item.
+ * @param string $ai_output
+ *   AI output.
+ * @param array $options
+ *   Options that modify the display behavior.
+ *
+ * @return string
+ *   The rendered HTML.
+ */
+function zg_render_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   static $party_title;
   $classes = [];
+  $header = '';
+
+  if (array_key_exists('prefix', $options)) {
+    $output = $options['prefix'];
+  }
+  else {
+    $output = '';
+  }
 
   if (empty($party_title)) {
     $sql = 'select party_title from `values` where id = %d;';
@@ -64,8 +96,23 @@ function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array
   }
 
   $soon = ($options['soon']) ? 'soon' : '';
-  $header = ($options['staff-succeeded'] == 'success') ?
-  '<div class="land-succeeded">Success</div>' : '';
+  if ($options['staff-succeeded'] == 'success') {
+    $header = '<div class="land-succeeded">Success</div>';
+  }
+  elseif ($options['staff-succeeded'] == 'quest-bonus') {
+    $output .= '<div class="speech-bubble-wrapper background-color">
+  <div class="wise_old_man happy">
+  </div>
+  <div class="speech-bubble">
+    <p class="bonus-text">Congratulations!</p>
+    <p>You have completed the second round of ' . $quest_lower . 's!</p>' .
+    '<p>Here is your bonus:</p>
+  </div>
+</div>';
+  }
+  elseif ($options['staff-succeeded'] == 'loot') {
+    $output .= '<div class="lesser-bonus-text">You Found</div>';
+  }
 
   switch ($options['staff-buy-succeeded']) {
 
@@ -75,21 +122,21 @@ function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array
 
         // FIXME remove special characters from text here.
         t('∆ @value <span>Insufficient</span> ∆',
-        ['@value' => $game_user->values]) . '
-      </div>
-      <div class="try-an-election-wrapper">
-        <div class="try-an-election">
-          <a href="/' . $game . '/elders_do_fill/' . $arg2 .
-              '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
-            t('Receive @offer @values (1&nbsp;@luck',
-            [
-              '@offer' => $offer,
-              '@values' => $game_user->values,
-              '@luck' => $luck,
-            ]) . ')
-          </a>
+          ['@value' => $game_user->values]) . '
         </div>
-      </div>';
+        <div class="try-an-election-wrapper">
+          <div class="try-an-election">
+            <a href="/' . $game . '/elders_do_fill/' . $arg2 .
+                '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
+              t('Receive @offer @values (1&nbsp;@luck',
+              [
+                '@offer' => $offer,
+                '@values' => $game_user->values,
+                '@luck' => $luck,
+              ]) . ')
+            </a>
+          </div>
+        </div>';
 
       $failed = 'failed';
       break;
@@ -126,7 +173,7 @@ function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array
     case 'failed not-required-party':
       $header = '<div class="title">' .
         t('∆ @party <span>Incorrect</span> ∆',
-        ['@party' => $party]) .
+          ['@party' => $party]) .
         '</div>';
       $failed = 'failed';
       break;
@@ -148,7 +195,7 @@ function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array
   }
 
   $description = str_replace('%party', "<em>$party_title</em>",
-  $item->description);
+    $item->description);
 
   $quantity = $item->quantity;
   if (empty($quantity)) {
@@ -226,10 +273,9 @@ function zg_show_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array
 
   if ($can_buy) {
     $icon_button = <<< EOF
-      <a href="/$game/staff_hire/$arg2/$item->id/1">
-        <img src="/sites/default/files/images/staff/$game-$item->id.png?2" width="96"
-             border="0">
-      </a>
+<a href="/$game/staff_hire/$arg2/$item->id/1">
+  <img src="$item->icon_path" class="round4" width="96" border="0">
+</a>
 EOF;
     $name_link = <<< EOF
       <a href="/$game/staff_hire/$arg2/$item->id/1">
@@ -250,8 +296,7 @@ EOF;
   else {
     // Can't buy.
     $icon_button = <<< EOF
-      <img src="/sites/default/files/images/staff/$game-$item->id.png?2" width="96"
-           border="0">
+  <img src="$item->icon_path" class="round4" width="96" border="0">
 EOF;
     $name_link = <<< EOF
       <span class="type">
@@ -332,7 +377,7 @@ EOF;
   $class_str = implode(' ', $classes);
 
   if ($soon) {
-    echo <<< EOF
+    $output .= <<< EOF
 <div class="land $soon $failed $class_str">
   <div class="land-icon">
     <img src="/sites/default/files/images/staff/$game-soon.png?1" width=96
@@ -347,26 +392,32 @@ EOF;
 EOF;
   }
   else {
-    echo <<< EOF
-    <div class="land $failed $class_str">
-      $header
-      <div class="land-icon">
-        $icon_button
-      </div>
-      <div class="land-details">
-        <div class="land-name">
-          $name_link
-        </div>
-        <div class="land-description">$description</div>
+    $output .= <<< EOF
+<div class="land $failed $class_str">
+  $header
+  <div class="land-icon">
+    $icon_button
+  </div>
+  <div class="land-details">
+    <div class="land-name">
+      $name_link
+    </div>
+    <div class="land-description">$description</div>
 EOF;
   }
 
-  echo <<< EOF
+  if ($options['equipment-succeeded'] == 'quest-bonus' ||
+    $options['equipment-succeeded'] == 'loot') {
+    $reqs = '';
+  }
+  else {
+    $output .= <<< EOF
     <div class="land-owned">Owned: $quantity $quantity_limit</div>
 EOF;
   $reqs = <<< EOF
     <div class="land-cost">Cost: $staff_price $game_user->values</div>
 EOF;
+  }
 
   if ($game_user->level < $item->required_level) {
     $reqs .= <<< EOF
@@ -375,74 +426,74 @@ EOF;
   }
 
   if (!empty($reqs)) {
-    echo <<< EOF
-      <!--<div class="land-requisites">// Requisites //</div>-->
-      $reqs
+    $output .= <<< EOF
+    <!--<div class="land-requisites">// Requisites //</div>-->
+    $reqs
 EOF;
   }
 
   if ($item->energy_bonus > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        Energy: +$item->energy_bonus immediate energy bonus
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    Energy: +$item->energy_bonus immediate energy bonus
+  </div>
 EOF;
   }
 
   if ($item->energy_increase > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        Energy: +$item->energy_increase every 5 minutes
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    Energy: +$item->energy_increase every 5 minutes
+  </div>
 EOF;
   }
 
   if ($item->initiative_bonus > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        {$game_text['initiative']}: +$item->initiative_bonus
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    {$game_text['initiative']}: +$item->initiative_bonus
+  </div>
 EOF;
   }
-  elseif ($item->initiative_bonus < 0) {
-    echo <<< EOF
-      <div class="land-payout negative">
-        {$game_text['initiative']}: $item->initiative_bonus
-      </div>
+elseif ($item->initiative_bonus < 0) {
+    $output .= <<< EOF
+  <div class="land-payout negative">
+    {$game_text['initiative']}: $item->initiative_bonus
+  </div>
 EOF;
   }
 
   if ($item->endurance_bonus > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        {$game_text['endurance']}: +$item->endurance_bonus
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    {$game_text['endurance']}: +$item->endurance_bonus
+  </div>
 EOF;
   }
-  elseif ($item->endurance_bonus < 0) {
-    echo <<< EOF
-      <div class="land-payout negative">
-        {$game_text['endurance']}: $item->endurance_bonus
-      </div>
+else if ($item->endurance_bonus < 0) {
+    $output .= <<< EOF
+  <div class="land-payout negative">
+    {$game_text['endurance']}: $item->endurance_bonus
+  </div>
 EOF;
   }
 
   if ($item->elocution_bonus > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        $elocution: +$item->elocution_bonus
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    $elocution: +$item->elocution_bonus
+  </div>
 EOF;
 
     if (!$item->is_loot) {
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
   }
-  elseif ($item->elocution_bonus < 0) {
-    echo <<< EOF
-      <div class="land-payout negative">
-        $elocution: $item->elocution_bonus
-      </div>
+else if ($item->elocution_bonus < 0) {
+    $output .= <<< EOF
+  <div class="land-payout negative">
+    $elocution: $item->elocution_bonus
+  </div>
 EOF;
 
     if (!$item->is_loot) {
@@ -451,11 +502,11 @@ EOF;
   }
 
   if ($item->speed_increase > 0) {
-    echo <<< EOF
-      <div class="land-payout">
-        Speed Increase: $item->speed_increase fewer Action
-        needed to move to a new $hood_lower
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout">
+    Speed Increase: $item->speed_increase fewer Action
+    needed to move to a new $hood_lower
+  </div>
 EOF;
 
     if ((!$item->is_loot) && ($item->quantity == 0)) {
@@ -464,20 +515,20 @@ EOF;
   }
 
   if ($item->upkeep > 0) {
-    echo <<< EOF
-      <div class="land-payout negative">
-        Upkeep: $item->upkeep every 60 minutes
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout negative">
+    Salary: $item->upkeep every 60 minutes
+  </div>
 EOF;
   }
 
   if ($item->chance_of_loss > 0) {
     $lifetime = floor(100 / $item->chance_of_loss);
     $use = ($lifetime == 1) ? 'use' : 'uses';
-    echo <<< EOF
-      <div class="land-payout negative">
-        Expected Lifetime: $lifetime $use
-      </div>
+    $output .= <<< EOF
+  <div class="land-payout negative">
+    Expected Lifetime: $lifetime $use
+  </div>
 EOF;
   }
 
@@ -491,13 +542,13 @@ EOF;
 
     $name = str_replace('%value', $game_user->values, $action->name);
 
-    echo '<div class="land-action">Action: ' . $name . '</div>';
-    echo '<div class="land-description">' . $action->description . '</div>';
-    echo '<div class="land-action-cost">' . $cost . '</div>';
+    $output .= '<div class="land-action">Action: ' . $name . '</div>';
+    $output .= '<div class="land-description">' . $action->description . '</div>';
+    $output .= '<div class="land-action-cost">' . $cost . '</div>';
 
     if ($action->influence_change < 0) {
       $inf_change = -$action->influence_change;
-      echo <<< EOF
+      $output .= <<< EOF
         <div class="land-payout negative">Effect: Target's
           {$experience_lower} is reduced by $inf_change</div>
 EOF;
@@ -507,72 +558,76 @@ EOF;
       $rat_change = abs($action->rating_change);
 
       if ($action->rating_change < 0.0) {
-        echo <<< EOF
-          <div class="land-payout negative">Effect: $target approval rating is
-            reduced by $rat_change%</div>
+        $output .= <<< EOF
+    <div class="land-payout negative">Effect: $target approval rating is
+      reduced by $rat_change%</div>
 EOF;
       }
       else {
-        echo <<< EOF
-          <div class="land-payout">Effect: $target approval rating is
-            increased by $rat_change%</div>
+        $output .= <<< EOF
+    <div class="land-payout">Effect: $target approval rating is
+      increased by $rat_change%</div>
 EOF;
       }
     }
 
     if ($action->rating_change >= 0.10) {
       $rat_change = $action->rating_change;
-      echo <<< EOF
-        <div class="land-payout">Effect: Your approval rating is
-          increased by $rat_change%</div>
+      $output .= <<< EOF
+    <div class="land-payout">Effect: Your approval rating is
+      increased by $rat_change%</div>
 EOF;
     }
 
     if ($action->neighborhood_rating_change < 0.0) {
       $rat_change = -$action->neighborhood_rating_change;
-      echo <<< EOF
-        <div class="land-payout negative">Effect: $hood $beauty_lower
-          rating is reduced by $rat_change</div>
+      $output .= <<< EOF
+  <div class="land-payout negative">Effect: $hood $beauty_lower
+    rating is reduced by $rat_change</div>
 EOF;
     }
 
     if ($action->neighborhood_rating_change > 0.0) {
       $rat_change = $action->neighborhood_rating_change;
-      echo <<< EOF
-        <div class="land-payout">Effect: $hood $beauty_lower rating is
-          increased by $rat_change</div>
+      $output .= <<< EOF
+  <div class="land-payout">Effect: $hood $beauty_lower rating is
+    increased by $rat_change</div>
 EOF;
     }
 
     if ($action->values_change < 0) {
       $val_change = -$action->values_change;
-      echo <<< EOF
+      $output .= <<< EOF
         <div class="land-payout negative">Effect: Target's $game_user->values is
           reduced by $val_change</div>
 EOF;
     }
   }
 
-  echo '</div>';
+  $output .= '</div>';
 
   // BUY buttons.
-  if ($soon) {
-    echo <<< EOF
-      <div class="land-button-wrapper">
-        <div class="land-buy-button not-yet">
-          Can't Hire
-        </div>
-        <div class="land-sell-button not-yet">
-          Can't Fire
-        </div>
-      </div>
+  if ($options['equipment-succeeded'] == 'quest-bonus' ||
+    $options['equipment-succeeded'] == 'loot') {
+    // No buy nor sell buttions.
+  }
+  elseif ($soon) {
+    $output .= <<< EOF
+  <div class="land-button-wrapper">
+    <div class="land-buy-button not-yet">
+      Can't Hire
+    </div>
+    <div class="land-sell-button not-yet">
+      Can't Fire
+    </div>
+  </div>
 EOF;
   }
   else {
 
     // Attempt to buy.
     if ($options['staff-buy-succeeded']) {
-      echo <<< EOF
+      $output .= <<< EOF
         <div class="land-button-wrapper">
           <form action="/$game/staff_hire/$arg2/$item->id/use-quantity">
             <div class="quantity">
@@ -581,54 +636,36 @@ EOF;
 
       foreach ([1, 5, 10, 25, 50, 100] as $option) {
         if ($option == $options['orig-quantity']) {
-          echo '<option selected="selected" value="' . $option . '">' .
+          $output .= '<option selected="selected" value="' . $option . '">' .
             $option . '</option>';
         }
         else {
-          echo '<option value="' . $option . '">' . $option . '</option>';
+          $output .= '<option value="' . $option . '">' . $option . '</option>';
         }
       }
-      echo <<< EOF
-        </select>
-      </div>
-      <input class="land-buy-button" type="submit" Value="Hire"/>
-    </form>
-  </div>
+      $output .= <<< EOF
+      </select>
+    </div>
+    <input class="land-buy-button" type="submit" Value="Hire"/>
+  </form>
+</div>
 EOF;
     }
 
     // Normal show.
     else {
-      echo <<< EOF
-      <div class="land-button-wrapper">
-        $buy_button
-        $sell_button
-      </div>
+      $output .= <<< EOF
+  <div class="land-button-wrapper">
+    $buy_button
+    $sell_button
+  </div>
 EOF;
     }
 
   }
 
-  echo '</div>';
-}
-
-/**
- * Render (without showing) a member of the staff.
- *
- * @param \stdClass $game_user
- *   The game user object.
- * @param \stdClass $item
- *   The staff item.
- * @param string $ai_output
- *   AI output.
- * @param array $options
- *   Options that modify the display behavior.
- *
- * @return string
- *   The rendered HTML.
- */
-function zg_render_staff(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
-  return zg_render_equip($game_user, $item, $ai_output, $options);
+  $output .= '</div>';
+  return $output;
 }
 
 /**
@@ -649,19 +686,19 @@ function zg_fetch_visible_staff(\stdClass $game_user) {
     fkey_neighborhoods_id = 0
     OR fkey_neighborhoods_id = %d
     )
-  
+
     AND
-  
+
     (
       fkey_values_id = 0
       OR fkey_values_id = %d
     ))
-  
+
       AND required_level <= %d
       AND active = 1
       AND is_loot = 0
     )
-  
+
     OR staff_ownership.quantity > 0 ';
   }
 
@@ -678,6 +715,7 @@ function zg_fetch_visible_staff(\stdClass $game_user) {
     $game_user->fkey_values_id, $game_user->level);
 
   while ($item = db_fetch_object($result)) {
+    zg_get_icon_path($game_user, $item, 'staff');
     $data[] = $item;
   }
   return $data;
@@ -722,7 +760,11 @@ function zg_fetch_next_staff(\stdClass $game_user) {
   ORDER BY required_level ASC LIMIT 1';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,
     $game_user->fkey_values_id, $game_user->level);
-  return db_fetch_object($result);
+  $item = db_fetch_object($result);
+  if (is_object($item)) {
+    zg_get_icon_path($game_user, $item, 'staff');
+  }
+  return $item;
 }
 
 /**

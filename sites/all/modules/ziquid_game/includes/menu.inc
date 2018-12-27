@@ -130,6 +130,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/staff/%'] = [
+      'title' => 'Ziquid Game Staff',
+      'page callback' => 'zg_staff_list_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/welcome/%'] = [
       'title' => 'Ziquid Game Welcome',
       'page callback' => 'zg_welcome_callback',
@@ -377,14 +385,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Land Work',
     'page callback' => 'zg_land_work_callback',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/staff/%'] = [
-    'title' => 'Ziquid Game Staff',
-    'page callback' => 'zg_staff_list_callback',
-    'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -1369,7 +1369,7 @@ function zg_theme() {
     ],
 
     'zg_staff_list' => [
-      'template' => 'zg_staff_list',
+      'template' => 'templates/zg_staff_list',
       'arguments' => [
         'phone_id' => NULL,
       ]
