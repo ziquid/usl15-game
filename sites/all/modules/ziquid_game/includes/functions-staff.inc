@@ -926,20 +926,16 @@ function zg_staff_lose(\stdClass &$game_user, $id, $quantity = 1, $st_price = 0)
 function zg_required_staff(\stdClass $game_user, $staff_id, $req_quantity = 1) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $st = zg_fetch_staff_by_id($game_user, $staff_id);
 
-  $sql = 'select quantity from staff_ownership
-    where fkey_staff_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $staff_id, $game_user->id);
-  $quantity = db_fetch_object($result);
-
-  if ($quantity->quantity >= $req_quantity) {
+  if ($st->quantity >= $req_quantity) {
     $not_yet = $a_start = $a_end = '';
   }
   else {
     $not_yet = 'not-yet';
-    $a_start = '<a href="/' . $game . '/staff_buy/' .
+    $a_start = '<a href="/' . $game . '/staff_hire/' .
       $arg2 . '/' . $staff_id . '/' .
-      ($req_quantity - $quantity->quantity) . '">';
+      ($req_quantity - $st->quantity) . '">';
     $a_end = '</a>';
   }
 
@@ -947,9 +943,7 @@ function zg_required_staff(\stdClass $game_user, $staff_id, $req_quantity = 1) {
 <div class="quest-required_stuff">Requires
   <div class="quest-required_equipment">
     $a_start
-      <img class="$not_yet"
-        src="/sites/default/files/images/staff/$game-$staff_id.png"
-        width="48">
+      <img class="$not_yet" src="{$st->icon_path}" width="48">
     $a_end
   </div>&nbsp;x$req_quantity
 </div>
