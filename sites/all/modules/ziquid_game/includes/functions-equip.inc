@@ -43,7 +43,7 @@ function zg_render_required_equipment(\stdClass $game_user, $equipment_id, $req_
   $eo = zg_fetch_equip_by_id($game_user, $equipment_id);
 
   if ($eo->quantity >= $req_quantity) {
-    $not_yet = $a_start = $a_end = '';
+    $not_yet = $a_start = $a_end = $quantity_left = '';
   }
   else {
     $not_yet = 'not-yet';
@@ -51,6 +51,7 @@ function zg_render_required_equipment(\stdClass $game_user, $equipment_id, $req_
       $arg2 . '/' . $equipment_id . '/' .
       ($req_quantity - $eo->quantity) . '">';
     $a_end = '</a>';
+    $quantity_left = '(+' . ($req_quantity - $eo->quantity) . ')';
   }
 
   $output = <<< EOF
@@ -59,7 +60,7 @@ function zg_render_required_equipment(\stdClass $game_user, $equipment_id, $req_
         $a_start
           <img class="$not_yet" src="$eo->icon_path" width="48">
         $a_end
-      </div>&nbsp;x$req_quantity
+      </div>&nbsp;x$req_quantity $quantity_left
     </div>
 EOF;
 
