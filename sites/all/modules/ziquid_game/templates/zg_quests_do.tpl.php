@@ -236,18 +236,21 @@ $pc = db_fetch_object($result);
 // Get quest completion stats.
 $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
-  $result = db_query($sql, $game_user->id, $game_quest->group);
-  $quest_group_completion = db_fetch_object($result);
+$result = db_query($sql, $game_user->id, $game_quest->group);
+$quest_group_completion = db_fetch_object($result);
 
-  $percentage_target = 100;
-  $percentage_divisor = 1;
+$percentage_target = 100;
+$percentage_divisor = 1;
 
-  if ($quest_group_completion->times_completed > 0) {
-    $percentage_target = 200;
-    $percentage_divisor = 2;
-  }
+if ($quest_group_completion->times_completed > 0) {
+  $percentage_target = 200;
+  $percentage_divisor = 2;
+}
 
 $quest_completion_html = '';
+
+// Save actual quest group, whether quest succeeded or not.
+zg_set_value($game_user, 'actual_last_quest_groups_id', $quest_action->group);
 
 if ($quest_succeeded) {
   zg_competency_gain($game_user, 'quester');
