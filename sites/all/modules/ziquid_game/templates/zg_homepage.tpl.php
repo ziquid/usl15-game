@@ -11,7 +11,7 @@
  * .
  */
 
-$version = 'v0.9.0, Dec 22 2018';
+$version = 'v0.9.0, Dec 28 2018';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -378,6 +378,7 @@ zg_alter('homepage_event_notice', $game_user, $event_text);
 zg_alter('homepage_menu', $game_user, $extra_menu);
 
 $link = 'quest_groups';
+$lqg = zg_fetch_latest_quest_group($game_user);
 $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 
 echo <<< EOF
@@ -397,7 +398,7 @@ $extra_bonus
     <ul>
       <li>
         <a class="quests-menu" 
-          href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}">
+          href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
           {$game_text['quests_tab']}
         </a>  
       </li>
@@ -419,7 +420,7 @@ EOF;
 $coords = zg_scale_coords($coefficient, 107, 34, 210, 63);
 echo <<< EOF
   <area shape="rect" coords="$coords" alt="Missions"
-  href="/$game/$link/$arg2{$show_expanded}#group-{$game_user->fkey_last_played_quest_groups_id}" />
+  href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}" />
 EOF;
 
  $coords = zg_scale_coords($coefficient, 42, 72, 122, 92);

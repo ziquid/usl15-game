@@ -30,6 +30,21 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Dec 28, 2018
+  </div>
+  <ul>
+    <li>
+      After moving for a mission, touching "Continue to Missions" will return
+      you to that mission group, even if it was an event or special mission.
+    </li>
+    <li>
+      Touching the "Missions" menu entry on the home page will also attempt to
+        return you to the latest mission group, even if it was an event or a
+        special mission.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Dec 22, 2018
   </div>
   <ul>
