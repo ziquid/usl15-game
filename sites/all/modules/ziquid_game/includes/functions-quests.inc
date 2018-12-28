@@ -238,7 +238,7 @@ function zg_fetch_quest_actions(\stdClass $game_user, \stdClass $q) {
 }
 
 /**
- * Fetch the list of visible quest groups to show.
+ * Fetch the list of highlighted quest groups to show.
  *
  * @param \stdClass $game_user
  *   The game user object.
@@ -246,7 +246,7 @@ function zg_fetch_quest_actions(\stdClass $game_user, \stdClass $q) {
  * @return \stdClass[]
  *   The array of quest group objects.
  */
-function zg_fetch_visible_quest_groups(\stdClass $game_user) {
+function zg_fetch_highlighted_quest_groups(\stdClass $game_user) {
   $data = $data2 = [];
   $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
     left join quests q on q.group = qg.id
@@ -267,6 +267,27 @@ function zg_fetch_visible_quest_groups(\stdClass $game_user) {
   }
 
   return $data2;
+}
+
+/**
+ * Fetch the latest played quest group.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ *
+ * @return mixed
+ *   The latest quest group played.
+ */
+function zg_fetch_latest_quest_group(\stdClass $game_user) {
+  if ($lqg = zg_get_value($game_user, 'actual_last_quest_groups_id')) {
+
+    // Use zfqg($gu)[$id] instead of zfqg($gu, $id) so we get correct show flag.
+    $lqgo = zg_fetch_quest_groups($game_user)[$lqg];
+    if (strpos($lqgo->class, 'clickable') !== FALSE) {
+      return $lqg;
+    }
+  }
+  return $game_user->fkey_last_played_quest_groups_id;
 }
 
 /**

@@ -114,6 +114,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/move_do/%/%'] = [
+      'title' => 'Ziquid Game Move Do',
+      'page callback' => 'zg_move_do_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/quest_groups/%'] = [
       'title' => 'Ziquid Game Quest Groups List',
       'page callback' => 'zg_quest_groups_callback',
@@ -440,14 +448,6 @@ function zg_menu() {
   $items[$game . '/move/%/%'] = [
     'title' => 'Ziquid Game Move',
     'page callback' => 'zg_move_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/move_do/%/%'] = [
-    'title' => 'Ziquid Game Move Do',
-    'page callback' => 'zg_move_do_callback',
     'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
@@ -1442,7 +1442,7 @@ function zg_theme() {
     ],
 
     'zg_move_do' => [
-      'template' => 'zg_move_do',
+      'template' => 'templates/zg_move_do',
       'arguments' => [
         'phone_id' => NULL,
         'neighborhood_id' => NULL,

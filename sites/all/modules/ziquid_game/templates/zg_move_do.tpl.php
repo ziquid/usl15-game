@@ -1,18 +1,19 @@
 <?php
 
 /**
- * @file stlouis_move_do.tpl.php
+ * @file
  * Template for doing movement.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 // Random hood -- April fools 2013.
 /*
@@ -81,7 +82,7 @@ firep($new_hood, 'new hood');
     $actions_to_move = 0;
   }
 
-  game_alter('actions_to_move', $game_user, $actions_to_move);
+  zg_alter('actions_to_move', $game_user, $actions_to_move);
 
   // April fools 2013.
 //    $actions_to_move = 1;
@@ -203,17 +204,13 @@ EOF;
       array('@stuff' => strtolower($eq->name))) . '</div>';
   }
 
-//  if (game_get_value($game_user, 'enabled_alpha')) {
-    $link = 'quest_groups';
-//  }
-//  else {
-//    $link = 'quests';
-//  }
+  $link = 'quest_groups';
+  $lqg = zg_fetch_latest_quest_group($game_user);
 
   echo <<< EOF
 <div class="try-an-election-wrapper">
 <div class="try-an-election">
-  <a href="/$game/$link/$arg2#group-{$game_user->fkey_last_played_quest_groups_id}">
+  <a href="/$game/$link/$arg2#group-{$lqg}">
     Continue to ${quest}s
   </a>
 </div>
@@ -248,7 +245,7 @@ EOF;
   }
 
   // FIXME: add hood_id to the query.
-  $hood_equip = game_fetch_visible_equip($game_user);
+  $hood_equip = zg_fetch_visible_equip($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -262,12 +259,12 @@ EOF;
 EOF;
         $title_shown = TRUE;
       }
-      game_show_equip($game_user, $item, $ai_output);
+      zg_show_equip($game_user, $item, $ai_output);
     }
   }
 
   // FIXME: add hood_id to the query.
-  $hood_staff = game_fetch_visible_staff($game_user);
+  $hood_staff = zg_fetch_visible_staff($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -281,11 +278,11 @@ EOF;
 EOF;
         $title_shown = TRUE;
       }
-      game_show_staff($game_user, $item, $ai_output);
+      zg_show_staff($game_user, $item, $ai_output);
     }
   }
 
-  $hood_qgs = game_fetch_visible_quest_groups($game_user);
+  $hood_qgs = zg_fetch_highlighted_quest_groups($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -298,7 +295,7 @@ EOF;
 EOF;
       $title_shown = TRUE;
     }
-      game_show_quest_group($game_user, $item, $ai_output);
+    zg_show_quest_group($game_user, $item, $ai_output);
   }
 
 }
@@ -307,4 +304,4 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"move-succeeded\"/>\n-->";
 }
 
- db_set_active('default');
+db_set_active('default');

@@ -315,14 +315,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/move_do/%/%'] = [
-    'title' => 'St. Louis Move Do',
-    'page callback' => 'stlouis_move_do_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/authenticate/%'] = [
     'title' => 'St. Louis Authenticate',
     'page callback' => 'stlouis_authenticate_callback',
@@ -771,15 +763,6 @@ function stlouis_move_callback($phone_id, $neighborhood_id) {
   return theme('stlouis_move', $phone_id, $neighborhood_id);
 }
 
-function stlouis_move_do_callback($phone_id, $neighborhood_id) {
-
-  if (empty($phone_id) || !is_numeric($neighborhood_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_move_do', $phone_id, $neighborhood_id);
-}
-
 function stlouis_authenticate_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1141,36 +1124,28 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'neighborhood_id' => NULL,
-      ]
-    ],
-
-    'stlouis_move_do' => [
-      'template' => 'stlouis_move_do',
-      'arguments' => [
-        'phone_id' => NULL,
-        'neighborhood_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_authenticate' => [
       'template' => 'stlouis_authenticate',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_bounce_040' => [
       'template' => 'stlouis_bounce_040',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elders_preferences' => [
       'template' => 'stlouis_elders_preferences',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_zombie_move' => [
@@ -1179,21 +1154,21 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'zombie_id' => NULL,
         'hood_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_event_info' => [
       'template' => 'stlouis_event_info',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_event_prizes' => [
       'template' => 'stlouis_event_prizes',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_error' => [
@@ -1201,10 +1176,9 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'error_code' => NULL,
-      ]
+      ],
     ],
 
   ];
 
 }
-
