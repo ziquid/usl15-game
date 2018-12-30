@@ -1049,13 +1049,15 @@ function zg_fetch_user($force = FALSE) {
         Level 6!</div>';
       }
 
-      if (!empty($game_user->max_level_for_office) &&
-        $game_user->level > $game_user->max_level_for_office) {
-        $sql = 'delete from elected_officials where fkey_users_id = %d;';
-        db_query($sql, $game_user->id);
-        $extra_messages .= '<div class="level-up-text">' .
-          t('You have become too influential to remain
+      if (zg_get_default('has_office_level_limits')) {
+        if (!empty($game_user->max_level_for_office) &&
+          $game_user->level > $game_user->max_level_for_office) {
+          $sql = 'delete from elected_officials where fkey_users_id = %d;';
+          db_query($sql, $game_user->id);
+          $extra_messages .= '<div class="level-up-text">' .
+            t('You have become too influential to remain
         in your current office.&nbsp; You resign your position.') . '</div>';
+        }
       }
 
       $extra_messages .= '</div>';
@@ -1091,8 +1093,6 @@ function zg_fetch_user($force = FALSE) {
 
     // Next add in 5 mins.
     $energy_next_gain += 300;
-
-    // Ditto.
     $secs_until += 300;
   }
 
@@ -1113,13 +1113,12 @@ function zg_fetch_user($force = FALSE) {
     $changes_made = TRUE;
 
     // Add money.
-    if ($max_income_gain > 0)
+    if ($max_income_gain > 0) {
       $game_user->money += $game_user->income - $game_user->expenses;
+    }
 
     // Next add in 60 mins.
     $income_next_gain += 3600;
-
-    // Ditto.
     $secs_until += 3600;
     $max_income_gain--;
   }
@@ -1129,10 +1128,7 @@ function zg_fetch_user($force = FALSE) {
 
   // Calculate actions.
   while (($game_user->actions < $game_user->actions_max) &&
-
-  // Do we need actions?
   ($secs_until <= 0)) {
-
     $changes_made = TRUE;
 
     // Add 1 action.
@@ -1140,16 +1136,11 @@ function zg_fetch_user($force = FALSE) {
 
     // Next add in 3 mins.
     $actions_next_gain += 180;
-
-    // Ditto.
     $secs_until += 180;
   }
 
   while (($game_user->actions > $game_user->actions_max) &&
-
-    // Do we need actions?
     ($secs_until <= 0)) {
-
     $changes_made = TRUE;
 
     // Delete 1 action.
@@ -1157,8 +1148,6 @@ function zg_fetch_user($force = FALSE) {
 
     // Next add in 3 mins.
     $actions_next_gain += 180;
-
-    // Ditto.
     $secs_until += 180;
   }
 
@@ -1303,74 +1292,77 @@ function zg_fetch_header(\stdClass $game_user) {
   }
 
   // Event points.
-  $sql = 'select points, last_goal_achieved
+  if (FALSE) {
+    $sql = 'select points, last_goal_achieved
     from event_points where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $points_obj = db_fetch_object($result);
+    $result = db_query($sql, $game_user->id);
+    $points_obj = db_fetch_object($result);
 
-  $points_text = '';
+    $points_text = '';
 
-  // User has some points.
-  if ($points_obj->points > 0) {
+    // User has some points.
+    if ($points_obj->points > 0) {
 
-    $sql = 'select points from event_milestones where points > %d
-      order by points asc limit 1;';
-    $result = db_query($sql, $points_obj->last_goal_achieved);
-    $goal_obj = db_fetch_object($result);
-
-    if ($goal_obj->points == 0) {
-      $goal_obj->points = 99999999;
-    }
-
-firep('points: ' . $points_obj->points);
-firep('points for next prize: ' . $goal_obj->points);
-
-    // User gets a prize!
-    if ($points_obj->points >= $goal_obj->points) {
-
-firep('a prize is deserved!');
-
-      // What's goal after this?
       $sql = 'select points from event_milestones where points > %d
+      order by points asc limit 1;';
+      $result = db_query($sql, $points_obj->last_goal_achieved);
+      $goal_obj = db_fetch_object($result);
+
+      if ($goal_obj->points == 0) {
+        $goal_obj->points = 99999999;
+      }
+
+      firep('points: ' . $points_obj->points);
+      firep('points for next prize: ' . $goal_obj->points);
+
+      // User gets a prize!
+      if ($points_obj->points >= $goal_obj->points) {
+
+        firep('a prize is deserved!');
+
+        // What's goal after this?
+        $sql = 'select points from event_milestones where points > %d
         order by points asc limit 1;';
-      $result = db_query($sql, $goal_obj->points);
-      $new_goal_obj = db_fetch_object($result);
+        $result = db_query($sql, $goal_obj->points);
+        $new_goal_obj = db_fetch_object($result);
 
-      if ($new_goal_obj->points == 0) {
-        $new_goal_obj->points = 99999999;
-      }
+        if ($new_goal_obj->points == 0) {
+          $new_goal_obj->points = 99999999;
+        }
 
-      // Which prize should be given?
-      if ($goal_obj->points >= 50000) {
-        // Large gift.
-        $prize_id = 37;
-      }
-      else if ($goal_obj->points >= 5000) {
-        // Med gift.
-        $prize_id = 36;
-      }
-      else {
-        // Small gift.
-        $prize_id = 35;
-      }
+        // Which prize should be given?
+        if ($goal_obj->points >= 50000) {
+          // Large gift.
+          $prize_id = 37;
+        }
+        else {
+          if ($goal_obj->points >= 5000) {
+            // Med gift.
+            $prize_id = 36;
+          }
+          else {
+            // Small gift.
+            $prize_id = 35;
+          }
+        }
 
-      zg_equipment_gain($game_user, $prize_id);
+        zg_equipment_gain($game_user, $prize_id);
 
-      // Update record of user getting this present.
-      $sql = 'update event_points set last_goal_achieved = %d
+        // Update record of user getting this present.
+        $sql = 'update event_points set last_goal_achieved = %d
         where fkey_users_id = %d;';
-      db_query($sql, $goal_obj->points, $game_user->id);
+        db_query($sql, $goal_obj->points, $game_user->id);
 
-      // Get present title.
-      $sql = 'select name from equipment
+        // Get present title.
+        $sql = 'select name from equipment
         where id = %d;';
-      $result = db_query($sql, $prize_id);
-      $equip_obj = db_fetch_object($result);
-      $equip_name = str_replace(' ', '&nbsp;', strtolower($equip_obj->name));
+        $result = db_query($sql, $prize_id);
+        $equip_obj = db_fetch_object($result);
+        $equip_name = str_replace(' ', '&nbsp;', strtolower($equip_obj->name));
 
-      $points_text = '<div class="subsubtitle">
+        $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
-        $new_goal_obj->points . ' points
+          $new_goal_obj->points . ' points
       </div>
       <div class="level-up">
         <div class="level-up-header">Prize Received!</div>
@@ -1385,13 +1377,14 @@ firep('a prize is deserved!');
           $new_goal_obj->points . '&nbsp;points.</div>
       </div>';
 
-    }
-    else {
-      // User doesn't get a prize.
-      $points_text = '<div class="subsubtitle">
+      }
+      else {
+        // User doesn't get a prize.
+        $points_text = '<div class="subsubtitle">
         Points: ' . $points_obj->points . ' &nbsp; Next prize at: ' .
-        $goal_obj->points . ' points
+          $goal_obj->points . ' points
       </div>';
+      }
     }
   }
 
