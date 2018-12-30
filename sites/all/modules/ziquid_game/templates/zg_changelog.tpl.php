@@ -30,6 +30,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Dec 30, 2018
+  </div>
+  <ul>
+    <li>
+      Enabled code: WanderLust
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Dec 28, 2018
   </div>
   <ul>

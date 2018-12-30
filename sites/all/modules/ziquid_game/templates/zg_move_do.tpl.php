@@ -223,13 +223,26 @@ EOF;
 </div>
 </div>
 <div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/home/$arg2">
-    Go to the home page
-  </a>
-</div>
+  <div class="try-an-election">
+    <a href="/$game/home/$arg2">
+      Go to the home page
+    </a>
+  </div>
 </div>
 EOF;
+
+  if (zg_get_value($game_user, 'WanderLust', FALSE)) {
+    echo <<< EOF
+<div class="try-an-election-wrapper">
+  <div class="try-an-election">
+    <a href="/$game/move/$arg2/0">
+      Move Again
+    </a>
+  </div>
+</div>
+
+EOF;
+  }
 
   // Cinco De Mayo in Benton Park West.
   if ($event_type == EVENT_CINCO_DE_MAYO && $neighborhood_id == 30) {
