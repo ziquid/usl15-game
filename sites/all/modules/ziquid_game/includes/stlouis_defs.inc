@@ -33,6 +33,7 @@ define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
 define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 define(EVENT_MOVE_3, 'event_move_3');
+define(EVENT_NYE_PARTY, 'event_nye_party');
 
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
@@ -47,7 +48,7 @@ define(MISSION_OCT, 1010);
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
-$event_type = EVENT_NONE;
+$event_type = [];
 $month_mission = MISSION_NONE;
 $energy_wait = 300;
 $energy_wait_str = '5 minutes';
@@ -233,9 +234,13 @@ switch ($today) {
   case '2018-12-27':
   case '2018-12-28':
   case '2018-12-29':
+    $event_type[] = EVENT_CHRISTMAS;
+    break;
+
   case '2018-12-30':
   case '2018-12-31':
-    $event_type = EVENT_CHRISTMAS;
+    $event_type[] = EVENT_CHRISTMAS;
+    $event_type[] = EVENT_NYE_PARTY;
     break;
 
 }
@@ -355,6 +360,6 @@ $fetch_header = 'zg_fetch_header';
 $slack_channel = '#uslce-data';
 
 // Add events to include list.
-if ($event_type !== EVENT_NONE) {
-  zg_includes_add($event_type, 'event');
+foreach ($event_type as $event) {
+  zg_includes_add($event, 'event');
 }
