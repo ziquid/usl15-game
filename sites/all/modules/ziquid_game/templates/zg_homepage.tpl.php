@@ -755,17 +755,21 @@ echo <<< EOF
 </div>
 EOF;
 
+zg_alter('homepage_messages', $game_user, $data);
+
 foreach ($data as $item) {
 // firep($item);
 
   $display_time = zg_format_date(strtotime($item->timestamp));
   $clan_acronym = '';
 
-  if (!empty($item->clan_acronym))
+  if (!empty($item->clan_acronym)) {
     $clan_acronym = "($item->clan_acronym)";
+  }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
   if ($item->private) {
     $private_css = 'private';
@@ -784,7 +788,7 @@ foreach ($data as $item) {
   else {
     $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
       $clan_acronym;
-    if ($item->username != 'USLCE Game') {
+    if (!in_array($item->username, ['USLCE Game', 'The Socialite'])) {
       $reply = '<div class="message-reply-wrapper"><div class="message-reply">
         <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
         '">View / Respond</a></div></div>';

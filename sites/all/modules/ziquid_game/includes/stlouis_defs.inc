@@ -62,10 +62,6 @@ switch ($today) {
 
   /* ------ JANUARY ------ */
   case '2019-01-01':
-    $event_type[] = EVENT_CHRISTMAS;
-    $event_type[] = EVENT_NYE_PARTY;
-    break;
-
   case '2019-01-02':
   case '2019-01-03':
   case '2019-01-04':
@@ -248,13 +244,9 @@ switch ($today) {
   case '2018-12-27':
   case '2018-12-28':
   case '2018-12-29':
-    $event_type[] = EVENT_CHRISTMAS;
-    break;
-
   case '2018-12-30':
   case '2018-12-31':
     $event_type[] = EVENT_CHRISTMAS;
-    $event_type[] = EVENT_NYE_PARTY;
     break;
 
 }

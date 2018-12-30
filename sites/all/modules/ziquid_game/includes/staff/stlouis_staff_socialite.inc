@@ -38,6 +38,31 @@ function stlouis_staff_socialite_homepage_event_notice(\stdClass $game_user, &$e
 }
 
 /**
+ * Implements hook_homepage_messages().
+ */
+function stlouis_staff_socialite_homepage_messages(\stdClass $game_user, &$messages) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  switch ($today) {
+
+    case '2018-12-30':
+      $message = (object) [
+        'timestamp' => '2018-12-30 01:11:11',
+        'message' => 'Hey &mdash; the Mayor is hosting his own New Year\'s Eve party tomorrow downtown.&nbsp; Might be good to go there; I\'ll see if I can get you in.&nbsp; More details later.',
+        'username' => 'The Socialite',
+        'phone_id' => '',
+        'ep_name' => '',
+        'is_clan_leader' => '0',
+        'clan_acronym' => '',
+        'private' => '1',
+        'type' => 'user',
+        'subtype' => '',
+      ];
+      array_unshift($messages, $message);
+      break;
+  }
+}
+
+/**
  * Implements hook_flag_show_quest_group_ID().
  */
 function stlouis_staff_socialite_flag_show_quest_group_1101(\stdClass $game_user, \stdClass $qg) {
