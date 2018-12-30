@@ -23,18 +23,15 @@ function stlouis_event_christmas_homepage_event_notice(\stdClass $game_user, &$e
   $today = date('Y-m-d', REQUEST_TIME - 3600);
   switch ($today) {
 
-    case '2018-12-30':
-    case '2018-12-31':
+    case '2019-01-05':
+    case '2019-01-06':
       $event_text .= '
 <div class="event">
   <div class="event-title">
     Christmas Quests
   </div>
   <div class="event-tagline">
-    End at midnight Dec 31st
-  </div>
-  <div class="event-text">
-    ~ Finish them while you can! ~
+    End at midnight Jan 6th
   </div>
 </div>';
       break;

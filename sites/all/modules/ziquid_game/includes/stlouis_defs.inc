@@ -60,6 +60,20 @@ global $game;
 $today = date('Y-m-d', REQUEST_TIME - 3600);
 switch ($today) {
 
+  /* ------ JANUARY ------ */
+  case '2019-01-01':
+    $event_type[] = EVENT_CHRISTMAS;
+    $event_type[] = EVENT_NYE_PARTY;
+    break;
+
+  case '2019-01-02':
+  case '2019-01-03':
+  case '2019-01-04':
+  case '2019-01-05':
+  case '2019-01-06':
+    $event_type[] = EVENT_CHRISTMAS;
+    break;
+
   /* ------ MARCH ------ */
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
