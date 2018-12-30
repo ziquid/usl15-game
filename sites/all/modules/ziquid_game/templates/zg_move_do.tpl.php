@@ -45,13 +45,11 @@ EOF;
 if ($neighborhood_id > 0) {
 
   $sql = 'select * from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $cur_hood = db_fetch_object($result);
+  $cur_hood = db_query($sql, $game_user->fkey_neighborhoods_id)->fetch_object();
 firep($cur_hood, 'current hood');
 
   $sql = 'select * from neighborhoods where id = %d;';
-  $result = db_query($sql, $neighborhood_id);
-  $new_hood = db_fetch_object($result);
+  $new_hood = db_query($sql, $neighborhood_id)->fetch_object();
 firep($new_hood, 'new hood');
 
   $distance = floor(sqrt(pow($cur_hood->xcoor - $new_hood->xcoor, 2) +
@@ -177,21 +175,37 @@ firep($new_hood, 'new hood');
     firep($eq->name . ' did NOT wear out');
   }
 
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
+  // Check new hood clan.
+  $sql = 'SELECT clans.acronym FROM `users`
+    inner join elected_officials on elected_officials.fkey_users_id = users.id
+    inner join clan_members cm on users.id = cm.fkey_users_id
+    inner join clans on cm.fkey_clans_id = clans.id
+    WHERE fkey_neighborhoods_id = %d
+    and elected_officials.fkey_elected_positions_id = 1;';
+  $clan = db_query($sql, $neighborhood_id)->fetch_object();
+  if (!empty($clan->acronym)) {
+    $clan_msg = t('<div class="subsubtitle">This @hood is controlled by the %clan clan.</div>',
+      ['@hood' => $game_text['hood_lower'], '%clan' => $clan->acronym]);
+  }
+  else {
+    $clan_msg = '';
+  }
 
-  echo '<div class="land-succeeded">' . t('Success!') .
-    '</div>';
+  $game_user = zg_fetch_user();
+  zg_fetch_header($game_user);
+
+  echo '<div class="land-succeeded">' . t('Success!') . '</div>';
 
   echo <<< EOF
 <div class="subtitle">You have arrived in <span class="nowrap highlight">$game_user->location</span></div>
 <div class="subsubtitle">$resigned_text</div>
+$clan_msg
 EOF;
 
   if (!empty($new_hood->welcome_msg)) {
     echo <<< EOF
-<p class="second">You see a billboard when you enter the $hood_lower.&nbsp; It states:</p>
-<p class="second">$new_hood->welcome_msg</p>
+<p class="second">You see a billboard when you enter the {$game_text['hood_lower']}.&nbsp; It states:</p>
+<div class="subsubtitle">$new_hood->welcome_msg</div>
 EOF;
   }
 

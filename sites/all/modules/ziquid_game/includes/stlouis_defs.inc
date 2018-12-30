@@ -292,6 +292,7 @@ $game_text = [
   'experience' => 'Influence',
   'experience_short' => 'Inf',
   'hood' => 'Neighborhood',
+  'hood_lower' => 'neighborhood',
   'hood_short' => '\'hood',
   'initiative' => 'Initiative',
   'initiative_short' => 'Ini',

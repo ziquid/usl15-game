@@ -36,6 +36,12 @@ db_set_active('default');
     <li>
       Enabled code: WanderLust
     </li>
+    <li>
+      Moving to a new hood shows you the clan that controls the hood, if any.
+    </li>
+    <li>
+      New equipment: Formal Dress
+    </li>
   </ul>
 
   <div class="subtitle">
