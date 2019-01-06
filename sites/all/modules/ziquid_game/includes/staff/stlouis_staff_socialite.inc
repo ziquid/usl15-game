@@ -59,6 +59,22 @@ function stlouis_staff_socialite_homepage_messages(\stdClass $game_user, &$messa
       ];
       array_unshift($messages, $message);
       break;
+
+    case '2019-01-06':
+      $message = (object) [
+        'timestamp' => '2019-01-06 09:10:11',
+        'message' => 'Hey &mdash; sorry I didn\'t get back to you as I was a bit hung over.&nbsp; I tried to get you on the guest list but they know who you are and wouldn\'t allow it.&nbsp; I went and found out some interesting things.  Let\'s get together soon and talk about it.',
+        'username' => 'The Socialite',
+        'phone_id' => '',
+        'ep_name' => '',
+        'is_clan_leader' => '0',
+        'clan_acronym' => '',
+        'private' => '1',
+        'type' => 'user',
+        'subtype' => '',
+      ];
+      array_unshift($messages, $message);
+      break;
   }
 }
 

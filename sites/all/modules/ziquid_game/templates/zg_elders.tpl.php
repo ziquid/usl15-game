@@ -156,4 +156,14 @@ if (zg_get_value($game_user, 'NothingButFur', FALSE)) {
 EOF;
 }
 
+if (zg_get_value($game_user, 'RockThisTown', FALSE)) {
+  echo <<< EOF
+<div class="menu-option">
+  <a href="/detroit/bounce/$arg2">
+    Move to Detroit (Free)
+  </a>
+</div>
+EOF;
+}
+
 db_set_active('default');

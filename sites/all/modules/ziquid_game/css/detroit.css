@@ -1,0 +1,1172 @@
+body.page-detroit {
+  background-color: rgb(22, 2, 0);
+  color: #f8f8f8;
+}
+
+body h3, body h4 {
+  font-family: warnock-pro-subhead, sans-serif;
+}
+
+body .title {
+  font-family: warnock-pro-caption, sans-serif;
+  text-transform: uppercase;
+  color: #f8f8f8;
+}
+
+.title.error {
+}
+
+body .title.loot {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+body .subtitle {
+  font-family: warnock-pro-subhead, sans-serif;
+  font-weight: bold;
+  color: #f80808;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+
+body .subsubtitle {
+  font-family: warnock-pro-subhead, sans-serif;
+  font-weight: bold;
+  color: #f80808;
+  text-transform: uppercase;
+  font-size: 17px;
+}
+
+.quest-group-completion {
+}
+
+body .header {
+  background-color: rgba(80, 0, 0, 0.80);
+}
+
+.header .money {
+}
+
+.header .money-text {
+}
+
+.header .actions {
+}
+
+.header .actions-text {
+}
+
+.header .experience {
+}
+
+.header .experience-text {
+}
+
+.header .energy-text {
+}
+
+.header .energy {
+}
+
+.header .home {
+}
+
+.header .home a {
+}
+
+.header .energy #energy-id, .header .money #money-id,
+.header .actions #actions-id {
+}
+
+.header .energy #energy-time, .header .money #income-time,
+.header .actions #actions-time {
+}
+
+.header .level {
+}
+
+.header .level a {
+}
+
+.header .level-text {
+}
+
+.main-menu, .elders-menu.big {
+}
+
+.main-menu, .elders-menu {
+}
+
+body p {
+  margin: 8px 0;
+  font-family: jaf-facitweb, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 0.64rem;
+  line-height: 125%;
+}
+
+p:first-child {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+body li {
+  font-family: jaf-facitweb, sans-serif;
+  margin-bottom: 4px;
+  font-size: 0.64rem;
+  line-height: 125%;
+}
+
+body li::before {
+  content: "\2297";
+  margin: 0 0.5rem 0 -1rem;
+  float: left;
+  color: #f80808;
+  -webkit-text-stroke: 0.25px rgba(192, 192, 192, 0.8);
+}
+
+body .quests {
+  min-height: 108px;
+}
+
+body .quests .quest-icon {
+  height: 100px;
+}
+
+.quests .quest-icon img {
+  height: 96px;
+}
+
+.quests.wrong-hood .quest-icon {
+}
+
+.quests .quest-complete {
+}
+
+.quests .quest-complete-percentage {
+}
+
+.quests .quest-complete-text {
+}
+
+body .quests .quest-details {
+  display: grid;
+}
+
+.quests .quest-name {
+  font-family: Adelle, serif;
+  color: limegreen;
+}
+
+.quests.wrong-hood .quest-name {
+}
+
+.quests .quest-description {
+}
+
+.quests.wrong-hood .quest-description {
+}
+
+.quests .quest-experience {
+}
+
+.quests .quest-experience, .quests .quest-money,
+.quests .quest-required_energy, .quests .quest-loot,
+.quests .quest-required_stuff {
+}
+
+.quests .quest-required_energy, .quests .quest-required_stuff {
+}
+
+.quests .quest-required_equipment {
+}
+
+.quests .quest-required_equipment img.not-yet {
+}
+
+.quests .quest-loot {
+  text-align: right;
+}
+
+.quests .quest-required_stuff.centered {
+}
+
+.quests-soon {
+}
+
+.quests-soon .quest-name {
+}
+
+.quests-soon .quest-description {
+}
+
+.quests-soon .quest-experience, .quests-soon .quest-money,
+.quests-soon .quest-required_energy, .quests-soon .quest-required_level {
+}
+
+.quests-soon .quest-required_level {
+}
+
+.quest-succeeded, .quest-action-succeeded, .election-succeeded, .land-succeeded {
+  font-family: Adelle, serif;
+  font-size: 15px;
+  text-transform: none;
+}
+
+.quest-failed, .election-failed, .land-failed {
+}
+
+.land {
+}
+
+body .land .land-icon {
+  width: 96px;
+  height: 96px;
+}
+
+.land .land-details {
+}
+
+.land .land-name {
+  font-family: Adelle, serif;
+  color: limegreen;
+  text-transform: none;
+}
+
+.land .land-name .type {
+}
+
+body .land .land-description {
+  text-transform: none;
+  color: #f8f8f8;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-family: jaf-facitweb, sans-serif;
+  font-size: 10px;
+}
+
+.land .land-owned, .land .land-action, .land-soon .land-action {
+  font-family: Adelle, serif;
+  color: lightskyblue;
+  text-transform: none;
+  font-size: 14px;
+}
+
+body .land .land-action-cost,
+body .land-soon .land-action-cost,
+body .land-disbursements {
+  font-family: jaf-facitweb, sans-serif;
+  text-transform: none;
+  font-weight: normal;
+  color: #f8f8f8;
+  text-align: right;
+  font-size: 10px;
+}
+
+.land .land-cost {
+}
+
+.quests .quest-payout,
+.land .land-owned, .land .land-cost, .land .land-action-cost,
+.land .land-payout {
+}
+
+.land .land-button-wrapper {
+}
+
+.land .land-perform-button-wrapper, .send-message-send-wrapper {
+}
+
+.quests .quests-perform-button-wrapper {
+}
+
+.land .land-buy-button, .land .land-sell-button {
+}
+
+.land form .land-buy-button, .land form .land-sell-button {
+}
+
+.land .land-perform-button, .quests .quests-perform-button {
+}
+
+.land .land-button-wrapper form {
+}
+
+.send-message-send-wrapper .send-message-send {
+}
+
+.land input.land-perform-button, .quests input.quests-perform-button,
+.crafting-submit-button {
+}
+
+a.crafting-submit-button {
+}
+
+.crafting-submit-button-wrapper {
+}
+
+.land .target {
+}
+
+.land .quantity {
+}
+
+.land form .quantity {
+}
+
+.land-soon {
+}
+
+.land-soon .land-name {
+}
+
+.land-soon .land-description {
+}
+
+.land-soon .land-cost, .land-soon .land-payout,
+.land-soon .land-required_level, .land-soon .land-action-cost {
+}
+
+.land-soon .land-required_level {
+}
+
+.level-up {
+}
+
+.level-up-header {
+}
+
+.level-up-image {
+}
+
+.level-up-text {
+}
+
+.tagline {
+  font-family: warnock-pro-subhead, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 5.55px;
+  color: #f80808;
+  -webkit-text-stroke: 0.25px rgba(192, 192, 192, 0.8);
+  text-transform: uppercase;
+}
+
+.title + .tagline {
+  margin-top: -10px;
+}
+
+body .welcome {
+  border: solid 1px #c0c0d0;
+  box-shadow: inset 0 0.4px 0 0 #f0f8ff;
+  background-image: url('/sites/default/files/images/detroit_agent.jpg');
+  background-repeat: no-repeat;
+  background-position: 2px 2px;
+  background-size: contain;
+  padding-left: 104px;
+  -webkit-background-size: 96px 120px;
+  background-size: 96px 120px;
+  background-color: rgb(57, 2, 0);
+  text-shadow: 0 0.4px 0 #520909;
+  min-height: 116px;
+}
+
+.welcome .ask-name {
+}
+
+.welcome-continue, .election-continue {
+}
+
+.welcome-continue a, .election-continue a {
+}
+
+body .welcome .subtitle {
+  margin-top: 4px;
+}
+
+.welcome p + .subtitle {
+}
+
+body .welcome ul {
+  margin-top: 6px;
+}
+
+.choose-clan {
+}
+
+.choose-clan-icon {
+}
+
+.help {
+}
+
+.help .subtitle {
+}
+
+.help p {
+}
+
+.news {
+}
+
+.news-buttons {
+}
+
+.news #all-text {
+}
+
+.news .title {
+}
+
+.news .messages-title {
+}
+
+.news .subtitle {
+}
+
+.news .dateline {
+}
+
+.news .message-body {
+}
+
+.news .message-body.private {
+}
+
+.news .message-body.mayor {
+}
+
+.news .message-body.mayor.mayor-system {
+}
+
+.news .message-body.mayor.mayor-mayor {
+}
+
+.news .message-body.user {
+color: #aab030;
+}
+
+.news .message-body.user.user-png {
+}
+
+.news .message-body.user.user-comp {
+}
+
+.news .message-body.challenge {
+color: #9f7b36;
+}
+
+.news .message-body.party {
+color: #aaa;
+}
+
+.news .message-body.values {
+color: #5abafe;
+}
+
+.news p {
+}
+
+.news .all {
+
+}
+
+.news .personal {
+
+}
+
+.news .elections {
+
+}
+
+.news .clan {
+
+}
+
+.news .system {
+
+}
+
+.news .button, .news button {
+}
+
+.news.secondary .button, .news.secondary button {
+}
+
+.news .button:last-child, .news button:last-child {
+}
+
+.news a.button {
+}
+
+.news button {
+}
+
+.news .message-reply-wrapper {
+}
+
+.news .message-reply {
+}
+
+.news .message-reply a {
+}
+
+.news .message-delete {
+}
+
+.news-item {
+}
+
+.location + .news {
+}
+
+.user-profile .action {
+}
+
+.user-profile .action a {
+}
+
+.username-error {
+}
+
+.elections {
+}
+
+.elections .clan-title {
+}
+
+.elections-header .clan-title {
+}
+
+.elections .election-details {
+}
+
+.elections .election-details .opponent-name,
+.elections-header .election-details .opponent-name {
+}
+
+.elections-header .election-details .opponent-influence {
+}
+
+.elections .election-details .approval-rating {
+}
+
+.elections-header {
+}
+
+.elections .me {
+}
+
+.elections .election-details .rank {
+}
+
+.elections .election-details .clan-icon {
+}
+
+.elections .election-details .clan-icon img {
+}
+
+.can-broadcast-to-party {
+}
+
+.elections .election-details .action-wrapper {
+}
+.elections .election-details .action {
+}
+
+.try-an-election-wrapper {
+}
+
+.try-an-election {
+}
+
+.try-an-election a, a.try-an-election, input.try-an-election {
+}
+
+a.try-an-election, input.try-an-election {
+}
+
+.election-succeeded {
+}
+
+.election-failed {
+}
+.user-profile {
+}
+
+.user-profile .heading {
+}
+
+.user-profile .value {
+}
+
+.user-profile .clan-icon {
+}
+
+.message-title {
+}
+
+.send-message {
+}
+
+.send-message .title {
+}
+
+.send-message .message-textarea {
+}
+
+.send-message .send-message-send {
+}
+
+.send-message .send-message-target {
+}
+
+.send-message .block-user {
+}
+
+.send-message .block-user a {
+}
+
+.action-effect {
+}
+
+.ask-clan-name {
+}
+
+.ask-clan-name p {
+}
+
+.ask-clan-name input {
+}
+
+.debate-used {
+}
+
+.debate-used img {
+}
+
+.debate-used .debate-num {
+}
+
+.debate-used-wrapper {
+}
+
+.purchase {
+}
+
+.message-error {
+}
+
+.message-error.big {
+}
+
+.clan-list {
+}
+
+.ask-name {
+}
+
+.event {
+}
+
+.event a {
+}
+
+.event .event-title {
+}
+
+.event-text {
+}
+
+.event-tagline {
+}
+
+.event-tagline.small{
+}
+
+a .event-text {
+}
+
+.event-info {
+}
+
+.event-info .subsubtitle strong {
+}
+
+.location {
+}
+
+.version {
+}
+
+.new-main-menu {
+}
+
+.new-main-menu img {
+}
+
+.competency-pip {
+}
+
+.competency-pip.attained {
+}
+
+.initial-caps {
+}
+
+.item-picklist select {
+}
+
+.map-image {
+}
+
+.map-marker {
+}
+
+img.round4 {
+}
+
+.highlight {
+}
+
+#copyright {
+}
+
+.center {
+}
+
+.hide {
+}
+
+.speech-bubble {
+}
+
+.speech-bubble:before {
+}
+
+.speech-bubble:after {
+}
+
+.colorize-blue {
+}
+
+.colorize-red {
+}
+
+.colorize-orange {
+}
+
+.colorize-yellow {
+}
+
+.colorize-green {
+}
+
+.colorize-grey, .colorize-gray {
+}
+
+.colorize-black {
+}
+
+body a.button {
+  box-shadow: inset 0 1px 0 0 #c41;
+  background: linear-gradient(to bottom, #b30 5%, #a20 100%);
+  background-color: #b30;
+  border-radius: 6px;
+  border: 1px solid #c41;
+  display: inline-block;
+  cursor: pointer;
+  color: #f8fefc;
+  font-family: roboto-mono, monospace;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 3px 10px 5px;
+  text-decoration: none;
+  text-shadow: 0 1px 0 #520909;
+  margin: 8px 0 8px;
+  text-transform: capitalize;
+}
+
+body a.button-continue {
+  font-size: 15px;
+  padding: 5px 24px 7px;
+  margin: 16px 0 8px;
+}
+
+.button-wrapper {
+  text-align: center;
+}
+
+.quest-details .button-wrapper {
+  text-align: right;
+}
+
+.quest-details .button {
+  margin-bottom: 2px;
+}
+
+.button-wrapper.button-wrapper-do-again {
+  text-align: right;
+}
+
+a, a:link, a:visited, a:hover, a:active {
+  color: yellow;
+}
+
+.main-menu .menu-option {
+}
+
+.elders-menu .menu-option {
+}
+
+.menu-option a {
+}
+
+.menu-option.not-yet {
+}
+
+body .quests, body .land {
+  margin: 4px 3px 9px;
+  background-color: #000225;
+}
+
+.quests .quest-required_stuff.missing {
+}
+
+.quests .quest-payout.negative,
+.land .land-payout.negative, .land-soon .land-payout.negative {
+  text-transform: none;
+  color: #f80808;
+  margin: 0;
+  padding: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-family: jaf-facitweb, sans-serif;
+  font-size: 10px;
+  text-align: right;
+  -webkit-text-stroke: 0.4px rgba(192, 192, 2, 0.4);
+  text-shadow: 0 0 0.8px rgba(192, 192, 2, 0.4);
+}
+
+.quests .quest-description, .land .land-description {
+}
+
+.quests .quest-description .not-yet, .land .land-description .not-yet {
+}
+
+.quests .quest-required_stuff .quest-required_equipment img.not-yet {
+}
+
+.quests .quest-required_stuff .quest-required_equipment img {
+}
+
+.quest-completed-wrapper p, .quest-failed-wrapper p {
+  text-transform: none;
+  margin: 4px 0;
+}
+
+.quest-failed-wrapper p:first-of-type {
+  margin-top: 0;
+}
+
+body .quest-failed, body .election-failed, body .land-failed, body .title.failed {
+  color: red;
+  font-size: 18px;
+  -webkit-text-stroke: 0.4px rgba(192, 192, 192, 0.8);
+  text-shadow: 0 0 2px rgba(192, 192, 192, 0.8);
+}
+
+.quest-do-again, .land-buy-again {
+}
+
+.quest-do-again-inside, .land-buy-again-inside {
+}
+
+.quest-do-again a, .land-buy-again a {
+}
+
+.quests .quest-name.loot {
+}
+
+.quests .quest-name.not-yet {
+}
+
+.quests .quest-num, .quests .quest-requisites, .quests .quest-disbursements {
+}
+
+body .land {
+  min-height: 96px;
+}
+
+.land .land-owned {
+}
+
+.level-up.happy {
+}
+
+.choose-clan-name {
+}
+
+.choose-clan-name a {
+}
+
+.choose-clan-slogan {
+}
+
+.wise_old_man_large, .wise_old_man {
+}
+
+.wise_old_man_small, .wise_old_man.small {
+}
+
+.wise_old_man.sad {
+}
+
+.wise_old_man.happy {
+}
+
+.city-icon {
+}
+
+.elections .election-details .action, .land .land-buy-button,
+.land .land-sell-button, .land .land-perform-button,
+.send-message-send-wrapper .send-message-send,
+.quests .quests-perform-button, .crafting-submit-button {
+}
+
+.elections .election-details .action.not-yet, .land .land-buy-button.not-yet,
+.land .land-sell-button.not-yet {
+}
+
+.elections .election-details .action a, .land .land-buy-button a,
+.land .land-sell-button a, .land form input.land-buy-button {
+}
+
+.user-profile .event-status {
+}
+
+.highlighted {
+}
+
+.event-info .subtitle {
+}
+
+.event-info .subsubtitle {
+}
+
+a.version {
+}
+
+.new-main-menu .elections-menu {
+}
+
+.too-soon {
+}
+
+.competency-tag {
+}
+
+textarea {
+}
+
+#drupalforfirebug_general {
+}
+
+.swiper-container {
+}
+
+.swiper-slide {
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+}
+
+.swiper-container-horizontal>.swiper-pagination-bullets,
+.swiper-pagination-custom,
+.swiper-pagination-fraction {
+}
+
+.swiper-slide .title {
+}
+
+.swiper-slide .title.loot {
+}
+
+.swiper-slide .quest-images {
+}
+
+.swiper-slide.overview .quest-images {
+}
+
+.quest-group-name, .quest-group-title {
+}
+
+.quest-group-name a, .quest-group-title a {
+}
+
+.swiper-slide .title .quest-group-title {
+  margin: 8px 0 5px;
+}
+
+.swiper-slide .title .quest-group-name {
+}
+
+.fit-box {
+}
+
+.swiper-slide .title .quest-group-name.admin-obfuscate {
+}
+
+.swiper-slide .title .overview-only {
+}
+
+.swiper-slide.overview .title .overview-only {
+}
+
+.swiper-slide.overview .title img.overview-only {
+}
+
+.wrong-hood-wrapper,  .not-yet-wrapper {
+}
+
+div + .wrong-hood-wrapper {
+}
+
+.quest-icon .wrong-hood-wrapper {
+}
+
+img.wrong-hood {
+}
+
+input.wrong-hood {
+}
+
+input + img.wrong-hood-overlay {
+}
+
+img.wrong-hood-overlay {
+}
+
+.not-yet-wrapper img.not-yet {
+}
+
+span.not-yet-overlay {
+}
+
+.quests span.not-yet-overlay {
+}
+
+.swiper-slide .description {
+}
+
+.swiper-slide.overview .description, .swiper-slide .description.show-expanded {
+}
+
+.swiper-slide.overview .description.empty {
+}
+
+.swiper-slide.overview .quests {
+}
+
+.swiper-slide .quests {
+  font-family: jaf-facitweb, sans-serif;
+  text-transform: none;
+  font-weight: normal;
+  color: #f8f8f8;
+}
+
+.swiper-slide .quests .quest-name a {
+}
+
+.swiper-slide .quests .quest-experience,
+.swiper-slide .quests .quest-money,
+.swiper-slide .quests .quest-required_energy,
+.swiper-slide .quests .quest-required_stuff,
+.swiper-slide .quests .quest-payout {
+  margin-top: 2px;
+  font-size: 10px;
+  text-align: right;
+}
+
+.swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
+}
+
+.swiper-container .swiper-button-prev, .swiper-container .swiper-container-rtl .swiper-button-next {
+}
+
+.swiper-container .swiper-button-next, .swiper-container .swiper-container-rtl .swiper-button-prev {
+}
+
+.system-message-response {
+}
+
+div.description-speech-bubble-wrapper {
+}
+
+div.speech-bubble-wrapper {
+}
+
+div.description-speech-bubble-wrapper .wise_old_man {
+}
+
+div.speech-bubble-wrapper .wise_old_man {
+}
+
+.quests .quest-icon-baseline-overlay {
+}
+
+.quests .quest-icon-overlay {
+}
+
+.bonus-text {
+}
+
+.lesser-bonus-text {
+  -webkit-text-stroke: 0.4px rgba(192, 192, 0, 0.4);
+  text-shadow: 0 0 0.8px rgba(192, 192, 0, 0.8);
+}
+
+div.lesser-bonus-text {
+}
+
+.speech {
+  color: yellow;
+  padding: 0 0 0 5px;
+  margin-left: 1px;
+  border-left: solid 1px yellow;
+  font-family: Adelle, serif;
+  font-weight: bold;
+}
+
+.thought {
+  color: lightblue;
+  font-family: Adelle, serif;
+  font-style: italic;
+}
+
+.quote {
+  margin: 6px;
+  color: lightcoral;
+}
+
+.quote {
+  text-indent: -4px;
+}
+
+.quote:before {
+  content: "\201c";
+}
+
+.quote:after {
+  content: "\201d";
+}

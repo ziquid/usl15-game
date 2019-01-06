@@ -370,7 +370,7 @@ function zg_init() {
     $conf['cache'] = FALSE;
 
     // Include TypeKit fonts.
-    if ($game == 'wonderland') {
+    if ($game == 'wonderland' || $game == 'detroit') {
       drupal_set_html_head('<link rel="stylesheet" href="https://use.typekit.net/unw5gbe.css">');
     }
 
@@ -784,7 +784,8 @@ function zg_fetch_user($force = FALSE) {
 
   // Only allow access through authorized clients.
   if (((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE)) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.detroit') === FALSE)) &&
 
     // Paypal IPN addresses.
     ($ip_addr != '66.211.170.66') &&
@@ -1200,6 +1201,7 @@ function zg_fetch_user($force = FALSE) {
 function zg_fetch_header(\stdClass $game_user) {
 
   global $game, $extra_messages, $next_level;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // Calculate energy change.
   $energy_bonus = 10 + $game_user->ep_energy_bonus +
@@ -1402,7 +1404,7 @@ $game_user->actions_max <div class="actions-text">Actions</div>
   <div id="actions-time">$actions_text</div>
   </div>
   <div class="experience"><strong>$experience_str</strong> /
-  $next_level<div class="experience-text">Influence</div></div>
+  $next_level<div class="experience-text">{$game_text['experience']}</div></div>
 <div class="energy"><div id="energy-id">$game_user->energy</div> /
 $game_user->energy_max <div class="energy-text">Energy</div>
   <div id="energy-time">$energy_text</div></div>

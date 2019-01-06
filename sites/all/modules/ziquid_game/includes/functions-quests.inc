@@ -784,7 +784,7 @@ EOF;
       // Disbursements //
     </div>
     <div class="quest-experience">
-      +$item->experience $experience, 
+      +$item->experience {$game_text['experience']},
       +$item->min_money to $item->max_money $game_user->values
     </div>
 EOF;

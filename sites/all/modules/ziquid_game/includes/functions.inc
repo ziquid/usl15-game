@@ -1918,6 +1918,7 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
  */
 function zg_get_game_list() {
   return [
+    'detroit',
     'stlouis',
     'wonderland',
   ];
@@ -2008,13 +2009,13 @@ function zg_get_html($key) {
     return $item->html_value;
   }
 
-  // Wonderland and value doesn't exist?  Create dummy value.
-  if ($game == 'wonderland') {
+  // Wonderland or Detroit and value doesn't exist?  Create dummy value.
+  if ($game == 'wonderland' || $game == 'detroit') {
     $sql = 'insert into html_well
       (html_key, html_value, comment)
       values ("%s", "%s", "FIXME -- automatically-generated value");';
-    db_query($sql, $key, 'Wonderland ' . $key);
-    return 'Wonderland ' . $key;
+    db_query($sql, $key, "$game $key");
+    return "$game $key";
   }
 
   return FALSE;
@@ -2083,13 +2084,13 @@ function zg_get_default($key) {
     return $game_defaults[$key];
   }
 
-  // Wonderland and value doesn't exist?  Copy value from St Louis.
-  if ($game == 'wonderland') {
+  // Wonderland or Detroit and value doesn't exist?  Copy value from St Louis.
+  if ($game == 'wonderland' || $game == 'detroit') {
     db_set_active('game_stlouis');
     $sql = 'select game_value, value_type from game_defaults where game_key = "%s";';
     $result = db_query($sql, $key);
     $item = db_fetch_object($result);
-    db_set_active('game_wonderland');
+    db_set_active('game_' . $game);
 
     if (is_object($item)) {
       $sql = 'insert into game_defaults
