@@ -332,7 +332,7 @@ if ($quest_succeeded) {
       $quest_completion_html .= <<< EOF
 <div class="title loot">{$game_text['quest']} Completed!</div>
 <p>You have completed this $quest_lower and gained an extra <strong>$money_added
-  $game_user->values and $game_quest->experience $experience</strong>!&nbsp; Complete
+  $game_user->values and $game_quest->experience {$game_text['experience']}</strong>!&nbsp; Complete
   all ${quest_lower}s in this group for an extra reward.</p>
 EOF;
     }

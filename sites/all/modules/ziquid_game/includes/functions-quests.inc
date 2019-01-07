@@ -909,7 +909,7 @@ EOF;
     // Quest performed -- show accomplishments.
     echo <<< EOF
     <div class="quest-experience">
-      $item->exp_added_str <strong>$experience</strong>
+      $item->exp_added_str <strong>${$game_text['experience']}</strong>
     <br>
       $item->money_added_str <strong>$game_user->values</strong>
     </div>
@@ -1064,7 +1064,7 @@ EOF;
 
     $output .= <<< EOF
     <div class="quest-experience">
-      Provides +$qa->experience $experience, 
+      Provides +$qa->experience {$game_text['experience']}, 
       +$qa->min_money to $qa->max_money $game_user->values
     </div>
 EOF;
@@ -1171,7 +1171,7 @@ EOF;
     // Quest action performed -- show accomplishments.
     $output .= <<< EOF
     <div class="quest-experience">
-      $qa->exp_added_str <strong>$experience</strong>
+      $qa->exp_added_str <strong>{$game_text['experience']}</strong>
     <br>
       $qa->money_added_str <strong>$game_user->values</strong>
     </div>
