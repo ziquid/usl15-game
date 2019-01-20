@@ -30,6 +30,16 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jan 20, 2019
+  </div>
+  <ul>
+    <li>
+      You cannot challenge for a seat if the player who holds it is more than 15
+        levels below you.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Dec 30, 2018
   </div>
   <ul>
