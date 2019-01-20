@@ -119,7 +119,7 @@ $sql = 'SELECT elected_positions.id AS ep_id, elected_positions.energy_bonus,
 $result = db_query($sql, $game_user->fkey_neighborhoods_id,
   $game_user->fkey_values_id, $district, $position_id);
 $item = db_fetch_object($result);
-firep($item);
+firep($item, 'opponent object');
 
   // Labor day -- all are UWP - jwc.
 //  $game_user->fkey_values_id = 7;
@@ -177,9 +177,9 @@ EOF;
   return;
 }
 
+// If you are running without an opponent, you automatically win.
 if (empty($item->id)) {
 
-  // If you are running without an opponent, you automatically win.
   // Party office.
   if ($item->type == 2) {
 
@@ -187,9 +187,8 @@ if (empty($item->id)) {
     game_set_timer($game_user, 'next_major_action', 86400);
   }
 
-  $sql = 'delete from elected_officials where fkey_users_id = %d;';
-
   // You can only hold one position.
+  $sql = 'delete from elected_officials where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
 
   $sql = 'insert into elected_officials set fkey_users_id = %d,
@@ -225,17 +224,14 @@ EOF;
   echo '<div class="election-succeeded">' . t('Success!') . '</div>';
   echo '<div class="subtitle">' .
     t('You ran unopposed and automatically win!') . '</div>';
-  echo '<div class="subtitle">
-<a href="/' . $game . '/elections/' . $arg2 . '">
-  <img src="/sites/default/files/images/' . $game . '_continue.png"/>
-</a>
-</div>';
+  zg_button('elections', 'Continue');
 
   $message = "$game_user->username ran unopposed for the seat $item->ep_name" .
     " in $location.";
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-won\"/>\n-->";
+  }
 
   $sql = 'insert into challenge_history
   (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
@@ -246,23 +242,19 @@ EOF;
     "$game_user->username challenged for the seat $item->ep_name in $location unopposed.",
     "$game_user->username challenged for the seat $item->ep_name in $location unopposed.");
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
-/*    if ($game_user->experience > ($item->experience * 2)) {
-
+// Too powerful to challenge.
+if ($game_user->level > ($item->level + 15)) {
   echo '<div class="election-failed">' . t('Sorry!') . '</div>';
-  echo '<div class="subtitle">' .
-    t('Your influence is too high to challenge ') . $item->username . '.</div>';
-  echo '<div class="election-continue"><a href="/' . $game . '/elections/' .
-    $arg2 . '">' . t('Continue') . '</a></div>';
-
-  db_set_active('default');
+  echo t('<div class="subtitle">Your @influence is too high to challenge @name</div>',
+    ['@influence' => $game_text['experience'], '@name' => $item->username]);
+  zg_button('elections', 'Continue');
+  db_set_active();
   return;
-
 }
-*/
 
 $sql = 'SELECT sum(staff.initiative_bonus * staff_ownership.quantity)
   as initiative from staff

@@ -909,7 +909,7 @@ EOF;
     // Quest performed -- show accomplishments.
     echo <<< EOF
     <div class="quest-experience">
-      $item->exp_added_str <strong>${$game_text['experience']}</strong>
+      $item->exp_added_str <strong>{$game_text['experience']}</strong>
     <br>
       $item->money_added_str <strong>$game_user->values</strong>
     </div>
