@@ -37,6 +37,12 @@ db_set_active('default');
       You cannot challenge for a seat if the player who holds it is more than 15
         levels below you.
     </li>
+    <li>
+      Alderman positions no longer have an upper level limit.
+    </li>
+    <li>
+      Elections are open now in West End.
+    </li>
   </ul>
 
   <div class="subtitle">
