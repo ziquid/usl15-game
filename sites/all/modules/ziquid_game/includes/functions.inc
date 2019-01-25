@@ -2192,3 +2192,29 @@ if (!function_exists('drupal_html_class')) {
   }
 
 }
+
+/**
+ * Send message to Slack.
+ *
+ * @param $type
+ *   The name of the channel.
+ *
+ * @return $message
+ *   The messafe to post into a channel.
+ */
+function game_slack($type, $message) {
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+
+  $ch = curl_init("https://slack.com/api/chat.postMessage");
+  curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
+  curl_setopt($ch, CURLOPT_POSTFIELDS, array('channel' => $type, 'message' => $message));
+  curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  
+  $slack_message = curl_exec($ch);
+  
+  curl_close($ch);
+    
+  return $slack_message;
+}
