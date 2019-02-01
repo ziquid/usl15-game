@@ -615,6 +615,11 @@ function zg_save_user_IP($game_user) {
       if (empty($game_user->password)) {
         zg_set_value($game_user, 'last_IP', $ip_addr);
       }
+      else if (key_exists('password', $_GET)) {
+        if ($_GET['password'] == $game_user->password) {
+          return TRUE;
+        }
+      }
       else {
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
