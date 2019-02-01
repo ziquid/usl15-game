@@ -27,7 +27,7 @@
  */
 function zg_dashboard_callback($phone_id, $stat) {
 
-  if (empty($phone_id)) {
+  if (empty($phone_id) || empty($stat)) {
     drupal_access_denied();
     return;
   }
