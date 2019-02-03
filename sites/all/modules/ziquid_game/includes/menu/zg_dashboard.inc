@@ -42,7 +42,7 @@ function zg_dashboard_callback($phone_id, $stat) {
       db_set_active();
       $sql = 'select count(sid) as anon_users from sessions
         where uid = 0 and timestamp >= "%s";';
-      $result = db_query($sql, date('Y/m/d H:n:s', time() - 900))->fetch_object();
+      $result = db_query($sql, date('Y-m-d H:i:s', time() - 900))->fetch_object();
       break;
 
     case 'luck':
@@ -54,9 +54,10 @@ function zg_dashboard_callback($phone_id, $stat) {
       break;
 
     case 'accounts':
-      // Number of player accounts.
+      // Number of player accounts >= level 25.
       $sql = 'select count(id) as accounts from users
-         and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
+        where level >= 25
+        and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
       $result = db_query($sql)->fetch_object();
       break;
 
