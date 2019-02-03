@@ -38,13 +38,15 @@ function zg_dashboard_callback($phone_id, $stat) {
 
   switch ($stat) {
     case 'sessions':
+      // Number of active sessions in last 15 minutes.
       db_set_active();
       $sql = 'select count(sid) as anon_users from sessions
         where uid = 0 and timestamp >= "%s";';
-    $result = db_query($sql, date('Y/m/d H:n:s', time() - 900))->fetch_object();
+      $result = db_query($sql, date('Y/m/d H:n:s', time() - 900))->fetch_object();
       break;
 
     case 'luck':
+      // Amount of outstanding luck for players >= level 25.
       $sql = 'select sum(luck) as luck from users
         where level >= 25
         and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
@@ -52,9 +54,17 @@ function zg_dashboard_callback($phone_id, $stat) {
       break;
 
     case 'accounts':
+      // Number of player accounts.
       $sql = 'select count(id) as accounts from users
-        where level >= 25
-        and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
+         and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
+      $result = db_query($sql)->fetch_object();
+      break;
+
+    case 'officials':
+      // All elected officials.
+      $sql = 'SELECT ep.name, u.username FROM `elected_positions` ep
+        left join elected_officials eo on ep.id = eo.fkey_elected_positions_id
+        left join users u on eo.fkey_users_id = u.id;';
       $result = db_query($sql)->fetch_object();
       break;
 
