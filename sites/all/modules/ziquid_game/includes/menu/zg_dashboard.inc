@@ -39,12 +39,27 @@ function zg_dashboard_callback($phone_id, $stat) {
   switch ($stat) {
     case 'sessions':
       db_set_active();
-      $sql = 'select count(sid) as anon_users from sessions where uid = 0 and timestamp >= \'$(date -d "15 minutes ago" +%s)\';';
+      $sql = 'select count(sid) as anon_users from sessions
+        where uid = 0 and timestamp >= "%s";';
+    $result = db_query($sql, date('Y/m/d H:n:s', time() - 900))->fetch_object();
+      break;
+
+    case 'luck':
+      $sql = 'select sum(luck) as luck from users
+        where level >= 25
+        and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
+      $result = db_query($sql)->fetch_object();
+      break;
+
+    case 'accounts':
+      $sql = 'select count(id) as accounts from users
+        where level >= 25
+        and meta <> "admin" and meta <> "zombie" and meta NOT LIKE "ai%";';
+      $result = db_query($sql)->fetch_object();
       break;
 
   }
 
-  $result = db_query($sql)->fetch_object();
   echo drupal_json($result);
   db_set_active('default');
   end;
