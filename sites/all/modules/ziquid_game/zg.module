@@ -315,7 +315,7 @@ function zg_cron() {
     // Add zombies?
     $sql = 'select count(*) as count from users where last_access < "%s"
     and meta = "";';
-    $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 90)));
+    $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 120)));
     $old_users = db_fetch_object($result);
 
     // 100 or more old accounts?  Check zombie count.
@@ -329,7 +329,7 @@ function zg_cron() {
 
         $sql = 'select id from users where last_access < "%s"
         order by rand() limit 100;';
-        $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 90)));
+        $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 120)));
         $zombie_users = [];
         while ($item = db_fetch_object($result)) {
           $zombie_users[] = $item;
