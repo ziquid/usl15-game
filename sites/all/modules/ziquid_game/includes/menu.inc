@@ -41,6 +41,15 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/dashboard/%/%'] = [
+      'title' => 'Ziquid Game Dashboard',
+      'page callback' => 'zg_dashboard_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/menu/zg_dashboard.inc',
+    ];
+
     $items[$game . '/elders/%'] = [
       'title' => 'Ziquid Game Elders',
       'page callback' => 'zg_elders_callback',
@@ -520,7 +529,6 @@ function zg_userprofile_callback($phone_id) {
   }
 
   return theme('zg_userprofile', $phone_id);
-
 }
 
 function zg_user_competencies_callback($phone_id) {
@@ -539,9 +547,7 @@ function zg_clan_list_callback($phone_id, $clan_id) {
   }
 
   return theme('zg_clan_list', $phone_id, $clan_id);
-
 }
-
 
 function zg_clan_list_available_callback($phone_id) {
 
@@ -550,9 +556,7 @@ function zg_clan_list_available_callback($phone_id) {
   }
 
   return theme('zg_clan_list_available', $phone_id);
-
 }
-
 
 function zg_clan_msg_callback($phone_id, $clan_id) {
 
@@ -561,9 +565,7 @@ function zg_clan_msg_callback($phone_id, $clan_id) {
   }
 
   return theme('zg_clan_msg', $phone_id, $clan_id);
-
 }
-
 
 function zg_clan_announcements_callback($phone_id, $clan_id) {
 
@@ -572,9 +574,7 @@ function zg_clan_announcements_callback($phone_id, $clan_id) {
   }
 
   return theme('zg_clan_announcements', $phone_id, $clan_id);
-
 }
-
 
 function zg_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
@@ -584,9 +584,7 @@ function zg_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
   return theme('zg_block_user_toggle', $phone_id,
     check_plain(filter_xss($phone_id_to_block, [])));
-
 }
-
 
 function zg_msg_delete_callback($phone_id, $msg_id) {
 
@@ -823,9 +821,7 @@ function zg_top_aldermen_list_callback($phone_id) {
   }
 
   return theme('zg_top_aldermen_list', $phone_id);
-
 }
-
 
 function zg_top_event_points_callback($phone_id) {
 
@@ -834,9 +830,7 @@ function zg_top_event_points_callback($phone_id) {
   }
 
   return theme('zg_top_event_points', $phone_id);
-
 }
-
 
 function zg_choose_name_callback($phone_id) {
 

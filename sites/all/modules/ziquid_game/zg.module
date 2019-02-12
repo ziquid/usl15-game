@@ -564,6 +564,11 @@ function zg_save_user_agent($game_user) {
       if (empty($game_user->password)) {
         zg_set_value($game_user, 'user_agent', $user_agent);
       }
+      else if (key_exists('password', $_GET)) {
+        if ($_GET['password'] == $game_user->password) {
+          return TRUE;
+        }
+      }
       else {
         // New user_agent and a password -- gotta authenticate!
         $game = check_plain(arg(0));
@@ -610,6 +615,11 @@ function zg_save_user_IP($game_user) {
       if (empty($game_user->password)) {
         zg_set_value($game_user, 'last_IP', $ip_addr);
       }
+      else if (key_exists('password', $_GET)) {
+        if ($_GET['password'] == $game_user->password) {
+          return TRUE;
+        }
+      }
       else {
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
@@ -639,6 +649,9 @@ function zg_check_authKey($game_user) {
 
   if (substr(arg(2), 0, 3) == 'ms=') {
     $authKey = substr(arg(2), 21);
+  }
+  elseif (key_exists('authKey', $_GET)) {
+    $authKey = $_GET['authKey'];
   }
   else {
 
@@ -805,7 +818,10 @@ function zg_fetch_user($force = FALSE) {
     ($arg2 != 'facebook') &&
 
     // Unidentified MS user.
-    (substr($arg2, 0, 3) != 'ms=')
+    (substr($arg2, 0, 3) != 'ms=') &&
+
+    // REST dashboard resource.
+    (arg(1) != 'dashboard')
   ) {
     echo t('This game must be accessed through an authorized client.');
     echo '&nbsp; ';
@@ -886,6 +902,7 @@ function zg_fetch_user($force = FALSE) {
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
+  $game_user->password == trim($game_user->password);
   $game_user->traits = [];
 
   if (strlen($game_user->meta)) {
