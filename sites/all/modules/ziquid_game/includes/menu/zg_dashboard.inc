@@ -42,7 +42,7 @@ function zg_dashboard_callback($phone_id, $stat) {
       db_set_active();
       $sql = 'select count(sid) as anon_users from sessions
         where uid = 0 and timestamp >= "%s";';
-      $result = db_query($sql, date('Y-m-d H:i:s', time() - 900))->fetch_object();
+      $result = db_query($sql, time() - 900)->fetch_object();
       break;
 
     case 'luck':
