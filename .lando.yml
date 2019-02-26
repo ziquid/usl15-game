@@ -1,0 +1,6 @@
+name: usl15
+recipe: drupal6
+config:
+  php: 5.6
+  webroot: .
+  database: mysql:5.7
