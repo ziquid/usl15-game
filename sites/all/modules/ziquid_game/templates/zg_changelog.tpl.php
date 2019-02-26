@@ -30,6 +30,14 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Feb 27, 2019
+  </div>
+  <ul>
+    <li>
+      Accounts wait 120 days without activity to become zombies.
+    </li>
+  </ul>
+  <div class="subtitle">
     Jan 20, 2019
   </div>
   <ul>
