@@ -1,4 +1,4 @@
-name: lando-usl-15
+name: usl15
 recipe: drupal6
 config:
   php: 5.6
