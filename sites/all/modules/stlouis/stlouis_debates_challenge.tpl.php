@@ -660,12 +660,7 @@ else {
 }
 
 // YOU USED.
-echo '<div class="subtitle">
-  <a href="/' . $game . '/debates/' . $arg2 . '">
-    <img src="/sites/default/files/images/' . $game . '_continue.png"/>
-  </a>
-</div>';
-
+zg_button('debates');
 echo "<div class=\"subtitle\">You used</div><div class=\"debate-used-wrapper\">";
 
 $data = [];
@@ -747,7 +742,7 @@ while ($item = db_fetch_object($result)) $data[] = $item;
 if (empty($data)) echo '<div class="debate-used">' . t('Nothing') . '</div>';
 
 foreach ($data as $item) {
-firep($item);
+  firep($item, 'debate item used');
 
   echo <<< EOF
 <div class="debate-used">
@@ -757,11 +752,6 @@ EOF;
 
 }
 
-  echo '<div class="subtitle">
-    <a href="/' . $game . '/debates/' . $arg2 . '">
-      <img src="/sites/default/files/images/' . $game . '_continue.png"/>
-    </a>
-  </div>
-  <div>&nbsp;</div>';
-
+zg_button('debates');
+echo '<div>&nbsp;</div>';
 db_set_active('default');

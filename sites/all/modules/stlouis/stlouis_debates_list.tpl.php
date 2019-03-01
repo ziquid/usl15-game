@@ -55,9 +55,7 @@ EOF;
 
     $sql = 'update users set seen_neighborhood_quests = 1 where id = %d;';
     $result = db_query($sql, $game_user->id);
-
   }
-
 }
 
 if ($game_user->level < 15) {
@@ -99,14 +97,12 @@ EOF;
 
     db_set_active('default');
     return;
-
   }
-
 }
 
 echo <<< EOF
 <div class="title">
-Whom would you like to $debate_lower?
+  Whom would you like to $debate_lower?
 </div>
 EOF;
 
@@ -140,22 +136,24 @@ $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
 
 // Jwc flag day - make debates much more active.
 $count = 12;
-while ($count-- && $item = db_fetch_object($result)) $data[] = $item;
+while ($count-- && $item = db_fetch_object($result)) {
+  $data[] = $item;
+}
 firep(db_affected_rows(), 'rows affected');
 
 echo <<< EOF
 <div class="elections-header">
-<div class="election-details">
-<div class="clan-title">$party</div>
-<div class="opponent-name">Name</div>
-<div class="opponent-influence">Action</div>
-</div>
+  <div class="election-details">
+    <div class="clan-title">$party</div>
+    <div class="opponent-name">Name</div>
+    <div class="opponent-influence">Action</div>
+  </div>
 </div>
 <div class="elections">
 EOF;
 
 foreach ($data as $item) {
-firep($item);
+firep($item, 'player to debate');
 
   $username = $item->username;
   if (empty($username)) $username = '<em>Anonymous</em>';
@@ -175,28 +173,35 @@ firep($item);
 
     $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
       strtolower($item->clan_acronym) . '.png';
-firep($icon_path);
 
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path))
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
       $icon = $game . '_clan_' . strtolower($item->clan_acronym) . '.png';
-
+    }
   }
 
-  if ($item->is_clan_leader)
+  if ($item->is_clan_leader) {
     $clan_acronym .= '*';
+  }
 
   $action_class = '';
   $action = $debate;
 
+  $button = zg_render_button('debates_challenge', $action, '/' . $item->id);
   echo <<< EOF
 <div class="$clan_class">
-<div class="clan-icon"><img width="24"
-  src="/sites/default/files/images/$icon"/></div>
-<div class="clan-title">$item->party_title</div>
-<div class="opponent-name"><a
-  href="/$game/user/$arg2/$item->phone_id">$username $clan_acronym</a></div>
-<div class="action-wrapper"><div class="action $action_class"><a
-  href="/$game/debates_challenge/$arg2/$item->id">$action</a></div></div>
+  <div class="clan-icon"><img width="24"
+    src="/sites/default/files/images/$icon"/></div>
+  <div class="clan-title">$item->party_title</div>
+  <div class="opponent-name"><a
+    href="/$game/user/$arg2/$item->phone_id">$username $clan_acronym</a></div>
+  <!--<div class="action-wrapper">
+    <div class="action $action_class">
+      <a href="/$game/debates_challenge/$arg2/$item->id">
+        $action
+      </a>
+    </div>
+  </div>-->
+  $button
 </div>
 EOF;
 

@@ -364,7 +364,7 @@ body.game-stlouis .welcome {
 .land .land-sell-button, .land .land-perform-button,
 .send-message-send-wrapper .send-message-send,
 .quests .quests-perform-button, .crafting-submit-button {
-  padding: 3px 20px 3px 12px;
+  padding: 3px 12px 3px 12px;
   background-color: #188433;
   border: 1px solid #188433;
   border-radius: 4px;
@@ -900,8 +900,13 @@ body a.button {
   text-align: center;
 }
 
-.button-wrapper.button-wrapper-do-again {
+.button-wrapper.button-wrapper-do-again,
+.button-wrapper.button-wrapper-debate {
   text-align: right;
+}
+
+.button.button-debate {
+  margin: 26px 3px 0 0;
 }
 
 .tagline {
