@@ -30,6 +30,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 01, 2019
+  </div>
+  <ul>
+    <li>
+      Better layout of debate / debate continue buttons.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Feb 27, 2019
   </div>
   <ul>
@@ -37,6 +46,7 @@ db_set_active('default');
       Accounts wait 120 days without activity to become zombies.
     </li>
   </ul>
+
   <div class="subtitle">
     Jan 20, 2019
   </div>
