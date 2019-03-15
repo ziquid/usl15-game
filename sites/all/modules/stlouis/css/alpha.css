@@ -66,13 +66,3 @@ body.alpha .alpha-only {
   text-shadow: 0 1px 0 #528009;
 }
 
-/*
-.alpha .quests .quest-icon-baseline-overlay {
-  border: solid 1px rgba(64, 192, 255, 0.25);
-}
-
-.alpha .quests .quest-icon-overlay {
-  border: solid 2px rgba(64, 192, 0, 0.5);
-  box-shadow: 1px 1px 3px rgba(64, 192, 0, 0.5);
-}
-*/
