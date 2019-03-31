@@ -30,6 +30,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 31, 2019
+  </div>
+  <ul>
+    <li>
+      Updated home menu background image.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 01, 2019
   </div>
   <ul>
