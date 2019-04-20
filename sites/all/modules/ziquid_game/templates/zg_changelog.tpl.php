@@ -8,6 +8,12 @@
  * Synced with 2114: N/A
  * Ready for phpcbf: done
  * Ready for MVC separation: yes
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
  * .
  */
 
@@ -28,6 +34,15 @@ db_set_active('default');
   <div class="title">
     <?php print $game_name_full; ?> Changelog
   </div>
+
+  <div class="subtitle">
+    Apr 21, 2019
+  </div>
+  <ul>
+    <li>
+      Updated choose name screen.
+    </li>
+  </ul>
 
   <div class="subtitle">
     Mar 31, 2019

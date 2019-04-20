@@ -33,6 +33,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/choose_name/%'] = [
+      'title' => 'Ziquid Game Choose Name',
+      'page callback' => 'zg_choose_name_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/choose_party/%/%'] = [
       'title' => 'Ziquid Game Choose Party',
       'page callback' => 'zg_choose_party_callback',
@@ -361,14 +369,6 @@ function zg_menu() {
   $items[$game . '/top_event_points/%'] = [
     'title' => 'Ziquid Game Top 100 Event Points',
     'page callback' => 'zg_top_event_points_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/choose_name/%'] = [
-    'title' => 'Ziquid Game Choose Name',
-    'page callback' => 'zg_choose_name_callback',
     'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
@@ -1316,7 +1316,7 @@ function zg_theme() {
     ],
 
     'zg_choose_name' => [
-      'template' => 'zg_choose_name',
+      'template' => 'templates/zg_choose_name',
       'arguments' => [
         'phone_id' => NULL,
       ]
