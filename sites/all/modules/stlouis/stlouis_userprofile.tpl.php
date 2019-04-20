@@ -87,7 +87,8 @@ else {
   firep($comp_show_level, 'comps based on people person');
   $comp_show_level = min($comp_show_level + $extra_comp, 4);
 }
-firep($comp_show_level, 'final comp_show_level value (' . $extra_comp . ' were extra)');
+firep($comp_show_level, 'final comp_show_level value (' . $extra_comp .
+  ' were extra)');
 
 //$want_jol = ($_GET['want_jol'] == 'yes') ? '/want_jol' : '';
 //if (arg(4) == 'want_jol') $want_jol = '/want_jol';
@@ -104,8 +105,8 @@ if (strlen($message) && strlen($message) < 3) {
 }
 
 if (substr($message, 0, 3) == 'XXX') {
-  $message_error .= '<div class="message-error">Your message contains words that are not
-    allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
+  $message_error .= '<div class="message-error">Your message contains words that
+    are not allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
   $message = '';
   game_competency_gain($game_user, 'uncouth');
 }
@@ -315,7 +316,8 @@ $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
 $money = number_format($item->money);
 $iph = number_format($item->income - $item->expenses);
 
-game_alter('extra_votes', $item, $extra_votes, $extra_defending_votes);
+game_alter('extra_votes', $item, $extra_votes,
+  $extra_defending_votes);
 
 $details_money = <<< EOF
 <div class="heading">$item->values:</div>
@@ -670,8 +672,11 @@ EOF;
   // Allow user to delete own messages.
   if ($phone_id_to_check == $phone_id || $item->fkey_users_from_id == $game_user->id) {
     $messages .= <<< EOF
-      <div class="message-delete"><a href="/$game/msg_delete/$arg2/$item->id?destination=/$q"><img
-        src="/sites/default/files/images/delete.png" width="16" height="16"/></a></div>
+      <div class="message-delete">
+        <a href="/$game/msg_delete/$arg2/$item->id?destination=/$q">
+          <img src="/sites/default/files/images/delete.png" width="16" height="16"/>
+        </a>
+      </div>
 EOF;
   }
 
@@ -707,7 +712,8 @@ game_show_by_level($game_user, $details_vote_stats, $comp_show_level, 3);
 game_show_by_level($game_user, $details_debates, $comp_show_level, 2);
 game_show_by_level($game_user, $details_residence, $comp_show_level, 2);
 game_show_by_level($game_user, $details_approval, $comp_show_level, 2);
-game_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level, 6);
+game_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level,
+  6);
 game_show_by_level($game_user, $details_meta, $comp_show_level, 4);
 game_show_by_level($game_user, $details_last_access, $comp_show_level, 5);
 game_show_by_level($game_user, $details_end, $comp_show_level, 0);

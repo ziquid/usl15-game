@@ -1,20 +1,21 @@
 <?php
 
 /**
- * @file stlouis_choose_name.tpl.php
- * Stlouis choose name
+ * @file
+ * Stlouis choose name.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * .
  */
 
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
-if ($game_user->level < 6) {
+if (FALSE && $game_user->level < 6) {
 
 echo <<< EOF
 <div class="title">
@@ -82,7 +83,7 @@ if ($username != '' && !$isdupusername) {
       // FIXME: record Luck usage in db.
     }
 
-    // FIXME: current workflow just goes to /user/ if name is the same.  Instead,
+    // FIXME: current workflow just goes to /user/ if name is the same.  Instead
     // Show an error message and ask for username again.
     db_set_active();
     drupal_goto($game . '/user/' . $arg2);
@@ -95,7 +96,7 @@ else {
   // Set an error message if a dup.
   if ($isdupusername) {
 
-    $msgUserDuplicate =<<< EOF
+    $msgUserDuplicate = <<< EOF
 <div class="message-error big">Sorry!</div>
 <p>The username <em>$username</em> already exists.</p>
 <p class="second">Please choose a different name and try again.</p>

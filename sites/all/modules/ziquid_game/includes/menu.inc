@@ -620,7 +620,8 @@ function zg_quest_groups_callback($phone_id) {
   }
 
   $module_path = drupal_get_path('module', 'zg');
-  drupal_add_js($module_path . '/js/zg_quest_groups.js', 'module', 'footer');
+  drupal_add_js($module_path . '/js/zg_quest_groups.js', 'module',
+    'footer');
   return theme('zg_quest_groups', $phone_id);
 }
 
