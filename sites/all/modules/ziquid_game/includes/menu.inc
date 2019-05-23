@@ -33,6 +33,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/choose_name/%'] = [
+      'title' => 'Ziquid Game Choose Name',
+      'page callback' => 'zg_choose_name_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/choose_party/%/%'] = [
       'title' => 'Ziquid Game Choose Party',
       'page callback' => 'zg_choose_party_callback',
@@ -366,14 +374,6 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items[$game . '/choose_name/%'] = [
-    'title' => 'Ziquid Game Choose Name',
-    'page callback' => 'zg_choose_name_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items[$game . '/enter_referral_code/%'] = [
     'title' => 'Ziquid Game Enter Referral Code',
     'page callback' => 'zg_enter_referral_code_callback',
@@ -620,7 +620,8 @@ function zg_quest_groups_callback($phone_id) {
   }
 
   $module_path = drupal_get_path('module', 'zg');
-  drupal_add_js($module_path . '/js/zg_quest_groups.js', 'module', 'footer');
+  drupal_add_js($module_path . '/js/zg_quest_groups.js', 'module',
+    'footer');
   return theme('zg_quest_groups', $phone_id);
 }
 
@@ -1315,7 +1316,7 @@ function zg_theme() {
     ],
 
     'zg_choose_name' => [
-      'template' => 'zg_choose_name',
+      'template' => 'templates/zg_choose_name',
       'arguments' => [
         'phone_id' => NULL,
       ]

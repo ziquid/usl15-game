@@ -8,10 +8,16 @@
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
  * .
  */
 
-$version = 'v0.9.0, Mar 01 2019';
+$version = 'v0.9.0, Apr 21 2019';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -127,7 +133,8 @@ if (empty($game_user->referral_code)) {
 
   while (!$good_code && $count++ < 10) {
     $referral_code = '0000' .
-      base_convert(mt_rand(0, pow(36, 5) - 1) . '', 10, 36);
+      base_convert(mt_rand(0, pow(36, 5) - 1) . '', 10,
+        36);
     $referral_code = strtoupper(substr($referral_code,
       strlen($referral_code) - 5, 5));
 firep($referral_code);

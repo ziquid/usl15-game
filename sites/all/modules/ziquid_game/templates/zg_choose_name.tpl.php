@@ -1,20 +1,41 @@
 <?php
 
 /**
- * @file stlouis_choose_name.tpl.php
- * Stlouis choose name
+ * @file
+ * Stlouis choose name.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
+ * .
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
-if ($game_user->level < 6) {
+$d = zg_get_default(
+    [
+      'new_user_comm_member_msg',
+      'welcome_page_1_speech',
+      'welcome_page_2_speech',
+    ]
+  ) + zg_get_html(
+    [
+      'tagline',
+      'welcome_page_1',
+      'welcome_page_2',
+    ]
+  );
+
+if (FALSE && $game_user->level < 6) {
 
 echo <<< EOF
 <div class="title">
@@ -76,13 +97,13 @@ if ($username != '' && !$isdupusername) {
       $message = "I've changed my name from <em>$game_user->username</em> to
         <em>$username</em>.&nbsp; Please call me <em>$username</em> from now
         on.";
-      game_send_user_message($game_user->id, $game_user->id, FALSE, $message);
+      zg_send_user_message($game_user->id, $game_user->id, FALSE, $message);
       $sql = 'update users set luck = luck - 10 where id = %d;';
       $result = db_query($sql, $game_user->id);
       // FIXME: record Luck usage in db.
     }
 
-    // FIXME: current workflow just goes to /user/ if name is the same.  Instead,
+    // FIXME: current workflow just goes to /user/ if name is the same.  Instead
     // Show an error message and ask for username again.
     db_set_active();
     drupal_goto($game . '/user/' . $arg2);
@@ -95,15 +116,17 @@ else {
   // Set an error message if a dup.
   if ($isdupusername) {
 
-    $msgUserDuplicate =<<< EOF
-<div class="message-error big">Sorry!</div>
-<p>The username <em>$username</em> already exists.</p>
-<p class="second">Please choose a different name and try again.</p>
+    $msgUserDuplicate = <<< EOF
+<p class="subtitle">Sorry!</p>
+<p>
+  The username <em>$username</em> already exists.
+  Please choose a different name and try again.
+</p>
 EOF;
 
   }
   else {
-    $msgUserDuplicate = '<p>&nbsp;</p>';
+    $msgUserDuplicate = '';
   }
 
   if (empty($game_user->username) || $game_user->username == '(new player)') {
@@ -112,7 +135,7 @@ EOF;
   else {
 
     // Allow them to navigate out of this.
-    $fetch_header($game_user);
+    zg_fetch_header($game_user);
     $quote = "Hello, <em>$game_user->username</em>!&nbsp; What would you like
       your new name to be?";
 
@@ -128,27 +151,38 @@ EOF;
   </div>
 EOF;
 
-      db_set_active('default');
     }
 
   }
 
-  echo <<< EOF
-$msgUserDuplicate
-<div class="welcome">
-<div class="wise_old_man_small">
-</div>$error_msg
-<p class="second">&quot;$quote&quot;</p>
-<p class="second">&nbsp;</p>
-<div class="ask-name">
-  <form method=get action="/$game/choose_name/$arg2">
-    <input type="text" name="username" width="20" maxlength="20"/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-</div>
-EOF;
+  $happy = strlen($msgUserDuplicate) ? 'sad' : 'happy';
 
+  db_set_active('default');
+
+  /* ------ VIEW ------ */
+  ?>
+  <div class="title">
+    <img src="/sites/default/files/images/<?php print $game; ?>_title.png">
+  </div>
+  <div class="tagline">
+    <?php print $d['tagline']; ?>
+  </div>
+
+  <div class="speech-bubble-wrapper">
+    <div class="wise_old_man <?php print $happy; ?>">
+    </div>
+    <div class="speech-bubble">
+      <div class="message-error highlight"><?php print $msgUserDuplicate; ?></div>
+      <p class="error"><?php print $error_msg; ?></p>
+      <p class="quote"><?php print $quote; ?></p>
+      <div class="ask-name">
+        <form method=get action="/<?php print $game; ?>/choose_name/<?php print $arg2; ?>">
+          <input type="text" name="username" width="20" maxlength="20"/>
+          <input type="submit" value="Submit"/>
+        </form>
+      </div>
+    </div>
+  </div>
+
+<?php
 }
-
-db_set_active('default');

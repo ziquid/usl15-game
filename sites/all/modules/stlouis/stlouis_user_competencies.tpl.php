@@ -1,12 +1,12 @@
 <?php
 
 /**
-* @file stlouis_user_competencies.tpl.php
-* Show a user's competencies.
-*
-* Synced with CG: yes
-* Synced with 2114: no
-* Ready for phpcbf: no
+ * @file stlouis_user_competencies.tpl.php
+ * Show a user's competencies.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: no
+ * Ready for phpcbf: no
  * Ready for MVC separation: no
 */
 
@@ -162,7 +162,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     }
 
     echo <<< EOF
-<div class="heading wider initial-caps">$comp->name :</div>
+<div class="heading wider initial-caps">$comp->name:</div>
 <div class="value">
   $pip
   <span class="small $too_soon">
@@ -176,8 +176,7 @@ EOF;
   }
 }
 
-echo <<< EOF
-</div>
-EOF;
+db_set_active();
+?>
 
-db_set_active('default');
+</div>

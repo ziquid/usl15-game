@@ -219,14 +219,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/choose_name/%'] = [
-    'title' => 'St. Louis Choose Name',
-    'page callback' => 'stlouis_choose_name_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/enter_referral_code/%'] = [
     'title' => 'St. Louis Enter Referral Code',
     'page callback' => 'stlouis_enter_referral_code_callback',
@@ -644,18 +636,6 @@ function stlouis_top_event_points_callback($phone_id) {
 
 }
 
-
-function stlouis_choose_name_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_choose_name', $phone_id);
-
-}
-
-
 function stlouis_enter_referral_code_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1022,13 +1002,6 @@ function stlouis_theme() {
 
     'stlouis_top_event_points' => [
       'template' => 'stlouis_top_event_points',
-      'arguments' => [
-        'phone_id' => NULL,
-      ],
-    ],
-
-    'stlouis_choose_name' => [
-      'template' => 'stlouis_choose_name',
       'arguments' => [
         'phone_id' => NULL,
       ],
