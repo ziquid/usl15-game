@@ -1,0 +1,26 @@
+/*!
+ * project-name v0.0.1
+ * A description for your project.
+ * (c) 2019 YOUR NAME
+ * MIT License
+ * http://link-to-your-git-repo.com
+ */
+
+/**
+ * @section Base Styles
+ */
+/* line 5, src/sass/components/_base.scss */
+body {
+  font-size: 125%;
+  margin: 0 auto;
+  max-width: 42em;
+  width: 88%;
+}
+
+/* line 12, src/sass/components/_base.scss */
+input,
+textarea,
+select,
+button {
+  font: inherit;
+}
