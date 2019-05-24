@@ -1235,7 +1235,7 @@ function zg_fetch_header(\stdClass $game_user) {
   }
   else {
     $energy_minutes = $energy_seconds = 0;
-    $energy_text = '';
+    $energy_text = '&nbsp;';
   }
 
   // Actions.
@@ -1257,7 +1257,7 @@ function zg_fetch_header(\stdClass $game_user) {
   }
 
   // Income.
-  $income_text = '';
+  $income_text = '&nbsp;';
   $income_bonus = $game_user->income - $game_user->expenses;
 
   if ($income_bonus != 0) {
@@ -1473,7 +1473,7 @@ $extra_messages
     }
     else {
 
-      document.getElementById('energy-time').innerHTML = '';
+      document.getElementById('energy-time').innerHTML = '&nbsp;';
 
     }
 
