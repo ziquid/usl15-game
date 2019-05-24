@@ -45,6 +45,16 @@ body.game-stlouis {
       top: -2px;
       right: 2px;
     }
+
+    .level-text {
+      position: relative;
+      background: url(../img/level.png) top right no-repeat;
+      height: 12px;
+      font: 0/0 a;
+      background-size: contain;
+      top: -2px;
+      right: 2px;
+    }
   }
 
   .header .experience {
