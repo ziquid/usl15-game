@@ -22,6 +22,7 @@ li {
     font: 0/0 a;
     background-size: contain;
     top: -9px;
+    margin-bottom: -9px;
   }
 
   .energy-text {
@@ -430,6 +431,7 @@ p:first-of-type {
   .message-body {
     border: 1px solid #111811 !important;
     background-color: #111811 !important;
+    padding: 4px 8px 8px 4px;
   }
 
   .message-body.user.user-png {

@@ -798,7 +798,8 @@ foreach ($data as $item) {
     if (!in_array($item->username, ['USLCE Game', 'The Socialite'])) {
       $reply = '<div class="message-reply-wrapper"><div class="message-reply">
         <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
-        '">View / Respond</a></div></div>';
+        '" class="button">View / Respond</a></div></div>';
+      $reply = zg_render_button('user', 'View / Respond', $item->phone_id);
     }
     else {
       $reply = '';
