@@ -24,6 +24,27 @@ body.game-stlouis {
       background-size: contain;
       top: -9px;
     }
+
+    .energy-text {
+      display: inline-block;
+      position: relative;
+      background: url(../img/energy.png) 0 0 no-repeat;
+      width: 12px;
+      height: 12px;
+      font: 0/0 a;
+      background-size: contain;
+      top: -9px;
+    }
+
+    .experience-text {
+      position: relative;
+      background: url(../img/influence.png) top right no-repeat;
+      height: 12px;
+      font: 0/0 a;
+      background-size: contain;
+      top: -2px;
+      right: 2px;
+    }
   }
 
   .header .experience {
