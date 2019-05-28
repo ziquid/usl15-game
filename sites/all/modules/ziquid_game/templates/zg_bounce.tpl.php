@@ -1,14 +1,21 @@
 <?php
 
 /**
-* @file
-* Template for bounce.
-*
-* Synced with CG: yes
-* Synced with 2114: yes
-* Ready for phpcbf: yes
-* Ready for MVC separation: no
-*/
+ * @file
+ * Template for bounce.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: yes
+ * Ready for phpcbf: yes
+ * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: N/A
+ * .
+ */
 
 $game = check_plain(arg(0));
 $arg2 = check_plain(arg(2));

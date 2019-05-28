@@ -36,6 +36,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    May 29, 2019
+  </div>
+  <ul>
+    <li>
+      Updated authenticate screen.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Apr 21, 2019
   </div>
   <ul>

@@ -17,8 +17,16 @@ function zg_menu() {
   $items = [];
   foreach (zg_get_game_list() as $game) {
 
+    $items[$game . '/authenticate/%'] = [
+      'title' => 'Ziquid Game Authenticate',
+      'page callback' => 'zg_authenticate_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/bounce/%'] = [
-      'title' => 'Ziquid Game bounce',
+      'title' => 'Ziquid Game Bounce',
       'page callback' => 'zg_bounce_callback',
       'page arguments' => [2],
       'access arguments' => ['access game content'],
@@ -458,14 +466,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Move',
     'page callback' => 'zg_move_callback',
     'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/authenticate/%'] = [
-    'title' => 'Ziquid Game Authenticate',
-    'page callback' => 'zg_authenticate_callback',
-    'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -1445,7 +1445,7 @@ function zg_theme() {
     ],
 
     'zg_authenticate' => [
-      'template' => 'zg_authenticate',
+      'template' => 'templates/zg_authenticate',
       'arguments' => [
         'phone_id' => NULL,
       ]

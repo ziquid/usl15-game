@@ -785,8 +785,8 @@ function zg_reset_event_tags_con($id) {
  *   The user object, if any.
  */
 function zg_fetch_user($force = FALSE) {
-
   global $game, $phone_id, $extra_messages, $next_level, $user;
+
   // Running from drush cron?  There is no user to fetch, so return silently.
   if (isset($game) && $game !== arg(0)) {
     return NULL;
@@ -823,14 +823,14 @@ function zg_fetch_user($force = FALSE) {
     // REST dashboard resource.
     (arg(1) != 'dashboard')
   ) {
-    echo t('This game must be accessed through an authorized client.');
-    echo '&nbsp; ';
-    echo t('Please e-mail zipport@ziquid.com if you have any questions.');
+    db_set_active('game_' . $game);
+    print zg_get_html('authentication_error');
+    db_set_active();
     exit;
   }
 
   // AI player -- only allow from certain IPs.
-  if (substr(arg(2), 0, 3) == 'ai-') {
+  if (substr($arg2, 0, 3) == 'ai-') {
     if (($ip_addr != $_SERVER['SERVER_ADDR']) &&
     ($user->roles[4] != 'web game access')) {
 

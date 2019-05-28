@@ -1355,6 +1355,8 @@ function zg_get_fbid() {
 function zg_get_html($key) {
   global $game;
 
+  $arg2 = check_plain(arg(2));
+
   if (is_array($key)) {
     $values = [];
     foreach ($key as $k) {
@@ -1367,7 +1369,11 @@ function zg_get_html($key) {
   $result = db_query($sql, $key);
   $item = db_fetch_object($result);
   if (is_object($item)) {
-    return $item->html_value;
+    return str_replace(
+      ['%arg2', '%game'],
+      [$arg2, $game],
+      $item->html_value
+    );
   }
 
   // Wonderland or Detroit and value doesn't exist?  Create dummy value.

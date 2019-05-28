@@ -1,26 +1,41 @@
 <?php
 
 /**
- * @file stlouis_authenticate.tpl.php
+ * @file
  * Enter the user's password.
  *
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: N/A
+ * .
  */
 
 global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
 $game = check_plain(arg(0));
-$get_phoneid = '_' . $game . '_get_phoneid';
-$check_authkey = '_' . $game . '_check_authKey';
+$get_phoneid = 'zg_get_phoneid';
+$check_authkey = 'zg_check_authKey';
 $phone_id = $get_phoneid();
-
 $arg2 = check_plain(arg(2));
 
 db_set_active('game_' . $game);
+
+$d = zg_get_html(
+  [
+    'tagline',
+    'authenticate',
+    'authenticate_speech',
+    'authentication_error',
+  ]
+);
 
 $sql = 'select * from users where phone_id = "%s";';
 $result = db_query($sql, $phone_id);
@@ -32,30 +47,26 @@ if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
 
   // Paypal IPN.
   ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&
-
-  // Paypal IPN.
   ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') &&
-
-  // Paypal IPN.
   ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') &&
 
   // Web users.
   ($user->roles[4] != 'web game access') &&
 
   // Identified facebook user.
-  (substr(arg(2), 0, 3) != 'fb=') &&
+  (substr($arg2, 0, 3) != 'fb=') &&
 
   // AI player.
-  (substr(arg(2), 0, 3) != 'ai-') &&
+  (substr($arg2, 0, 3) != 'ai-') &&
 
   // Unidentified facebook user.
-  (arg(2) != 'facebook') &&
+  ($arg2 != 'facebook') &&
 
   // Unidentified MS user.
-  (substr(arg(2), 0, 3) != 'ms=')
+  (substr($arg2, 0, 3) != 'ms=')
 ) {
-  echo t('This game must be accessed through an authorized client.  ');
-  echo t('Please e-mail zipport@ziquid.com if you have any questions.');
+  print $d['authentication_error'];
+  db_set_active();
   exit;
 }
 
@@ -72,39 +83,23 @@ if ($password == trim($game_user->password) || password_hash($password, PASSWORD
     $user_agent = trim(substr($user_agent, 0, $extra_stuff_pos));
   }
 
-  $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'user_agent', $user_agent);
-  $set_value($game_user->id, 'last_IP', $ip_addr);
+  zg_set_value($game_user, 'user_agent', $user_agent);
+  zg_set_value($game_user, 'last_IP', $ip_addr);
 
   db_set_active('default');
   drupal_goto("$game/home/$arg2");
 }
 
-echo <<< EOF
+/* ------ VIEW ------ */
+?>
 <div class="title">
-<img src="/sites/default/files/images/{$game}_title.png"/>
+  <img src="/sites/default/files/images/<?php print $game; ?>_title.png">
 </div>
-<p>&nbsp;</p>
-<div class="welcome">
-<div class="wise_old_man_large">
+<div class="tagline">
+  <?php print $d['tagline']; ?>
 </div>
-<p>Welcome back, $game_user->username.</p>
-<p class="second">
-  You are almost ready to continue playing!&nbsp;
-  Just to ensure you are the correct player, will you give me your
-  password?
-</p>
-<p class="second">
-  If you can't remember it, you can e-mail <strong>zipport@ziquid.com</strong>
-  and we can reset it for you.
-</p>
-<div class="ask-name">
-  <form method=get action="/$game/authenticate/$arg2">
-    <input type="password" name="password" width="20" maxlength="20"/>
-    <input type="submit" value="Submit"/>
-  </form>
-</div>
-</div>
-EOF;
 
-db_set_active('default');
+<?php print $d['authenticate']; ?>
+<?php zg_speech($game_user, $d['authenticate_speech']); ?>
+<?php
+  db_set_active('default');
