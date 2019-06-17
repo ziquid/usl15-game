@@ -409,6 +409,17 @@ p:first-of-type {
   border: 1px solid #333833 !important;
 }
 
+.location {
+  color: #f8fdfe;
+  font: 10px Helvetica,Arial,sans-serif;
+  text-align: center;
+  padding: 4px 0 3px 0;
+  width: 312px;
+  background-color: #888;
+  margin: 21px 0 0 4px;
+  border-radius: 0 0 12px 12px;
+}
+
 .location + .news {
   margin-top: 0;
 }
@@ -499,28 +510,195 @@ a.version {
   text-align: center;
 }
 
-.new-main-menu .elections-menu {
-  position: absolute;
-  top: 97px;
-  left: 45px;
-  text-decoration: none;
-  color: rgba(255, 85, 85, 0.01);
-  font-size: 15px;
-  font-family: Georgia, "times new roman", serif;
-  font-weight: bold;
-  text-shadow: 0 0 8px rgba(255, 255, 0, 0.01);
-}
+.new-main-menu {
 
-.new-main-menu ul {
-  position: absolute;
-
-  li {
-    list-style-type: none;
-    list-style-image: none;
-    margin: 0;
+  img {
+    width: 310px;
+    border-radius: 4px;
   }
-}
 
+  ul {
+    li {
+      list-style-type: none;
+      list-style-image: none;
+      margin: 0;
+      span {
+        position: absolute;
+        z-index: 11;
+        width: 52px;
+        height: 22px;
+        top: 0;
+        margin-top: 160px;
+        padding-top: 0;
+        text-align: center;
+        &.beauty-value {
+          background-color: rgba(255, 0, 0, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 4px;
+          border-radius: 4px 0 0 0;
+        }
+        &.beauty-label {
+          background-color: rgba(255, 0, 0, 0.8);
+          left: 4px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+        &.humility-value {
+          background-color: rgba(255, 255, 0, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 56px;
+        }
+        &.humility-label {
+          background-color: rgba(255, 255, 0, 0.8);
+          left: 56px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+        &.financial-value {
+          background-color: rgba(255, 255, 255, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 108px;
+          color: black;
+         }
+        &.financial-label {
+          background-color: rgba(255, 255, 255, 0.8);
+          left: 108px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+          color: black;
+        }
+        &.health-value {
+          background-color: rgba(0, 255, 0, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 160px;
+        }
+        &.health-label {
+          background-color: rgba(0, 255, 0, 0.8);
+          left: 160px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+        &.fifth-value {
+          background-color: rgba(0, 0, 255, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 212px;
+        }
+        &.fifth-label {
+          background-color: rgba(0, 0, 255, 0.8);
+          left: 212px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+        &.sixth-value {
+          background-color: rgba(255, 0, 255, 0.4);
+          height: 16px;
+          top: 0;
+          margin-top: 160px;
+          padding-top: 6px;
+          left: 264px;
+          border-radius: 0 4px 0 0;
+        }
+        &.sixth-label {
+          background-color: rgba(255, 0, 255, 0.8);
+          left: 264px;
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+      }
+      a {
+        position: absolute;
+        z-index: 12;
+        text-decoration: none;
+        color: #dd7b;
+        font-size: 15px;
+        font-family: Georgia, "times new roman", serif;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px black;
+        min-width: 80px;
+        text-align: center;
+        //border: solid 1px red;
+        &.actions-menu {
+          top: 57px;
+          left: 197px;
+        }
+        &.aides-menu {
+          top: 37px;
+          left: 197px;
+        }
+        &.clan-menu {
+          top: 140px;
+          left: 91px;
+          font-size: 12px;
+        }
+        &.debates-menu {
+          top: 37px;
+          left: 45px;
+        }
+        &.elders-menu {
+          top: 97px;
+          left: 120px;
+        }
+        &.elections-menu {
+          top: 57px;
+          left: 45px;
+        }
+        &.forum-menu {
+          top: 140px;
+          left: 214px;
+          font-size: 12px;
+        }
+        &.help-menu {
+          top: 140px;
+          left: 154px;
+          font-size: 12px;
+        }
+        &.missions-menu {
+          top: 10px;
+          left: 112px;
+          font-size: 17px;
+          text-transform: uppercase;
+        }
+        &.move-menu {
+          top: 87px;
+          left: 120px;
+        }
+        &.profile-menu {
+          top: 140px;
+          left: 33px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+
+}
 .competency-pip {
   border-right: solid 2px #693318 !important;
 }
@@ -932,10 +1110,6 @@ div.speech-bubble-wrapper .wise_old_man.sad {
   width: 92px;
   height: 56px;
   border-radius: 4px;
-}
-
-.new-main-menu img {
-  width: 310px;
 }
 
 .bonus-text {

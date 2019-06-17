@@ -17,7 +17,7 @@
  * .
  */
 
-$version = 'v0.9.0, May 29 2019';
+$version = 'v0.9.1, Jun 17 2019';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -38,15 +38,16 @@ if (substr($phone_id, 0, 3) == 'ai-') {
 
 $today = date('Y-m-d');
 
+$sql = 'select residents, rating from neighborhoods where id = %d;';
+$result = db_query($sql, $game_user->fkey_neighborhoods_id);
+$item = db_fetch_object($result);
+$beauty = (int) $item->rating;
+
 if ($game_user->last_bonus_date != $today || $game_user->meta == 'admin') {
-
-  $sql = 'select residents from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $item = db_fetch_object($result);
-
   $money = ($game_user->level * $item->residents) + $game_user->income -
     $game_user->expenses;
   $extra_bonus = '';
+
 /*
   if ($game == 'stlouis') {
 
@@ -388,6 +389,13 @@ $link = 'quest_groups';
 $lqg = zg_fetch_latest_quest_group($game_user);
 $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
 
+if ($game_user->fkey_clans_id > 0) {
+  $clan_link = "clan_list/$arg2/{$game_user->fkey_clans_id}";
+}
+else {
+  $clan_link = "clan_list_available/$arg2";
+}
+
 echo <<< EOF
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png">
@@ -400,99 +408,131 @@ echo <<< EOF
 </a>
 $extra_bonus
 <div class="new-main-menu">
-  <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.png"
-    usemap="#new_main_menu">
-    <ul>
+  <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.jpg">
+    <ul class="value-links">
       <li>
-        <a class="quests-menu" 
-          href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
-          {$game_text['quests_tab']}
-        </a>  
+        <span class="beauty-value">
+          $beauty
+        </span>
+        <span class="beauty-label">
+          BEAU
+        </span>
       </li>
       <li>
-        <a class="elections-menu" href="/$game/elections/$arg2">
-          $election_tab
+        <span class="humility-value">
+          ???
+        </span>
+        <span class="humility-label">
+          HUML
+        </span>
+      </li>
+      <li>
+        <span class="financial-value">
+          ???
+        </span>
+        <span class="financial-label">
+          FNCE
+        </span>
+      </li>
+      <li>
+        <span class="health-value">
+          ???
+        </span>
+        <span class="health-label">
+          HLTH
+        </span>
+      </li>
+      <li>
+        <span class="fifth-value">
+          ???
+        </span>
+        <span class="fifth-label">
+          INTL
+        </span>
+      </li>
+      <li>
+        <span class="sixth-value">
+          ???
+        </span>
+        <span class="sixth-label">
+          STRG
+        </span>
+      </li>
+    </ul>
+    <ul class="menu-links">
+    
+      <li>
+        <a class="actions-menu" href="/$game/actions/$arg2">
+          {$game_text['menu']['actions']}
         </a>
       </li>
 
       <li>
         <a class="aides-menu" href="/$game/land/$arg2">
-          {$game_text['aides_tab']}
+          {$game_text['menu']['aides']}
         </a>
       </li>
+      
+      <li>
+        <a class="clan-menu" href="/$game/$clan_link">
+          {$game_text['menu']['clan']}
+        </a>
+      </li>
+      
+      <li>
+        <a class="debates-menu" href="/$game/debates/$arg2">
+          {$game_text['menu']['debates']}
+        </a>
+      </li>
+
+      <li>
+        <a class="elders-menu" href="/$game/elders/$arg2">
+          {$game_text['menu']['elders']}
+        </a>
+      </li>
+      
+      <li>
+        <a class="elections-menu" href="/$game/elections/$arg2">
+          {$game_text['menu']['elections']}
+        </a>
+      </li>
+      
+      <li>
+        <a class="forum-menu" href="external://discord.gg/cFyt7w9">
+          {$game_text['menu']['forum']}
+        </a>
+      </li>
+      
+      <li>
+        <a class="help-menu" href="/$game/help/$arg2">
+          {$game_text['menu']['help']}
+        </a>
+      </li>
+
+      <li>
+        <a class="missions-menu" 
+          href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
+          {$game_text['menu']['missions']}
+        </a>  
+      </li>
+      
+      <li>
+        <a class="move-menu" href="/$game/move/$arg2/0">
+          {$game_text['menu']['move']}
+        </a>  
+      </li>
+      
+      <li>
+        <a class="profile-menu" href="/$game/user/$arg2">
+          {$game_text['menu']['profile']}
+        </a>
+      </li>
+      
     </ul>
-  <map name="new_main_menu">
 EOF;
 
-$coords = zg_scale_coords($coefficient, 107, 34, 210, 63);
-echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Missions"
-  href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}" />
-EOF;
-
- $coords = zg_scale_coords($coefficient, 42, 72, 122, 92);
-
-echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Debates" href="/$game/debates/$arg2" />
-EOF;
-
-$coords = zg_scale_coords($coefficient, 197, 72, 257, 92);
-$coords2 = zg_scale_coords($coefficient, 187, 93, 267, 115);
-
-echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Aides" href="/$game/land/$arg2" />
-  <area shape="rect" coords="$coords2" alt="Actions" href="/$game/actions/$arg2" />
-EOF;
-
-
-  // Move.
-  $coords = zg_scale_coords($coefficient, 131, 127, 183, 147);
 
   echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Move" href="/$game/move/$arg2/0" />
-EOF;
-
-
-// Elders, Profile.
-$coords = zg_scale_coords($coefficient, 126, 155, 192, 180);
-$coords2 = zg_scale_coords($coefficient, 45, 192, 100, 210);
-
-echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Elders" href="/$game/elders/$arg2" />
-  <area shape="rect" coords="$coords2" alt="Profile" href="/$game/user/$arg2" />
-EOF;
-
-$coords = zg_scale_coords($coefficient, 113, 192, 151, 210);
-
-if ($game_user->fkey_clans_id > 0) {
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Clan"
-    href="/$game/clan_list/$arg2/{$game_user->fkey_clans_id}" />
-EOF;
-
-}
-else {
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Clan"
-    href="/$game/clan_list_available/$arg2" />
-EOF;
-
-}
-
-  $coords = zg_scale_coords($coefficient, 162, 192, 200, 210);
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Help" href="/$game/help/$arg2" />
-EOF;
-
-  $coords = zg_scale_coords($coefficient, 214, 192, 265, 210);
-
-  echo <<< EOF
-  <area shape="rect" coords="$coords" alt="Forum"
-    href="external://discord.gg/cFyt7w9" />
-</map>
 </div>
 <div class="location">
 <span class="location-$alder_values player-$player_values">$game_user->location</span>

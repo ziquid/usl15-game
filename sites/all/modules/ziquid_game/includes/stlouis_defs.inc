@@ -249,6 +249,14 @@ switch ($today) {
     $event_type[] = EVENT_CHRISTMAS;
     break;
 
+  case '2019-06-16':
+  case '2019-06-17':
+  case '2019-06-18':
+  case '2019-06-19':
+  case '2019-06-23':
+  case '2019-06-24':
+//    $month_mission = MISSION_JUN;
+    break;
 }
 
 $alderman = 'Alderman';
@@ -305,6 +313,14 @@ $game_text = [
   'hood' => 'Neighborhood',
   'hood_lower' => 'neighborhood',
   'hood_short' => '\'hood',
+  'hood_values' => [
+    'beauty' => 'BEAU',
+    'entertainment' => 'ENTR',
+    'financial' => 'FNCE',
+    'health' => 'HLTH',
+    'intelligence' => 'INTL',
+    'strength' => 'STRG',
+  ],
   'initiative' => 'Initiative',
   'initiative_short' => 'Ini',
   'investment' => 'Investment',
@@ -314,6 +330,19 @@ $game_text = [
   'land' => 'Income',
   'mayor' => 'Mayor',
   'mayor_tab' => 'Mayor',
+  'menu' => [
+    'actions' => 'Actions',
+    'aides' => 'Aides',
+    'clan' => 'Clan',
+    'debates' => 'Debates',
+    'elders' => 'Elders',
+    'elections' => 'Elections',
+    'forum' => 'Forum',
+    'help' => 'Help',
+    'missions' => 'Missions',
+    'move' => 'Move',
+    'profile' => 'Profile',
+  ],
   'qg_quests' => 'Missions',
   'quest' => 'Mission',
   'quest_lower' => 'mission',
