@@ -411,51 +411,59 @@ $extra_bonus
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.jpg">
     <ul class="value-links">
       <li>
-        <span class="beauty-value">
+        <span class="beauty value first odd">
           $beauty
         </span>
-        <span class="beauty-label">
-          BEAU
+        <span class="beauty label first odd">
+          BTY
         </span>
       </li>
       <li>
-        <span class="humility-value">
+        <span class="chaos value even">
           ???
         </span>
-        <span class="humility-label">
-          HUML
+        <span class="chaos label even">
+          CHA
         </span>
       </li>
       <li>
-        <span class="financial-value">
+        <span class="faith value odd">
           ???
         </span>
-        <span class="financial-label">
-          FNCE
+        <span class="faith label odd">
+          FTH
         </span>
       </li>
       <li>
-        <span class="health-value">
+        <span class="finance value even">
           ???
         </span>
-        <span class="health-label">
-          HLTH
+        <span class="finance label even">
+          FIN
         </span>
       </li>
       <li>
-        <span class="fifth-value">
+        <span class="health value odd">
           ???
         </span>
-        <span class="fifth-label">
-          INTL
+        <span class="health label odd">
+          HEA
         </span>
       </li>
       <li>
-        <span class="sixth-value">
+        <span class="intelligence value even">
           ???
         </span>
-        <span class="sixth-label">
-          STRG
+        <span class="intelligence label even">
+          INT
+        </span>
+      </li>
+      <li>
+        <span class="strength value odd last">
+          ???
+        </span>
+        <span class="strength label odd last">
+          STR
         </span>
       </li>
     </ul>

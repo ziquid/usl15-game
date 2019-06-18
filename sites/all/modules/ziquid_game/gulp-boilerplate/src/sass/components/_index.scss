@@ -525,125 +525,99 @@ a.version {
       span {
         position: absolute;
         z-index: 11;
-        width: 52px;
+        width: 44px;
         height: 22px;
         top: 0;
         margin-top: 160px;
         padding-top: 0;
         text-align: center;
-        &.beauty-value {
-          background-color: rgba(255, 0, 0, 0.4);
+        &.odd {
+          width: 45px;
+        }
+        &.value {
           height: 16px;
           top: 0;
           margin-top: 160px;
           padding-top: 6px;
+          &.first {
+            border-radius: 4px 0 0 0;
+          }
+          &.last {
+            border-radius: 0 4px 0 0;
+          }
+        }
+        &.label {
+          top: 182px;
+          height: 16px;
+          padding-top: 4px;
+          margin-top: 0;
+        }
+        &.beauty {
+          background-color: #e005;
           left: 4px;
-          border-radius: 4px 0 0 0;
+          &.label {
+            background-color: #e00d;
+          }
         }
-        &.beauty-label {
-          background-color: rgba(255, 0, 0, 0.8);
-          left: 4px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
+        &.chaos {
+          background-color: #e705;
+          left: 49px;
+          &.label {
+            background-color: #e70d;
+          }
         }
-        &.humility-value {
-          background-color: rgba(255, 255, 0, 0.4);
-          height: 16px;
-          top: 0;
-          margin-top: 160px;
-          padding-top: 6px;
-          left: 56px;
+        &.faith {
+          background-color: #ee05;
+          left: 93px;
+          &.label {
+            background-color: #ee0d;
+          }
         }
-        &.humility-label {
-          background-color: rgba(255, 255, 0, 0.8);
-          left: 56px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
-        }
-        &.financial-value {
-          background-color: rgba(255, 255, 255, 0.4);
-          height: 16px;
-          top: 0;
-          margin-top: 160px;
-          padding-top: 6px;
-          left: 108px;
+        &.finance {
           color: black;
-         }
-        &.financial-label {
-          background-color: rgba(255, 255, 255, 0.8);
-          left: 108px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
-          color: black;
+          background-color: #eee5;
+          left: 138px;
+          &.label {
+            background-color: #eeed;
+          }
         }
-        &.health-value {
-          background-color: rgba(0, 255, 0, 0.4);
-          height: 16px;
-          top: 0;
-          margin-top: 160px;
-          padding-top: 6px;
-          left: 160px;
+        &.health {
+          background-color: #0e05;
+          left: 182px;
+          &.label {
+            background-color: #0e0d;
+          }
         }
-        &.health-label {
-          background-color: rgba(0, 255, 0, 0.8);
-          left: 160px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
+        &.intelligence {
+          background-color: #00e5;
+          left: 227px;
+          &.label {
+            background-color: #00ed;
+          }
         }
-        &.fifth-value {
-          background-color: rgba(0, 0, 255, 0.4);
-          height: 16px;
-          top: 0;
-          margin-top: 160px;
-          padding-top: 6px;
-          left: 212px;
-        }
-        &.fifth-label {
-          background-color: rgba(0, 0, 255, 0.8);
-          left: 212px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
-        }
-        &.sixth-value {
-          background-color: rgba(255, 0, 255, 0.4);
-          height: 16px;
-          top: 0;
-          margin-top: 160px;
-          padding-top: 6px;
-          left: 264px;
-          border-radius: 0 4px 0 0;
-        }
-        &.sixth-label {
-          background-color: rgba(255, 0, 255, 0.8);
-          left: 264px;
-          top: 182px;
-          height: 16px;
-          padding-top: 4px;
-          margin-top: 0;
+        &.strength {
+          background-color: #e0e5;
+          left: 271px;
+          &.label {
+            background-color: #e0ed;
+          }
         }
       }
       a {
         position: absolute;
         z-index: 12;
         text-decoration: none;
-        color: #dd7b;
+        color: #dd7;
         font-size: 15px;
         font-family: Georgia, "times new roman", serif;
         font-weight: bold;
-        text-shadow: 1px 1px 2px black;
+        text-shadow: 1px 1px 2px #e008;
         min-width: 80px;
         text-align: center;
-        //border: solid 1px red;
+        -webkit-text-stroke: 0.35px darkred;
+        background-color: #0003;
+        border-radius: 5px;
+        //border: 0.5px solid #5005;
         &.actions-menu {
           top: 57px;
           left: 197px;
@@ -654,8 +628,10 @@ a.version {
         }
         &.clan-menu {
           top: 140px;
-          left: 91px;
+          left: 106px;
           font-size: 12px;
+          min-width: 50px;
+          background-color: #0009;
         }
         &.debates-menu {
           top: 37px;
@@ -663,7 +639,10 @@ a.version {
         }
         &.elders-menu {
           top: 97px;
-          left: 120px;
+          left: 130px;
+          min-width: 60px;
+          font-size: 14px;
+          background-color: #0007;
         }
         &.elections-menu {
           top: 57px;
@@ -671,28 +650,39 @@ a.version {
         }
         &.forum-menu {
           top: 140px;
-          left: 214px;
+          left: 239px;
           font-size: 12px;
+          min-width: 50px;
+          background-color: #0009;
         }
         &.help-menu {
           top: 140px;
-          left: 154px;
+          left: 169px;
           font-size: 12px;
+          min-width: 50px;
+          background-color: #0009;
         }
         &.missions-menu {
           top: 10px;
-          left: 112px;
+          left: 102px;
           font-size: 17px;
           text-transform: uppercase;
+          text-shadow: 1px 1px 2px #0e08;
+          min-width: 120px;
         }
         &.move-menu {
           top: 87px;
-          left: 120px;
+          left: 130px;
+          min-width: 60px;
+          font-size: 14px;
+          background-color: #0006;
         }
         &.profile-menu {
           top: 140px;
-          left: 33px;
+          left: 38px;
           font-size: 12px;
+          min-width: 50px;
+          background-color: #0009;
         }
       }
     }
