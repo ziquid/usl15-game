@@ -156,6 +156,7 @@ p:first-of-type {
   background-color: rgba(13, 15, 13, 0.25);
   text-shadow: none;
   text-align: left;
+  min-height: 60px;
 }
 
 .quests .quest-experience, .quests .quest-money,
@@ -167,7 +168,7 @@ p:first-of-type {
 }
 
 .quests .quest-required_stuff.missing {
-  color: #c4244f;
+  color: #e4344f;
 }
 
 .quests .quest-loot {
@@ -176,7 +177,7 @@ p:first-of-type {
 
 .quests .quest-payout.negative,
 .land .land-payout.negative, .land-soon .land-payout.negative {
-  color: #c4244f;
+  color: #e4344f;
 }
 
 .quests .quest-description, .land .land-description {
@@ -475,18 +476,40 @@ p:first-of-type {
 
 }
 
-.user-profile .action {
-  background-color: #188433 !important;
-  border: 1px solid #188433 !important;
-}
+.user-profile {
 
-.user-profile .action.not-yet {
-  background-color: #333833 !important;
-  border: 1px solid #333833 !important;
-}
+  .heading {
+    clear: both;
+  }
 
-.user-profile .event-status {
-  color: #b33;
+  .action {
+    background-color: #188433 !important;
+    border: 1px solid #188433 !important;
+  }
+
+  .action.not-yet {
+    background-color: #333833 !important;
+    border: 1px solid #333833 !important;
+  }
+
+  .skill-point {
+    display: inline-block;
+    margin-left: 8px;
+    &.not-yet a {
+      background-color: #333833 !important;
+      box-shadow: inset 0 1px 0 0 #343934;
+      background: linear-gradient(to bottom, #444844 5%, #333833 100%);
+      background-color: #333833;
+      border: 1px solid #404440;
+      color: #c8cecc !important;
+      text-shadow: 0 1px 0 #343934;
+    }
+  }
+
+  .user-profile .event-status {
+    color: #b33;
+  }
+
 }
 
 .highlighted {

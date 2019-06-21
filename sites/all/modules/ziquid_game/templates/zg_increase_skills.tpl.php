@@ -8,6 +8,12 @@
  * Synced with 2114: yes
  * Ready for phpcbf: yes
  * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
  * .
  */
 
@@ -159,28 +165,46 @@ echo <<< EOF
 <div class="user-profile">
 EOF;
 
+$energy_button = zg_render_button('increase_skills', 'Increase',
+  '/energy_max', 'skill-point');
+$energy_100_button = zg_render_button('increase_skills', 'Inc +100',
+  '/energy_100', 'skill-point');
+$ini_button = zg_render_button('increase_skills', 'Increase',
+  '/initiative', 'skill-point');
+$ini_10_button = zg_render_button('increase_skills', 'Inc +10',
+  '/initiative_10', 'skill-point');
+$end_button = zg_render_button('increase_skills', 'Increase',
+  '/endurance', 'skill-point');
+$end_10_button = zg_render_button('increase_skills', 'Inc +10',
+  '/endurance_10', 'skill-point');
+$elo_button = zg_render_button('increase_skills', 'Increase',
+  '/elocution', 'skill-point');
+$elo_10_button = zg_render_button('increase_skills', 'Inc +10',
+  '/elocution_10', 'skill-point');
+$act_button = zg_render_button('increase_skills', 'Increase',
+  '/actions', 'skill-point');
+$act_5_button = zg_render_button('increase_skills', 'Inc +5',
+  '/actions_5', 'skill-point');
+$cant_button = zg_render_button('increase_skills', 'Can\'t Increase',
+  '/none', 'skill-point not-yet');
+
 if ($game_user->skill_points == 0) {
 
   echo <<< EOF
 <div class="heading">Energy:</div>
-<div class="value">$game_user->energy_max <div class="action not-yet">Can't
-  increase Energy</div></div><br/>
+<div class="value">$game_user->energy_max $cant_button</div><br>
 
 <div class="heading">{$game_text['initiative']}:</div>
-<div class="value">$game_user->initiative <div class="action not-yet">Can't
-  increase {$game_text['initiative']}</div></div><br/>
+<div class="value">$game_user->initiative $cant_button</div><br>
 
 <div class="heading">{$game_text['endurance']}:</div>
-<div class="value">$game_user->endurance <div class="action not-yet">Can't
-  increase {$game_text['endurance']}</div></div><br/>
+<div class="value">$game_user->endurance $cant_button</div><br>
 
 <div class="heading">$elocution:</div>
-<div class="value">$game_user->elocution <div class="action not-yet">Can't
-  increase $elocution</div></div><br/>
+<div class="value">$game_user->elocution $cant_button</div><br>
 
   <div class="heading">Actions:</div>
-<div class="value">$game_user->actions_max <div class="action not-yet">Can't
-  increase Actions</div></div><br/>
+<div class="value">$game_user->actions_max $cant_button</div><br>
 </div>
 EOF;
 
@@ -189,24 +213,19 @@ elseif ($game_user->skill_points == 1) {
 
   echo <<< EOF
 <div class="heading">Energy:</div>
-<div class="value">$game_user->energy_max <div class="action"><a
-  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
+<div class="value">$game_user->energy_max $energy_button</div><br>
 
 <div class="heading">{$game_text['initiative']}:</div>
-<div class="value">$game_user->initiative <div class="action"><a
-  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
+<div class="value">$game_user->initiative $ini_button</div><br>
 
 <div class="heading">{$game_text['endurance']}:</div>
-<div class="value">$game_user->endurance <div class="action"><a
-  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
+<div class="value">$game_user->endurance $end_button</div><br>
 
 <div class="heading">$elocution:</div>
-<div class="value">$game_user->elocution <div class="action"><a
-  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
+<div class="value">$game_user->elocution $elo_button</div><br>
 
   <div class="heading">Actions:</div>
-<div class="value">$game_user->actions_max <div class="action not-yet">Can't
-  increase Actions</div></div><br/>
+<div class="value">$game_user->actions_max $cant_button</div><br>
 </div>
 EOF;
 
@@ -215,34 +234,19 @@ elseif ($game_user->skill_points >= 10) {
 
       echo <<< EOF
 <div class="heading">Energy:</div>
-<div class="value">$game_user->energy_max <div class="action"><a
-  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div>
-<div class="value"><div class="action"><a
-  href="/$game/increase_skills/$arg2/energy_100">Inc +100</a></div></div><br/>
+<div class="value">$game_user->energy_max $energy_button $energy_100_button</div><br>
 
 <div class="heading">{$game_text['initiative']}:</div>
-<div class="value">$game_user->initiative <div class="action"><a
-  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div>
-<div class="value"><div class="action"><a
-  href="/$game/increase_skills/$arg2/initiative_10">Increase +10</a></div></div><br/>
+<div class="value">$game_user->initiative $ini_button $ini_10_button</div><br>
 
 <div class="heading">{$game_text['endurance']}:</div>
-<div class="value">$game_user->endurance <div class="action"><a
-  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div>
-<div class="value"><div class="action"><a
-  href="/$game/increase_skills/$arg2/endurance_10">Increase +10</a></div></div><br/>
+<div class="value">$game_user->endurance $end_button $end_10_button</div><br>
 
 <div class="heading">$elocution:</div>
-<div class="value">$game_user->elocution <div class="action"><a
-  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div>
-<div class="value"><div class="action"><a
-  href="/$game/increase_skills/$arg2/elocution_10">Increase +10</a></div></div><br/>
+<div class="value">$game_user->elocution $elo_button $elo_10_button</div><br>
 
 <div class="heading">Actions:</div>
-<div class="value">$game_user->actions_max <div class="action"><a
-  href="/$game/increase_skills/$arg2/actions">Increase</a></div></div>
-<div class="value"><div class="action"><a
-  href="/$game/increase_skills/$arg2/actions_5">Increase +5</a></div></div><br/>
+<div class="value">$game_user->actions_max $act_button $act_5_button</div><br>
 </div>
 EOF;
 
@@ -251,24 +255,19 @@ elseif ($game_user->skill_points > 1) {
 
       echo <<< EOF
 <div class="heading">Energy:</div>
-<div class="value">$game_user->energy_max <div class="action"><a
-  href="/$game/increase_skills/$arg2/energy_max">Increase</a></div></div><br/>
+<div class="value">$game_user->energy_max $energy_button</div><br>
 
 <div class="heading">{$game_text['initiative']}:</div>
-<div class="value">$game_user->initiative <div class="action"><a
-  href="/$game/increase_skills/$arg2/initiative">Increase</a></div></div><br/>
+<div class="value">$game_user->initiative $ini_button</div><br>
 
 <div class="heading">{$game_text['endurance']}:</div>
-<div class="value">$game_user->endurance <div class="action"><a
-  href="/$game/increase_skills/$arg2/endurance">Increase</a></div></div><br/>
+<div class="value">$game_user->endurance $end_button</div><br>
 
 <div class="heading">$elocution:</div>
-<div class="value">$game_user->elocution <div class="action"><a
-  href="/$game/increase_skills/$arg2/elocution">Increase</a></div></div><br/>
+<div class="value">$game_user->elocution $elo_button</div><br>
 
 <div class="heading">Actions:</div>
-<div class="value">$game_user->actions_max <div class="action"><a
-  href="/$game/increase_skills/$arg2/actions">Increase</a></div></div><br/>
+<div class="value">$game_user->actions_max $act_button</div><br>
 </div>
 EOF;
 
