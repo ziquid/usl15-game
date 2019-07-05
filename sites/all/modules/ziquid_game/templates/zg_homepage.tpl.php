@@ -468,7 +468,7 @@ $extra_bonus
       </li>
     </ul>
     <ul class="menu-links">
-    
+
       <li>
         <a class="actions-menu" href="/$game/actions/$arg2">
           {$game_text['menu']['actions']}
@@ -480,13 +480,13 @@ $extra_bonus
           {$game_text['menu']['aides']}
         </a>
       </li>
-      
+
       <li>
         <a class="clan-menu" href="/$game/$clan_link">
           {$game_text['menu']['clan']}
         </a>
       </li>
-      
+
       <li>
         <a class="debates-menu" href="/$game/debates/$arg2">
           {$game_text['menu']['debates']}
@@ -498,19 +498,19 @@ $extra_bonus
           {$game_text['menu']['elders']}
         </a>
       </li>
-      
+
       <li>
         <a class="elections-menu" href="/$game/elections/$arg2">
           {$game_text['menu']['elections']}
         </a>
       </li>
-      
+
       <li>
         <a class="forum-menu" href="external://discord.gg/cFyt7w9">
           {$game_text['menu']['forum']}
         </a>
       </li>
-      
+
       <li>
         <a class="help-menu" href="/$game/help/$arg2">
           {$game_text['menu']['help']}
@@ -518,24 +518,24 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="missions-menu" 
+        <a class="missions-menu"
           href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
           {$game_text['menu']['missions']}
-        </a>  
+        </a>
       </li>
-      
+
       <li>
         <a class="move-menu" href="/$game/move/$arg2/0">
           {$game_text['menu']['move']}
-        </a>  
+        </a>
       </li>
-      
+
       <li>
         <a class="profile-menu" href="/$game/user/$arg2">
           {$game_text['menu']['profile']}
         </a>
       </li>
-      
+
     </ul>
 EOF;
 
@@ -847,7 +847,8 @@ foreach ($data as $item) {
       $reply = '<div class="message-reply-wrapper"><div class="message-reply">
         <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
         '" class="button">View / Respond</a></div></div>';
-      $reply = zg_render_button('user', 'View / Respond', $item->phone_id);
+      $reply = zg_render_button('user', 'View / Respond', '/' .
+        $item->phone_id);
     }
     else {
       $reply = '';
