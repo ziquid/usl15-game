@@ -8,6 +8,12 @@
  * Synced with 2114: N/A
  * Ready for phpcbf: done!
  * Ready for MVC separation: done
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
  * .
  */
 
