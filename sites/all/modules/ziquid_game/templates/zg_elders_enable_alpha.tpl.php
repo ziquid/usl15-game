@@ -14,6 +14,7 @@
  * Minimal function calls in view: no
  * Removal of globals: no
  * Removal of game_defs include: no
+ * .
  */
 
 /* ------ CONTROLLER ------ */
