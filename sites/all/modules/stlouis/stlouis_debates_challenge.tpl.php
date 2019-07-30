@@ -4,7 +4,7 @@
  * @file stlouis_debates_challenge.tpl.php
  * Do the debates challenge.
  *
- * Synced with CG: no
+ * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
