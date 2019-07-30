@@ -1,14 +1,21 @@
 <?php
 
 /**
-* @file
-* Template for confirmation of resetting skill points.
-*
-* Synced with CG: yes
-* Synced with 2114: yes
-* Ready for phpcbf: yes
-* Ready for MVC separation: no
-*/
+ * @file
+ * Template for confirmation of resetting skill points.
+ *
+ * Synced with CG: yes
+ * Synced with 2114: yes
+ * Ready for phpcbf: yes
+ * Ready for MVC separation: no
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
+ * .
+ */
 
 global $game, $phone_id;
 
