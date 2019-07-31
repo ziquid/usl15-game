@@ -93,10 +93,8 @@ li {
 .welcome-continue a, .election-continue a {
   border: 1px solid #1ca443;
   background-color: #1ca443;
-
-    color: #fff !important;
-    text-decoration: none;
-
+  color: #f8fefb;
+  text-decoration: none;
 }
 
 .welcome ul {
@@ -407,11 +405,12 @@ p:first-of-type {
 .try-an-election {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
-}
 
-.try-an-election a, a.try-an-election, input.try-an-election {
-  text-decoration: none;
-  color: #fff;
+  &.try-an-election a, a.try-an-election, input.try-an-election {
+    text-decoration: none;
+    color: #f8fdfe;
+  }
+  
 }
 
 .try-an-election.not-yet {
