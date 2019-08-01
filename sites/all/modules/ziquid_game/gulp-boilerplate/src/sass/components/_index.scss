@@ -12,6 +12,8 @@ li {
   width: calc(100% - 4px);
   height: 52px;
   background-color: rgba(0, 0, 0, 0.35) !important;
+  /*background-color: #333;*/
+  padding: 0px 2px;
 
   .actions-text {
     display: inline-block;
@@ -23,6 +25,8 @@ li {
     background-size: contain;
     top: -9px;
     margin-bottom: -9px;
+    font-size: 10px;
+    display: inline;
   }
 
   .energy-text {
@@ -34,6 +38,8 @@ li {
     font: 0/0 a;
     background-size: contain;
     top: -9px;
+    font-size: 10px;
+    display: inline;
   }
 
   .experience-text {
@@ -44,11 +50,13 @@ li {
     background-size: contain;
     top: -2px;
     right: 2px;
+    font-size: 10px;
   }
 
   .level {
     float: right;
     position: relative;
+    text-align: right;
   }
 
   .level-text {
@@ -60,15 +68,19 @@ li {
     background-size: contain;
     top: 13px;
     right: 2px;
+    font-size: 11px;
   }
 }
 
 .header .experience {
   border-bottom: 1px solid #333833 !important;
+  text-align: right;
 }
 
 .title.loot {
   color: #d4c41c;
+  padding-top: 12px;
+  padding-bottom: 6px;
 }
 
 .welcome {
@@ -76,6 +88,10 @@ li {
   color: #f8fefb;
   min-height: 150px;
   box-shadow: 1px 1px 3px lightblue;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  margin: 16px 3px 3px;
+  padding: 4px;
 }
 
 .welcome .subtitle {
@@ -95,6 +111,11 @@ li {
   background-color: #1ca443;
   color: #f8fefb;
   text-decoration: none;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  padding: 3px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .welcome ul {
@@ -123,6 +144,9 @@ p:first-of-type {
 
 .main-menu, .elders-menu {
   font-weight: bold;
+  margin-top: 12px;
+  font-size: 17px;
+  text-align: center;
 }
 
 .main-menu .menu-option {
@@ -175,6 +199,7 @@ p:first-of-type {
 
 .quests .quest-loot {
   color: #d4c41c;
+  font-size: 11px;
 }
 
 .quests .quest-payout.negative,
@@ -203,6 +228,7 @@ p:first-of-type {
 .quests .quest-required_stuff .quest-required_equipment img {
   border-radius: 4px;
   box-shadow: 1px 1px 3px rgba(0, 192, 0, 0.6);
+  border: solid 0.5px #0c0;
 }
 
 .quests-soon .quest-experience, .quests-soon .quest-money,
@@ -221,6 +247,10 @@ p:first-of-type {
 
 .quest-succeeded, .election-succeeded, .land-succeeded {
   color: #1ca443;
+  clear: both;
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
 }
 
 .quest-failed, .election-failed, .land-failed, .title.failed {
@@ -269,6 +299,10 @@ p:first-of-type {
   border: 1px solid rgba(255, 255, 255, 0.7) !important;
   background-color: #0e5221;
   min-height: 72px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  margin: 6px 3px 10px 3px;
+  padding: 2px;
 }
 
 .level-up.happy {
@@ -301,6 +335,7 @@ p:first-of-type {
 
 .help .subtitle {
   margin: 8px 0 4px;
+  font-weight: bold;
 }
 
 .help .subtitle {
@@ -360,10 +395,14 @@ p:first-of-type {
 
 .username-error {
   color: #c4244f;
+  margin: 3px 0 6px;
 }
 
 .elections-header {
   color: #1aa443;
+  font-weight: bold;
+  margin: 12px 0 0 36px;
+  font-size: 13px;
 }
 
 .elections .election-details .action, .land .land-buy-button,
@@ -383,6 +422,8 @@ p:first-of-type {
   border: 1px solid #188433;
   border-radius: 4px;
   -moz-border-radius: 4px;
+  float: left;
+  margin: 9px 3px 3px 3px;
 }
 
 .send-message .block-user a {
@@ -405,10 +446,19 @@ p:first-of-type {
 .try-an-election {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
+  margin: 12px auto 16px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 15px;
+  padding: 6px;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  width: 15em;
 
   &.try-an-election a, a.try-an-election, input.try-an-election {
     text-decoration: none;
     color: #f8fdfe;
+    display: block;
   }
   
 }
@@ -428,6 +478,7 @@ p:first-of-type {
   background-color: #888;
   margin: 21px 0 0 4px;
   border-radius: 0 0 12px 12px;
+  padding-top: 2px;
 }
 
 .location + .news {
@@ -443,16 +494,28 @@ p:first-of-type {
     width: fit-content;
     margin: 0 auto 6px;
     padding: 0;
+    text-align: center;
   }
 
   .dateline {
     padding-left: 10px;
+    font-style: italic;
+    font-size: 10px;
+    color: #ccc;
+    clear: both;
+    text-align: left;
   }
 
   .message-body {
     border: 1px solid #111811 !important;
     background-color: #111811 !important;
     padding: 4px 8px 8px 4px;
+    margin: 3px;
+    padding: 4px 24px 30px 4px;
+    border: 1px solid #111;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    text-align: left;
   }
 
   .message-body.user.user-png {
@@ -475,6 +538,13 @@ p:first-of-type {
   .message-reply {
     background-color: #188433 !important;
     border: 1px solid #188433 !important;
+    display: inline-block;
+    text-align: right;
+    margin-right: 6px;
+    margin-bottom: 5px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
   }
 
   .message-reply.not-yet {
@@ -489,11 +559,23 @@ p:first-of-type {
 
   .heading {
     clear: both;
+    font-weight: bold;
+    text-align: right;
+    display: inline-block;
+    width: 100px;
+    margin: 3px;
   }
 
   .action {
     background-color: #188433 !important;
     border: 1px solid #188433 !important;
+    display: inline-block;
+    text-align: right;
+    margin-left: 12px;
+    margin-bottom: 18px;
+    padding: 4px 7px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
   }
 
   .action.not-yet {
@@ -723,6 +805,8 @@ a.version {
 }
 .competency-pip {
   border-right: solid 2px #693318 !important;
+  border-radius: 2px;
+  margin-right: 2px;
 }
 
 .competency-pip.attained {
@@ -906,6 +990,7 @@ textarea {
 
 .swiper-slide .title .quest-group-name {
   width: 248px;
+  margin: auto;
 }
 
 .fit-box {
@@ -1114,6 +1199,12 @@ div.speech-bubble-wrapper .wise_old_man.sad {
 
 .quests .quest-icon {
   position: relative;
+  width: 97px;
+  height: 62px;
+  padding-right: 5px;
+  border: 0px;
+  float: left;
+  display: table-cell;
 }
 
 .quests .quest-icon-baseline-overlay {
@@ -1158,4 +1249,5 @@ div.lesser-bonus-text {
 .ask-name {
   margin-top: 15px;
   margin-bottom: 9px;
+  text-align: center;
 }
