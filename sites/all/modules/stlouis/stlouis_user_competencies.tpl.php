@@ -8,7 +8,14 @@
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
-*/
+ * Controller moved to callback include: no
+ * View only in theme template: no
+ * All db queries in controller: no
+ * Minimal function calls in view: no
+ * Removal of globals: no
+ * Removal of game_defs include: no
+ * .
+ */
 
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
