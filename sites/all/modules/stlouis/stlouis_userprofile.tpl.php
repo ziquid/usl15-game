@@ -690,16 +690,8 @@ EOF;
   $messages .= '<p>' . $item->message . '</p>';
 
   if ($item->username != 'USLCE Game') {
-    $messages .= <<< EOF
-<div class="message-reply-wrapper"><div class="message-reply">
- 
-      $reply = zg_render_button('user', 'View / Respond', '/' .
-        $item->phone_id);
-    
-</div></div>
-
-
-EOF;
+    $messages .= zg_render_button('user', 'View / Respond', '/id:' .
+      $item->fkey_users_from_id);
   }
 
   $messages .= '</div>';
