@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_userprofile.tpl.php
+ * @file
  * Show a user's profile.
  *
  * Synced with CG: yes
@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 
-// ------ CONTROLLER ------
+/* ------ CONTROLLER ------ */
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $q = $_GET['q'];
@@ -700,7 +700,7 @@ EOF;
 
 $message_end = '</div>';
 
-// ------ VIEW ------
+/* ------ VIEW ------ */
 $fetch_header($game_user);
 game_show_profile_menu($game_user);
 print $message_error;
