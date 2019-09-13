@@ -35,7 +35,7 @@ $offer = game_luck_money_offer($game_user);
 echo <<< EOF
 <div class="title">Visit the {$game_text['elders']}</div>
 <div class="subtitle">You have $game_user->luck&nbsp;$luck</div>
-<div class="elders-menu">
+<div class="elders-menu slide-in from-right">
 EOF;
 
 if ($game_user->level >= 6) {
@@ -46,17 +46,17 @@ if ($game_user->level >= 6) {
   if ($game_user->luck > 9) {
 
     echo <<< EOF
-<div class="menu-option"><a href="/$game/choose_name/$arg2">Change your
+<div class="menu-option slide-in-content"><a href="/$game/choose_name/$arg2">Change your
 character's name (10&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/choose_party/$arg2/0">Join a
+<div class="menu-option slide-in-content"><a href="/$game/choose_party/$arg2/0">Join a
 different $party_lower (5&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
+<div class="menu-option slide-in-content"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
 your skill points (3&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/action">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/action">Refill
 your Action (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/energy">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/energy">Refill
 your Energy (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/money">Receive
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/money">Receive
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
@@ -65,16 +65,16 @@ EOF;
 
     // AT LEAST 5 LUCK!
     echo <<< EOF
-<div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
-<div class="menu-option"><a href="/$game/choose_party/$arg2/0">Join a
+<div class="menu-option not-yet slide-in-content">Change your character's name (10&nbsp;$luck)</div>
+<div class="menu-option slide-in-content"><a href="/$game/choose_party/$arg2/0">Join a
 different $party_lower (5&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
+<div class="menu-option slide-in-content"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
 your skill points (3&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/action">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/action">Refill
 your Action (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/energy">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/energy">Refill
 your Energy (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/money">Receive
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/money">Receive
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
@@ -83,15 +83,15 @@ EOF;
 
     // AT LEAST THREE LUCK!
     echo <<< EOF
-<div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
-<div class="menu-option not-yet">Join a different $party_lower (5&nbsp;$luck)</div>
-<div class="menu-option"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
+<div class="menu-option not-yet slide-in-content">Change your character's name (10&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Join a different $party_lower (5&nbsp;$luck)</div>
+<div class="menu-option slide-in-content"><a href="/$game/elders_ask_reset_skills/$arg2">Reset
 your skill points (3&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/action">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/action">Refill
 your Action (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/energy">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/energy">Refill
 your Energy (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/money">Receive
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/money">Receive
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
@@ -100,14 +100,14 @@ EOF;
 
     // AT LEAST ONE LUCK!
     echo <<< EOF
-<div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
-<div class="menu-option not-yet">Join a different $party_lower (5&nbsp;$luck)</div>
-<div class="menu-option not-yet">Reset your skill points (3&nbsp;$luck)</div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/action">Refill
+<div class="menu-option not-yet slide-in-content">Change your character's name (10&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Join a different $party_lower (5&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Reset your skill points (3&nbsp;$luck)</div>
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/action">Refill
 your Action (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/energy">Refill
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/energy">Refill
 your Energy (1&nbsp;$luck)</a></div>
-<div class="menu-option"><a href="/$game/elders_do_fill/$arg2/money">Receive
+<div class="menu-option slide-in-content"><a href="/$game/elders_do_fill/$arg2/money">Receive
 $offer $game_user->values (1&nbsp;$luck)</a></div>
 EOF;
 
@@ -116,12 +116,12 @@ EOF;
 
     // NO LUCK!
     echo <<< EOF
-<div class="menu-option not-yet">Change your character's name (10&nbsp;$luck)</div>
-<div class="menu-option not-yet">Join a different $party_lower (5&nbsp;$luck)</div>
-<div class="menu-option not-yet">Reset your skill points (3&nbsp;$luck)</div>
-<div class="menu-option not-yet">Refill your Action (1&nbsp;$luck)</div>
-<div class="menu-option not-yet">Refill your Energy (1&nbsp;$luck)</div>
-<div class="menu-option not-yet">Receive $offer $game_user->values (1&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Change your character's name (10&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Join a different $party_lower (5&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Reset your skill points (3&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Refill your Action (1&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Refill your Energy (1&nbsp;$luck)</div>
+<div class="menu-option not-yet slide-in-content">Receive $offer $game_user->values (1&nbsp;$luck)</div>
 EOF;
 
   }
@@ -129,13 +129,13 @@ EOF;
 }
 
 echo <<< EOF
-<div class="menu-option"><a href="/$game/elders_set_password/$arg2">Set a
+<div class="menu-option slide-in-content"><a href="/$game/elders_set_password/$arg2">Set a
 password for your account (Free)</a></div>
-<div class="menu-option"><a href="/$game/elders_ask_reset/$arg2">Reset
+<div class="menu-option slide-in-content"><a href="/$game/elders_ask_reset/$arg2">Reset
 your character (Free)</a></div>
-<!--<div class="menu-option"><a href="/$game/elders_preferences/$arg2">Game
+<!--<div class="menu-option slide-in-content"><a href="/$game/elders_preferences/$arg2">Game
 Preferences</a></div>-->
-<div class="menu-option"><a href="/$game/elders_ask_purchase/$arg2">Purchase
+<div class="menu-option slide-in-content"><a href="/$game/elders_ask_purchase/$arg2">Purchase
 more $luck</a></div>
 EOF;
 
@@ -146,7 +146,7 @@ else {
   $enable = 'Enable';
 }
 echo <<< EOF
-<div class="menu-option">
+<div class="menu-option slide-in-content">
   <a href="/$game/elders_enable_alpha/$arg2">
     $enable pre-release (Alpha) features (Free)
   </a>
@@ -155,7 +155,7 @@ EOF;
 
 if (zg_get_value($game_user, 'NothingButFur', FALSE)) {
   echo <<< EOF
-<div class="menu-option">
+<div class="menu-option slide-in-content">
   <a href="/wonderland/bounce/$arg2">
     Go Down the Rabbit Hole (Free)
   </a>
@@ -165,7 +165,7 @@ EOF;
 
 if (zg_get_value($game_user, 'RockThisTown', FALSE)) {
   echo <<< EOF
-<div class="menu-option">
+<div class="menu-option slide-in-content">
   <a href="/detroit/bounce/$arg2">
     Move to Detroit (Free)
   </a>

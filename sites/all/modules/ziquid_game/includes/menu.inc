@@ -640,6 +640,9 @@ function zg_elders_callback($phone_id) {
     return drupal_access_denied();
   }
 
+  $module_path = drupal_get_path('module', 'zg');
+  drupal_add_js($module_path . '/js/zg_elders.js', 'module',
+    'footer');
   return theme('zg_elders', $phone_id);
 }
 

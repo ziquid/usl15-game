@@ -1,0 +1,29 @@
+.slide-in {
+  z-index: 10; /* to position it in front of the other content */
+
+  &.from-left {
+    left: 0;
+    .slide-in-content {
+      transform: translateX(-100%);
+      -webkit-transform: translateX(-100%);
+    }
+  }
+
+  &.from-right {
+    right: 0;
+    .slide-in-content {
+      transform: translateX(100%);
+      -webkit-transform: translateX(100%);
+    }
+  }
+
+  .slide-in-content {
+    transition: all 0.75s ease; /* our nice transition */
+  }
+
+  &.show .slide-in-content, .slide-in-content-now {
+    transform: translateX(0) !important;
+    -webkit-transform: translateX(0) !important;
+  }
+
+}
