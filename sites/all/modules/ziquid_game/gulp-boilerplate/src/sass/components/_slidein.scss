@@ -5,16 +5,16 @@
   &.from-left {
     left: 0;
     .slide-in-content {
-      transform: translateX(-100%);
-      -webkit-transform: translateX(-100%);
+      transform: translateX(-150%);
+      -webkit-transform: translateX(-150%);
     }
   }
 
   &.from-right {
     right: 0;
     .slide-in-content {
-      transform: translateX(100%);
-      -webkit-transform: translateX(100%);
+      transform: translateX(150%);
+      -webkit-transform: translateX(150%);
     }
   }
 

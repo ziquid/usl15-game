@@ -111,8 +111,8 @@ body.game-stlouis .slide-in.from-left {
 
 /* line 7, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-left .slide-in-content {
-  transform: translateX(-100%);
-  -webkit-transform: translateX(-100%);
+  transform: translateX(-150%);
+  -webkit-transform: translateX(-150%);
 }
 
 /* line 13, src/sass/components/_slidein.scss */
@@ -122,8 +122,8 @@ body.game-stlouis .slide-in.from-right {
 
 /* line 15, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-right .slide-in-content {
-  transform: translateX(100%);
-  -webkit-transform: translateX(100%);
+  transform: translateX(150%);
+  -webkit-transform: translateX(150%);
 }
 
 /* line 21, src/sass/components/_slidein.scss */
