@@ -101,38 +101,39 @@ body.game-stlouis .button.button-debate {
 body.game-stlouis .slide-in {
   z-index: 10;
   /* to position it in front of the other content */
+  overflow: hidden;
 }
 
-/* line 4, src/sass/components/_slidein.scss */
+/* line 5, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-left {
   left: 0;
 }
 
-/* line 6, src/sass/components/_slidein.scss */
+/* line 7, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-left .slide-in-content {
   transform: translateX(-100%);
   -webkit-transform: translateX(-100%);
 }
 
-/* line 12, src/sass/components/_slidein.scss */
+/* line 13, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-right {
   right: 0;
 }
 
-/* line 14, src/sass/components/_slidein.scss */
+/* line 15, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.from-right .slide-in-content {
   transform: translateX(100%);
   -webkit-transform: translateX(100%);
 }
 
-/* line 20, src/sass/components/_slidein.scss */
+/* line 21, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in .slide-in-content {
   -webkit-transition: all 0.75s ease;
   transition: all 0.75s ease;
   /* our nice transition */
 }
 
-/* line 24, src/sass/components/_slidein.scss */
+/* line 25, src/sass/components/_slidein.scss */
 body.game-stlouis .slide-in.show .slide-in-content, body.game-stlouis .slide-in .slide-in-content-now {
   transform: translateX(0) !important;
   -webkit-transform: translateX(0) !important;
