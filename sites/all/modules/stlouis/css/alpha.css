@@ -7,7 +7,7 @@ body.alpha {
 body.alpha::after {
   content: "";
   background: url(/sites/default/files/images/green-bg.jpg);
-  background-size: cover;
+  background-size: 100vw 100vh;
   background-position: top left;
   background-attachment: fixed;
   opacity: 0.25;
