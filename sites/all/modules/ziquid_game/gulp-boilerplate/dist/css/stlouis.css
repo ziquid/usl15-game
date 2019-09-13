@@ -10,6 +10,7 @@
 body.game-stlouis {
   margin: 4px auto 40px;
   background-color: #003b00;
+  color: #f8fefb;
 }
 
 /* line 1, src/sass/components/_button.scss */

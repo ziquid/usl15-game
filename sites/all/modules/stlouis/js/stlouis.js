@@ -20,8 +20,8 @@ Drupal.behaviors.stlouis = function (context) {
     red = Math.floor(red * 0.6);
     green = Math.floor(green * 0.6);
     blue = Math.floor(blue * 0.6);
-    $('body.game-stlouis').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
-    $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
+    // $('body.game-stlouis').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
+    // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
   jQuery(".fit-box").each(function() {

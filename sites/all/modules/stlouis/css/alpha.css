@@ -1,18 +1,20 @@
-body.alpha,
-body.party-unaffiliated.alpha,
-body.party-anarchists.alpha,
-body.party-docs.alpha,
-body.party-economic.alpha,
-body.party-faith.alpha,
-body.party-guns.alpha,
-body.party-mafia.alpha,
-body.party-intelligentsia.alpha,
-body.party-workers.alpha,
-body.party-toxicorp.alpha {
-  background-color: rgb(180, 200, 180);
-  background-image: none;
-  color: #f8fefb;
-  margin: auto;
+body.alpha {
+  background-color: black;
+}
+
+body.alpha::after {
+  content: "";
+  background: url(/sites/default/files/images/green-bg.jpg);
+  background-size: cover;
+  background-position: top left;
+  background-attachment: fixed;
+  opacity: 0.25;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: absolute;
+  z-index: -1;
 }
 
 .alpha .quest-group-completion {
@@ -25,28 +27,10 @@ body.party-toxicorp.alpha {
   color: #cfd5d1;
 }
 
-.alpha .highlight {
-  color: #f0fef8 !important;
-  -webkit-text-stroke: 0.4px rgba(104, 28, 20, 0.8);
-  -webkit-text-fill-color: #f0fef8;
-}
-
 .alpha .news .message-body {
   background-color: rgba(16, 24, 20, 0.8) !important;
   border: rgba(16, 24, 20, 0.5) !important;
   box-shadow: 2px 2px 5px #000;
-}
-
-.alpha p {
-  margin: 9px 8px 9px 14px;
-}
-
-.alpha p:first-of-type {
-  margin-top: 0;
-}
-
-.alpha .speech-bubble p:first-of-type {
-  margin-top: 9px;
 }
 
 .alpha-only {
@@ -65,4 +49,3 @@ body.alpha .alpha-only {
   font-family: Helvetica, Arial, "Verdana", "sans-serif";
   text-shadow: 0 1px 0 #528009;
 }
-
