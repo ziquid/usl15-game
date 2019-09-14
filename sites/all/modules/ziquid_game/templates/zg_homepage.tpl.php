@@ -17,7 +17,7 @@
  * .
  */
 
-$version = 'v0.9.1, Jun 17 2019';
+$version = 'v0.9.1, Sep 15 2019';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -95,8 +95,8 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
     $extra_text .
       '<p>For the next three minutes, competencies can be enhanced every 15 seconds.</p>
       <p>Come back tomorrow for another bonus!</p>
-  </div>
-</div>';
+    </div>
+  </div>';
 
   // Fast comps for the next three minutes.
   zg_set_timer($game_user, 'fast_comps_15', 180);

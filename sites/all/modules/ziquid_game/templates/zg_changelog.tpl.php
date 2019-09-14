@@ -36,6 +36,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Sep 15, 2019
+  </div>
+  <ul>
+    <li>
+      Updated Elders screen.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     May 29, 2019
   </div>
   <ul>

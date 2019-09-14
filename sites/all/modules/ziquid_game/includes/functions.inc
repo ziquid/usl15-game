@@ -51,17 +51,31 @@ function zg_render_button($link = 'home', $type = 'continue', $extra_link = '', 
 
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
-  $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
   $class = drupal_html_class($type);
-
-  $button = <<< EOF
+  if (strlen($link)) {
+    if ($link[0] == '/') {
+      $link .= '/' . $arg2 . $extra_link;
+    }
+    else {
+      $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
+    }
+    $button = <<< EOF
 <div class="button-wrapper-$class button-wrapper $extra_classes">
   <a class="button-$class button" href="/$link">
     $type
   </a>
 </div>
 EOF;
-
+  }
+  else {
+    $button = <<< EOF
+<div class="button-wrapper-$class button-wrapper $extra_classes">
+  <span class="button-$class button not-yet">
+    $type
+  </span>
+</div>
+EOF;
+  }
   return $button;
 }
 
