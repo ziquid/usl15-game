@@ -443,12 +443,14 @@ p:first-of-type {
 
   .dateline {
     padding-left: 10px;
+    color: #cfd5d1;
   }
 
   .message-body {
-    border: 1px solid #111811 !important;
-    background-color: #111811 !important;
     padding: 4px 8px 8px 4px;
+    background-color: rgba(16, 24, 20, 0.8) !important;
+    border: rgba(16, 24, 20, 0.5) !important;
+    box-shadow: 2px 2px 5px #000;
   }
 
   .message-body.user.user-png {

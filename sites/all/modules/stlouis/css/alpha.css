@@ -25,14 +25,8 @@ body.alpha::after {
   margin-bottom: 22px;
 }
 
-.alpha a.version, .alpha .location, .alpha .news .dateline {
+.alpha a.version, .alpha .location {
   color: #cfd5d1;
-}
-
-.alpha .news .message-body {
-  background-color: rgba(16, 24, 20, 0.8) !important;
-  border: rgba(16, 24, 20, 0.5) !important;
-  box-shadow: 2px 2px 5px #000;
 }
 
 .alpha-only {
