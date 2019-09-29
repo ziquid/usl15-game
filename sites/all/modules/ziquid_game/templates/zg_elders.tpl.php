@@ -37,7 +37,7 @@ if ($game_user->luck > 99) {
   $luck_text = '<p>You have <strong>' . $game_user->luck . '&nbsp;' . $luck . '</strong>!</p>';
   $help_text = '<p>How can I help you?</p>';
 }
-else if ($game_user->luck > 0) {
+elseif ($game_user->luck > 0) {
   $happy = 'small';
   $luck_text = '<p>You have <strong>' . $game_user->luck . '</strong>&nbsp;' . $luck . '.</p>';
   $help_text = '<p>How can I help you?</p>';
@@ -87,10 +87,28 @@ if ($game_user->level >= 6) {
       "Join a different $party_lower (5&nbsp;$luck)",
       '/0',
       'big-80 slide-in-content');
+  }
+  else {
+    $menus[] = zg_render_button('',
+      "Join a different $party_lower (5&nbsp;$luck)",
+      '',
+      'big-80 slide-in-content');
+  }
+
+  if ($game_user->luck > 2) {
     $menus[] = zg_render_button('elders_ask_reset_skills',
       "Reset your skill points (3&nbsp;$luck)",
       '',
       'big-80 slide-in-content');
+  }
+  else {
+    $menus[] = zg_render_button('',
+      "Reset your skill points (3&nbsp;$luck)",
+      '',
+      'big-80 slide-in-content');
+  }
+
+  if ($game_user->luck > 0) {
     $menus[] = zg_render_button('elders_do_fill',
       "Refill your Action (1&nbsp;$luck)",
       '/action',
@@ -105,14 +123,6 @@ if ($game_user->level >= 6) {
       'big-80 slide-in-content');
   }
   else {
-    $menus[] = zg_render_button('',
-      "Join a different $party_lower (5&nbsp;$luck)",
-      '',
-      'big-80 slide-in-content');
-    $menus[] = zg_render_button('',
-      "Reset your skill points (3&nbsp;$luck)",
-      '',
-      'big-80 slide-in-content');
     $menus[] = zg_render_button('',
       "Refill your Action (1&nbsp;$luck)",
       '',
