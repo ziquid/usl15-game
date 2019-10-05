@@ -690,11 +690,8 @@ EOF;
   $messages .= '<p>' . $item->message . '</p>';
 
   if ($item->username != 'USLCE Game') {
-    $messages .= <<< EOF
-<div class="message-reply-wrapper"><div class="message-reply">
-  <a href="/$game/user/$arg2/id:$item->fkey_users_from_id">View / Respond</a>
-</div></div>
-EOF;
+    $messages .= zg_render_button('user', 'View / Respond', '/id:' .
+      $item->fkey_users_from_id);
   }
 
   $messages .= '</div>';
