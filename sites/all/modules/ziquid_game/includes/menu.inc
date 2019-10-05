@@ -15,6 +15,14 @@
 function zg_menu() {
 
   $items = [];
+  $items['usl_esa/bounce/%'] = [
+    'title' => 'USL_ESA Game Bounce',
+    'page callback' => 'usl_esa_bounce_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access game content'],
+    'type' => MENU_CALLBACK,
+  ];
+
   foreach (zg_get_game_list() as $game) {
 
     $items[$game . '/authenticate/%'] = [
@@ -1003,6 +1011,22 @@ function zg_bounce_callback($phone_id) {
   return theme('zg_bounce', $phone_id);
 }
 
+function usl_esa_bounce_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  global $game, $phone_id;
+
+  $game = 'stlouis';
+  $phone_id = zg_get_phoneid();
+  $arg2 = check_plain(arg(2));
+
+  $game_user = new \stdClass();
+  zg_sound($game_user, 'In the air tonight teaser', TRUE);
+  return theme('usl_esa_bounce', $game, $phone_id, $arg2);
+}
+
 function zg_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1410,7 +1434,7 @@ function zg_theme() {
       'template' => 'templates/zg_equipment_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_equipment_buy' => [
@@ -1419,7 +1443,7 @@ function zg_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_equipment_sell' => [
@@ -1428,7 +1452,7 @@ function zg_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_move' => [
@@ -1436,7 +1460,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'neighborhood_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_move_do' => [
@@ -1444,35 +1468,44 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'neighborhood_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_authenticate' => [
       'template' => 'templates/zg_authenticate',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_bounce' => [
       'template' => 'templates/zg_bounce',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
+    ],
+
+    'usl_esa_bounce' => [
+      'template' => 'templates/usl_esa_bounce',
+      'arguments' => [
+        'game' => NULL,
+        'phone_id' => NULL,
+        'arg2' => NULL,
+      ],
     ],
 
     'zg_bounce_040' => [
       'template' => 'zg_bounce_040',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_preferences' => [
       'template' => 'zg_elders_preferences',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_zombie_move' => [
@@ -1481,28 +1514,28 @@ function zg_theme() {
         'phone_id' => NULL,
         'zombie_id' => NULL,
         'hood_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_event_info' => [
       'template' => 'zg_event_info',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_event_prizes' => [
       'template' => 'zg_event_prizes',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_changelog' => [
       'template' => 'templates/zg_changelog',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_error' => [
@@ -1510,7 +1543,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'error_code' => NULL,
-      ]
+      ],
     ],
 
   ];

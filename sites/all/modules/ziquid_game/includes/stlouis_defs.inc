@@ -388,6 +388,11 @@ $system_lower = strtolower($system);
 // Function-wide defs.
 if (arg(0) != 'node' && arg(0) != 'devel' && arg(0) != 'admin') {
   $game = check_plain(arg(0));
+
+  // Pretend usl_esa is stlouis for now.
+  if ($game == 'usl_esa') {
+    $game = 'stlouis';
+  }
 }
 $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));

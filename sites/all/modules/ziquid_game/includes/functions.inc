@@ -103,6 +103,32 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 }
 
 /**
+ * Tell the client to play a sound.
+ *
+ * The MP3 must already be built into the client; this call does not support
+ * streaming remote audio.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param string $sound
+ *   The sound file.
+ * @param bool $force
+ *   Force the code to instruct the client to play the sound even if user has
+ *   not opted in.
+ */
+function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
+  //  global $game;
+  //  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  if ($force || !zg_get_value($game_user, 'SoundOff', FALSE)) {
+    drupal_add_js([
+      'zg' => [
+        'sound' => $sound,
+      ],
+    ], 'setting');
+  }
+}
+
+/**
  * Recalc the income and expenses for a user.
  *
  * @param \stdClass $game_user
@@ -1556,7 +1582,6 @@ if (!function_exists('drupal_clean_css_identifier')) {
       '', $identifier);
     return $identifier;
   }
-
 }
 
 // Backported from Drupal 7.
@@ -1571,7 +1596,6 @@ if (!function_exists('drupal_html_class')) {
     }
     return $classes[$class];
   }
-
 }
 
 /**

@@ -362,6 +362,12 @@ function zg_init() {
   global $custom_theme, $conf;
 
   $game = arg(0);
+
+  // Pretend usl_esa is stlouis for now.
+  if ($game == 'usl_esa') {
+    $game = 'stlouis';
+  }
+
   if (in_array($game, zg_get_game_list())) {
 
     define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);

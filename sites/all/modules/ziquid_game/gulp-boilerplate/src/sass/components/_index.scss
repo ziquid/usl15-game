@@ -35,6 +35,7 @@ li {
     font: 0/0 a;
     background-size: contain;
     top: -9px;
+    margin-bottom: -9px;
   }
 
   .experience-text {
@@ -857,7 +858,15 @@ textarea {
 }
 
 .swiper-pagination .swiper-pagination-bullet {
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(48, 188, 0, 0.6);
+}
+
+.swiper-pagination-bullet {
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  opacity: 1;
 }
 
 .swiper-container-horizontal > .swiper-pagination-bullets,
