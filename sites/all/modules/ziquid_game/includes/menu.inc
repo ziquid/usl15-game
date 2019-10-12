@@ -521,6 +521,15 @@ function zg_menu() {
   return $items;
 }
 
+/**
+ * Homepage callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The homepage HTML, or access denied if the player has no access.
+ */
 function zg_homepage_callback($phone_id) {
 
   if (empty($phone_id)) {
