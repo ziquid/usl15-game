@@ -7,6 +7,7 @@
  * Synced with CG: no
  * Synced with 2114: no
  * Ready for phpcbf: no
+ * .
  */
 
 /**
@@ -539,6 +540,15 @@ function zg_homepage_callback($phone_id) {
   return theme('zg_homepage', $phone_id);
 }
 
+/**
+ * User profile callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The user profile page HTML, or access denied if the player has no access.
+ */
 function zg_userprofile_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -548,6 +558,16 @@ function zg_userprofile_callback($phone_id) {
   return theme('zg_userprofile', $phone_id);
 }
 
+/**
+ * User competencies callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The user competencies page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_user_competencies_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -557,6 +577,17 @@ function zg_user_competencies_callback($phone_id) {
   return theme('zg_user_competencies', $phone_id);
 }
 
+/**
+ * Homepage callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan list page HTML, or access denied if the player has no access.
+ */
 function zg_clan_list_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -1090,30 +1121,33 @@ function zg_changelog_callback($phone_id) {
   return theme('zg_changelog', $phone_id);
 }
 
+/**
+ * Implements hook_theme().
+ */
 function zg_theme() {
-  // theme "A" uses template "B" with args "C"
 
+  // Theme "A" uses template "B" with args "C".
   return [
 
     'zg_homepage' => [
       'template' => 'templates/zg_homepage',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_userprofile' => [
       'template' => 'zg_userprofile',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_user_competencies' => [
       'template' => 'zg_user_competencies',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_clan_list' => [
@@ -1121,14 +1155,14 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_clan_list_available' => [
       'template' => 'zg_clan_list_available',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_clan_msg' => [
@@ -1136,7 +1170,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_clan_announcements' => [
@@ -1144,7 +1178,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_block_user_toggle' => [
@@ -1152,7 +1186,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'phone_id_to_block' => NULL,
-      ]
+      ],
     ],
 
     'zg_msg_delete' => [
@@ -1160,14 +1194,14 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'msg_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_party_msg' => [
       'template' => 'zg_party_msg',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_increase_skills' => [
@@ -1175,14 +1209,14 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'skill' => NULL,
-      ]
+      ],
     ],
 
     'zg_quest_groups' => [
       'template' => 'templates/zg_quest_groups',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_quests_do' => [
@@ -1190,35 +1224,35 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'quest_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders' => [
       'template' => 'templates/zg_elders',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_elders_ask_reset' => [
       'template' => 'templates/zg_elders_ask_reset',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_elders_ask_reset_skills' => [
       'template' => 'zg_elders_ask_reset_skills',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_elders_do_reset_skills' => [
       'template' => 'zg_elders_do_reset_skills',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_elders_do_fill' => [
@@ -1226,63 +1260,63 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'fill_type' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_rename' => [
       'template' => 'zg_elders_rename',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_enable_alpha' => [
       'template' => 'templates/zg_elders_enable_alpha',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_set_password' => [
       'template' => 'zg_elders_set_password',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_ask_purchase' => [
       'template' => 'zg_elders_ask_purchase',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elders_do_purchase' => [
       'template' => 'zg_elders_do_purchase',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_check_receipt' => [
       'template' => 'zg_elders_check_receipt',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_google_checkout' => [
       'template' => 'zg_google_checkout',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_welcome' => [
       'template' => 'templates/zg_welcome',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'zg_choose_party' => [
@@ -1290,21 +1324,21 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'party_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_help' => [
       'template' => 'zg_help',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elections_list' => [
       'template' => 'zg_elections_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_elections_challenge' => [
@@ -1312,14 +1346,14 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_debates_list' => [
       'template' => 'zg_debates_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_debates_challenge' => [
@@ -1327,49 +1361,49 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_top20_list' => [
       'template' => 'zg_top20_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_top_aldermen_list' => [
       'template' => 'zg_top_aldermen_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_top_event_points' => [
       'template' => 'zg_top_event_points',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_choose_name' => [
       'template' => 'templates/zg_choose_name',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_enter_referral_code' => [
       'template' => 'zg_enter_referral_code',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_land_list' => [
       'template' => 'templates/zg_land_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_land_buy' => [
@@ -1378,7 +1412,7 @@ function zg_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_land_sell' => [
@@ -1387,7 +1421,7 @@ function zg_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_land_work' => [
@@ -1396,14 +1430,14 @@ function zg_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_staff_list' => [
       'template' => 'templates/zg_staff_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_staff_hire' => [
@@ -1412,7 +1446,7 @@ function zg_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_staff_fire' => [
@@ -1421,14 +1455,14 @@ function zg_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'zg_actions_list' => [
       'template' => 'zg_actions_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_actions_do' => [
@@ -1436,7 +1470,7 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'action_id' => NULL,
-      ]
+      ],
     ],
 
     'zg_equipment_list' => [
