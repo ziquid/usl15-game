@@ -917,6 +917,7 @@ function zg_fetch_user($force = FALSE) {
   if ($game_user->level <= 25) {
     zg_includes_add('new_user', 'other');
   }
+  zg_includes_add('hood_' . $game_user->fkey_neighborhoods_id, 'hood');
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {

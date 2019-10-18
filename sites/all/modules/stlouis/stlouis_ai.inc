@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @file stlouis_ai.inc
- * Stlouis ai
+ * @file
+ * St Louis AI moves
  *
  * Synced with CG: no
  * Synced with 2114: no
+ * .
  */
 
 define('CONSERVE_ACTIONS', 1);
@@ -16,8 +17,8 @@ define('CONSERVE_MONEY', 2);
  */
 function game_move_ai() {
 
-  // turn off AI moves for now.
-  return;
+  // Turn off AI moves for now.
+//  return;
 
   global $game, $ai_output, $bt_skip;
 
@@ -61,7 +62,7 @@ function game_move_ai() {
 
   game_ai_list_all_ais();
 
-  game_ai_do('have num players', 12);
+  game_ai_do('have num players', 8);
   game_ai_do('build');
 //  game_ai_do('build');
 //  game_ai_do('build');

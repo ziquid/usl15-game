@@ -36,6 +36,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Oct 13, 2019
+  </div>
+  <ul>
+    <li>
+      Enabled Media Mafia and United Workers Party.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Sep 15, 2019
   </div>
   <ul>

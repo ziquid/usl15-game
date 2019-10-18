@@ -198,6 +198,7 @@ firep($new_hood, 'new hood');
   }
 
   $game_user = zg_fetch_user();
+  zg_alter('move_to_succeeded', $game_user, $neighborhood_id);
   zg_fetch_header($game_user);
 
   echo '<div class="land-succeeded">' . t('Success!') . '</div>';
