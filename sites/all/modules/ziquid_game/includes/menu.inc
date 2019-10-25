@@ -578,7 +578,7 @@ function zg_user_competencies_callback($phone_id) {
 }
 
 /**
- * Homepage callback function.
+ * Clan list callback function.
  *
  * @param string $phone_id
  *   The phone ID of the player.
@@ -597,6 +597,16 @@ function zg_clan_list_callback($phone_id, $clan_id) {
   return theme('zg_clan_list', $phone_id, $clan_id);
 }
 
+/**
+ * Clan list available callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan list available page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_clan_list_available_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -606,6 +616,17 @@ function zg_clan_list_available_callback($phone_id) {
   return theme('zg_clan_list_available', $phone_id);
 }
 
+/**
+ * Clan msg callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan msg page HTML, or access denied if the player has no access.
+ */
 function zg_clan_msg_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -615,6 +636,17 @@ function zg_clan_msg_callback($phone_id, $clan_id) {
   return theme('zg_clan_msg', $phone_id, $clan_id);
 }
 
+/**
+ * Clan announcements callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan announcements page HTML, or access denied if the player has no access.
+ */
 function zg_clan_announcements_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -624,6 +656,17 @@ function zg_clan_announcements_callback($phone_id, $clan_id) {
   return theme('zg_clan_announcements', $phone_id, $clan_id);
 }
 
+/**
+ * Block user toggle callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $phone_id_to_block
+ *   The phone ID of the player to block.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The block user toggle page HTML, or access denied if the player has no access.
+ */
 function zg_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
   if (empty($phone_id) || empty($phone_id_to_block)) {
@@ -634,6 +677,17 @@ function zg_block_user_toggle_callback($phone_id, $phone_id_to_block) {
     check_plain(filter_xss($phone_id_to_block, [])));
 }
 
+/**
+ * Msg delete callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $msg_id
+ *   The message ID to delete.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The msg delete page HTML, or access denied if the player has no access.
+ */
 function zg_msg_delete_callback($phone_id, $msg_id) {
 
   if (empty($phone_id) || !is_numeric($msg_id)) {
@@ -643,6 +697,16 @@ function zg_msg_delete_callback($phone_id, $msg_id) {
   return theme('zg_msg_delete', $phone_id, $msg_id);
 }
 
+/**
+ * Party msg callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The party msg page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_party_msg_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -652,6 +716,17 @@ function zg_party_msg_callback($phone_id) {
   return theme('zg_party_msg', $phone_id);
 }
 
+/**
+ * Increase skills callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $skill
+ *   The skill to increase.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The increase skills page HTML, or access denied if the player has no access.
+ */
 function zg_increase_skills_callback($phone_id, $skill) {
 
   if (empty($phone_id) || empty($skill)) {
@@ -661,6 +736,16 @@ function zg_increase_skills_callback($phone_id, $skill) {
   return theme('zg_increase_skills', $phone_id, $skill);
 }
 
+/**
+ * Quest groups callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The quest groups page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_quest_groups_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -673,6 +758,17 @@ function zg_quest_groups_callback($phone_id) {
   return theme('zg_quest_groups', $phone_id);
 }
 
+/**
+ * Quests do callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $quest_id
+ *   The quests ID to do.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The quests do page HTML, or access denied if the player has no access.
+ */
 function zg_quests_do_callback($phone_id, $quest_id) {
 
   if (empty($phone_id) || !is_numeric($quest_id)) {
@@ -682,6 +778,16 @@ function zg_quests_do_callback($phone_id, $quest_id) {
   return theme('zg_quests_do', $phone_id, $quest_id);
 }
 
+/**
+ * Elders callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -694,6 +800,16 @@ function zg_elders_callback($phone_id) {
   return theme('zg_elders', $phone_id);
 }
 
+/**
+ * Elders ask reset callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders ask reset page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_ask_reset_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -703,6 +819,16 @@ function zg_elders_ask_reset_callback($phone_id) {
   return theme('zg_elders_ask_reset', $phone_id);
 }
 
+/**
+ * Elders ask reset skills callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders ask reset skills page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_ask_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -712,6 +838,16 @@ function zg_elders_ask_reset_skills_callback($phone_id) {
   return theme('zg_elders_ask_reset_skills', $phone_id);
 }
 
+/**
+ * Elders do reset skills callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders do reset skills page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_do_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -721,6 +857,17 @@ function zg_elders_do_reset_skills_callback($phone_id) {
   return theme('zg_elders_do_reset_skills', $phone_id);
 }
 
+/**
+ * Elders do fill callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $fill_type
+ *   The type to fill.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders do fill page HTML, or access denied if the player has no access.
+ */
 function zg_elders_do_fill_callback($phone_id, $fill_type) {
 
   if (empty($phone_id) || empty($fill_type)) {
@@ -730,6 +877,16 @@ function zg_elders_do_fill_callback($phone_id, $fill_type) {
   return theme('zg_elders_do_fill', $phone_id, $fill_type);
 }
 
+/**
+ * Elders rename callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders rename page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_rename_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -739,6 +896,16 @@ function zg_elders_rename_callback($phone_id) {
   return theme('zg_elders_rename', $phone_id);
 }
 
+/**
+ * Elders enable alpha callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders enable alpha page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_enable_alpha_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -748,6 +915,16 @@ function zg_elders_enable_alpha_callback($phone_id) {
   return theme('zg_elders_enable_alpha', $phone_id);
 }
 
+/**
+ * Elders set password callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders set password page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_set_password_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -757,6 +934,16 @@ function zg_elders_set_password_callback($phone_id) {
   return theme('zg_elders_set_password', $phone_id);
 }
 
+/**
+ * Elders ask purchase callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders ask purchase page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_ask_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -766,6 +953,16 @@ function zg_elders_ask_purchase_callback($phone_id) {
   return theme('zg_elders_ask_purchase', $phone_id);
 }
 
+/**
+ * Elders do purchase callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders do purchase page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_do_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -775,6 +972,16 @@ function zg_elders_do_purchase_callback($phone_id) {
   return theme('zg_elders_do_purchase', $phone_id);
 }
 
+/**
+ * Elders check receipt callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders check receipt page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_check_receipt_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -784,6 +991,16 @@ function zg_elders_check_receipt_callback($phone_id) {
   return theme('zg_elders_check_receipt', $phone_id);
 }
 
+/**
+ * Google checkout callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The google checkout page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_google_checkout_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -793,6 +1010,16 @@ function zg_google_checkout_callback($phone_id) {
   return theme('zg_google_checkout', $phone_id);
 }
 
+/**
+ * Welcome callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The welcome page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_welcome_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -805,6 +1032,17 @@ function zg_welcome_callback($phone_id) {
   return theme('zg_welcome', $phone_id);
 }
 
+/**
+ * Choose party callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $party_id
+ *   The party ID to choose.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The choose party page HTML, or access denied if the player has no access.
+ */
 function zg_choose_party_callback($phone_id, $party_id) {
 
   if (empty($phone_id) || !is_numeric($party_id)) {
@@ -814,6 +1052,16 @@ function zg_choose_party_callback($phone_id, $party_id) {
   return theme('zg_choose_party', $phone_id, $party_id);
 }
 
+/**
+ * Help callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The help page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_help_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -823,6 +1071,16 @@ function zg_help_callback($phone_id) {
   return theme('zg_help', $phone_id);
 }
 
+/**
+ * Debates list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The debates list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_debates_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -832,6 +1090,17 @@ function zg_debates_list_callback($phone_id) {
   return theme('zg_debates_list', $phone_id);
 }
 
+/**
+ * Debates challenge callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $position_id
+ *   The position ID to debate.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The debates challenge page HTML, or access denied if the player has no access.
+ */
 function zg_debates_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -841,6 +1110,16 @@ function zg_debates_challenge_callback($phone_id, $position_id) {
   return theme('zg_debates_challenge', $phone_id, $position_id);
 }
 
+/**
+ * Elections list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elections list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elections_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -850,6 +1129,17 @@ function zg_elections_list_callback($phone_id) {
   return theme('zg_elections_list', $phone_id);
 }
 
+/**
+ * Elections challenge callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $position_id
+ *   The position ID to challenge.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elections challenge page HTML, or access denied if the player has no access.
+ */
 function zg_elections_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -859,6 +1149,16 @@ function zg_elections_challenge_callback($phone_id, $position_id) {
   return theme('zg_elections_challenge', $phone_id, $position_id);
 }
 
+/**
+ * Top20 list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top20 list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_top20_list_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -866,6 +1166,16 @@ function zg_top20_list_callback($phone_id) {
   return theme('zg_top20_list', $phone_id);
 }
 
+/**
+ * Top aldermen list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top aldermen list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_top_aldermen_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -875,6 +1185,16 @@ function zg_top_aldermen_list_callback($phone_id) {
   return theme('zg_top_aldermen_list', $phone_id);
 }
 
+/**
+ * Top event points callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top event points page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_top_event_points_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -884,6 +1204,16 @@ function zg_top_event_points_callback($phone_id) {
   return theme('zg_top_event_points', $phone_id);
 }
 
+/**
+ * Choose name callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The choose name page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_choose_name_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -893,6 +1223,16 @@ function zg_choose_name_callback($phone_id) {
   return theme('zg_choose_name', $phone_id);
 }
 
+/**
+ * Enter referral code callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The enter referral code page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_enter_referral_code_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -902,6 +1242,16 @@ function zg_enter_referral_code_callback($phone_id) {
   return theme('zg_enter_referral_code', $phone_id);
 }
 
+/**
+ * Land list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_land_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -911,6 +1261,19 @@ function zg_land_list_callback($phone_id) {
   return theme('zg_land_list', $phone_id);
 }
 
+/**
+ * Land buy callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   The land ID to buy.
+ * @param string $quantity
+ *   The quantity to buy.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land buy page HTML, or access denied if the player has no access.
+ */
 function zg_land_buy_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -921,6 +1284,19 @@ function zg_land_buy_callback($phone_id, $land_id, $quantity) {
   return theme('zg_land_buy', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Land sell callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   The land ID to sell.
+ * @param string $quantity
+ *   The quantity to sell.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land sell page HTML, or access denied if the player has no access.
+ */
 function zg_land_sell_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -931,6 +1307,19 @@ function zg_land_sell_callback($phone_id, $land_id, $quantity) {
   return theme('zg_land_sell', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Land work callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   The land ID to work.
+ * @param string $quantity
+ *   The quantity to work.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land work page HTML, or access denied if the player has no access.
+ */
 function zg_land_work_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -941,6 +1330,16 @@ function zg_land_work_callback($phone_id, $land_id, $quantity) {
   return theme('zg_land_work', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Staff list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The staff list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_staff_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -950,6 +1349,19 @@ function zg_staff_list_callback($phone_id) {
   return theme('zg_staff_list', $phone_id);
 }
 
+/**
+ * Staff hire callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $staff_id
+ *   The staff ID to hire.
+ * @param string $quantity
+ *   The quantity to hire.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The staff hire page HTML, or access denied if the player has no access.
+ */
 function zg_staff_hire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -960,6 +1372,19 @@ function zg_staff_hire_callback($phone_id, $staff_id, $quantity) {
   return theme('zg_staff_hire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ * Staff fire callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $staff_id
+ *   The staff ID to fire.
+ * @param string $quantity
+ *   The quantity to fire.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The staff fire page HTML, or access denied if the player has no access.
+ */
 function zg_staff_fire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -970,6 +1395,16 @@ function zg_staff_fire_callback($phone_id, $staff_id, $quantity) {
   return theme('zg_staff_fire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ * Actions list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The action list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_actions_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -979,6 +1414,17 @@ function zg_actions_list_callback($phone_id) {
   return theme('zg_actions_list', $phone_id);
 }
 
+/**
+ * Actions do callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $action_id
+ *   The action ID to do.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The actions do page HTML, or access denied if the player has no access.
+ */
 function zg_actions_do_callback($phone_id, $action_id) {
 
   if (empty($phone_id) || !is_numeric($action_id)) {
@@ -988,6 +1434,16 @@ function zg_actions_do_callback($phone_id, $action_id) {
   return theme('zg_actions_do', $phone_id, $action_id);
 }
 
+/**
+ * Equipment list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The equipment list page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_equipment_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -997,6 +1453,19 @@ function zg_equipment_list_callback($phone_id) {
   return theme('zg_equipment_list', $phone_id);
 }
 
+/**
+ * Equipment buy callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $equipment_id
+ *   The equipment ID to buy.
+ * @param string $quantity
+ *   The quantity to buy.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The equipment buy page HTML, or access denied if the player has no access.
+ */
 function zg_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -1007,6 +1476,19 @@ function zg_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
   return theme('zg_equipment_buy', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ * Equipment sell callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $equipment_id
+ *   The equipment ID to sell.
+ * @param string $quantity
+ *   The quantity to sell.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The equipment sell page HTML, or access denied if the player has no access.
+ */
 function zg_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -1017,6 +1499,17 @@ function zg_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
   return theme('zg_equipment_sell', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ * Move callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $neighborhood_id
+ *   The neighborhood ID to move to.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The move page HTML, or access denied if the player has no access.
+ */
 function zg_move_callback($phone_id, $neighborhood_id) {
 
   if (empty($phone_id) || !is_numeric($neighborhood_id)) {
@@ -1025,7 +1518,17 @@ function zg_move_callback($phone_id, $neighborhood_id) {
 
   return theme('zg_move', $phone_id, $neighborhood_id);
 }
-
+/**
+ * Move do callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $neighborhood_id
+ *   The neighborhood ID to do.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The move do page HTML, or access denied if the player has no access.
+ */
 function zg_move_do_callback($phone_id, $neighborhood_id) {
 
   if (empty($phone_id) || !is_numeric($neighborhood_id)) {
@@ -1035,6 +1538,16 @@ function zg_move_do_callback($phone_id, $neighborhood_id) {
   return theme('zg_move_do', $phone_id, $neighborhood_id);
 }
 
+/**
+ * Authenticate callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The authenticate page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_authenticate_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1044,6 +1557,16 @@ function zg_authenticate_callback($phone_id) {
   return theme('zg_authenticate', $phone_id);
 }
 
+/**
+ * Bounce callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The bounce page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_bounce_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1051,6 +1574,16 @@ function zg_bounce_callback($phone_id) {
   return theme('zg_bounce', $phone_id);
 }
 
+/**
+ * Esa bounce callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The esa bounce page HTML, or access denied if the player has no
+ *   access.
+ */
 function usl_esa_bounce_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1067,6 +1600,16 @@ function usl_esa_bounce_callback($phone_id) {
   return theme('usl_esa_bounce', $game, $phone_id, $arg2);
 }
 
+/**
+ * Elders preference callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders preference page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1076,6 +1619,19 @@ function zg_elders_preference_callback($phone_id) {
   return theme('zg_elders_preferences', $phone_id);
 }
 
+/**
+ * Zombie move callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $zombie_id
+ *   The zombie ID to move.
+ * @param string $hood_id
+ *   The hood ID to move to.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The zombie move page HTML, or access denied if the player has no access.
+ */
 function zg_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
 
   if (empty($phone_id) || is_nan($zombie_id) || is_nan($hood_id)) {
@@ -1085,6 +1641,16 @@ function zg_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
   return theme('zg_zombie_move', $phone_id, $zombie_id, $hood_id);
 }
 
+/**
+ * Event info callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The event info page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_event_info_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -1094,6 +1660,16 @@ function zg_event_info_callback($phone_id) {
   return theme('zg_event_info', $phone_id);
 }
 
+/**
+ * Event prizes callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The event prizes page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_event_prizes_callback($phone_id) {
 
   global $user;
@@ -1106,6 +1682,17 @@ function zg_event_prizes_callback($phone_id) {
   return theme('zg_event_prizes', $phone_id);
 }
 
+/**
+ * Error callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $error_code
+ *   The error to show.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The error page HTML, or access denied if the player has no access.
+ */
 function zg_error_callback($phone_id, $error_code) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -1113,6 +1700,16 @@ function zg_error_callback($phone_id, $error_code) {
   return theme('zg_error', $phone_id, $error_code);
 }
 
+/**
+ * Changelog callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The changelog page HTML, or access denied if the player has no
+ *   access.
+ */
 function zg_changelog_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
