@@ -105,7 +105,7 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 /**
  * Tell the client to download and play a sound.
  *
- * @param object $game_user
+ * @param stdClass $game_user
  *   The game user object.
  * @param string $sound
  *   The sound file's URL.
@@ -130,14 +130,14 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
  * recently and plays shorter versions if the longer versions have been played
  * too much recently.
  *
- * @param object $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  * @param string $song
  *   The song name.
  * @param bool $force
  *   Force the game client to play the song even if user has not opted in.
  */
-function zg_song(object $game_user, $song, $force = FALSE) {
+function zg_song(\stdClass $game_user, $song, $force = FALSE) {
   $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() . '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
   zg_sound($game_user, $sound_file, $force);
@@ -146,10 +146,10 @@ function zg_song(object $game_user, $song, $force = FALSE) {
 /**
  * Recalc the income and expenses for a user.
  *
- * @param object $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  */
-function zg_recalc_income(object $game_user) {
+function zg_recalc_income(\stdClass $game_user) {
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
