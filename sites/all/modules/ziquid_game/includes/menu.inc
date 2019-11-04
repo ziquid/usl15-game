@@ -1594,9 +1594,8 @@ function usl_esa_bounce_callback($phone_id) {
   $game = 'stlouis';
   $phone_id = zg_get_phoneid();
   $arg2 = check_plain(arg(2));
-
   $game_user = new \stdClass();
-  zg_sound($game_user, 'In the air tonight teaser', TRUE);
+  zg_song($game_user, 'In the air tonight teaser', TRUE);
   return theme('usl_esa_bounce', $game, $phone_id, $arg2);
 }
 
