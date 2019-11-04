@@ -358,6 +358,15 @@ function stlouis_menu() {
   return $items;
 }
 
+/**
+ * Homepage callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The homepage HTML, or access denied if the player has no access.
+ */
 function stlouis_homepage_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -367,6 +376,15 @@ function stlouis_homepage_callback($phone_id) {
   return theme('stlouis_homepage', $phone_id);
 }
 
+/**
+ * User profile callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The user profile page HTML, or access denied if the player has no access.
+ */
 function stlouis_userprofile_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -377,6 +395,16 @@ function stlouis_userprofile_callback($phone_id) {
 
 }
 
+/**
+ * User competencies callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The user competencies page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_user_competencies_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -386,6 +414,17 @@ function stlouis_user_competencies_callback($phone_id) {
   return theme('stlouis_user_competencies', $phone_id);
 }
 
+/**
+ * Clan list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan list page HTML, or access denied if the player has no access.
+ */
 function stlouis_clan_list_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -396,7 +435,16 @@ function stlouis_clan_list_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ * Clan list available callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan list available page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_clan_list_available_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -407,7 +455,17 @@ function stlouis_clan_list_available_callback($phone_id) {
 
 }
 
-
+/**
+ * Clan msg callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan msg page HTML, or access denied if the player has no access.
+ */
 function stlouis_clan_msg_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -418,7 +476,17 @@ function stlouis_clan_msg_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ * Clan announcements callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $clan_id
+ *   The clan ID to check.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The clan announcements page HTML, or access denied if the player has no access.
+ */
 function stlouis_clan_announcements_callback($phone_id, $clan_id) {
 
   if (empty($phone_id) || !is_numeric($clan_id)) {
@@ -429,7 +497,17 @@ function stlouis_clan_announcements_callback($phone_id, $clan_id) {
 
 }
 
-
+/**
+ * Block user toggle callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $phone_id_to_block
+ *   The phone ID of the player to block.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The block user toggle page HTML, or access denied if the player has no access.
+ */
 function stlouis_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
   if (empty($phone_id) || empty($phone_id_to_block)) {
@@ -441,7 +519,17 @@ function stlouis_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 
 }
 
-
+/**
+ * Message delete callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $msg_id
+ *   The message ID to delete.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The message delete page HTML, or access denied if the player has no access.
+ */
 function stlouis_msg_delete_callback($phone_id, $msg_id) {
 
   if (empty($phone_id) || !is_numeric($msg_id)) {
@@ -450,7 +538,16 @@ function stlouis_msg_delete_callback($phone_id, $msg_id) {
 
   return theme('stlouis_msg_delete', $phone_id, $msg_id);
 }
-
+/**
+ * Party msg callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The party msg page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_party_msg_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -460,6 +557,15 @@ function stlouis_party_msg_callback($phone_id) {
   return theme('stlouis_party_msg', $phone_id);
 }
 
+/**
+ * Quests list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The quests list page HTML, or access denied if the player has no access.
+ */
 function stlouis_quests_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -469,6 +575,16 @@ function stlouis_quests_list_callback($phone_id) {
   return theme('stlouis_quests_list', $phone_id);
 }
 
+/**
+ * Elders ask reset skills callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders ask reset skills page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_ask_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -478,6 +594,16 @@ function stlouis_elders_ask_reset_skills_callback($phone_id) {
   return theme('stlouis_elders_ask_reset_skills', $phone_id);
 }
 
+/**
+ * Elders do reset skills callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders do reset skills page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_do_reset_skills_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -487,6 +613,16 @@ function stlouis_elders_do_reset_skills_callback($phone_id) {
   return theme('stlouis_elders_do_reset_skills', $phone_id);
 }
 
+/**
+ * Elders rename callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders rename page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_rename_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -496,6 +632,16 @@ function stlouis_elders_rename_callback($phone_id) {
   return theme('stlouis_elders_rename', $phone_id);
 }
 
+/**
+ * Elders set password callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders set password page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_set_password_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -505,6 +651,16 @@ function stlouis_elders_set_password_callback($phone_id) {
   return theme('stlouis_elders_set_password', $phone_id);
 }
 
+/**
+ * Elders ask purchase callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders ask purchase page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_ask_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -514,7 +670,16 @@ function stlouis_elders_ask_purchase_callback($phone_id) {
   return theme('stlouis_elders_ask_purchase', $phone_id);
 }
 
-
+/**
+ * Elders do purchase callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders do purchase page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_do_purchase_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -524,7 +689,16 @@ function stlouis_elders_do_purchase_callback($phone_id) {
   return theme('stlouis_elders_do_purchase', $phone_id);
 }
 
-
+/**
+ * Elders check receipt callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders check receipt page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_check_receipt_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -535,7 +709,16 @@ function stlouis_elders_check_receipt_callback($phone_id) {
 
 }
 
-
+/**
+ * Google checkout callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The google checkout page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_google_checkout_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -546,6 +729,16 @@ function stlouis_google_checkout_callback($phone_id) {
 
 }
 
+/**
+ * Help callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The help page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_help_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -556,7 +749,16 @@ function stlouis_help_callback($phone_id) {
 
 }
 
-
+/**
+ * Debates list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The debates list page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_debates_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -567,7 +769,17 @@ function stlouis_debates_list_callback($phone_id) {
 
 }
 
-
+/**
+ * Debates challenge callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $position_id
+ *   
+ *
+ * @return mixed|string|string[]|void|null
+ *   The debates challenge page HTML, or access denied if the player has no access.
+ */
 function stlouis_debates_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -578,7 +790,16 @@ function stlouis_debates_challenge_callback($phone_id, $position_id) {
 
 }
 
-
+/**
+ * Elections list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elections list page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elections_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -589,7 +810,17 @@ function stlouis_elections_list_callback($phone_id) {
 
 }
 
-
+/**
+ * Elections challenge callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $position_id
+ *   
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elections challenge page HTML, or access denied if the player has no access.
+ */
 function stlouis_elections_challenge_callback($phone_id, $position_id) {
 
   if (empty($phone_id) || !is_numeric($position_id)) {
@@ -600,6 +831,16 @@ function stlouis_elections_challenge_callback($phone_id, $position_id) {
 
 }
 
+/**
+ * Top20 list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top20 list page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_top20_list_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -607,6 +848,16 @@ function stlouis_top20_list_callback($phone_id) {
   return theme('stlouis_top20_list', $phone_id);
 }
 
+/**
+ * Top aldermen list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top aldermen list page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_top_aldermen_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -617,7 +868,16 @@ function stlouis_top_aldermen_list_callback($phone_id) {
 
 }
 
-
+/**
+ * Top event points callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The top event points page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_top_event_points_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -628,6 +888,16 @@ function stlouis_top_event_points_callback($phone_id) {
 
 }
 
+/**
+ * Enter referral code callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The enter referral code page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_enter_referral_code_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -638,6 +908,19 @@ function stlouis_enter_referral_code_callback($phone_id) {
 
 }
 
+/**
+ * Land buy callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   
+ * @param string $quantity
+ *   
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land buy page HTML, or access denied if the player has no access.
+ */
 function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -648,6 +931,19 @@ function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_buy', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Land sell callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   The land ID to buy.
+ * @param string $quantity
+ *   The quantity to buy.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land sell page HTML, or access denied if the player has no access.
+ */
 function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -658,6 +954,19 @@ function stlouis_land_sell_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_sell', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Land work callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $land_id
+ *   The land ID to work.
+ * @param string $quantity
+ *   The quantity to work.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The land work page HTML, or access denied if the player has no access.
+ */
 function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -668,6 +977,19 @@ function stlouis_land_work_callback($phone_id, $land_id, $quantity) {
   return theme('stlouis_land_work', $phone_id, $land_id, $quantity);
 }
 
+/**
+ * Staff hire callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $staff_id
+ *   The staff ID to hire.
+ * @param string $quantity
+ *   The quantity to hire.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The staff hire page HTML, or access denied if the player has no access.
+ */
 function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -678,6 +1000,19 @@ function stlouis_staff_hire_callback($phone_id, $staff_id, $quantity) {
   return theme('stlouis_staff_hire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ * Staff fire callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $staff_id
+ *   The staff ID to fire.
+ * @param string $quantity
+ *   The quantity to fire.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The staff fire page HTML, or access denied if the player has no access.
+ */
 function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($staff_id) || !(is_numeric($quantity) ||
@@ -688,6 +1023,16 @@ function stlouis_staff_fire_callback($phone_id, $staff_id, $quantity) {
   return theme('stlouis_staff_fire', $phone_id, $staff_id, $quantity);
 }
 
+/**
+ * Actions list callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The actions list page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_actions_list_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -697,6 +1042,17 @@ function stlouis_actions_list_callback($phone_id) {
   return theme('stlouis_actions_list', $phone_id);
 }
 
+/**
+ * Actions do callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $action_id
+ *   The action Id to do.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The actions do page HTML, or access denied if the player has no access.
+ */
 function stlouis_actions_do_callback($phone_id, $action_id) {
 
   if (empty($phone_id) || !is_numeric($action_id)) {
@@ -706,6 +1062,19 @@ function stlouis_actions_do_callback($phone_id, $action_id) {
   return theme('stlouis_actions_do', $phone_id, $action_id);
 }
 
+/**
+ * Equipment buy callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $equipment_id
+ *   The equipment ID to buy.
+ * @param string $quantity
+ *   The quantity to buy.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The equipment buy page HTML, or access denied if the player has no access.
+ */
 function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -716,6 +1085,19 @@ function stlouis_equipment_buy_callback($phone_id, $equipment_id, $quantity) {
   return theme('stlouis_equipment_buy', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ * Equipment sell callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $equipment_id
+ *   The equipment ID to buy.
+ * @param string $quantity
+ *   The quantity to buy.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The equipment sell page HTML, or access denied if the player has no access.
+ */
 function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($equipment_id) ||
@@ -726,6 +1108,17 @@ function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
   return theme('stlouis_equipment_sell', $phone_id, $equipment_id, $quantity);
 }
 
+/**
+ * Move callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $neighborhood_id
+ *   The neighborhood ID to move to.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The move page HTML, or access denied if the player has no access.
+ */
 function stlouis_move_callback($phone_id, $neighborhood_id) {
 
   if (empty($phone_id) || !is_numeric($neighborhood_id)) {
@@ -735,6 +1128,16 @@ function stlouis_move_callback($phone_id, $neighborhood_id) {
   return theme('stlouis_move', $phone_id, $neighborhood_id);
 }
 
+/**
+ * Bounce 040 callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The bounce 040 page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_bounce_040_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
@@ -742,6 +1145,16 @@ function stlouis_bounce_040_callback($phone_id) {
   return theme('stlouis_bounce_040', $phone_id);
 }
 
+/**
+ * Elders preference callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The elders preference page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_elders_preference_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -752,6 +1165,19 @@ function stlouis_elders_preference_callback($phone_id) {
 
 }
 
+/**
+ * Zombie move callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $zombie_id
+ *   The zombie ID to move.
+ * @param string $hood_id
+ *   The hood ID to move to.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The zombie move page HTML, or access denied if the player has no access.
+ */
 function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
 
   if (empty($phone_id) || is_nan($zombie_id) || is_nan($hood_id)) {
@@ -761,6 +1187,16 @@ function stlouis_zombie_move_callback($phone_id, $zombie_id, $hood_id) {
   return theme('stlouis_zombie_move', $phone_id, $zombie_id, $hood_id);
 }
 
+/**
+ * Event info callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The event info page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_event_info_callback($phone_id) {
 
   if (empty($phone_id)) {
@@ -770,6 +1206,16 @@ function stlouis_event_info_callback($phone_id) {
   return theme('stlouis_event_info', $phone_id);
 }
 
+/**
+ * Event prizes callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The event prizes page HTML, or access denied if the player has no
+ *   access.
+ */
 function stlouis_event_prizes_callback($phone_id) {
 
   global $user;
@@ -782,6 +1228,17 @@ function stlouis_event_prizes_callback($phone_id) {
   return theme('stlouis_event_prizes', $phone_id);
 }
 
+/**
+ * Error callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $error_code
+ *   The error to show.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The error page HTML, or access denied if the player has no access.
+ */
 function stlouis_error_callback($phone_id, $error_code) {
   if (empty($phone_id)) {
     return drupal_access_denied();
