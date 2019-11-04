@@ -18,7 +18,7 @@ define('CONSERVE_MONEY', 2);
 function game_move_ai() {
 
   // Turn off AI moves for now.
-//  return;
+  return;
 
   global $game, $ai_output, $bt_skip;
 
