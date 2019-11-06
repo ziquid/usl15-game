@@ -17,8 +17,8 @@ function stlouis_hood_79_init() {
 /**
  * Implements hook_move_to_succeeded().
  */
-function stlouis_hood_79_move_to_succeeded(\stdClass $game_user, $hood_id) {
-  if ($hood_id == 79) {
-    zg_sound($game_user, 'mr roboto intro', FALSE);
+function stlouis_hood_79_move_to_succeeded(\stdClass $game_user, $old_hood_id, $new_hood_id) {
+  if ($new_hood_id == 79) {
+    zg_song($game_user, 'Mr roboto intro', FALSE);
   }
 }

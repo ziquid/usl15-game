@@ -105,7 +105,7 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 /**
  * Tell the client to download and play a sound.
  *
- * @param stdClass $game_user
+ * @param \stdClass $game_user
  *   The game user object.
  * @param string $sound
  *   The sound file's URL.

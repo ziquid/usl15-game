@@ -33,7 +33,8 @@ if (mt_rand(0, 1) > 0) {
 
 }
 */
-if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
+$current_neighborhood_id = $game_user->fkey_neighborhoods_id;
+if ($neighborhood_id == $current_neighborhood_id &&
   $game_user->meta != 'admin') {
   $fetch_header($game_user);
   echo <<< EOF
@@ -51,7 +52,7 @@ EOF;
 if ($neighborhood_id > 0) {
 
   $sql = 'select * from neighborhoods where id = %d;';
-  $cur_hood = db_query($sql, $game_user->fkey_neighborhoods_id)->fetch_object();
+  $cur_hood = db_query($sql, $current_neighborhood_id)->fetch_object();
 firep($cur_hood, 'current hood');
 
   $sql = 'select * from neighborhoods where id = %d;';
@@ -198,7 +199,7 @@ firep($new_hood, 'new hood');
   }
 
   $game_user = zg_fetch_user();
-  zg_alter('move_to_succeeded', $game_user, $neighborhood_id);
+  zg_alter('move_to_succeeded', $game_user, $current_neighborhood_id, $neighborhood_id);
   zg_fetch_header($game_user);
 
   echo '<div class="land-succeeded">' . t('Success!') . '</div>';
