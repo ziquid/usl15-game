@@ -98,13 +98,13 @@ firep($new_hood, 'new hood');
 
     echo '<div class="land-failed">' . t('Out of Action!') .
       '</div>';
-    echo '<div class="try-an-election-wrapper"><div
+    echo '<div class="zg_button"><div
       class="try-an-election"><a
       href="/' . $game . '/elders_do_fill/' . $arg2 .
       '/action?destination=/' . $game . '/move/' . $arg2 . '/' .
       $neighborhood_id . '">' . t('Refill your Action (1&nbsp;Luck)') .
       '</a></div></div>';
-    echo '<div class="try-an-election-wrapper"><div
+    echo '<div class="zg_button"><div
       class="try-an-election"><a href="/' . $game . '/move/' .
       $arg2 . '/0">' . t('Choose a different @neighborhood',
       array('@neighborhood' => $hood_lower)) .
@@ -229,33 +229,13 @@ EOF;
   $link = 'quest_groups';
   $lqg = zg_fetch_latest_quest_group($game_user);
 
-  echo <<< EOF
-<div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/$link/$arg2#group-{$lqg}">
-    Continue to ${quest}s
-  </a>
-</div>
-</div>
-<div class="try-an-election-wrapper">
-<div class="try-an-election">
-  <a href="/$game/actions/$arg2">
-    Continue to Actions
-  </a>
-</div>
-</div>
-<div class="try-an-election-wrapper">
-  <div class="try-an-election">
-    <a href="/$game/home/$arg2">
-      Go to the home page
-    </a>
-  </div>
-</div>
-EOF;
+  zg_button($link, "Continue to ${quest}s", "#group-{$lqg}", 'big-68');
+  zg_button('actions', 'Continue to Actions', '', 'big-68');
+  zg_button('home', 'Go to the home page', '', 'big-68');
 
   if (zg_get_value($game_user, 'WanderLust', FALSE)) {
     echo <<< EOF
-<div class="try-an-election-wrapper">
+<div class="zg_button">
   <div class="try-an-election">
     <a href="/$game/move/$arg2/0">
       Move Again
@@ -269,7 +249,7 @@ EOF;
   // Cinco De Mayo in Benton Park West.
   if ($event_type == EVENT_CINCO_DE_MAYO && $neighborhood_id == 30) {
     echo <<< EOF
-  <div class="try-an-election-wrapper">
+  <div class="zg_button">
 <div class="try-an-election">
   <a href="/$game/quests/$arg2/1100">
     Go to <i>Los Tacos</i>
