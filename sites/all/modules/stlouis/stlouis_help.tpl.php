@@ -25,7 +25,9 @@ $fetch_header($game_user);
 echo <<< EOF
 <div class="news">
   <button class="active">Help</button>
+  <a href="/$game/privacy/$arg2" class="button">Privacy</a>
   <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
+  <a href="/$game/changelog/$arg2" class="button">Changelog</a>
 </div>
 <div class="help">
 <div class="title">

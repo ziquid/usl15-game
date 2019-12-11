@@ -26,14 +26,25 @@ db_set_active('default');
 
 ?>
 <div class="news">
-<a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
-<a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button active">Changelog</a>
+  <a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
+  <a href="/<?php echo $game; ?>/privacy/<?php echo $arg2; ?>" class="button">Privacy</a>
+  <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
+  <a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button active">Changelog</a>
 </div>
 
 <div class="help">
   <div class="title">
     <?php print $game_name_full; ?> Changelog
   </div>
+
+  <div class="subtitle">
+    Dec 12, 2019
+  </div>
+  <ul>
+    <li>
+      Added Privacy Policy and fixed the Help pages menu.
+    </li>
+  </ul>
 
   <div class="subtitle">
     Oct 13, 2019

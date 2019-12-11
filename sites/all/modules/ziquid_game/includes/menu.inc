@@ -156,6 +156,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/privacy/%'] = [
+      'title' => 'Ziquid Game Privacy Policy',
+      'page callback' => 'zg_privacy_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/quest_groups/%'] = [
       'title' => 'Ziquid Game Quest Groups List',
       'page callback' => 'zg_quest_groups_callback',
@@ -734,6 +742,25 @@ function zg_increase_skills_callback($phone_id, $skill) {
   }
 
   return theme('zg_increase_skills', $phone_id, $skill);
+}
+
+/**
+ * Privacy policy callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The privacy policy page HTML, or access denied if the player has no
+ *   access.
+ */
+function zg_privacy_callback($phone_id) {
+
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return theme('zg_privacy', $phone_id);
 }
 
 /**
@@ -1805,6 +1832,13 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'skill' => NULL,
+      ],
+    ],
+
+    'zg_privacy' => [
+      'template' => 'templates/zg_privacy',
+      'arguments' => [
+        'phone_id' => NULL,
       ],
     ],
 
