@@ -18,7 +18,7 @@ define('CONSERVE_MONEY', 2);
 function game_move_ai() {
 
   // Turn off AI moves for now.
-  return;
+//  return;
 
   global $game, $ai_output, $bt_skip;
 
@@ -33,7 +33,7 @@ function game_move_ai() {
 
   // Nor on local.
   if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083') {
-    return;
+//    return;
   }
 
   // No AI moves if load is too high.
@@ -809,7 +809,7 @@ function game_ai_create_new_player() {
 
   $uri = $base_url . "/$game/home/$id_to_check";
   game_ai_out("phone_id $id_to_check not in use; URI is $uri");
-  // $response = game_ai_web_request($id_to_check, 'home');.
+  $response = game_ai_web_request($id_to_check, 'home');
   game_ai_out($response);
 
   game_ai_out('updating record to make this a ToxiCorp Employee');

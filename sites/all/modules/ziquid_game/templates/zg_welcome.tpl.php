@@ -67,8 +67,9 @@ $d = zg_get_default(
   ]
 );
 
-// Last page?
-if ($page == $d['number_of_welcome_pages']) {
+// Last page or AI bot?
+if ($page == $d['number_of_welcome_pages'] ||
+  substr($phone_id, 0, 3) == 'ai-') {
 
   // Setup user account.
   $sql = 'insert into users set phone_id = "%s", username = "(new player)",
