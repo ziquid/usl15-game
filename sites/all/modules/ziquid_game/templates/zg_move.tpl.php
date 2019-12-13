@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_move.tpl.php
- * Stlouis move
+ * @file zg_move.tpl.php
+ * Game move page.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -13,14 +13,14 @@
  * All db queries in controller: no
  * Minimal function calls in view: no
  * Removal of globals: no
- * Removal of game_defs include: no
+ * Removal of zg_defs include: no
  * .
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
-$fetch_header($game_user);
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+zg_fetch_header($game_user);
 
 $sql = 'select name from neighborhoods where id = %d;';
 $result = db_query($sql, $game_user->fkey_neighborhoods_id);
@@ -32,9 +32,9 @@ if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
 
   echo <<< EOF
 <div class="title">You are already in $location</div>
-<div class="election-continue"><a href="0">Try again</a></div>
 EOF;
 
+  zg_button('move', 'Let me choose again', '/0', 'big-68');
   db_set_active('default');
   return;
 }
@@ -42,7 +42,7 @@ EOF;
 if ($neighborhood_id > 0) {
 
   list($cur_hood, $new_hood, $actions_to_move, $verb) =
-    game_get_actions_to_move($game_user, $game_user->fkey_neighborhoods_id, $neighborhood_id);
+    zg_get_actions_to_move($game_user, $game_user->fkey_neighborhoods_id, $neighborhood_id);
 
   if (($game_user->meta == 'frozen') && ($actions_to_move > 6)) {
 
@@ -51,12 +51,10 @@ if ($neighborhood_id > 0) {
 <div class="subtitle">You have been tagged and cannot move more than
 6 actions at a time</div>
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
-<div class="try-an-election-wrapper"><div
-class="try-an-election"><a href="/$game/home/$arg2">Go to the home page</a></div></div>
-<div class="try-an-election-wrapper"><div
-class="try-an-election"><a href="0">Let me choose again</a></div></div>
 EOF;
 
+    zg_button('home', 'Go to the home page', '', 'big-68');
+    zg_button('move', 'Let me choose again', '/0', 'big-68');
     db_set_active('default');
     return;
   }
@@ -65,13 +63,10 @@ EOF;
 <div class="title">$verb from <span class="nowrap highlight">$cur_hood->name</span>
   to <span class="nowrap highlight">$new_hood->name</span>?</div>
 <div class="subtitle">It will cost $actions_to_move Actions to move</div>
-<div class="try-an-election-wrapper"><div
-class="try-an-election"><a href="/$game/move_do/$arg2/$neighborhood_id">Yes,
-I want to go</a></div></div>
-<div class="try-an-election-wrapper"><div
-class="try-an-election"><a href="0">No, let me choose again</a></div></div>
 EOF;
 
+  zg_button('move_do', 'Yes, I want to go', "/$neighborhood_id", 'big-68');
+  zg_button('move', 'No, let me choose again', '/0', 'big-68');
   db_set_active('default');
   return;
 }
@@ -237,9 +232,9 @@ echo <<< EOF
 </div>
 EOF;
 
-if (game_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
+if (zg_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
   // FIXME: add hood_id to the query.
-  $hood_equip = game_fetch_visible_equip($game_user);
+  $hood_equip = zg_fetch_visible_equip($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -254,12 +249,12 @@ if (game_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
 EOF;
         $title_shown = TRUE;
       }
-      game_show_equip($game_user, $item, $ai_output);
+      zg_show_equip($game_user, $item, $ai_output);
     }
   }
 
   // FIXME: add hood_id to the query.
-  $hood_staff = game_fetch_visible_staff($game_user);
+  $hood_staff = zg_fetch_visible_staff($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -274,11 +269,11 @@ EOF;
 EOF;
         $title_shown = TRUE;
       }
-      game_show_staff($game_user, $item, $ai_output);
+      zg_show_staff($game_user, $item, $ai_output);
     }
   }
 
-  $hood_qgs = game_fetch_visible_quest_groups($game_user);
+  $hood_qgs = zg_fetch_visible_quest_groups($game_user);
   $ai_output = '';
   $title_shown = FALSE;
 
@@ -292,7 +287,7 @@ EOF;
 EOF;
       $title_shown = TRUE;
     }
-    game_show_quest_group($game_user, $item, $ai_output);
+    zg_show_quest_group($game_user, $item, $ai_output);
   }
 }
 
