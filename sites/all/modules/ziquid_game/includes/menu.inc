@@ -148,6 +148,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/move/%/%'] = [
+      'title' => 'Ziquid Game Move',
+      'page callback' => 'zg_move_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/move_do/%/%'] = [
       'title' => 'Ziquid Game Move Do',
       'page callback' => 'zg_move_do_callback',
@@ -475,14 +483,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Equipment Sell',
     'page callback' => 'zg_equipment_sell_callback',
     'page arguments' => [2, 3, 4],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/move/%/%'] = [
-    'title' => 'Ziquid Game Move',
-    'page callback' => 'zg_move_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -1545,6 +1545,7 @@ function zg_move_callback($phone_id, $neighborhood_id) {
 
   return theme('zg_move', $phone_id, $neighborhood_id);
 }
+
 /**
  * Move do callback function.
  *
@@ -2129,7 +2130,7 @@ function zg_theme() {
     ],
 
     'zg_move' => [
-      'template' => 'zg_move',
+      'template' => 'templates/zg_move',
       'arguments' => [
         'phone_id' => NULL,
         'neighborhood_id' => NULL,

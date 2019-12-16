@@ -99,39 +99,46 @@ body.game-stlouis .big button, body.game-stlouis .big .button {
 }
 
 /* line 76, src/sass/components/_button.scss */
+body.game-stlouis .big-68 button, body.game-stlouis .big-68 .button {
+  font-size: 13px !important;
+  padding: 5px 10px 6px;
+  width: 68%;
+}
+
+/* line 82, src/sass/components/_button.scss */
 body.game-stlouis .big-80 button, body.game-stlouis .big-80 .button {
   font-size: 13px !important;
   padding: 5px 10px 6px;
   width: 80%;
 }
 
-/* line 82, src/sass/components/_button.scss */
+/* line 88, src/sass/components/_button.scss */
 body.game-stlouis .highlight button, body.game-stlouis .highlight .button {
   -webkit-box-shadow: inset 0 1px 0 0 #b13;
           box-shadow: inset 0 1px 0 0 #b13;
   border: 1px solid #c14;
 }
 
-/* line 87, src/sass/components/_button.scss */
+/* line 93, src/sass/components/_button.scss */
 body.game-stlouis .halflight button, body.game-stlouis .halflight .button {
   -webkit-box-shadow: inset 0 1px 0 0 #13b;
           box-shadow: inset 0 1px 0 0 #13b;
   border: 1px solid #14c;
 }
 
-/* line 92, src/sass/components/_button.scss */
+/* line 98, src/sass/components/_button.scss */
 body.game-stlouis .button-wrapper {
   text-align: center;
 }
 
-/* line 96, src/sass/components/_button.scss */
+/* line 102, src/sass/components/_button.scss */
 body.game-stlouis .button-wrapper.button-wrapper-do-again,
 body.game-stlouis .button-wrapper.button-wrapper-debate,
 body.game-stlouis .button-wrapper.button-wrapper-view---respond {
   text-align: right;
 }
 
-/* line 102, src/sass/components/_button.scss */
+/* line 108, src/sass/components/_button.scss */
 body.game-stlouis .button.button-debate {
   margin: 26px 3px 0 0;
 }

@@ -299,14 +299,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/move/%/%'] = [
-    'title' => 'St. Louis Move',
-    'page callback' => 'stlouis_move_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/bounce_040/%'] = [
     'title' => 'St. Louis bounce',
     'page callback' => 'stlouis_bounce_040_callback',
@@ -1109,26 +1101,6 @@ function stlouis_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 }
 
 /**
- * Move callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $neighborhood_id
- *   The neighborhood ID to move to.
- *
- * @return mixed|string|string[]|void|null
- *   The move page HTML, or access denied if the player has no access.
- */
-function stlouis_move_callback($phone_id, $neighborhood_id) {
-
-  if (empty($phone_id) || !is_numeric($neighborhood_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_move', $phone_id, $neighborhood_id);
-}
-
-/**
  * Bounce 040 callback function.
  *
  * @param string $phone_id
@@ -1530,14 +1502,6 @@ function stlouis_theme() {
         'equipment_id' => NULL,
         'quantity' => NULL,
       ]
-    ],
-
-    'stlouis_move' => [
-      'template' => 'stlouis_move',
-      'arguments' => [
-        'phone_id' => NULL,
-        'neighborhood_id' => NULL,
-      ],
     ],
 
     'stlouis_bounce_040' => [
