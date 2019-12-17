@@ -37,18 +37,20 @@ $button_extra_link = '?page=' . ($page + 1);
 
 db_set_active('game_' . $game);
 
-// Check to make sure not too many from the same IP address.
-$sql = 'select count(`value`) as count from user_attributes
+// Check to make sure not too many from the same IP address, unless AI bot.
+if (substr($arg2, 0, 3) != 'ai-') {
+  $sql = 'select count(`value`) as count from user_attributes
   where `key` = "last_IP" and `value` = "%s";';
-$result = db_query($sql, $ip_address);
-$item = db_fetch_object($result);
-if ($item->count > 5) {
-  $sql = 'select * from ip_whitelist where ip_address = "%s";';
   $result = db_query($sql, $ip_address);
-  $ips = db_fetch_object($result);
-  if (empty($ips)) {
-    db_set_active('default');
-    drupal_goto($game . '/error/' . $arg2 . '/E-2242');
+  $item = db_fetch_object($result);
+  if ($item->count > 5) {
+    $sql = 'select * from ip_whitelist where ip_address = "%s";';
+    $result = db_query($sql, $ip_address);
+    $ips = db_fetch_object($result);
+    if (empty($ips)) {
+      db_set_active('default');
+      drupal_goto($game . '/error/' . $arg2 . '/E-2242');
+    }
   }
 }
 

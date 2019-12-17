@@ -87,6 +87,8 @@ EOF;
     return;
   }
 
+  // FIXME: what if there is no target?  This entire block of code assumes
+  // that there is a target.
   $sql = 'SELECT username, phone_id, elected_positions.name as ep_name,
     elected_positions.id as ep_id, experience, fkey_neighborhoods_id, luck,
     level from users
@@ -100,6 +102,11 @@ EOF;
 
   $result = db_query($sql, $_GET['target']);
   $target = db_fetch_object($result);
+
+  if (!is_object($target)) {
+    $target = new stdClass();
+  }
+
   $target->id = (int) $_GET['target'];
   firep($target, 'Target of Action');
 
@@ -164,7 +171,7 @@ if ($action_succeeded) {
   if ($action_function == '_stlouis_action_investigate_a_public_official_function') {
     $show_all = '?comp_show_level=curious';
   }
-  else if ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
+  elseif ($action_function == '_stlouis_action_investigate_a_clan_member_function') {
     $show_all = '?comp_show_level=yes';
   }
   else {

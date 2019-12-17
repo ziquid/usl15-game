@@ -1307,6 +1307,11 @@ function game_competency_level(\stdClass $game_user, $id) {
   $result = db_query($sql, $id, $game_user->id);
   $comp = db_fetch_object($result);
 
+  if (!is_object($comp)) {
+    $comp = new stdClass();
+    $comp->use_count = 0;
+  }
+
   $level = 0;
 
   while ($level <= 5) {

@@ -1243,6 +1243,11 @@ function _stlouis_check_authKey($game_user) {
     return;
   }
 
+  // AI users don't have authKeys.
+  if (substr(arg(2), 0, 3) == 'ai-') {
+    return;
+  }
+
   $authKey = '';
 
   if (substr(arg(2), 0, 3) == 'ms=') {
@@ -1602,14 +1607,6 @@ function _stlouis_fetch_user() {
     where phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
-  $game_user->traits = [];
-
-  if (strlen($game_user->meta)) {
-    game_includes_add('user_meta_' . $game_user->meta, 'user_meta');
-  }
-  if ($game_user->level <= 25) {
-    game_includes_add('new_user', 'other');
-  }
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
@@ -1624,6 +1621,17 @@ function _stlouis_fetch_user() {
     db_set_active();
     drupal_goto($game . '/welcome/' . $arg2);
   }
+
+  $game_user->password = trim($game_user->password);
+  $game_user->traits = [];
+
+  if (strlen($game_user->meta)) {
+    game_includes_add('user_meta_' . $game_user->meta, 'user_meta');
+  }
+  if ($game_user->level <= 25) {
+    game_includes_add('new_user', 'other');
+  }
+
 
   // Save the IP address, user agent of user.
   _stlouis_save_user_agent($game_user);

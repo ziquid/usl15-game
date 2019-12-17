@@ -1315,7 +1315,7 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
   $result = db_query($sql, $game_user->id);
   $eq = db_fetch_object($result);
 
-  if ($eq->speed_increase > 0) {
+  if (is_object($eq) && $eq->speed_increase > 0) {
     $verb = $eq->action_verb;
     zg_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
     $actions_to_move -= $eq->speed_increase;
