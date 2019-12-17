@@ -398,7 +398,7 @@ $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
 $fetch_user = 'zg_fetch_user';
 $fetch_header = 'zg_fetch_header';
-$slack_channel = '#uslce-data';
+$slack_channel = '#uslce';
 
 // Add events to include list.
 foreach ($event_type as $event) {

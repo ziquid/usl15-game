@@ -1,11 +1,12 @@
 <?php
 
 /**
- * @file game_defs.inc
- * Stlouis game definitions
+ * @file
+ * Stlouis game definitions.
  *
  * Synced with CG: no
  * Synced with 2114: no
+ * .
  */
 
 define(EVENT_NONE, 0);
@@ -309,3 +310,5 @@ $fetch_header = '_' . $game . '_header';
 if ($event_type !== EVENT_NONE) {
   game_includes_add($event_type, 'event');
 }
+
+$slack_channel = '#uslce';
