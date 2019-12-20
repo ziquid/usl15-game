@@ -14,6 +14,10 @@ li {
   height: 52px;
   background-color: rgba(0, 0, 0, 0.35) !important;
 
+  #money-id {
+    margin-left: 12px;
+  }
+
   .actions-text {
     display: inline-block;
     position: relative;
@@ -45,7 +49,7 @@ li {
     font: 0/0 a;
     background-size: contain;
     top: -2px;
-    right: 2px;
+    right: -11px;
   }
 
   .level {
@@ -67,6 +71,7 @@ li {
 
 .header .experience {
   border-bottom: 1px solid #333833 !important;
+  margin-right: 12px;
 }
 
 .title.loot {
