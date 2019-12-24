@@ -82,7 +82,7 @@ if ($debate == 'Box') {
 
   $sql = 'select quantity from equipment_ownership
     where fkey_equipment_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, 32, $game_user->id);
+  $result = db_query($sql, 79, $game_user->id);
   $item = db_fetch_object($result);
 
   // No boxing gloves!
@@ -93,15 +93,10 @@ if ($debate == 'Box') {
 No boxing gloves?
 </div>
 <div class="subtitle">
-How do you expect to be able to box?
-</div>
-<div class="subtitle">
-<a href="/$game/equipment/$arg2">
-  <img src="/sites/default/files/images/{$game}_continue.png"/>
-</a>
+How can you box without gloves?
 </div>
 EOF;
-
+    game_button('home', 'Go Home Instead');
     db_set_active('default');
     return;
   }

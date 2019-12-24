@@ -1,1 +1,0 @@
-../stlouis/stlouis_welcome.tpl.php

@@ -154,10 +154,9 @@ firep($referral_code);
   }
 }
 
-/*
-if (($today == '2012-12-26') || $game_user->username == 'abc123')
+
+if (($today == '2019-12-26') || $game_user->username == 'abc123')
 $extra_menu = '-boxing';
-*/
 
 $event_text = '';
 
@@ -334,6 +333,8 @@ else {
   $clan_link = "clan_list_available/$arg2";
 }
 
+$debates_class = drupal_html_class($game_text['menu']['debates']) . '-menu';
+
 echo <<< EOF
 <div class="title">
   <img src="/sites/default/files/images/{$game}_title.png">
@@ -426,7 +427,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="debates-menu" href="/$game/debates/$arg2">
+        <a class="$debates_class" href="/$game/debates/$arg2">
           {$game_text['menu']['debates']}
         </a>
       </li>

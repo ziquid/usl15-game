@@ -268,14 +268,12 @@ if ($event_type == EVENT_NEW_NAMES) {
   $game_settings['competencies']['talkative'] = 'cunning linguist';
 }
 
-/*
 // Boxing day.
-if ((date('Y-m-d') == '2012-12-26') || arg(2) == 'abc123') {
+if ((date('Y-m-d') == '2019-12-26') || arg(2) == 'abc123') {
   $debate = 'Box';
   $debate_tab = 'Boxing';
   $top20 = 'Top Boxers';
 }
-*/
 
 $beauty_lower = strtolower($beauty);
 $city_lower = strtolower($city);
