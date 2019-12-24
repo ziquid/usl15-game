@@ -17,7 +17,7 @@
  * .
  */
 
-$version = 'v0.9.5, Dec 12 2019';
+$version = 'v0.9.5, Dec 25 2019';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
