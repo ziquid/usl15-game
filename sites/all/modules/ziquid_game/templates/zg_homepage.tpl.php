@@ -154,9 +154,9 @@ firep($referral_code);
   }
 }
 
-
-if (($today == '2019-12-26') || $game_user->username == 'abc123')
-$extra_menu = '-boxing';
+if (($today == '2019-12-26') || $game_user->username == 'abc123') {
+  $extra_menu = '-boxing';
+}
 
 $event_text = '';
 
