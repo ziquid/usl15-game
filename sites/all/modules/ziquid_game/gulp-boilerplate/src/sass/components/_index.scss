@@ -13,6 +13,7 @@ li {
   width: calc(100% - 4px);
   height: 52px;
   background-color: rgba(0, 0, 0, 0.35) !important;
+  border-radius: 14px 14px 0 0;
 
   #money-id {
     margin-left: 12px;
@@ -42,6 +43,11 @@ li {
     margin-bottom: -9px;
   }
 
+  .experience {
+    border-bottom: 1px solid #333833 !important;
+    margin-right: 12px;
+  }
+
   .experience-text {
     position: relative;
     background: url(../img/influence.png) top right no-repeat;
@@ -67,11 +73,6 @@ li {
     top: 13px;
     right: 2px;
   }
-}
-
-.header .experience {
-  border-bottom: 1px solid #333833 !important;
-  margin-right: 12px;
 }
 
 .title.loot {

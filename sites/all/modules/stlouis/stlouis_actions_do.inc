@@ -140,7 +140,6 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $sql = 'select * from clan_members where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-firep($item);
 
   if (!empty($item)) {
     $outcome_reason = '<div class="land-failed">' .
@@ -152,7 +151,7 @@ firep($item);
 
   if (empty($clan_acronym)) {
 
-    $outcome_reason =<<< EOF
+    $outcome_reason = <<< EOF
 <div class="ask-clan-name">
 <form method=get action="/$game/actions_do/$arg2/$action_id">
   <p>Which clan would you like to join (three letters)?</p>
@@ -169,7 +168,6 @@ EOF;
   $sql = 'select * from clans where acronym = "%s";';
   $result = db_query($sql, $clan_acronym);
   $item = db_fetch_object($result);
-firep($item);
 
   // Clan does not exist.
   if (empty($item)) {
@@ -189,14 +187,33 @@ firep($item);
   $clan_id = $item->id;
   $clan_password = strtolower($item->password);
 
+  // Find clan leader.
   $sql = 'select users.fkey_values_id, users.id from clan_members
     left join clans on clan_members.fkey_clans_id = clans.id
     left join users on clan_members.fkey_users_id = users.id
     where clans.id = %d and clan_members.is_clan_leader = 1;';
   $result = db_query($sql, $clan_id);
   $item = db_fetch_object($result);
-firep($item);
+firep($item, 'party of clan leader');
   $clan_leader_id = $item->id;
+
+  // No clan leader?
+  if (empty($clan_leader_id)) {
+    $outcome_reason = '<div class="land-failed">' .
+      t('No clan leader') .
+      '</div><div class="action-effect">' .
+      t('That clan has no leader') . '</div>';
+    return FALSE;
+  }
+
+  // Find political party.
+  $sql = 'select users.fkey_values_id, users.id from clan_members
+    left join clans on clan_members.fkey_clans_id = clans.id
+    left join users on clan_members.fkey_users_id = users.id
+    where clans.id = %d limit 1;';
+  $result = db_query($sql, $clan_id);
+  $item = db_fetch_object($result);
+  firep($item, 'party of clan');
 
   // Different political party?
   if ($item->fkey_values_id != $game_user->fkey_values_id) {
@@ -2523,7 +2540,7 @@ function _stlouis_action_check_st_louis_time_function(&$outcome_reason,
   $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', $game) . '/game_defs.inc' ;
-  
+
   // One hour ago, since we are ET.
   $st_time = date('g:i:s A', REQUEST_TIME - 3600);
   $outcome_reason .= '<div class="title">Current Time in St. Louis</div>
