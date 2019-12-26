@@ -258,11 +258,15 @@ if ($won) {
 
   // Boxing day? Add boxing stats.
   if ($debate == 'Box') {
+
+    // You get one boxing point for initiating the challenge.
+    $boxing_points = $money_change + 1;
+
     $sql = 'update users set meta_int = meta_int + %d where id = %d;';
-    $result = db_query($sql, $money_change, $game_user->id);
-    $sql = 'update users set meta_int = meta_int - %d where id = %d;';
+    $result = db_query($sql, $boxing_points, $game_user->id);
+    $sql = 'update users set meta_int = meta_int - %d + 1 where id = %d;';
     $result = db_query($sql, $money_change, $item->id);
-    $gain_extra = ' and Boxing Points<br/>';
+    $gain_extra = ' and ' . $boxing_points . ' Boxing Points<br/>';
   }
   else {
     $gain_extra = '';
@@ -582,17 +586,17 @@ else {
   // Boxing day?  Add boxing stats.
   if ($debate == 'Box') {
 
+    // You lose one less boxing point for initiating the challenge.
+    $boxing_points = $money_change - 1;
+
     $sql = 'update users set meta_int = meta_int - %d where id = %d;';
-    $result = db_query($sql, $money_change, $game_user->id);
+    $result = db_query($sql, $boxing_points, $game_user->id);
     $sql = 'update users set meta_int = meta_int + %d where id = %d;';
     $result = db_query($sql, $money_change, $item->id);
-    $gain_extra = ' and Boxing Points<br/>';
-
+    $gain_extra = ' and ' . $boxing_points . ' Boxing Points<br/>';
   }
   else {
-
     $gain_extra = '';
-
   }
 
   // Start the actions clock if needed.
@@ -607,13 +611,11 @@ else {
   $game_user = $fetch_user();
 
   if ($event_type == EVENT_DEBATE) {
-
     $bump = '_' . $game . '_bump_event_tags_con';
     $reset = '_' . $game . '_reset_event_tags_con';
     $row = $reset($game_user->id);
     $bump($item->id);
     firep($row);
-
   }
 
   $fetch_header($game_user);
