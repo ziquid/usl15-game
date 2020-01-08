@@ -302,3 +302,6 @@ $last_group = $item->ep_group;
 }
 
 db_set_active('default');
+
+?>
+</div>
