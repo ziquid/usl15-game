@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_elders_do_purchase.tpl.php
+ * @file
  * Stlouis elders do purchase.
  *
  * Synced with CG: yes

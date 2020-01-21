@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_elders_ask_purchase.tpl.php
- * Stlouis elders ask purchase
+ * @file
+ * Stlouis elders ask purchase.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -17,11 +17,11 @@
  * .
  */
 
-  global $game, $phone_id;
+global $game, $phone_id;
 
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
+include drupal_get_path('module', $game) . '/game_defs.inc';
+$game_user = $fetch_user();
+$fetch_header($game_user);
 
 /*  if ($game == 'stlouis') {
 
@@ -67,35 +67,30 @@ EOF;
 //    return;
 //  }
 
-  if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
+if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
 
-    echo <<< EOF
-
-  <div class="elders-menu big">
-    <div class="menu-option"><a
-      href="javascript:qnx.callExtensionMethod('buy_luck_10');">Buy
-      10 Luck (US $1.99)</a></div>
-    <div class="menu-option"><a
-      href="javascript:qnx.callExtensionMethod('buy_luck_35');">Buy
-      35 Luck (US $5.99)</a></div>
-    <div class="menu-option"><a
-       href="javascript:qnx.callExtensionMethod('buy_luck_120');">Buy
-      120 Luck (US $19.99)</a></div>
-  </div>
-
+  echo <<< EOF
+<div class="elders-menu big">
+  <div class="menu-option"><a
+    href="javascript:qnx.callExtensionMethod('buy_luck_10');">Buy
+    10 Luck (US $1.99)</a></div>
+  <div class="menu-option"><a
+    href="javascript:qnx.callExtensionMethod('buy_luck_35');">Buy
+    35 Luck (US $5.99)</a></div>
+  <div class="menu-option"><a
+     href="javascript:qnx.callExtensionMethod('buy_luck_120');">Buy
+    120 Luck (US $19.99)</a></div>
+</div>
 EOF;
 
-    db_set_active('default');
+  db_set_active('default');
+  return;
+}
 
-    return;
+// Nook color - no in app purchases!
+if (substr(arg(2), 0, 4) == 'nkc ') {
 
-  }
-
-  // Nook color - no in app purchases!
-  if (substr(arg(2), 0, 4) == 'nkc ') {
-
-    echo <<< EOF
-
+  echo <<< EOF
 <div class="title">
 Sorry!
 </div>
@@ -122,25 +117,23 @@ Purchase 320 $luck for US $49.99
 </div>
 
 <div class="subtitle">
-  <a href="/$game/elders/$phone_id">
-    <img src="/sites/default/files/images/{$game}_continue.png"/>
-  </a>
+<a href="/$game/elders/$phone_id">
+  <img src="/sites/default/files/images/{$game}_continue.png"/>
+</a>
 </div>
 EOF;
 
-    db_set_active('default');
+  db_set_active('default');
+  return;
+}
 
-    return;
+if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') !== FALSE) {
 
-  }
+  // Support for Google IAPs.
+  if (stripos($_SERVER['HTTP_USER_AGENT'], 'PlayBook') !== FALSE) {
 
-  if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') !== FALSE) {
-
-    // Support for Google IAPs.
-    if (stripos($_SERVER['HTTP_USER_AGENT'], 'PlayBook') !== FALSE) {
-
-      // BlackBerry with Android emulation.
-      echo <<< EOF
+    // BlackBerry with Android emulation.
+    echo <<< EOF
 <div class="title">Purchase through BlackBerry Commerce</div>
 <div class="elders-menu big">
   <div class="menu-option">
@@ -161,11 +154,11 @@ or purchase through PayPal
 </div>
 EOF;
 
-    }
-    else {
+  }
+  else {
 
-      // *Real* Android with GoogleIAP.
-      echo <<< EOF
+    // *Real* Android with GoogleIAP.
+    echo <<< EOF
 <div class="title">Purchase through Google Checkout</div>
 <div class="elders-menu big">
   <div class="menu-option">
@@ -187,15 +180,15 @@ or purchase through PayPal
 </div>
 EOF;
 
-    }
-
   }
+
+}
 
 // Win8/RT IAPs
 
-  if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSAppHost') !== FALSE) {
+if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSAppHost') !== FALSE) {
 
-    echo <<< EOF
+  echo <<< EOF
 <div class="title">
   Purchase 10 $luck for US $1.99
 </div>
@@ -240,15 +233,14 @@ EOF;
 </div>
 EOF;
 
-    db_set_active('default');
-    return;
+  db_set_active('default');
+  return;
+}
 
-  }
 
+$nonce = date('Y-m-d-H-i-s-') . mt_rand();
 
-  $nonce = date('Y-m-d-H-i-s-') . mt_rand();
-
-  echo <<< EOF
+echo <<< EOF
 <div class="title">
 Purchase 10 $luck for US $1.99
 </div>
@@ -404,10 +396,10 @@ Purchase 4500 $luck for US $499.99
 </div>
 EOF;
 
-  // 2000 luck for kenny.
-  if (ip_address() == '72.177.116.233') {
+// 2000 luck for kenny.
+if (ip_address() == '72.177.116.233') {
 
-    echo <<< EOF
+  echo <<< EOF
 <div class="title">
 Purchase 2000 $luck for US $250
 </div>
@@ -431,7 +423,7 @@ Purchase 2000 $luck for US $250
 </div>
 EOF;
 
-  }
+}
 
 /*
   if (stripos($_SERVER['HTTP_USER_AGENT'], 'GoogleIAP') === FALSE) {
@@ -470,4 +462,4 @@ EOF;
 
   }
 */
-  db_set_active('default');
+db_set_active('default');
