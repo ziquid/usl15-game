@@ -19,6 +19,11 @@
 
 global $game, $phone_id;
 
+// Don't go through fetch_user(); set these here.
+$game = check_plain(arg(0));
+$phone_id = zg_get_phoneid();
+$arg2 = check_plain(arg(2));
+
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 db_set_active('default');
 
