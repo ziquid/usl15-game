@@ -339,14 +339,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/error/%/%'] = [
-    'title' => 'St. Louis Error Page',
-    'page callback' => 'stlouis_error_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   return $items;
 }
 
@@ -767,7 +759,7 @@ function stlouis_debates_list_callback($phone_id) {
  * @param string $phone_id
  *   The phone ID of the player.
  * @param string $position_id
- *   
+ *
  *
  * @return mixed|string|string[]|void|null
  *   The debates challenge page HTML, or access denied if the player has no access.
@@ -808,7 +800,7 @@ function stlouis_elections_list_callback($phone_id) {
  * @param string $phone_id
  *   The phone ID of the player.
  * @param string $position_id
- *   
+ *
  *
  * @return mixed|string|string[]|void|null
  *   The elections challenge page HTML, or access denied if the player has no access.
@@ -906,9 +898,9 @@ function stlouis_enter_referral_code_callback($phone_id) {
  * @param string $phone_id
  *   The phone ID of the player.
  * @param string $land_id
- *   
+ *
  * @param string $quantity
- *   
+ *
  *
  * @return mixed|string|string[]|void|null
  *   The land buy page HTML, or access denied if the player has no access.
@@ -1201,26 +1193,11 @@ function stlouis_event_prizes_callback($phone_id) {
 }
 
 /**
- * Error callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $error_code
- *   The error to show.
- *
- * @return mixed|string|string[]|void|null
- *   The error page HTML, or access denied if the player has no access.
+ * Implements hook_theme().
  */
-function stlouis_error_callback($phone_id, $error_code) {
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-  return theme('stlouis_error', $phone_id, $error_code);
-}
-
 function stlouis_theme() {
-  // theme "A" uses template "B" with args "C"
 
+  // Theme "A" uses template "B" with args "C".
   return [
 
     'stlouis_userprofile' => [
@@ -1483,7 +1460,7 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'action_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_equipment_buy' => [
@@ -1492,7 +1469,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_equipment_sell' => [
@@ -1501,7 +1478,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'equipment_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_bounce_040' => [
@@ -1538,14 +1515,6 @@ function stlouis_theme() {
       'template' => 'stlouis_event_prizes',
       'arguments' => [
         'phone_id' => NULL,
-      ],
-    ],
-
-    'stlouis_error' => [
-      'template' => 'stlouis_error',
-      'arguments' => [
-        'phone_id' => NULL,
-        'error_code' => NULL,
       ],
     ],
 

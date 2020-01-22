@@ -19,8 +19,7 @@
 
 global $game, $phone_id;
 
-include drupal_get_path('module', arg(0)) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 db_set_active('default');
 
 echo <<< EOF

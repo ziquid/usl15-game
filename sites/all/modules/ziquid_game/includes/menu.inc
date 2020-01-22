@@ -124,6 +124,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/error/%/%'] = [
+      'title' => 'Ziquid Game Error Page',
+      'page callback' => 'zg_error_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/home/%'] = [
       'title' => 'Ziquid Game Home Page',
       'page callback' => 'zg_homepage_callback',
@@ -519,13 +527,6 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items[$game . '/error/%/%'] = [
-    'title' => 'Ziquid Game Error Page',
-    'page callback' => 'zg_error_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
   */
   return $items;
 }
@@ -2213,7 +2214,7 @@ function zg_theme() {
     ],
 
     'zg_error' => [
-      'template' => 'zg_error',
+      'template' => 'templates/zg_error',
       'arguments' => [
         'phone_id' => NULL,
         'error_code' => NULL,
