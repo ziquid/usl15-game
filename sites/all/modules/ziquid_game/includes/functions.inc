@@ -1556,6 +1556,7 @@ function zg_get_default($key) {
 
 // Backported from Drupal 7.
 if (!function_exists('drupal_clean_css_identifier')) {
+
   function drupal_clean_css_identifier($identifier, $filter = [
     ' ' => '-',
     '_' => '-',
@@ -1597,10 +1598,12 @@ if (!function_exists('drupal_clean_css_identifier')) {
       '', $identifier);
     return $identifier;
   }
+
 }
 
 // Backported from Drupal 7.
 if (!function_exists('drupal_html_class')) {
+
   function drupal_html_class($class) {
 
     // The output of this function will never change, so this uses a normal
@@ -1611,6 +1614,7 @@ if (!function_exists('drupal_html_class')) {
     }
     return $classes[$class];
   }
+
 }
 
 /**

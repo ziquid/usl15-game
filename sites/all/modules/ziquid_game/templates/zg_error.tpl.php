@@ -27,8 +27,11 @@ $phone_id = zg_get_phoneid();
 $arg2 = check_plain(arg(2));
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-slack_send_message('Error ' . $error_code . ' for phone ID '
-  . $phone_id, $slack_channel);
+
+$d = zg_get_html('tagline');
+
+zg_slack('error', 'Error ' . $error_code . ' for phone ID '
+  . $phone_id);
 db_set_active();
 
 /* ------ VIEW ------ */
