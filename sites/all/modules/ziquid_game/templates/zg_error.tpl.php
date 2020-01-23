@@ -7,7 +7,7 @@
  * Synced with CG: yes
  * Synced with 2114: N/A
  * Ready for phpcbf: done
- * Ready for MVC separation: yes
+ * Ready for MVC separation: done
  * Controller moved to callback include: no
  * View only in theme template: no
  * All db queries in controller: no
@@ -19,32 +19,38 @@
 
 global $game, $phone_id;
 
+/* ------ CONTROLLER ------ */
+
 // Don't go through fetch_user(); set these here.
 $game = check_plain(arg(0));
 $phone_id = zg_get_phoneid();
 $arg2 = check_plain(arg(2));
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-db_set_active('default');
-
-echo <<< EOF
-  <div class="title">
-    <img src="/sites/default/files/images/{$game}_title.png"/>
-  </div>
-  <p>&nbsp;</p>
-  <div class="welcome">
-   <div class="wise_old_man_large">
-
-  </div>
-  <p>And it came to pass that</p>
-  <p class="second">Error <strong>{$error_code}</strong></p>
-  <p class="second">happened for user</p>
-  <p class="second"><strong>{$phone_id}</strong>.</p>
-  <p class="second">Please report this to
-    <strong>zipport@ziquid.com</strong>.
-  </p>
-  </div>
-EOF;
-
 slack_send_message('Error ' . $error_code . ' for phone ID '
-. $phone_id, $slack_channel);
+  . $phone_id, $slack_channel);
+db_set_active();
+
+/* ------ VIEW ------ */
+?>
+
+<div class="title">
+  <img src="/sites/default/files/images/<?php print $game; ?>_title.png">
+</div>
+<div class="tagline">
+  <?php print $d['tagline']; ?>
+</div>
+
+<div class="speech-bubble-wrapper background-color">
+  <div class="wise_old_man embarrassed">
+  </div>
+  <div class="speech-bubble">
+    <p>D'oh!</p>
+    <p>Error <strong><?php print $error_code; ?></strong></p>
+    <p>happened for user</p>
+    <p><strong><?php print $phone_id; ?></strong></p>
+    <p>If you message us at <strong>zipport@ziquid.com</strong>,
+      we will do what we can to help you.
+    </p>
+  </div>
+</div>
