@@ -23,13 +23,14 @@ global $game, $phone_id;
 
 // Don't go through fetch_user(); set these here.
 $game = check_plain(arg(0));
+db_set_active('game_' . $game);
 $phone_id = zg_get_phoneid();
 $arg2 = check_plain(arg(2));
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-$d = zg_get_html('tagline');
-
+$d = zg_get_html(['tagline']);
+firep($d);
 zg_slack('error', 'Error ' . $error_code . ' for phone ID '
   . $phone_id);
 db_set_active();
@@ -43,6 +44,8 @@ db_set_active();
 <div class="tagline">
   <?php print $d['tagline']; ?>
 </div>
+
+<br>
 
 <div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man embarrassed">
