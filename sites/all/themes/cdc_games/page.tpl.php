@@ -20,7 +20,7 @@
 </div>
 <?php print $closure ?>
 <div id="copyright">
-  Copyright &copy; 2017-2019 Ziquid Design Studio, LLC.
+  Copyright &copy; 2017-2020 Ziquid Design Studio, LLC.
 <br><br>&nbsp;
 </div>
 </body>
