@@ -346,6 +346,17 @@ p:first-of-type {
   margin-right: 12px;
 }
 
+.wise_old_man.embarrassed {
+  background-image: url('/sites/default/files/images/stlouis_wise_old_man_sad2.png');
+  background-repeat: no-repeat;
+  background-position: 0 0;
+  width: 54px;
+  height: 72px;
+  float: left;
+  background-size: contain;
+  margin-right: 12px;
+}
+
 .wise_old_man.happy {
   background-image: url('/sites/default/files/images/stlouis_wise_old_man_happy.png');
   background-repeat: no-repeat;
@@ -1127,6 +1138,11 @@ div.speech-bubble-wrapper .wise_old_man {
 
 div.speech-bubble-wrapper .wise_old_man.sad {
   background-position: 0 9px;
+  height: 80px;
+}
+
+div.speech-bubble-wrapper .wise_old_man.embarrassed {
+  background-position: 0 18px;
   height: 80px;
 }
 
