@@ -117,10 +117,7 @@ if ($game_user->level >= 6) {
       "Refill your Energy (1&nbsp;$luck)",
       '/energy',
       'big-80 slide-in-content');
-    $menus[] = zg_render_button('elders_do_fill',
-      "Receive $offer $game_user->values (1&nbsp;$luck)",
-      '/money',
-      'big-80 slide-in-content');
+    $menus[] = zg_luck_money_render_button($game_user);
   }
   else {
     $menus[] = zg_render_button('',

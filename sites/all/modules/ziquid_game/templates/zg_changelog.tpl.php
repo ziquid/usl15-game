@@ -38,6 +38,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Jan 29, 2020
+  </div>
+  <ul>
+    <li>
+      Added more music, 20% more money for Luck
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Dec 25, 2019
   </div>
   <ul>

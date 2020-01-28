@@ -1084,9 +1084,11 @@ span.not-yet-overlay {
 
 .highlight {
   color: #f0fef8 !important;
-  -webkit-text-stroke: 0.4px rgba(104, 28, 20, 0.8);
+  -webkit-text-stroke: 0.4px #cc0;
   -webkit-text-fill-color: #f0fef8;
   font-weight: bold;
+  font-size: 120%;
+  text-shadow: #0004 2px 2px;
 }
 
 .tagline {

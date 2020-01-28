@@ -1,8 +1,7 @@
 <?php
 
 /**
- * @file event_memorial_day_1.inc
- *
+ * @file
  * Memorial Day event, Day 1.
  */
 
@@ -12,7 +11,7 @@
 function game_event_memorial_day_1_init() {
 }
 
-// HOOKS
+/* HOOKS */
 
 function game_event_memorial_day_1_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '

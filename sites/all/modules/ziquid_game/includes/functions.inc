@@ -1114,6 +1114,50 @@ function zg_remove_value(\stdClass $game_user, $key) {
 }
 
 /**
+ * Return the normal amount of money the game offers for one Luck.
+ *
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return int
+ *   The offer.
+ */
+function zg_normal_luck_money_offer(\stdClass $game_user) {
+  $offer = ($game_user->income - $game_user->expenses) * 5;
+  $offer = min($offer, $game_user->level * 1000);
+  $offer = max($offer, $game_user->level * 100);
+  return $offer;
+}
+
+/**
+ * Render a button allowing purchase of money for one Luck.
+ *
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return string
+ *   The button, as a string of HTML.
+ */
+function zg_luck_money_render_button(\stdClass $game_user) {
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+
+  $normal_offer = zg_normal_luck_money_offer($game_user);
+  $offer = zg_luck_money_offer($game_user);
+
+  if ($offer == $normal_offer) {
+    $type = "Receive $offer $game_user->values (1&nbsp;$luck)";
+  }
+  else {
+    $type = "Receive <span class='highlight'>$offer</span> $game_user->values (1&nbsp;$luck)";
+  }
+  return zg_render_button('elders_do_fill',
+    $type,
+    '/money',
+    'big-80 slide-in-content');
+}
+
+/**
  * Return the amount of money the game offers for one Luck.
  *
  * @param \stdClass $game_user
@@ -1126,13 +1170,14 @@ function zg_luck_money_offer(\stdClass $game_user) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  $offer = ($game_user->income - $game_user->expenses) * 5;
-  $offer = min($offer, $game_user->level * 1000);
-  $offer = max($offer, $game_user->level * 100);
+  $offer = zg_normal_luck_money_offer($game_user);
 
   if ($event_type == EVENT_DOUBLE_LUCK_MONEY) {
     $offer *= 2;
   }
+
+  $comment = '';
+  zg_alter('luck_money_offer', $game_user, $offer, $comment);
 
   return $offer;
 }

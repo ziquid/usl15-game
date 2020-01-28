@@ -17,7 +17,7 @@
  * .
  */
 
-$version = 'v0.9.5, Dec 25 2019';
+$version = 'v0.9.5, Jan 29 2020';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -154,7 +154,7 @@ firep($referral_code);
   }
 }
 
-if (($today == '2019-12-26') || $game_user->username == 'abc123') {
+if (($today == '2019-12-26')) {
   $extra_menu = '-boxing';
 }
 

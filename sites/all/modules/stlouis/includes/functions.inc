@@ -1765,18 +1765,7 @@ function game_remove_value($game_user, $key) {
  *   The offer.
  */
 function game_luck_money_offer($game_user) {
-  global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
-
-  $offer = ($game_user->income - $game_user->expenses) * 5;
-  $offer = min($offer, $game_user->level * 1000);
-  $offer = max($offer, $game_user->level * 100);
-
-  if ($event_type == EVENT_DOUBLE_LUCK_MONEY) {
-    $offer *= 2;
-  }
-
-  return $offer;
+  return zg_luck_money_offer($game_user);
 }
 
 /**

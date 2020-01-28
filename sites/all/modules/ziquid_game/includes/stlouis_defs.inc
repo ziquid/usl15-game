@@ -70,6 +70,14 @@ switch ($today) {
     $event_type[] = EVENT_CHRISTMAS;
     break;
 
+  case '2020-01-28':
+    $event_type[] = 'event_jan_28_2020';
+    break;
+
+  case '2020-01-29':
+    $event_type[] = 'event_jan_29_2020';
+    break;
+
   /* ------ MARCH ------ */
   case '2013-03-08':
     $event_type = EVENT_DEBATE;
@@ -357,7 +365,7 @@ if ($event_type == EVENT_NEW_NAMES) {
 }
 
 // Boxing day.
-if ((date('Y-m-d') == '2019-12-26') || arg(2) == 'abc123') {
+if ((date('Y-m-d') == '2019-12-26')) {
   $debate = 'Box';
   $debate_tab = 'Boxing';
   $top20 = 'Top Boxers';
