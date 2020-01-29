@@ -41,7 +41,7 @@ function stlouis_event_jan_28_2020_luck_money_offer($game_user, &$offer, &$comme
 /**
  * Implements hook_cron().
  */
-function stlouis_event_jan_28_2020_cron($game_user) {
+function game_event_jan_28_2020_cron($game_user) {
 
   // People are getting sick!
   $sql = 'update `users` set meta_int = meta_int + 1 where meta = "" AND level > 10 order by RAND() limit 5;';
