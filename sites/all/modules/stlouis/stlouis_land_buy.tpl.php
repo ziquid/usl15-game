@@ -123,7 +123,7 @@ if ($options['land-buy-succeeded'] == 'buy-success') {
     );';
     db_query($sql, $game_user->id);
 
-    $game_land->quantity = '';
+    $game_land->quantity = 0;
   }
 
   // Investment?  Add competency.
@@ -136,7 +136,7 @@ else {
   $quantity = 0;
 }
 
-$game_land->quantity += $quantity;
+$game_land->quantity = $game_land->quantity + $quantity;
 $data = game_fetch_visible_land($game_user);
 $next = game_fetch_next_land($game_user);
 
