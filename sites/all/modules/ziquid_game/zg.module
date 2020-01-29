@@ -24,14 +24,14 @@ function zg_cron() {
   define('REQUEST_TIME', time());
   foreach (zg_get_game_list() as $game) {
 
-    // Module has its own cron?  Skip it.
+    db_set_active('game_' . $game);
+    include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+
+    // Module has its own cron?  Skip this cron, except for hook_cron().
     if (function_exists($cron = $game . '_cron')) {
       zg_alter('cron', NULL);
       continue;
     }
-
-    db_set_active('game_' . $game);
-    include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
     // AI moves.
     // include drupal_get_path('module', 'zg') . '/' . $game . '_ai.inc';
