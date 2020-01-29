@@ -22,6 +22,7 @@ function stlouis_hood_36_move_to_succeeded(\stdClass $game_user, $old_hood_id, $
     'Basket Case',
     'Boulevard of Broken Dreams',
     'Holiday',
+    'When September Ends',
   ];
 
   if ($new_hood_id == 36) {
