@@ -19,6 +19,7 @@ function stlouis_hood_36_init() {
  */
 function stlouis_hood_36_move_to_succeeded(\stdClass $game_user, $old_hood_id, $new_hood_id) {
   static $songs = [
+    '21 Guns',
     'Basket Case',
     'Boulevard of Broken Dreams',
     'Holiday',
