@@ -35,7 +35,7 @@ function stlouis_event_groundhog_day_homepage_event_notice(\stdClass $game_user,
     Groundhog Day Missions
   </div>
   <div class="event-text">
-    Misisons End Monday at 11:59 PM
+    Missions End Monday at 11:59 PM
   </div>
 </div>';
       break;
