@@ -24,7 +24,7 @@ define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
 
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
 define(EVENT_FLAG_DAY, 'event_flag_day');
-
+define(EVENT_GROUNDHOG_DAY, 'event_groundhog_day');
 define(EVENT_HALLOWEEN, 'event_halloween');
 
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
@@ -76,6 +76,13 @@ switch ($today) {
 
   case '2020-01-29':
     $event_type[] = 'event_jan_29_2020';
+    break;
+
+  /* ------ FEBRUARY ------ */
+  case '2020-02-01':
+  case '2020-02-02':
+  case '2020-02-03':
+    $event_type[] = EVENT_GROUNDHOG_DAY;
     break;
 
   /* ------ MARCH ------ */
