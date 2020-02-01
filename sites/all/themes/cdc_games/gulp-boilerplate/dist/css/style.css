@@ -1,7 +1,7 @@
 /*!
  * project-name v0.0.1
  * A description for your project.
- * (c) 2019 YOUR NAME
+ * (c) 2020 YOUR NAME
  * MIT License
  * http://link-to-your-git-repo.com
  */
@@ -1173,13 +1173,13 @@ a.try-an-election, input.try-an-election {
 /* line 1034, src/sass/style.scss */
 .event a {
   display: block;
-  padding: 4px;
+  padding: 4px 8px;
   font-size: 18px;
   font-weight: bold;
   background-color: #cc0;
   border-radius: 50px;
   margin: 10px auto 0;
-  width: 156px;
+  width: 160px;
   text-decoration: none;
 }
 

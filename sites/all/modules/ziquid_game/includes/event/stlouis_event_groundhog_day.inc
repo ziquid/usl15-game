@@ -32,7 +32,7 @@ function stlouis_event_groundhog_day_homepage_event_notice(\stdClass $game_user,
     ~ This Weekend ~
   </div>
   <div class="event-tagline">
-    Groundhog Day Missions
+    <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1016">Groundhog Day Missions</a>
   </div>
   <div class="event-text">
     Missions End Monday at 11:59 PM
