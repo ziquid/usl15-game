@@ -167,16 +167,13 @@ if ($game_user->actions < $item->energy_bonus) {
 
   zg_fetch_header($game_user);
 
-  echo <<< EOF
-<div class="title">$title</div>
-EOF;
-
+  echo '<div class="title">' . $title . '</div>';
   echo '<div class="subtitle">' . t('Not enough Action!') .
     '</div>';
-  echo '<div class="election-continue"><a href="/' . $game . '/elders_do_fill/'
-    . $arg2 . '/action?destination=/' . $game . '/elections/' . $arg2 .
-    '">' . t('Refill your Action (1&nbsp;@luck)', ['@luck' => $luck]) .
-    '</a></div>';
+  zg_button('elders_do_fill',
+    "Refill your Action (1&nbsp;$luck)",
+    '/action?destination=/' . $game . '/elections/' . $arg2,
+    'big-80 slide-in-content');
 
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed no-action\"/>\n-->";
@@ -236,6 +233,7 @@ EOF;
 
   $message = "$game_user->username ran unopposed for the seat $item->ep_name" .
     " in $location.";
+  zg_slack('Challenge', $message);
 
   if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-won\"/>\n-->";
@@ -430,7 +428,7 @@ if ($item->type == 1) {
     $game_user->fkey_neighborhoods_id);
 
 }
-else if ($item->type == 2) {
+elseif ($item->type == 2) {
 
   // Party.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
@@ -460,7 +458,7 @@ else if ($item->type == 2) {
     date('Y-m-d', REQUEST_TIME - 1728000), $game_user->fkey_values_id);
 
 }
-else if ($item->type == 3) {
+elseif ($item->type == 3) {
 
   // District.
   $sql = 'SELECT users.*, clan_members.fkey_clans_id,
@@ -822,6 +820,16 @@ if ($votes < 0) {
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-won\"/>\n-->";
 
+  $message = t('%office: %user1 has successfully challenged %user2 in %place.',
+    [
+      '%user1' => $game_user->username,
+      '%user2' => $item->username,
+      '%office' => $item->ep_name,
+      '%place' => $game_user->location,
+    ]
+  );
+  zg_slack('challenge', $message);
+
   // Party office.
   if ($item->type == 2) {
 
@@ -843,10 +851,13 @@ if ($votes < 0) {
       $data[] = $official;
     }
 
-    $message = t('%user1 has successfully challenged %user2 for the office ' .
-      'of %office.&nbsp; You lose your seat.',
-      ['%user1' => $game_user->username, '%user2' => $item->username,
-        '%office' => $item->ep_name]);
+    $message = t('%user1 has successfully challenged %user2 for the office of %office.&nbsp; You lose your seat.',
+      [
+        '%user1' => $game_user->username,
+        '%user2' => $item->username,
+        '%office' => $item->ep_name,
+      ]
+    );
     $official_ids = [];
 
     $sql = 'insert into challenge_messages (fkey_users_from_id,
@@ -891,10 +902,13 @@ if ($votes < 0) {
   $sql = 'insert into challenge_messages
     (fkey_users_from_id, fkey_users_to_id, message)
     values (%d, %d, "%s");';
-  $message = t('%user has successfully challenged you for your office!  ' .
-    'You are no longer %office and lost @exp influence.',
-    ['%user' => $game_user->username, '%office' => $item->ep_name,
-      '@exp' => $experience_change]);
+  $message = t('%user has successfully challenged you for your office!&nbsp; You are no longer %office and lost @exp influence.',
+    [
+      '%user' => $game_user->username,
+      '%office' => $item->ep_name,
+      '@exp' => $experience_change
+    ]
+  );
   $result = db_query($sql, $game_user->id, $item->id, $message);
 
   $sql = 'update users set experience = experience + %d,
@@ -906,9 +920,9 @@ if ($votes < 0) {
   // Start the actions clock if needed.
   if ($game_user->actions == $game_user->actions_max) {
 
-     $sql = 'update users set actions_next_gain = "%s" where id = %d;';
+    $sql = 'update users set actions_next_gain = "%s" where id = %d;';
     $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
-       $game_user->id);
+      $game_user->id);
 
   }
 
@@ -930,6 +944,16 @@ EOF;
 
 }
 else {
+
+  $message = t('%office: %user1 has UNSUCCESSFULLY challenged %user2 in %place.',
+    [
+      '%user1' => $game_user->username,
+      '%user2' => $item->username,
+      '%office' => $item->ep_name,
+      '%place' => $game_user->location,
+    ]
+  );
+  zg_slack('challenge', $message);
 
   // You lost.
   if (substr($phone_id, 0, 3) == 'ai-')

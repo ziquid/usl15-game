@@ -1670,14 +1670,21 @@ if (!function_exists('drupal_html_class')) {
  * @param string $message
  *   The message to post into a channel.
  *
- * @return bool|\stdClass
- *   Slack response.
+ * @return bool|object
  */
 function zg_slack($type, $message) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $slack_message = $type . ': ' . $message;
+
+  switch (mb_strtolower($type)) {
+
+    case 'bot':
+    case 'bots':
+      $slack_channel .= '-bots';
+      break;
+  }
 
   return slack_send_message($slack_message, $slack_channel);
 }

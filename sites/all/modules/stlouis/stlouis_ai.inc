@@ -18,7 +18,7 @@ define('CONSERVE_MONEY', 2);
 function game_move_ai() {
 
   // Turn off AI moves for now.
-//  return;
+  return;
 
   global $game, $ai_output, $bt_skip;
 
@@ -40,7 +40,7 @@ function game_move_ai() {
   $load = sys_getloadavg();
 
   if ($load[0] > 7) {
-    slack_send_message('not performing AI moves for ' .
+    zg_slack('bots', 'not performing AI moves for ' .
       $game_name_full . " since load average is $load[0]");
     return;
   }
@@ -49,7 +49,7 @@ function game_move_ai() {
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
-    slack_send_message('not performing AI moves for ' .
+    zg_slack('bots','not performing AI moves for ' .
       $game_name_full . " since lock could not be acquired");
     db_set_active('game_' . $game);
     return;
@@ -85,7 +85,7 @@ function game_move_ai() {
 
   // From cron?  Send to Slack.
   if (arg(0) == 'node') {
-    slack_send_message($ai_output);
+    zg_slack('bots', $ai_output);
   }
 
   db_set_active('default');
@@ -818,16 +818,14 @@ function game_ai_create_new_player() {
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
   // mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);.
-  slack_send_message($ai_output);
+  zg_slack('bots', $ai_output);
 }
 
 /**
  *
  */
 function _ai_have_num_type_level_min_max_players($num_players,
- $type,
-  $level_min,
- $level_max) {
+  $type, $level_min, $level_max) {
 
   // Goal: $num players across the game.
   $sql = 'select count(id) as count from users
