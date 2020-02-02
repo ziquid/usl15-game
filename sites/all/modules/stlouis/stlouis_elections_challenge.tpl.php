@@ -18,8 +18,8 @@
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 if (empty($game_user->username)) {
   db_set_active('default');
@@ -31,7 +31,7 @@ $sql = 'select id, name, has_elections, residents, district, is_limited,
   from neighborhoods where id = %d;';
 $result = db_query($sql, $game_user->fkey_neighborhoods_id);
 $item = db_fetch_object($result);
-game_alter('elections_challenge_get_hood', $game_user, $item);
+zg_alter('elections_challenge_get_hood', $game_user, $item);
 $location = $item->name;
 $residents = $item->residents;
 $district = $item->district;
@@ -41,15 +41,16 @@ $stats_only_hood = (bool) $item->stats_only_hood;
 if ($item->has_elections == 0) {
 
   echo <<< EOF
-<div class="title">No Elections here!</div>
-<div class="subtitle">You're on vacation!&nbsp;
-Why worry about elections here?</div>
+<div class="title">
+  No Elections here!
+</div>
 <div class="subtitle">
-<a href="/$game/home/$arg2">
-  <img src="/sites/default/files/images/{$game}_continue.png"/>
-</a>
+  You're on vacation!&nbsp;
+  Why worry about elections here?
 </div>
 EOF;
+
+  zg_button();
 
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
@@ -164,7 +165,7 @@ EOF;
 // Not enough action left.
 if ($game_user->actions < $item->energy_bonus) {
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">$title</div>
@@ -221,8 +222,8 @@ if (empty($item->id)) {
        $game_user->id);
   }
 
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
+  $game_user = zg_fetch_user();
+  zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">$title</div>
@@ -911,8 +912,8 @@ if ($votes < 0) {
 
   }
 
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
+  $game_user = zg_fetch_user();
+  zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">$title</div>
@@ -960,8 +961,8 @@ else {
 
   }
 
-  $game_user = $fetch_user();
-  $fetch_header($game_user);
+  $game_user = zg_fetch_user();
+  zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">$title</div>

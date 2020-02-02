@@ -38,6 +38,7 @@ define(EVENT_NYE_PARTY, 'event_nye_party');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
+define(EVENT_SUPPERBOWL, 'event_supperbowl');
 define(EVENT_THANKSGIVING, 'event_thanksgiving');
 
 define(MISSION_NONE, 1000);
@@ -80,7 +81,14 @@ switch ($today) {
 
   /* ------ FEBRUARY ------ */
   case '2020-02-01':
+    $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
   case '2020-02-02':
+    $event_type[] = EVENT_SUPPERBOWL;
+    $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
   case '2020-02-03':
     $event_type[] = EVENT_GROUNDHOG_DAY;
     break;
