@@ -577,17 +577,20 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
  * @param int $quantity
  *   The amount of luck to credit (debit).
  * @param int $amount_before
- *   The amount of $type that s/he had before this action.
+ *   The amount of $type that player had before this action.
  * @param int $amount_filled
- *   The amount of $type that s/he received for the luck, if any.
+ *   The amount of $type that player received for the luck, if any.
  * @param int $amount_now
- *   The amount of $type that s/he has now, if applicable.
+ *   The amount of $type that player has now, if applicable.
  * @param string $text
  *   Explanatory text.
  * @param string $type
  *   Type of update: purchase, use, system_gift.
  * @param string $subtype
  *   Subtype of $type.
+ *
+ * @return bool
+ *   Whether the update succeeded or not.
  */
 function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_filled, $amount_now, $text, $type, $subtype) {
   global $game;
@@ -606,6 +609,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
       mail('joseph@ziquid.com', $game . ' Luck purchase', $text);
       break;
 
+    case 'action':
     case 'change_party':
     case 'energy':
       $sql = 'insert into luck_use (fkey_users_id, use_type, amount_before, 
@@ -615,6 +619,8 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
         $amount_now, $game_user->luck + $quantity, $text);
       break;
   }
+
+  zg_slack('luck', $text);
 
   // Reprocess user object.
   $game_user = zg_fetch_user();
