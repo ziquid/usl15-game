@@ -648,9 +648,9 @@ function zg_competency_level(\stdClass $game_user, $id) {
     }
     else {
       echo 'competency_level for id ' . $id . ' doesn\'t exist!';
-      slack_send_message('competency_level for id ' . $id . 'doesn\'t exist!',
+      zg_slack('competency_level for id ' . $id . 'doesn\'t exist!',
         $slack_channel);
-      slack_send_message(print_r($game_user, TRUE), $slack_channel);
+      zg_slack(print_r($game_user, TRUE), $slack_channel);
       die;
     }
 
@@ -1630,5 +1630,5 @@ function zg_slack($type, $message) {
 
   $slack_message = $type . ': ' . $message;
 
-  return slack_send_message($slack_message, $slack_channel);
+  return zg_slack($slack_message, $slack_channel);
 }
