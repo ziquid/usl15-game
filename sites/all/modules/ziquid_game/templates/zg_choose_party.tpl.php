@@ -65,7 +65,7 @@ if ($party_id != 0) {
   $result = db_query($sql, $party_id);
   $item = db_fetch_object($result);
 
-  // Update his/her user entry.
+  // Update user entry.
   $sql = 'update users set fkey_neighborhoods_id = %d, fkey_values_id = %d,
     `values` = "%s", level = %d, experience = %d, energy_max = 200,
     skill_points = %d, initiative = 1, endurance = 1, actions = 3,
@@ -78,15 +78,15 @@ if ($party_id != 0) {
   // Remove Luck if changing parties.
   if ($game_user->fkey_values_id != 0) {
     zg_luck($game_user, -5, $game_user->fkey_values_id, 0, $party_id,
-      'changing parties to ' . $party_id . ' from ' . $game_user->fkey_values_id,
+      $game_user->username . ' changed parties to ' . $item->party_title . ' from ' . $game_user->party_title,
       'change_party', '');
   }
 
-  // Also delete any offices s/he held.
+  // Also delete any offices held.
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
 
-  // And any clan memberships s/he had (disband if s/he was the leader).
+  // And any clan memberships (disband if player was the leader).
   $sql = 'select * from clan_members where fkey_users_id = %d;';
   $item = db_query($sql, $game_user->id)->fetch_object();
 
