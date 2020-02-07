@@ -118,8 +118,7 @@ else {
   <p class="second">$quote2</p>
   <div class="ask-name">
     <form method=get action="/$game/elders_set_password/$phone_id">
-      <input type="text" name="password" width="20" maxlength="20"
-        value="$game_user->password"/>
+      <input type="text" name="password" width="20" maxlength="20"/>
       <input type="submit" value="Submit"/>
     </form>
   </div>

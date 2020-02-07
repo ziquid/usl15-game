@@ -40,6 +40,7 @@ $d = zg_get_html(
 $sql = 'select * from users where phone_id = "%s";';
 $result = db_query($sql, $phone_id);
 $game_user = db_fetch_object($result);
+firep($game_user, 'game_user object');
 $check_authkey($game_user);
 
 // Check for authorized client.
@@ -71,8 +72,7 @@ if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
 }
 
 $password = trim(check_plain($_GET['password']));
-
-if ($password == trim($game_user->password) || password_hash($password, PASSWORD_BCRYPT) == trim($game_user->password)) {
+if ($password == trim($game_user->password) || password_verify($password, trim($game_user->password))) {
   $user_agent = $_SERVER['HTTP_USER_AGENT'];
   $ip_addr = ip_address();
 
