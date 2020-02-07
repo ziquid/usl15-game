@@ -94,6 +94,9 @@ switch ($today) {
   case '2020-02-05':
   case '2020-02-06':
   case '2020-02-07':
+  case '2020-02-08':
+  case '2020-02-09':
+  case '2020-02-10':
     $event_type[] = EVENT_GROUNDHOG_DAY;
     break;
 
