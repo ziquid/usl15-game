@@ -49,7 +49,7 @@ body.game-stlouis .button-continue {
   cursor: pointer;
   color: #f8fefc !important;
   font-family: Helvetica, Arial, "Verdana", "sans-serif";
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: bold;
   padding: 6px 24px;
   text-decoration: none;
@@ -71,7 +71,7 @@ body.game-stlouis button, body.game-stlouis .button {
   cursor: pointer;
   color: #f8fefc !important;
   font-family: Helvetica, Arial, "Verdana", "sans-serif";
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: bold;
   padding: 3px 8px 4px;
   text-decoration: none;
@@ -94,20 +94,20 @@ body.game-stlouis button.not-yet, body.game-stlouis .button.not-yet {
 
 /* line 71, src/sass/components/_button.scss */
 body.game-stlouis .big button, body.game-stlouis .big .button {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
   padding: 5px 10px 6px;
 }
 
 /* line 76, src/sass/components/_button.scss */
 body.game-stlouis .big-68 button, body.game-stlouis .big-68 .button {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
   padding: 5px 10px 6px;
   width: 68%;
 }
 
 /* line 82, src/sass/components/_button.scss */
 body.game-stlouis .big-80 button, body.game-stlouis .big-80 .button {
-  font-size: 13px !important;
+  font-size: 0.8125rem !important;
   padding: 5px 10px 6px;
   width: 80%;
 }
@@ -418,7 +418,7 @@ body.game-stlouis .quests .quest-description, body.game-stlouis .land .land-desc
 body.game-stlouis .quests .quest-description .not-yet, body.game-stlouis .land .land-description .not-yet {
   color: #c23;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   margin-top: 6px;
   margin-left: 10px;
 }
@@ -470,7 +470,7 @@ body.game-stlouis .quest-do-again, body.game-stlouis .land-buy-again {
   margin-right: 8px;
   margin-bottom: 28px;
   padding-top: 3px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 /* line 248, src/sass/components/_index.scss */
@@ -530,7 +530,7 @@ body.game-stlouis .level-up.happy {
 body.game-stlouis .choose-clan-name {
   margin-left: 6px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #1ca443;
 }
 
@@ -543,7 +543,7 @@ body.game-stlouis .choose-clan-name a {
 body.game-stlouis .choose-clan-slogan {
   margin: 0 0 8px 54px;
   font-style: italic;
-  font-size: 11px;
+  font-size: 0.6875rem;
   color: #bcb;
 }
 
@@ -691,7 +691,7 @@ body.game-stlouis .try-an-election.not-yet {
 /* line 436, src/sass/components/_index.scss */
 body.game-stlouis .location {
   color: #f8fdfe;
-  font: 10px Helvetica,Arial,sans-serif;
+  font: 0.625rem Helvetica,Arial,sans-serif;
   text-align: center;
   padding: 4px 0 3px 0;
   width: 312px;
@@ -972,7 +972,7 @@ body.game-stlouis .new-main-menu ul li a {
   z-index: 12;
   text-decoration: none;
   color: #dd7;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-family: Georgia, "times new roman", serif;
   font-weight: bold;
   text-shadow: 1px 1px 2px #e008;
@@ -999,7 +999,7 @@ body.game-stlouis .new-main-menu ul li a.aides-menu {
 body.game-stlouis .new-main-menu ul li a.clan-menu {
   top: 140px;
   left: 106px;
-  font-size: 12px;
+  font-size: 0.75rem;
   min-width: 50px;
   background-color: #0009;
 }
@@ -1022,7 +1022,7 @@ body.game-stlouis .new-main-menu ul li a.elders-menu {
   top: 97px;
   left: 130px;
   min-width: 60px;
-  font-size: 14px;
+  font-size: 0.875rem;
   background-color: #0007;
 }
 
@@ -1036,7 +1036,7 @@ body.game-stlouis .new-main-menu ul li a.elections-menu {
 body.game-stlouis .new-main-menu ul li a.forum-menu {
   top: 140px;
   left: 239px;
-  font-size: 12px;
+  font-size: 0.75rem;
   min-width: 50px;
   background-color: #0009;
 }
@@ -1045,7 +1045,7 @@ body.game-stlouis .new-main-menu ul li a.forum-menu {
 body.game-stlouis .new-main-menu ul li a.help-menu {
   top: 140px;
   left: 169px;
-  font-size: 12px;
+  font-size: 0.75rem;
   min-width: 50px;
   background-color: #0009;
 }
@@ -1054,7 +1054,7 @@ body.game-stlouis .new-main-menu ul li a.help-menu {
 body.game-stlouis .new-main-menu ul li a.missions-menu {
   top: 10px;
   left: 102px;
-  font-size: 17px;
+  font-size: 1.0625rem;
   text-transform: uppercase;
   text-shadow: 1px 1px 2px #0e08;
   min-width: 120px;
@@ -1065,7 +1065,7 @@ body.game-stlouis .new-main-menu ul li a.move-menu {
   top: 87px;
   left: 130px;
   min-width: 60px;
-  font-size: 14px;
+  font-size: 0.875rem;
   background-color: #0006;
 }
 
@@ -1073,7 +1073,7 @@ body.game-stlouis .new-main-menu ul li a.move-menu {
 body.game-stlouis .new-main-menu ul li a.profile-menu {
   top: 140px;
   left: 38px;
-  font-size: 12px;
+  font-size: 0.75rem;
   min-width: 50px;
   background-color: #0009;
 }
@@ -1103,7 +1103,7 @@ body.game-stlouis .competency-tag {
   bottom: 0;
   -webkit-transform-origin: 13px 11px;
           transform-origin: 13px 11px;
-  font-size: 20px;
+  font-size: 1.25rem;
   background: rgba(0, 100, 0, 0.7);
   padding: 2px 6px;
   border-radius: 4px;
@@ -1229,7 +1229,7 @@ body.game-stlouis .swiper-container {
 /* line 864, src/sass/components/_index.scss */
 body.game-stlouis .swiper-slide {
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1272,19 +1272,19 @@ body.game-stlouis .swiper-slide .title {
 
 /* line 905, src/sass/components/_index.scss */
 body.game-stlouis .swiper-slide .title.loot {
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 /* line 909, src/sass/components/_index.scss */
 body.game-stlouis .swiper-slide .quest-images {
   margin: 0 2px;
   font-weight: initial;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 915, src/sass/components/_index.scss */
 body.game-stlouis .quest-group-name, body.game-stlouis .quest-group-title {
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
   display: block;
   -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
@@ -1399,7 +1399,7 @@ body.game-stlouis span.not-yet-overlay {
   color: #9aa;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 17px;
+  font-size: 1.0625rem;
   letter-spacing: 2.75px;
   text-shadow: 0 1px 0 beige;
 }
@@ -1414,7 +1414,7 @@ body.game-stlouis .quests span.not-yet-overlay {
 body.game-stlouis .swiper-slide .description {
   display: none;
   color: #e0e8ee;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-style: italic;
   font-weight: normal;
   margin: 16px 6px 10px;
@@ -1506,7 +1506,7 @@ body.game-stlouis .tagline {
   font-weight: bold;
   letter-spacing: 5px;
   text-shadow: 0 0.9px 0 beige;
-  font-size: 11px;
+  font-size: 0.6875rem;
   margin-bottom: 4px;
 }
 
@@ -1522,7 +1522,7 @@ body.game-stlouis .system-message-response {
 
 /* line 1115, src/sass/components/_index.scss */
 body.game-stlouis div.description-speech-bubble-wrapper {
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: left;
   font-style: normal;
   margin-left: -22px;
@@ -1532,7 +1532,7 @@ body.game-stlouis div.description-speech-bubble-wrapper {
 
 /* line 1124, src/sass/components/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper {
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: left;
   font-style: normal;
   margin: 8px 0;

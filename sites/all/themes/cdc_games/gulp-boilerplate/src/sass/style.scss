@@ -1,7 +1,7 @@
 body {
   margin: auto;
   padding: 0;
-  font: 12px Arial, Helvetica, sans-serif;
+  font: 0.75rem Arial, Helvetica, sans-serif;
   color: #fff;
   max-width: 320px;
   background-color: black;
@@ -12,7 +12,7 @@ h3, h4 {
 }
 
 .title {
-  font: 16px Arial, Helvetica, sans-serif;
+  font: 1rem Arial, Helvetica, sans-serif;
   clear: both;
   margin-top: 8px;
   margin-bottom: 5px;
@@ -30,14 +30,14 @@ h3, h4 {
 }
 
 .subtitle {
-  font: 15px Arial, Helvetica, sans-serif;
+  font: 0.9375rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 8px;
 }
 
 .subsubtitle {
-  font: 13px Arial, Helvetica, sans-serif;
+  font: 0.8125rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 8px;
@@ -45,7 +45,7 @@ h3, h4 {
 }
 
 .quest-group-completion {
-  font: 10px Arial, Helvetica, sans-serif;
+  font: 0.625rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 4px;
@@ -64,7 +64,7 @@ h3, h4 {
 }
 
 .header .money-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -76,7 +76,7 @@ h3, h4 {
 }
 
 .header .actions-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -86,11 +86,11 @@ h3, h4 {
 }
 
 .header .experience-text {
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .header .energy-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -121,7 +121,7 @@ h3, h4 {
 .header .energy #energy-time, .header .money #income-time,
 .header .actions #actions-time {
 /*  display: inline; */
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .header .level {
@@ -129,22 +129,22 @@ h3, h4 {
 }
 
 .header .level a {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .header .level-text {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .main-menu, .elders-menu.big {
   margin-top: 12px;
-  font-size: 21px;
+  font-size: 1.3125rem;
   text-align: center;
 }
 
 .main-menu, .elders-menu {
   margin-top: 12px;
-  font-size: 17px;
+  font-size: 1.0625rem;
   text-align: center;
 }
 
@@ -166,7 +166,7 @@ li {
   margin-left: 0;
   padding-left: 0;
   margin-bottom: 5px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quests {
@@ -194,7 +194,7 @@ li {
 
 .quests .quest-complete {
   color: #26c;
-  font-size: 10px;
+  font-size: 0.625rem;
   text-align: center;
   margin-top: 3px;
 }
@@ -217,7 +217,7 @@ li {
 }
 
 .quests .quest-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
 }
 
@@ -226,7 +226,7 @@ li {
 }
 
 .quests .quest-description {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quests.wrong-hood .quest-description {
@@ -242,7 +242,7 @@ li {
 .quests .quest-required_energy, .quests .quest-loot,
 .quests .quest-required_stuff {
   /* margin-left: 10px; */
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quests .quest-required_energy, .quests .quest-required_stuff {
@@ -269,7 +269,7 @@ li {
   text-align: center;
   margin-top: 8px;
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .quests-soon {
@@ -284,7 +284,7 @@ li {
 }
 
 .quests-soon .quest-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: #888;
 }
@@ -292,13 +292,13 @@ li {
 .quests-soon .quest-description {
   color: #888;
   margin-bottom: 6px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quests-soon .quest-experience, .quests-soon .quest-money,
 .quests-soon .quest-required_energy, .quests-soon .quest-required_level {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quests-soon .quest-required_level {
@@ -309,14 +309,14 @@ li {
 .quest-succeeded, .election-succeeded, .land-succeeded {
   clear: both;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
 .quest-failed, .election-failed, .land-failed {
   clear: both;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -344,7 +344,7 @@ li {
 }
 
 .land .land-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
 }
 
@@ -353,7 +353,7 @@ li {
 }
 
 .land .land-description {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .land .land-owned, .land .land-action, .land-soon .land-action {
@@ -372,7 +372,7 @@ li {
 .land .land-owned, .land .land-cost, .land .land-action-cost,
 .land .land-payout {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .land .land-button-wrapper {
@@ -457,21 +457,21 @@ a.crafting-submit-button {
 }
 
 .land-soon .land-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: #888;
 }
 
 .land-soon .land-description {
   color: #888;
-  font-size: 11px;
+  font-size: 0.6875rem;
   margin-bottom: 6px;
 }
 
 .land-soon .land-cost, .land-soon .land-payout,
 .land-soon .land-required_level, .land-soon .land-action-cost {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .land-soon .land-required_level {
@@ -489,7 +489,7 @@ a.crafting-submit-button {
 
 .level-up-header {
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
   margin-bottom: 6px;
 }
@@ -531,7 +531,7 @@ a.crafting-submit-button {
   padding: 3px;
   color: #fff;
   text-decoration: none;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -581,7 +581,7 @@ a.crafting-submit-button {
   margin-top: 0px;
   margin-bottom: 2px;
   font-weight: normal;
-  font-size: 13px;
+  font-size: 0.8125rem;
   clear: both;
 }
 
@@ -591,7 +591,7 @@ a.crafting-submit-button {
   padding-top: 10px;
   margin-bottom: 2px;
   font-weight: normal;
-  font-size: 13px;
+  font-size: 0.8125rem;
   clear: both;
 }
 
@@ -603,7 +603,7 @@ a.crafting-submit-button {
 
 .news .dateline {
   font-style: italic;
-  font-size: 10px;
+  font-size: 0.625rem;
   color: #ccc;
   clear: both;
   text-align: left;
@@ -815,7 +815,7 @@ color: #5abafe;
 .elections-header {
   font-weight: bold;
   margin: 12px 0 0 36px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 .elections .me {
@@ -827,7 +827,7 @@ color: #5abafe;
   position: absolute;
   left: 2px;
   top: 26px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .elections .election-details .clan-icon {
@@ -863,7 +863,7 @@ color: #5abafe;
   margin: 12px auto 16px;
   text-align: center;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 0.9375rem;
   padding: 6px;
   background-color: #888;
   border: 1px solid #888;
@@ -884,14 +884,14 @@ a.try-an-election, input.try-an-election {
 .election-succeeded {
   margin-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
 .election-failed {
   margin-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 .user-profile {
@@ -979,7 +979,7 @@ a.try-an-election, input.try-an-election {
 
 .debate-used {
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 8px 3px 3px;
   display: inline-block;
   position: relative;
@@ -1014,7 +1014,7 @@ a.try-an-election, input.try-an-election {
 
 .message-error.big {
   padding-bottom: 6px;
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 .clan-list {
@@ -1034,7 +1034,7 @@ a.try-an-election, input.try-an-election {
 .event a {
   display: block;
   padding: 4px 8px;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   background-color: #cc0;
   border-radius: 50px;
@@ -1045,7 +1045,7 @@ a.try-an-election, input.try-an-election {
 
 .event .event-title {
   margin: 3px;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-family: Georgia, "times new roman", serif;
   font-weight: bold;
 }
@@ -1059,7 +1059,7 @@ a.try-an-election, input.try-an-election {
   clear: both;
   font-weight: bold;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: georgia, times new roman, times, serif;
 }
 
@@ -1067,7 +1067,7 @@ a.try-an-election, input.try-an-election {
   clear: both;
   padding-bottom: 4px;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: times new roman, times, serif;
 }
 
@@ -1086,13 +1086,13 @@ a .event-text {
 
 .location {
   color: #888;
-  font: 10px Helvetica, Arial, sans-serif;
+  font: 0.625rem Helvetica, Arial, sans-serif;
   text-align: center;
   padding-top: 2px;
 }
 
 .version {
-  font: 8px Helvetica, Arial, sans-serif;
+  font: 0.5rem Helvetica, Arial, sans-serif;
   display: block;
 }
 
@@ -1147,7 +1147,7 @@ img.round4 {
   text-align: center;
   color: #aaa;
   margin: 72px 0 12px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 .center {
