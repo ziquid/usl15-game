@@ -459,18 +459,17 @@ EOF;
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              slack_send_message('could not give 2nd-round eq bonus for quest ' . $game_quest->id .
-                " due to $eq_success, $eq_reason, $eq_details",
-                $slack_channel);
-              $response = slack_send_message($game_user, $slack_channel);
+              zg_slack(type: 'error', message: 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+                " due to $eq_success, $eq_reason, $eq_details");
+              $response = zg_slack($type, $message);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = slack_send_message($game_quest, $slack_channel);
+              $response = zg_slack($type, $message);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = slack_send_message($game_equipment, $slack_channel);
+              $response = zg_slack($type, $message);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
@@ -500,18 +499,18 @@ EOF;
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              slack_send_message('could not give 2nd-round st bonus for quest ' . $game_quest->id .
+              zg_slack(type: 'error', message: 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $st_success, $st_reason, $st_details",
                 $slack_channel);
-              $response = slack_send_message($game_user, $slack_channel);
+              $response = zg_slack($type, $message);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = slack_send_message($game_quest, $slack_channel);
+              $response = zg_slack($type, $message));
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = slack_send_message($game_staff, $slack_channel);
+              $response = zg_slack($type, $message);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
