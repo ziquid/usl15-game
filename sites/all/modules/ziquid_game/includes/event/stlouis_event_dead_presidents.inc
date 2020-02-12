@@ -51,14 +51,16 @@ function stlouis_event_dead_presidents_actions_to_move($game_user, &$actions_to_
  * Implements hook_fetch_quest_groups_sql().
  */
 function stlouis_event_dead_presidents_fetch_quest_groups_sql($game_user, &$sql) {
-  $sql = 'select NULL;';
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $sql = 'select NULL;';
+  }
 }
 
 /**
  * Implements hook_fetch_quest_groups().
  */
 function stlouis_event_dead_presidents_fetch_quest_groups($game_user, &$data) {
-
   $today = date('Y-m-d', REQUEST_TIME - 3600);
   if ($today == '2020-02-17' || $game_user->meta == 'admin') {
     $item = new \stdClass();
