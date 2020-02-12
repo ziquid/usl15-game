@@ -542,6 +542,14 @@ p:first-of-type {
   font-weight: bold;
 }
 
+.event {
+  border: #1a2 solid 1px;
+  border-radius: 8px;
+  padding: 4px 4px 10px;
+  background-color: #1a22;
+  color: #1a2;
+}
+
 .event-info .subtitle {
   color: #c33;
   font-weight: bold;
