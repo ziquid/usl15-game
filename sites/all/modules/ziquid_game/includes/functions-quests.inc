@@ -54,6 +54,10 @@ function zg_fetch_quest_groups(\stdClass $game_user, $id = NULL) {
     $sql = 'SELECT qg.* FROM `quest_groups` qg
     order by qg.id ASC';
   }
+
+  // Allow altering of SQL query.
+  zg_alter('fetch_quest_groups_sql', $game_user, $sql);
+
   $result = db_query($sql, $id);
   while ($item = db_fetch_object($result)) {
     $data[$item->id] = $item;

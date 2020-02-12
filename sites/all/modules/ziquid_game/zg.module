@@ -1025,8 +1025,8 @@ function zg_fetch_user($force = FALSE) {
     zg_includes_add('land_' . $land, 'land');
   }
 
-  // Run fetch_user_post alter hooks.
-  zg_alter('zg_fetch_user_post', $game_user);
+  // Run fetch_user alter hooks.
+  zg_alter('fetch_user', $game_user);
 
   $sql = 'select experience from levels where level = %d;';
   $result = db_query($sql, $game_user->level + 1);

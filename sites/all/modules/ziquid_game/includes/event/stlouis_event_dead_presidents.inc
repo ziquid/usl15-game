@@ -46,3 +46,44 @@ function stlouis_event_dead_presidents_actions_to_move($game_user, &$actions_to_
     $actions_to_move = min($actions_to_move, 6);
   }
 }
+
+/**
+ * Implements hook_fetch_quest_groups_sql().
+ */
+function stlouis_event_dead_presidents_fetch_quest_groups_sql($game_user, &$sql) {
+  $sql = 'select NULL;';
+}
+
+/**
+ * Implements hook_fetch_quest_groups().
+ */
+function stlouis_event_dead_presidents_fetch_quest_groups($game_user, &$data) {
+
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $item = new \stdClass();
+    $item->name = 'Dead Presidents';
+    $item->description = 'You\'ve got better things to do today';
+    $data = [$item];
+  }
+}
+
+/**
+ * Implements hook_fetch_user().
+ */
+function stlouis_event_dead_presidents_fetch_user($game_user) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $game_user->income = $game_user->expenses = 0;
+  }
+}
+
+/**
+ * Implements hook_recalc_income().
+ */
+function stlouis_event_dead_presidents_recalc_income($game_user) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $game_user->income = $game_user->expenses = 0;
+  }
+}

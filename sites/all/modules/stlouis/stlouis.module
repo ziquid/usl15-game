@@ -1471,6 +1471,7 @@ function _stlouis_reset_event_tags_con($id) {
 
 
 function _stlouis_fetch_user() {
+  return zg_fetch_user();
 
   global $game, $phone_id, $extra_messages, $next_level, $user;
   // Running from drush cron?  There is no user to fetch, so return silently.
@@ -1719,6 +1720,7 @@ function _stlouis_fetch_user() {
 
   // Run fetch_user_post alter hooks.
   game_alter('game_fetch_user_post', $game_user);
+  zg_alter('fetch_user', $game_user);
 
   $sql = 'select experience from levels where level = %d;';
   $result = db_query($sql, $game_user->level + 1);
@@ -1928,8 +1930,8 @@ function _stlouis_fetch_user() {
   return $game_user;
 }
 
-
 function _stlouis_header($game_user) {
+  return zg_fetch_header($game_user);
 
   global $game, $phone_id, $extra_messages, $next_level;
 

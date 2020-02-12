@@ -184,6 +184,8 @@ function zg_recalc_income(\stdClass $game_user) {
   $item = db_fetch_object($result);
   $game_user->income = $item->income;
   $game_user->expenses = $item->expenses;
+
+  zg_alter('recalc_income', $game_user);
 }
 
 function zg_show_aides_menu(\stdClass $game_user) {

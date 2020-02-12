@@ -24,7 +24,7 @@ include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $ai_output = 'land-prices';
 
-game_recalc_income($game_user);
+zg_recalc_income($game_user);
 $data = zg_fetch_visible_land($game_user);
 $next = zg_fetch_next_land($game_user);
 
