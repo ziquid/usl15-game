@@ -30,16 +30,19 @@ function stlouis_event_groundhog_day_homepage_event_notice(\stdClass $game_user,
     case '2020-02-05':
     case '2020-02-06':
     case '2020-02-07':
+    case '2020-02-08':
+    case '2020-02-09':
+    case '2020-02-10':
       $event_text .= '
 <div class="event">
   <div class="event-title">
-    ~ This Weekend ~
+    ~ This Week ~
   </div>
   <div class="event-tagline">
     <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1016">Groundhog Day Missions</a>
   </div>
   <div class="event-text">
-    Missions End Friday at 11:59 PM
+    Missions End Sunday at 11:59 PM
   </div>
 </div>';
       break;

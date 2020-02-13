@@ -38,7 +38,7 @@ $button_extra_link = '?page=' . ($page + 1);
 db_set_active('game_' . $game);
 
 // Check to make sure not too many from the same IP address, unless AI bot.
-if (substr($arg2, 0, 3) != 'ai-') {
+if ((substr($arg2, 0, 3) != 'ai-') && $ip_address != '127.0.0.1') {
   $sql = 'select count(`value`) as count from user_attributes
   where `key` = "last_IP" and `value` = "%s";';
   $result = db_query($sql, $ip_address);

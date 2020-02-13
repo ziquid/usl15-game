@@ -455,7 +455,7 @@ EOF;
   </div>
 EOF;
   }
-elseif ($item->initiative_bonus < 0) {
+  elseif ($item->initiative_bonus < 0) {
     $output .= <<< EOF
   <div class="land-payout negative">
     {$game_text['initiative']}: $item->initiative_bonus
@@ -470,7 +470,7 @@ EOF;
   </div>
 EOF;
   }
-else if ($item->endurance_bonus < 0) {
+  elseif ($item->endurance_bonus < 0) {
     $output .= <<< EOF
   <div class="land-payout negative">
     {$game_text['endurance']}: $item->endurance_bonus
@@ -489,7 +489,7 @@ EOF;
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
   }
-else if ($item->elocution_bonus < 0) {
+  elseif ($item->elocution_bonus < 0) {
     $output .= <<< EOF
   <div class="land-payout negative">
     $elocution: $item->elocution_bonus
@@ -499,6 +499,22 @@ EOF;
     if (!$item->is_loot) {
       $ai_output .= "/+elo:$item->elocution_bonus";
     }
+  }
+
+  if ($item->extra_votes > 0) {
+    $output .= <<< EOF
+  <div class="land-payout highlighted">
+    {$game_text['extra votes']}: $item->extra_votes
+  </div>
+EOF;
+  }
+
+  if ($item->extra_defending_votes > 0) {
+    $output .= <<< EOF
+  <div class="land-payout highlighted">
+    {$game_text['extra defending votes']}: $item->extra_defending_votes
+  </div>
+EOF;
   }
 
   if ($item->speed_increase > 0) {

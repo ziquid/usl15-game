@@ -538,40 +538,7 @@ function game_get_quest_completion($completed_percent, $percentage_target, $perc
  *   The game user object.
  */
 function game_recalc_income(\stdClass $game_user) {
-  $sql = 'update users set income =
-    (SELECT sum(land.payout * land_ownership.quantity)
-    as income from land
-    left join land_ownership
-    on land_ownership.fkey_land_id = land.id and
-    land_ownership.fkey_users_id = %d)
-    where id = %d;';
-  db_query($sql, $game_user->id, $game_user->id);
-
-  $sql = 'SELECT sum(equipment.upkeep * equipment_ownership.quantity)
-    as expenses from equipment
-    left join equipment_ownership
-    on equipment_ownership.fkey_equipment_id = equipment.id and
-    equipment_ownership.fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $eq = db_fetch_object($result);
-
-  $sql = 'SELECT sum(staff.upkeep * staff_ownership.quantity)
-    as expenses from staff
-    left join staff_ownership
-    on staff_ownership.fkey_staff_id = staff.id and
-    staff_ownership.fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $st = db_fetch_object($result);
-
-  $sql = 'update users set expenses = %d where id = %d;';
-  db_query($sql, $eq->expenses + $st->expenses, $game_user->id);
-
-  $sql = 'select income, expenses from users
-    where id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $item = db_fetch_object($result);
-  $game_user->income = $item->income;
-  $game_user->expenses = $item->expenses;
+  return zg_recalc_income($game_user);
 }
 
 function game_show_aides_menu(\stdClass $game_user) {
@@ -1449,6 +1416,8 @@ function game_competency_name($comp) {
 }
 
 function game_fetch_user_by_id($id) {
+
+  return zg_fetch_user_by_id($id);
 
   // Simple per-page cache.
   static $user_cache;

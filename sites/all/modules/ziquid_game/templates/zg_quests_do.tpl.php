@@ -50,13 +50,11 @@ if (($game_user->energy < $quest_action->required_energy) &&
   // Unlimited quests below level 6.
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not enough Energy!') .
-    '</div><div class="try-an-election-wrapper">
-    <div class="try-an-election"><a
-    href="/' . $game . '/elders_do_fill/' . $arg2 . '/energy?destination=/' .
-    $game . '/' . $quest_link . '/' . $arg2 . '/' . $game_quest->group .
-    '%3fshow_expanded=' . $game_quest->group . '%23group-' .
-    $game_quest->group . '">Refill
-    your Energy (1&nbsp;' . $luck . ')</a></div></div>';
+    '</div>' .
+    zg_render_button('elders_do_fill', t('Refill your Energy (1&nbsp;Luck)'),
+      '/energy?destination=/' . $game . '/' . $quest_link . '/' . $arg2 . '/' .
+      $game_quest->group . '%3fshow_expanded=' . $game_quest->group . '%23group-' .
+      $game_quest->group, 'big-68');
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
 

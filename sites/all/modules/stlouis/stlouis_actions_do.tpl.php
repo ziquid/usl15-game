@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_actions_do.tpl.php
+ * @file
  * Template for special actions.
  *
  * Synced with CG: no
@@ -24,17 +24,16 @@ include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
 $game_user = $fetch_user();
 
 if ($game_user->meta == 'frozen') {
+  $fetch_header($game_user);
+  db_set_active('default');
 
-    $fetch_header($game_user);
-
-    echo <<< EOF
+?>
 <div class="title">Frozen!</div>
 <div class="subtitle">You have been tagged and cannot perform any actions</div>
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
-EOF;
+<?php
 
-    db_set_active('default');
-    return;
+  return;
   }
 
   $data = actionlist();
@@ -47,10 +46,8 @@ EOF;
     }
   }
 
-  if ((!$action_found) &&
-
-    // Hacking!
-    (substr($arg2, 0, 3) != 'ai-')) {
+  // Hacking!
+  if ((!$action_found) && (substr($arg2, 0, 3) != 'ai-')) {
 
     game_karma($game_user, "Trying to perform action that is not available", -20);
 
@@ -434,7 +431,6 @@ firep($eq);
   }
 
   // Chance of loss - aides.
-
   // Any staff for this action?
   if ($action->fkey_staff_id) {
 
@@ -452,7 +448,6 @@ firep($st->name . ' has run away!');
       $result = db_query($sql, $st->id, $game_user->id);
 
       // Player expenses need resetting?
-
       // Subtract upkeep from your expenses.
       if ($st->upkeep > 0) {
         $sql = 'update users set expenses = expenses - %d where id = %d;';
@@ -493,47 +488,29 @@ firep($st->name . ' has run away!');
 
   }
 
-    $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a
-      href="/' . $game . '/user/' . $arg2 . '/' . $target->phone_id .
-      $show_all .
-      '">View ' . $target->ep_name . ' ' . $target->username .
-      '</a></div></div>';
+  $outcome_reason .= zg_render_button('user', 'View ' . $target->ep_name . ' ' . $target->username, '/id:' . $_GET['target'], 'big-68');
 
-    if ($can_do_again) {
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a
-      href="/' . $game . '/actions_do/' . $arg2 . '/' . $action_id .
-      '?target=' . $_GET['target'] .
-      '">Do it again</a></div></div>';
-    }
-    else {
-      $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election not-yet">Can\'t do it again</div></div>';
-    }
-
-    $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a
-      href="/' . $game . '/actions/' . $arg2 .
-      '">Perform a different action</a></div></div>';
-
-    // Reprocess user object.
-    $game_user = $fetch_user();
-
+  if ($can_do_again) {
+    $outcome_reason .= zg_render_button('actions_do', "Do it again", '/' . $action_id . '?target=' . $_GET['target'], 'big-68');
   }
   else {
-
-    // Failed - try a different action.
-    $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a
-      href="/' . $game . '/actions/' . $arg2 .
-      '">Perform a different action</a></div></div>';
-
-    $ai_output = 'action-failed';
-
+    $outcome_reason .= zg_render_button('', "Can't do it again", '', 'big-68');
   }
 
-  $fetch_header($game_user);
+  $outcome_reason .= zg_render_button('actions', 'Perform a different action', '', 'big-68');
+
+  // Reprocess user object.
+  $game_user = $fetch_user();
+
+}
+else {
+
+  // Failed - try a different action.
+  $outcome_reason .= zg_render_button('actions', 'Perform a different action', '', 'big-68');
+  $ai_output = 'action-failed';
+}
+
+$fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">
@@ -542,9 +519,10 @@ $title
 $outcome_reason
 EOF;
 
-  if (substr($phone_id, 0, 3) == 'ai-')
-    echo "<!--\n<ai \"$ai_output " .
+if (substr($phone_id, 0, 3) == 'ai-') {
+  echo "<!--\n<ai \"$ai_output " .
     filter_xss($outcome_reason, []) .
     " \"/>\n-->";
+}
 
-  db_set_active('default');
+db_set_active('default');

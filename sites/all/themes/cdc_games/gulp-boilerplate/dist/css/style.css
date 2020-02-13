@@ -10,7 +10,7 @@
 body {
   margin: auto;
   padding: 0;
-  font: 12px Arial, Helvetica, sans-serif;
+  font: 0.75rem Arial, Helvetica, sans-serif;
   color: #fff;
   max-width: 320px;
   background-color: black;
@@ -23,7 +23,7 @@ h3, h4 {
 
 /* line 14, src/sass/style.scss */
 .title {
-  font: 16px Arial, Helvetica, sans-serif;
+  font: 1rem Arial, Helvetica, sans-serif;
   clear: both;
   margin-top: 8px;
   margin-bottom: 5px;
@@ -44,7 +44,7 @@ h3, h4 {
 
 /* line 32, src/sass/style.scss */
 .subtitle {
-  font: 15px Arial, Helvetica, sans-serif;
+  font: 0.9375rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 8px;
@@ -52,7 +52,7 @@ h3, h4 {
 
 /* line 39, src/sass/style.scss */
 .subsubtitle {
-  font: 13px Arial, Helvetica, sans-serif;
+  font: 0.8125rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 8px;
@@ -61,7 +61,7 @@ h3, h4 {
 
 /* line 47, src/sass/style.scss */
 .quest-group-completion {
-  font: 10px Arial, Helvetica, sans-serif;
+  font: 0.625rem Arial, Helvetica, sans-serif;
   text-align: center;
   clear: both;
   margin-top: 4px;
@@ -83,7 +83,7 @@ h3, h4 {
 
 /* line 66, src/sass/style.scss */
 .header .money-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -97,7 +97,7 @@ h3, h4 {
 
 /* line 78, src/sass/style.scss */
 .header .actions-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -109,12 +109,12 @@ h3, h4 {
 
 /* line 88, src/sass/style.scss */
 .header .experience-text {
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 /* line 92, src/sass/style.scss */
 .header .energy-text {
-  font-size: 10px;
+  font-size: 0.625rem;
   display: inline;
 }
 
@@ -150,7 +150,7 @@ h3, h4 {
 .header .energy #energy-time, .header .money #income-time,
 .header .actions #actions-time {
   /*  display: inline; */
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 /* line 127, src/sass/style.scss */
@@ -160,25 +160,25 @@ h3, h4 {
 
 /* line 131, src/sass/style.scss */
 .header .level a {
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 /* line 135, src/sass/style.scss */
 .header .level-text {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 139, src/sass/style.scss */
 .main-menu, .elders-menu.big {
   margin-top: 12px;
-  font-size: 21px;
+  font-size: 1.3125rem;
   text-align: center;
 }
 
 /* line 145, src/sass/style.scss */
 .main-menu, .elders-menu {
   margin-top: 12px;
-  font-size: 17px;
+  font-size: 1.0625rem;
   text-align: center;
 }
 
@@ -204,7 +204,7 @@ li {
   margin-left: 0;
   padding-left: 0;
   margin-bottom: 5px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 172, src/sass/style.scss */
@@ -236,7 +236,7 @@ li {
 /* line 195, src/sass/style.scss */
 .quests .quest-complete {
   color: #26c;
-  font-size: 10px;
+  font-size: 0.625rem;
   text-align: center;
   margin-top: 3px;
 }
@@ -263,7 +263,7 @@ li {
 
 /* line 219, src/sass/style.scss */
 .quests .quest-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
 }
 
@@ -274,7 +274,7 @@ li {
 
 /* line 228, src/sass/style.scss */
 .quests .quest-description {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 232, src/sass/style.scss */
@@ -293,7 +293,7 @@ li {
 .quests .quest-required_energy, .quests .quest-loot,
 .quests .quest-required_stuff {
   /* margin-left: 10px; */
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 248, src/sass/style.scss */
@@ -325,7 +325,7 @@ li {
   text-align: center;
   margin-top: 8px;
   margin-bottom: 8px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 /* line 275, src/sass/style.scss */
@@ -342,7 +342,7 @@ li {
 
 /* line 286, src/sass/style.scss */
 .quests-soon .quest-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: #888;
 }
@@ -351,14 +351,14 @@ li {
 .quests-soon .quest-description {
   color: #888;
   margin-bottom: 6px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 298, src/sass/style.scss */
 .quests-soon .quest-experience, .quests-soon .quest-money,
 .quests-soon .quest-required_energy, .quests-soon .quest-required_level {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 304, src/sass/style.scss */
@@ -371,7 +371,7 @@ li {
 .quest-succeeded, .election-succeeded, .land-succeeded {
   clear: both;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -379,7 +379,7 @@ li {
 .quest-failed, .election-failed, .land-failed {
   clear: both;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -411,7 +411,7 @@ li {
 
 /* line 346, src/sass/style.scss */
 .land .land-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
 }
 
@@ -422,7 +422,7 @@ li {
 
 /* line 355, src/sass/style.scss */
 .land .land-description {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 359, src/sass/style.scss */
@@ -441,7 +441,7 @@ li {
 .land .land-owned, .land .land-cost, .land .land-action-cost,
 .land .land-payout {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 378, src/sass/style.scss */
@@ -542,7 +542,7 @@ a.crafting-submit-button {
 
 /* line 459, src/sass/style.scss */
 .land-soon .land-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: bold;
   color: #888;
 }
@@ -550,7 +550,7 @@ a.crafting-submit-button {
 /* line 465, src/sass/style.scss */
 .land-soon .land-description {
   color: #888;
-  font-size: 11px;
+  font-size: 0.6875rem;
   margin-bottom: 6px;
 }
 
@@ -558,7 +558,7 @@ a.crafting-submit-button {
 .land-soon .land-cost, .land-soon .land-payout,
 .land-soon .land-required_level, .land-soon .land-action-cost {
   margin-left: 10px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 /* line 477, src/sass/style.scss */
@@ -579,7 +579,7 @@ a.crafting-submit-button {
 /* line 490, src/sass/style.scss */
 .level-up-header {
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
   margin-bottom: 6px;
 }
@@ -627,7 +627,7 @@ a.crafting-submit-button {
   padding: 3px;
   color: #fff;
   text-decoration: none;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -686,7 +686,7 @@ a.crafting-submit-button {
   margin-top: 0px;
   margin-bottom: 2px;
   font-weight: normal;
-  font-size: 13px;
+  font-size: 0.8125rem;
   clear: both;
 }
 
@@ -697,7 +697,7 @@ a.crafting-submit-button {
   padding-top: 10px;
   margin-bottom: 2px;
   font-weight: normal;
-  font-size: 13px;
+  font-size: 0.8125rem;
   clear: both;
 }
 
@@ -711,7 +711,7 @@ a.crafting-submit-button {
 /* line 604, src/sass/style.scss */
 .news .dateline {
   font-style: italic;
-  font-size: 10px;
+  font-size: 0.625rem;
   color: #ccc;
   clear: both;
   text-align: left;
@@ -917,7 +917,7 @@ a.crafting-submit-button {
 .elections-header {
   font-weight: bold;
   margin: 12px 0 0 36px;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 
 /* line 821, src/sass/style.scss */
@@ -931,7 +931,7 @@ a.crafting-submit-button {
   position: absolute;
   left: 2px;
   top: 26px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 /* line 833, src/sass/style.scss */
@@ -975,7 +975,7 @@ a.crafting-submit-button {
   margin: 12px auto 16px;
   text-align: center;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 0.9375rem;
   padding: 6px;
   background-color: #888;
   border: 1px solid #888;
@@ -999,7 +999,7 @@ a.try-an-election, input.try-an-election {
 .election-succeeded {
   margin-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -1007,7 +1007,7 @@ a.try-an-election, input.try-an-election {
 .election-failed {
   margin-top: 12px;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
 }
 
@@ -1109,7 +1109,7 @@ a.try-an-election, input.try-an-election {
 /* line 980, src/sass/style.scss */
 .debate-used {
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   padding: 8px 3px 3px;
   display: inline-block;
   position: relative;
@@ -1150,7 +1150,7 @@ a.try-an-election, input.try-an-election {
 /* line 1015, src/sass/style.scss */
 .message-error.big {
   padding-bottom: 6px;
-  font-size: 18px;
+  font-size: 1.125rem;
 }
 
 /* line 1020, src/sass/style.scss */
@@ -1174,7 +1174,7 @@ a.try-an-election, input.try-an-election {
 .event a {
   display: block;
   padding: 4px 8px;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   background-color: #cc0;
   border-radius: 50px;
@@ -1186,7 +1186,7 @@ a.try-an-election, input.try-an-election {
 /* line 1046, src/sass/style.scss */
 .event .event-title {
   margin: 3px;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-family: Georgia, "times new roman", serif;
   font-weight: bold;
 }
@@ -1202,7 +1202,7 @@ a.try-an-election, input.try-an-election {
   clear: both;
   font-weight: bold;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: georgia, times new roman, times, serif;
 }
 
@@ -1211,7 +1211,7 @@ a.try-an-election, input.try-an-election {
   clear: both;
   padding-bottom: 4px;
   text-align: center;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-family: times new roman, times, serif;
 }
 
@@ -1234,14 +1234,14 @@ a .event-text {
 /* line 1087, src/sass/style.scss */
 .location {
   color: #888;
-  font: 10px Helvetica, Arial, sans-serif;
+  font: 0.625rem Helvetica, Arial, sans-serif;
   text-align: center;
   padding-top: 2px;
 }
 
 /* line 1094, src/sass/style.scss */
 .version {
-  font: 8px Helvetica, Arial, sans-serif;
+  font: 0.5rem Helvetica, Arial, sans-serif;
   display: block;
 }
 
@@ -1307,7 +1307,7 @@ img.round4 {
   text-align: center;
   color: #aaa;
   margin: 72px 0 12px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 
 /* line 1153, src/sass/style.scss */

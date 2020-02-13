@@ -199,7 +199,7 @@ p:first-of-type {
 .quests .quest-description .not-yet, .land .land-description .not-yet {
   color: #c23;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   margin-top: 6px;
   margin-left: 10px;
 }
@@ -242,7 +242,7 @@ p:first-of-type {
   margin-right: 8px;
   margin-bottom: 28px;
   padding-top: 3px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 
 .quest-do-again-inside, .land-buy-again-inside {
@@ -294,7 +294,7 @@ p:first-of-type {
 .choose-clan-name {
   margin-left: 6px;
   font-weight: bold;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: #1ca443;
 }
 
@@ -305,7 +305,7 @@ p:first-of-type {
 .choose-clan-slogan {
   margin: 0 0 8px 54px;
   font-style: italic;
-  font-size: 11px;
+  font-size: 0.6875rem;
   color: #bcb;
 }
 
@@ -435,7 +435,7 @@ p:first-of-type {
 
 .location {
   color: #f8fdfe;
-  font: 10px Helvetica,Arial,sans-serif;
+  font: 0.625rem Helvetica,Arial,sans-serif;
   text-align: center;
   padding: 4px 0 3px 0;
   width: 312px;
@@ -540,6 +540,14 @@ p:first-of-type {
 .highlighted {
   color: #188433;
   font-weight: bold;
+}
+
+.event {
+  border: #1a2 solid 1px;
+  border-radius: 8px;
+  padding: 4px 4px 10px;
+  background-color: #1a22;
+  color: #1a2;
 }
 
 .event-info .subtitle {
@@ -656,7 +664,7 @@ a.version {
         z-index: 12;
         text-decoration: none;
         color: #dd7;
-        font-size: 15px;
+        font-size: 0.9375rem;
         font-family: Georgia, "times new roman", serif;
         font-weight: bold;
         text-shadow: 1px 1px 2px #e008;
@@ -677,7 +685,7 @@ a.version {
         &.clan-menu {
           top: 140px;
           left: 106px;
-          font-size: 12px;
+          font-size: 0.75rem;
           min-width: 50px;
           background-color: #0009;
         }
@@ -694,7 +702,7 @@ a.version {
           top: 97px;
           left: 130px;
           min-width: 60px;
-          font-size: 14px;
+          font-size: 0.875rem;
           background-color: #0007;
         }
         &.elections-menu {
@@ -704,21 +712,21 @@ a.version {
         &.forum-menu {
           top: 140px;
           left: 239px;
-          font-size: 12px;
+          font-size: 0.75rem;
           min-width: 50px;
           background-color: #0009;
         }
         &.help-menu {
           top: 140px;
           left: 169px;
-          font-size: 12px;
+          font-size: 0.75rem;
           min-width: 50px;
           background-color: #0009;
         }
         &.missions-menu {
           top: 10px;
           left: 102px;
-          font-size: 17px;
+          font-size: 1.0625rem;
           text-transform: uppercase;
           text-shadow: 1px 1px 2px #0e08;
           min-width: 120px;
@@ -727,13 +735,13 @@ a.version {
           top: 87px;
           left: 130px;
           min-width: 60px;
-          font-size: 14px;
+          font-size: 0.875rem;
           background-color: #0006;
         }
         &.profile-menu {
           top: 140px;
           left: 38px;
-          font-size: 12px;
+          font-size: 0.75rem;
           min-width: 50px;
           background-color: #0009;
         }
@@ -761,7 +769,7 @@ a.version {
   left: 0;
   bottom: 0;
   transform-origin: 13px 11px;
-  font-size: 20px;
+  font-size: 1.25rem;
   background: rgba(0, 100, 0, 0.7);
   padding: 2px 6px;
   border-radius: 4px;
@@ -863,7 +871,7 @@ textarea {
 
 .swiper-slide {
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem;
   display: -webkit-box;
   display: -ms-flexbox;
   display: -webkit-flex;
@@ -903,17 +911,17 @@ textarea {
 }
 
 .swiper-slide .title.loot {
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .swiper-slide .quest-images {
   margin: 0 2px;
   font-weight: initial;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 
 .quest-group-name, .quest-group-title {
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: bold;
   display: block;
   -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
@@ -1007,7 +1015,7 @@ span.not-yet-overlay {
   color: #9aa;
   font-weight: bold;
   text-transform: uppercase;
-  font-size: 17px;
+  font-size: 1.0625rem;
   letter-spacing: 2.75px;
   text-shadow: 0 1px 0 beige;
 }
@@ -1020,7 +1028,7 @@ span.not-yet-overlay {
 .swiper-slide .description {
   display: none;
   color: #e0e8ee;
-  font-size: 12px;
+  font-size: 0.75rem;
   font-style: italic;
   font-weight: normal;
   margin: 16px 6px 10px;
@@ -1099,7 +1107,7 @@ span.not-yet-overlay {
   font-weight: bold;
   letter-spacing: 5px;
   text-shadow: 0 0.9px 0 beige;
-  font-size: 11px;
+  font-size: 0.6875rem;
   margin-bottom: 4px;
 }
 
@@ -1113,7 +1121,7 @@ span.not-yet-overlay {
 }
 
 div.description-speech-bubble-wrapper {
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: left;
   font-style: normal;
   margin-left: -22px;
@@ -1122,7 +1130,7 @@ div.description-speech-bubble-wrapper {
 }
 
 div.speech-bubble-wrapper {
-  font-size: 11px;
+  font-size: 0.6875rem;
   text-align: left;
   font-style: normal;
   margin: 8px 0;

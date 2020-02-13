@@ -20,6 +20,7 @@ define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
 define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
 define(EVENT_CHRISTMAS, 'event_christmas');
+define(EVENT_DEAD_PRESIDENTS, 'event_dead_presidents');
 define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
 
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
@@ -94,7 +95,19 @@ switch ($today) {
   case '2020-02-05':
   case '2020-02-06':
   case '2020-02-07':
+  case '2020-02-08':
+  case '2020-02-09':
+  case '2020-02-10':
     $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
+  case '2020-02-12':
+  case '2020-02-13':
+  case '2020-02-14':
+  case '2020-02-15':
+  case '2020-02-16':
+  case '2020-02-17':
+    $event_type[] = EVENT_DEAD_PRESIDENTS;
     break;
 
   /* ------ MARCH ------ */
@@ -337,6 +350,8 @@ $game_text = [
   'energy' => 'Energy',
   'experience' => 'Influence',
   'experience_short' => 'Inf',
+  'extra defending votes' => 'Extra Def Votes',
+  'extra votes' => 'Extra Votes',
   'hood' => 'Neighborhood',
   'hood_lower' => 'neighborhood',
   'hood_short' => '\'hood',
