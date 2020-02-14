@@ -98,7 +98,8 @@ firep($new_hood, 'new hood');
 
     echo '<div class="land-failed">' . t('Out of Action!') .
       '</div>';
-    zg_button('elders_do_fill', t('Refill your Action (1&nbsp;Luck)'), '/action?destination=/' . $game . '/move/' . $arg2 . '/' .
+    zg_button('elders_do_fill', t('Refill your Action (1&nbsp;Luck)'),
+      '/action?destination=/' . $game . '/move/' . $arg2 . '/' .
       $neighborhood_id, 'big-68');
     zg_button('move', t('Choose a different @neighborhood',
       array('@neighborhood' => $hood_lower)), '/0', 'big-68');

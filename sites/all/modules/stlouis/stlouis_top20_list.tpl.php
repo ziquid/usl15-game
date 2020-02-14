@@ -470,7 +470,7 @@ else {
   $sql = 'SELECT username, experience, initiative, endurance,
     elocution, debates_won, debates_lost, skill_points, luck,
     debates_last_time, users.fkey_values_id, level, phone_id,
-    income, expenses, users.money,
+    income, expenses, users.money, users.meta_int,
     `values`.party_title, `values`.party_icon,
     `values`.name, users.id, users.fkey_neighborhoods_id,
     elected_positions.name as ep_name,
@@ -560,7 +560,16 @@ else {
     case 'init_aides':
     case 'end_aides':
     case 'eloc_aides':
+      break;
 
+    case 'stolen_money':
+      $subtitle = 'Stolen money received';
+      $sql .= '
+        ORDER BY users.meta_int DESC
+      ';
+      $sql2_what = 'meta_int';
+      $sql2_limit = $game_user->meta_int;
+      break;
   }
 
   $result = db_query($sql . ' LIMIT 20;');
@@ -799,7 +808,11 @@ firep($item, 'rank ' . $rank);
     case 'init_aides':
     case 'end_aides':
     case 'eloc_aides':
+      break;
 
+    case 'stolen_money':
+      $data_point = '$tL ' . number_format($item->meta_int) . " received";
+      break;
   }
 
   if (($item->weight != $last_weight) && $last_weight != '') {

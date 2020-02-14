@@ -171,15 +171,24 @@ function actionlist() {
   }
 
   foreach ($data as &$action) {
-    $action_function = 'game_preaction_' .
+    $game_preaction_function = 'game_preaction_' .
+      strtolower(str_replace(
+        [' ', '%', "'", '.', '(', ')'],
+        ['_', '', '', '', '', ''],
+        $action->name));
+    $zg_preaction_function = 'zg_preaction_' .
       strtolower(str_replace(
         [' ', '%', "'", '.', '(', ')'],
         ['_', '', '', '', '', ''],
         $action->name));
 
-    if (function_exists($action_function)) {
-      $action_function($action);
+    if (function_exists($game_preaction_function)) {
+      $game_preaction_function($action);
       firep($action, 'action after game_preaction');
+    }
+    if (function_exists($zg_preaction_function)) {
+      $zg_preaction_function($game_user, $action);
+      firep($action, 'action after zg_preaction');
     }
   }
 
@@ -503,13 +512,20 @@ function game_preaction_spread_gossip(&$action) {
   $action->values_cost += ($comp_level->level);
 }
 
-function game_preaction_steal_some_value(&$action) {
-  global $game;
-  $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
-
-  $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
+/**
+ * Preaction for steal some value.
+ *
+ * This function increases the amount stolen based on the user's competency.
+ *
+ * @param object $game_user
+ *   The game user object.
+ * @param object $action
+ *   The action object.
+ */
+function zg_preaction_steal_some_value(&$game_user, &$action) {
+  $comp_level = zg_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->values_change -= ($comp_level->level * 20);
+  zg_alter('preaction_steal_some_value', $game_user, $action);
 }
 
 function game_preaction_support_your_local_official(&$action) {

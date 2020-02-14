@@ -28,7 +28,7 @@ function zg_cron() {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
     // Module has its own cron?  Skip this cron, except for hook_cron().
-    if (function_exists($cron = $game . '_cron')) {
+    if (function_exists($game . '_cron')) {
       zg_alter('cron', NULL);
       continue;
     }

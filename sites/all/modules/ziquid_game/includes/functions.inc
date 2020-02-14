@@ -1221,7 +1221,7 @@ function zg_luck_energy_offer(\stdClass $game_user) {
  *   TRUE if any hooks exist and returned TRUE.  FALSE otherwise.
  */
 function zg_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = NULL) {
-  $game = check_plain(arg(0));
+  global $game;
 
   $retval = FALSE;
   $game_include_list = zg_includes_get();
@@ -1387,9 +1387,9 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
  */
 function zg_get_game_list() {
   return [
-    'detroit',
+//    'detroit',
     'stlouis',
-    'wonderland',
+//    'wonderland',
   ];
 }
 

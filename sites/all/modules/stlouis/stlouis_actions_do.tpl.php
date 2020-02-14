@@ -71,16 +71,16 @@ EOF;
     return;
   }
 
+  // Target is required but no target specified.
   if (($_GET['target'] == 0) && ($action->target != 'none')) {
 
-    $fetch_header($game_user);
-
-    echo '<div class="election-failed">' . t('Failure') . '</div>';
-    echo "<div class=\"subtitle\">You must choose a target</div>";
-    echo '<div class="election-continue"><a href="/' . $game . '/actions/' .
-      $arg2 . '">' . t('Try again') . '</a></div>';
-
-    db_set_active('default');
+    zg_fetch_header($game_user);
+    db_set_active();
+    ?>
+    <div class="election-failed">Failure</div>
+    <div class="subtitle">You must choose a target</div>
+    <?php
+    zg_button('actions', 'Try again');
     return;
   }
 
@@ -330,17 +330,18 @@ if ($action_succeeded) {
       $money = -min(-$action->values_change, $item->money);
     }
 
-//    $sql = 'update users set money = greatest(money + %d, 0) where id = %d;';
     $sql = 'update users set money = money + %d where id = %d;';
     $result = db_query($sql, $money, $target_id);
     $outcome_reason .= '<div class="action-effect">' . $target_name . ' ' .
-    $game_user->values . ' is ' . $verb . ' by ' . abs($money) . '</div>';
+      $game_user->values . ' is ' . $verb . ' by ' . abs($money) . '</div>';
 
     if ($action->values_change < 0) {
       $can_do_again = FALSE;
+      $money = abs(floor($money / 2));
       $sql = 'update users set money = money + %d where id = %d;';
-      db_query($sql, abs(floor($money / 2)), $game_user->id);
+      db_query($sql, $money, $game_user->id);
       $outcome_reason .= '<div class="action-effect">You gain half</div>';
+      zg_alter('actions_do_half_money_gained', $game_user, $action, $money);
     }
 
   }

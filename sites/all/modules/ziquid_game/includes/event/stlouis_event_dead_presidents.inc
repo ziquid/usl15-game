@@ -89,3 +89,35 @@ function stlouis_event_dead_presidents_recalc_income($game_user) {
     $game_user->income = $game_user->expenses = 0;
   }
 }
+
+/**
+ * Implements hook_cron().
+ */
+function stlouis_event_dead_presidents_cron($game_user) {
+//  echo 'cron!';
+}
+
+/**
+ * Implements hook_preaction_steal_some_value().
+ */
+function stlouis_event_dead_presidents_preaction_steal_some_value($game_user, &$action) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $action->values_change *= 10;
+    $action->neighborhood_rating_change *= 5;
+  }
+}
+
+/**
+ * Implements hook_actions_do_half_money_gained().
+ */
+function stlouis_event_dead_presidents_actions_do_half_money_gained($game_user, &$action, &$money) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $game_user->meta_int += $money;
+    $sql = 'update users set meta_int = meta_int + %d
+      where id = %d;';
+    db_query($sql, $money, $game_user->id);
+    firep($game_user->meta_int, 'total money received');
+  }
+}
