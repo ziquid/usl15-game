@@ -317,7 +317,7 @@ if ($action_succeeded) {
     $target_name = $target->ep_name . ' ' . $target->username . '\'s';
     $target_id = $_GET['target'];
 
-    $sql = 'select money from users where id = %d;';
+    $sql = 'select id, money, meta_int from users where id = %d;';
     $result = db_query($sql, $target_id);
 
     if ($action->values_change > 0) {
@@ -328,6 +328,7 @@ if ($action_succeeded) {
       $verb = 'decreased';
       $item = db_fetch_object($result);
       $money = -min(-$action->values_change, $item->money);
+      zg_alter('actions_do_money_lost', $item, $action, $money);
     }
 
     $sql = 'update users set money = money + %d where id = %d;';

@@ -126,6 +126,20 @@ function stlouis_event_dead_presidents_actions_do_half_money_gained($game_user, 
 }
 
 /**
+ * Implements hook_actions_do_money_lost().
+ */
+function stlouis_event_dead_presidents_actions_do_money_lost($game_user, &$action, &$money) {
+  $today = date('Y-m-d', REQUEST_TIME - 3600);
+  if ($today == '2020-02-17' || $game_user->meta == 'admin') {
+    $game_user->meta_int += $money;
+    $sql = 'update users set meta_int = meta_int + %d
+      where id = %d;';
+    db_query($sql, $money, $game_user->id);
+    firep($game_user->meta_int, 'total money received, minus ' . abs($money) . ' just lost');
+  }
+}
+
+/**
  * Implements hook_top20_list_what().
  */
 function stlouis_event_dead_presidents_top20_list_what($game_user, &$what) {
