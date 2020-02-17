@@ -29,13 +29,16 @@ function stlouis_event_dead_presidents_homepage_event_notice(\stdClass $game_use
   <div class="event-text">
     No Mission.&nbsp; No Job.&nbsp; No Income.
   <br>
-    Only one thing to do:
-  </div>
-  <div class="event-text">
-    Steal <span class="highlight">A LOT</span> of money.
+    Only THREE things to do:
   </div>
   <div class="event-text">' .
-    zg_render_button('top20', 'Top 20 Thieves') .
+    zg_render_button('staff_hire', 'Hire a Petty Thief', '/9/1') .
+  '</div>
+  <div class="event-text">' .
+    zg_render_button('actions', 'Steal A LOT of money') .
+    '</div>
+  <div class="event-text">' .
+    zg_render_button('top20', 'View Top 20 Thieves') .
   '</div>
 </div>';
 }
