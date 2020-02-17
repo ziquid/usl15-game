@@ -22,6 +22,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 $show_where = check_plain($_GET['where']);
 $show_what = check_plain($_GET['what']);
+zg_alter('top20_list_show_what', $game_user, $show_what);
 
 if (empty($game_user->username)) {
   db_set_active('default');
@@ -617,6 +618,8 @@ $what = [
   'eloc_aides' => 'Eloc Aides (5 Actions)',
 ];
 
+zg_alter('top20_list_what', $game_user, $what);
+
 $total_cost = 0;
 $where_title = $where[$show_where];
 $what_title = $what[$show_what];
@@ -638,8 +641,8 @@ if (!$actions_paid) {
 }
 
 /* ------ VIEW ------ */
-$fetch_header($game_user);
-game_show_elections_menu($game_user);
+zg_fetch_header($game_user);
+zg_show_elections_menu($game_user);
 
 if (!$actions_paid) {
   print '<div class="land-failed">' . t('Out of Action!') .

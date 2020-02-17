@@ -34,6 +34,9 @@ function stlouis_event_dead_presidents_homepage_event_notice(\stdClass $game_use
   <div class="event-text">
     Steal <span class="highlight">A LOT</span> of money.
   </div>
+  <div class="event-text">' .
+    zg_render_button('top20', 'Top 20 Thieves') .
+  '</div>
 </div>';
 }
 
@@ -120,4 +123,20 @@ function stlouis_event_dead_presidents_actions_do_half_money_gained($game_user, 
     db_query($sql, $money, $game_user->id);
     firep($game_user->meta_int, 'total money received');
   }
+}
+
+/**
+ * Implements hook_top20_list_what().
+ */
+function stlouis_event_dead_presidents_top20_list_what($game_user, &$what) {
+  $what = [
+    'stolen_money' => 'Stolen Money (Free)',
+  ];
+}
+
+/**
+ * Implements hook_top20_list_show_what().
+ */
+function stlouis_event_dead_presidents_top20_list_show_what($game_user, &$show_what) {
+  $show_what = 'stolen_money';
 }
