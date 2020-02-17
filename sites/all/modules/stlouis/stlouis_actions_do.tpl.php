@@ -34,31 +34,31 @@ if ($game_user->meta == 'frozen') {
 <?php
 
   return;
+}
+
+$data = actionlist();
+$action_found = FALSE;
+
+foreach ($data as $item) {
+  if ($item->id == $action_id) {
+    $action = $item;
+    $action_found = TRUE;
   }
+}
 
-  $data = actionlist();
-  $action_found = FALSE;
+// Hacking!
+if ((!$action_found) && (substr($arg2, 0, 3) != 'ai-')) {
 
-  foreach ($data as $item) {
-    if ($item->id == $action_id) {
-      $action = $item;
-      $action_found = TRUE;
-    }
-  }
+  game_karma($game_user, "Trying to perform action that is not available", -20);
 
-  // Hacking!
-  if ((!$action_found) && (substr($arg2, 0, 3) != 'ai-')) {
+  db_set_active('default');
+  drupal_goto($game . '/home/' . $arg2);
+}
 
-    game_karma($game_user, "Trying to perform action that is not available", -20);
+// FIXME: Show list.
+if (substr($_GET['target'], 0, 7) == 'letter_') {
 
-    db_set_active('default');
-    drupal_goto($game . '/home/' . $arg2);
-  }
-
-  // Show list.
-  if (substr($_GET['target'], 0, 7) == 'letter_') {
-
-    echo <<< EOF
+  echo <<< EOF
 <div class="title">
 $action->name
 </div>
@@ -67,100 +67,99 @@ Please select a target
 </div>
 EOF;
 
-    db_set_active('default');
-    return;
-  }
+  db_set_active('default');
+  return;
+}
 
-  // Target is required but no target specified.
-  if (($_GET['target'] == 0) && ($action->target != 'none')) {
+// Target is required but no target specified.
+if (($_GET['target'] == 0) && ($action->target != 'none')) {
 
-    zg_fetch_header($game_user);
-    db_set_active();
-    ?>
-    <div class="election-failed">Failure</div>
-    <div class="subtitle">You must choose a target</div>
-    <?php
-    zg_button('actions', 'Try again');
-    return;
-  }
+  zg_fetch_header($game_user);
+  db_set_active();
+  ?>
+  <div class="election-failed">Failure</div>
+  <div class="subtitle">You must choose a target</div>
+  <?php
+  zg_button('actions', 'Try again');
+  return;
+}
 
-  // FIXME: what if there is no target?  This entire block of code assumes
-  // that there is a target.
-  $sql = 'SELECT username, phone_id, elected_positions.name as ep_name,
-    elected_positions.id as ep_id, experience, fkey_neighborhoods_id, luck,
-    level from users
+// FIXME: what if there is no target?  This entire block of code assumes
+// that there is a target.
+$sql = 'SELECT username, phone_id, elected_positions.name as ep_name,
+  elected_positions.id as ep_id, experience, fkey_neighborhoods_id, luck,
+  level from users
 
-    LEFT OUTER JOIN elected_officials
-    ON elected_officials.fkey_users_id = users.id
-    LEFT OUTER JOIN elected_positions
-    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
 
-    where users.id = %d';
+  where users.id = %d';
 
-  $result = db_query($sql, $_GET['target']);
-  $target = db_fetch_object($result);
+$result = db_query($sql, $_GET['target']);
+$target = db_fetch_object($result);
 
-  if (!is_object($target)) {
-    $target = new stdClass();
-  }
+if (!is_object($target)) {
+  $target = new stdClass();
+}
 
-  $target->id = (int) $_GET['target'];
-  firep($target, 'Target of Action');
+$target->id = (int) $_GET['target'];
+firep($target, 'Target of Action');
 
-  $name = str_replace('%value', $game_user->values, $action->name);
+$name = str_replace('%value', $game_user->values, $action->name);
+$title = "$name $action->preposition $target->ep_name $target->username";
+$action_succeeded = $can_do_again = TRUE;
+$outcome_reason = '<div class="land-succeeded">' . t('Success!') .
+  '</div>';
+$ai_output = 'action-succeeded';
 
-  $title = "$name $action->preposition $target->ep_name $target->username";
-
-  $action_succeeded = $can_do_again = TRUE;
-  $outcome_reason = '<div class="land-succeeded">' . t('Success!') .
+// Check to see if prerequisites are met.
+if ($game_user->actions < $action->cost) {
+  $action_succeeded = FALSE;
+  $outcome_reason = '<div class="land-failed">' . t('Out of Action!') .
     '</div>';
-  $ai_output = 'action-succeeded';
-
-  // Check to see if prerequisites are met.
-  if ($game_user->actions < $action->cost) {
-    $action_succeeded = FALSE;
-    $outcome_reason = '<div class="land-failed">' . t('Out of Action!') .
-      '</div>';
-    if (substr($phone_id, 0, 3) == 'ai-') {
-      $ai_output = 'action-failed no-action';
-    }
-    $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $arg2 . '/action?destination=/' . $game . '/actions/' . $arg2 .
-      '">Refill your Action (1&nbsp;Luck)</a></div></div>';
+  if (substr($phone_id, 0, 3) == 'ai-') {
+    $ai_output = 'action-failed no-action';
   }
+  $outcome_reason .= zg_render_button('elders_do_fill',
+    'Refill your Action (1&nbsp;Luck)',
+    '/action?destination=/' . $game . '/actions/' . $arg2,
+    'big-68');
+}
 
-  if (($game_user->money < $action->values_cost) &&
-    ($action->values_cost > 0)) {
+if (($game_user->money < $action->values_cost) &&
+  ($action->values_cost > 0)) {
 
-    $action_succeeded = FALSE;
-    $outcome_reason = '<div class="land-failed">' .
-    t('Out of @value!', ['@value' => $game_user->values]) .
-      '</div>';
+  $action_succeeded = FALSE;
+  $outcome_reason = '<div class="land-failed">' .
+  t('Out of @value!', ['@value' => $game_user->values]) .
+    '</div>';
 
-    if (substr($phone_id, 0, 3) == 'ai-')
-      $ai_output = 'action-failed no-money';
-    $offer = game_luck_money_offer($game_user);
-    $outcome_reason .= '<div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .
-      '">Receive ' . $offer . ' ' . $game_user->values .
-      ' (1&nbsp;Luck)</a></div></div>';
+  if (substr($phone_id, 0, 3) == 'ai-') {
+    $ai_output = 'action-failed no-money';
   }
+  $offer = zg_luck_money_offer($game_user);
+  $outcome_reason .= '<div class="try-an-election-wrapper"><div
+    class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
+    $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .
+    '">Receive ' . $offer . ' ' . $game_user->values .
+    ' (1&nbsp;Luck)</a></div></div>';
+}
 
-  $action_function = $game . '_action_' .
-    strtolower(str_replace(
-      [' ', '%', "'", '.', '(', ')'],
-      ['_', '', '', '', '', ''],
-      $action->name));
+$action_function = $game . '_action_' .
+  strtolower(str_replace(
+    [' ', '%', "'", '.', '(', ')'],
+    ['_', '', '', '', '', ''],
+    $action->name));
 
-  if (!function_exists($action_function)) {
-    $action_function = '_' . $action_function . '_function';
-  }
+if (!function_exists($action_function)) {
+  $action_function = '_' . $action_function . '_function';
+}
 
-  if ($action_succeeded && function_exists($action_function)) {
-    $action_succeeded = $action_function($outcome_reason, $target, $can_do_again, $action);
-  }
+if ($action_succeeded && function_exists($action_function)) {
+  $action_succeeded = $action_function($outcome_reason, $target, $can_do_again, $action);
+}
 
 if ($action_succeeded) {
 
