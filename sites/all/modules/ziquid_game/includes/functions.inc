@@ -1693,5 +1693,5 @@ function zg_slack($type, $message) {
       break;
   }
 
-  return zg_slack($type, $message);
+  return slack_send_message($slack_message, $slack_channel);
 }
