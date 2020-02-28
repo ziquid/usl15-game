@@ -128,6 +128,12 @@ $player_values = drupal_strtolower($game_user->values);
 
 zg_fetch_header($game_user);
 
+// AI bot?  No reason to spend cycles on this.
+if (substr($phone_id, 0, 3) == 'ai-') {
+  db_set_active('default');
+  return;
+}
+
 if (empty($game_user->referral_code)) {
   $good_code = FALSE;
   $count = 0;
@@ -295,31 +301,7 @@ switch ($month_mission) {
     break;
 }
 
-// Dead presidents event.
-/*
-if ($game == 'stlouis') $event_text = '<!--<a href="/' . $game .
-'/top_event_points/' . $arg2 . '">-->
-<div class="event">
-  <img src="/sites/default/files/images/toxicorp_takeover.png" border=0
-  width="160">
-</div>
-<div class="event-text">
-    New&nbsp;Event <!--Starts&nbsp;Feb&nbsp;28th-->DELAYED
-</div>
-<div class="event-tagline small">
-  Turning St. Louis into an industrial wasteland
-</div>
-<div class="event-tagline">
-  &mdash; one &mdash; hood &mdash; at &mdash; a &mdash; time &mdash;
-</div>
-</div>
-<!--</a>-->';
-*/
-
-// Add event text, if any.
 zg_alter('homepage_event_notice', $game_user, $event_text);
-
-// Alter menu.
 zg_alter('homepage_menu', $game_user, $extra_menu);
 
 $link = 'quest_groups';
@@ -334,6 +316,9 @@ else {
 }
 
 $debates_class = drupal_html_class($game_text['menu']['debates']) . '-menu';
+$data = zg_get_msgs($game_user);
+zg_alter('homepage_messages', $game_user, $data);
+$msg_shown = FALSE;
 
 echo <<< EOF
 <div class="title">
@@ -476,258 +461,31 @@ $extra_bonus
       </li>
 
     </ul>
-EOF;
-
-
-  echo <<< EOF
-</div>
-<div class="location">
-<span class="location-$alder_values player-$player_values">$game_user->location</span>
-</div>
-$event_text
-<div class="news">
-<div class="title">
-  News
-</div>
-<div class="news-buttons">
-  <button id="news-all" class="active">All</button>
-  <button id="news-user">Personal</button>
-  <button id="news-challenge">{$election_tab}</button>
-  <button id="news-clan">$party_small</button>
-  <button id="news-mayor">${game_text['mayor_tab']}</button>
-</div>
-<div id="all-text">
-EOF;
-
-// No reason to spend cycles on msgs.
-if (substr($phone_id, 0, 3) == 'ai-') {
-  db_set_active('default');
-  return;
-}
-
-// Are we a type 2 elected official?
-$sql = 'SELECT type FROM elected_officials
-  left join elected_positions on elected_positions.id = fkey_elected_positions_id
-  WHERE fkey_users_id = %d;';
-$result = db_query($sql, $game_user->id);
-$item = db_fetch_object($result);
-
-$elected_official_type = $item->type;
-
-// If a party official.
-if ($elected_official_type == 2) {
-
-  // Grab the list of all clans in the user's party.
-  // We need to do this separately to keep the db from locking.
-  // Wish mysql had a select with nolock feature - JWC.
-  $data = [];
-  $sql = 'SELECT fkey_clans_id FROM clan_members
-    left join users on fkey_users_id = users.id
-    WHERE fkey_values_id = %d
-    and is_clan_leader = 1;';
-  $result = db_query($sql, $game_user->fkey_values_id);
-  while ($item = db_fetch_object($result)) {
-    $data[] = $item->fkey_clans_id;
-  }
-
-  $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
-  $clan_id_to_use = implode(',', $data);
-//firep($clan_id_to_use);
-  $limit = 50;
-  $all_limit = 150;
-}
-else {
-  $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
-  $clan_id_to_use = $game_user->fkey_clans_id;
-  $limit = 20;
-  $all_limit = 100;
-}
-
-$sql = '
-  (
-  select user_messages.timestamp, user_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  user_messages.private,
-  "user" as type,
-  subtype
-  from user_messages
-  left join users on user_messages.fkey_users_from_id = users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-  user_messages.fkey_users_from_id
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  where fkey_users_to_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select challenge_messages.timestamp, challenge_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  0 AS private,
-  "challenge" as type,
-  "" as subtype
-  from challenge_messages
-  left join users on challenge_messages.fkey_users_from_id = users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-  challenge_messages.fkey_users_from_id
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  where fkey_users_to_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select neighborhood_messages.timestamp, neighborhood_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  0 AS private,
-  "hood" as type,
-  "" as subtype
-  from neighborhood_messages
-  left join users on neighborhood_messages.fkey_users_from_id =
-    users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-  neighborhood_messages.fkey_users_from_id
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  where neighborhood_messages.fkey_neighborhoods_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select clan_messages.timestamp, clan_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  0 AS private,
-  "clan" as type,
-  "" as subtype
-  from clan_messages
-  left join users on clan_messages.fkey_users_from_id = users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    clan_messages.fkey_users_from_id
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  ' . $clan_sql . '
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select values_messages.timestamp, values_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
-  0 AS private,
-  "values" as type,
-  "" as subtype
-  from values_messages
-  left join users on values_messages.fkey_users_from_id = users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    values_messages.fkey_users_from_id
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  where values_messages.fkey_values_id = %d
---    AND values_messages.fkey_neighborhoods_id = %d
-  order by timestamp DESC limit %d
-  )
-
-  union
-
-  (
-  select system_messages.timestamp, system_messages.message,
-  users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
---  NULL AS username, NULL as phone_id,
---  NULL AS ep_name,
---  0 AS is_clan_leader,
---  NULL AS clan_acronym,
-  0 AS private,
-  "mayor" as type,
-  subtype
-  from system_messages
-  left join users on system_messages.fkey_users_from_id = users.id
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    system_messages.fkey_users_from_id
-    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  order by timestamp DESC limit %d
-  )
-
-  order by timestamp DESC limit %d;';
-firep($sql, 'sql for homepage');
-
-// Don't show if load avg too high.
-// FIXME: get load avg of db server.
-//  $load_avg = sys_getloadavg();
-$data = [];
-
-if (TRUE/*$load_avg[0] <= 2.0*/) {
-  // Expensive query - goes to slave.
-//   db_set_active('zg_' . $game . '_slave1');
-  $result = db_query($sql, $game_user->id, $limit,
-    $game_user->id, 10, // challenge limit of 10
-    $game_user->fkey_neighborhoods_id, $limit,
-    $clan_id_to_use, $limit,
-    $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
-    $limit, $all_limit);
-  while ($item = db_fetch_object($result)) {
-    $data[] = $item;
-  }
-
-  // Reset to master.
-  db_set_active('zg_' . $game);
-}
-
-$msg_shown = FALSE;
-
-echo <<< EOF
-<div class="news-item clan clan-msg">
-<div class="message-title">Send a message to your clan</div>
-<div class="send-message">
-  <form method=get action="/$game/party_msg/$arg2">
-    <textarea class="message-textarea" name="message"
-    rows="2">$message</textarea>
-  <br/>
-  <div class="send-message-target">
-    <select name="target">
+  </div>
+  <div class="location">
+    <span class="location-$alder_values player-$player_values">$game_user->location</span>
+  </div>
+  $event_text
+  <div class="news">
+    <div class="title">
+      News
+    </div>
+    <div class="news-buttons">
+      <button id="news-all" class="active">All</button>
+      <button id="news-user">Personal</button>
+      <button id="news-challenge">{$election_tab}</button>
+      <button id="news-clan">$party_small</button>
+      <button id="news-mayor">${game_text['mayor_tab']}</button>
+    </div>
+    <div id="all-text">
+      <div class="news-item clan clan-msg">
+        <div class="message-title">Send a message to your clan</div>
+        <div class="send-message">
+        <form method=get action="/$game/party_msg/$arg2">
+          <textarea class="message-textarea" name="message" rows="2">$message</textarea>
+          <br>
+          <div class="send-message-target">
+            <select name="target">
 EOF;
 
 if ($game_user->fkey_clans_id) {
@@ -738,18 +496,16 @@ if ($game_user->can_broadcast_to_party || $game_user->meta == 'admin') {
 }
 
 echo <<< EOF
-        <option value="values">$party</option>
-      </select>
+              <option value="values">$party</option>
+            </select>
+          </div>
+          <div class="send-message-send-wrapper">
+            <input class="send-message-send" type="submit" value="Send"/>
+          </div>
+        </form>
+      </div>
     </div>
-    <div class="send-message-send-wrapper">
-      <input class="send-message-send" type="submit" value="Send"/>
-    </div>
-  </form>
-</div>
-</div>
 EOF;
-
-zg_alter('homepage_messages', $game_user, $data);
 
 foreach ($data as $item) {
 // firep($item);
@@ -795,21 +551,21 @@ foreach ($data as $item) {
   }
 
   echo <<< EOF
-<div class="news-item $item->type">
-<div class="dateline">
-  $display_time $username $private_text
-</div>
-<div class="message-body $private_css">
-  <p>$item->message</p>$reply
-</div>
-</div>
+    <div class="news-item $item->type">
+      <div class="dateline">
+        $display_time $username $private_text
+      </div>
+      <div class="message-body $private_css">
+        <p>$item->message</p>$reply
+      </div>
+    </div>
 EOF;
   $msg_shown = TRUE;
 
 }
 
 echo <<< EOF
-</div>
+  </div>
 </div>
 <script type="text/javascript">
 var isoNews = $('#all-text').isotope({

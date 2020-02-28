@@ -1696,3 +1696,226 @@ function zg_slack($type, $message) {
 
   return slack_send_message($slack_message, $slack_channel);
 }
+
+/**
+ * Fetch all messages for a user.
+ *
+ * @param object $game_user
+ *   The game_user object.
+ *
+ * @return array
+ *   The messages.
+ */
+function zg_get_msgs($game_user) {
+
+  // Are we a type 2 elected official?
+  $sql = 'SELECT type FROM elected_officials
+  left join elected_positions on elected_positions.id = fkey_elected_positions_id
+  WHERE fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $item = db_fetch_object($result);
+  $elected_official_type = $item->type;
+
+  // If a party official.
+  if ($elected_official_type == 2) {
+
+    // Grab the list of all clans in the user's party.
+    // We need to do this separately to keep the db from locking.
+    // Wish mysql had a select with nolock feature - JWC.
+    $data = [];
+    $sql = 'SELECT fkey_clans_id FROM clan_members
+    left join users on fkey_users_id = users.id
+    WHERE fkey_values_id = %d
+    and is_clan_leader = 1;';
+    $result = db_query($sql, $game_user->fkey_values_id);
+    while ($item = db_fetch_object($result)) {
+      $data[] = $item->fkey_clans_id;
+    }
+
+    $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
+    $clan_id_to_use = implode(',', $data);
+    //firep($clan_id_to_use);
+    $limit = 50;
+    $all_limit = 150;
+  }
+  else {
+    $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
+    $clan_id_to_use = $game_user->fkey_clans_id;
+    $limit = 20;
+    $all_limit = 100;
+  }
+
+  $sql = '
+  (
+  select user_messages.timestamp, user_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  user_messages.private,
+  "user" as type,
+  subtype
+  from user_messages
+  left join users on user_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+  user_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  where fkey_users_to_id = %d
+  order by timestamp DESC limit %d
+  )
+
+  union
+
+  (
+  select challenge_messages.timestamp, challenge_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  0 AS private,
+  "challenge" as type,
+  "" as subtype
+  from challenge_messages
+  left join users on challenge_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+  challenge_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  where fkey_users_to_id = %d
+  order by timestamp DESC limit %d
+  )
+
+  union
+
+  (
+  select neighborhood_messages.timestamp, neighborhood_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  0 AS private,
+  "hood" as type,
+  "" as subtype
+  from neighborhood_messages
+  left join users on neighborhood_messages.fkey_users_from_id =
+    users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+  neighborhood_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  where neighborhood_messages.fkey_neighborhoods_id = %d
+  order by timestamp DESC limit %d
+  )
+
+  union
+
+  (
+  select clan_messages.timestamp, clan_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  0 AS private,
+  "clan" as type,
+  "" as subtype
+  from clan_messages
+  left join users on clan_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    clan_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  ' . $clan_sql . '
+  order by timestamp DESC limit %d
+  )
+
+  union
+
+  (
+  select values_messages.timestamp, values_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  0 AS private,
+  "values" as type,
+  "" as subtype
+  from values_messages
+  left join users on values_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    values_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  where values_messages.fkey_values_id = %d
+--    AND values_messages.fkey_neighborhoods_id = %d
+  order by timestamp DESC limit %d
+  )
+
+  union
+
+  (
+  select system_messages.timestamp, system_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+--  NULL AS username, NULL as phone_id,
+--  NULL AS ep_name,
+--  0 AS is_clan_leader,
+--  NULL AS clan_acronym,
+  0 AS private,
+  "mayor" as type,
+  subtype
+  from system_messages
+  left join users on system_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    system_messages.fkey_users_from_id
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  order by timestamp DESC limit %d
+  )
+
+  order by timestamp DESC limit %d;';
+  //firep($sql, 'sql for homepage');
+
+  // Don't show if load avg too high.
+  // FIXME: get load avg of db server.
+  //  $load_avg = sys_getloadavg();
+  $data = [];
+
+  if (TRUE/*$load_avg[0] <= 2.0*/) {
+    // Expensive query - goes to slave.
+    //   db_set_active('game_' . $game . '_slave1');
+    $result = db_query($sql, $game_user->id, $limit,
+      $game_user->id, 10, // challenge limit of 10
+      $game_user->fkey_neighborhoods_id, $limit,
+      $clan_id_to_use, $limit,
+      $game_user->fkey_values_id, $game_user->fkey_neighborhoods_id, $limit,
+      $limit, $all_limit);
+    while ($item = db_fetch_object($result)) {
+      $data[] = $item;
+    }
+
+    // Reset to master.
+    db_set_active('game_' . $game);
+  }
+  return $data;
+}
