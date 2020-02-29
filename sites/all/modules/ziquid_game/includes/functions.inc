@@ -1706,7 +1706,9 @@ function zg_slack($type, $message) {
  * @return array
  *   The messages.
  */
-function zg_get_msgs($game_user) {
+function zg_get_all_messages($game_user) {
+
+  global $game;
 
   // Are we a type 2 elected official?
   $sql = 'SELECT type FROM elected_officials
@@ -1752,7 +1754,7 @@ function zg_get_msgs($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
-  user_messages.private,
+  user_messages.private, user_messages.id as msg_id,
   "user" as type,
   subtype
   from user_messages
@@ -1776,7 +1778,7 @@ function zg_get_msgs($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
-  0 AS private,
+  0 AS private, challenge_messages.id as msg_id,
   "challenge" as type,
   "" as subtype
   from challenge_messages
@@ -1800,7 +1802,7 @@ function zg_get_msgs($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
-  0 AS private,
+  0 AS private, neighborhood_messages.id as msg_id,
   "hood" as type,
   "" as subtype
   from neighborhood_messages
@@ -1825,7 +1827,7 @@ function zg_get_msgs($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
-  0 AS private,
+  0 AS private, clan_messages.id as msg_id,
   "clan" as type,
   "" as subtype
   from clan_messages
@@ -1849,7 +1851,7 @@ function zg_get_msgs($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
-  0 AS private,
+  0 AS private, values_messages.id as msg_id,
   "values" as type,
   "" as subtype
   from values_messages
@@ -1878,7 +1880,7 @@ function zg_get_msgs($game_user) {
 --  NULL AS ep_name,
 --  0 AS is_clan_leader,
 --  NULL AS clan_acronym,
-  0 AS private,
+  0 AS private, system_messages.id as msg_id,
   "mayor" as type,
   subtype
   from system_messages
@@ -1918,4 +1920,54 @@ function zg_get_msgs($game_user) {
     db_set_active('game_' . $game);
   }
   return $data;
+}
+
+/**
+ * Format items in a message for display.
+ *
+ * @param object $game_user
+ *   The game user object.
+ * @param object $message
+ *   The message object.
+ */
+function zg_format_message($game_user, &$message) {
+
+  $message->display = new \stdClass();
+  $message->display->timestamp = zg_format_date(strtotime($message->timestamp));
+  $message->display->msg_id = 'news-item-' . $message->type . '-' . $message->msg_id;
+
+  $message->display->clan_acronym = '';
+  if (!empty($message->clan_acronym)) {
+    $message->display->clan_acronym = "($message->clan_acronym)";
+  }
+
+  if ($message->is_clan_leader) {
+    $message->display->clan_acronym .= '*';
+  }
+
+  if ($message->private) {
+    $message->display->private_css = 'private';
+    $message->display->private_text = '(private)';
+  }
+  else {
+    $message->display->private_css = $message->display->private_text = '';
+  }
+
+  $message->display->private_css .= ' ' . $message->type . ' ' . $message->type . '-' . $message->subtype;
+
+  if (empty($message->username)) {
+    $message->display->username = '';
+    $message->display->reply = '';
+  }
+  else {
+    $message->display->username = 'from ' . $message->ep_name . ' ' . $message->username . ' ' .
+      $message->display->clan_acronym;
+    if (!in_array($message->username, ['USLCE Game', 'The Socialite'])) {
+      $message->display->reply = zg_render_button('user', 'View / Respond', '/' .
+        $message->phone_id);
+    }
+    else {
+      $message->display->reply = '';
+    }
+  }
 }

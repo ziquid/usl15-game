@@ -46,28 +46,57 @@ $beauty = (int) $item->rating;
 if ($game_user->last_bonus_date != $today || $game_user->meta == 'admin') {
   $money = ($game_user->level * $item->residents) + $game_user->income -
     $game_user->expenses;
-  $money = ceil($money);
   $extra_bonus = '';
 
-firep("adding $money money because last_bonus_date = {$game_user->last_bonus_date}");
+/*
+  if ($game == 'stlouis') {
+
+    $sql = 'select quantity from staff_ownership
+      where fkey_staff_id = 18 and fkey_users_id = %d;';
+    $result = db_query($sql, $game_user->id);
+    $item = db_fetch_object($result);
+
+    if ($item->quantity >= 1) {
+      $money *= 3;
+      $extra_text .= '<div class="level-up-text">
+        ~ Your private banker tripled your bonus ~
+      </div>';
+    }
+
+  }
+
+  if ($game == 'celestial_glory') {
+
+    if ($game_user->fkey_values_id == 5) {
+      $money *= 1.01;
+      $extra_text .= '<div class="level-up-text">
+        ~ As a Merchant, you gained an extra 1% ~
+      </div>';
+    }
+
+  }
+*/
+  $money = ceil($money);
+
+firep("adding $money money because last_bonus_date = $last_bonus_date");
 
   $sql = 'update users set money = money + %d, last_bonus_date = "%s"
     where id = %d;';
   $result = db_query($sql, $money, $today, $game_user->id);
   $game_user = zg_fetch_user();
 
-  $extra_bonus = '
-<div class="speech-bubble-wrapper background-color">
+  $extra_bonus = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man happy">
   </div>
   <div class="speech-bubble">
     <p class="bonus-text">Daily Bonus!</p>
     <p>You have received <strong>' .
-    number_format($money) . ' ' . $game_user->values . '</strong>!</p>
-    <p>For the next three minutes, competencies can be enhanced every 15 seconds.</p>
-    <p>Come back tomorrow for another bonus!</p>
-  </div>
-</div>';
+    number_format($money) . ' ' . $game_user->values . '</strong>!</p>' .
+    $extra_text .
+      '<p>For the next three minutes, competencies can be enhanced every 15 seconds.</p>
+      <p>Come back tomorrow for another bonus!</p>
+    </div>
+  </div>';
 
   // Fast comps for the next three minutes.
   zg_set_timer($game_user, 'fast_comps_15', 180);
@@ -131,7 +160,147 @@ firep($referral_code);
   }
 }
 
+if (($today == '2019-12-26')) {
+  $extra_menu = '-boxing';
+}
+
 $event_text = '';
+
+switch($event_type) {
+
+  case EVENT_DONE:
+
+    $event_text = '<div class="event">
+      The event is over!&nbsp; We hope you had fun.
+      </div><div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+          '">Leaderboard</a>
+      </div>';
+    break;
+
+  case EVENT_DEBATE:
+
+    $event_text = '<div class="event">
+        While we are waiting on ToxiCorp to be ready,
+        let\'s have a debate mini event.&nbsp; Debate for prizes today!
+      </div><div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+          '">Leaderboard</a>
+      </div>';
+    break;
+
+  case EVENT_PRE_MAY:
+
+    $event_text = '<div class="event">
+<div class="event-title">
+        May\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect gift for Mother\'s Day ~
+      </div>
+      <div class="event-text">
+        Starts May 1
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+      '">Leaderboard</a>
+      </div>-->
+      </div>';
+    break;
+
+  case EVENT_CINCO_DE_MAYO:
+
+    $event_text = '<div class="event">
+      <div class="event-tagline">
+        <!--Are you going to the Cinco De Mayo party in Benton Park West?-->
+        Didn\'t finish the Cinco De Mayo event in Benton Park West?
+      </div>
+      <div class="event-text">
+        <!--I hear it\'s going to be fun!-->
+        Try it again this weekend! (Fri, Sat, Sun)
+      </div>
+      </div>';
+    break;
+
+  case EVENT_DOUBLE_LUCK_MONEY:
+    $event_text = '<div class="event">
+      <div class="event-tagline">
+        DOUBLE YOUR MONEY EVENT
+      </div>
+      <div class="event-text">
+        May 14 and 15 only, get 2x the normal amount of money for 1 ' . $luck . '!
+      </div>
+      </div>
+      <div class="try-an-election-wrapper">
+        <div class="try-an-election">
+          <a href="/' . $game . '/elders_do_fill/' . $arg2 .
+            '/money?destination=/' . $game . '/home/' . $arg2 . '">' .
+            t('Receive @offer @values NOW (1&nbsp;@luck',
+              [
+                '@offer' => zg_luck_money_offer($game_user),
+                '@values' => $game_user->values,
+                '@luck' => $luck,
+              ]) . ')
+          </a>
+        </div>
+      </div>';
+    break;
+}
+
+// Monthly quests.
+switch ($month_mission) {
+
+  case MISSION_MAY:
+    $event_text .= '<div class="event">
+<div class="event-title">
+        May\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect gift for your wife ~
+      </div>
+      <div class="event-tagline">
+        to celebrate Mother\'s Day
+      </div>
+      <div class="event-text">
+        Ends May 13
+      </div>
+      <div class="event-text">
+        <a href="/' . $game . '/quests/' . $arg2 .
+          '/1005">Start Here</a>
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+    '">Leaderboard</a>
+      </div>-->
+      </div>';
+    break;
+
+  case MISSION_JUN:
+    $event_text .= '<div class="event">
+<div class="event-title">
+        June\'s Quest
+      </div>
+      <div class="event-tagline">
+        ~ Find the perfect tie for your husband ~
+      </div>
+      <div class="event-tagline">
+        to celebrate Father\'s Day
+      </div>
+      <div class="event-text">
+        Ends June 24
+      </div>
+      <div class="event-text">
+        <a href="/' . $game . '/quests/' . $arg2 .
+      '/1006">Start Here</a>
+      </div>
+      <!--<div class="event-tagline small">
+        <a href="/' . $game . '/top_event_points/' . $arg2 .
+      '">Leaderboard</a>
+      </div>-->
+      </div>';
+    break;
+}
+
 zg_alter('homepage_event_notice', $game_user, $event_text);
 zg_alter('homepage_menu', $game_user, $extra_menu);
 
@@ -147,26 +316,9 @@ else {
 }
 
 $debates_class = drupal_html_class($game_text['menu']['debates']) . '-menu';
-$data = zg_get_all_messages($game_user);
-$max_user_message = 0;
-foreach ($data as &$item) {
-  zg_format_message($game_user, $item);
-  if ($item->type == 'user') {
-    $max_user_message = max((int) $item->msg_id, $max_user_message);
-  }
-}
-firep($max_user_message, 'max user message');
-zg_set_value($game_user, 'max_user_message', $max_user_message);
+$data = zg_get_msgs($game_user);
 zg_alter('homepage_messages', $game_user, $data);
 $msg_shown = FALSE;
-$msg_options = '';
-
-if ($game_user->fkey_clans_id) {
-  $msg_options .= '<option value="clan">Clan</option>';
-}
-if ($game_user->can_broadcast_to_party || $game_user->meta == 'admin') {
-  $msg_options .= '<option value="neighborhood">' . $hood . '</option>';
-}
 
 echo <<< EOF
 <div class="title">
@@ -334,7 +486,16 @@ $extra_bonus
           <br>
           <div class="send-message-target">
             <select name="target">
-              $msg_options
+EOF;
+
+if ($game_user->fkey_clans_id) {
+  echo '<option value="clan">Clan</option>';
+}
+if ($game_user->can_broadcast_to_party || $game_user->meta == 'admin') {
+  echo '<option value="neighborhood">' . $hood . '</option>';
+}
+
+echo <<< EOF
               <option value="values">$party</option>
             </select>
           </div>
@@ -347,13 +508,55 @@ $extra_bonus
 EOF;
 
 foreach ($data as $item) {
+// firep($item);
+
+  $display_time = zg_format_date(strtotime($item->timestamp));
+  $clan_acronym = '';
+
+  if (!empty($item->clan_acronym)) {
+    $clan_acronym = "($item->clan_acronym)";
+  }
+
+  if ($item->is_clan_leader) {
+    $clan_acronym .= '*';
+  }
+
+  if ($item->private) {
+    $private_css = 'private';
+    $private_text = '(private)';
+  }
+  else {
+    $private_css = $private_text = '';
+  }
+
+  $private_css .= ' ' . $item->type . ' ' . $item->type . '-' . $item->subtype;
+
+  if (empty($item->username)) {
+    $username = '';
+    $reply = '';
+  }
+  else {
+    $username = 'from ' . $item->ep_name . ' ' . $item->username . ' ' .
+      $clan_acronym;
+    if (!in_array($item->username, ['USLCE Game', 'The Socialite'])) {
+      $reply = '<div class="message-reply-wrapper"><div class="message-reply">
+        <a href="/' . $game . '/user/' . $arg2 . '/' . $item->phone_id .
+        '" class="button">View / Respond</a></div></div>';
+      $reply = zg_render_button('user', 'View / Respond', '/' .
+        $item->phone_id);
+    }
+    else {
+      $reply = '';
+    }
+  }
+
   echo <<< EOF
-    <div class="news-item $item->type" id="{$item->display->msg_id}">
+    <div class="news-item $item->type">
       <div class="dateline">
-        {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
+        $display_time $username $private_text
       </div>
-      <div class="message-body {$item->display->private_css}">
-        <p>$item->message</p>{$item->display->reply}
+      <div class="message-body $private_css">
+        <p>$item->message</p>$reply
       </div>
     </div>
 EOF;
