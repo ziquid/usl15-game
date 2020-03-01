@@ -26,7 +26,7 @@ function stlouis_hood_36_move_to_succeeded(\stdClass $game_user, $old_hood_id, $
     'When September Ends',
   ];
 
-  if (($new_hood_id == 36) && (mt_rand(0, 1) == 1) {
+  if (($new_hood_id == 42) && (mt_rand(0, 1) == 1)) {
     zg_song($game_user, $songs[mt_rand(0, count($songs) - 1)], FALSE);
   }
 }
