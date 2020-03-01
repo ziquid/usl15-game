@@ -17,13 +17,9 @@ function stlouis_hood_42_init() {
 /**
  * Implements hook_move_to_succeeded().
  */
-function stlouis_hood_36_move_to_succeeded(\stdClass $game_user, $old_hood_id, $new_hood_id) {
+function stlouis_hood_42_move_to_succeeded(\stdClass $game_user, $old_hood_id, $new_hood_id) {
   static $songs = [
-    '21 Guns',
-    'Basket Case',
-    'Boulevard of Broken Dreams',
-    'Holiday',
-    'When September Ends',
+    'Another Brick in the Wall teaser',
   ];
 
   if (($new_hood_id == 42) && (mt_rand(0, 1) == 1)) {

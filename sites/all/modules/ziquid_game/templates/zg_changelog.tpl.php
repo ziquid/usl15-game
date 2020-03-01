@@ -44,6 +44,9 @@ db_set_active('default');
     <li>
       Added badge in the header to show unread personal message count
     </li>
+    <li>
+      Elections live in Clayton/Tamm!
+    </li>
   </ul>
 
   <div class="subtitle">
