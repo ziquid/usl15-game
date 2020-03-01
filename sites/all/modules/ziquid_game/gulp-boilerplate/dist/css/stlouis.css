@@ -149,17 +149,16 @@ body.game-stlouis .button.button-debate {
 /* line 5, src/sass/components/_header.scss */
 body.game-stlouis header {
   width: 100%;
-  height: 54px;
   background-color: rgba(0, 0, 0, 0.35) !important;
   border-radius: 14px 14px 0 0;
 }
 
-/* line 11, src/sass/components/_header.scss */
+/* line 10, src/sass/components/_header.scss */
 body.game-stlouis header #money-id {
   margin-left: 12px;
 }
 
-/* line 15, src/sass/components/_header.scss */
+/* line 14, src/sass/components/_header.scss */
 body.game-stlouis header .actions-text {
   display: inline-block;
   position: relative;
@@ -172,7 +171,7 @@ body.game-stlouis header .actions-text {
   margin-bottom: -9px;
 }
 
-/* line 27, src/sass/components/_header.scss */
+/* line 26, src/sass/components/_header.scss */
 body.game-stlouis header .energy-text {
   display: inline-block;
   position: relative;
@@ -185,13 +184,23 @@ body.game-stlouis header .energy-text {
   margin-bottom: -9px;
 }
 
-/* line 39, src/sass/components/_header.scss */
+/* line 38, src/sass/components/_header.scss */
+body.game-stlouis header .home {
+  bottom: 4px;
+}
+
+/* line 41, src/sass/components/_header.scss */
+body.game-stlouis header .home #msg-badge {
+  background-color: #85851f;
+}
+
+/* line 46, src/sass/components/_header.scss */
 body.game-stlouis header .experience {
   border-bottom: 1px solid rgba(51, 153, 51, 0.35) !important;
   padding-right: 12px;
 }
 
-/* line 44, src/sass/components/_header.scss */
+/* line 51, src/sass/components/_header.scss */
 body.game-stlouis header .experience-text {
   position: relative;
   background: url(../img/influence.png) top right no-repeat;
@@ -202,7 +211,7 @@ body.game-stlouis header .experience-text {
   right: -11px;
 }
 
-/* line 54, src/sass/components/_header.scss */
+/* line 61, src/sass/components/_header.scss */
 body.game-stlouis header .level-text {
   background: url(../img/level.png) top right no-repeat;
   height: 12px;

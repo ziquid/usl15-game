@@ -1442,8 +1442,12 @@ $game_user->actions_max <div class="actions-text">Actions</div>
 <div class="energy"><div id="energy-id">$game_user->energy</div> /
 $game_user->energy_max <div class="energy-text">Energy</div>
   <div id="energy-time">$energy_text</div></div>
-<div class="home"><a href="/$game/home/$arg2"><img
-  src="/sites/default/files/images/{$game}_home_icon.png"/></a></div>
+  <div class="home">
+    <a href="/$game/home/$arg2">
+      <img src="/sites/default/files/images/{$game}_home_icon.png"/>
+      <div id="msg-badge"></div>
+    </a>
+  </div>
 $level_text
 </header>
 $points_text

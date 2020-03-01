@@ -7,7 +7,7 @@ header {
   padding: 0px 2px;
   box-sizing: border-box;
   width: 100%;
-  height: 52px;
+  height: 56px;
   position: relative;
 
   > div {
@@ -80,12 +80,26 @@ header {
     display: inline-block;
     width: 30%;
     text-align: center;
-    margin-bottom: 2px;
     left: 131px;
-  }
 
-  .home a {
-    border: none;
+    a {
+      border: none;
+    }
+
+    #msg-badge {
+      text-align: center;
+      margin: 0 auto;
+      position: absolute;
+      bottom: 0px;
+      left: 43px;
+      width: 1.2em;
+      background-color: #858585;
+      border-radius: 50px;
+      color: black;
+      font-size: 0.625rem;
+      font-family: sans-serif;
+      line-height: 1.2em;
+    }
   }
 
   .energy #energy-id, .money #money-id,

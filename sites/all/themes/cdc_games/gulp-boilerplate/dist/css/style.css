@@ -16,7 +16,7 @@ header {
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
   width: 100%;
-  height: 52px;
+  height: 56px;
   position: relative;
 }
 
@@ -105,41 +105,56 @@ header .home {
   display: inline-block;
   width: 30%;
   text-align: center;
-  margin-bottom: 2px;
   left: 131px;
 }
 
-/* line 87, src/sass/components/_header.scss */
+/* line 85, src/sass/components/_header.scss */
 header .home a {
   border: none;
 }
 
-/* line 91, src/sass/components/_header.scss */
+/* line 89, src/sass/components/_header.scss */
+header .home #msg-badge {
+  text-align: center;
+  margin: 0 auto;
+  position: absolute;
+  bottom: 0px;
+  left: 43px;
+  width: 1.2em;
+  background-color: #858585;
+  border-radius: 50px;
+  color: black;
+  font-size: 0.625rem;
+  font-family: sans-serif;
+  line-height: 1.2em;
+}
+
+/* line 105, src/sass/components/_header.scss */
 header .energy #energy-id, header .money #money-id,
 header .actions #actions-id {
   font-weight: bold;
   display: inline-block;
 }
 
-/* line 97, src/sass/components/_header.scss */
+/* line 111, src/sass/components/_header.scss */
 header .energy #energy-time, header .money #income-time,
 header .actions #actions-time {
   display: block;
   font-size: 0.625rem;
 }
 
-/* line 103, src/sass/components/_header.scss */
+/* line 117, src/sass/components/_header.scss */
 header .level {
   text-align: right;
   display: inline-block;
 }
 
-/* line 108, src/sass/components/_header.scss */
+/* line 122, src/sass/components/_header.scss */
 header .level a {
   font-size: 0.8125rem;
 }
 
-/* line 112, src/sass/components/_header.scss */
+/* line 126, src/sass/components/_header.scss */
 header .level-text {
   font-size: 0.6875rem;
 }
