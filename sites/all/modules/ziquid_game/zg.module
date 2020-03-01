@@ -1326,13 +1326,13 @@ function zg_fetch_header(\stdClass $game_user) {
   }
 
   // Event points.
+  $points_text = '';
   if (FALSE) {
     $sql = 'select points, last_goal_achieved
     from event_points where fkey_users_id = %d;';
     $result = db_query($sql, $game_user->id);
     $points_obj = db_fetch_object($result);
 
-    $points_text = '';
 
     // User has some points.
     if ($points_obj->points > 0) {
@@ -1427,10 +1427,12 @@ function zg_fetch_header(\stdClass $game_user) {
   $arg2 = check_plain(arg(2));
 
   echo <<< EOF
-<div class="header $hood">
-<div class="money"><div id="money-id">$money_str</div>
-  <div class="money-text">$game_user->values</div>
-  <div id="income-time">$income_text</div></div>
+<header class="$hood">
+  <div class="money">
+    <div id="money-id">$money_str</div>
+    <div class="money-text">$game_user->values</div>
+    <div id="income-time">$income_text</div>
+  </div>
 <div class="actions"><div id="actions-id">$game_user->actions</div> /
 $game_user->actions_max <div class="actions-text">Actions</div>
   <div id="actions-time">$actions_text</div>
@@ -1443,7 +1445,7 @@ $game_user->energy_max <div class="energy-text">Energy</div>
 <div class="home"><a href="/$game/home/$arg2"><img
   src="/sites/default/files/images/{$game}_home_icon.png"/></a></div>
 $level_text
-</div>
+</header>
 $points_text
 $extra_messages
 <script type="text/javascript">
