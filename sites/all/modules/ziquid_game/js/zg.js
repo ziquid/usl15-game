@@ -1,5 +1,26 @@
 Drupal.behaviors.zg = function (context) {
 
+  function zg_header_check_message_count(url) {
+    messageCount = 0;
+    $.ajax({
+      url: url,
+      success: function (data, status, xhr) {
+        messageCount = data;
+      },
+      complete: function (xhr, status) {
+        if (messageCount > 9) {
+          $("#msg-badge").text("9+");
+        }
+        else if (messageCount > 0) {
+          $("#msg-badge").text(messageCount);
+        }
+        else {
+          $("#msg-badge").text("");
+        }
+      }
+    });
+  }
+
   if (Drupal.settings.zg) {
     if (Drupal.settings.zg.party_icon) {
       $('body').addClass('party-' + Drupal.settings.zg.party_icon);
@@ -7,6 +28,11 @@ Drupal.behaviors.zg = function (context) {
 
     if (Drupal.settings.zg.enabled_alpha) {
       $('body').addClass('alpha');
+    }
+
+    if (Drupal.settings.zg.check_message_count_url) {
+      console.log(Drupal.settings.zg.check_message_count_url);
+      setInterval(zg_header_check_message_count, 2020, Drupal.settings.zg.check_message_count_url);
     }
 
     var level = parseInt(Drupal.settings.zg.level);
@@ -24,7 +50,7 @@ Drupal.behaviors.zg = function (context) {
     // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
-  jQuery(".fit-box").each(function() {
+  jQuery(".fit-box").each(function () {
     var innerWidth = $(this).innerWidth();
     var scrollWidth = $(this)[0].scrollWidth;
     if (scrollWidth > innerWidth) {

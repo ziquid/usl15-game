@@ -1426,6 +1426,19 @@ function zg_fetch_header(\stdClass $game_user) {
   $hood = '';
   $arg2 = check_plain(arg(2));
 
+  $max_user_message = zg_get_value($game_user, 'max_user_message', FALSE);
+  if (($max_user_message !== FALSE) && (arg(1) != 'home')) {
+    drupal_add_js(
+      [
+        'zg' =>
+          [
+            'check_message_count_url' =>
+              "/$game/msg_count/{$game_user->phone_id}/$max_user_message",
+          ],
+      ],
+      'setting');
+  }
+
   echo <<< EOF
 <header class="$hood">
   <div class="money">

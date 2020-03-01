@@ -38,6 +38,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 2, 2020
+  </div>
+  <ul>
+    <li>
+      Added badge in the header to show unread personal message count
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 1, 2020
   </div>
   <ul>

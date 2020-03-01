@@ -17,7 +17,7 @@
  * .
  */
 
-$version = 'v0.9.6, Mar 1 2020';
+$version = 'v0.9.6, Mar 2 2020';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -158,6 +158,16 @@ foreach ($data as &$item) {
 firep($max_user_message, 'max user message');
 zg_set_value($game_user, 'max_user_message', $max_user_message);
 zg_alter('homepage_messages', $game_user, $data);
+// FIXME: add this endpoint.
+drupal_add_js(
+  [
+    'zg' =>
+    [
+      'check_messages_url' =>
+      "/$game/msg_count/$phone_id/$max_user_message",
+    ],
+  ],
+  'setting');
 $msg_shown = FALSE;
 $msg_options = '';
 
