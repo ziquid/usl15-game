@@ -11,7 +11,7 @@
  */
 
 require_once drupal_get_path('module', 'zg') . '/includes/functions-staff.inc';
-require_once drupal_get_path('module', 'zg') . '/includes/functions-no.inc';
+//require_once drupal_get_path('module', 'zg') . '/includes/functions-no.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-equip.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-quests.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-land.inc';
@@ -808,6 +808,15 @@ function zg_competency_name($comp) {
   return $comps[$comp];
 }
 
+/**
+ * Retrieve the user object.
+ *
+ * @param mixed $id
+ *   The user ID (int) or the phone ID (string).
+ *
+ * @return bool|object|null
+ *   The user object, if any.
+ */
 function zg_fetch_user_by_id($id) {
 
   // Simple per-page cache.
@@ -876,6 +885,28 @@ function zg_fetch_user_by_id($id) {
 
 firep($item, 'zg_fetch_user_by_id for id ' . $id);
   return $item;
+}
+
+/**
+ * Get the user ID from the phone ID.
+ *
+ * @param string $phone_id
+ *   The phone ID to check.
+ *
+ * @return object|null
+ *   The user ID, as an 'id' property of an object, or null if no results.
+ */
+function zg_get_userid_from_phoneid($phone_id) {
+  global $game;
+
+  db_set_active('game_' . $game);
+  $sql = 'select id from users
+    where phone_id = "%s";';
+  $result = db_query($sql, $phone_id);
+  if ($result) {
+    return db_fetch_object($result);
+  }
+  return NULL;
 }
 
 /**
@@ -1920,6 +1951,74 @@ function zg_get_all_messages($game_user) {
     db_set_active('game_' . $game);
   }
   return $data;
+}
+
+/**
+ * Fetch all new user messages for a user.
+ *
+ * Retrieves all messages above a given message ID.
+ *
+ * @param object $game_user
+ *   The game_user object.
+ * @param int $msg_id
+ *   The message ID of messages already received.
+ *
+ * @return array
+ *   The messages.
+ */
+function zg_get_new_user_messages($game_user, $msg_id = 0) {
+
+  $sql = '
+  select user_messages.timestamp, user_messages.message,
+  users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym,
+  user_messages.private, user_messages.id as msg_id,
+  "user" as type,
+  subtype
+  from user_messages
+  left join users on user_messages.fkey_users_from_id = users.id
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+  user_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  where fkey_users_to_id = %d AND user_messages.id > %d
+  order by timestamp DESC;';
+  $data = [];
+
+  $result = db_query($sql, $game_user->id, $msg_id);
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+  return $data;
+}
+
+/**
+ * Fetch the new user messages count for a user.
+ *
+ * Retrieves the number of messages above a given message ID.
+ *
+ * @param object $game_user
+ *   The game_user object.
+ * @param int $msg_id
+ *   The message ID of messages already received.
+ *
+ * @return int
+ *   The message count.
+ */
+function zg_get_new_user_message_count($game_user, $msg_id = 0) {
+
+  $sql = '
+  select count(user_messages.id) as count
+  from user_messages
+  where fkey_users_to_id = %d AND user_messages.id > %d;';
+
+  $result = db_query($sql, $game_user->id, $msg_id)->fetch_object();
+  return (int) $result->count;
 }
 
 /**

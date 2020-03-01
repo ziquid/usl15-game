@@ -1,7 +1,7 @@
-<?php 
+<?php
 
 /**
-* Implementation of hook_init() 
+* Implementation of hook_init()
 */
 function drupalforfirebug_exit() {
   $dff = TRUE;
@@ -45,7 +45,7 @@ function drupalforfirebug_menu() {
 }
 
 /**
-*  Implementation of hook_nodeapi() 
+*  Implementation of hook_nodeapi()
 */
 function drupalforfirebug_nodeapi(&$node, $op, $a3 = NULL, $a4 = NULL) {
   global $dfp_runtime;
@@ -95,7 +95,7 @@ function drupalforfirebug_user($op, &$edit, &$account, $category = NULL) {
   if (!user_access('Access Firebug Debug')) {
     return;
   }
-  if (isset($account->uid)) { 
+  if (isset($account->uid)) {
     $uid = $account->uid;
     $name = $account->name;
   } else {
@@ -116,7 +116,7 @@ function drupalforfirebug_user($op, &$edit, &$account, $category = NULL) {
 */
 function drupalforfirebug_log($message, $type = 'general') {
   global $dfp_runtime;
-  $dfp_runtime['firebug_messages'][$type][] = $message; 
+  $dfp_runtime['firebug_messages'][$type][] = $message;
 }
 
 /**
@@ -162,11 +162,11 @@ function drupalforfirebug_get_sql_log() {
     $output .= $query_summary;
     $output .= drupalforfirebug_devel_query_table($queries, $counts);
   }
-  $output .= '</fieldset>'; 
+  $output .= '</fieldset>';
   return $output;
 }
 
-/** 
+/**
 * Generates an Execute PHP Drupal For Firebug Form
 **/
 function drupalforfirebug_execute_form() {
@@ -182,7 +182,7 @@ function drupalforfirebug_execute_form() {
   $form['#redirect'] = FALSE;
   $form['#action'] = url('admin/firebug/exec', array('absolute' => TRUE));
   $form['#skip_duplicate_check'] = TRUE;
-  return $form; 
+  return $form;
 }
 
 function drupalforfirebug_get_php_exec_area() {
@@ -246,12 +246,16 @@ function drupalforfirebug_shutdown() {
   if (!user_access('Access Firebug Debug')) {
     return;
   }
+  $msgs = FALSE;
   $output = '<div style="display: none" id="drupalforfirebug_general">';
   $output .= '<fieldset>';
   $output .= '<legend>' . t('Drupal for Firebug General Messages') . '</legend>';
   $general_messages = drupalforfirebug_get('general');
   $output .= $general_messages;
-  if (!$general_messages) {
+  if ($general_messages) {
+    $msgs = TRUE;
+  }
+  else {
     $output .= t('There were no messages sent to the general log. Please use "firep($item, $optional_title)" to output messages to this console.');
   }
   $output .= '</div>';
@@ -260,20 +264,40 @@ function drupalforfirebug_shutdown() {
   $output .= '</div>';
   $output .= '<div style="display: none" id="drupalforfirebug_hook_form_alter">';
   $output .= $form_alter_output = drupalforfirebug_get('hook_form_alter');
-  if (!$form_alter_output) { $output .= t('There was no form altering.'); }
+  if ($form_alter_output) {
+    $msgs = TRUE;
+  }
+  else {
+    $output .= t('There was no form altering.');
+  }
   $output .= '</div>';
   $output .= '<div style="display: none" id="drupalforfirebug_hook_user">';
   $output .= $user_output = drupalforfirebug_get('hook_user');
-  if (!$user_output) { $output .= t('There was no user processing.'); }
+  if ($user_output) {
+    $msgs = TRUE;
+  }
+  else {
+    $output .= t('There was no user processing.');
+  }
   $output .= '</div>';
   $output .= '<div style="display: none" id="drupalforfirebug_hook_nodeapi">';
   $output .= $node_api_output = drupalforfirebug_get('hook_nodeapi');
-  if (!$node_api_output) { $output .= t('There was no node processing.'); }
+  if ($node_api_output) {
+    $msgs = TRUE;
+  }
+  else {
+    $output .= t('There was no node processing.');
+  }
   $output .= '</div>';
   $output .= '<div style="display: none" id="drupalforfirebug_hook_views">';
   if (module_exists('views')) {
     $output .= $views_output = drupalforfirebug_get('hook_views');
-    if (!$views_output) { $output .= t('There was no views processing.'); }
+    if ($views_output) {
+      $msgs = TRUE;
+    }
+    else {
+      $output .= t('There was no views processing.');
+    }
   } else {
     $output .= t('The views module is not installed.');
   }
@@ -284,7 +308,10 @@ function drupalforfirebug_shutdown() {
   $output .= '<div style="display: none" id="drupalforfirebug_hook_page_alter">';
   $output .= t('This feature is only available in Drupal 7.');
   $output .= '</div>';
-  print $output;
+
+  if ($msgs) {
+    print $output;
+  }
   unset($GLOBALS['dfp_runtime']);
 }
 
@@ -309,7 +336,7 @@ function drupalforfirebug_array_compare($a, $b) {
 */
 function drupalforfirebug_array_row_build($key, $value, $style, $depth) {
   $spacing = '';
-  for ($x = 0; $x <= $depth; $x++) { 
+  for ($x = 0; $x <= $depth; $x++) {
     $spacing .= '&nbsp;&nbsp;&nbsp;&nbsp;';
   }
   switch ($style) {
@@ -319,7 +346,7 @@ function drupalforfirebug_array_row_build($key, $value, $style, $depth) {
       break;
     case 'REMOVED':
       $color = '<span style="color: red;">';
-      $colorend = '</span>'; 
+      $colorend = '</span>';
       break;
     case 'SAME':
       $color = '<span style="color: black;">';
@@ -337,7 +364,7 @@ function drupalforfirebug_array_row_build($key, $value, $style, $depth) {
 
   $output = '';
   if (is_array($value) || is_object($value)) {
-    if ($style == 'DIFFERENT') { // do not highlight if contained item is just changed. 
+    if ($style == 'DIFFERENT') { // do not highlight if contained item is just changed.
       $color = '';
       $colorend = '';
     }
@@ -356,8 +383,8 @@ function drupalforfirebug_array_row_build($key, $value, $style, $depth) {
         $output .= "<div>$spacing $color [$key] => [" . check_plain($value) . "] $colorend </div>";
       }
     }
-  } 
-  return $output; 
+  }
+  return $output;
 }
 
 /**
@@ -383,7 +410,7 @@ function drupalforfirebug_array_highlight_code($data, $depth = 0) {
         $output .= drupalforfirebug_array_row_build($key, $value, $data['#firebug_style'][$key], $depth);
       }
     }
-  } 
+  }
   return $output;
 }
 
@@ -429,10 +456,10 @@ function drupalforfirebug_array_compare_code($a, $b, $c = array()) {
           $c[$akeys[$x]] = $a[$akeys[$x]];
         }
       }
-    }     
+    }
     if (isset($bkeys[$x]) && isset($b[$bkeys[$x]])) { // does b have a valid argument
       // Set the Proper Styling
-      if (array_key_exists($bkeys[$x], array_flip($akeys))) { // is it in A array? 
+      if (array_key_exists($bkeys[$x], array_flip($akeys))) { // is it in A array?
         // exists in the A array, already processed
       } else {
         $c[$bkeys[$x]] = $b[$bkeys[$x]];
@@ -450,7 +477,7 @@ function drupalforfirebug_array_compare_code($a, $b, $c = array()) {
 
 // Array Handling Helper Function
 function do_offset($level) {
-  $offset = "";             // offset for subarry 
+  $offset = "";             // offset for subarry
   for ($i=1; $i<$level;$i++) {
     $offset = $offset . "<td></td>";
   }
@@ -475,12 +502,12 @@ function drupalforfirebug_show_array($array, $level, $sub){
           $offset = do_offset($level);
         }
         $sub = 0;
-        $output .= $offset . "<td main ".$sub." width=\"120\">" . $key_val . 
-          "</td><td width=\"120\">" . $value . "</td>"; 
+        $output .= $offset . "<td main ".$sub." width=\"120\">" . $key_val .
+          "</td><td width=\"120\">" . $value . "</td>";
         $output .= "</tr>\n";
       }
     } //foreach $array
-  }  
+  }
   return $output;
 }
 
@@ -508,7 +535,7 @@ function drupalforfirebug_field_object($marker, $id, $op = NULL, $data) {
   $output .= '<div>' . '&nbsp;);</div>';
   $output .= '</div>';
   $output .= '</fieldset>';
-  
+
   return $output;
 }
 
@@ -549,4 +576,4 @@ function drupalforfirebug_devel_query_table($queries, $counts) {
   }
   return theme('table', $header, $cell);
 }
- 
+

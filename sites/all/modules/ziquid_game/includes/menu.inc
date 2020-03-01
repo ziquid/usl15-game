@@ -156,6 +156,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/msg_count/%/%'] = [
+      'title' => 'Ziquid Game Message Count',
+      'page callback' => 'zg_msg_count_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/move/%/%'] = [
       'title' => 'Ziquid Game Move',
       'page callback' => 'zg_move_callback',
@@ -1526,6 +1534,28 @@ function zg_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
   return theme('zg_equipment_sell', $phone_id, $equipment_id, $quantity);
 }
+/**
+ * User message count callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ * @param string $msg_id
+ *   The last message ID shown.
+ */
+function zg_msg_count_callback($phone_id, $msg_id) {
+
+  if (empty($phone_id) || !is_numeric($msg_id)) {
+    return drupal_access_denied();
+  }
+
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $game_user_id = zg_get_userid_from_phoneid($phone_id);
+  $count = zg_get_new_user_message_count($game_user_id, (int) $msg_id);
+  db_set_active('default');
+  echo $count;
+}
+
 
 /**
  * Move callback function.
