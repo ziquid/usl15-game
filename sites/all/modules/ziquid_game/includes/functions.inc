@@ -1782,7 +1782,7 @@ function zg_get_all_messages($game_user) {
   $sql = '
   (
   select user_messages.timestamp, user_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1807,7 +1807,7 @@ function zg_get_all_messages($game_user) {
 
   (
   select challenge_messages.timestamp, challenge_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1833,7 +1833,7 @@ function zg_get_all_messages($game_user) {
 
   (
   select neighborhood_messages.timestamp, neighborhood_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1860,7 +1860,7 @@ function zg_get_all_messages($game_user) {
 
   (
   select clan_messages.timestamp, clan_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1886,7 +1886,7 @@ function zg_get_all_messages($game_user) {
 
   (
   select values_messages.timestamp, values_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1912,7 +1912,7 @@ function zg_get_all_messages($game_user) {
 
   (
   select system_messages.timestamp, system_messages.message,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -1987,7 +1987,7 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   $sql = '
   select user_messages.timestamp, user_messages.message,
   user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
-  users.username, users.phone_id,
+  users.username, users.phone_id, users.values,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -2063,15 +2063,6 @@ function zg_format_message($game_user, $check_user_id, &$message) {
   $message->display->timestamp = zg_format_date($message->timestamp);
   $message->display->msg_id = 'news-item-' . $message->type . '-' . $message->msg_id;
 
-  $message->display->clan_acronym = '';
-  if (!empty($message->clan_acronym)) {
-    $message->display->clan_acronym = "($message->clan_acronym)";
-  }
-
-  if ($message->is_clan_leader) {
-    $message->display->clan_acronym .= '*';
-  }
-
   if ($message->private) {
     $message->display->private_css = 'private';
     $message->display->private_text = '(private)';
@@ -2087,8 +2078,7 @@ function zg_format_message($game_user, $check_user_id, &$message) {
     $message->display->reply = '';
   }
   else {
-    $message->display->username = 'from ' . $message->ep_name . ' ' . $message->username . ' ' .
-      $message->display->clan_acronym;
+    $message->display->username = 'from ' . zg_render_user($message);
     if (!in_array($message->username, ['USLCE Game', 'The Socialite'])) {
       $message->display->reply = zg_render_button('user', 'View / Respond', '/id:' .
         $message->fkey_users_from_id);
@@ -2145,4 +2135,31 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
   // FIXME: add this endpoint.
   $url = "/$game/msg_count/$phone_id/$max_user_message";
   drupal_add_js(['zg' => ['check_messages_url' => $url]], 'setting');
+}
+
+/**
+ * Render a user as html.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The html rendering of the user object.
+ */
+function zg_render_user(&$user) {
+  $user->display->clan_acronym = '';
+  if (!empty($user->clan_acronym)) {
+    $user->display->clan_acronym = "($user->clan_acronym)";
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan_acronym .= '*';
+  }
+
+  $user->display->class = 'player-' . drupal_strtolower($user->values);
+
+  $user->display->username = $user->ep_name . ' <span class="' .
+    $user->display->class . '">' . $user->username . '</span> ' .
+    $user->display->clan_acronym;
+  return $user->display->username;
 }
