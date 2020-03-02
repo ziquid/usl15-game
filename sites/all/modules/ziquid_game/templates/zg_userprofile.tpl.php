@@ -13,15 +13,15 @@
  * All db queries in controller: no
  * Minimal function calls in view: no
  * Removal of globals: no
- * Removal of game_defs include: no
+ * Removal of zg_defs include: no
  * .
  */
 
 global $game, $phone_id;
 
 /* ------ CONTROLLER ------ */
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 $q = $_GET['q'];
 $message_error = '';
 
@@ -46,13 +46,13 @@ if (isset($_GET['comp_show_level'])) {
   // Using an action which gives curious comp; do nothing.
 }
 else if ($phone_id_to_check == $phone_id) {
-  game_competency_gain($game_user, 'introspective');
+  zg_competency_gain($game_user, 'introspective');
 }
 else {
-  game_competency_gain($game_user, 'people person');
+  zg_competency_gain($game_user, 'people person');
 }
 
-$item = game_fetch_user_by_id($phone_id_to_check);
+$item = zg_fetch_user_by_id($phone_id_to_check);
 $location = $item->location;
 $points = $item->points + 0;
 $extra_comp = 0;
@@ -80,7 +80,7 @@ else if ($_GET['comp_show_level'] == 'yes') {
   firep('investigating a clannie!');
 }
 else if ($_GET['comp_show_level'] == 'curious') {
-  $comp_show_level = game_competency_level($game_user, 'curious')->level;
+  $comp_show_level = zg_competency_level($game_user, 'curious')->level;
   firep($comp_show_level, 'comps based on curiosity');
   if ($comp_show_level == 5) {
     $message_error .= '<div class="message-error">
@@ -90,7 +90,7 @@ else if ($_GET['comp_show_level'] == 'curious') {
   $comp_show_level = min($comp_show_level + $extra_comp, 5);
 }
 else {
-  $comp_show_level = game_competency_level($game_user, 'people person')->level;
+  $comp_show_level = zg_competency_level($game_user, 'people person')->level;
   firep($comp_show_level, 'comps based on people person');
   $comp_show_level = min($comp_show_level + $extra_comp, 4);
 }
@@ -108,14 +108,14 @@ if (strlen($message) && strlen($message) < 3) {
   $message_error .= '<div class="message-error">Your message must be at least 3
     characters long.</div>';
   $message = '';
-  game_competency_gain($game_user, 'silent cal');
+  zg_competency_gain($game_user, 'silent cal');
 }
 
 if (substr($message, 0, 3) == 'XXX') {
   $message_error .= '<div class="message-error">Your message contains words that
     are not allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
   $message = '';
-  game_competency_gain($game_user, 'uncouth');
+  zg_competency_gain($game_user, 'uncouth');
 }
 
 $sql = 'select count(id) as ranking from event_points
@@ -151,9 +151,9 @@ $party_title = preg_replace('/^The /', '', $item->party_title);
 $private = check_plain($_GET['private']) == '1' ? 1 : 0;
 
 if (!empty($message)) {
-  game_send_user_message($game_user->id, $item->id, $private, $message);
+  zg_send_user_message($game_user->id, $item->id, $private, $message);
   $message_orig = '';
-  game_competency_gain($game_user, 'talkative');
+  zg_competency_gain($game_user, 'talkative');
 }
 
 // FIXME: Halloween Jack-o-lantern posting.
@@ -323,7 +323,7 @@ $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
 $money = number_format($item->money);
 $iph = number_format($item->income - $item->expenses);
 
-game_alter('extra_votes', $item, $extra_votes,
+zg_alter('extra_votes', $item, $extra_votes,
   $extra_defending_votes);
 
 $details_money = <<< EOF
@@ -438,25 +438,25 @@ if ($debate == 'Box') {
   if ($item->level <= 20) {
     $boxing_weight = 'Minimumweight';
   }
-  else if ($item->level <= 35) {
+  elseif ($item->level <= 35) {
     $boxing_weight = 'Flyweight';
   }
-  else if ($item->level <= 50) {
+  elseif ($item->level <= 50) {
     $boxing_weight = 'Bantamweight';
   }
-  else if ($item->level <= 65) {
+  elseif ($item->level <= 65) {
     $boxing_weight = 'Featherweight';
   }
-  else if ($item->level <= 80) {
+  elseif ($item->level <= 80) {
     $boxing_weight = 'Lightweight';
   }
-  else if ($item->level <= 95) {
+  elseif ($item->level <= 95) {
     $boxing_weight = 'Welterweight';
   }
-  else if ($item->level <= 110) {
+  elseif ($item->level <= 110) {
     $boxing_weight = 'Middleweight';
   }
-  else if ($item->level <= 125) {
+  elseif ($item->level <= 125) {
     $boxing_weight = 'Cruiserweight';
   }
   else {
@@ -528,8 +528,8 @@ else {
   $details_meta = '';
 }
 
-$last_access = game_format_date(strtotime($item->last_access));
-$startDate = game_format_date(strtotime($item->startdate));
+$last_access = zg_format_date($item->last_access);
+$startDate = zg_format_date($item->startdate);
 $details_last_access = <<< EOF
 <div class="heading">Start Date:</div>
 <div class="value">$startDate</div><br>
@@ -648,7 +648,7 @@ while ($item = db_fetch_object($result)) {
 }
 
 foreach ($data as $item) {
-  $display_time = game_format_date(strtotime($item->timestamp));
+  $display_time = zg_format_date(strtotime($item->timestamp));
   $clan_acronym = '';
 
   if (!empty($item->clan_acronym)) {
@@ -702,28 +702,28 @@ $message_end = '</div>';
 
 /* ------ VIEW ------ */
 $fetch_header($game_user);
-game_show_profile_menu($game_user);
+zg_show_profile_menu($game_user);
 print $message_error;
 
-game_show_by_level($game_user, $details_start, $comp_show_level, 0);
-game_show_by_level($game_user, $details_politics, $comp_show_level, 0);
-game_show_by_level($game_user, $details_referral_code, $comp_show_level, 6);
-game_show_by_level($game_user, $details_level, $comp_show_level, 0);
-game_show_by_level($game_user, $details_money, $comp_show_level, 5);
-game_show_by_level($game_user, $details_energy_action, $comp_show_level, 4);
-game_show_by_level($game_user, $details_iee_stats, $comp_show_level, 1);
-game_show_by_level($game_user, $details_vote_stats, $comp_show_level, 3);
-game_show_by_level($game_user, $details_debates, $comp_show_level, 2);
-game_show_by_level($game_user, $details_residence, $comp_show_level, 2);
-game_show_by_level($game_user, $details_approval, $comp_show_level, 2);
-game_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level,
+zg_show_by_level($game_user, $details_start, $comp_show_level, 0);
+zg_show_by_level($game_user, $details_politics, $comp_show_level, 0);
+zg_show_by_level($game_user, $details_referral_code, $comp_show_level, 6);
+zg_show_by_level($game_user, $details_level, $comp_show_level, 0);
+zg_show_by_level($game_user, $details_money, $comp_show_level, 5);
+zg_show_by_level($game_user, $details_energy_action, $comp_show_level, 4);
+zg_show_by_level($game_user, $details_iee_stats, $comp_show_level, 1);
+zg_show_by_level($game_user, $details_vote_stats, $comp_show_level, 3);
+zg_show_by_level($game_user, $details_debates, $comp_show_level, 2);
+zg_show_by_level($game_user, $details_residence, $comp_show_level, 2);
+zg_show_by_level($game_user, $details_approval, $comp_show_level, 2);
+zg_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level,
   6);
-game_show_by_level($game_user, $details_meta, $comp_show_level, 4);
-game_show_by_level($game_user, $details_last_access, $comp_show_level, 5);
-game_show_by_level($game_user, $details_end, $comp_show_level, 0);
-game_show_by_level($game_user, $send_a_message, $comp_show_level, 0);
-game_show_by_level($game_user, $message_start, $comp_show_level, 0);
-game_show_by_level($game_user, $messages, $comp_show_level, 0);
-game_show_by_level($game_user, $message_end, $comp_show_level, 0);
+zg_show_by_level($game_user, $details_meta, $comp_show_level, 4);
+zg_show_by_level($game_user, $details_last_access, $comp_show_level, 5);
+zg_show_by_level($game_user, $details_end, $comp_show_level, 0);
+zg_show_by_level($game_user, $send_a_message, $comp_show_level, 0);
+zg_show_by_level($game_user, $message_start, $comp_show_level, 0);
+zg_show_by_level($game_user, $messages, $comp_show_level, 0);
+zg_show_by_level($game_user, $message_end, $comp_show_level, 0);
 
 db_set_active('default');

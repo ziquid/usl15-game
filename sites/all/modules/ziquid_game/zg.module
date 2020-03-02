@@ -466,7 +466,20 @@ function zg_init() {
   }
 }
 
+/**
+ * Format a date according to game guidelines.
+ *
+ * @param int|string $epoch
+ *   The date to format, converted to an int, if necessary.
+ *
+ * @return false|mixed|string|null
+ *   The date, as a string.
+ */
 function zg_format_date($epoch) {
+
+  if (is_string($epoch)) {
+    $epoch = strtotime($epoch);
+  }
 
   $time_diff = REQUEST_TIME - $epoch;
 // firep("time difference: $time_diff");
@@ -710,26 +723,27 @@ function zg_check_authKey($game_user) {
 
 function zg_get_phoneid() {
 
-  if ((substr(arg(2), 0, 3) == 'fb=') || arg(2) == '') {
-    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . arg(2),
+  $arg2 = arg(2);
+  if ((substr($arg2, 0, 3) == 'fb=') || $arg2 == '') {
+    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . $arg2,
       'Referrer is ' . $_SERVER['HTTP_REFERER']);
-    echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . arg(2) .
+    echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . $arg2 .
       ' from <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
       $_SERVER['HTTP_REFERER'] . '</a>';
     exit;
   }
 
-  if (arg(2) == 'facebook') {
-    return (zg_get_fbid());
+  if ($arg2 == 'facebook') {
+    return zg_get_fbid();
   }
-  elseif (arg(2) === 'null') {
+  elseif ($arg2 === 'null') {
     drupal_goto('stlouis/playbook_null');
   }
-  elseif (substr(arg(2), 0, 3) === 'ms=') {
-    return (zg_get_msid());
+  elseif (substr($arg2, 0, 3) === 'ms=') {
+    return zg_get_msid();
   }
   else {
-    return check_plain(arg(2));
+    return check_plain($arg2);
   }
 
 }
@@ -893,7 +907,8 @@ function zg_fetch_user($force = FALSE) {
     elected_positions.max_level as max_level_for_office,
     elected_positions.name as ep_name,
     CURRENT_TIMESTAMP as time_now, neighborhoods.name as location,
-    `values`.party_title, `values`.party_icon
+    `values`.party_title, `values`.party_icon,
+    user_creations.datetime as startdate
 
     from users
 
@@ -910,8 +925,10 @@ function zg_fetch_user($force = FALSE) {
 
     LEFT OUTER JOIN `values`
     on users.fkey_values_id = `values`.id
+
+    LEFT OUTER JOIN user_creations on users.phone_id = user_creations.phone_id
     
-    where phone_id = "%s";';
+    where users.phone_id = "%s";';
   $result = db_query($sql, $phone_id);
   $game_user = db_fetch_object($result);
 

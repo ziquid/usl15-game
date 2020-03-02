@@ -212,6 +212,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/user/%'] = [
+      'title' => 'Ziquid Game User Profile Page',
+      'page callback' => 'zg_userprofile_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/welcome/%'] = [
       'title' => 'Ziquid Game Welcome',
       'page callback' => 'zg_welcome_callback',
@@ -222,14 +230,6 @@ function zg_menu() {
   }
 
   /*
-
-  $items[$game . '/user/%'] = [
-    'title' => 'Ziquid Game User Profile Page',
-    'page callback' => 'zg_userprofile_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
 
   $items[$game . '/user_comp/%'] = [
     'title' => 'Ziquid Game User Competencies Page',
@@ -1792,7 +1792,7 @@ function zg_theme() {
     ],
 
     'zg_userprofile' => [
-      'template' => 'zg_userprofile',
+      'template' => 'templates/zg_userprofile',
       'arguments' => [
         'phone_id' => NULL,
       ],

@@ -11,14 +11,6 @@
 function stlouis_menu() {
 
   $items = [];
-  $items['stlouis/user/%'] = [
-    'title' => 'St. Louis User Profile Page',
-    'page callback' => 'stlouis_userprofile_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/user_comp/%'] = [
     'title' => 'St. Louis User Competencies Page',
     'page callback' => 'stlouis_user_competencies_callback',
@@ -340,43 +332,6 @@ function stlouis_menu() {
   ];
 
   return $items;
-}
-
-/**
- * Homepage callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- *
- * @return mixed|string|string[]|void|null
- *   The homepage HTML, or access denied if the player has no access.
- */
-function stlouis_homepage_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_homepage', $phone_id);
-}
-
-/**
- * User profile callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- *
- * @return mixed|string|string[]|void|null
- *   The user profile page HTML, or access denied if the player has no access.
- */
-function stlouis_userprofile_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_userprofile', $phone_id);
-
 }
 
 /**
@@ -1200,13 +1155,6 @@ function stlouis_theme() {
   // Theme "A" uses template "B" with args "C".
   return [
 
-    'stlouis_userprofile' => [
-      'template' => 'stlouis_userprofile',
-      'arguments' => [
-        'phone_id' => NULL,
-      ],
-    ],
-
     'stlouis_user_competencies' => [
       'template' => 'stlouis_user_competencies',
       'arguments' => [
@@ -1250,7 +1198,7 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'phone_id_to_block' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_msg_delete' => [
@@ -1328,13 +1276,6 @@ function stlouis_theme() {
       'template' => 'stlouis_google_checkout',
       'arguments' => [
         'phone_id' => NULL,
-      ]
-    ],
-
-    'stlouis_welcome' => [
-      'template' => 'stlouis_welcome',
-      'arguments' => [
-        'phone_id' => NULL
       ]
     ],
 
