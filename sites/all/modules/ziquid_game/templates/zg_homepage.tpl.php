@@ -7,15 +7,17 @@
  * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
- * Ready for MVC separation: no
+ * Ready for MVC separation: done
  * Controller moved to callback include: no
- * View only in theme template: no
+ * View only in theme template: yes
  * All db queries in controller: no
  * Minimal function calls in view: no
  * Removal of globals: no
  * Removal of game_defs include: no
  * .
  */
+
+/* ------ CONTROLLER ------ */
 
 $version = 'v0.9.6, Mar 2 2020';
 
@@ -97,10 +99,10 @@ firep($alder, 'values of current hood alder');
 $alder_values = drupal_strtolower($alder->values);
 $player_values = drupal_strtolower($game_user->values);
 
-zg_fetch_header($game_user);
 
 // AI bot?  No reason to spend cycles on this.
 if (substr($phone_id, 0, 3) == 'ai-') {
+  zg_fetch_header($game_user);
   db_set_active('default');
   return;
 }
@@ -148,26 +150,8 @@ else {
 
 $debates_class = drupal_html_class($game_text['menu']['debates']) . '-menu';
 $data = zg_get_all_messages($game_user);
-$max_user_message = 0;
-foreach ($data as &$item) {
-  zg_format_message($game_user, $item);
-  if ($item->type == 'user') {
-    $max_user_message = max((int) $item->msg_id, $max_user_message);
-  }
-}
-firep($max_user_message, 'max user message');
-zg_set_value($game_user, 'max_user_message', $max_user_message);
+zg_format_messages($game_user, $game_user->id, $data);
 zg_alter('homepage_messages', $game_user, $data);
-// FIXME: add this endpoint.
-drupal_add_js(
-  [
-    'zg' =>
-    [
-      'check_messages_url' =>
-      "/$game/msg_count/$phone_id/$max_user_message",
-    ],
-  ],
-  'setting');
 $msg_shown = FALSE;
 $msg_options = '';
 
@@ -177,6 +161,11 @@ if ($game_user->fkey_clans_id) {
 if ($game_user->can_broadcast_to_party || $game_user->meta == 'admin') {
   $msg_options .= '<option value="neighborhood">' . $hood . '</option>';
 }
+
+/* ------ VIEW ------ */
+
+zg_fetch_header($game_user);
+db_set_active();
 
 echo <<< EOF
 <div class="title">
@@ -363,6 +352,7 @@ foreach ($data as $item) {
         {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
       </div>
       <div class="message-body {$item->display->private_css}">
+        {$item->display->delete}
         <p>$item->message</p>{$item->display->reply}
       </div>
     </div>
@@ -413,4 +403,3 @@ $("#news-mayor").addClass("active");
 <!--  <div id="personal-text">-->
 EOF;
 
-db_set_active('default');

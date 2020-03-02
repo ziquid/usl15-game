@@ -347,20 +347,21 @@ function zg_show_profile_menu(\stdClass $game_user) {
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $arg1 = check_plain(arg(1));
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
-  if (arg(1) == 'user') {
+  if ($arg1 == 'user') {
     $user_active = 'active';
   }
-  if (arg(1) == 'user_favors') {
+  if ($arg1 == 'user_favors') {
     $favor_active = 'active';
   }
-  if (arg(1) == 'favor_perform') {
+  if ($arg1 == 'favor_perform') {
     $favor_active = 'active';
     $arg3 = '';
   }
-  if (arg(1) == 'user_comp') {
+  if ($arg1 == 'user_comp') {
     $comp_active = 'active';
   }
 
@@ -717,7 +718,7 @@ function zg_competency_level(\stdClass $game_user, $id) {
  */
 function zg_show_by_level(\stdClass $game_user, $text, $level_obtained, $level_needed = 0) {
   if ($level_obtained >= $level_needed) {
-    if ($game_user->meta == 'admin') {
+    if (FALSE && $game_user->meta == 'admin') {
       $level_debug = ' (' . $level_obtained . ':' . $level_needed . ')';
       if (substr($text, -4) === '<br>') {
         $text = str_replace('<br>', $level_debug . '<br>', $text);
@@ -1786,6 +1787,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   user_messages.private, user_messages.id as msg_id,
+  user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
   "user" as type,
   subtype
   from user_messages
@@ -1810,6 +1812,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, challenge_messages.id as msg_id,
+  challenge_messages.fkey_users_from_id, challenge_messages.fkey_users_to_id,
   "challenge" as type,
   "" as subtype
   from challenge_messages
@@ -1826,6 +1829,7 @@ function zg_get_all_messages($game_user) {
   )
 
   union
+  -- HOOD MESSAGES
 
   (
   select neighborhood_messages.timestamp, neighborhood_messages.message,
@@ -1834,6 +1838,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, neighborhood_messages.id as msg_id,
+  neighborhood_messages.fkey_users_from_id, 0 as fkey_users_to_id,
   "hood" as type,
   "" as subtype
   from neighborhood_messages
@@ -1851,6 +1856,7 @@ function zg_get_all_messages($game_user) {
   )
 
   union
+  -- CLAN MESSAGES
 
   (
   select clan_messages.timestamp, clan_messages.message,
@@ -1859,6 +1865,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, clan_messages.id as msg_id,
+  clan_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "clan" as type,
   "" as subtype
   from clan_messages
@@ -1875,6 +1882,7 @@ function zg_get_all_messages($game_user) {
   )
 
   union
+  -- VALUES (PARTY) MESSAGES
 
   (
   select values_messages.timestamp, values_messages.message,
@@ -1883,6 +1891,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, values_messages.id as msg_id,
+  values_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "values" as type,
   "" as subtype
   from values_messages
@@ -1907,11 +1916,8 @@ function zg_get_all_messages($game_user) {
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
---  NULL AS username, NULL as phone_id,
---  NULL AS ep_name,
---  0 AS is_clan_leader,
---  NULL AS clan_acronym,
   0 AS private, system_messages.id as msg_id,
+  system_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "mayor" as type,
   subtype
   from system_messages
@@ -1920,9 +1926,9 @@ function zg_get_all_messages($game_user) {
   ON elected_officials.fkey_users_id = users.id
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
-    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    system_messages.fkey_users_from_id
-    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+  system_messages.fkey_users_from_id
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   order by timestamp DESC limit %d
   )
 
@@ -1956,20 +1962,31 @@ function zg_get_all_messages($game_user) {
 /**
  * Fetch all new user messages for a user.
  *
- * Retrieves all messages above a given message ID.
+ * Retrieves all messages above a given message ID.  If the player is checking
+ * the player's own messages, include private messages.
  *
  * @param object $game_user
  *   The game_user object.
+ * @param int $check_user_id
+ *   The userID of the user to check.
  * @param int $msg_id
  *   The message ID of messages already received.
  *
  * @return array
  *   The messages.
  */
-function zg_get_new_user_messages($game_user, $msg_id = 0) {
+function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
 
+  // Standard view?  Show in descending order.  New messages show in ascending.
+  $order = ($msg_id == 0) ? 'DESC' : 'ASC';
+
+  // Not looking at yourself? Don't show private messages.
+  if ($game_user->id != $check_user_id) {
+    $no_private = ' AND (private = 0 OR user_messages.fkey_users_from_id = %d) ';
+  }
   $sql = '
   select user_messages.timestamp, user_messages.message,
+  user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
   users.username, users.phone_id,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
@@ -1977,20 +1994,28 @@ function zg_get_new_user_messages($game_user, $msg_id = 0) {
   user_messages.private, user_messages.id as msg_id,
   "user" as type,
   subtype
+
   from user_messages
+
   left join users on user_messages.fkey_users_from_id = users.id
+
   LEFT OUTER JOIN elected_officials
   ON elected_officials.fkey_users_id = users.id
+
   LEFT OUTER JOIN elected_positions
   ON elected_positions.id = elected_officials.fkey_elected_positions_id
+
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   user_messages.fkey_users_from_id
+
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+
   where fkey_users_to_id = %d AND user_messages.id > %d
-  order by timestamp DESC;';
+  ' . $no_private . '
+  order by msg_id ' . $order . ' LIMIT 50;';
   $data = [];
 
-  $result = db_query($sql, $game_user->id, $msg_id);
+  $result = db_query($sql, $check_user_id, $msg_id, $game_user->id);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -1998,7 +2023,7 @@ function zg_get_new_user_messages($game_user, $msg_id = 0) {
 }
 
 /**
- * Fetch the new user messages count for a user.
+ * Fetch the new user messages count for current user.
  *
  * Retrieves the number of messages above a given message ID.
  *
@@ -2022,17 +2047,20 @@ function zg_get_new_user_message_count($game_user, $msg_id = 0) {
 }
 
 /**
- * Format items in a message for display.
+ * Format a message item for display.
  *
  * @param object $game_user
  *   The game user object.
+ * @param int $check_user_id
+ *   The userID of the person whose messages area being checked.
  * @param object $message
  *   The message object.
  */
-function zg_format_message($game_user, &$message) {
+function zg_format_message($game_user, $check_user_id, &$message) {
+  global $game, $phone_id;
 
   $message->display = new \stdClass();
-  $message->display->timestamp = zg_format_date(strtotime($message->timestamp));
+  $message->display->timestamp = zg_format_date($message->timestamp);
   $message->display->msg_id = 'news-item-' . $message->type . '-' . $message->msg_id;
 
   $message->display->clan_acronym = '';
@@ -2062,11 +2090,59 @@ function zg_format_message($game_user, &$message) {
     $message->display->username = 'from ' . $message->ep_name . ' ' . $message->username . ' ' .
       $message->display->clan_acronym;
     if (!in_array($message->username, ['USLCE Game', 'The Socialite'])) {
-      $message->display->reply = zg_render_button('user', 'View / Respond', '/' .
-        $message->phone_id);
+      $message->display->reply = zg_render_button('user', 'View / Respond', '/id:' .
+        $message->fkey_users_from_id);
     }
     else {
       $message->display->reply = '';
     }
   }
+  // Allow user to delete own messages.
+  if (($message->type == 'user') &&
+  ($message->fkey_users_to_id == $game_user->id ||
+    $message->fkey_users_from_id == $game_user->id)) {
+    $arg2 = check_plain(arg(2));
+    $q = $_GET['q'];
+    $message->display->delete = <<< EOF
+      <div class="message-delete">
+        <a href="/$game/msg_delete/$arg2/$message->msg_id?destination=/$q">
+          <img src="/sites/default/files/images/delete.png" width="16" height="16"/>
+        </a>
+      </div>
+EOF;
+  }
+  else {
+    $message->display->delete = '';
+  }
+
+}
+
+/**
+ * Format items in a message for display.
+ *
+ * Also saves the highest messageID found.
+ *
+ * @param object $game_user
+ *   The game user object.
+ * @param int $check_user_id
+ *   The userID of the person whose messages area being checked.
+ * @param object[] $messages
+ *   An array of message objects.
+ */
+function zg_format_messages($game_user, $check_user_id, array &$messages) {
+  global $game, $phone_id;
+
+  $max_user_message = 0;
+  foreach ($messages as &$item) {
+    zg_format_message($game_user, $check_user_id, $item);
+    if ($item->type == 'user') {
+      $max_user_message = max((int) $item->msg_id, $max_user_message);
+    }
+  }
+  firep($max_user_message, 'max user message');
+  zg_set_value($game_user, 'max_user_message', $max_user_message);
+
+  // FIXME: add this endpoint.
+  $url = "/$game/msg_count/$phone_id/$max_user_message";
+  drupal_add_js(['zg' => ['check_messages_url' => $url]], 'setting');
 }

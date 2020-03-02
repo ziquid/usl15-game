@@ -17,9 +17,9 @@
  * .
  */
 
-global $game, $phone_id;
-
 /* ------ CONTROLLER ------ */
+
+global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $q = $_GET['q'];
@@ -45,7 +45,7 @@ if (substr($arg3, 0, 3) == 'id:') {
 if (isset($_GET['comp_show_level'])) {
   // Using an action which gives curious comp; do nothing.
 }
-else if ($phone_id_to_check == $phone_id) {
+elseif ($phone_id_to_check == $phone_id) {
   zg_competency_gain($game_user, 'introspective');
 }
 else {
@@ -604,104 +604,29 @@ $message_start = <<< EOF
 </div>
 EOF;
 $messages = '';
-
-if ($phone_id != $phone_id_to_check) {
-
-  // Not looking at yourself? Don't show private messages.
-  $no_private = 'and (private = 0 OR user_messages.fkey_users_from_id = ' .
-
-  // FIXME -- don't add user id inline, use %d instead.
-  $game_user->id . ')';
-}
-
-$sql = 'select user_messages.*, users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym
-
-  from user_messages
-
-  left join users on user_messages.fkey_users_from_id = users.id
-
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    user_messages.fkey_users_from_id
-
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
-  where fkey_users_to_id = %d ' . $no_private . '
-
-  order by id DESC
-  LIMIT 50;';
-
-$result = db_query($sql, $item->id);
-//$msg_shown = FALSE;
-
-$data = [];
-while ($item = db_fetch_object($result)) {
-  $data[] = $item;
-}
+$data = zg_get_new_user_messages($game_user, $item->id);
+zg_format_messages($game_user, $item->id, $data);
 
 foreach ($data as $item) {
-  $display_time = zg_format_date(strtotime($item->timestamp));
-  $clan_acronym = '';
-
-  if (!empty($item->clan_acronym)) {
-    $clan_acronym = "($item->clan_acronym)";
-  }
-
-  if ($item->is_clan_leader) {
-    $clan_acronym .= '*';
-  }
-
-  if ($item->private) {
-    $private_css = 'private';
-    $private_text = '(private)';
-  }
-  else {
-    $private_css = $private_text = '';
-  }
-
-  $private_css .= ' user';
-
   $messages .= <<< EOF
-<div class="dateline">
-  $display_time from $item->ep_name $item->username $clan_acronym $private_text
-</div>
-<div class="message-body $private_css">
+  <div class="news-item $item->type" id="{$item->display->msg_id}">
+    <div class="dateline">
+      {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
+    </div>
+    <div class="message-body {$item->display->private_css}">
+      {$item->display->delete}
+      <p>$item->message</p>{$item->display->reply}
+    </div>
+  </div>
 EOF;
-
-  // Allow user to delete own messages.
-  if ($phone_id_to_check == $phone_id || $item->fkey_users_from_id == $game_user->id) {
-    $messages .= <<< EOF
-      <div class="message-delete">
-        <a href="/$game/msg_delete/$arg2/$item->id?destination=/$q">
-          <img src="/sites/default/files/images/delete.png" width="16" height="16"/>
-        </a>
-      </div>
-EOF;
-  }
-
-  $messages .= '<p>' . $item->message . '</p>';
-
-  if ($item->username != 'USLCE Game') {
-    $messages .= zg_render_button('user', 'View / Respond', '/id:' .
-      $item->fkey_users_from_id);
-  }
-
-  $messages .= '</div>';
-  //  $msg_shown = TRUE;
 }
 
 $message_end = '</div>';
 
 /* ------ VIEW ------ */
-$fetch_header($game_user);
+
+zg_fetch_header($game_user);
+db_set_active();
 zg_show_profile_menu($game_user);
 print $message_error;
 
@@ -725,5 +650,3 @@ zg_show_by_level($game_user, $send_a_message, $comp_show_level, 0);
 zg_show_by_level($game_user, $message_start, $comp_show_level, 0);
 zg_show_by_level($game_user, $messages, $comp_show_level, 0);
 zg_show_by_level($game_user, $message_end, $comp_show_level, 0);
-
-db_set_active('default');

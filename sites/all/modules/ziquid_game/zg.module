@@ -1444,7 +1444,8 @@ function zg_fetch_header(\stdClass $game_user) {
   $arg2 = check_plain(arg(2));
 
   $max_user_message = zg_get_value($game_user, 'max_user_message', FALSE);
-  if (($max_user_message !== FALSE) && (arg(1) != 'home')) {
+  if (($max_user_message !== FALSE) && (arg(1) != 'home') &&
+    (arg(1) != 'user')) {
     drupal_add_js(
       [
         'zg' =>
