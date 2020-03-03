@@ -457,17 +457,17 @@ EOF;
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack(type: 'error', message: 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+              zg_slack('error',  'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $eq_success, $eq_reason, $eq_details");
-              $response = zg_slack($type, $message);
+              $response = zg_slack('user object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack($type, $message);
+              $response = zg_slack('quest object' , $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack($type, $message);
+              $response = zg_slack('equipment object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
@@ -497,18 +497,18 @@ EOF;
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack(type: 'error', message: 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+              zg_slack('error', 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $st_success, $st_reason, $st_details",
                 $slack_channel);
-              $response = zg_slack($type, $message);
+              $response = zg_slack('user object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack($type, $message));
+              $response = zg_slack('quest object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack($type, $message);
+              $response = zg_slack('equipment  object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
