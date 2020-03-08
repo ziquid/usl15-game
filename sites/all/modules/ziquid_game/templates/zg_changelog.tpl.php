@@ -38,6 +38,16 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 9, 2020
+  </div>
+  <ul>
+    <li>
+      Added Ammunition count on main menu; temporarily removed all labels and
+        counters except Beauty
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 2, 2020
   </div>
   <ul>

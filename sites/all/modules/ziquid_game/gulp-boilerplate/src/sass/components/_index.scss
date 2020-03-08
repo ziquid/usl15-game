@@ -373,7 +373,7 @@ p:first-of-type {
   font: 0.625rem Helvetica,Arial,sans-serif;
   text-align: center;
   padding: 4px 0 3px 0;
-  width: 312px;
+  width: 310px;
   background-color: #888;
   margin: 21px 0 0 4px;
   border-radius: 0 0 12px 12px;
@@ -516,14 +516,15 @@ a.version {
       span {
         position: absolute;
         z-index: 11;
-        width: 44px;
+        width: 39px;
         height: 22px;
         top: 0;
         margin-top: 160px;
         padding-top: 0;
         text-align: center;
+        color: #f8fef800;
         &.odd {
-          width: 45px;
+          width: 39px;
         }
         &.value {
           height: 16px;
@@ -543,52 +544,63 @@ a.version {
           padding-top: 4px;
           margin-top: 0;
         }
+        &.ammunition {
+          background-color: #0805;
+          left: 4px;
+          &.label {
+            background-color: #080d;
+          }
+        }
         &.beauty {
           background-color: #e005;
-          left: 4px;
+          color: #f8fefd;
+          left: 43px;
           &.label {
             background-color: #e00d;
           }
         }
         &.chaos {
           background-color: #e705;
-          left: 49px;
+          left: 82px;
+          width: 38px;
           &.label {
             background-color: #e70d;
           }
         }
         &.faith {
-          background-color: #ee05;
-          left: 93px;
+          color: #00000000;
+          background-color: #dd05;
+          left: 120px;
           &.label {
-            background-color: #ee0d;
+            background-color: #dd0d;
           }
         }
         &.finance {
-          color: black;
+          color: #00000000;
           background-color: #eee5;
-          left: 138px;
+          left: 159px;
           &.label {
             background-color: #eeed;
           }
         }
         &.health {
           background-color: #0e05;
-          left: 182px;
+          left: 198px;
+          width: 38px;
           &.label {
             background-color: #0e0d;
           }
         }
         &.intelligence {
           background-color: #00e5;
-          left: 227px;
+          left: 236px;
           &.label {
             background-color: #00ed;
           }
         }
         &.strength {
           background-color: #e0e5;
-          left: 271px;
+          left: 275px;
           &.label {
             background-color: #e0ed;
           }

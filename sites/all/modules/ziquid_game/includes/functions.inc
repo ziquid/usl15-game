@@ -1372,7 +1372,7 @@ function zg_user_has_trait(\stdClass $game_user, $trait) {
  *
  * @return array
  *   Returns the from hood object, the to hood object, the number of actions to
- *   move, and the verb used to display the move.
+ *   move, the verb used to display the move, and the equipment used.
  */
 function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
   $sql = 'select * from neighborhoods where id = %d;';
@@ -1402,13 +1402,19 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
 
   if (is_object($eq) && $eq->speed_increase > 0) {
     $verb = $eq->action_verb;
-    zg_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
+    zg_alter('speed_increase', $game_user, $eq, $verb);
     $actions_to_move -= $eq->speed_increase;
   }
 
   $actions_to_move = max($actions_to_move, 6);
-  zg_alter('actions_to_move', $game_user, $actions_to_move);
-  return [$from_hood, $to_hood, $actions_to_move, $verb];
+
+  // In a building?  1 extra action.
+  if ($game_user->fkey_buildings_id > 0) {
+    $actions_to_move++;
+  }
+
+  zg_alter('actions_to_move', $game_user, $actions_to_move, $eq);
+  return [$from_hood, $to_hood, $actions_to_move, $verb, $eq];
 }
 
 /**

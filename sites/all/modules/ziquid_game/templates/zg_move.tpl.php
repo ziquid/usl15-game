@@ -41,7 +41,7 @@ EOF;
 
 if ($neighborhood_id > 0) {
 
-  list($cur_hood, $new_hood, $actions_to_move, $verb) =
+  list($cur_hood, $new_hood, $actions_to_move, $verb, $eq) =
     zg_get_actions_to_move($game_user, $game_user->fkey_neighborhoods_id, $neighborhood_id);
 
   if (($game_user->meta == 'frozen') && ($actions_to_move > 6)) {
@@ -65,7 +65,8 @@ EOF;
 <div class="subtitle">It will cost $actions_to_move Actions to move</div>
 EOF;
 
-  zg_button('move_do', 'Yes, I want to go', "/$neighborhood_id", 'big-68');
+  zg_button('move_do', 'Yes, I want to go', "/$neighborhood_id",
+    'big-68');
   zg_button('move', 'No, let me choose again', '/0', 'big-68');
   db_set_active('default');
   return;

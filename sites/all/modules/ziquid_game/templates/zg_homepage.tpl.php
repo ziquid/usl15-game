@@ -19,7 +19,7 @@
 
 /* ------ CONTROLLER ------ */
 
-$version = 'v0.9.6, Mar 2 2020';
+$version = 'v0.9.6, Mar 9 2020';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -182,58 +182,66 @@ $extra_bonus
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.jpg">
     <ul class="value-links">
       <li>
-        <span class="beauty value first odd">
+        <span class="ammunition value first odd">
+          50
+        </span>
+        <span class="ammunition label first odd">
+          AMM
+        </span>
+      </li>
+      <li>
+        <span class="beauty value even">
           $beauty
         </span>
-        <span class="beauty label first odd">
+        <span class="beauty label even">
           BTY
         </span>
       </li>
       <li>
-        <span class="chaos value even">
-          ???
+        <span class="chaos value odd">
+          50
         </span>
-        <span class="chaos label even">
+        <span class="chaos label odd">
           CHA
         </span>
       </li>
       <li>
-        <span class="faith value odd">
-          ???
+        <span class="faith value even">
+          50
         </span>
-        <span class="faith label odd">
+        <span class="faith label even">
           FTH
         </span>
       </li>
       <li>
-        <span class="finance value even">
-          ???
+        <span class="finance value odd">
+          50
         </span>
-        <span class="finance label even">
+        <span class="finance label odd">
           FIN
         </span>
       </li>
       <li>
-        <span class="health value odd">
-          ???
+        <span class="health value even">
+          50
         </span>
-        <span class="health label odd">
+        <span class="health label even">
           HEA
         </span>
       </li>
       <li>
-        <span class="intelligence value even">
-          ???
+        <span class="intelligence value odd">
+          50
         </span>
-        <span class="intelligence label even">
+        <span class="intelligence label odd">
           INT
         </span>
       </li>
       <li>
-        <span class="strength value odd last">
-          ???
+        <span class="strength value even last">
+          50
         </span>
-        <span class="strength label odd last">
+        <span class="strength label even last">
           STR
         </span>
       </li>

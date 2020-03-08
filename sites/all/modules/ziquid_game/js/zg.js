@@ -33,6 +33,7 @@ Drupal.behaviors.zg = function (context) {
     if (Drupal.settings.zg.check_message_count_url) {
       console.log(Drupal.settings.zg.check_message_count_url);
       setInterval(zg_header_check_message_count, 2020, Drupal.settings.zg.check_message_count_url);
+      setTimeout(zg_header_check_message_count, 20, Drupal.settings.zg.check_message_count_url);
     }
 
     var level = parseInt(Drupal.settings.zg.level);

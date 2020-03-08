@@ -1872,7 +1872,7 @@ function game_user_has_trait($game_user, $trait) {
  *
  * Also returns hood objects for from and to hood and verb used.
  *
- * @param \stdClass $game_user
+ * @param object $game_user
  *   The game user object.
  * @param int $from_id
  *   The id of the hood moving from.
@@ -1881,41 +1881,8 @@ function game_user_has_trait($game_user, $trait) {
  *
  * @return array
  *   Returns the from hood object, the to hood object, the number of actions to
- * move, and the verb used to display the move.
+ *   move, and the verb used to display the move.
  */
 function game_get_actions_to_move($game_user, $from_id, $to_id) {
-  $sql = 'select * from neighborhoods where id = %d;';
-  $result = db_query($sql, $from_id);
-  $from_hood = db_fetch_object($result);
-  $result = db_query($sql, $to_id);
-  $to_hood = db_fetch_object($result);
-
-  $distance = floor(sqrt(pow($from_hood->xcoor - $to_hood->xcoor, 2) +
-    pow($from_hood->ycoor - $to_hood->ycoor, 2)));
-  $actions_to_move = floor($distance / 8);
-  $verb = t('Walk');
-
-  // Find player's fastest equipment.
-  $sql = 'SELECT equipment.speed_increase as speed_increase,
-    action_verb from equipment
-
-    left join equipment_ownership
-      on equipment_ownership.fkey_equipment_id = equipment.id
-      and equipment_ownership.fkey_users_id = %d
-
-    where equipment_ownership.quantity > 0
-
-    order by equipment.speed_increase DESC limit 1;';
-  $result = db_query($sql, $game_user->id);
-  $eq = db_fetch_object($result);
-
-  if ($eq->speed_increase > 0) {
-    $verb = t($eq->action_verb);
-    game_alter('speed_increase', $game_user, $eq->speed_increase, $verb);
-    $actions_to_move -= $eq->speed_increase;
-  }
-
-  $actions_to_move = max($actions_to_move, 6);
-  game_alter('actions_to_move', $game_user, $actions_to_move);
-  return [$from_hood, $to_hood, $actions_to_move, $verb];
+  return zg_get_actions_to_move($game_user, $from_id, $to_id);
 }
