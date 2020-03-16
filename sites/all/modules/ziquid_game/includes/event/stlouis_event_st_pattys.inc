@@ -58,7 +58,7 @@ function stlouis_event_st_pattys_homepage_event_notice(\stdClass $game_user, &$e
   $event_text .= '
 <div class="event">
   <div class="event-title">
-    ~ St Patty\'s Day ~
+    &#127808; Happy St Patty\'s Day &#127808;
   </div>
 </div>';
 }
