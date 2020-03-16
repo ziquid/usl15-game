@@ -1025,6 +1025,26 @@ function zg_irish_name() {
     'Donagh',
     'Eireann',
     'Fionbarr',
+    'Grainne',
+    'Houlihan',
+    'Innes',
+    'Ruaridh',
+    'Kael',
+    'Logan',
+    'Morag',
+    'Nigel',
+    'Vonagh',
+    'Paisley',
+    'Ryne',
+    'Quinn',
+    'Sorcha',
+    'Tory',
+    'Urlaith',
+    'Diarmid',
+    'Conor',
+    'Cadhgan',
+    'Yseult',
+    'Kameron',
   ];
 
   static $last = [
@@ -1033,12 +1053,19 @@ function zg_irish_name() {
     'Byrne',
     'O\'Connor',
     'Murphy',
+    'Maguire',
+    'O\'Riley',
+    'Fitzgerald',
+    'Walsh',
+    'Doherty',
+    'Gallagher',
+    'McCarthy',
+    'O\'Fallon',
   ];
 
   return $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 }
-
 
 /**
  * Can I perform an action yet?

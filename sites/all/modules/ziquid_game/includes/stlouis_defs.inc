@@ -122,7 +122,8 @@ switch ($today) {
     break;
 
   case '2020-03-16':
-//    $event_type[] = EVENT_ST_PATTYS;
+  case '2020-03-17':
+    $event_type[] = EVENT_ST_PATTYS;
     break;
 
   case '2018-03-17':
