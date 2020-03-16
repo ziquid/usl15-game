@@ -957,7 +957,6 @@ function zg_fetch_user($force = FALSE) {
   }
   zg_includes_add('hood_' . $game_user->fkey_neighborhoods_id, 'hood');
 
-
   // Save the IP address, user agent of user.
   zg_save_user_agent($game_user);
   zg_save_user_IP($game_user);

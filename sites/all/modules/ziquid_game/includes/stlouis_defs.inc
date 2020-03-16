@@ -11,7 +11,7 @@
 define(EVENT_NONE, 0);
 define(EVENT_DONE, 1);
 define(EVENT_DEBATE, 2);
-define(EVENT_ST_PATTYS, 3);
+define(EVENT_ST_PATTYS_MAP, 3);
 define(EVENT_APRIL_FOOLS, 4);
 define(EVENT_NEW_NAMES, 5);
 define(EVENT_PRE_MAY, 6);
@@ -39,6 +39,7 @@ define(EVENT_NYE_PARTY, 'event_nye_party');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
+define(EVENT_ST_PATTYS, 'event_st_pattys');
 define(EVENT_SUPPERBOWL, 'event_supperbowl');
 define(EVENT_THANKSGIVING, 'event_thanksgiving');
 
@@ -120,8 +121,12 @@ switch ($today) {
     $event_type = EVENT_DONE;
     break;
 
+  case '2020-03-16':
+//    $event_type[] = EVENT_ST_PATTYS;
+    break;
+
   case '2018-03-17':
-    $event_type = EVENT_ST_PATTYS;
+    $event_type = EVENT_ST_PATTYS_MAP;
     break;
 
   case '2018-03-18':

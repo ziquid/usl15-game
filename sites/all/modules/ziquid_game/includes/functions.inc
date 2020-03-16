@@ -47,7 +47,8 @@ function zg_button($link = 'home', $type = 'continue', $extra_link = '', $extra_
  * @return string
  *   The rendered button in HTML.
  */
-function zg_render_button($link = 'home', $type = 'continue', $extra_link = '', $extra_classes = '') {
+function zg_render_button($link = 'home', $type = 'continue', $extra_link = '',
+  $extra_classes = '') {
 
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
@@ -595,7 +596,8 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
  * @return bool
  *   Whether the update succeeded or not.
  */
-function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_filled, $amount_now, $text, $type, $subtype) {
+function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_filled,
+  $amount_now, $text, $type, $subtype) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
@@ -882,6 +884,8 @@ function zg_fetch_user_by_id($id) {
   if (empty($item->ep_level)) {
     $item->ep_level = 0;
   }
+  zg_alter('fetch_user', $item);
+
   $user_cache[$id] = $item;
 
 firep($item, 'zg_fetch_user_by_id for id ' . $id);
@@ -964,7 +968,7 @@ function zg_send_system_message($from, $message, $subtype = 'system') {
 }
 
 /**
- * Generate a zombie  name.
+ * Generate a zombie name.
  *
  * @see https://s-media-cache-ak0.pinimg.com/736x/d5/87/a4/d587a4917ff097a6ed2697e5b84dc4c7.jpg
  *
@@ -1003,6 +1007,38 @@ function zg_zombie_name() {
   return 'PoliZombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 }
+
+/**
+ * Generate an Irish name.
+ *
+ * @see https://www.pinterest.com/pin/472385448387146151/
+ *
+ * @return string
+ *   The Irish name.
+ */
+function zg_irish_name() {
+
+  static $first = [
+    'Aeden',
+    'Braeden',
+    'Cillian',
+    'Donagh',
+    'Eireann',
+    'Fionbarr',
+  ];
+
+  static $last = [
+    'Allen',
+    'O\'Brien',
+    'Byrne',
+    'O\'Connor',
+    'Murphy',
+  ];
+
+  return $first[mt_rand(0, count($first) - 1)] . ' '
+    . $last[mt_rand(0, count($last) - 1)];
+}
+
 
 /**
  * Can I perform an action yet?
@@ -1285,7 +1321,8 @@ function zg_includes_add($include_file, $type) {
   $game_include_list = &drupal_static('zg_include_list', []);
   $game_include_missing = &drupal_static('zg_include_missing', []);
   $module_path = drupal_get_path('module', 'zg');
-  $file_to_include = $module_path . '/includes/' . $type . '/' . $game . '_' . $include_file . '.inc';
+  $file_to_include = $module_path . '/includes/' . $type . '/' . $game . '_' .
+    $include_file . '.inc';
 
   // Already in include list; return.
   if (in_array($type . '/' . $include_file, $game_include_list)) {
@@ -1755,6 +1792,12 @@ function zg_get_all_messages($game_user) {
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
   $elected_official_type = $item->type;
+  firep($elected_official_type, 'elected_official_type');
+
+  $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
+  $clan_id_to_use = $game_user->fkey_clans_id;
+  $limit = 20;
+  $all_limit = 100;
 
   // If a party official.
   if ($elected_official_type == 2) {
@@ -1772,17 +1815,12 @@ function zg_get_all_messages($game_user) {
       $data[] = $item->fkey_clans_id;
     }
 
-    $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
-    $clan_id_to_use = implode(',', $data);
-    //firep($clan_id_to_use);
-    $limit = 50;
-    $all_limit = 150;
-  }
-  else {
-    $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
-    $clan_id_to_use = $game_user->fkey_clans_id;
-    $limit = 20;
-    $all_limit = 100;
+    if (count($data)) {
+      $clan_sql = 'where clan_messages.fkey_neighborhoods_id in (%s)';
+      $clan_id_to_use = implode(',', $data);
+      $limit = 50;
+      $all_limit = 150;
+    }
   }
 
   $sql = '
@@ -1962,6 +2000,8 @@ function zg_get_all_messages($game_user) {
     // Reset to master.
     db_set_active('game_' . $game);
   }
+
+  zg_alter('get_all_messages', $game_user, $data);
   return $data;
 }
 
@@ -2025,6 +2065,8 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
+
+  zg_alter('get_new_user_messages', $game_user, $data);
   return $data;
 }
 
