@@ -12,7 +12,7 @@
  *
  * @return string
  *   Returns 'XXX' if the string has profanity in it or the original message
- * string if no profanity is found.
+ *   string if no profanity is found.
  */
 function zg_filter_profanity($message) {
 
