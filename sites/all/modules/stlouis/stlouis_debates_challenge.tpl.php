@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_debates_challenge.tpl.php
- * Do the debates challenge.
+ * @file
+ * Debate results.
  *
  * Synced with CG: yes
  * Synced with 2114: no
@@ -19,8 +19,9 @@
 
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+$q = $_GET['q'];
 
 if (empty($game_user->username)) {
   db_set_active('default');
@@ -47,6 +48,7 @@ $sql = 'SELECT users.*,  elected_positions.name as ep_name,
 
 $result = db_query($sql, $position_id);
 $item = db_fetch_object($result);
+zg_alter('debates_challenge', $game_user, $item);
 firep($item, 'opponent');
 
 $username = $item->username;
@@ -54,19 +56,16 @@ $title = "$debate $item->ep_name $username";
 
 if ($item->id == $game_user->id) {
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo "<div class=\"title\">$title</div>";
   echo '<div class="subtitle">' . t('You cannot @debate yourself.',
     ['@debate' => $debate_lower]) . '</div>';
-  echo '<div class="subtitle">
-    <a href="/' . $game . '/debates/' . $arg2 . '">
-      <img src="/sites/default/files/images/' . $game . '_continue.png"/>
-    </a>
-  </div>';
+  zg_button('debates');
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-lost\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
@@ -74,25 +73,21 @@ if ($item->id == $game_user->id) {
 
 if ($game_user->actions == 0) {
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo "<div class=\"title\">$title</div>";
   echo '<div class="subtitle">' . t('Out of Action!') .
     '</div>';
-  echo '<div class="try-an-election-wrapper"><div  class="try-an-election"><a
-    href="/' . $game . '/elders_do_fill/' . $arg2 . '/action?destination=/' .
-    $game . '/debates/' . $arg2 . '">Refill
-    your Action (1&nbsp;' . $luck . ')</a></div></div>';
+  zg_button('elders_do_fill', t('Refill your Action (1&nbsp;Luck)'),
+    '/action?destination=/' . $q, 'big-68');
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-no-action\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
 }
-
-//  $debate_wait_time = 1200;
-//  if ($debate == 'Box') $debate_wait_time = 900;
 
 if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   (REQUEST_TIME - strtotime($item->debates_last_time)) <= $debate_wait_time) ||
@@ -100,30 +95,26 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   (REQUEST_TIME - strtotime($item->debates_last_time)) <= $zombie_debate_wait)) {
 
   // Not long enough.
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo "<div class=\"title\">$title</div>";
   echo '<div class="subtitle">' .
     t('You must wait longer to @debate this player',
     ['@debate' => $debate_lower]) . '</div>';
-  echo '<div class="subtitle">
-    <a href="/' . $game . '/debates/' . $arg2 . '">
-      <img src="/sites/default/files/images/' . $game . '_continue.png"/>
-    </a>
-  </div>';
+  zg_button('debates');
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-must-wait\"/>\n-->";
+  }
 
   db_set_active('default');
   return;
-
 }
 
 /*  if ($game_user->experience > ($item->experience * 2)) {
 
   // You cannot challenge someone if you have more than twice their influence.
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo "<div class=\"title\">$title</div>";
   echo '<div class="election-failed">' . t('Sorry!') . '</div>';
@@ -289,11 +280,11 @@ if ($won) {
     firep($row);
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo '<div class="election-succeeded">' . t('Success!') . '</div>';
   echo "<div class=\"subtitle\">You beat
-    <a href=\"/$game/user/$arg2/$item->phone_id\">$item->username</a></div>
+    <a href=\"/$game/user/$arg2/id:$item->id\">$item->username</a></div>
     <div class=\"action-effect\">You gained
     $money_change $game_user->values $gain_extra
     and $experience_gained $experience!</div>";
@@ -302,10 +293,8 @@ if ($won) {
     echo "<!--\n<ai \"debate-won\"/>\n-->";
 
   if ($event_type == EVENT_DEBATE) {
-
     echo '<div class="subsubtitle">You have ' . $row->tags_con .
     ' consecutive debate win(s) and ' . $row->points . ' point(s)</div>';
-
   }
 
   $points_to_add = 0;
@@ -618,7 +607,7 @@ else {
     firep($row);
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   if ($item->meta == 'zombie') {
 
@@ -634,7 +623,7 @@ else {
 
   echo '<div class="election-failed">' . t('Defeated') . '</div>';
   echo "<div class=\"subtitle\">You lost to
-  <a href=\"/$game/user/$arg2/$item->phone_id\">$item->username</a></div>
+  <a href=\"/$game/user/$arg2/id:$item->id\">$item->username</a></div>
     <div class=\"action-effect\">" .
     t('You lost @money @value' . $gain_extra, ['@money' => $money_change,
       '@value' => $game_user->values]) .

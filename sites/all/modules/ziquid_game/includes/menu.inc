@@ -2012,14 +2012,14 @@ function zg_theme() {
     ],
 
     'zg_debates_list' => [
-      'template' => 'zg_debates_list',
+      'template' => 'templates/zg_debates_list',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_debates_challenge' => [
-      'template' => 'zg_debates_challenge',
+      'template' => 'templates/zg_debates_challenge',
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,

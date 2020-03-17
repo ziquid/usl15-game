@@ -97,3 +97,17 @@ function stlouis_event_st_pattys_get_all_messages(\stdClass $game_user, &$messag
 function stlouis_event_st_pattys_get_new_user_messages(\stdClass $game_user, &$messages) {
   return stlouis_event_st_pattys_get_all_messages($game_user, $messages);
 }
+
+/**
+ * Implements hook_debates_list().
+ */
+function stlouis_event_st_pattys_debates_list(\stdClass $game_user, &$player) {
+  $player->username = stlouis_event_st_pattys_get_irish_name($player);
+}
+
+/**
+ * Implements hook_debates_challenge().
+ */
+function stlouis_event_st_pattys_debates_challenge(\stdClass $game_user, &$player) {
+  $player->username = stlouis_event_st_pattys_get_irish_name($player);
+}

@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_debates_list.tpl.php
- * Stlouis debates list
+ * @file
+ * Debates list.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -18,14 +18,14 @@
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
-$fetch_header($game_user);
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+zg_fetch_header($game_user);
 
 // Do AI moves from this page!!!
 if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
   include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
-  game_move_ai();
+//  zg_move_ai();
 }
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
@@ -96,7 +96,7 @@ No boxing gloves?
 How can you box without gloves?
 </div>
 EOF;
-    game_button('home', 'Go Home Instead');
+    zg_button('home', 'Go Home Instead');
     db_set_active('default');
     return;
   }
@@ -155,6 +155,7 @@ echo <<< EOF
 EOF;
 
 foreach ($data as $item) {
+  zg_alter('debates_list', $game_user, $item);
 firep($item, 'player to debate');
 
   $username = $item->username;
@@ -195,14 +196,7 @@ firep($item, 'player to debate');
     src="/sites/default/files/images/$icon"/></div>
   <div class="clan-title">$item->party_title</div>
   <div class="opponent-name"><a
-    href="/$game/user/$arg2/$item->phone_id">$username $clan_acronym</a></div>
-  <!--<div class="action-wrapper">
-    <div class="action $action_class">
-      <a href="/$game/debates_challenge/$arg2/$item->id">
-        $action
-      </a>
-    </div>
-  </div>-->
+    href="/$game/user/$arg2/id:$item->id">$username $clan_acronym</a></div>
   $button
 </div>
 EOF;

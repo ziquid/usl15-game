@@ -11,7 +11,6 @@
  */
 
 require_once drupal_get_path('module', 'zg') . '/includes/functions-staff.inc';
-//require_once drupal_get_path('module', 'zg') . '/includes/functions-no.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-equip.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-quests.inc';
 require_once drupal_get_path('module', 'zg') . '/includes/functions-land.inc';
