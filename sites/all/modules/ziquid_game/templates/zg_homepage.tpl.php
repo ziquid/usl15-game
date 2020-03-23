@@ -19,7 +19,7 @@
 
 /* ------ CONTROLLER ------ */
 
-$version = 'v0.9.6, Mar 9 2020';
+$version = 'v0.9.6, Mar 23 2020';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';

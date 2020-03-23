@@ -38,6 +38,17 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 23, 2020
+  </div>
+  <ul>
+    <li>
+      New action: "Generate Fake News" increases your rating, the neighborhood
+        beauty rating, and the new competency "Propaganda".  It requires a TV
+        Anchor.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 9, 2020
   </div>
   <ul>
