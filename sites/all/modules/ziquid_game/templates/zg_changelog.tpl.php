@@ -38,6 +38,15 @@ db_set_active('default');
   </div>
 
   <div class="subtitle">
+    Mar 25, 2020
+  </div>
+  <ul>
+    <li>
+      Emoji support 😁😁😁
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 23, 2020
   </div>
   <ul>
