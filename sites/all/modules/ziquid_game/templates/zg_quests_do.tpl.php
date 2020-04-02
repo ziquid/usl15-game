@@ -457,7 +457,7 @@ EOF;
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack('error',  'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+              zg_slack('error', 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $eq_success, $eq_reason, $eq_details");
               $response = zg_slack('user object', $game_user);
               if ($response !== TRUE) {
@@ -508,7 +508,7 @@ EOF;
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('equipment object', $game_equipment);
+              $response = zg_slack('staff object', $game_staff);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
