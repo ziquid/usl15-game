@@ -1,7 +1,7 @@
 <?php
 
 /**
- * @file stlouis_user_competencies.tpl.php
+ * @file
  * Show a user's competencies.
  *
  * Synced with CG: yes
@@ -18,30 +18,32 @@
  */
 
 global $game, $phone_id;
-include drupal_get_path('module', $game) . '/game_defs.inc';
-$game_user = $fetch_user();
-$fetch_header($game_user);
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
 if (empty($game_user->username)) {
   db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-// Refresh every 20 seconds.
-drupal_set_html_head('<meta http-equiv="refresh" content="20">');
+// Refresh every 30 seconds.
+drupal_set_html_head('<meta http-equiv="refresh" content="30">');
 
-game_show_profile_menu($game_user);
+zg_fetch_header($game_user);
+zg_show_profile_menu($game_user);
 
 $phone_id_to_check = $phone_id;
 if ($arg3 != '') {
   $phone_id_to_check = $arg3;
 }
 
+// Fetch user by phone ID or user ID.
 if (substr($arg3, 0, 3) == 'id:') {
-  $sql = 'select phone_id from users where id = %d;';
-  $result = db_query($sql, (int) substr($arg3, 3));
-  $item = db_fetch_object($result);
+  $item = zg_fetch_user_by_id((int) substr($arg3, 3));
   $phone_id_to_check = $item->phone_id;
+}
+else {
+  $item = zg_fetch_user_by_id($phone_id_to_check);
 }
 
 if (($phone_id_to_check == $phone_id) ||
@@ -53,7 +55,6 @@ else {
   $show_all = FALSE;
 }
 
-$item = game_fetch_user_by_id($phone_id_to_check);
 
 //  $party_title = preg_replace('/^The /', '', $item->party_title);
 
@@ -90,9 +91,13 @@ $count = db_fetch_object($result);
 $user_comps = $count->total;
 $time_left = '';
 
+zg_alter('competency_gain_wait', $game_user, $competency_gain_wait_time,
+  $competency_gain_wait_time_str);
+
 if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
   $stats = t('You have discovered @user out of @total competencies',
     ['@user' => $user_comps, '@total' => $total_comps]);
+
   $fast_comps_30 = game_timed_bonus_in_effect($item, 'fast_comps_30');
   if ($fast_comps_30->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 30);
@@ -101,6 +106,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
       $fast_comps_30->minutes_remaining . 'm' . $fast_comps_30->seconds_remaining .
       's&nbsp;left)';
   }
+
   $fast_comps_15 = game_timed_bonus_in_effect($item, 'fast_comps_15');
   if ($fast_comps_15->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 15);

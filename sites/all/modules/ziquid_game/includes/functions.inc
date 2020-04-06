@@ -416,7 +416,18 @@ function zg_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   }
 }
 
-function zg_competency_gain(\stdClass $game_user, $id, $level = 1) {
+/**
+ * Increase a user's competency point.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param string|int $id
+ *   The competency name (string) or id (int).
+ *
+ * @return bool
+ *   Whether the competency was increased or not.
+ */
+function zg_competency_gain(\stdClass $game_user, $id) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
@@ -433,7 +444,7 @@ function zg_competency_gain(\stdClass $game_user, $id, $level = 1) {
     else {
       // Not found! Create it!
       $sql = 'insert into competencies (name, level) values ("%s", %d);';
-      db_query($sql, $id, $level);
+      db_query($sql, $id, 1);
 
       $sql = 'select * from competencies where name = "%s";';
       $result = db_query($sql, $id);
@@ -451,6 +462,9 @@ function zg_competency_gain(\stdClass $game_user, $id, $level = 1) {
     where fkey_competencies_id = %d and fkey_users_id = %d;';
   $result = db_query($sql, $id, $game_user->id);
   $data = db_fetch_object($result);
+
+  zg_alter('competency_gain_wait', $game_user, $competency_gain_wait_time,
+    $competency_gain_wait_time_str);
 
   if (zg_timed_bonus_in_effect($game_user, 'fast_comps_30')->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 30);
@@ -658,8 +672,8 @@ function zg_competency_level(\stdClass $game_user, $id) {
     }
     else {
       echo 'competency_level for id ' . $id . ' doesn\'t exist!';
-      zg_slack(type: 'error', message: 'competency_level for id ' . $id . 'doesn\'t exist!');
-      zg_slack(type: 'game user', print_r($game_user, TRUE));
+      zg_slack('error', 'competency_level for id ' . $id . 'doesn\'t exist!');
+      zg_slack('game user', print_r($game_user, TRUE));
       die;
     }
 
@@ -830,7 +844,7 @@ function zg_fetch_user_by_id($id) {
 //    return $user_cache[$id];
   }
 
-  // Find id from phone_id.
+  // Find user from phone_id.
   if (gettype($id) == 'string') {
     $where = 'WHERE users.phone_id = "%s"';
   }
