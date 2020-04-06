@@ -11,14 +11,6 @@
 function stlouis_menu() {
 
   $items = [];
-  $items['stlouis/user_comp/%'] = [
-    'title' => 'St. Louis User Competencies Page',
-    'page callback' => 'stlouis_user_competencies_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/clan_list/%/%'] = [
     'title' => 'St. Louis Clan List Page',
     'page callback' => 'stlouis_clan_list_callback',
@@ -332,25 +324,6 @@ function stlouis_menu() {
   ];
 
   return $items;
-}
-
-/**
- * User competencies callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- *
- * @return mixed|string|string[]|void|null
- *   The user competencies page HTML, or access denied if the player has no
- *   access.
- */
-function stlouis_user_competencies_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_user_competencies', $phone_id);
 }
 
 /**
@@ -1155,13 +1128,6 @@ function stlouis_theme() {
   // Theme "A" uses template "B" with args "C".
   return [
 
-    'stlouis_user_competencies' => [
-      'template' => 'stlouis_user_competencies',
-      'arguments' => [
-        'phone_id' => NULL,
-      ],
-    ],
-
     'stlouis_clan_list' => [
       'template' => 'stlouis_clan_list',
       'arguments' => [
@@ -1241,56 +1207,56 @@ function stlouis_theme() {
       'template' => 'stlouis_elders_rename',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elders_set_password' => [
       'template' => 'stlouis_elders_set_password',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elders_ask_purchase' => [
       'template' => 'stlouis_elders_ask_purchase',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elders_do_purchase' => [
       'template' => 'stlouis_elders_do_purchase',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_check_receipt' => [
       'template' => 'stlouis_elders_check_receipt',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_google_checkout' => [
       'template' => 'stlouis_google_checkout',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_help' => [
       'template' => 'stlouis_help',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elections_list' => [
       'template' => 'stlouis_elections_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_elections_challenge' => [
@@ -1298,7 +1264,7 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_debates_list' => [
@@ -1359,7 +1325,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_land_work' => [
@@ -1368,7 +1334,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'land_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_staff_hire' => [
@@ -1377,7 +1343,7 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_staff_fire' => [
@@ -1386,14 +1352,14 @@ function stlouis_theme() {
         'phone_id' => NULL,
         'staff_id' => NULL,
         'quantity' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_actions_list' => [
       'template' => 'stlouis_actions_list',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_actions_do' => [

@@ -35,7 +35,7 @@ define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
 define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_NYE_PARTY, 'event_nye_party');
-
+define(EVENT_ONE_MINUTE_COMPS, 'event_one_minute_comps');
 define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
 define(EVENT_ROT13_COMPS, 'event_rot13_comps');
 define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
@@ -137,6 +137,14 @@ switch ($today) {
   /* ------ APRIL ------ */
   case '2018-04-01':
     $event_type = EVENT_APRIL_FOOLS;
+    break;
+
+  case '2020-04-06':
+  case '2020-04-07':
+  case '2020-04-08':
+  case '2020-04-09':
+  case '2020-04-10':
+    $event_type[] = EVENT_ONE_MINUTE_COMPS;
     break;
 
   case '2018-04-30':

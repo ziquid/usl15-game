@@ -13,7 +13,7 @@
  * All db queries in controller: no
  * Minimal function calls in view: no
  * Removal of globals: no
- * Removal of game_defs include: no
+ * Removal of zg_defs include: no
  * .
  */
 
@@ -98,7 +98,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
   $stats = t('You have discovered @user out of @total competencies',
     ['@user' => $user_comps, '@total' => $total_comps]);
 
-  $fast_comps_30 = game_timed_bonus_in_effect($item, 'fast_comps_30');
+  $fast_comps_30 = zg_timed_bonus_in_effect($item, 'fast_comps_30');
   if ($fast_comps_30->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 30);
     $competency_gain_wait_time_str = '30 seconds';
@@ -107,7 +107,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
       's&nbsp;left)';
   }
 
-  $fast_comps_15 = game_timed_bonus_in_effect($item, 'fast_comps_15');
+  $fast_comps_15 = zg_timed_bonus_in_effect($item, 'fast_comps_15');
   if ($fast_comps_15->allowed) {
     $competency_gain_wait_time = min($competency_gain_wait_time, 15);
     $competency_gain_wait_time_str = '15 seconds';
@@ -138,7 +138,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     ORDER BY level DESC, name ASC;';
   $result = db_query($sql, $item->id);
   while ($item = db_fetch_object($result)) {
-    $item->name = game_competency_name($item->name);
+    $item->name = zg_competency_name($item->name);
     $comps[] = $item;
   }
 
@@ -149,7 +149,7 @@ if ($phone_id_to_check == $phone_id || $game_user->meta == 'admin') {
     $level = $comp->level;
     $comp = (object) array_merge(
       (array) $comp,
-      (array) game_competency_level($game_user,
+      (array) zg_competency_level($game_user,
         intval($comp->fkey_competencies_id))
     );
 // firep($comp, 'competency');
