@@ -1806,7 +1806,7 @@ function zg_theme() {
     ],
 
     'zg_clan_list' => [
-      'template' => 'zg_clan_list',
+      'template' => 'templates/zg_clan_list',
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
@@ -1814,14 +1814,14 @@ function zg_theme() {
     ],
 
     'zg_clan_list_available' => [
-      'template' => 'zg_clan_list_available',
+      'template' => 'templates/zg_clan_list_available',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_clan_msg' => [
-      'template' => 'zg_clan_msg',
+      'template' => 'templates/zg_clan_msg',
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
@@ -1829,7 +1829,7 @@ function zg_theme() {
     ],
 
     'zg_clan_announcements' => [
-      'template' => 'zg_clan_announcements',
+      'template' => 'templates/zg_clan_announcements',
       'arguments' => [
         'phone_id' => NULL,
         'clan_id' => NULL,
@@ -1837,7 +1837,7 @@ function zg_theme() {
     ],
 
     'zg_block_user_toggle' => [
-      'template' => 'zg_block_user_toggle',
+      'template' => 'templates/zg_block_user_toggle',
       'arguments' => [
         'phone_id' => NULL,
         'phone_id_to_block' => NULL,
@@ -1845,7 +1845,7 @@ function zg_theme() {
     ],
 
     'zg_msg_delete' => [
-      'template' => 'zg_msg_delete',
+      'template' => 'templates/zg_msg_delete',
       'arguments' => [
         'phone_id' => NULL,
         'msg_id' => NULL,
@@ -1853,7 +1853,7 @@ function zg_theme() {
     ],
 
     'zg_party_msg' => [
-      'template' => 'zg_party_msg',
+      'template' => 'templates/zg_party_msg',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -1904,14 +1904,14 @@ function zg_theme() {
     ],
 
     'zg_elders_ask_reset_skills' => [
-      'template' => 'zg_elders_ask_reset_skills',
+      'template' => 'templates/zg_elders_ask_reset_skills',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elders_do_reset_skills' => [
-      'template' => 'zg_elders_do_reset_skills',
+      'template' => 'templates/zg_elders_do_reset_skills',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -1926,7 +1926,7 @@ function zg_theme() {
     ],
 
     'zg_elders_rename' => [
-      'template' => 'zg_elders_rename',
+      'template' => 'templates/zg_elders_rename',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -1940,35 +1940,35 @@ function zg_theme() {
     ],
 
     'zg_elders_set_password' => [
-      'template' => 'zg_elders_set_password',
+      'template' => 'templates/zg_elders_set_password',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elders_ask_purchase' => [
-      'template' => 'zg_elders_ask_purchase',
+      'template' => 'templates/zg_elders_ask_purchase',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elders_do_purchase' => [
-      'template' => 'zg_elders_do_purchase',
+      'template' => 'templates/zg_elders_do_purchase',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_check_receipt' => [
-      'template' => 'zg_elders_check_receipt',
+      'template' => 'templates/zg_elders_check_receipt',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_google_checkout' => [
-      'template' => 'zg_google_checkout',
+      'template' => 'templates/zg_google_checkout',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -1990,21 +1990,21 @@ function zg_theme() {
     ],
 
     'zg_help' => [
-      'template' => 'zg_help',
+      'template' => 'templates/zg_help',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elections_list' => [
-      'template' => 'zg_elections_list',
+      'template' => 'templates/zg_elections_list',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elections_challenge' => [
-      'template' => 'zg_elections_challenge',
+      'template' => 'templates/zg_elections_challenge',
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
@@ -2027,21 +2027,21 @@ function zg_theme() {
     ],
 
     'zg_top20_list' => [
-      'template' => 'zg_top20_list',
+      'template' => 'templates/zg_top20_list',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_top_aldermen_list' => [
-      'template' => 'zg_top_aldermen_list',
+      'template' => 'templates/zg_top_aldermen_list',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_top_event_points' => [
-      'template' => 'zg_top_event_points',
+      'template' => 'templates/zg_top_event_points',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -2055,7 +2055,7 @@ function zg_theme() {
     ],
 
     'zg_enter_referral_code' => [
-      'template' => 'zg_enter_referral_code',
+      'template' => 'templates/zg_enter_referral_code',
       'arguments' => [
         'phone_id' => NULL,
       ],
@@ -2069,7 +2069,7 @@ function zg_theme() {
     ],
 
     'zg_land_buy' => [
-      'template' => 'zg_land_buy',
+      'template' => 'templates/zg_land_buy',
       'arguments' => [
         'phone_id' => NULL,
         'land_id' => NULL,
@@ -2078,7 +2078,7 @@ function zg_theme() {
     ],
 
     'zg_land_sell' => [
-      'template' => 'zg_land_sell',
+      'template' => 'templates/zg_land_sell',
       'arguments' => [
         'phone_id' => NULL,
         'land_id' => NULL,
@@ -2087,7 +2087,7 @@ function zg_theme() {
     ],
 
     'zg_land_work' => [
-      'template' => 'zg_land_work',
+      'template' => 'templates/zg_land_work',
       'arguments' => [
         'phone_id' => NULL,
         'land_id' => NULL,
@@ -2103,7 +2103,7 @@ function zg_theme() {
     ],
 
     'zg_staff_hire' => [
-      'template' => 'zg_staff_hire',
+      'template' => 'templates/zg_staff_hire',
       'arguments' => [
         'phone_id' => NULL,
         'staff_id' => NULL,
@@ -2112,7 +2112,7 @@ function zg_theme() {
     ],
 
     'zg_staff_fire' => [
-      'template' => 'zg_staff_fire',
+      'template' => 'templates/zg_staff_fire',
       'arguments' => [
         'phone_id' => NULL,
         'staff_id' => NULL,
@@ -2121,14 +2121,14 @@ function zg_theme() {
     ],
 
     'zg_actions_list' => [
-      'template' => 'zg_actions_list',
+      'template' => 'templates/zg_actions_list',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_actions_do' => [
-      'template' => 'zg_actions_do',
+      'template' => 'templates/zg_actions_do',
       'arguments' => [
         'phone_id' => NULL,
         'action_id' => NULL,
@@ -2143,7 +2143,7 @@ function zg_theme() {
     ],
 
     'zg_equipment_buy' => [
-      'template' => 'zg_equipment_buy',
+      'template' => 'templates/zg_equipment_buy',
       'arguments' => [
         'phone_id' => NULL,
         'equipment_id' => NULL,
@@ -2152,7 +2152,7 @@ function zg_theme() {
     ],
 
     'zg_equipment_sell' => [
-      'template' => 'zg_equipment_sell',
+      'template' => 'templates/zg_equipment_sell',
       'arguments' => [
         'phone_id' => NULL,
         'equipment_id' => NULL,
@@ -2200,21 +2200,21 @@ function zg_theme() {
     ],
 
     'zg_bounce_040' => [
-      'template' => 'zg_bounce_040',
+      'template' => 'templates/zg_bounce_040',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_elders_preferences' => [
-      'template' => 'zg_elders_preferences',
+      'template' => 'templates/zg_elders_preferences',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_zombie_move' => [
-      'template' => 'zg_zombie_move',
+      'template' => 'templates/zg_zombie_move',
       'arguments' => [
         'phone_id' => NULL,
         'zombie_id' => NULL,
@@ -2223,14 +2223,14 @@ function zg_theme() {
     ],
 
     'zg_event_info' => [
-      'template' => 'zg_event_info',
+      'template' => 'templates/zg_event_info',
       'arguments' => [
         'phone_id' => NULL,
       ],
     ],
 
     'zg_event_prizes' => [
-      'template' => 'zg_event_prizes',
+      'template' => 'templates/zg_event_prizes',
       'arguments' => [
         'phone_id' => NULL,
       ],
