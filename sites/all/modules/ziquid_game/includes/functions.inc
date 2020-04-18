@@ -1503,9 +1503,9 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
  */
 function zg_get_game_list() {
   return [
-//    'detroit',
+    'detroit',
     'stlouis',
-//    'wonderland',
+    'wonderland',
   ];
 }
 
