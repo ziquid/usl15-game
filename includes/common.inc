@@ -1937,7 +1937,7 @@ function drupal_get_css($css = NULL) {
   // browser-caching. The string changes on every update or full cache
   // flush, forcing browsers to load a new copy of the files, as the
   // URL changed.
-  $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
+  $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 6);
 
   foreach ($css as $media => $types) {
     // If CSS preprocessing is off, we still need to output the styles.
@@ -2347,7 +2347,7 @@ function drupal_get_js($scope = 'header', $javascript = NULL) {
   // URL changed. Files that should not be cached (see drupal_add_js())
   // get time() as query-string instead, to enforce reload on every
   // page request.
-  $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 1);
+  $query_string = '?'. substr(variable_get('css_js_query_string', '0'), 0, 6);
 
   // For inline Javascript to validate as XHTML, all Javascript containing
   // XHTML needs to be wrapped in CDATA. To make that backwards compatible

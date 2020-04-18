@@ -382,6 +382,7 @@ function zg_init() {
     }
 
     $module_path = drupal_get_path('module', 'zg');
+    drupal_set_html_head('<meta name="viewport" content="width=device-width, user-scalable=no">');
     drupal_add_js($module_path . '/js/isotope.pkgd.min.js');
     drupal_add_js($module_path . '/js/js.cookie.js');
     drupal_add_js($module_path . '/js/swiper.min.js');

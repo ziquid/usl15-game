@@ -375,6 +375,8 @@ function stlouis_cron() {
  * Implements hook_init().
  */
 function stlouis_init() {
+  // Handled by zg_init() now.
+  return;
   global $custom_theme, $conf;
 
   $game = arg(0);
