@@ -129,3 +129,5 @@ EOF;
 
   db_set_active('default');
 
+?>
+</div>
