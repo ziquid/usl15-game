@@ -270,7 +270,7 @@ body.game-stlouis::after {
   background: url(/sites/default/files/images/stlouis_bg.jpg);
   background-position: top left;
   background-attachment: fixed;
-  opacity: 0.02;
+  opacity: 0.05;
   top: 0;
   left: 0;
   bottom: 0;
