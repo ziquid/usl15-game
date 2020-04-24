@@ -28,7 +28,7 @@ $result = db_query($sql, $phone_id);
 $game_user = db_fetch_object($result);
 firep($game_user, 'game_user object');
 
-if ($game_user->meta == 'admin') {
+if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
   $button = zg_render_button() . "<p class='center'>(if you dare)</p>";
 }
 else {
