@@ -57,11 +57,11 @@ function zg_render_button($link = 'home', $type = 'continue', $extra_link = '',
       $link .= '/' . $arg2 . $extra_link;
     }
     else {
-      $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
+      $link = '/' . $game . '/' . $link . '/' . $arg2 . $extra_link;
     }
     $button = <<< EOF
 <div class="button-wrapper-$class button-wrapper $extra_classes">
-  <a class="button-$class button" href="/$link">
+  <a class="button-$class button" href="$link">
     $type
   </a>
 </div>

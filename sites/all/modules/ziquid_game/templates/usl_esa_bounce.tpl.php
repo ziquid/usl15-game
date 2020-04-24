@@ -12,7 +12,7 @@
  * View only in theme template: yes
  * All db queries in controller: yes
  * Minimal function calls in view: yes
- * Removal of globals: no
+ * Removal of globals: yes
  * Removal of game_defs include: N/A
  * .
  */
@@ -29,7 +29,7 @@ $game_user = db_fetch_object($result);
 firep($game_user, 'game_user object');
 
 if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
-  $button = zg_render_button() . "<p class='center'>(if you dare)</p>";
+  $button = zg_render_button('/stlouis/home') . "<p class='center'>(if you dare)</p>";
 }
 else {
   $button = '';
