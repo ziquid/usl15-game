@@ -21,11 +21,8 @@ global $game, $phone_id;
 
 // We won't have gone through fetch_user() yet, so set these here.
 $game = check_plain(arg(0));
-$get_phoneid = 'zg_get_phoneid';
-$check_authkey = 'zg_check_authKey';
-$phone_id = $get_phoneid();
+$phone_id = zg_get_phoneid();
 $arg2 = check_plain(arg(2));
-
 db_set_active('game_' . $game);
 
 $d = zg_get_html(
@@ -41,7 +38,7 @@ $sql = 'select * from users where phone_id = "%s";';
 $result = db_query($sql, $phone_id);
 $game_user = db_fetch_object($result);
 firep($game_user, 'game_user object');
-$check_authkey($game_user);
+zg_check_authkey($game_user);
 
 // Check for authorized client.
 if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
