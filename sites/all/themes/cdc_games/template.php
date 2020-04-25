@@ -19,9 +19,17 @@ function cdc_games_preprocess_page(&$vars) {
     $game = 'stlouis';
   }
 
+  // Game class.
   $vars['body_classes'] = str_replace('page-' . $arg0,
-    'game-' . $game . ' page-' . $page,
-    $vars['body_classes']);
+    'game-' . $game . ' page-' . $page, $vars['body_classes']);
+
+  // Orientation class.
+  if (stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) {
+    $vars['body_classes'] .= ' landscape-orientation';
+  }
+  else {
+    $vars['body_classes'] .= ' portrait-orientation';
+  }
 }
 
 // Backported from Drupal 7.

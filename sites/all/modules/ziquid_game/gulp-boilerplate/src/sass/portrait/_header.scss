@@ -1,0 +1,70 @@
+/**
+ * @section Header styles
+ */
+
+header {
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.35) !important;
+  border-radius: 14px 14px 0 0;
+
+  #money-id {
+    margin-left: 12px;
+  }
+
+  .actions-text {
+    display: inline-block;
+    position: relative;
+    background: url(../img/actions.png) 0 0 no-repeat;
+    width: 12px;
+    height: 10px;
+    font: 0/0 a;
+    background-size: contain;
+    top: -9px;
+    margin-bottom: -9px;
+  }
+
+  .energy-text {
+    display: inline-block;
+    position: relative;
+    background: url(../img/energy.png) 0 0 no-repeat;
+    width: 12px;
+    height: 12px;
+    font: 0/0 a;
+    background-size: contain;
+    top: -9px;
+    margin-bottom: -9px;
+  }
+
+  .home {
+    bottom: 4px;
+
+    #msg-badge {
+      background-color: #85851f;
+    }
+  }
+
+  .experience {
+    border-bottom: 1px solid rgba(51, 153, 51, 0.35) !important;
+    padding-right: 12px;
+  }
+
+  .experience-text {
+    position: relative;
+    background: url(../img/influence.png) top right no-repeat;
+    height: 12px;
+    font: 0/0 a;
+    background-size: contain;
+    top: -2px;
+    right: -11px;
+  }
+
+  .level-text {
+    background: url(../img/level.png) top right no-repeat;
+    height: 12px;
+    width: 12px;
+    font: 0/0 a;
+    background-size: contain;
+    top: 2px;
+    right: 2px;
+  }
+}

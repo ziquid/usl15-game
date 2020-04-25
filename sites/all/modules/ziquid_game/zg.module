@@ -391,6 +391,7 @@ function zg_init() {
     jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
     $custom_theme = 'cdc_games';
+
     drupal_add_css($module_path . '/css/' . $game . '.css');
     drupal_add_css($module_path . '/css/alpha.css');
     drupal_add_css($module_path . '/css/swiper.min.css');

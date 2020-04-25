@@ -3,5 +3,14 @@ body.game-stlouis {
   background-color: #001b00;
   color: #f8fefb;
 
-  @import 'components/index';
+  @import 'common/index';
+
+  &.portrait-orientation {
+    @import 'portrait/index';
+  }
+
+  &.landscape-orientation {
+    @import 'landscape/index';
+  }
+
 }
