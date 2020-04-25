@@ -51,6 +51,11 @@ Drupal.behaviors.zg = function (context) {
     // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
+  // Header toggle.
+  $('#header-toggle').click(function() {
+    $('header').toggle(200, 'swing');
+  });
+
   jQuery(".fit-box").each(function () {
     var innerWidth = $(this).innerWidth();
     var scrollWidth = $(this)[0].scrollWidth;

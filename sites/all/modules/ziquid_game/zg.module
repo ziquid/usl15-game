@@ -744,6 +744,9 @@ function zg_get_phoneid() {
   elseif (substr($arg2, 0, 3) === 'ms=') {
     return zg_get_msid();
   }
+  elseif (substr($arg2, 0, 10) == 'landscape:') {
+    return check_plain(substr($arg2, 10));
+  }
   else {
     return check_plain($arg2);
   }
@@ -1459,6 +1462,12 @@ function zg_fetch_header(\stdClass $game_user) {
   }
 
   echo <<< EOF
+<div id="menu-toggle" class="landscape-only">
+  <a href="/$game/home/$arg2">
+    <img id="menu-toggle-button" src="/sites/default/files/images/{$game}_home_icon.png"/>
+  </a>
+</div>
+<div id="header-toggle" class="landscape-only">&nbsp;</div>
 <header class="$hood">
   <div class="money">
     <div id="money-id">$money_str</div>

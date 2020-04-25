@@ -1,11 +1,24 @@
 /**
  * @section Header styles
  */
+#header-toggle {
+  width: 48px;
+  height: 48px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: green;
+  z-index: 99;
+}
 
 header {
-  width: 100%;
+  display: none;
+  width: 320px;
   background-color: rgba(0, 0, 0, 0.35) !important;
   border-radius: 14px 14px 0 0;
+  position: absolute;
+  top: 0;
+  right: 0;
 
   #money-id {
     margin-left: 12px;

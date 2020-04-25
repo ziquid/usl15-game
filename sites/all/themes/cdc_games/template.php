@@ -13,6 +13,7 @@ function cdc_games_placeholder($text) {
 function cdc_games_preprocess_page(&$vars) {
   $game = $arg0 = drupal_html_class(arg(0));
   $page = $arg1 = drupal_html_class(arg(1));
+  $phone_id = $arg2 = check_plain(arg(2));
 
   // Pretend usl_esa is stlouis for now.
   if ($game == 'usl-esa') {
@@ -24,7 +25,8 @@ function cdc_games_preprocess_page(&$vars) {
     'game-' . $game . ' page-' . $page, $vars['body_classes']);
 
   // Orientation class.
-  if (stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) {
+  if ((stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) ||
+    (substr($phone_id, 0, 9) == 'landscape')) {
     $vars['body_classes'] .= ' landscape-orientation';
   }
   else {
