@@ -6,17 +6,28 @@
   height: 40px;
   position: fixed;
   top: 14px;
-  left: 12px;
+  left: 8px;
   z-index: 99;
+  background-color: #0808;
+  border: solid 1.5px #1ca443cc;
+  box-sizing: border-box;
+  border-radius: 19px 99px 99px 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 6px;
   &::after {
     content: "menu";
-    transform: rotate(30deg);
     position: fixed;
-    left: 42px;
-    top: 47px;
+    left: 8px;
+    top: 0px;
     color: #1ca443cc;
-    font-size: large;
+    font-size: .7rem;
     text-transform: uppercase;
+    border-left: 1.5px solid #1ca443cc;
+    margin-bottom: 4px;
+    background-color: #0808;
+    padding: 2px;
+    border-radius: 9px 9px 9px 0;
   }
 }
 
@@ -24,9 +35,6 @@
   width: calc(100% - 4px);
   height: 100%;
   object-fit: scale-down;
-  object-position: center 6px;
-  background-color: #0808;
-  border: solid 1.5px #1ca443cc;
-  border-radius: 99px;
+  object-position: center 0px;
   box-sizing: border-box;
 }

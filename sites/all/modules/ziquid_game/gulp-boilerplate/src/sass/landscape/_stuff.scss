@@ -4,23 +4,30 @@
 #stuff-toggle {
   width: 40px;
   height: 40px;
-  position: absolute;
-  top: 8px;
-  right: 84px;
+  position: fixed;
+  bottom: 14px;
+  right: 8px;
   z-index: 99;
-  background-color: #0808;
-  border: solid 1.5px #1ca443cc;
+  background-color: #8808;
+  border: solid 1.5px #a4a443cc;
   box-sizing: border-box;
-  border-radius: 99px;
+  border-radius: 99px 99px 19px 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 10px;
   &::after {
     content: "stuff";
-    transform: rotate(-22deg);
-    position: absolute;
-    right: 37px;
-    top: 28px;
-    color: #1ca443cc;
-    font-size: large;
+    position: fixed;
+    right: 8px;
+    bottom: 0px;
+    color: #a4a443cc;
+    font-size: .7rem;
     text-transform: uppercase;
+    border-right: 1.5px solid #a4a443cc;
+    margin-top: 4px;
+    background-color: #8808;
+    padding: 2px;
+    border-radius: 9px 0 9px 9px;
   }
 }
 

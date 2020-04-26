@@ -6,21 +6,28 @@
   height: 40px;
   position: fixed;
   top: 14px;
-  right: 12px;
-  background-color: #0808;
-  border-radius: 99px;
-  border: solid 1.5px #1ca443cc;
-  box-sizing: border-box;
+  right: 8px;
   z-index: 99;
+  background-color: #8008;
+  border: solid 1.5px #b42f43cc;
+  box-sizing: border-box;
+  border-radius: 99px 19px 99px 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 10px;
   &::after {
     content: "stats";
-    transform: rotate(-18deg);
     position: fixed;
-    right: 51px;
-    top: 39px;
-    color: #1ca443cc;
-    font-size: large;
+    right: 8px;
+    top: 0px;
+    color: #b42f43cc;
+    font-size: .7rem;
     text-transform: uppercase;
+    border-right: 1.5px solid #b42f43cc;
+    margin-bottom: 4px;
+    background-color: #8008;
+    padding: 2px;
+    border-radius: 9px 9px 0 9px;
   }
 }
 
@@ -29,9 +36,9 @@
   width: 320px;
   background-color: rgba(0, 0, 0, 0.35) !important;
   border-radius: 14px 14px 0 0;
-  position: absolute;
+  position: fixed;
   top: 0;
-  right: 0;
+  right: 50px;
 
   #money-id {
     margin-left: 12px;

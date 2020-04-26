@@ -4,31 +4,34 @@
 #people-toggle {
   width: 40px;
   height: 40px;
-  position: absolute;
-  top: 16px;
-  left: 84px;
-  background-color: #0808;
-  border-radius: 99px;
-  border: solid 1.5px #1ca443cc;
-  box-sizing: border-box;
+  position: fixed;
+  bottom: 14px;
+  left: 8px;
   z-index: 99;
+  background-color: #0088;
+  border: solid 1.5px #1477c5;
+  box-sizing: border-box;
+  border-radius: 99px 99px 99px 19px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 5px;
   &::after {
     content: "people";
-    transform: rotate(30deg);
-    position: absolute;
-    left: 32px;
-    top: 36px;
-    color: #1ca443cc;
-    font-size: large;
+    position: fixed;
+    left: 8px;
+    bottom: 0px;
+    color: #1477c5;
+    font-size: .7rem;
     text-transform: uppercase;
+    border-left: 1.5px solid #1477c5;
+    margin-top: 4px;
+    background-color: #0088;
+    padding: 2px;
+    border-radius: 0 9px 9px 9px;
   }
 }
 
-#people-toggle-button {
-  width: calc(100% - 4px);
-  height: 100%;
-  object-fit: scale-down;
-  object-position: center 7px;
-  background-color: #0808;
-  border-radius: 99px;
+#people-button {
+  width: 24px;
+  object-position: center top;
 }

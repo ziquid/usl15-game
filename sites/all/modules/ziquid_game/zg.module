@@ -723,6 +723,17 @@ function zg_check_authKey($game_user) {
   }
 }
 
+/**
+ * Is the player playing in landscape mode?
+ *
+ * @return bool
+ *   Whether the player is playing in landscape mode or not.
+ */
+function zg_is_landscape() {
+  return (stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) ||
+    (substr(arg(2), 0, 9) == 'landscape');
+}
+
 function zg_get_phoneid() {
 
   $arg2 = arg(2);
@@ -1461,19 +1472,58 @@ function zg_fetch_header(\stdClass $game_user) {
       'setting');
   }
 
-  echo <<< EOF
-<div id="menu-toggle" class="landscape-only">
+  if (zg_is_landscape()) {
+
+    // Landscape header/menus.
+    echo <<< EOF
+  <!-- menu -->
+<div id="menu-toggle">
   <img id="menu-button" src="/sites/default/files/images/{$game}_home_icon.png"
     data-home-link="/$game/home/$arg2"/>
 </div>
 
-<div id="stats-toggle" class="landscape-only">&nbsp;</div>
+<!-- stats -->
+<div id="stats-toggle">&nbsp;</div>
+<div id="stats" class="$hood landscape-only">
+  <div class="money">
+    <div id="money-id">$money_str</div>
+    <div class="money-text">$game_user->values</div>
+    <div id="income-time">$income_text</div>
+  </div>
+<div class="actions"><div id="actions-id">$game_user->actions</div> /
+$game_user->actions_max <div class="actions-text">Actions</div>
+  <div id="actions-time">$actions_text</div>
+  </div>
+  <div class="experience"><strong>$experience_str</strong> /
+  $next_level<div class="experience-text">{$game_text['experience']}</div></div>
+<div class="energy"><div id="energy-id">$game_user->energy</div> /
+$game_user->energy_max <div class="energy-text">Energy</div>
+  <div id="energy-time">$energy_text</div></div>
+  <div class="home">
+    <a href="/$game/home/$arg2">
+      <img src="/sites/default/files/images/{$game}_home_icon.png"/>
+      <div id="msg-badge"></div>
+    </a>
+  </div>
+  $level_text
+</div>
 
-<div id="people-toggle" class="landscape-only">&nbsp;</div>
+<!-- people -->
+<div id="people-toggle">
+  <a href="/$game/elders/$arg2">
+    <img id="people-button" src="/sites/default/files/images/{$game}_people_icon.png"/>
+  </a>
+</div>
 
-<div id="stuff-toggle" class="landscape-only">&nbsp;</div>
+<!-- stuff -->
+<div id="stuff-toggle">14M</div>
+EOF;
+  }
+  else {
 
-<header id="stats" class="$hood">
+    // Portrait header/menus.
+    echo <<< EOF
+<header class="$hood">
   <div class="money">
     <div id="money-id">$money_str</div>
     <div class="money-text">$game_user->values</div>
@@ -1496,8 +1546,13 @@ $game_user->energy_max <div class="energy-text">Energy</div>
   </div>
 $level_text
 </header>
-$points_text
-$extra_messages
+EOF;
+  }
+
+  print $points_text;
+  print $extra_messages;
+
+  echo <<< EOF
 <script type="text/javascript">
 
   var energy_minutes = $energy_minutes;
