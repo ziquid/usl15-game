@@ -51,9 +51,8 @@ Drupal.behaviors.zg = function (context) {
     // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
-
   // Menu button.
-  $('#menu-button').click(function() {
+  $('#menu-button').click(function () {
     let xPos = self.pageXOffset;
     let yPos = self.pageYOffset;
     if (xPos + yPos) {
@@ -65,8 +64,13 @@ Drupal.behaviors.zg = function (context) {
   });
 
   // Stats toggle.
-  $('#stats-toggle').click(function() {
+  $('#stats-toggle').click(function () {
     $('#stats').toggle(200, 'swing');
+  });
+
+  // People toggle.
+  $('#people-toggle').click(function () {
+    $('.people-button').toggle(200, 'swing');
   });
 
   jQuery(".fit-box").each(function () {

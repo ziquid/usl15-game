@@ -1499,19 +1499,29 @@ $game_user->actions_max <div class="actions-text">Actions</div>
 <div class="energy"><div id="energy-id">$game_user->energy</div> /
 $game_user->energy_max <div class="energy-text">Energy</div>
   <div id="energy-time">$energy_text</div></div>
-  <div class="home">
-    <a href="/$game/home/$arg2">
-      <img src="/sites/default/files/images/{$game}_home_icon.png"/>
-      <div id="msg-badge"></div>
-    </a>
-  </div>
   $level_text
 </div>
 
 <!-- people -->
 <div id="people-toggle">
+  <div id="msg-badge">&nbsp;</div>
+</div>
+
+<div class="people-button" id="people-button-1">
   <a href="/$game/elders/$arg2">
-    <img id="people-button" src="/sites/default/files/images/{$game}_people_icon.png"/>
+    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
+    <div class="label fit-box">
+      Elders
+    </div>
+  </a>
+</div>
+
+<div class="people-button" id="people-button-2">
+  <a href="/$game/elders/$arg2">
+    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
+      <div class="label fit-box">
+        Elders
+    </div>
   </a>
 </div>
 

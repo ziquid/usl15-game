@@ -31,7 +31,53 @@
   }
 }
 
-#people-button {
-  width: 24px;
-  object-position: center top;
+.people-button {
+  display: none;
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  z-index: 99;
+  background-color: #0088;
+  border: solid 1.5px #1477c5;
+  box-sizing: border-box;
+  border-radius: 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 3px;
+  .label {
+    position: fixed;
+    color: #1477c5;
+    font-size: .6rem;
+    text-transform: uppercase;
+    margin-top: 4px;
+    background-color: #0088;
+    padding: 2px;
+    border-radius: 9px;
+    border-radius: 0;
+    border: solid 1.5px red;
+    width: 32px;
+    box-sizing: border-box;
+  }
+  img {
+    width: 20px;
+    object-position: center top;
+  }
+
+  &#people-button-1 {
+    bottom: 74px;
+    left: 4px;
+    .label {
+      left: 4px;
+      bottom: 60px;
+    }
+  }
+
+  &#people-button-2 {
+    bottom: 74px;
+    left: 64px;
+    .label {
+      left: 64px;
+      bottom: 60px;
+    }
+  }
 }
