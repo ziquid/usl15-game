@@ -2196,6 +2196,44 @@ EOF;
 
 }
 
+function zg_short_format_int($num) {
+  $num = floor($num);
+  if ($num < 1000) {
+    return (string) $num;
+  }
+  if ($num < 10000) {
+    $num = floor($num / 100);
+    return number_format($num / 10, 1) . 'K';
+  }
+  if ($num < 1000000) {
+    $num = floor($num / 1000);
+    return number_format($num, 0) . 'K';
+  }
+  if ($num < 10000000) {
+    $num = floor($num / 100000);
+    return number_format($num / 10, 1) . 'M';
+  }
+  if ($num < 1000000000) {
+    $num = floor($num / 1000000);
+    return number_format($num, 0) . 'M';
+  }
+  if ($num < 10000000000) {
+    $num = floor($num / 100000000);
+    return number_format($num / 10, 1) . 'B';
+  }
+  if ($num < 1000000000000) {
+    $num = floor($num / 1000000000);
+    return number_format($num, 0) . 'B';
+  }
+  if ($num < 10000000000000) {
+    $num = floor($num / 100000000000);
+    return number_format($num / 10, 1) . 'T';
+  }
+  if ($num < 1000000000000000) {
+    $num = floor($num / 1000000000000);
+    return number_format($num, 0) . 'T';
+  }
+}
 /**
  * Format items in a message for display.
  *
@@ -2231,11 +2269,26 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
  *
  * @param object $user
  *   The user object.
+ * @param string $type
+ *   The rendering type.  Defaults to html.
  *
  * @return string
  *   The html rendering of the user object.
  */
-function zg_render_user(&$user) {
+function zg_render_user(&$user, $type = 'html') {
+  return call_user_func('zg_render_user_' . $type, $user);
+}
+
+/**
+ * Render a user as html.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The html rendering of the user object.
+ */
+function zg_render_user_html(&$user) {
   $user->display->clan_acronym = '';
   if (!empty($user->clan_acronym)) {
     $user->display->clan_acronym = "($user->clan_acronym)";
@@ -2250,5 +2303,39 @@ function zg_render_user(&$user) {
   $user->display->username = $user->ep_name . ' <span class="' .
     $user->display->class . '">' . $user->username . '</span> ' .
     $user->display->clan_acronym;
+  return $user->display->username;
+}
+
+/**
+ * Render a user as html.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The html rendering of the user object.
+ */
+function zg_render_user_header(&$user) {
+  $user->display->clan_acronym = '';
+  if (empty($user->clan_acronym)) {
+    $user->display->clan = t('No Clan');
+  }
+  else {
+    $user->display->clan = "Clan: $user->clan_name ($user->clan_acronym)";
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan .= '*';
+  }
+
+  $user->display->party = "Party: $user->party_title";
+  $user->display->level = t('Level: @level', ['@level' => $user->level]);
+
+  $user->display->username = $user->ep_name .
+    '<span class="player_username">' . $user->username . '</span><br>' .
+    '<span class="player_level">' . $user->display->level . '</span>' .
+    '<span class="player_clan">' . $user->display->clan . '</span>' .
+    '<span class="player_party">' . $user->display->party . '</span>';
+//   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->username;
 }

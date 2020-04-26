@@ -1689,6 +1689,9 @@ body.game-stlouis.landscape-orientation {
  * @section Menu styles
  */
   /**
+ * @section Player styles
+ */
+  /**
  * @section People styles
  */
   /**
@@ -1745,6 +1748,50 @@ body.game-stlouis.landscape-orientation #menu-button {
           box-sizing: border-box;
 }
 
+/* line 4, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation #player {
+  position: absolute;
+  top: 4px;
+  left: 80px;
+  width: calc(100% - 160px);
+  height: 42px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+}
+
+/* line 14, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation #player .player_username {
+  font-size: 1.25em;
+  font-weight: 700;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefdbb;
+}
+
+/* line 21, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation #player .player_level {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
+}
+
+/* line 28, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation #player .player_clan {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
+}
+
+/* line 35, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation #player .player_party {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
+}
+
 /* line 4, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation #people-toggle {
   width: 40px;
@@ -1798,7 +1845,7 @@ body.game-stlouis.landscape-orientation .people-button {
 
 /* line 47, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation .people-button .label {
-  position: fixed;
+  display: none;
   color: #1477c5;
   font-size: .6rem;
   text-transform: uppercase;
@@ -1807,41 +1854,41 @@ body.game-stlouis.landscape-orientation .people-button .label {
   padding: 2px;
   border-radius: 9px;
   border-radius: 0;
-  border: solid 1.5px red;
-  width: 32px;
+  border: solid 0.5px red;
+  text-align: center;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
 }
 
-/* line 61, src/sass/landscape/_people.scss */
+/* line 62, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation .people-button img {
   width: 20px;
   -o-object-position: center top;
      object-position: center top;
 }
 
-/* line 66, src/sass/landscape/_people.scss */
+/* line 67, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation .people-button#people-button-1 {
-  bottom: 74px;
-  left: 4px;
+  bottom: 62px;
+  left: 2px;
 }
 
-/* line 69, src/sass/landscape/_people.scss */
-body.game-stlouis.landscape-orientation .people-button#people-button-1 .label {
-  left: 4px;
-  bottom: 60px;
-}
-
-/* line 75, src/sass/landscape/_people.scss */
+/* line 72, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation .people-button#people-button-2 {
-  bottom: 74px;
-  left: 64px;
+  bottom: 55px;
+  left: 33px;
 }
 
-/* line 78, src/sass/landscape/_people.scss */
-body.game-stlouis.landscape-orientation .people-button#people-button-2 .label {
-  left: 64px;
-  bottom: 60px;
+/* line 77, src/sass/landscape/_people.scss */
+body.game-stlouis.landscape-orientation .people-button#people-button-3 {
+  bottom: 31px;
+  left: 53px;
+}
+
+/* line 82, src/sass/landscape/_people.scss */
+body.game-stlouis.landscape-orientation .people-button#people-button-4 {
+  bottom: 2px;
+  left: 58px;
 }
 
 /* line 4, src/sass/landscape/_stats.scss */
@@ -2005,22 +2052,22 @@ body.game-stlouis.landscape-orientation #stuff-toggle-button {
   border-radius: 99px;
 }
 
-/* line 6, src/sass/landscape/_index.scss */
+/* line 7, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .portrait-only {
   display: none !important;
 }
 
-/* line 11, src/sass/landscape/_index.scss */
+/* line 12, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation.admin-menu {
   margin-top: 0 !important;
 }
 
-/* line 13, src/sass/landscape/_index.scss */
+/* line 14, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation.admin-menu #admin-menu {
   display: none;
 }
 
-/* line 18, src/sass/landscape/_index.scss */
+/* line 19, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation {
   max-width: 100vw;
   padding: 54px 54px 0;

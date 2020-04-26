@@ -45,7 +45,7 @@
   font-size: 1rem;
   padding-top: 3px;
   .label {
-    position: fixed;
+    display: none;
     color: #1477c5;
     font-size: .6rem;
     text-transform: uppercase;
@@ -54,9 +54,10 @@
     padding: 2px;
     border-radius: 9px;
     border-radius: 0;
-    border: solid 1.5px red;
-    width: 32px;
+    border: solid 0.5px red;
+    text-align: center;
     box-sizing: border-box;
+    //transform: translateX(-25%);
   }
   img {
     width: 20px;
@@ -64,20 +65,22 @@
   }
 
   &#people-button-1 {
-    bottom: 74px;
-    left: 4px;
-    .label {
-      left: 4px;
-      bottom: 60px;
-    }
+    bottom: 62px;
+    left: 2px;
   }
 
   &#people-button-2 {
-    bottom: 74px;
-    left: 64px;
-    .label {
-      left: 64px;
-      bottom: 60px;
-    }
+    bottom: 55px;
+    left: 33px;
+  }
+
+  &#people-button-3 {
+    bottom: 31px;
+    left: 53px;
+  }
+
+  &#people-button-4 {
+    bottom: 2px;
+    left: 58px;
   }
 }

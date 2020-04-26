@@ -945,8 +945,9 @@ function zg_fetch_user($force = FALSE) {
     LEFT OUTER JOIN user_creations on users.phone_id = user_creations.phone_id
     
     where users.phone_id = "%s";';
-  $result = db_query($sql, $phone_id);
-  $game_user = db_fetch_object($result);
+//  $result = db_query($sql, $phone_id);
+//  $game_user = db_fetch_object($result);
+  $game_user = zg_fetch_user_by_id((string) $phone_id);
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
@@ -1475,8 +1476,16 @@ function zg_fetch_header(\stdClass $game_user) {
   if (zg_is_landscape()) {
 
     // Landscape header/menus.
+    $money_str = zg_short_format_int($game_user->money);
+    $game_user_str = zg_render_user($game_user, 'header');
+
     echo <<< EOF
-  <!-- menu -->
+<!-- player -->
+<div id="player">
+  $game_user_str
+</div>
+
+<!-- menu -->
 <div id="menu-toggle">
   <img id="menu-button" src="/sites/default/files/images/{$game}_home_icon.png"
     data-home-link="/$game/home/$arg2"/>
@@ -1525,8 +1534,26 @@ $game_user->energy_max <div class="energy-text">Energy</div>
   </a>
 </div>
 
+<div class="people-button" id="people-button-3">
+  <a href="/$game/elders/$arg2">
+    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
+      <div class="label fit-box">
+        Elders
+    </div>
+  </a>
+</div>
+
+<div class="people-button" id="people-button-4">
+  <a href="/$game/elders/$arg2">
+    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
+      <div class="label fit-box">
+        Elders
+    </div>
+  </a>
+</div>
+
 <!-- stuff -->
-<div id="stuff-toggle">14M</div>
+<div id="stuff-toggle">$money_str</div>
 EOF;
   }
   else {
