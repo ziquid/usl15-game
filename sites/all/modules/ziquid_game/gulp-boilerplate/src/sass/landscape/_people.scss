@@ -1,0 +1,34 @@
+/**
+ * @section People styles
+ */
+#people-toggle {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 16px;
+  left: 84px;
+  background-color: #0808;
+  border-radius: 99px;
+  border: solid 1.5px #1ca443cc;
+  box-sizing: border-box;
+  z-index: 99;
+  &::after {
+    content: "people";
+    transform: rotate(30deg);
+    position: absolute;
+    left: 32px;
+    top: 36px;
+    color: #1ca443cc;
+    font-size: large;
+    text-transform: uppercase;
+  }
+}
+
+#people-toggle-button {
+  width: calc(100% - 4px);
+  height: 100%;
+  object-fit: scale-down;
+  object-position: center 7px;
+  background-color: #0808;
+  border-radius: 99px;
+}

@@ -51,9 +51,22 @@ Drupal.behaviors.zg = function (context) {
     // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
-  // Header toggle.
-  $('#header-toggle').click(function() {
-    $('header').toggle(200, 'swing');
+
+  // Menu button.
+  $('#menu-button').click(function() {
+    let xPos = self.pageXOffset;
+    let yPos = self.pageYOffset;
+    if (xPos + yPos) {
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    }
+    else {
+      window.location.href = $(this).attr('data-home-link');
+    }
+  });
+
+  // Stats toggle.
+  $('#stats-toggle').click(function() {
+    $('#stats').toggle(200, 'swing');
   });
 
   jQuery(".fit-box").each(function () {

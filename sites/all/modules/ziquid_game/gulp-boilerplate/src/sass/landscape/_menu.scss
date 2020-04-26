@@ -4,17 +4,29 @@
 #menu-toggle {
   width: 40px;
   height: 40px;
-  position: absolute;
+  position: fixed;
   top: 14px;
   left: 12px;
   z-index: 99;
+  &::after {
+    content: "menu";
+    transform: rotate(30deg);
+    position: fixed;
+    left: 42px;
+    top: 47px;
+    color: #1ca443cc;
+    font-size: large;
+    text-transform: uppercase;
+  }
 }
 
-#menu-toggle-button {
+#menu-button {
   width: calc(100% - 4px);
   height: 100%;
   object-fit: scale-down;
-  object-position: center 7px;
-  background-color: #00800080;
+  object-position: center 6px;
+  background-color: #0808;
+  border: solid 1.5px #1ca443cc;
   border-radius: 99px;
+  box-sizing: border-box;
 }
