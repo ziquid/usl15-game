@@ -1724,7 +1724,7 @@ body.game-stlouis.landscape-orientation #menu-toggle::after {
   left: 8px;
   top: 0px;
   color: #1ca443cc;
-  font-size: .7rem;
+  font-size: 11px;
   text-transform: uppercase;
   border-left: 1.5px solid #1ca443cc;
   margin-bottom: 4px;
@@ -1770,7 +1770,7 @@ body.game-stlouis.landscape-orientation #people-toggle::after {
   left: 8px;
   bottom: 0px;
   color: #1477c5;
-  font-size: .7rem;
+  font-size: 11px;
   text-transform: uppercase;
   border-left: 1.5px solid #1477c5;
   margin-top: 4px;
