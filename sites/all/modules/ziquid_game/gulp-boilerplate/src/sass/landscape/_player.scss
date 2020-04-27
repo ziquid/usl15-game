@@ -10,32 +10,33 @@
   text-align: center;
   background-color: rgba(0, 0, 0, 0.35);
   z-index: 1;
+}
 
-  .player_username {
-    font-size: 1.25em;
-    font-weight: 700;
-    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-    color: #f8fefdbb;
-  }
+.player_username {
+  font-size: 1.25em;
+  font-weight: 700;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefdbb;
+  text-decoration: none;
+}
 
-  .player_level {
-    font-size: 0.75em;
-    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-    color: #f8fefd99;
-    padding: 2px 5px;
-  }
+.player_level {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
+}
 
-  .player_clan {
-    font-size: 0.75em;
-    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-    color: #f8fefd99;
-    padding: 2px 5px;
-  }
+.player_clan {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
+}
 
-  .player_party {
-    font-size: 0.75em;
-    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-    color: #f8fefd99;
-    padding: 2px 5px;
-  }
+.player_party {
+  font-size: 0.75em;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefd99;
+  padding: 2px 5px;
 }

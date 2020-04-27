@@ -66,6 +66,7 @@ Drupal.behaviors.zg = function (context) {
   // Stats toggle.
   $('#stats-toggle').click(function () {
     $('#stats').toggle(200, 'swing');
+    $('.stats-button').toggle(200, 'swing');
   });
 
   // People toggle.

@@ -400,6 +400,7 @@ $game_text = [
     'move' => 'Move',
     'profile' => 'Profile',
   ],
+  'money' => 'Money',
   'qg_quests' => 'Missions',
   'quest' => 'Mission',
   'quest_lower' => 'mission',

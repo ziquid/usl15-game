@@ -1236,7 +1236,8 @@ function zg_fetch_user($force = FALSE) {
 function zg_fetch_header(\stdClass $game_user) {
 
   global $game, $extra_messages, $next_level;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $module_path = drupal_get_path('module', 'zg');
+  include $module_path . '/includes/' . $game . '_defs.inc';
 
   // Calculate energy change.
   $energy_bonus = 10 + $game_user->ep_energy_bonus +
@@ -1448,7 +1449,7 @@ function zg_fetch_header(\stdClass $game_user) {
     // Landscape header/menus.
     $money_str = zg_short_format_int($game_user->money);
     $game_user_str = zg_render_user($game_user, 'header');
-
+    $full_stats_button = zg_render_button('user', 'Full Player Stats');
     echo <<< EOF
 <!-- player -->
 <div id="player">
@@ -1463,23 +1464,42 @@ function zg_fetch_header(\stdClass $game_user) {
 
 <!-- stats -->
 <div id="stats-toggle">&nbsp;</div>
-<div id="stats" class="$hood landscape-only">
+<div id="stats" class="landscape-overlay">
+  <div class="overlay-title">
+    {$game_user->display->username} Statistics
+  </div>
   <div class="money">
+    {$game_text['money']}:
     <div id="money-id">$money_str</div>
     <div class="money-text">$game_user->values</div>
     <div id="income-time">$income_text</div>
   </div>
-<div class="actions"><div id="actions-id">$game_user->actions</div> /
-$game_user->actions_max <div class="actions-text">Actions</div>
-  <div id="actions-time">$actions_text</div>
+  <div class="actions">
+    {$game_text['actions']}:
+    <div id="actions-id">$game_user->actions</div> / $game_user->actions_max
+    <div id="actions-time">$actions_text</div>
   </div>
-  <div class="experience"><strong>$experience_str</strong> /
-  $next_level<div class="experience-text">{$game_text['experience']}</div></div>
-<div class="energy"><div id="energy-id">$game_user->energy</div> /
-$game_user->energy_max <div class="energy-text">Energy</div>
-  <div id="energy-time">$energy_text</div></div>
+  <div class="experience">
+    {$game_text['experience']}:
+    <strong>$experience_str</strong> / $next_level
+  </div>
+  <div class="energy">
+    {$game_text['energy']}:
+    <div id="energy-id">$game_user->energy</div> / $game_user->energy_max
+    <div id="energy-time">$energy_text</div>
+  </div>
+  $full_stats_button
   $level_text
 </div>
+
+<!--<div class="stats-button" id="stats-button-1">-->
+<!--  <a href="/$game/elders/$arg2">-->
+<!--    {$game_user->actions}<img width=10 src="/$module_path/img/actions.png"/>-->
+<!--    <div class="label fit-box">-->
+<!--      Elders-->
+<!--    </div>-->
+<!--  </a>-->
+<!--</div>-->
 
 <!-- people -->
 <div id="people-toggle">

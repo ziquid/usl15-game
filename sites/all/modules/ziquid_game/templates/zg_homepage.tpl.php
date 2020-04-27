@@ -168,10 +168,10 @@ zg_fetch_header($game_user);
 db_set_active();
 
 echo <<< EOF
-<div class="title">
+<div class="title portrait-only">
   <img src="/sites/default/files/images/{$game}_title.png">
 </div>
-<div class="tagline">
+<div class="tagline portrait-only">
   {$d['tagline']}
 </div>
 <a class="version" href="/$game/changelog/$arg2">
@@ -310,7 +310,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="profile-menu" href="/$game/user/$arg2">
+        <a class="profile-menu portrait-only" href="/$game/user/$arg2">
           {$game_text['menu']['profile']}
         </a>
       </li>

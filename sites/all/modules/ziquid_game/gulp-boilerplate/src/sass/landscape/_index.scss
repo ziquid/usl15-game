@@ -20,3 +20,49 @@
   max-width: 100vw;
   padding: 54px 54px 0;
 }
+
+.landscape-overlay {
+  width: calc(60% - 32px);
+  height: calc(100% - 140px);
+  background-color: rgba(0, 0, 0, 0.725) !important;
+  border: solid 1.5px #1ca443cc;
+  border-radius: 9px 0 19px 19px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 13;
+  margin: 60px auto 80px;
+  padding: 6px 18px;
+
+  .overlay-title {
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: 700;
+    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+    color: #f8fefdbb;
+    text-decoration: none;
+  }
+}
+
+// Landscape overrides for buttons.
+button, .button {
+  box-shadow: inset 0 1px 0 0 #2a0;
+  background: linear-gradient(180deg, #20a00088 5%, #1f990088);
+  background-color: #2a0;
+  border: 1px solid #2a09;
+  font-size: .75rem;
+  padding: 5px 14px 6px;
+  text-shadow: 0 1px 0 #528009;
+
+  &.not-yet {
+    box-shadow: inset 0 1px 0 0 #999;
+    background: linear-gradient(to bottom, #888 5%, #777 100%);
+    background-color: #777;
+    border: 1px solid #999;
+    color: #bbb !important;
+    text-shadow: 0 1px 0 #808080;
+  }
+
+}

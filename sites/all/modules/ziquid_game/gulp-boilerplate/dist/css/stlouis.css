@@ -1772,32 +1772,33 @@ body.game-stlouis.landscape-orientation #player {
   z-index: 1;
 }
 
-/* line 14, src/sass/landscape/_player.scss */
-body.game-stlouis.landscape-orientation #player .player_username {
+/* line 15, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_username {
   font-size: 1.25em;
   font-weight: 700;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefdbb;
+  text-decoration: none;
 }
 
-/* line 21, src/sass/landscape/_player.scss */
-body.game-stlouis.landscape-orientation #player .player_level {
+/* line 23, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_level {
   font-size: 0.75em;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
   padding: 2px 5px;
 }
 
-/* line 28, src/sass/landscape/_player.scss */
-body.game-stlouis.landscape-orientation #player .player_clan {
+/* line 30, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_clan {
   font-size: 0.75em;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
   padding: 2px 5px;
 }
 
-/* line 35, src/sass/landscape/_player.scss */
-body.game-stlouis.landscape-orientation #player .player_party {
+/* line 37, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_party {
   font-size: 0.75em;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
@@ -1937,21 +1938,20 @@ body.game-stlouis.landscape-orientation #stats-toggle::after {
   border-radius: 9px 9px 0 9px;
 }
 
-/* line 34, src/sass/landscape/_stats.scss */
+/* line 36, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation #stats {
   display: none;
-  width: 320px;
-  background-color: rgba(0, 0, 0, 0.35) !important;
-  border-radius: 14px 14px 0 0;
-  position: fixed;
-  top: 0;
-  right: 50px;
-  z-index: 1;
+}
+
+/* line 39, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation #stats.landscape-overlay {
+  background-color: #8008;
+  border-color: #b42f43cc;
 }
 
 /* line 44, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats #money-id {
-  margin-left: 12px;
+body.game-stlouis.landscape-orientation #stats #money-id, body.game-stlouis.landscape-orientation #stats .money-text, body.game-stlouis.landscape-orientation #stats #income-time {
+  display: inline-block;
 }
 
 /* line 48, src/sass/landscape/_stats.scss */
@@ -2016,6 +2016,71 @@ body.game-stlouis.landscape-orientation #stats .level-text {
   background-size: contain;
   top: 2px;
   right: 2px;
+}
+
+/* line 106, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button {
+  display: none;
+  width: 32px;
+  height: 32px;
+  position: fixed;
+  z-index: 99;
+  background-color: #8008;
+  border: solid 1.5px #b42f43cc;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  border-radius: 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 3px;
+}
+
+/* line 119, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button .label {
+  display: none;
+  color: #b42f43cc;
+  font-size: .6rem;
+  text-transform: uppercase;
+  margin-top: 4px;
+  background-color: #8008;
+  padding: 2px;
+  border-radius: 9px;
+  border-radius: 0;
+  border: solid 0.5px red;
+  text-align: center;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* line 134, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button img {
+  width: 10px;
+  -o-object-position: center top;
+     object-position: center top;
+}
+
+/* line 139, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button#stats-button-4 {
+  top: 62px;
+  right: 2px;
+}
+
+/* line 144, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button#stats-button-3 {
+  top: 55px;
+  right: 33px;
+}
+
+/* line 149, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button#stats-button-2 {
+  top: 31px;
+  right: 53px;
+}
+
+/* line 154, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation .stats-button#stats-button-1 {
+  top: 2px;
+  right: 58px;
 }
 
 /* line 4, src/sass/landscape/_stuff.scss */
@@ -2083,4 +2148,56 @@ body.game-stlouis.landscape-orientation.admin-menu #admin-menu {
 body.game-stlouis.landscape-orientation {
   max-width: 100vw;
   padding: 54px 54px 0;
+}
+
+/* line 24, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay {
+  width: calc(60% - 32px);
+  height: calc(100% - 140px);
+  background-color: rgba(0, 0, 0, 0.725) !important;
+  border: solid 1.5px #1ca443cc;
+  border-radius: 9px 0 19px 19px;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 13;
+  margin: 60px auto 80px;
+  padding: 6px 18px;
+}
+
+/* line 39, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay .overlay-title {
+  text-align: center;
+  font-size: 1.25em;
+  font-weight: 700;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefdbb;
+  text-decoration: none;
+}
+
+/* line 50, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orientation .button {
+  -webkit-box-shadow: inset 0 1px 0 0 #2a0;
+          box-shadow: inset 0 1px 0 0 #2a0;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #20a00088), to(#1f990088));
+  background: linear-gradient(180deg, #20a00088 5%, #1f990088);
+  background-color: #2a0;
+  border: 1px solid #2a09;
+  font-size: .75rem;
+  padding: 5px 14px 6px;
+  text-shadow: 0 1px 0 #528009;
+}
+
+/* line 59, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landscape-orientation .button.not-yet {
+  -webkit-box-shadow: inset 0 1px 0 0 #999;
+          box-shadow: inset 0 1px 0 0 #999;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(5%, #888), to(#777));
+  background: linear-gradient(to bottom, #888 5%, #777 100%);
+  background-color: #777;
+  border: 1px solid #999;
+  color: #bbb !important;
+  text-shadow: 0 1px 0 #808080;
 }

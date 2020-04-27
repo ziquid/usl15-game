@@ -2341,7 +2341,7 @@ function zg_render_user_html(&$user) {
 }
 
 /**
- * Render a user as html.
+ * Render a user as header.
  *
  * @param object $user
  *   The user object.
@@ -2350,6 +2350,9 @@ function zg_render_user_html(&$user) {
  *   The html rendering of the user object.
  */
 function zg_render_user_header(&$user) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
+
   $user->display->clan_acronym = '';
   if (empty($user->clan_acronym)) {
     $user->display->clan = t('No Clan');
@@ -2366,10 +2369,13 @@ function zg_render_user_header(&$user) {
   $user->display->level = t('Level: @level', ['@level' => $user->level]);
 
   $user->display->username = $user->ep_name .
-    '<span class="player_username">' . $user->username . '</span><br>' .
+    '<a class="player_username" href="/' . $game . '/user/' . $arg2 .
+    '">' . $user->username . '</a>';
+
+  $user->display->user = $user->display->username . '<br>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<span class="player_clan">' . $user->display->clan . '</span>' .
     '<span class="player_party">' . $user->display->party . '</span>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
-  return $user->display->username;
+  return $user->display->user;
 }
