@@ -1774,7 +1774,7 @@ body.game-stlouis.landscape-orientation #player {
 
 /* line 15, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username {
-  font-size: 1.25em;
+  font-size: 1.25rem;
   font-weight: 700;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefdbb;
@@ -1783,7 +1783,7 @@ body.game-stlouis.landscape-orientation .player_username {
 
 /* line 23, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_level {
-  font-size: 0.75em;
+  font-size: 0.75rem;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
   padding: 2px 5px;
@@ -1791,7 +1791,7 @@ body.game-stlouis.landscape-orientation .player_level {
 
 /* line 30, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_clan {
-  font-size: 0.75em;
+  font-size: 0.75rem;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
   padding: 2px 5px;
@@ -1799,7 +1799,7 @@ body.game-stlouis.landscape-orientation .player_clan {
 
 /* line 37, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_party {
-  font-size: 0.75em;
+  font-size: 0.75rem;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefd99;
   padding: 2px 5px;

@@ -273,7 +273,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="elders-menu" href="/$game/elders/$arg2">
+        <a class="elders-menu portrait-only" href="/$game/elders/$arg2">
           {$game_text['menu']['elders']}
         </a>
       </li>
