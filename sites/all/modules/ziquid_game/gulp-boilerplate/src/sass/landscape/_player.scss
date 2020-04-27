@@ -13,11 +13,17 @@
 }
 
 .player_username {
-  font-size: 1.25rem;
-  font-weight: 700;
-  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-  color: #f8fefdbb;
   text-decoration: none;
+  color: #dd7;
+  font-size: .9375rem;
+  font-family: Georgia,times new roman,serif;
+  font-weight: 700;
+  text-shadow: 1px 1px 2px #e008;
+  min-width: 80px;
+  text-align: center;
+  -webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  border-radius: 5px;
 }
 
 .player_level {
