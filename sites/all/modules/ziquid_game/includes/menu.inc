@@ -1534,6 +1534,7 @@ function zg_equipment_sell_callback($phone_id, $equipment_id, $quantity) {
 
   return theme('zg_equipment_sell', $phone_id, $equipment_id, $quantity);
 }
+
 /**
  * User message count callback function.
  *
@@ -1555,7 +1556,6 @@ function zg_msg_count_callback($phone_id, $msg_id) {
   db_set_active('default');
   echo $count;
 }
-
 
 /**
  * Move callback function.
@@ -1630,6 +1630,10 @@ function zg_bounce_callback($phone_id) {
   if (empty($phone_id)) {
     return drupal_access_denied();
   }
+
+  $module_path = drupal_get_path('module', 'zg');
+  drupal_add_js($module_path . '/js/zg_bounce.js', 'module',
+    'footer');
   return theme('zg_bounce', $phone_id);
 }
 

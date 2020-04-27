@@ -927,6 +927,40 @@ function zg_get_userid_from_phoneid($phone_id) {
 }
 
 /**
+ * Get the phone ID from the environment.
+ *
+ * @return false|string
+ *   The phone ID, if any.
+ */
+function zg_get_phoneid() {
+
+  $arg2 = arg(2);
+  if ((substr($arg2, 0, 3) == 'fb=') || $arg2 == '') {
+    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . $arg2,
+      'Referrer is ' . $_SERVER['HTTP_REFERER']);
+    echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . $arg2 .
+      ' from <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
+      $_SERVER['HTTP_REFERER'] . '</a>';
+    exit;
+  }
+
+  if ($arg2 == 'facebook') {
+    return zg_get_fbid();
+  }
+  elseif ($arg2 === 'null') {
+    drupal_goto('stlouis/playbook_null');
+  }
+  elseif (substr($arg2, 0, 3) === 'ms=') {
+    return zg_get_msid();
+  }
+  elseif (substr($arg2, 0, 10) == 'landscape:') {
+    return check_plain(substr($arg2, 10));
+  }
+
+  return check_plain($arg2);
+}
+
+/**
  * Send a user a message.
  *
  * @param int $from

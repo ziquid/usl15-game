@@ -1489,6 +1489,18 @@ body.game-stlouis .tagline {
 }
 
 /* line 1085, src/sass/common/_index.scss */
+body.game-stlouis .bounce-welcome {
+  text-align: center;
+  color: #687;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-shadow: 0 0.9px 0 beige;
+  font-size: 1.375rem;
+  margin-bottom: 4px;
+}
+
+/* line 1096, src/sass/common/_index.scss */
 body.game-stlouis .system-message-response {
   background-color: green;
   text-align: center;
@@ -1498,7 +1510,7 @@ body.game-stlouis .system-message-response {
   margin: 6px 2px 4px;
 }
 
-/* line 1094, src/sass/common/_index.scss */
+/* line 1105, src/sass/common/_index.scss */
 body.game-stlouis div.description-speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1508,7 +1520,7 @@ body.game-stlouis div.description-speech-bubble-wrapper {
   height: 84px;
 }
 
-/* line 1103, src/sass/common/_index.scss */
+/* line 1114, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1516,36 +1528,36 @@ body.game-stlouis div.speech-bubble-wrapper {
   margin: 8px 0;
 }
 
-/* line 1110, src/sass/common/_index.scss */
+/* line 1121, src/sass/common/_index.scss */
 body.game-stlouis div.description-speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1115, src/sass/common/_index.scss */
+/* line 1126, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1120, src/sass/common/_index.scss */
+/* line 1131, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man.sad {
   background-position: 0 9px;
   height: 80px;
 }
 
-/* line 1125, src/sass/common/_index.scss */
+/* line 1136, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man.embarrassed {
   background-position: 0 18px;
   height: 80px;
 }
 
-/* line 1130, src/sass/common/_index.scss */
+/* line 1141, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon {
   position: relative;
 }
 
-/* line 1134, src/sass/common/_index.scss */
+/* line 1145, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon-baseline-overlay {
   position: absolute;
   left: 0;
@@ -1555,7 +1567,7 @@ body.game-stlouis .quests .quest-icon-baseline-overlay {
   border-radius: 4px;
 }
 
-/* line 1143, src/sass/common/_index.scss */
+/* line 1154, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon-overlay {
   position: absolute;
   left: 0;
@@ -1565,7 +1577,7 @@ body.game-stlouis .quests .quest-icon-overlay {
   border-radius: 4px;
 }
 
-/* line 1152, src/sass/common/_index.scss */
+/* line 1163, src/sass/common/_index.scss */
 body.game-stlouis .bonus-text {
   text-align: center;
   text-transform: uppercase;
@@ -1575,7 +1587,7 @@ body.game-stlouis .bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1161, src/sass/common/_index.scss */
+/* line 1172, src/sass/common/_index.scss */
 body.game-stlouis .lesser-bonus-text {
   text-align: center;
   font-weight: bold;
@@ -1584,12 +1596,12 @@ body.game-stlouis .lesser-bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1169, src/sass/common/_index.scss */
+/* line 1180, src/sass/common/_index.scss */
 body.game-stlouis div.lesser-bonus-text {
   margin: 12px 0;
 }
 
-/* line 1173, src/sass/common/_index.scss */
+/* line 1184, src/sass/common/_index.scss */
 body.game-stlouis .ask-name {
   margin-top: 15px;
   margin-bottom: 9px;
