@@ -1938,87 +1938,31 @@ body.game-stlouis.landscape-orientation #stats-toggle::after {
   border-radius: 9px 9px 0 9px;
 }
 
-/* line 36, src/sass/landscape/_stats.scss */
+/* line 34, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation #stats {
   display: none;
 }
 
-/* line 39, src/sass/landscape/_stats.scss */
+/* line 37, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation #stats.landscape-overlay {
   background-color: #8008;
   border-color: #b42f43cc;
 }
 
-/* line 44, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats #money-id, body.game-stlouis.landscape-orientation #stats .money-text, body.game-stlouis.landscape-orientation #stats #income-time {
+/* line 40, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation #stats.landscape-overlay .overlay-panel-3x2 {
+  border-color: #000c;
+  -webkit-box-shadow: inset 0.75px 0.75px 0 0 #b42f43cc;
+          box-shadow: inset 0.75px 0.75px 0 0 #b42f43cc;
+}
+
+/* line 46, src/sass/landscape/_stats.scss */
+body.game-stlouis.landscape-orientation #stats #money-id, body.game-stlouis.landscape-orientation #stats .money-text, body.game-stlouis.landscape-orientation #stats #income-time, body.game-stlouis.landscape-orientation #stats #actions-id, body.game-stlouis.landscape-orientation #stats #actions-time,
+body.game-stlouis.landscape-orientation #stats #energy-id, body.game-stlouis.landscape-orientation #stats #energy-time {
   display: inline-block;
 }
 
-/* line 48, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .actions-text {
-  display: inline-block;
-  position: relative;
-  background: url(../img/actions.png) 0 0 no-repeat;
-  width: 12px;
-  height: 10px;
-  font: 0/0 a;
-  background-size: contain;
-  top: -9px;
-  margin-bottom: -9px;
-}
-
-/* line 60, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .energy-text {
-  display: inline-block;
-  position: relative;
-  background: url(../img/energy.png) 0 0 no-repeat;
-  width: 12px;
-  height: 12px;
-  font: 0/0 a;
-  background-size: contain;
-  top: -9px;
-  margin-bottom: -9px;
-}
-
-/* line 72, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .home {
-  bottom: 4px;
-}
-
-/* line 75, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .home #msg-badge {
-  background-color: #85851f;
-}
-
-/* line 80, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .experience {
-  border-bottom: 1px solid rgba(51, 153, 51, 0.35) !important;
-  padding-right: 12px;
-}
-
-/* line 85, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .experience-text {
-  position: relative;
-  background: url(../img/influence.png) top right no-repeat;
-  height: 12px;
-  font: 0/0 a;
-  background-size: contain;
-  top: -2px;
-  right: -11px;
-}
-
-/* line 95, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats .level-text {
-  background: url(../img/level.png) top right no-repeat;
-  height: 12px;
-  width: 12px;
-  font: 0/0 a;
-  background-size: contain;
-  top: 2px;
-  right: 2px;
-}
-
-/* line 106, src/sass/landscape/_stats.scss */
+/* line 53, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button {
   display: none;
   width: 32px;
@@ -2035,7 +1979,7 @@ body.game-stlouis.landscape-orientation .stats-button {
   padding-top: 3px;
 }
 
-/* line 119, src/sass/landscape/_stats.scss */
+/* line 66, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button .label {
   display: none;
   color: #b42f43cc;
@@ -2052,32 +1996,32 @@ body.game-stlouis.landscape-orientation .stats-button .label {
           box-sizing: border-box;
 }
 
-/* line 134, src/sass/landscape/_stats.scss */
+/* line 81, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button img {
   width: 10px;
   -o-object-position: center top;
      object-position: center top;
 }
 
-/* line 139, src/sass/landscape/_stats.scss */
+/* line 86, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button#stats-button-4 {
   top: 62px;
   right: 2px;
 }
 
-/* line 144, src/sass/landscape/_stats.scss */
+/* line 91, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button#stats-button-3 {
   top: 55px;
   right: 33px;
 }
 
-/* line 149, src/sass/landscape/_stats.scss */
+/* line 96, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button#stats-button-2 {
   top: 31px;
   right: 53px;
 }
 
-/* line 154, src/sass/landscape/_stats.scss */
+/* line 101, src/sass/landscape/_stats.scss */
 body.game-stlouis.landscape-orientation .stats-button#stats-button-1 {
   top: 2px;
   right: 58px;
@@ -2153,7 +2097,7 @@ body.game-stlouis.landscape-orientation {
 /* line 24, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay {
   width: calc(60% - 32px);
-  height: calc(100% - 140px);
+  height: calc(100% - 120px);
   background-color: rgba(0, 0, 0, 0.725) !important;
   border: solid 1.5px #1ca443cc;
   border-radius: 9px 0 19px 19px;
@@ -2163,21 +2107,55 @@ body.game-stlouis.landscape-orientation .landscape-overlay {
   left: 0;
   right: 0;
   z-index: 13;
-  margin: 60px auto 80px;
+  margin: 60px auto 60px;
   padding: 6px 18px;
 }
 
 /* line 39, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .overlay-title {
   text-align: center;
-  font-size: 1.25em;
+  font-size: 1.05rem;
   font-weight: 700;
   font-family: "Avenir Next", Helvetica, Arial, sans-serif;
   color: #f8fefdbb;
   text-decoration: none;
 }
 
-/* line 50, src/sass/landscape/_index.scss */
+/* line 48, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2 {
+  width: 26%;
+  height: 34%;
+  display: inline-block;
+  text-align: center;
+  vertical-align: top;
+  font-size: 0.625rem;
+  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+  color: #f8fefdbb;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.725) !important;
+  border: solid 0.75px #1ca443cc;
+  border-radius: 9px 0 9px 9px;
+  z-index: 14;
+  padding: 6px 8px;
+  margin-bottom: 5px;
+  -webkit-box-shadow: inset 0.75px 0.75px 0 0 #4c1;
+          box-shadow: inset 0.75px 0.75px 0 0 #4c1;
+}
+
+/* line 65, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2.no-panel {
+  border: none !important;
+  background-color: #0000 !important;
+  -webkit-box-shadow: inset 0 0 0 0 black !important;
+          box-shadow: inset 0 0 0 0 black !important;
+}
+
+/* line 70, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2 .overlay-title {
+  font-size: 0.7rem;
+}
+
+/* line 77, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orientation .button {
   -webkit-box-shadow: inset 0 1px 0 0 #2a0;
           box-shadow: inset 0 1px 0 0 #2a0;
@@ -2190,7 +2168,7 @@ body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orie
   text-shadow: 0 1px 0 #528009;
 }
 
-/* line 59, src/sass/landscape/_index.scss */
+/* line 86, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landscape-orientation .button.not-yet {
   -webkit-box-shadow: inset 0 1px 0 0 #999;
           box-shadow: inset 0 1px 0 0 #999;

@@ -31,76 +31,23 @@
   }
 }
 
-// Old stats from portrait header.  Remove as soon as buttons are done.
-
 #stats {
   display: none;
 
   &.landscape-overlay {
     background-color: #8008;
     border-color: #b42f43cc;
-  }
-
-  #money-id, .money-text, #income-time {
-    display: inline-block;
-  }
-
-  .actions-text {
-    display: inline-block;
-    position: relative;
-    background: url(../img/actions.png) 0 0 no-repeat;
-    width: 12px;
-    height: 10px;
-    font: 0/0 a;
-    background-size: contain;
-    top: -9px;
-    margin-bottom: -9px;
-  }
-
-  .energy-text {
-    display: inline-block;
-    position: relative;
-    background: url(../img/energy.png) 0 0 no-repeat;
-    width: 12px;
-    height: 12px;
-    font: 0/0 a;
-    background-size: contain;
-    top: -9px;
-    margin-bottom: -9px;
-  }
-
-  .home {
-    bottom: 4px;
-
-    #msg-badge {
-      background-color: #85851f;
+    .overlay-panel-3x2 {
+      border-color: #000c;
+      box-shadow: inset 0.75px 0.75px 0 0 #b42f43cc;
     }
   }
 
-  .experience {
-    border-bottom: 1px solid rgba(51, 153, 51, 0.35) !important;
-    padding-right: 12px;
+  #money-id, .money-text, #income-time, #actions-id, #actions-time,
+  #energy-id, #energy-time {
+    display: inline-block;
   }
 
-  .experience-text {
-    position: relative;
-    background: url(../img/influence.png) top right no-repeat;
-    height: 12px;
-    font: 0/0 a;
-    background-size: contain;
-    top: -2px;
-    right: -11px;
-  }
-
-  .level-text {
-    background: url(../img/level.png) top right no-repeat;
-    height: 12px;
-    width: 12px;
-    font: 0/0 a;
-    background-size: contain;
-    top: 2px;
-    right: 2px;
-  }
 }
 
 .stats-button {

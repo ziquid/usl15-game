@@ -1468,28 +1468,33 @@ function zg_fetch_header(\stdClass $game_user) {
   <div class="overlay-title">
     {$game_user->display->username} Statistics
   </div>
-  <div class="money">
-    {$game_text['money']}:
+  <div class="money overlay-panel-3x2">
+    <div class="overlay-title">{$game_text['money']}</div>
     <div id="money-id">$money_str</div>
     <div class="money-text">$game_user->values</div>
     <div id="income-time">$income_text</div>
   </div>
-  <div class="actions">
-    {$game_text['actions']}:
+  <div class="actions overlay-panel-3x2">
+    <div class="overlay-title">{$game_text['actions']}</div>
     <div id="actions-id">$game_user->actions</div> / $game_user->actions_max
     <div id="actions-time">$actions_text</div>
   </div>
-  <div class="experience">
-    {$game_text['experience']}:
+  <div class="experience overlay-panel-3x2">
+    <div class="overlay-title">{$game_text['experience']}</div>
     <strong>$experience_str</strong> / $next_level
   </div>
-  <div class="energy">
-    {$game_text['energy']}:
+  <div class="energy overlay-panel-3x2">
+    <div class="overlay-title">{$game_text['energy']}</div>
     <div id="energy-id">$game_user->energy</div> / $game_user->energy_max
     <div id="energy-time">$energy_text</div>
   </div>
-  $full_stats_button
-  $level_text
+  <div class="overlay-panel-3x2 no-panel">
+    $full_stats_button
+  </div>
+  <div class="overlay-panel-3x2">
+    <div class="overlay-title">Level</div>
+    $level_text
+  </div>
 </div>
 
 <!--<div class="stats-button" id="stats-button-1">-->

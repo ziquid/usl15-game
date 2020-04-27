@@ -23,7 +23,7 @@
 
 .landscape-overlay {
   width: calc(60% - 32px);
-  height: calc(100% - 140px);
+  height: calc(100% - 120px);
   background-color: rgba(0, 0, 0, 0.725) !important;
   border: solid 1.5px #1ca443cc;
   border-radius: 9px 0 19px 19px;
@@ -33,16 +33,43 @@
   left: 0;
   right: 0;
   z-index: 13;
-  margin: 60px auto 80px;
+  margin: 60px auto 60px;
   padding: 6px 18px;
 
   .overlay-title {
     text-align: center;
-    font-size: 1.25em;
+    font-size: 1.05rem;
     font-weight: 700;
     font-family: "Avenir Next", Helvetica, Arial, sans-serif;
     color: #f8fefdbb;
     text-decoration: none;
+  }
+
+  .overlay-panel-3x2 {
+    width: 26%;
+    height: 34%;
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    font-size: 0.625rem;
+    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+    color: #f8fefdbb;
+    text-decoration: none;
+    background-color: rgba(0, 0, 0, 0.725) !important;
+    border: solid 0.75px #1ca443cc;
+    border-radius: 9px 0 9px 9px;
+    z-index: 14;
+    padding: 6px 8px;
+    margin-bottom: 5px;
+    box-shadow: inset 0.75px 0.75px 0 0 #4c1;
+    &.no-panel {
+      border: none !important;
+      background-color: #0000 !important;
+      box-shadow: inset 0 0 0 0 black !important;
+    }
+    .overlay-title {
+      font-size: 0.7rem;
+    }
   }
 }
 
