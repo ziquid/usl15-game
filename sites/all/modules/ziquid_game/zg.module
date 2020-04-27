@@ -1450,6 +1450,10 @@ function zg_fetch_header(\stdClass $game_user) {
     $money_str = zg_short_format_int($game_user->money);
     $game_user_str = zg_render_user($game_user, 'header');
     $full_stats_button = zg_render_button('user', 'Full Player Stats');
+
+    $lqg = zg_fetch_latest_quest_group($game_user);
+    $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
+
     echo <<< EOF
 <!-- player -->
 <div id="player">
@@ -1458,15 +1462,37 @@ function zg_fetch_header(\stdClass $game_user) {
 
 <!-- menu -->
 <div id="menu-toggle">
-  <img id="menu-button" src="/sites/default/files/images/{$game}_home_icon.png"
-    data-home-link="/$game/home/$arg2"/>
+  <img id="menu-toggle-button" src="/sites/default/files/images/{$game}_home_icon.png"/>
 </div>
+
+<div class="menu-button" id="menu-button-1" data-home-link="/$game/home/$arg2">
+  <img src="/sites/default/files/images/{$game}_home_icon.png" />
+  <div class="label">
+    Home
+  </div>
+</div>
+
+<div class="menu-button" id="menu-button-2">
+  <a href="/$game/quest_groups/$arg2{$show_expanded}#group-{$lqg}">
+<!--    <img src="/sites/default/files/images/{$game}_missions_icon.png"/>-->
+    Mi
+  </a>
+  <div class="label">
+    Missions
+  </div>
+</div>
+
+<div class="menu-button inactive" id="menu-button-3">&nbsp;</div>
+<div class="menu-button inactive" id="menu-button-4">&nbsp;</div>
 
 <!-- stats -->
 <div id="stats-toggle">&nbsp;</div>
 <div id="stats" class="landscape-overlay">
   <div class="overlay-title">
-    {$game_user->display->username} Statistics
+    {$game_user->display->username}
+  </div>
+  <div class="overlay-subtitle">
+    Statistics
   </div>
   <div class="money overlay-panel-3x2">
     <div class="overlay-title">{$game_text['money']}</div>
@@ -1493,7 +1519,8 @@ function zg_fetch_header(\stdClass $game_user) {
   </div>
   <div class="overlay-panel-3x2">
     <div class="overlay-title">Level</div>
-    $level_text
+    {$game_user->display->level_num}
+    <div class="overlay-tip">{$game_user->display->level_tip}</div>
   </div>
 </div>
 
@@ -1514,38 +1541,15 @@ function zg_fetch_header(\stdClass $game_user) {
 <div class="people-button" id="people-button-1">
   <a href="/$game/elders/$arg2">
     <img src="/sites/default/files/images/{$game}_people_icon.png"/>
-    <div class="label fit-box">
-      Elders
-    </div>
   </a>
+  <div class="label">
+    Elders
+  </div>
 </div>
 
-<div class="people-button" id="people-button-2">
-  <a href="/$game/elders/$arg2">
-    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
-      <div class="label fit-box">
-        Elders
-    </div>
-  </a>
-</div>
-
-<div class="people-button" id="people-button-3">
-  <a href="/$game/elders/$arg2">
-    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
-      <div class="label fit-box">
-        Elders
-    </div>
-  </a>
-</div>
-
-<div class="people-button" id="people-button-4">
-  <a href="/$game/elders/$arg2">
-    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
-      <div class="label fit-box">
-        Elders
-    </div>
-  </a>
-</div>
+<div class="people-button inactive" id="people-button-2">&nbsp;</div>
+<div class="people-button inactive" id="people-button-3">&nbsp;</div>
+<div class="people-button inactive" id="people-button-4">&nbsp;</div>
 
 <!-- stuff -->
 <div id="stuff-toggle">$money_str</div>

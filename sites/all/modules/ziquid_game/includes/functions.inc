@@ -2352,6 +2352,7 @@ function zg_render_user_html(&$user) {
 function zg_render_user_header(&$user) {
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
+  $phone_id = zg_get_phoneid();
 
   $user->display->clan_acronym = '';
   if (empty($user->clan_acronym)) {
@@ -2366,16 +2367,25 @@ function zg_render_user_header(&$user) {
   }
 
   $user->display->party = "Party: $user->party_title";
-  $user->display->level = t('Level: @level', ['@level' => $user->level]);
+
+  $level = $user->level;
+  $level_a1 = $level_a2 = $user->display->level_tip = '';
+  if ($user->skill_points && $phone_id === $user->phone_id) {
+    $level_a1 = '<a href="/' . $game . '/increase_skills/' . $arg2 . '/none">';
+    $level_a2 = '</a>';
+    $user->display->level_tip = t('Tap to assign skill points');
+  }
+  $user->display->level_num = $level_a1 . $user->level . $level_a2;
+  $user->display->level = t('Level: ') . $user->display->level_num;
 
   $user->display->username = $user->ep_name .
     '<a class="player_username" href="/' . $game . '/user/' . $arg2 .
     '">' . $user->username . '</a>';
 
-  $user->display->user = $user->display->username . '<br>' .
+  $user->display->user = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<span class="player_clan">' . $user->display->clan . '</span>' .
-    '<span class="player_party">' . $user->display->party . '</span>';
+    '<span class="player_party">' . $user->display->party . '</span></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->user;
 }

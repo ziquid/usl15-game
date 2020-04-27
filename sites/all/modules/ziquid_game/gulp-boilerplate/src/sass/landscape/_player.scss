@@ -10,6 +10,10 @@
   text-align: center;
   background-color: rgba(0, 0, 0, 0.35);
   z-index: 1;
+
+  div {
+    margin: 2px 0;
+  }
 }
 
 .player_username {
@@ -26,23 +30,19 @@
   border-radius: 5px;
 }
 
-.player_level {
-  font-size: 0.75rem;
-  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-  color: #f8fefd99;
-  padding: 2px 5px;
-}
-
-.player_clan {
-  font-size: 0.75rem;
-  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-  color: #f8fefd99;
-  padding: 2px 5px;
-}
-
-.player_party {
-  font-size: 0.75rem;
-  font-family: "Avenir Next", Helvetica, Arial, sans-serif;
-  color: #f8fefd99;
-  padding: 2px 5px;
+.player_level, .player_clan, .player_party {
+  font-size: 0.625rem;
+  padding: 5px 5px 2px;
+  text-decoration: none;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  text-shadow: 1px 1px 2px #0e08;
+  -webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+  a {
+    text-decoration: none;
+  }
 }

@@ -44,29 +44,43 @@
   text-align: center;
   font-size: 1rem;
   padding-top: 3px;
+  &.inactive {
+    border: none;
+  }
   .label {
-    display: none;
     color: #1477c5;
     font-size: .6rem;
     text-transform: uppercase;
-    margin-top: 4px;
-    background-color: #0088;
+    //margin-top: 4px;
+    //background-color: #0088;
     padding: 2px;
-    border-radius: 9px;
-    border-radius: 0;
-    border: solid 0.5px red;
-    text-align: center;
-    box-sizing: border-box;
+    position: relative;
+    //border-radius: 9px;
+    //border-radius: 0;
+    //border: solid 0.5px red;
+    //text-align: center;
+    //box-sizing: border-box;
     //transform: translateX(-25%);
   }
   img {
     width: 20px;
     object-position: center top;
   }
+  a {
+    text-decoration: none;
+    color: #f8fefdcc;
+  }
 
   &#people-button-1 {
     bottom: 62px;
     left: 2px;
+    .label {
+      color: #1477c5;
+      top: -39px;
+      left: 23px;
+      transform-origin: left;
+      transform: rotate(-60deg);
+    }
   }
 
   &#people-button-2 {

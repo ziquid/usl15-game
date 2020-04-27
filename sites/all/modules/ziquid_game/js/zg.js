@@ -52,7 +52,7 @@ Drupal.behaviors.zg = function (context) {
   }
 
   // Menu button.
-  $('#menu-button').click(function () {
+  $('#menu-button-1').click(function () {
     let xPos = self.pageXOffset;
     let yPos = self.pageYOffset;
     if (xPos + yPos) {
@@ -61,6 +61,11 @@ Drupal.behaviors.zg = function (context) {
     else {
       window.location.href = $(this).attr('data-home-link');
     }
+  });
+
+  // Menu toggle.
+  $('#menu-toggle').click(function () {
+    $('.menu-button').toggle(200, 'swing');
   });
 
   // Stats toggle.

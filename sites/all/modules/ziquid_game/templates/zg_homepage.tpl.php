@@ -297,7 +297,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="missions-menu"
+        <a class="missions-menu portrait-only"
           href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
           {$game_text['menu']['missions']}
         </a>
