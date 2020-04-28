@@ -6,8 +6,8 @@
  *
  * Synced with CG: yes
  * Synced with 2114: yes
- * Ready for phpcbf: yes
- * Ready for MVC separation: no
+ * Ready for phpcbf: done
+ * Ready for MVC separation: yes
  * Controller moved to callback include: no
  * View only in theme template: no
  * All db queries in controller: no
@@ -53,6 +53,7 @@ if (zg_is_landscape() && strlen($game_user->username)) {
   $game_user_str
 </div>
 EOF;
+  zg_song($game_user, 'Jump welcome');
 }
 
 ?>

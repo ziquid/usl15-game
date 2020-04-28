@@ -1638,7 +1638,7 @@ function zg_bounce_callback($phone_id) {
 }
 
 /**
- * Esa bounce callback function.
+ * Usl_Esa bounce callback function.
  *
  * @param string $phone_id
  *   The phone ID of the player.

@@ -6,7 +6,7 @@
  *
  * Synced with CG: N/A
  * Synced with 2114: N/A
- * Ready for phpcbf: yes
+ * Ready for phpcbf: done
  * Ready for MVC separation: done
  * Controller moved to callback include: N/A
  * View only in theme template: yes
@@ -16,7 +16,6 @@
  * Removal of game_defs include: N/A
  * .
  */
-
 ?>
 <br>
 <br>
