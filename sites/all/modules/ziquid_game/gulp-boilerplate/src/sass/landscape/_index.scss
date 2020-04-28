@@ -50,7 +50,7 @@
     padding: 5px 5px 2px;
     text-decoration: none;
     color: #aa7e;
-    font-family: Georgia,Times New Roman,serif;
+    font-family: Georgia, "Times New Roman", times, serif;
     font-weight: 400;
     text-shadow: 1px 1px 2px #0e08;
     -webkit-text-stroke: .35px darkred;
@@ -82,6 +82,7 @@
     margin-bottom: 5px;
     box-shadow: inset 0.75px 0.75px 0 0 #4c1;
     position: relative;
+    line-height: 0.75rem;
     &.no-panel {
       border: none !important;
       background-color: #0000 !important;
@@ -89,11 +90,16 @@
     }
     .overlay-title {
       font-size: 0.7rem;
+      margin-bottom: 3px;
     }
     .overlay-tip {
-      font-size: 0.5rem;
+      font-size: 0.4rem;
       position: absolute;
-      bottom: 0px;
+      bottom: 0;
+      left: 0;
+      text-align: center;
+      width: 100%;
+      font-family: Georgia, "Times New Roman", times, serif;
     }
   }
 }

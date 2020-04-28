@@ -1881,7 +1881,7 @@ body.game-stlouis.landscape-orientation .player_level, body.game-stlouis.landsca
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;
   text-shadow: 1px 1px 2px #0e08;
-  -webkit-text-stroke: .35px darkred;
+  -webkit-text-stroke: .35px darkgreen;
   background-color: #0003;
   border-radius: 5px;
   text-transform: uppercase;
@@ -2058,7 +2058,7 @@ body.game-stlouis.landscape-orientation #stats.landscape-overlay .overlay-panel-
 }
 
 /* line 46, src/sass/landscape/_stats.scss */
-body.game-stlouis.landscape-orientation #stats #money-id, body.game-stlouis.landscape-orientation #stats .money-text, body.game-stlouis.landscape-orientation #stats #income-time, body.game-stlouis.landscape-orientation #stats #actions-id, body.game-stlouis.landscape-orientation #stats #actions-time,
+body.game-stlouis.landscape-orientation #stats #money-id, body.game-stlouis.landscape-orientation #stats .money-text, body.game-stlouis.landscape-orientation #stats #actions-id, body.game-stlouis.landscape-orientation #stats #actions-time,
 body.game-stlouis.landscape-orientation #stats #energy-id, body.game-stlouis.landscape-orientation #stats #energy-time {
   display: inline-block;
 }
@@ -2229,7 +2229,7 @@ body.game-stlouis.landscape-orientation .landscape-overlay .overlay-subtitle {
   padding: 5px 5px 2px;
   text-decoration: none;
   color: #aa7e;
-  font-family: Georgia,Times New Roman,serif;
+  font-family: Georgia, "Times New Roman", times, serif;
   font-weight: 400;
   text-shadow: 1px 1px 2px #0e08;
   -webkit-text-stroke: .35px darkred;
@@ -2265,9 +2265,10 @@ body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2 {
   -webkit-box-shadow: inset 0.75px 0.75px 0 0 #4c1;
           box-shadow: inset 0.75px 0.75px 0 0 #4c1;
   position: relative;
+  line-height: 0.75rem;
 }
 
-/* line 85, src/sass/landscape/_index.scss */
+/* line 86, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2.no-panel {
   border: none !important;
   background-color: #0000 !important;
@@ -2275,19 +2276,24 @@ body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2.no
           box-shadow: inset 0 0 0 0 black !important;
 }
 
-/* line 90, src/sass/landscape/_index.scss */
+/* line 91, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2 .overlay-title {
   font-size: 0.7rem;
+  margin-bottom: 3px;
 }
 
-/* line 93, src/sass/landscape/_index.scss */
+/* line 95, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .overlay-panel-3x2 .overlay-tip {
-  font-size: 0.5rem;
+  font-size: 0.4rem;
   position: absolute;
-  bottom: 0px;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  width: 100%;
+  font-family: Georgia, "Times New Roman", times, serif;
 }
 
-/* line 102, src/sass/landscape/_index.scss */
+/* line 108, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orientation .button {
   -webkit-box-shadow: inset 0 1px 0 0 #2a0;
           box-shadow: inset 0 1px 0 0 #2a0;
@@ -2300,7 +2306,7 @@ body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orie
   text-shadow: 0 1px 0 #528009;
 }
 
-/* line 111, src/sass/landscape/_index.scss */
+/* line 117, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landscape-orientation .button.not-yet {
   -webkit-box-shadow: inset 0 1px 0 0 #999;
           box-shadow: inset 0 1px 0 0 #999;
