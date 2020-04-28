@@ -2357,9 +2357,11 @@ function zg_render_user_header(&$user) {
   $user->display->clan_acronym = '';
   if (empty($user->clan_acronym)) {
     $user->display->clan = t('No Clan');
+    $clan_link = "clan_list_available/$arg2";
   }
   else {
     $user->display->clan = "Clan: $user->clan_name ($user->clan_acronym)";
+    $clan_link = "clan_list/$arg2/{$user->fkey_clans_id}";
   }
 
   if ($user->is_clan_leader) {
@@ -2384,7 +2386,7 @@ function zg_render_user_header(&$user) {
 
   $user->display->user = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
-    '<span class="player_clan">' . $user->display->clan . '</span>' .
+    '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
     '<span class="player_party">' . $user->display->party . '</span></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->user;
