@@ -138,7 +138,8 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
  *   Force the game client to play the song even if user has not opted in.
  */
 function zg_song(\stdClass $game_user, $song, $force = FALSE) {
-  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() . '/sounds/' . $song . ' micro.mp3';
+  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+    '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
   zg_sound($game_user, $sound_file, $force);
 }

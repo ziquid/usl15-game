@@ -17,24 +17,6 @@
  * .
  */
 
-// We won't have gone through fetch_user() yet, so set these here.
-$game = 'stlouis';
-$phone_id = zg_get_phoneid();
-$arg2 = check_plain(arg(2));
-db_set_active('game_' . $game);
-
-$sql = 'select * from users where phone_id = "%s";';
-$result = db_query($sql, $phone_id);
-$game_user = db_fetch_object($result);
-firep($game_user, 'game_user object');
-
-if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
-  $button = zg_render_button('/stlouis/bounce') . "<p class='center'>(if you dare)</p>";
-}
-else {
-  $button = '';
-}
-
 ?>
 <br>
 <br>

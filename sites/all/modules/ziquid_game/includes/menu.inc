@@ -1652,14 +1652,20 @@ function usl_esa_bounce_callback($phone_id) {
     return drupal_access_denied();
   }
 
-  global $game, $phone_id;
-
   $game = 'stlouis';
-  $phone_id = zg_get_phoneid();
-  $arg2 = check_plain(arg(2));
-  $game_user = new \stdClass();
-  zg_song($game_user, 'Jump', TRUE);
-  return theme('usl_esa_bounce', $game, $phone_id, $arg2);
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  db_set_active();
+  zg_song($game_user, 'Jump teaser', TRUE);
+
+  if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
+    $button = zg_render_button('/stlouis/bounce') .
+      "<p class='center'>(if you dare)</p>";
+  }
+  else {
+    $button = '';
+  }
+  return theme('usl_esa_bounce', $button);
 }
 
 /**
@@ -2197,16 +2203,7 @@ function zg_theme() {
     'usl_esa_bounce' => [
       'template' => 'templates/usl_esa_bounce',
       'arguments' => [
-        'game' => NULL,
-        'phone_id' => NULL,
-        'arg2' => NULL,
-      ],
-    ],
-
-    'zg_bounce_040' => [
-      'template' => 'templates/zg_bounce_040',
-      'arguments' => [
-        'phone_id' => NULL,
+        'button' => '',
       ],
     ],
 
