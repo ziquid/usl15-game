@@ -46,7 +46,7 @@ if ($game_user->level < 6) {
 </div>
 EOF;
 
-  db_set_active();
+ db_set_active();
 return;
 
 }

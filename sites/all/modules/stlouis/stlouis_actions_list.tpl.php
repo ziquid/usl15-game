@@ -78,7 +78,7 @@ EOF;
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
 
-    db_set_active();
+   db_set_active();
   return;
 
   }

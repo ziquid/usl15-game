@@ -159,6 +159,6 @@ game_show_land($game_user, $game_land, $options);
     if (!empty($next)):
       game_show_land($game_user, $next, ['soon' => TRUE]);
     endif;
-     db_set_active();
+    db_set_active();
   ?>
 </div>

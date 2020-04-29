@@ -99,4 +99,4 @@ if ($password == trim($game_user->password) || password_verify($password, trim($
 <?php print $d['authenticate']; ?>
 <?php zg_speech($game_user, $d['authenticate_speech']); ?>
 <?php
-    db_set_active();
+   db_set_active();

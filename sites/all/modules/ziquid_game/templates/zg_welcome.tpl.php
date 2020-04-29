@@ -121,4 +121,4 @@ else {
 <?php zg_button($button_link, 'continue', $button_extra_link); ?>
 <?php zg_speech($game_user, $d['welcome_page_' . $page . '_speech'], TRUE); ?>
 <?php
-    db_set_active();
+   db_set_active();
