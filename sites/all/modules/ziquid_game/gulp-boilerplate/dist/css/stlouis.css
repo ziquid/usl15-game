@@ -2205,7 +2205,7 @@ body.game-stlouis.landscape-orientation .landscape-overlay {
 
 /* line 31, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-slide-overlay {
-  width: calc(90% - 32px);
+  width: calc(90% - 108px);
   margin: 0 auto;
   min-height: 50%;
 }
@@ -2329,4 +2329,10 @@ body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landsc
   border: 1px solid #999;
   color: #bbb !important;
   text-shadow: 0 1px 0 #808080;
+}
+
+/* line 140, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .swiper-container, body.game-stlouis.landscape-orientation .swiper-container-rtl {
+  width: calc(100% + 108px);
+  margin: 0 -54px;
 }

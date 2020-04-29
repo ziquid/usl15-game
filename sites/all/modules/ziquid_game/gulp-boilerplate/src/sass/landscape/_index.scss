@@ -29,7 +29,7 @@
 }
 
 .landscape-slide-overlay {
-  width: calc(90% - 32px);
+  width: calc(90% - 108px);
   margin: 0 auto;
   min-height: 50%;
 }
@@ -134,6 +134,14 @@ button, .button {
     text-shadow: 0 1px 0 #808080;
   }
 
+}
+
+// Swiper stuff.
+.swiper-container, .swiper-container-rtl {
+  width: calc(100% + 108px);
+  margin: 0 -54px;
+  //padding-left: 54px;
+  //padding-right: 54px;
 }
 
 .swiper-container .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
