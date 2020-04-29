@@ -24,23 +24,34 @@
 .landscape-overlay {
   width: calc(60% - 32px);
   height: calc(100% - 120px);
+  margin: 60px auto 60px;
+  bottom: 0;
+}
+
+.landscape-slide-overlay {
+  width: calc(90% - 32px);
+  margin: 0 auto;
+  min-height: 50%;
+}
+
+.landscape-overlay, .landscape-slide-overlay {
   background-color: rgba(0, 0, 0, 0.725) !important;
   border: solid 1.5px #1ca443cc;
   border-radius: 9px 0 19px 19px;
   position: fixed;
   top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
   z-index: 13;
-  margin: 60px auto 60px;
   padding: 6px 13px 6px 23px;
 
   .overlay-title {
     text-align: center;
     font-size: 1.05rem;
     font-weight: 700;
-    font-family: "Avenir Next", Helvetica, Arial, sans-serif;
+    font-family: Georgia, "Times New Roman", times, serif;
+    text-transform: capitalize;
+    font-variant: small-caps;
     color: #f8fefdbb;
     text-decoration: none;
   }
@@ -123,4 +134,18 @@ button, .button {
     text-shadow: 0 1px 0 #808080;
   }
 
+}
+
+.swiper-container .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
+  right: -25px;
+  top: 25%;
+}
+
+.swiper-container .swiper-button-prev, .swiper-container-rtl .swiper-button-next {
+  left: -25px;
+  top: 25%;
+}
+
+.swiper-container, .swiper-container-rtl {
+  overflow: visible;
 }

@@ -66,6 +66,23 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/clan/%/%'] = [
+      'title' => 'Ziquid Game Clan Page',
+      'page callback' => 'zg_clan_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/menu/zg_clan.inc',
+    ];
+
+    $items[$game . '/clan_list/%/%'] = [
+      'title' => 'Ziquid Game Clan List Page',
+      'page callback' => 'zg_clan_list_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/dashboard/%/%'] = [
       'title' => 'Ziquid Game Dashboard',
       'page callback' => 'zg_dashboard_callback',
@@ -238,14 +255,6 @@ function zg_menu() {
   }
 
   /*
-
-  $items[$game . '/clan_list/%/%'] = [
-    'title' => 'Ziquid Game Clan List Page',
-    'page callback' => 'zg_clan_list_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
 
   $items[$game . '/clan_list_available/%'] = [
     'title' => 'Ziquid Game Available Clan List Page',
@@ -1812,6 +1821,14 @@ function zg_theme() {
       'template' => 'templates/zg_user_competencies',
       'arguments' => [
         'phone_id' => NULL,
+      ],
+    ],
+
+    'zg_clan' => [
+      'template' => 'templates/landscape/zg_clan',
+      'arguments' => [
+        'game_user' => NULL,
+        'clan_data' => [],
       ],
     ],
 
