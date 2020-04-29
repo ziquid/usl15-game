@@ -113,6 +113,20 @@
       font-family: Georgia, "Times New Roman", times, serif;
     }
   }
+
+  ul {
+    text-align: left;
+    li {
+      list-style: none;
+      font-size: 0.75rem;
+      font-weight: 400;
+      font-family: Georgia, "Times New Roman", times, serif;
+      text-transform: capitalize;
+      font-variant: small-caps;
+      color: #f8fefdbb;
+      text-decoration: none;
+    }
+  }
 }
 
 // Landscape overrides for buttons.

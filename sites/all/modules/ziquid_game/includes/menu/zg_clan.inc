@@ -67,6 +67,7 @@ function zg_clan_callback($phone_id, $clan_id) {
     $clan_data['all_clans'] = [
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
       'button' => zg_render_button('clan_list_available', 'old page'),
+      'items' => zg_get_all_clans($game_user->fkey_values_id),
     ];
   }
 
@@ -83,4 +84,50 @@ function zg_clan_callback($phone_id, $clan_id) {
   drupal_add_js($module_path . '/js/zg_clan.js', 'module',
     'footer');
   return theme('zg_clan', $game_user, $clan_data);
+}
+
+/**
+ * Fetch and render a list of all clans in a specific party.
+ *
+ * @param int $party_id
+ *   The party (values) id.
+ *
+ * @return string[]
+ *   The rendered list of clans, if any.
+ */
+function zg_get_all_clans($party_id) {
+  $items = [];
+  $sql = 'SELECT count( clan_members.id ) AS members, clans.name, clans.acronym,
+    clans.rules
+    FROM clan_members
+    LEFT JOIN clans ON clan_members.fkey_clans_id = clans.id
+    LEFT JOIN users ON clan_members.fkey_users_id = users.id
+    WHERE users.fkey_values_id = %d
+    GROUP BY clans.id
+    ORDER BY members DESC';
+
+  $result = db_query($sql, $party_id);
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+
+  foreach ($data as $item) {
+    firep($item, 'clan');
+
+    if (empty($item->rules)) {
+      $item->rules = 'No rules';
+    }
+
+    $items[] = <<< EOF
+<li class="overlay-list-item"><dt>{$item->name} ({$item->acronym}): $item->members members</dt>
+<dd>Rules: $item->rules</dd></li>
+EOF;
+  }
+
+  if (count($items)) {
+    $items[] = '</ul>';
+    array_unshift($items, '<ul>');
+  }
+
+  return $items;
 }

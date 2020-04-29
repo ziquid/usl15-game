@@ -30,6 +30,9 @@ db_set_active();
     <?php foreach ($clan_data as $data): ?>
       <div class="swiper-slide"><div class="landscape-slide-overlay">
           <div class="overlay-title"><?php print $data['title']; ?></div>
+          <?php foreach ($data['items'] as $item): ?>
+            <?php print $item; ?>
+          <?php endforeach; ?>
           <div class="overlay-tip"><?php print $data['button']; ?></div>
       </div></div>
     <?php endforeach; ?>
