@@ -63,7 +63,7 @@ function zg_clan_callback($phone_id, $clan_id) {
   }
 
   // Add list of all clans in the party if player is in a party.
-  if ($game_user->fkey_values_id) {
+  if (TRUE || $game_user->fkey_values_id) {
     $clan_data['all_clans'] = [
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
       'button' => zg_render_button('clan_list_available', 'old page'),

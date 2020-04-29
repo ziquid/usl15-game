@@ -2330,18 +2330,3 @@ body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landsc
   color: #bbb !important;
   text-shadow: 0 1px 0 #808080;
 }
-
-/* line 139, src/sass/landscape/_index.scss */
-body.game-stlouis.landscape-orientation .swiper-container .swiper-button-next, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-prev {
-  right: -25px;
-}
-
-/* line 144, src/sass/landscape/_index.scss */
-body.game-stlouis.landscape-orientation .swiper-container .swiper-button-prev, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-next {
-  left: -25px;
-}
-
-/* line 149, src/sass/landscape/_index.scss */
-body.game-stlouis.landscape-orientation .swiper-container, body.game-stlouis.landscape-orientation .swiper-container-rtl {
-  overflow: visible;
-}
