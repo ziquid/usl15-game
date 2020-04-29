@@ -30,11 +30,10 @@ $game_user = zg_fetch_user_by_id(zg_get_phoneid());
 $game_user_str = zg_render_user($game_user, 'header');
 $welcome_msg = strlen($game_user->username) ? t('Welcome back to') :
   t('Welcome to');
-db_set_active();
 
 if ($arg2 == 'facebook') {
 
-//  $phone_id = zg_get_fbid();
+  //  $phone_id = zg_get_fbid();
   // echo $phone_id;
   echo <<< EOF
 <form method=post action="/$game/home/$arg2">
@@ -56,6 +55,7 @@ EOF;
   zg_song($game_user, 'Jump welcome');
 }
 
+db_set_active();
 ?>
 
 <br>
