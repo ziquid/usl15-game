@@ -22,7 +22,7 @@
   $game_user = $fetch_user();
   $fetch_header($game_user);
   if ($game_user->meta == 'admin') {
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -116,4 +116,4 @@ echo '<div class="subsubtitle">updating record for ' . $user->username .
 
   }
 
-  db_set_active('default');
+  db_set_active();

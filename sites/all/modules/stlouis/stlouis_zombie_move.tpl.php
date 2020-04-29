@@ -87,4 +87,4 @@ EOF;
 
   }
 
-  db_set_active('default');
+  db_set_active();

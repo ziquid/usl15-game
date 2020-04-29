@@ -24,7 +24,7 @@
   $fetch_header($game_user);
 
   if (empty($game_user->username)) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/choose_name/' . $arg2);
   }
   
@@ -52,7 +52,7 @@ firep($message);
   $item = db_fetch_object($result);
 
   if ($item->fkey_clans_id != $clan_id) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/home/' . $arg2);
   }
   if (!empty($message)) {
@@ -156,4 +156,4 @@ EOF;
 
   }
 
-  db_set_active('default');
+  db_set_active();

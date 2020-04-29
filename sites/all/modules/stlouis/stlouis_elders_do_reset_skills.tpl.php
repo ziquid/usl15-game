@@ -32,7 +32,7 @@
   $skill_points = ($game_user->level * 4) + $item->bonus - 20;
 
   if ($game_user->skill_points == $skill_points) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/user/' . $arg2);
   }
 
@@ -43,5 +43,5 @@
     where id = %d;';
   $result = db_query($sql, $skill_points, $game_user->id);
 
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/user/' . $arg2);

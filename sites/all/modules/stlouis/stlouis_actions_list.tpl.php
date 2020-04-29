@@ -44,7 +44,7 @@
     src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
-    db_set_active('default');
+    db_set_active();
     return;
 
   }
@@ -52,7 +52,7 @@ EOF;
   $fetch_header($game_user);
 
   if (empty($game_user->username)) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/choose_name/' . $arg2);
   }
 
@@ -78,7 +78,7 @@ EOF;
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
 
-  db_set_active('default');
+    db_set_active();
   return;
 
   }
@@ -131,7 +131,7 @@ EOF;
   agents</a></div></div>
 EOF;
 
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -575,4 +575,4 @@ EOF;
 
   }
 
-  db_set_active('default');
+  db_set_active();

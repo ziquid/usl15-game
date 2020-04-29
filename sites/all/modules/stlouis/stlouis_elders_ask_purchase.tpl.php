@@ -39,7 +39,7 @@ $fetch_header($game_user);
 </div>
 EOF;
 
-  	db_set_active('default');
+  	db_set_active();
 
     return;
 
@@ -63,7 +63,7 @@ EOF;
 //
 //EOF;
 //
-//    db_set_active('default');
+//    db_set_active();
 //    return;
 //  }
 
@@ -83,7 +83,7 @@ if ((strpos($_SERVER['HTTP_USER_AGENT'], 'Playbook') !== FALSE )) {
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -123,7 +123,7 @@ Purchase 320 $luck for US $49.99
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -233,7 +233,7 @@ if (stripos($_SERVER['HTTP_USER_AGENT'], 'MSAppHost') !== FALSE) {
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -462,4 +462,4 @@ EOF;
 
   }
 */
-db_set_active('default');
+db_set_active();

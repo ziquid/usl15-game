@@ -19,7 +19,7 @@
 
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
-  db_set_active('default');
+    db_set_active();
 ?>
 <style>
   body {

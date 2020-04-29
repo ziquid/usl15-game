@@ -83,7 +83,7 @@ if ($password == trim($game_user->password) || password_verify($password, trim($
   zg_set_value($game_user, 'user_agent', $user_agent);
   zg_set_value($game_user, 'last_IP', $ip_addr);
 
-  db_set_active('default');
+  db_set_active();
   drupal_goto("$game/home/$arg2");
 }
 
@@ -99,4 +99,4 @@ if ($password == trim($game_user->password) || password_verify($password, trim($
 <?php print $d['authenticate']; ?>
 <?php zg_speech($game_user, $d['authenticate_speech']); ?>
 <?php
-  db_set_active('default');
+    db_set_active();

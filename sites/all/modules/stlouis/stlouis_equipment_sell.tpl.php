@@ -109,4 +109,4 @@ if (!empty($next)) {
 }
 
 echo '</div>';
-db_set_active('default');
+db_set_active();

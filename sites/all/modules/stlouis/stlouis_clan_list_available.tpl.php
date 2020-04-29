@@ -24,7 +24,7 @@
   $fetch_header($game_user);
 
   if (empty($game_user->username)) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/choose_name/' . $phone_id);
   }
 
@@ -69,5 +69,5 @@ EOF;
   }
   
   echo '</div>';
-  
-  db_set_active('default');
+
+  db_set_active();

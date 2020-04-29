@@ -44,4 +44,4 @@ zg_fetch_header($game_user);
 </div>
 
 <?php
-db_set_active('default');
+db_set_active();

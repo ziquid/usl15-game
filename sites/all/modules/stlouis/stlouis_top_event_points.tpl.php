@@ -24,7 +24,7 @@
   $fetch_header($game_user);
 
   if (empty($game_user->username)) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/choose_name/' . $arg2);
   }
 
@@ -125,5 +125,5 @@ firep($item);
 EOF;
 
   }
-  
-  db_set_active('default');
+
+  db_set_active();

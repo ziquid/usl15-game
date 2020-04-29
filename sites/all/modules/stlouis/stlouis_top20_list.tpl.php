@@ -25,7 +25,7 @@ $show_what = check_plain($_GET['what']);
 zg_alter('top20_list_show_what', $game_user, $show_what);
 
 if (empty($game_user->username)) {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
@@ -852,4 +852,4 @@ EOF;
 
 echo '</div>';
 
-db_set_active('default');
+db_set_active();

@@ -72,6 +72,6 @@ function zg_dashboard_callback($phone_id, $stat) {
   }
 
   echo drupal_json($result);
-  db_set_active('default');
+  db_set_active();
   end;
 }

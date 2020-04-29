@@ -25,7 +25,7 @@ $game_user = $fetch_user();
 
 if ($game_user->meta == 'frozen') {
   $fetch_header($game_user);
-  db_set_active('default');
+  db_set_active();
 
 ?>
 <div class="title">Frozen!</div>
@@ -51,7 +51,7 @@ if ((!$action_found) && (substr($arg2, 0, 3) != 'ai-')) {
 
   game_karma($game_user, "Trying to perform action that is not available", -20);
 
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/home/' . $arg2);
 }
 
@@ -67,7 +67,7 @@ Please select a target
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -526,4 +526,4 @@ if (substr($phone_id, 0, 3) == 'ai-') {
     " \"/>\n-->";
 }
 
-db_set_active('default');
+db_set_active();

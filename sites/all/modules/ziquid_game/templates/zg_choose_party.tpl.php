@@ -40,7 +40,7 @@ if ($party_id != 0) {
 
   // No change?  Just show stats.
   if ($party_id == $game_user->fkey_values_id) {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/user/' . $arg2);
   }
 
@@ -106,7 +106,7 @@ if ($party_id != 0) {
   // Add 24-hour waiting period on major actions.
   zg_set_timer($game_user, 'next_major_action', 86400);
 
-  db_set_active('default');
+  db_set_active();
 
   // First time choosing? Go to debates.
   if ($game_user->fkey_values_id == 0) {
@@ -175,7 +175,7 @@ $data = [];
 while ($item = db_fetch_object($result)) {
   $data[] = $item;
 }
-db_set_active('default');
+db_set_active();
 firep($data, 'values');
 
 foreach ($data as $item) {

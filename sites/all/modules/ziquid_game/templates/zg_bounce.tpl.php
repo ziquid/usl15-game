@@ -42,6 +42,7 @@ if ($arg2 == 'facebook') {
 </form>
 EOF;
 
+<<<<<<< Updated upstream
   return;
 }
 
@@ -80,3 +81,11 @@ EOF;
 <a class="version" href="/<?php print $game; ?>/changelog/<?php print $arg2; ?>">
   <?php print $version; ?>
 </a>
+=======
+  db_set_active();
+  return;
+}
+
+db_set_active();
+drupal_goto($game . '/home/' . $arg2);
+>>>>>>> Stashed changes

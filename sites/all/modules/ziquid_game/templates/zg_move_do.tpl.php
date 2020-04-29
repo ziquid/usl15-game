@@ -47,7 +47,7 @@ EOF;
     echo "<!--\n<ai \"move-failed already-there\"/>\n-->";
   }
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -72,7 +72,7 @@ if ($neighborhood_id > 0) {
       echo "<!--\n<ai \"move-failed no-action\"/>\n-->";
     }
 
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -262,4 +262,4 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"move-succeeded\"/>\n-->";
 }
 
-db_set_active('default');
+db_set_active();

@@ -22,7 +22,7 @@ include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 
 if (empty($game_user->username)) {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
@@ -57,7 +57,7 @@ EOF;
 
   game_karma($game_user, "No elections in current hood", -25);
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -158,7 +158,7 @@ EOF;
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed no-challenge-yourself\"/>\n-->";
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -178,7 +178,7 @@ if ($game_user->actions < $item->energy_bonus) {
   if (substr($phone_id, 0, 3) == 'ai-')
     echo "<!--\n<ai \"election-failed no-action\"/>\n-->";
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -388,7 +388,7 @@ firep('10000 extra voters spontaneously arrive to vote for you!');
     echo '<div class="election-continue"><a href="/' . $game . '/elections/' .
       $arg2 . '">' . t('Continue') . '</a></div>';
 
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -1081,4 +1081,4 @@ for ($c = 0 ; $c < $total_polls ; $c++) {
 
 }
 
-db_set_active('default');
+db_set_active();

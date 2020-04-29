@@ -43,7 +43,7 @@
 </div>
 EOF;
 
-    db_set_active('default');
+    db_set_active();
 
     return;
 
@@ -53,7 +53,7 @@ EOF;
 
     // No change?  Just show stats.
     if ($referral_code == $game_user->referral_code) {
-      db_set_active('default');
+      db_set_active();
       drupal_goto($game . '/user/' . $arg2);
     }
     
@@ -96,7 +96,7 @@ EOF;
 </div>
 EOF;
 
-      db_set_active('default');
+      db_set_active();
 
       return;
 
@@ -154,7 +154,7 @@ firep($mentor);
 </div>
 EOF;
 
-      db_set_active('default');
+      db_set_active();
       return;
     }
 
@@ -214,7 +214,7 @@ EOF;
       'message back.';
     $result = db_query($sql, $mentor->id, $game_user->id, $message);
 
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -235,4 +235,4 @@ EOF;
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
