@@ -11,13 +11,6 @@
 function stlouis_menu() {
 
   $items = [];
-  $items['stlouis/clan_list/%/%'] = [
-    'title' => 'St. Louis Clan List Page',
-    'page callback' => 'stlouis_clan_list_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
 
   $items['stlouis/clan_list_available/%'] = [
     'title' => 'St. Louis Available Clan List Page',
@@ -324,27 +317,6 @@ function stlouis_menu() {
   ];
 
   return $items;
-}
-
-/**
- * Clan list callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $clan_id
- *   The clan ID to check.
- *
- * @return mixed|string|string[]|void|null
- *   The clan list page HTML, or access denied if the player has no access.
- */
-function stlouis_clan_list_callback($phone_id, $clan_id) {
-
-  if (empty($phone_id) || !is_numeric($clan_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_clan_list', $phone_id, $clan_id);
-
 }
 
 /**
@@ -1127,14 +1099,6 @@ function stlouis_theme() {
 
   // Theme "A" uses template "B" with args "C".
   return [
-
-    'stlouis_clan_list' => [
-      'template' => 'stlouis_clan_list',
-      'arguments' => [
-        'phone_id' => NULL,
-        'clan_id' => NULL,
-      ],
-    ],
 
     'stlouis_clan_list_available' => [
       'template' => 'stlouis_clan_list_available',

@@ -66,6 +66,23 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/clan/%/%'] = [
+      'title' => 'Ziquid Game Clan Page',
+      'page callback' => 'zg_clan_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+      'file' => 'includes/menu/zg_clan.inc',
+    ];
+
+    $items[$game . '/clan_list/%/%'] = [
+      'title' => 'Ziquid Game Clan List Page',
+      'page callback' => 'zg_clan_list_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/dashboard/%/%'] = [
       'title' => 'Ziquid Game Dashboard',
       'page callback' => 'zg_dashboard_callback',
@@ -238,14 +255,6 @@ function zg_menu() {
   }
 
   /*
-
-  $items[$game . '/clan_list/%/%'] = [
-    'title' => 'Ziquid Game Clan List Page',
-    'page callback' => 'zg_clan_list_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
 
   $items[$game . '/clan_list_available/%'] = [
     'title' => 'Ziquid Game Available Clan List Page',
@@ -1638,7 +1647,7 @@ function zg_bounce_callback($phone_id) {
 }
 
 /**
- * Esa bounce callback function.
+ * Usl_Esa bounce callback function.
  *
  * @param string $phone_id
  *   The phone ID of the player.
@@ -1652,14 +1661,20 @@ function usl_esa_bounce_callback($phone_id) {
     return drupal_access_denied();
   }
 
-  global $game, $phone_id;
-
   $game = 'stlouis';
-  $phone_id = zg_get_phoneid();
-  $arg2 = check_plain(arg(2));
-  $game_user = new \stdClass();
-  zg_song($game_user, 'In the air tonight teaser', TRUE);
-  return theme('usl_esa_bounce', $game, $phone_id, $arg2);
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  db_set_active();
+  zg_song($game_user, 'Jump teaser', TRUE);
+
+  if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
+    $button = zg_render_button('/stlouis/bounce') .
+      "<p class='center'>(if you dare)</p>";
+  }
+  else {
+    $button = '';
+  }
+  return theme('usl_esa_bounce', $button);
 }
 
 /**
@@ -1806,6 +1821,14 @@ function zg_theme() {
       'template' => 'templates/zg_user_competencies',
       'arguments' => [
         'phone_id' => NULL,
+      ],
+    ],
+
+    'zg_clan' => [
+      'template' => 'templates/landscape/zg_clan',
+      'arguments' => [
+        'game_user' => NULL,
+        'clan_data' => [],
       ],
     ],
 
@@ -2197,16 +2220,7 @@ function zg_theme() {
     'usl_esa_bounce' => [
       'template' => 'templates/usl_esa_bounce',
       'arguments' => [
-        'game' => NULL,
-        'phone_id' => NULL,
-        'arg2' => NULL,
-      ],
-    ],
-
-    'zg_bounce_040' => [
-      'template' => 'templates/zg_bounce_040',
-      'arguments' => [
-        'phone_id' => NULL,
+        'button' => '',
       ],
     ],
 
