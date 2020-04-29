@@ -2358,11 +2358,11 @@ function zg_render_user_header(&$user) {
   $user->display->clan_acronym = '';
   if (empty($user->clan_acronym)) {
     $user->display->clan = t('No Clan');
-    $clan_link = "clan_list_available/$arg2";
+    $clan_link = "clan/$arg2/0";
   }
   else {
     $user->display->clan = "Clan: $user->clan_name ($user->clan_acronym)";
-    $clan_link = "clan_list/$arg2/{$user->fkey_clans_id}";
+    $clan_link = "clan/$arg2/{$user->fkey_clans_id}";
   }
 
   if ($user->is_clan_leader) {

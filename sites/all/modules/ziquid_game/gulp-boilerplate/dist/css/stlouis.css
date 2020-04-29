@@ -2334,13 +2334,11 @@ body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landsc
 /* line 139, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-next, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-prev {
   right: -25px;
-  top: 25%;
 }
 
 /* line 144, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-prev, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-next {
   left: -25px;
-  top: 25%;
 }
 
 /* line 149, src/sass/landscape/_index.scss */

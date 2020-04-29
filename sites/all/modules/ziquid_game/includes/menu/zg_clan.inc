@@ -47,25 +47,37 @@ function zg_clan_callback($phone_id, $clan_id) {
   include $module_path . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
 
-  // FIXME: fetch clan data here.
-  $clan_data = [
-    'messages' => [
-      'title' => t('@clan clan messages', ['@clan' => $game_user->clan_name]),
+  // Fetch clan data here.
+  $clan_data = [];
+  if ($clan_id > 0) {
+    $clan_data['messages'] = [
+      'title' => t('@clan (@tla) clan messages',
+        ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_msg', 'old page', '/90'),
-    ],
-    'announcements' => [
-      'title' => t('@clan clan announcements', ['@clan' => $game_user->clan_name]),
+    ];
+    $clan_data['announcements'] = [
+      'title' => t('@clan (@tla) clan announcements',
+        ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_announcements', 'old page', '/90'),
-    ],
-    'other_clans' => [
-      'title' => t('other clans', ['@clan' => $game_user->clan_name]),
+    ];
+  }
+
+  // Add list of all clans in the party if player is in a party.
+  if ($game_user->fkey_values_id) {
+    $clan_data['all_clans'] = [
+      'title' => t('all @party clans', ['@party' => $game_user->party_title]),
       'button' => zg_render_button('clan_list_available', 'old page'),
-    ],
-    'members' => [
-      'title' => t('@clan clan members', ['@clan' => $game_user->clan_name]),
+    ];
+  }
+
+  // In a clan?  Show the member list.
+  if ($clan_id > 0) {
+    $clan_data['members'] = [
+      'title' => t('@clan (@tla) clan members',
+        ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_list', 'old page', '/90'),
-    ],
-  ];
+    ];
+  }
 
   db_set_active();
   drupal_add_js($module_path . '/js/zg_clan.js', 'module',
