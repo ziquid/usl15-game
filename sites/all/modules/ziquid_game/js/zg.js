@@ -53,8 +53,8 @@ Drupal.behaviors.zg = function (context) {
 
   // Menu button.
   $('#menu-button-1').click(function () {
-    let xPos = self.pageXOffset;
-    let yPos = self.pageYOffset;
+    var xPos = self.pageXOffset;
+    var yPos = self.pageYOffset;
     if (xPos + yPos) {
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     }
