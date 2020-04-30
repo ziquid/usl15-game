@@ -24,14 +24,6 @@ include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 zg_fetch_header($game_user);
 
-<<<<<<< Updated upstream
-=======
-if (empty($game_user->username)) {
-  db_set_active();
-  drupal_goto($game . '/choose_name/' . $arg2);
-}
-
->>>>>>> Stashed changes
 if (substr($phone_id, 0, 3) == 'ai-') {
 
   // Useful for freshening stats.
