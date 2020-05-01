@@ -33,8 +33,9 @@
 
 #stats {
   display: none;
+  left: initial;
 
-  &.landscape-overlay {
+  .landscape-overlay {
     background-color: #8008;
     border-color: #b42f43cc;
     .overlay-panel-3x2 {

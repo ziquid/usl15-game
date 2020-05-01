@@ -79,6 +79,18 @@ Drupal.behaviors.zg = function (context) {
     $('.people-button').toggle(200, 'swing');
   });
 
+  // Tap to close.
+  $('.tap-to-close').click(function () {
+    console.log('tap to close!');
+    $(this).hide(200, 'swing');
+  });
+
+  // Don't tap to close.
+  $('.landscape-overlay').click(function (e) {
+    console.log('landscape overlay!');
+    e.stopPropagation();
+  });
+
   jQuery(".fit-box").each(function () {
     var innerWidth = $(this).innerWidth();
     var scrollWidth = $(this)[0].scrollWidth;

@@ -2381,8 +2381,8 @@ function zg_render_user_header(&$user) {
   $user->display->level_num = $level_a1 . $user->level . $level_a2;
   $user->display->level = t('Level: ') . $user->display->level_num;
 
-  $user->display->username = $user->ep_name .
-    '<a class="player_username" href="/' . $game . '/user/' . $arg2 .
+  $user->display->username = '<span class="player_seat">' . $user->ep_name . '</span>' .
+    ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
     '">' . $user->username . '</a>';
 
   $user->display->user = '<div>' . $user->display->username . '</div><div>' .
