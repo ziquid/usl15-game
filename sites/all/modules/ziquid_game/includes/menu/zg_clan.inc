@@ -68,7 +68,7 @@ function zg_clan_callback($phone_id, $clan_id) {
   if (TRUE || $game_user->fkey_values_id) {
     $clan_data['all_clans'] = [
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
-      'button' => zg_render_button('clan_list_available', 'old page'),
+//      'button' => zg_render_button('clan_list_available', 'old page'),
       'items' => zg_get_all_clans($game_user->fkey_values_id),
     ];
   }
