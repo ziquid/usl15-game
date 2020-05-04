@@ -22,7 +22,7 @@ include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
 
 if (empty($game_user->username)) {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
@@ -40,7 +40,7 @@ if (strlen($message) < 3) {
     $arg2 . '?message=' . $message_orig . '">' .
     t('Try again') . '</a></div>';
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -52,7 +52,7 @@ if (substr($message, 0, 3) == 'XXX') {
     $arg2 . '?message=' . $message_orig . '">' .
     t('Try again') . '</a></div>';
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -84,8 +84,8 @@ if (!empty($message)) {
 
   }
 
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/home/' . $arg2);
 }
 
-db_set_active('default');
+db_set_active();

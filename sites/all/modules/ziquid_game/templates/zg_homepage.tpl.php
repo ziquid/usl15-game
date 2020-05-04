@@ -103,7 +103,7 @@ $player_values = drupal_strtolower($game_user->values);
 // AI bot?  No reason to spend cycles on this.
 if (substr($phone_id, 0, 3) == 'ai-') {
   zg_fetch_header($game_user);
-  db_set_active('default');
+  db_set_active();
   return;
 }
 

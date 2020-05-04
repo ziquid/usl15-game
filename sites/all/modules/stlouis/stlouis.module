@@ -368,7 +368,7 @@ function stlouis_cron() {
     }
   }
 
-  db_set_active('default');
+  db_set_active();
 }
 
 function _stlouis_filter_profanity($message) {
@@ -592,7 +592,7 @@ function _stlouis_check_authKey($game_user) {
 
     // Uhoh!  Wrong authKey!
     if ($game_user->authKey != $authKey) {
-      db_set_active('default');
+      db_set_active();
       drupal_goto(arg(0) . '/error/' . arg(2) . '/E-1017');
     }
 
@@ -600,7 +600,7 @@ function _stlouis_check_authKey($game_user) {
   else {
 
     // Otherwise, client doesn't have an authkey... someone is hacking!
-    db_set_active('default');
+    db_set_active();
     drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0922');
   }
 }

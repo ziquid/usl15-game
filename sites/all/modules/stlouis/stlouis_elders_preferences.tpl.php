@@ -54,4 +54,4 @@ EOF;
     _stlouis_set_value($game_user->id, 'ask_before_refilling_luck', $ask_luck_refill);
   }
 
-  db_set_active('default');
+  db_set_active();

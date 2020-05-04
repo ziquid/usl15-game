@@ -42,7 +42,7 @@ Sorry!&nbsp; No $luck today!
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
 
   return;
 
@@ -75,7 +75,7 @@ switch ($fill_type) {
         </a>
       </div>';
 
-      db_set_active('default');
+      db_set_active();
       return;
 
     }
@@ -95,7 +95,7 @@ switch ($fill_type) {
         </div>
       </div>';
       zg_button('elders_ask_purchase', t('Purchase more @luck', ['@luck' => $luck]));
-      db_set_active('default');
+      db_set_active();
       return;
     }
 
@@ -128,7 +128,7 @@ switch ($fill_type) {
         </div>
       </div>';
       zg_button('elders_ask_purchase', t('Purchase more @luck', ['@luck' => $luck]));
-      db_set_active('default');
+      db_set_active();
       return;
     }
 
@@ -161,7 +161,7 @@ switch ($fill_type) {
         '">Purchase more ' . $luck . '</div></div>';
       // FIXME replace with zg_luck().
       db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
-      db_set_active('default');
+      db_set_active();
       return;
     }
 
@@ -176,5 +176,5 @@ switch ($fill_type) {
 
 }
 
-db_set_active('default');
+db_set_active();
 drupal_goto($game . '/user/' . $arg2);

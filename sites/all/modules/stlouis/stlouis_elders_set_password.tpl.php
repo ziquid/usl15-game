@@ -46,7 +46,7 @@ if ($game_user->level < 6) {
 </div>
 EOF;
 
-db_set_active('default');
+ db_set_active();
 return;
 
 }
@@ -88,7 +88,7 @@ if ($password != '') {
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 else {
@@ -127,4 +127,4 @@ EOF;
 
 }
 
-db_set_active('default');
+db_set_active();

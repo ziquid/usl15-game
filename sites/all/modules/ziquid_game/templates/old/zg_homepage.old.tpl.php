@@ -130,7 +130,7 @@ zg_fetch_header($game_user);
 
 // AI bot?  No reason to spend cycles on this.
 if (substr($phone_id, 0, 3) == 'ai-') {
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -606,4 +606,4 @@ $("#news-mayor").addClass("active");
 <!--  <div id="personal-text">-->
 EOF;
 
-db_set_active('default');
+db_set_active();

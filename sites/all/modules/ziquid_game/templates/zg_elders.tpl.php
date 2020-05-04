@@ -34,7 +34,7 @@ if (substr($phone_id, 0, 3) == 'ai-') {
 
   // Useful for freshening stats.
   echo "<!--\n<ai \"elders\"/>\n-->";
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -176,7 +176,7 @@ if (zg_get_value($game_user, 'RockThisTown', FALSE)) {
     'big-80 slide-in-content halflight');
 }
 
-db_set_active('default');
+db_set_active();
 
 /* ------ VIEW ------ */
 

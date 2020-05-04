@@ -147,12 +147,12 @@ function zg_elders_do_reset_callback($phone_id) {
       WHERE id = %d;";
     db_query($sql, $d['initial_hood'], $d['initial_user_value'],
       $luck_in_sql, $game_user->id);
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/welcome/' . $arg2, 'type=reset');
 
   }
   else {
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/elders_ask_reset/' . $arg2, 'msg=error');
   }
 }

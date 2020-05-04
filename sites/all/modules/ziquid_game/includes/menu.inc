@@ -1562,7 +1562,7 @@ function zg_msg_count_callback($phone_id, $msg_id) {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user_id = zg_get_userid_from_phoneid($phone_id);
   $count = zg_get_new_user_message_count($game_user_id, (int) $msg_id);
-  db_set_active('default');
+  db_set_active();
   echo $count;
 }
 

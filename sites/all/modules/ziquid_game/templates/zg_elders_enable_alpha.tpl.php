@@ -56,7 +56,7 @@ else {
 
 /* ------ VIEW ------ */
 zg_fetch_header($game_user);
-db_set_active('default');
+db_set_active();
 ?>
 <?php print $code_response; ?>
 <div class="title">

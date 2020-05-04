@@ -45,7 +45,7 @@ function game_move_ai() {
     return;
   }
 
-  db_set_active('default');
+  db_set_active();
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
@@ -88,7 +88,7 @@ function game_move_ai() {
     zg_slack('bots', $ai_output);
   }
 
-  db_set_active('default');
+  db_set_active();
   lock_release('ai_move');
   db_set_active('game_' . $game);
 }
@@ -120,7 +120,7 @@ function game_ai_out($output) {
   // Too long -- kill script.
   if (strlen($ai_output) > 25000) {
     // mail('joseph@ziquid.com', 'ai output too long!', $ai_output);.
-    db_set_active('default');
+    db_set_active();
     return;
   }
 

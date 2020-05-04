@@ -24,7 +24,7 @@ $game_user = zg_fetch_user();
 $q = $_GET['q'];
 
 if (empty($game_user->username)) {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
@@ -67,7 +67,7 @@ if ($item->id == $game_user->id) {
     echo "<!--\n<ai \"debate-lost\"/>\n-->";
   }
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -85,7 +85,7 @@ if ($game_user->actions == 0) {
     echo "<!--\n<ai \"debate-no-action\"/>\n-->";
   }
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -107,7 +107,7 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
     echo "<!--\n<ai \"debate-must-wait\"/>\n-->";
   }
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -125,7 +125,7 @@ if (($item->meta != 'zombie' && $item->meta != 'debatebot' &&
   echo '<div class="election-continue"><a href="/' . $game . '/debates/' .
     $arg2 . '">' . t('Continue') . '</a></div>';
 
-  db_set_active('default');
+  db_set_active();
   return;
 
 }*/
@@ -753,4 +753,4 @@ EOF;
 
 zg_button('debates');
 echo '<div>&nbsp;</div>';
-db_set_active('default');
+db_set_active();

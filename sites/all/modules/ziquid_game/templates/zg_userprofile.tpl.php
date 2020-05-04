@@ -26,7 +26,7 @@ $q = $_GET['q'];
 $message_error = '';
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 

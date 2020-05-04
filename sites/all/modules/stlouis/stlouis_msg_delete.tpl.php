@@ -32,7 +32,7 @@ $msg = db_fetch_object($result);
 if ($msg->fkey_users_to_id != $game_user->id && $msg->fkey_users_from_id != $game_user->id) {
 
   // FIXME jwc 10Apr2014 -- deduct karma.
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/home/' . $arg2);
 }
 
@@ -41,5 +41,5 @@ game_competency_gain($game_user, 'pruner');
 $sql = 'delete from user_messages where id = %d;';
 db_query($sql, $msg_id);
 
-db_set_active('default');
+db_set_active();
 drupal_goto($game . '/user/' . $arg2);

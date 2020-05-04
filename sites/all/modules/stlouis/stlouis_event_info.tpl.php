@@ -161,4 +161,4 @@ and cannot tag nor perform any actions until you are unfrozen by a teammate.
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();

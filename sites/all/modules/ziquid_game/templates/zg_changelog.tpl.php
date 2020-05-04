@@ -22,7 +22,7 @@ global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 zg_fetch_header($game_user);
-db_set_active('default');
+db_set_active();
 
 ?>
 <div class="news">

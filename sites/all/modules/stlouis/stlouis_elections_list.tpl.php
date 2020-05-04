@@ -29,7 +29,7 @@ if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 
 }
 
 if (empty($game_user->username)) {
-  db_set_active('default');
+  db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
@@ -68,7 +68,7 @@ Why worry about elections here?</div>
 </div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -303,7 +303,7 @@ $last_group = $item->ep_group;
 
 }
 
-db_set_active('default');
+db_set_active();
 
 ?>
 </div>

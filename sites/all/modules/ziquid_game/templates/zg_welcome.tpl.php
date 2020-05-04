@@ -48,7 +48,7 @@ if ((substr($arg2, 0, 3) != 'ai-') && $ip_address != '127.0.0.1') {
     $result = db_query($sql, $ip_address);
     $ips = db_fetch_object($result);
     if (empty($ips)) {
-      db_set_active('default');
+      db_set_active();
       drupal_goto($game . '/error/' . $arg2 . '/E-2242');
     }
   }
@@ -121,4 +121,4 @@ else {
 <?php zg_button($button_link, 'continue', $button_extra_link); ?>
 <?php zg_speech($game_user, $d['welcome_page_' . $page . '_speech'], TRUE); ?>
 <?php
-  db_set_active('default');
+   db_set_active();

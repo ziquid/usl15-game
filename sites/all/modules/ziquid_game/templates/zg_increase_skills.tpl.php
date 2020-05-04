@@ -277,4 +277,4 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   echo "<!--\n<ai \"$ai_output\"/>\n-->";
 }
 
-db_set_active('default');
+db_set_active();

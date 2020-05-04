@@ -35,7 +35,7 @@ if ($neighborhood_id == $game_user->fkey_neighborhoods_id &&
 EOF;
 
   zg_button('move', 'Let me choose again', '/0', 'big-68');
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -55,7 +55,7 @@ EOF;
 
     zg_button('home', 'Go to the home page', '', 'big-68');
     zg_button('move', 'Let me choose again', '/0', 'big-68');
-    db_set_active('default');
+    db_set_active();
     return;
   }
 
@@ -68,7 +68,7 @@ EOF;
   zg_button('move_do', 'Yes, I want to go', "/$neighborhood_id",
     'big-68');
   zg_button('move', 'No, let me choose again', '/0', 'big-68');
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -337,4 +337,4 @@ document.getElementById('map_bottom_back_click').onclick = function() {
 </script>
 EOF;
 
-db_set_active('default');
+db_set_active();

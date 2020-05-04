@@ -56,7 +56,7 @@ href="/$game/quests/$arg2"><img
 src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
-  db_set_active('default');
+  db_set_active();
   return;
 }
 
@@ -157,7 +157,7 @@ EOF;
 
   $happy = strlen($msgUserDuplicate) ? 'sad' : 'happy';
 
-  db_set_active('default');
+  db_set_active();
 
   /* ------ VIEW ------ */
   ?>

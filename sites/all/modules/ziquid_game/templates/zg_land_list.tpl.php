@@ -48,6 +48,6 @@ if (!empty($next)) {
   zg_show_land($game_user, $next, ['soon' => TRUE]);
 }
 
-db_set_active('default');
+db_set_active();
 ?>
 </div>

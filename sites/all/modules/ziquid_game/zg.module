@@ -353,7 +353,7 @@ function zg_cron() {
       }
     }
   }
-  db_set_active('default');
+  db_set_active();
 }
 
 /**
@@ -710,14 +710,14 @@ function zg_check_authKey($game_user) {
 
     // Uhoh!  Wrong authKey!
     if ($game_user->authKey != $authKey) {
-      db_set_active('default');
+      db_set_active();
       drupal_goto(arg(0) . '/error/' . arg(2) . '/E-1017');
     }
 
   }
   else {
     // Otherwise, client doesn't have an authkey... someone is hacking!
-    db_set_active('default');
+    db_set_active();
     drupal_goto(arg(0) . '/error/' . arg(2) . '/E-0922');
   }
 }
@@ -846,7 +846,7 @@ function zg_fetch_user($force = FALSE) {
     ($user->roles[4] != 'web game access')) {
 
       // Ai access from a different host.
-      db_set_active('default');
+      db_set_active();
       drupal_goto(arg(0) . '/error/' . $arg2 . '/E-4713');
     }
   }
@@ -869,7 +869,7 @@ function zg_fetch_user($force = FALSE) {
     $blocked_user->phone_id == $phone_id) {
 
     // Banned by phone ID.
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/error/' . $arg2 . '/E-0467');
   }
 
@@ -883,7 +883,7 @@ function zg_fetch_user($force = FALSE) {
   if (!empty($blocked_ip)) {
 
     // Banned by IP.
-    db_set_active('default');
+    db_set_active();
     drupal_goto($game . '/error/' . $arg2 . '/E-0468');
   }
 
