@@ -261,7 +261,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="clan-menu" href="/$game/$clan_link">
+        <a class="clan-menu portrait-only" href="/$game/$clan_link">
           {$game_text['menu']['clan']}
         </a>
       </li>

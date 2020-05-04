@@ -53,8 +53,8 @@ Drupal.behaviors.zg = function (context) {
 
   // Menu button.
   $('#menu-button-1').click(function () {
-    let xPos = self.pageXOffset;
-    let yPos = self.pageYOffset;
+    var xPos = self.pageXOffset;
+    var yPos = self.pageYOffset;
     if (xPos + yPos) {
       window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
     }
@@ -77,6 +77,18 @@ Drupal.behaviors.zg = function (context) {
   // People toggle.
   $('#people-toggle').click(function () {
     $('.people-button').toggle(200, 'swing');
+  });
+
+  // Tap to close.
+  $('.tap-to-close').click(function () {
+    console.log('tap to close!');
+    $(this).hide(200, 'swing');
+  });
+
+  // Don't tap to close.
+  $('.landscape-overlay').click(function (e) {
+    console.log('landscape overlay!');
+    e.stopPropagation();
   });
 
   jQuery(".fit-box").each(function () {

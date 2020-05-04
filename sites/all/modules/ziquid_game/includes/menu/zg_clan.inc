@@ -53,12 +53,14 @@ function zg_clan_callback($phone_id, $clan_id) {
     $clan_data['messages'] = [
       'title' => t('@clan (@tla) clan messages',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_msg', 'old page', '/90'),
+      'button' => zg_render_button('clan_msg', 'old page',
+        '/' . $game_user->fkey_clans_id),
     ];
     $clan_data['announcements'] = [
       'title' => t('@clan (@tla) clan announcements',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_announcements', 'old page', '/90'),
+      'button' => zg_render_button('clan_announcements', 'old page',
+        '/' . $game_user->fkey_clans_id),
     ];
   }
 
@@ -66,7 +68,7 @@ function zg_clan_callback($phone_id, $clan_id) {
   if (TRUE || $game_user->fkey_values_id) {
     $clan_data['all_clans'] = [
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
-      'button' => zg_render_button('clan_list_available', 'old page'),
+//      'button' => zg_render_button('clan_list_available', 'old page'),
       'items' => zg_get_all_clans($game_user->fkey_values_id),
     ];
   }
@@ -76,7 +78,8 @@ function zg_clan_callback($phone_id, $clan_id) {
     $clan_data['members'] = [
       'title' => t('@clan (@tla) clan members',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_list', 'old page', '/90'),
+      'button' => zg_render_button('clan_list', 'old page',
+        '/' . $game_user->fkey_clans_id),
     ];
   }
 
