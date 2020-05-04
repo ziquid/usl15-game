@@ -1,5 +1,4 @@
 @import 'button';
-@import 'header';
 @import 'slidein';
 
 &::after {
@@ -1080,6 +1079,17 @@ span.not-yet-overlay {
   letter-spacing: 5px;
   text-shadow: 0 0.9px 0 beige;
   font-size: 0.6875rem;
+  margin-bottom: 4px;
+}
+
+.bounce-welcome {
+  text-align: center;
+  color: #687;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 5px;
+  text-shadow: 0 0.9px 0 beige;
+  font-size: 1.375rem;
   margin-bottom: 4px;
 }
 

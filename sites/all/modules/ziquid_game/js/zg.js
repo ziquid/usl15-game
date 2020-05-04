@@ -51,6 +51,46 @@ Drupal.behaviors.zg = function (context) {
     // $('.background-color').css('background-color', 'rgb(' + red + ', ' + green + ', ' + blue + ')');
   }
 
+  // Menu button.
+  $('#menu-button-1').click(function () {
+    var xPos = self.pageXOffset;
+    var yPos = self.pageYOffset;
+    if (xPos + yPos) {
+      window.scrollTo({top: 0, left: 0, behavior: 'smooth'});
+    }
+    else {
+      window.location.href = $(this).attr('data-home-link');
+    }
+  });
+
+  // Menu toggle.
+  $('#menu-toggle').click(function () {
+    $('.menu-button').toggle(200, 'swing');
+  });
+
+  // Stats toggle.
+  $('#stats-toggle').click(function () {
+    $('#stats').toggle(200, 'swing');
+    $('.stats-button').toggle(200, 'swing');
+  });
+
+  // People toggle.
+  $('#people-toggle').click(function () {
+    $('.people-button').toggle(200, 'swing');
+  });
+
+  // Tap to close.
+  $('.tap-to-close').click(function () {
+    console.log('tap to close!');
+    $(this).hide(200, 'swing');
+  });
+
+  // Don't tap to close.
+  $('.landscape-overlay').click(function (e) {
+    console.log('landscape overlay!');
+    e.stopPropagation();
+  });
+
   jQuery(".fit-box").each(function () {
     var innerWidth = $(this).innerWidth();
     var scrollWidth = $(this)[0].scrollWidth;

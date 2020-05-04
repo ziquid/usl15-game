@@ -138,7 +138,8 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
  *   Force the game client to play the song even if user has not opted in.
  */
 function zg_song(\stdClass $game_user, $song, $force = FALSE) {
-  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() . '/sounds/' . $song . ' micro.mp3';
+  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+    '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
   zg_sound($game_user, $sound_file, $force);
 }
@@ -924,6 +925,40 @@ function zg_get_userid_from_phoneid($phone_id) {
     return db_fetch_object($result);
   }
   return NULL;
+}
+
+/**
+ * Get the phone ID from the environment.
+ *
+ * @return false|string
+ *   The phone ID, if any.
+ */
+function zg_get_phoneid() {
+
+  $arg2 = arg(2);
+  if ((substr($arg2, 0, 3) == 'fb=') || $arg2 == '') {
+    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . $arg2,
+      'Referrer is ' . $_SERVER['HTTP_REFERER']);
+    echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . $arg2 .
+      ' from <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
+      $_SERVER['HTTP_REFERER'] . '</a>';
+    exit;
+  }
+
+  if ($arg2 == 'facebook') {
+    return zg_get_fbid();
+  }
+  elseif ($arg2 === 'null') {
+    drupal_goto('stlouis/playbook_null');
+  }
+  elseif (substr($arg2, 0, 3) === 'ms=') {
+    return zg_get_msid();
+  }
+  elseif (substr($arg2, 0, 10) == 'landscape:') {
+    return check_plain(substr($arg2, 10));
+  }
+
+  return check_plain($arg2);
 }
 
 /**
@@ -2196,6 +2231,44 @@ EOF;
 
 }
 
+function zg_short_format_int($num) {
+  $num = floor($num);
+  if ($num < 1000) {
+    return (string) $num;
+  }
+  if ($num < 10000) {
+    $num = floor($num / 100);
+    return number_format($num / 10, 1) . 'K';
+  }
+  if ($num < 1000000) {
+    $num = floor($num / 1000);
+    return number_format($num, 0) . 'K';
+  }
+  if ($num < 10000000) {
+    $num = floor($num / 100000);
+    return number_format($num / 10, 1) . 'M';
+  }
+  if ($num < 1000000000) {
+    $num = floor($num / 1000000);
+    return number_format($num, 0) . 'M';
+  }
+  if ($num < 10000000000) {
+    $num = floor($num / 100000000);
+    return number_format($num / 10, 1) . 'B';
+  }
+  if ($num < 1000000000000) {
+    $num = floor($num / 1000000000);
+    return number_format($num, 0) . 'B';
+  }
+  if ($num < 10000000000000) {
+    $num = floor($num / 100000000000);
+    return number_format($num / 10, 1) . 'T';
+  }
+  if ($num < 1000000000000000) {
+    $num = floor($num / 1000000000000);
+    return number_format($num, 0) . 'T';
+  }
+}
 /**
  * Format items in a message for display.
  *
@@ -2231,11 +2304,26 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
  *
  * @param object $user
  *   The user object.
+ * @param string $type
+ *   The rendering type.  Defaults to html.
  *
  * @return string
  *   The html rendering of the user object.
  */
-function zg_render_user(&$user) {
+function zg_render_user(&$user, $type = 'html') {
+  return call_user_func('zg_render_user_' . $type, $user);
+}
+
+/**
+ * Render a user as html.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The html rendering of the user object.
+ */
+function zg_render_user_html(&$user) {
   $user->display->clan_acronym = '';
   if (!empty($user->clan_acronym)) {
     $user->display->clan_acronym = "($user->clan_acronym)";
@@ -2251,4 +2339,56 @@ function zg_render_user(&$user) {
     $user->display->class . '">' . $user->username . '</span> ' .
     $user->display->clan_acronym;
   return $user->display->username;
+}
+
+/**
+ * Render a user as header.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The html rendering of the user object.
+ */
+function zg_render_user_header(&$user) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
+  $phone_id = zg_get_phoneid();
+
+  $user->display->clan_acronym = '';
+  if (empty($user->clan_acronym)) {
+    $user->display->clan = t('No Clan');
+    $clan_link = "clan/$arg2/0";
+  }
+  else {
+    $user->display->clan = "Clan: $user->clan_name ($user->clan_acronym)";
+    $clan_link = "clan/$arg2/{$user->fkey_clans_id}";
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan .= '*';
+  }
+
+  $user->display->party = "Party: $user->party_title";
+
+  $level = $user->level;
+  $level_a1 = $level_a2 = $user->display->level_tip = '';
+  if ($user->skill_points && $phone_id === $user->phone_id) {
+    $level_a1 = '<a href="/' . $game . '/increase_skills/' . $arg2 . '/none">';
+    $level_a2 = '</a>';
+    $user->display->level_tip = t('Tap to assign skill points');
+  }
+  $user->display->level_num = $level_a1 . $user->level . $level_a2;
+  $user->display->level = t('Level: ') . $user->display->level_num;
+
+  $user->display->username = '<span class="player_seat">' . $user->ep_name . '</span>' .
+    ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
+    '">' . $user->username . '</a>';
+
+  $user->display->user = '<div>' . $user->display->username . '</div><div>' .
+    '<span class="player_level">' . $user->display->level . '</span>' .
+    '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
+    '<span class="player_party">' . $user->display->party . '</span></div>';
+//   . '<pre>' . print_r($user, TRUE) . '</pre>';
+  return $user->display->user;
 }

@@ -168,10 +168,10 @@ zg_fetch_header($game_user);
 db_set_active();
 
 echo <<< EOF
-<div class="title">
+<div class="title portrait-only">
   <img src="/sites/default/files/images/{$game}_title.png">
 </div>
-<div class="tagline">
+<div class="tagline portrait-only">
   {$d['tagline']}
 </div>
 <a class="version" href="/$game/changelog/$arg2">
@@ -261,7 +261,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="clan-menu" href="/$game/$clan_link">
+        <a class="clan-menu portrait-only" href="/$game/$clan_link">
           {$game_text['menu']['clan']}
         </a>
       </li>
@@ -273,7 +273,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="elders-menu" href="/$game/elders/$arg2">
+        <a class="elders-menu portrait-only" href="/$game/elders/$arg2">
           {$game_text['menu']['elders']}
         </a>
       </li>
@@ -297,7 +297,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="missions-menu"
+        <a class="missions-menu portrait-only"
           href="/$game/$link/$arg2{$show_expanded}#group-{$lqg}">
           {$game_text['menu']['missions']}
         </a>
@@ -310,7 +310,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="profile-menu" href="/$game/user/$arg2">
+        <a class="profile-menu portrait-only" href="/$game/user/$arg2">
           {$game_text['menu']['profile']}
         </a>
       </li>

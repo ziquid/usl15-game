@@ -370,7 +370,6 @@ function zg_init() {
   }
 
   if (in_array($game, zg_get_game_list())) {
-
     define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
 
     // Don't cache anything.
@@ -391,6 +390,7 @@ function zg_init() {
     jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
     $custom_theme = 'cdc_games';
+
     drupal_add_css($module_path . '/css/' . $game . '.css');
     drupal_add_css($module_path . '/css/alpha.css');
     drupal_add_css($module_path . '/css/swiper.min.css');
@@ -722,31 +722,15 @@ function zg_check_authKey($game_user) {
   }
 }
 
-function zg_get_phoneid() {
-
-  $arg2 = arg(2);
-  if ((substr($arg2, 0, 3) == 'fb=') || $arg2 == '') {
-    mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . $arg2,
-      'Referrer is ' . $_SERVER['HTTP_REFERER']);
-    echo 'Uhoh! Bad URL ' . arg(0) . '/' . arg(1) . '/' . $arg2 .
-      ' from <a href="' . $_SERVER['HTTP_REFERER'] . '">' .
-      $_SERVER['HTTP_REFERER'] . '</a>';
-    exit;
-  }
-
-  if ($arg2 == 'facebook') {
-    return zg_get_fbid();
-  }
-  elseif ($arg2 === 'null') {
-    drupal_goto('stlouis/playbook_null');
-  }
-  elseif (substr($arg2, 0, 3) === 'ms=') {
-    return zg_get_msid();
-  }
-  else {
-    return check_plain($arg2);
-  }
-
+/**
+ * Is the player playing in landscape mode?
+ *
+ * @return bool
+ *   Whether the player is playing in landscape mode or not.
+ */
+function zg_is_landscape() {
+  return (stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) ||
+    (substr(arg(2), 0, 9) == 'landscape');
 }
 
 function zg_get_msid() {
@@ -930,8 +914,9 @@ function zg_fetch_user($force = FALSE) {
     LEFT OUTER JOIN user_creations on users.phone_id = user_creations.phone_id
     
     where users.phone_id = "%s";';
-  $result = db_query($sql, $phone_id);
-  $game_user = db_fetch_object($result);
+//  $result = db_query($sql, $phone_id);
+//  $game_user = db_fetch_object($result);
+  $game_user = zg_fetch_user_by_id((string) $phone_id);
 
   // Start welcome wizard if user not in db.
   if (empty($game_user->id)) {
@@ -1250,7 +1235,8 @@ function zg_fetch_user($force = FALSE) {
 function zg_fetch_header(\stdClass $game_user) {
 
   global $game, $extra_messages, $next_level;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $module_path = drupal_get_path('module', 'zg');
+  include $module_path . '/includes/' . $game . '_defs.inc';
 
   // Calculate energy change.
   $energy_bonus = 10 + $game_user->ep_energy_bonus +
@@ -1457,7 +1443,123 @@ function zg_fetch_header(\stdClass $game_user) {
       'setting');
   }
 
-  echo <<< EOF
+  if (zg_is_landscape()) {
+
+    // Landscape header/menus.
+    $money_str = zg_short_format_int($game_user->money);
+    $game_user_str = zg_render_user($game_user, 'header');
+    $full_stats_button = zg_render_button('user', 'Full Player Stats');
+
+    $lqg = zg_fetch_latest_quest_group($game_user);
+    $show_expanded = ($game_user->level < 7) ? '?show_expanded=0' : '';
+
+    echo <<< EOF
+<!-- player -->
+<div id="player">
+  $game_user_str
+</div>
+
+<!-- menu -->
+<div id="menu-toggle">
+  <img id="menu-toggle-button" src="/sites/default/files/images/{$game}_home_icon.png"/>
+</div>
+
+<div class="menu-button" id="menu-button-1" data-home-link="/$game/home/$arg2">
+  <img src="/sites/default/files/images/{$game}_home_icon.png" />
+  <div class="label">
+    Home
+  </div>
+</div>
+
+<div class="menu-button" id="menu-button-2">
+  <a href="/$game/quest_groups/$arg2{$show_expanded}#group-{$lqg}">
+<!--    <img src="/sites/default/files/images/{$game}_missions_icon.png"/>-->
+    Mi
+  </a>
+  <div class="label">
+    Missions
+  </div>
+</div>
+
+<div class="menu-button inactive" id="menu-button-3">&nbsp;</div>
+<div class="menu-button inactive" id="menu-button-4">&nbsp;</div>
+
+<!-- stats -->
+<div id="stats-toggle">&nbsp;</div>
+<div id="stats" class="landscape-overlay-wrapper tap-to-close">
+  <div class="landscape-overlay">
+    <div class="overlay-title">
+      {$game_user->display->username}
+    </div>
+    <div class="overlay-subtitle">
+      Statistics
+    </div>
+    <div class="money overlay-panel-3x2">
+      <div class="overlay-title">{$game_text['money']}</div>
+      <div id="money-id">$money_str</div>
+      <div class="money-text">$game_user->values</div>
+      <div id="income-time">$income_text</div>
+    </div>
+    <div class="actions overlay-panel-3x2">
+      <div class="overlay-title">{$game_text['actions']}</div>
+      <div id="actions-id">$game_user->actions</div> / $game_user->actions_max
+      <div id="actions-time">$actions_text</div>
+    </div>
+    <div class="experience overlay-panel-3x2">
+      <div class="overlay-title">{$game_text['experience']}</div>
+      <strong>$experience_str</strong> / $next_level
+    </div>
+    <div class="energy overlay-panel-3x2">
+      <div class="overlay-title">{$game_text['energy']}</div>
+      <div id="energy-id">$game_user->energy</div> / $game_user->energy_max
+      <div id="energy-time">$energy_text</div>
+    </div>
+    <div class="overlay-panel-3x2 no-panel">
+      $full_stats_button
+    </div>
+    <div class="overlay-panel-3x2">
+      <div class="overlay-title">Level</div>
+      {$game_user->display->level_num}
+      <div class="overlay-tip">{$game_user->display->level_tip}</div>
+    </div>
+  </div>
+</div>
+
+<!--<div class="stats-button" id="stats-button-1">-->
+<!--  <a href="/$game/elders/$arg2">-->
+<!--    {$game_user->actions}<img width=10 src="/$module_path/img/actions.png"/>-->
+<!--    <div class="label fit-box">-->
+<!--      Elders-->
+<!--    </div>-->
+<!--  </a>-->
+<!--</div>-->
+
+<!-- people -->
+<div id="people-toggle">
+  <div id="msg-badge">&nbsp;</div>
+</div>
+
+<div class="people-button" id="people-button-1">
+  <a href="/$game/elders/$arg2">
+    <img src="/sites/default/files/images/{$game}_people_icon.png"/>
+  </a>
+  <div class="label">
+    Elders
+  </div>
+</div>
+
+<div class="people-button inactive" id="people-button-2">&nbsp;</div>
+<div class="people-button inactive" id="people-button-3">&nbsp;</div>
+<div class="people-button inactive" id="people-button-4">&nbsp;</div>
+
+<!-- stuff -->
+<div id="stuff-toggle">$money_str</div>
+EOF;
+  }
+  else {
+
+    // Portrait header/menus.
+    echo <<< EOF
 <header class="$hood">
   <div class="money">
     <div id="money-id">$money_str</div>
@@ -1481,8 +1583,13 @@ $game_user->energy_max <div class="energy-text">Energy</div>
   </div>
 $level_text
 </header>
-$points_text
-$extra_messages
+EOF;
+  }
+
+  print $points_text;
+  print $extra_messages;
+
+  echo <<< EOF
 <script type="text/javascript">
 
   var energy_minutes = $energy_minutes;

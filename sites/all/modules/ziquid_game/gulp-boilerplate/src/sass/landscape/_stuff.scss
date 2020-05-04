@@ -1,0 +1,41 @@
+/**
+ * @section Stuff styles
+ */
+#stuff-toggle {
+  width: 40px;
+  height: 40px;
+  position: fixed;
+  bottom: 14px;
+  right: 8px;
+  z-index: 99;
+  background-color: #8808;
+  border: solid 1.5px #a4a443cc;
+  box-sizing: border-box;
+  border-radius: 99px 99px 19px 99px;
+  text-align: center;
+  font-size: 1rem;
+  padding-top: 10px;
+  &::after {
+    content: "stuff";
+    position: fixed;
+    right: 8px;
+    bottom: 0px;
+    color: #a4a443cc;
+    font-size: 10px;
+    text-transform: uppercase;
+    border-right: 1.5px solid #a4a443cc;
+    margin-top: 4px;
+    background-color: #8808;
+    padding: 3px 2px 2px;
+    border-radius: 9px 0 9px 9px;
+  }
+}
+
+#stuff-toggle-button {
+  width: calc(100% - 4px);
+  height: 100%;
+  object-fit: scale-down;
+  object-position: center 7px;
+  background-color: #0808;
+  border-radius: 99px;
+}
