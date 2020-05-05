@@ -68,7 +68,7 @@ function zg_clan_callback($phone_id, $clan_id) {
   if (TRUE || $game_user->fkey_values_id) {
     $clan_data['all_clans'] = [
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
-//      'button' => zg_render_button('clan_list_available', 'old page'),
+      //      'button' => zg_render_button('clan_list_available', 'old page'),
       'items' => zg_get_all_clans($game_user->fkey_values_id),
     ];
   }
@@ -78,8 +78,7 @@ function zg_clan_callback($phone_id, $clan_id) {
     $clan_data['members'] = [
       'title' => t('@clan (@tla) clan members',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_list', 'old page',
-        '/' . $game_user->fkey_clans_id),
+      'items' => zg_get_clan_members($clan_id),
     ];
   }
 
@@ -133,4 +132,42 @@ EOF;
   }
 
   return $items;
+}
+
+/**
+ * Fetch and render a list of all members of a specific clan.
+ *
+ * @param int $clan_id
+ *   The clan id.
+ *
+ * @return string[]
+ *   The rendered list of clan members, if any.
+ */
+function zg_get_clan_members($clan_id) {
+  $member_ids = $rendered_users = [];
+
+  $sql = 'SELECT users.id from users
+    left join clan_members on users.id = clan_members.fkey_users_id
+    where clan_members.fkey_clans_id = %d;';
+  $result = db_query($sql, $clan_id);
+
+  while ($item = db_fetch_object($result)) {
+    $member_ids[] = (int) $item->id;
+  }
+  firep($member_ids, 'clan member ids');
+
+  $users = zg_fetch_users_by_id($member_ids);
+
+  foreach ($users as $user) {
+    firep($user, 'clan member');
+
+    $rendered_users[] = '<li class="overlay-list-item">' . zg_render_user($user, 'clan') . '</li>';
+  }
+
+  if (count($rendered_users)) {
+    $rendered_users[] = '</ul>';
+    array_unshift($rendered_users, '<ul>');
+  }
+
+  return $rendered_users;
 }

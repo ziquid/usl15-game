@@ -825,34 +825,48 @@ function zg_competency_name($comp) {
 }
 
 /**
- * Retrieve the user object.
+ * Fetch a user object by phone ID or user ID.
  *
- * @param mixed $id
- *   The user ID (int) or the phone ID (string).
+ * @param string|int $id
+ *   The user ID or phone ID of the object.
  *
- * @return bool|object|null
+ * @return object|null
  *   The user object, if any.
  */
 function zg_fetch_user_by_id($id) {
+  $user = zg_fetch_users_by_id([$id]);
+  if (is_array($user)) {
+    return $user[0];
+  }
+  return NULL;
+}
 
-  // Simple per-page cache.
-  static $user_cache;
+/**
+ * Retrieve the specified user objects.
+ *
+ * @param array $ids
+ *   The user IDs (int) or the phone IDs (string).  All the elements of the
+ *   array must be of the same type.
+ *
+ * @return object[]
+ *   The user objects, if any.
+ */
+function zg_fetch_users_by_id($ids) {
 
-  if (!empty($user_cache[$id])) {
-    firep("query for user $id resulted in cached object");
-    // Jwc 05Jul2013 -- don't return cached results.
-    // Until we can reliably invalidate the cache.
-//    return $user_cache[$id];
+  if (!is_array($ids)) {
+    $ids = [$ids];
   }
 
   // Find user from phone_id.
-  if (gettype($id) == 'string') {
-    $where = 'WHERE users.phone_id = "%s"';
+  if (gettype($ids[0]) == 'string') {
+    $where = 'WHERE users.phone_id in ("%s")';
+    $id_string = implode('","', $ids);
   }
   else {
-    $where = 'WHERE users.id = %d';
+    $where = 'WHERE users.id in (%s)';
+    $id_string = implode(',', $ids);
   }
-
+firep($id_string, 'id string');
   $sql = 'SELECT users.*,
     user_creations.datetime as startdate,
     `values`.party_title, `values`.party_icon,
@@ -889,20 +903,24 @@ function zg_fetch_user_by_id($id) {
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
 
     ' . $where . ';';
-
-  $result = db_query($sql, $id);
-  $item = db_fetch_object($result);
-
-//   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
-  if (empty($item->ep_level)) {
-    $item->ep_level = 0;
+firep($sql, 'sql code');
+  $result = db_query($sql, $id_string);
+  $data = [];
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
   }
-  zg_alter('fetch_user', $item);
+firep($data, 'results set');
+//   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+  foreach ($data as &$item) {
 
-  $user_cache[$id] = $item;
+    if (empty($item->ep_level)) {
+      $item->ep_level = 0;
+    }
 
-firep($item, 'zg_fetch_user_by_id for id ' . $id);
-  return $item;
+    zg_alter('fetch_user', $item);
+    firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_id');
+  }
+  return $data;
 }
 
 /**
@@ -2335,10 +2353,38 @@ function zg_render_user_html(&$user) {
 
   $user->display->class = 'player-' . drupal_strtolower($user->values);
 
-  $user->display->username = $user->ep_name . ' <span class="' .
+  $user->display->user_html = $user->ep_name . ' <span class="' .
     $user->display->class . '">' . $user->username . '</span> ' .
     $user->display->clan_acronym;
-  return $user->display->username;
+  return $user->display->user_html;
+}
+/**
+ * Render a user as clan view.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The clan view html rendering of the user object.
+ */
+function zg_render_user_clan(&$user) {
+  $user->display->clan_acronym = '';
+  if (!empty($user->clan_acronym)) {
+    $user->display->clan_acronym = "($user->clan_acronym)";
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan_acronym .= '*';
+  }
+
+  $user->display->level = t('Level:') . ' ' . $user->level;
+  $user->display->location = t('Location:') . ' ' . $user->location;
+
+  $user->display->user_clan = $user->ep_name . $user->username .
+    $user->display->clan_acronym .
+    '<span class="player_level">' . $user->display->level . '</span>' .
+    '<span class="player_location">' . $user->display->location . '</span>';
+  return $user->display->user_clan;
 }
 
 /**
@@ -2371,7 +2417,6 @@ function zg_render_user_header(&$user) {
 
   $user->display->party = "Party: $user->party_title";
 
-  $level = $user->level;
   $level_a1 = $level_a2 = $user->display->level_tip = '';
   if ($user->skill_points && $phone_id === $user->phone_id) {
     $level_a1 = '<a href="/' . $game . '/increase_skills/' . $arg2 . '/none">';
@@ -2385,10 +2430,10 @@ function zg_render_user_header(&$user) {
     ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
     '">' . $user->username . '</a>';
 
-  $user->display->user = '<div>' . $user->display->username . '</div><div>' .
+  $user->display->user_header = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
     '<span class="player_party">' . $user->display->party . '</span></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
-  return $user->display->user;
+  return $user->display->user_header;
 }

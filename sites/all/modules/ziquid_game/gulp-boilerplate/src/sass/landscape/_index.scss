@@ -43,8 +43,13 @@
   z-index: 13;
   width: calc(90% - 108px);
   margin: 0 auto;
-  min-height: 50%;
+  height: 50%;
   position: absolute;
+  overflow: scroll;
+  transform: scaleX(-1);
+  > * {
+    transform: scaleX(-1);
+  }
 }
 
 .landscape-overlay, .landscape-slide-overlay {
@@ -136,6 +141,11 @@
       font-variant: small-caps;
       color: #f8fefdbb;
       text-decoration: none;
+      min-height: 1.6rem;
+      padding: 6px 0 2px 6px;
+      &:nth-child(even) {
+        background-color: #0802;
+      }
     }
   }
 }
@@ -170,12 +180,12 @@ button, .button {
 }
 
 .swiper-container .swiper-button-next, .swiper-container-rtl .swiper-button-prev {
-  //right: -25px;
+  right: 30px;
   //top: 25%;
 }
 
 .swiper-container .swiper-button-prev, .swiper-container-rtl .swiper-button-next {
-  //left: -25px;
+  left: 30px;
   //top: 25%;
 }
 
