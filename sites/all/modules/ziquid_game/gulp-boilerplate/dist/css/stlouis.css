@@ -1914,6 +1914,25 @@ body.game-stlouis.landscape-orientation .player_level a, body.game-stlouis.lands
   text-decoration: none;
 }
 
+/* line 66, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_seat {
+  font-size: 0.755rem;
+  padding: 5px 2px 2px;
+  text-decoration: none;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  -webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* line 78, src/sass/landscape/_player.scss */
+body.game-stlouis.landscape-orientation .player_seat a {
+  text-decoration: none;
+}
+
 /* line 4, src/sass/landscape/_people.scss */
 body.game-stlouis.landscape-orientation #people-toggle {
   width: 40px;
@@ -2095,7 +2114,7 @@ body.game-stlouis.landscape-orientation .stats-energy {
   border: solid 0.75px #b42f43cc;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 9px;
+  border-radius: 9px 5px 9px 9px;
   text-align: center;
   padding-top: 1px;
 }
@@ -2112,7 +2131,7 @@ body.game-stlouis.landscape-orientation .stats-actions {
   border: solid 0.75px #b42f43cc;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 9px;
+  border-radius: 9px 5px 9px 9px;
   text-align: center;
   padding-top: 1px;
 }
@@ -2129,7 +2148,7 @@ body.game-stlouis.landscape-orientation .stats-experience {
   border: solid 0.75px #b42f43cc;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 9px;
+  border-radius: 9px 5px 9px 9px;
   text-align: center;
   padding-top: 1px;
 }
@@ -2211,7 +2230,7 @@ body.game-stlouis.landscape-orientation #stuff-toggle {
   border: solid 1.5px #a4a443cc;
   -webkit-box-sizing: border-box;
           box-sizing: border-box;
-  border-radius: 99px 99px 19px 99px;
+  border-radius: 99px 99px 29px 99px;
   text-align: center;
   font-size: 1rem;
   padding-top: 10px;
