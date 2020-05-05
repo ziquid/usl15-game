@@ -43,7 +43,8 @@
   z-index: 13;
   width: calc(90% - 108px);
   margin: 0 auto;
-  height: 50%;
+  min-height: 50%;
+  max-height: 70%;
   position: absolute;
   overflow: scroll;
   transform: scaleX(-1);
@@ -145,6 +146,9 @@
       padding: 6px 0 2px 6px;
       a, span {
         margin-right: 6px;
+      }
+      dd {
+        text-transform: none;
       }
       &:nth-child(even) {
         background-color: #0802;
