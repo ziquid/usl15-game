@@ -1485,7 +1485,17 @@ function zg_fetch_header(\stdClass $game_user) {
 <div class="menu-button inactive" id="menu-button-4">&nbsp;</div>
 
 <!-- stats -->
-<div id="stats-toggle">&nbsp;</div>
+<div id="stats-toggle">
+  <div class="stats-energy">
+    <span class="energy-num">$game_user->energy</span><!-- / $game_user->energy_max-->
+  </div>
+  <div class="stats-actions">
+    <span class="actions-num">$game_user->actions</span><!-- / $game_user->actions_max-->@
+  </div>
+  <div class="stats-experience">
+    <span class="experience-num">$experience_str</span>
+  </div>
+</div>
 <div id="stats" class="landscape-overlay-wrapper tap-to-close">
   <div class="landscape-overlay">
     <div class="overlay-title">
@@ -1615,7 +1625,8 @@ EOF;
   function display_energy() {
 
     document.getElementById('energy-id').innerHTML = energy;
-
+    $('.energy-num').text(energy);
+    
     if ((energy != energy_max) && (energy_to_add > 0)) {
 
       if (energy > energy_max) {
@@ -1641,6 +1652,7 @@ EOF;
   function display_actions() {
 
     document.getElementById('actions-id').innerHTML = actions;
+    $('.actions-num').text(actions);
 
     if (actions != actions_max) {
 

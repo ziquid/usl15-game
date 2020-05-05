@@ -8,13 +8,14 @@
   top: 14px;
   right: 8px;
   z-index: 99;
-  background-color: #8008;
-  border: solid 1.5px #b42f43cc;
+  //background-color: #8008;
+  //border: solid 1.5px #b42f43cc;
   box-sizing: border-box;
-  border-radius: 99px 19px 99px 99px;
+  //border-radius: 99px 19px 99px 99px;
   text-align: center;
-  font-size: 1rem;
+  //font-size: 1rem;
   padding-top: 10px;
+  color: #f8fefdbb;
   &::after {
     content: "stats";
     position: fixed;
@@ -49,6 +50,52 @@
     display: inline-block;
   }
 
+}
+
+.stats-energy {
+  font-size: 0.625rem;
+  width: 48px;
+  height: 16px;
+  position: fixed;
+  top: 14px;
+  right: 8px;
+  //z-index: 99;
+  background-color: #8008;
+  border: solid 0.75px #b42f43cc;
+  box-sizing: border-box;
+  border-radius: 9px;
+  text-align: center;
+  padding-top: 1px;
+}
+.stats-actions {
+  font-size: 0.625rem;
+  width: 48px;
+  height: 16px;
+  position: fixed;
+  top: 30px;
+  right: 8px;
+  //z-index: 99;
+  background-color: #8008;
+  border: solid 0.75px #b42f43cc;
+  box-sizing: border-box;
+  border-radius: 9px;
+  text-align: center;
+  padding-top: 1px;
+}
+.stats-experience {
+  font-size: 0.625rem;
+  width: 48px;
+  height: 16px;
+  position: fixed;
+  top: 46px;
+  right: 8px;
+  //z-index: 99;
+  background-color: #8008;
+  border: solid 0.75px #b42f43cc;
+  box-sizing: border-box;
+  border-radius: 9px;
+  text-align: center;
+  padding-top: 1px;
 }
 
 .stats-button {

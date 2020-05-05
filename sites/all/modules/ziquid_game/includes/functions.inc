@@ -866,8 +866,8 @@ function zg_fetch_users_by_id($ids) {
     $where = 'WHERE users.id in (%s)';
     $id_string = implode(',', $ids);
   }
-firep($id_string, 'id string');
-  $sql = 'SELECT users.*,
+
+  $sql = 'SELECT distinct users.*,
     user_creations.datetime as startdate,
     `values`.party_title, `values`.party_icon,
     elected_positions.name as ep_name,
@@ -903,14 +903,13 @@ firep($id_string, 'id string');
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
 
     ' . $where . ';';
-firep($sql, 'sql code');
+
   $result = db_query($sql, $id_string);
   $data = [];
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
-firep($data, 'results set');
-//   if (empty($item->ep_name)) $item->ep_name = 'Subjugate';
+
   foreach ($data as &$item) {
 
     if (empty($item->ep_level)) {
@@ -2368,10 +2367,13 @@ function zg_render_user_html(&$user) {
  *   The clan view html rendering of the user object.
  */
 function zg_render_user_clan(&$user) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
+
   $user->display->clan_acronym = '';
-  if (!empty($user->clan_acronym)) {
-    $user->display->clan_acronym = "($user->clan_acronym)";
-  }
+//  if (!empty($user->clan_acronym)) {
+//    $user->display->clan_acronym = "($user->clan_acronym)";
+//  }
 
   if ($user->is_clan_leader) {
     $user->display->clan_acronym .= '*';
@@ -2380,8 +2382,28 @@ function zg_render_user_clan(&$user) {
   $user->display->level = t('Level:') . ' ' . $user->level;
   $user->display->location = t('Location:') . ' ' . $user->location;
 
-  $user->display->user_clan = $user->ep_name . $user->username .
-    $user->display->clan_acronym .
+  $player_class = 'player_username';
+  $last_access = REQUEST_TIME - strtotime($user->last_access);
+  firep([REQUEST_TIME, strtotime($user->last_access), $last_access], 'last access times');
+  if ($last_access < 300) {
+    $player_class .= ' online_now';
+  }
+  elseif ($last_access < 900) {
+    $player_class .= ' online_recently';
+  }
+  else {
+    $player_class .= ' not_online';
+  }
+
+  $user->display->username = '<a class="' . $player_class . '" href="/' . $game .
+    '/user/' . $arg2 . '">' . $user->username . '</a>' . $user->display->clan_acronym;
+
+  if (strlen($user->ep_name)) {
+    $user->display->username = '<span class="player_seat">' . $user->ep_name .
+      '</span> ' . $user->display->username;
+  }
+
+  $user->display->user_clan = $user->display->username .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<span class="player_location">' . $user->display->location . '</span>';
   return $user->display->user_clan;

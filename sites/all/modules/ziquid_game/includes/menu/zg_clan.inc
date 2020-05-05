@@ -160,7 +160,6 @@ function zg_get_clan_members($clan_id) {
 
   foreach ($users as $user) {
     firep($user, 'clan member');
-
     $rendered_users[] = '<li class="overlay-list-item">' . zg_render_user($user, 'clan') . '</li>';
   }
 
