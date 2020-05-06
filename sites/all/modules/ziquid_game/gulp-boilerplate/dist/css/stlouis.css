@@ -1813,7 +1813,7 @@ body.game-stlouis.landscape-orientation .menu-button a {
 /* line 80, src/sass/landscape/_menu.scss */
 body.game-stlouis.landscape-orientation .menu-button#menu-button-1 {
   top: 2px;
-  left: 58px;
+  left: 57px;
 }
 
 /* line 83, src/sass/landscape/_menu.scss */
@@ -1825,7 +1825,7 @@ body.game-stlouis.landscape-orientation .menu-button#menu-button-1 .label {
 /* line 89, src/sass/landscape/_menu.scss */
 body.game-stlouis.landscape-orientation .menu-button#menu-button-2 {
   top: 31px;
-  left: 53px;
+  left: 52px;
 }
 
 /* line 92, src/sass/landscape/_menu.scss */
@@ -2491,10 +2491,14 @@ body.game-stlouis.landscape-orientation .swiper-container, body.game-stlouis.lan
 
 /* line 189, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-next, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-prev {
-  right: 30px;
+  right: 4rem;
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
 }
 
-/* line 194, src/sass/landscape/_index.scss */
+/* line 195, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-prev, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-next {
-  left: 30px;
+  left: 4rem;
+  -webkit-transform: scale(0.6);
+          transform: scale(0.6);
 }
