@@ -2311,7 +2311,6 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
   firep($max_user_message, 'max user message');
   zg_set_value($game_user, 'max_user_message', $max_user_message);
 
-  // FIXME: add this endpoint.
   $url = "/$game/msg_count/$phone_id/$max_user_message";
   drupal_add_js(['zg' => ['check_messages_url' => $url]], 'setting');
 }

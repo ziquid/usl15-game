@@ -83,6 +83,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/clan_msg/%/%'] = [
+      'title' => 'Ziquid Game Clan Messages Page',
+      'page callback' => 'zg_clan_msg_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/dashboard/%/%'] = [
       'title' => 'Ziquid Game Dashboard',
       'page callback' => 'zg_dashboard_callback',
@@ -260,14 +268,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Available Clan List Page',
     'page callback' => 'zg_clan_list_available_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/clan_msg/%/%'] = [
-    'title' => 'Ziquid Game Clan Messages Page',
-    'page callback' => 'zg_clan_msg_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -671,7 +671,7 @@ function zg_clan_msg_callback($phone_id, $clan_id) {
  *   The clan ID to check.
  *
  * @return mixed|string|string[]|void|null
- *   The clan announcements page HTML, or access denied if the player has no access.
+ *   The clan announcements page, or access denied if the player has no access.
  */
 function zg_clan_announcements_callback($phone_id, $clan_id) {
 
@@ -691,7 +691,7 @@ function zg_clan_announcements_callback($phone_id, $clan_id) {
  *   The phone ID of the player to block.
  *
  * @return mixed|string|string[]|void|null
- *   The block user toggle page HTML, or access denied if the player has no access.
+ *   The block user toggle page, or access denied if the player has no access.
  */
 function zg_block_user_toggle_callback($phone_id, $phone_id_to_block) {
 

@@ -20,14 +20,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/clan_msg/%/%'] = [
-    'title' => 'St. Louis Clan Messages Page',
-    'page callback' => 'stlouis_clan_msg_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/clan_announcements/%/%'] = [
     'title' => 'St. Louis Clan Announcements Page',
     'page callback' => 'stlouis_clan_announcements_callback',
@@ -336,27 +328,6 @@ function stlouis_clan_list_available_callback($phone_id) {
   }
 
   return theme('stlouis_clan_list_available', $phone_id);
-
-}
-
-/**
- * Clan msg callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $clan_id
- *   The clan ID to check.
- *
- * @return mixed|string|string[]|void|null
- *   The clan msg page HTML, or access denied if the player has no access.
- */
-function stlouis_clan_msg_callback($phone_id, $clan_id) {
-
-  if (empty($phone_id) || !is_numeric($clan_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_clan_msg', $phone_id, $clan_id);
 
 }
 
@@ -1107,14 +1078,6 @@ function stlouis_theme() {
       ],
     ],
 
-    'stlouis_clan_msg' => [
-      'template' => 'stlouis_clan_msg',
-      'arguments' => [
-        'phone_id' => NULL,
-        'clan_id' => NULL,
-      ],
-    ],
-
     'stlouis_clan_announcements' => [
       'template' => 'stlouis_clan_announcements',
       'arguments' => [
@@ -1136,35 +1099,35 @@ function stlouis_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'msg_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_party_msg' => [
       'template' => 'stlouis_party_msg',
       'arguments' => [
         'phone_id' => NULL,
-      ]
+      ],
     ],
 
     'stlouis_quests_list' => [
       'template' => 'stlouis_quests_list',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'stlouis_elders_ask_reset_skills' => [
       'template' => 'stlouis_elders_ask_reset_skills',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'stlouis_elders_do_reset_skills' => [
       'template' => 'stlouis_elders_do_reset_skills',
       'arguments' => [
-        'phone_id' => NULL
-      ]
+        'phone_id' => NULL,
+      ],
     ],
 
     'stlouis_elders_rename' => [

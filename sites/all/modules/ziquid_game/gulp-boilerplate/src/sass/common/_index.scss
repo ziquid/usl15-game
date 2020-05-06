@@ -399,6 +399,11 @@ p:first-of-type {
 
 .news {
 
+  .news-item {
+    text-transform: none;
+    font-variant: none;
+  }
+
   .news-buttons {
     background-color: rgba(48, 144, 0, 0.4);
     color: #3b0;

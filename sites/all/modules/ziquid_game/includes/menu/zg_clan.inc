@@ -55,6 +55,7 @@ function zg_clan_callback($phone_id, $clan_id) {
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_msg', 'old page',
         '/' . $game_user->fkey_clans_id),
+      'items' => zg_get_clan_messages($game_user, $clan_id),
     ];
     $clan_data['announcements'] = [
       'title' => t('@clan (@tla) clan announcements',
@@ -169,4 +170,79 @@ function zg_get_clan_members($clan_id) {
   }
 
   return $rendered_users;
+}
+
+/**
+ * Fetch and render a list of messages in a specific clan.
+ *
+ * @param object $game_user
+ *   The game user object.
+ * @param int $clan_id
+ *   The clan id.
+ *
+ * @return string[]
+ *   The rendered list of clan messages, if any.
+ */
+function zg_get_clan_messages($game_user, $clan_id) {
+  $rendered_messages = [];
+
+  // FIXME: move SQL to a function.
+  $sql = 'select clan_messages.*, users.username, users.phone_id,
+  elected_positions.name as ep_name,
+  clan_members.is_clan_leader,
+  clans.acronym as clan_acronym, clans.name as clan_name,
+  clans.rules as clan_rules
+  
+  from clan_messages 
+  
+  left join users on clan_messages.fkey_users_from_id = users.id
+  
+  LEFT OUTER JOIN elected_officials
+  ON elected_officials.fkey_users_id = users.id
+  
+  LEFT OUTER JOIN elected_positions
+  ON elected_positions.id = elected_officials.fkey_elected_positions_id
+  
+  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+    clan_messages.fkey_users_from_id
+  
+  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  
+  where clan_messages.fkey_neighborhoods_id = %d
+    AND clan_messages.is_announcement = 0
+  order by id DESC
+  LIMIT 50;';
+
+  $result = db_query($sql, $clan_id);
+  $data = [];
+  while ($item = db_fetch_object($result)) {
+    $data[] = $item;
+  }
+  zg_format_messages($game_user, $game_user->id, $data);
+
+  foreach ($data as $item) {
+
+    // FIXME: render messages in a function.
+    $rendered_messages[] = <<< EOF
+    <li class="overlay-list-item">
+      <div class="news-item $item->type" id="{$item->display->msg_id}">
+        <div class="dateline">
+          {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
+        </div>
+        <div class="message-body {$item->display->private_css}">
+          {$item->display->delete}
+          <p>$item->message</p>{$item->display->reply}
+        </div>
+      </div>
+    </li>
+EOF;
+
+  }
+
+  if (count($rendered_messages)) {
+    $rendered_messages[] = '</ul>';
+    array_unshift($rendered_messages, '<ul class="news">');
+  }
+
+  return $rendered_messages;
 }

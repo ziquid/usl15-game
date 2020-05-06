@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    May 6, 2020
+  </div>
+  <ul>
+    <li>
+      Modernized the message look on the clan messages page
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Mar 25, 2020
   </div>
   <ul>
