@@ -47,6 +47,32 @@ function zg_clan_callback($phone_id, $clan_id) {
   include $module_path . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
 
+  // Save the message, if any.
+  $message_orig = check_plain($_GET['message']);
+  $message = zg_filter_profanity($message_orig);
+  firep($message, 'message');
+
+  $errors = [];
+
+  if (strlen($message) > 0 && strlen($message) < 3) {
+    $errors[] = '<div class="message-error">Your message must be at least 3
+    characters long.</div>';
+    $message = '';
+  }
+
+  if (substr($message, 0, 3) == 'XXX') {
+    $errors[] = '<div class="message-error">Your message contains words that are not
+    allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
+    $message = '';
+  }
+
+  if (strlen($message)) {
+    $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_neighborhoods_id, message) values (%d, %d, "%s");';
+    db_query($sql, $game_user->id, $clan_id, $message);
+    $message_orig = '';
+  }
+
   // Fetch clan data here.
   $clan_data = [];
   if ($clan_id > 0) {
@@ -55,13 +81,15 @@ function zg_clan_callback($phone_id, $clan_id) {
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_msg', 'old page',
         '/' . $game_user->fkey_clans_id),
-      'items' => zg_get_clan_messages($game_user, $clan_id),
+      'items' => zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig),
+      'errors' => $errors,
     ];
     $clan_data['announcements'] = [
       'title' => t('@clan (@tla) clan announcements',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'button' => zg_render_button('clan_announcements', 'old page',
         '/' . $game_user->fkey_clans_id),
+      'errors' => $errors,
     ];
   }
 
@@ -71,6 +99,7 @@ function zg_clan_callback($phone_id, $clan_id) {
       'title' => t('all @party clans', ['@party' => $game_user->party_title]),
       //      'button' => zg_render_button('clan_list_available', 'old page'),
       'items' => zg_get_all_clans($game_user->fkey_values_id),
+      'errors' => $errors,
     ];
   }
 
@@ -80,6 +109,7 @@ function zg_clan_callback($phone_id, $clan_id) {
       'title' => t('@clan (@tla) clan members',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
       'items' => zg_get_clan_members($clan_id),
+      'errors' => $errors,
     ];
   }
 
@@ -179,12 +209,28 @@ function zg_get_clan_members($clan_id) {
  *   The game user object.
  * @param int $clan_id
  *   The clan id.
+ * @param string $game
+ *   The machine name of the game.
+ * @param string $arg2
+ *   Arg2.
+ * @param string $message_orig
+ *   The original message, if any.
  *
  * @return string[]
  *   The rendered list of clan messages, if any.
  */
-function zg_get_clan_messages($game_user, $clan_id) {
-  $rendered_messages = [];
+function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig) {
+  $rendered_messages = [
+    '<div class="send-message">
+      <form method=get action="/' . $game . '/clan/' . $arg2 . '/' . $clan_id. '">
+        <textarea class="message-textarea" name="message" rows="2">' . $message_orig . '</textarea>
+        <div class="send-message-send-wrapper">
+          <input class="send-message-send" type="submit" value="Send"/>
+        </div>
+      </form>
+    </div>',
+    '<ul>',
+  ];
 
   // FIXME: move SQL to a function.
   $sql = 'select clan_messages.*, users.username, users.phone_id,
@@ -239,10 +285,6 @@ EOF;
 
   }
 
-  if (count($rendered_messages)) {
-    $rendered_messages[] = '</ul>';
-    array_unshift($rendered_messages, '<ul class="news">');
-  }
-
+  $rendered_messages[] = '</ul>';
   return $rendered_messages;
 }

@@ -2327,7 +2327,8 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
  *   The html rendering of the user object.
  */
 function zg_render_user(&$user, $type = 'html') {
-  return call_user_func('zg_render_user_' . $type, $user);
+  $function_name = 'zg_render_user_' . $type;
+  return $function_name($user);
 }
 
 /**
@@ -2340,6 +2341,10 @@ function zg_render_user(&$user, $type = 'html') {
  *   The html rendering of the user object.
  */
 function zg_render_user_html(&$user) {
+
+  if (!property_exists($user, 'display')) {
+    $user->display = new \stdClass();
+  }
   $user->display->clan_acronym = '';
   if (!empty($user->clan_acronym)) {
     $user->display->clan_acronym = "($user->clan_acronym)";
@@ -2369,6 +2374,9 @@ function zg_render_user_clan(&$user) {
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
 
+  if (!property_exists($user, 'display')) {
+    $user->display = new \stdClass();
+  }
   $user->display->clan_acronym = '';
 //  if (!empty($user->clan_acronym)) {
 //    $user->display->clan_acronym = "($user->clan_acronym)";
@@ -2422,6 +2430,9 @@ function zg_render_user_header(&$user) {
   $arg2 = check_plain(arg(2));
   $phone_id = zg_get_phoneid();
 
+  if (!property_exists($user, 'display')) {
+    $user->display = new \stdClass();
+  }
   $user->display->clan_acronym = '';
   if (empty($user->clan_acronym)) {
     $user->display->clan = t('No Clan');

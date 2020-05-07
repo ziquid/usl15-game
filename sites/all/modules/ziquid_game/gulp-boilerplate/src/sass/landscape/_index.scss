@@ -133,6 +133,8 @@
 
   ul {
     text-align: left;
+    margin: 0;
+    padding: 0;
     li {
       list-style: none;
       font-size: 0.75rem;
@@ -152,6 +154,26 @@
       }
       &:nth-child(even) {
         background-color: #0802;
+      }
+    }
+  }
+
+  .send-message {
+    //position: absolute;
+    //left: 0;
+    //right: 0;
+    //top: 0;
+    border: none;
+    margin: 0;
+    background-color: #0802;
+    .message-textarea {
+      width: 80%;
+    }
+    .send-message-send-wrapper {
+      display: inline-block;
+      vertical-align: text-bottom;
+      .send-message-send {
+        margin: 0;
       }
     }
   }
@@ -200,4 +222,11 @@ button, .button {
 
 .swiper-container, .swiper-container-rtl {
   //overflow: visible;
+}
+
+/* CLAN pages */
+.page-clan {
+  .button-wrapper-view---respond {
+    display: none;
+  }
 }

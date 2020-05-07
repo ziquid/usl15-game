@@ -25,15 +25,22 @@ zg_fetch_header($game_user);
 db_set_active();
 ?>
 
-<div class="swiper-container">
+<div class="swiper-container page-clan">
   <div class="swiper-wrapper">
     <?php foreach ($clan_data as $data): ?>
       <div class="swiper-slide"><div class="landscape-slide-overlay">
           <div class="overlay-title"><?php print $data['title']; ?></div>
-          <?php foreach ($data['items'] as $item): ?>
-            <?php print $item; ?>
+          <?php foreach ($data['errors'] as $error): ?>
+            <?php print $error; ?>
           <?php endforeach; ?>
-          <div class="overlay-tip"><?php print $data['button']; ?></div>
+          <?php if (array_key_exists('items', $data)): ?>
+            <?php foreach ($data['items'] as $item): ?>
+            <?php print $item; ?>
+            <?php endforeach; ?>
+          <?php endif; ?>
+          <?php if (array_key_exists('button', $data)): ?>
+            <div class="overlay-tip"><?php print $data['button']; ?></div>
+          <?php endif; ?>
       </div></div>
     <?php endforeach; ?>
   </div>
