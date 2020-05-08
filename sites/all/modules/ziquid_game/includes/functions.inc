@@ -2361,6 +2361,7 @@ function zg_render_user_html(&$user) {
     $user->display->clan_acronym;
   return $user->display->user_html;
 }
+
 /**
  * Render a user as clan view.
  *
@@ -2462,10 +2463,13 @@ function zg_render_user_header(&$user) {
     ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
     '">' . $user->username . '</a>';
 
+  $user->display->location = $user->location;
+
   $user->display->user_header = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
-    '<span class="player_party">' . $user->display->party . '</span></div>';
+    '<span class="player_party">' . $user->display->party . '</span></div>' .
+    '<div class="player_location">' . $user->display->location . '</div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->user_header;
 }

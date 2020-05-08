@@ -10,6 +10,7 @@
   text-align: center;
   background-color: rgba(0, 0, 0, 0.35);
   z-index: 1;
+  border-bottom: solid 1.5px #080c;
 
   div {
     margin: 2px 0;
@@ -17,6 +18,11 @@
 
   .player_username {
     font-size: 0.9375rem;
+  }
+
+  .player_location {
+    border: solid 1px #dd7a;
+    border-radius: 9px;
   }
 }
 
@@ -46,7 +52,7 @@
   }
 }
 
-.player_level, .player_clan, .player_party {
+.player_level, .player_clan, .player_party, .player_location {
   font-size: 0.625rem;
   padding: 5px 5px 2px;
   text-decoration: none;
