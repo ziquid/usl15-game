@@ -94,7 +94,6 @@ firep($alder, 'current hood alder');
 $alder_values = drupal_strtolower($alder->values);
 $player_values = drupal_strtolower($game_user->values);
 
-
 // AI bot?  No reason to spend cycles on this.
 if (substr($phone_id, 0, 3) == 'ai-') {
   zg_fetch_header($game_user);
@@ -175,7 +174,7 @@ echo <<< EOF
 $extra_bonus
 <div class="new-main-menu">
   <img src="/sites/default/files/images/{$game}_home_menu{$extra_menu}.jpg">
-    <ul class="value-links">
+    <ul class="value-links portrait-only">
       <li>
         <span class="ammunition value first odd">
           50
@@ -299,7 +298,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="move-menu" href="/$game/move/$arg2/0">
+        <a class="move-menu portrait-only" href="/$game/move/$arg2/0">
           {$game_text['menu']['move']}
         </a>
       </li>
@@ -312,7 +311,7 @@ $extra_bonus
 
     </ul>
   </div>
-  <div class="location">
+  <div class="location portrait-only">
     <span class="location-$alder_values player-$player_values">$game_user->location</span>
   </div>
   $event_text

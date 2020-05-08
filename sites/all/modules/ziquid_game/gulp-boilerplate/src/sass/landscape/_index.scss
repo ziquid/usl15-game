@@ -139,9 +139,9 @@
       list-style: none;
       font-size: 0.75rem;
       font-weight: 400;
-      font-family: Georgia, "Times New Roman", times, serif;
-      text-transform: capitalize;
-      font-variant: small-caps;
+      //font-family: Georgia, "Times New Roman", times, serif;
+      //text-transform: capitalize;
+      //font-variant: small-caps;
       color: #f8fefdbb;
       text-decoration: none;
       min-height: 1.6rem;
@@ -149,7 +149,14 @@
       a, span {
         margin-right: 6px;
       }
+      dt {
+        font-family: Georgia, "Times New Roman", times, serif;
+        text-transform: capitalize;
+        font-variant: small-caps;
+      }
       dd {
+        font-family: Georgia, "Times New Roman", times, serif;
+        font-size: 0.675rem;
         text-transform: none;
       }
       &:nth-child(even) {

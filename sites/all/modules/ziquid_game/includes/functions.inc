@@ -2468,14 +2468,14 @@ function zg_render_user_header(&$user) {
   $alder = zg_get_hood_alder($user->fkey_neighborhoods_id);
   firep($alder, 'Alder player');
   $hood_values = strlen($alder->values) ? drupal_strtolower($alder->values) : 'nothing';
-  $hood_color = strlen($alder->color) ? $alder->color . 'cc' : '333c';
+  $hood_color = strlen($alder->color) ? $alder->color . 'aa' : '333a';
 
   $user->display->user_header = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
     '<span class="player_party">' . $user->display->party . '</span></div>' .
     '<div><div class="player_location location-values-' . $hood_values . '" ' .
-    'style="background-color: #' . $hood_color . ';">' .
+    'style="border-color: #' . $hood_color . ';">' .
     $user->display->location . '</div></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->user_header;
@@ -2489,13 +2489,15 @@ function zg_render_user_header(&$user) {
  *   The value of the current hood's Alder, if any.
  */
 function zg_get_hood_alder($hood) {
-  $sql = 'SELECT `id` FROM `users`
+  firep($hood, 'hood');
+  $sql = 'SELECT users.id FROM users
   inner join elected_officials on elected_officials.fkey_users_id = users.id
   WHERE fkey_neighborhoods_id = %d
   and elected_officials.fkey_elected_positions_id = 1;';
   $result = db_query($sql, $hood);
   $alder = db_fetch_object($result);
-  if (property_exists($result, 'id')) {
+  firep($alder, 'alder id');
+  if (property_exists($alder, 'id')) {
     return zg_fetch_user_by_id((int) $alder->id);
   }
   return NULL;

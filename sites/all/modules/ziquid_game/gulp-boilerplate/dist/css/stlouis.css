@@ -1877,9 +1877,10 @@ body.game-stlouis.landscape-orientation #player .player_location {
   display: inline-block;
   margin: 0;
   padding-top: 2px;
+  background-color: #050e;
 }
 
-/* line 32, src/sass/landscape/_player.scss */
+/* line 33, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username {
   text-decoration: none;
   color: #dd7;
@@ -1894,25 +1895,25 @@ body.game-stlouis.landscape-orientation .player_username {
   border-radius: 5px;
 }
 
-/* line 44, src/sass/landscape/_player.scss */
+/* line 45, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username.online_now {
   border-left: solid 1px green;
   padding-left: 3px;
 }
 
-/* line 48, src/sass/landscape/_player.scss */
+/* line 49, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username.online_recently {
   border-left: solid 1px yellow;
   padding-left: 3px;
 }
 
-/* line 52, src/sass/landscape/_player.scss */
+/* line 53, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username.not_online {
   border-left: solid 1px red;
   padding-left: 3px;
 }
 
-/* line 58, src/sass/landscape/_player.scss */
+/* line 59, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_level, body.game-stlouis.landscape-orientation .player_clan, body.game-stlouis.landscape-orientation .player_party, body.game-stlouis.landscape-orientation .player_location {
   font-size: 0.625rem;
   padding: 5px 5px 2px;
@@ -1926,12 +1927,12 @@ body.game-stlouis.landscape-orientation .player_level, body.game-stlouis.landsca
   text-transform: uppercase;
 }
 
-/* line 70, src/sass/landscape/_player.scss */
+/* line 71, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_level a, body.game-stlouis.landscape-orientation .player_clan a, body.game-stlouis.landscape-orientation .player_party a, body.game-stlouis.landscape-orientation .player_location a {
   text-decoration: none;
 }
 
-/* line 75, src/sass/landscape/_player.scss */
+/* line 76, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_seat {
   font-size: 0.755rem;
   padding: 5px 2px 2px;
@@ -1945,7 +1946,7 @@ body.game-stlouis.landscape-orientation .player_seat {
   text-transform: uppercase;
 }
 
-/* line 87, src/sass/landscape/_player.scss */
+/* line 88, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_seat a {
   text-decoration: none;
 }
@@ -2447,9 +2448,6 @@ body.game-stlouis.landscape-orientation .landscape-overlay ul li, body.game-stlo
   list-style: none;
   font-size: 0.75rem;
   font-weight: 400;
-  font-family: Georgia, "Times New Roman", times, serif;
-  text-transform: capitalize;
-  font-variant: small-caps;
   color: #f8fefdbb;
   text-decoration: none;
   min-height: 1.6rem;
@@ -2462,39 +2460,48 @@ body.game-stlouis.landscape-orientation .landscape-overlay ul li a, body.game-st
 }
 
 /* line 152, src/sass/landscape/_index.scss */
+body.game-stlouis.landscape-orientation .landscape-overlay ul li dt, body.game-stlouis.landscape-orientation .landscape-slide-overlay ul li dt {
+  font-family: Georgia, "Times New Roman", times, serif;
+  text-transform: capitalize;
+  font-variant: small-caps;
+}
+
+/* line 157, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay ul li dd, body.game-stlouis.landscape-orientation .landscape-slide-overlay ul li dd {
+  font-family: Georgia, "Times New Roman", times, serif;
+  font-size: 0.675rem;
   text-transform: none;
 }
 
-/* line 155, src/sass/landscape/_index.scss */
+/* line 162, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay ul li:nth-child(even), body.game-stlouis.landscape-orientation .landscape-slide-overlay ul li:nth-child(even) {
   background-color: #0802;
 }
 
-/* line 161, src/sass/landscape/_index.scss */
+/* line 168, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .send-message, body.game-stlouis.landscape-orientation .landscape-slide-overlay .send-message {
   border: none;
   margin: 0;
   background-color: #0802;
 }
 
-/* line 169, src/sass/landscape/_index.scss */
+/* line 176, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .send-message .message-textarea, body.game-stlouis.landscape-orientation .landscape-slide-overlay .send-message .message-textarea {
   width: 80%;
 }
 
-/* line 172, src/sass/landscape/_index.scss */
+/* line 179, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .send-message .send-message-send-wrapper, body.game-stlouis.landscape-orientation .landscape-slide-overlay .send-message .send-message-send-wrapper {
   display: inline-block;
   vertical-align: text-bottom;
 }
 
-/* line 175, src/sass/landscape/_index.scss */
+/* line 182, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .landscape-overlay .send-message .send-message-send-wrapper .send-message-send, body.game-stlouis.landscape-orientation .landscape-slide-overlay .send-message .send-message-send-wrapper .send-message-send {
   margin: 0;
 }
 
-/* line 183, src/sass/landscape/_index.scss */
+/* line 190, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orientation .button {
   -webkit-box-shadow: inset 0 1px 0 0 #2a0;
           box-shadow: inset 0 1px 0 0 #2a0;
@@ -2507,7 +2514,7 @@ body.game-stlouis.landscape-orientation button, body.game-stlouis.landscape-orie
   text-shadow: 0 1px 0 #528009;
 }
 
-/* line 192, src/sass/landscape/_index.scss */
+/* line 199, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landscape-orientation .button.not-yet {
   -webkit-box-shadow: inset 0 1px 0 0 #999;
           box-shadow: inset 0 1px 0 0 #999;
@@ -2519,27 +2526,27 @@ body.game-stlouis.landscape-orientation button.not-yet, body.game-stlouis.landsc
   text-shadow: 0 1px 0 #808080;
 }
 
-/* line 204, src/sass/landscape/_index.scss */
+/* line 211, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container, body.game-stlouis.landscape-orientation .swiper-container-rtl {
   width: calc(100% + 108px);
-  margin: 0 -54px;
+  margin: 4px -54px 0;
 }
 
-/* line 211, src/sass/landscape/_index.scss */
+/* line 218, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-next, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-prev {
   right: 4rem;
   -webkit-transform: scale(0.6);
           transform: scale(0.6);
 }
 
-/* line 217, src/sass/landscape/_index.scss */
+/* line 224, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .swiper-container .swiper-button-prev, body.game-stlouis.landscape-orientation .swiper-container-rtl .swiper-button-next {
   left: 4rem;
   -webkit-transform: scale(0.6);
           transform: scale(0.6);
 }
 
-/* line 229, src/sass/landscape/_index.scss */
+/* line 236, src/sass/landscape/_index.scss */
 body.game-stlouis.landscape-orientation .page-clan .button-wrapper-view---respond {
   display: none;
 }

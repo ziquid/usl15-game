@@ -33,6 +33,7 @@ define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
 define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
 define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
 define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
+define(EVENT_MOTHERS_DAY, 'event_mothers_day');
 define(EVENT_MOVE_3, 'event_move_3');
 define(EVENT_NYE_PARTY, 'event_nye_party');
 define(EVENT_ONE_MINUTE_COMPS, 'event_one_minute_comps');
@@ -165,14 +166,15 @@ switch ($today) {
     $event_type = EVENT_CINCO_DE_MAYO;
     break;
 
-  case '2018-05-07':
-  case '2018-05-08':
-  case '2018-05-09':
-  case '2018-05-10':
-  case '2018-05-11':
-  case '2018-05-12':
-  case '2018-05-13':
-    $month_mission = MISSION_MAY;
+  case '2020-05-08':
+  case '2020-05-09':
+  case '2020-05-10':
+  case '2020-05-11':
+  case '2020-05-12':
+  case '2020-05-13':
+  case '2020-05-14':
+  case '2020-05-15':
+    $event_type[] = EVENT_MOTHERS_DAY;
     break;
 
   case '2018-05-14':

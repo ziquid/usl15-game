@@ -796,7 +796,7 @@ function zg_reset_event_tags_con($id) {
  *   The user object, if any.
  */
 function zg_fetch_user($force = FALSE) {
-  global $game, $phone_id, $extra_messages, $next_level, $user;
+  global $game, $phone_id, $extra_messages, $next_level, $user, $player_location_id;
 
   // Running from drush cron?  There is no user to fetch, so return silently.
   if (isset($game) && $game !== arg(0)) {
@@ -1221,6 +1221,7 @@ function zg_fetch_user($force = FALSE) {
     drupal_goto($game . '/choose_party/' . $arg2 . '/0');
   }
 
+  $player_location_id = drupal_html_class($game_user->location) . '-' . $game_user->fkey_neighborhoods_id;
   zg_alter('zg_fetch_user_end', $game_user);
   firep($game_user, 'game_user at fetch_user');
   return $game_user;

@@ -1327,7 +1327,7 @@ a.try-an-election, input.try-an-election {
 .event a {
   display: block;
   padding: 4px 8px;
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   font-weight: bold;
   background-color: #cc0;
   border-radius: 50px;
@@ -1516,45 +1516,46 @@ img.round4 {
 .colorize-blue {
   -webkit-filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
           filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
 }
 
-/* line 1201, src/sass/style.scss */
+/* line 1202, src/sass/style.scss */
 .colorize-red {
   -webkit-filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(1000%) contrast(0.8);
           filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-50deg) saturate(1000%) contrast(0.8);
 }
 
-/* line 1205, src/sass/style.scss */
+/* line 1206, src/sass/style.scss */
 .colorize-orange {
   -webkit-filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(-25deg) saturate(1000%) contrast(0.7);
           filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(-25deg) saturate(1000%) contrast(0.7);
 }
 
-/* line 1209, src/sass/style.scss */
+/* line 1210, src/sass/style.scss */
 .colorize-yellow {
   -webkit-filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(5deg) saturate(1000%) contrast(0.7);
           filter: grayscale(100%) brightness(120%) sepia(90%) hue-rotate(5deg) saturate(1000%) contrast(0.7);
 }
 
-/* line 1213, src/sass/style.scss */
+/* line 1214, src/sass/style.scss */
 .colorize-green {
   -webkit-filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
           filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
 }
 
-/* line 1217, src/sass/style.scss */
+/* line 1218, src/sass/style.scss */
 .colorize-grey, .colorize-gray {
   -webkit-filter: grayscale(100%) brightness(110%) contrast(0.9);
           filter: grayscale(100%) brightness(110%) contrast(0.9);
 }
 
-/* line 1221, src/sass/style.scss */
+/* line 1222, src/sass/style.scss */
 .colorize-black {
   -webkit-filter: invert(30%) grayscale(100%) brightness(70%) contrast(4);
           filter: invert(30%) grayscale(100%) brightness(70%) contrast(4);
 }
 
-/* line 1225, src/sass/style.scss */
+/* line 1226, src/sass/style.scss */
 a.button-continue {
   border: 1px solid #4d1;
   display: inline-block;
@@ -1562,25 +1563,25 @@ a.button-continue {
   border-radius: 6px;
 }
 
-/* line 1232, src/sass/style.scss */
+/* line 1233, src/sass/style.scss */
 .button-wrapper {
   text-align: center;
 }
 
-/* line 1236, src/sass/style.scss */
+/* line 1237, src/sass/style.scss */
 .tagline {
   text-align: center;
   font-weight: bold;
 }
 
-/* line 1253, src/sass/style.scss */
+/* line 1254, src/sass/style.scss */
 .main-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
   -moz-border-radius: 4px;
 }
 
-/* line 1259, src/sass/style.scss */
+/* line 1260, src/sass/style.scss */
 .elders-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
@@ -1588,44 +1589,44 @@ a.button-continue {
   text-align: center;
 }
 
-/* line 1272, src/sass/style.scss */
+/* line 1273, src/sass/style.scss */
 .quests, .land {
   text-align: left;
 }
 
-/* line 1289, src/sass/style.scss */
+/* line 1290, src/sass/style.scss */
 .quest-required_stuff .quest-required_equipment img.not-yet {
   border: solid 0.5px #c00;
 }
 
-/* line 1293, src/sass/style.scss */
+/* line 1294, src/sass/style.scss */
 .quests .quest-required_stuff .quest-required_equipment img {
   border: solid 0.5px #0c0;
 }
 
-/* line 1300, src/sass/style.scss */
+/* line 1301, src/sass/style.scss */
 .quest-do-again, .land-buy-again {
   text-align: right;
 }
 
-/* line 1304, src/sass/style.scss */
+/* line 1305, src/sass/style.scss */
 .quest-do-again-inside, .land-buy-again-inside {
   border: 1px solid #1ca443;
   border-radius: 4px;
   float: right;
 }
 
-/* line 1319, src/sass/style.scss */
+/* line 1320, src/sass/style.scss */
 .quests .quest-num, .quests .quest-requisites, .quests .quest-disbursements {
   display: none;
 }
 
-/* line 1350, src/sass/style.scss */
+/* line 1351, src/sass/style.scss */
 .city-icon {
   border-radius: 8px;
 }
 
-/* line 1354, src/sass/style.scss */
+/* line 1355, src/sass/style.scss */
 .elections .election-details .action, .land .land-buy-button,
 .land .land-sell-button, .land .land-perform-button,
 .send-message-send-wrapper .send-message-send,
@@ -1635,39 +1636,39 @@ a.button-continue {
   -moz-border-radius: 4px;
 }
 
-/* line 1363, src/sass/style.scss */
+/* line 1364, src/sass/style.scss */
 .elections .election-details .action.not-yet, .land .land-buy-button.not-yet,
 .land .land-sell-button.not-yet {
   border: 1px solid #333833;
 }
 
-/* line 1384, src/sass/style.scss */
+/* line 1385, src/sass/style.scss */
 a.version {
   text-align: center;
 }
 
-/* line 1388, src/sass/style.scss */
+/* line 1389, src/sass/style.scss */
 .new-main-menu .elections-menu {
   font-family: Georgia, "times new roman", serif;
 }
 
-/* line 1395, src/sass/style.scss */
+/* line 1396, src/sass/style.scss */
 .competency-tag {
   border-radius: 4px;
   font-family: "times new roman", Roman, Serif;
 }
 
-/* line 1403, src/sass/style.scss */
+/* line 1404, src/sass/style.scss */
 #drupalforfirebug_general {
   display: block !important;
 }
 
-/* line 1407, src/sass/style.scss */
+/* line 1408, src/sass/style.scss */
 .swiper-container {
   width: 100%;
 }
 
-/* line 1411, src/sass/style.scss */
+/* line 1412, src/sass/style.scss */
 .swiper-slide {
   text-align: center;
   display: -webkit-box;
@@ -1675,7 +1676,7 @@ a.version {
   display: flex;
 }
 
-/* line 1422, src/sass/style.scss */
+/* line 1423, src/sass/style.scss */
 .swiper-container-horizontal > .swiper-pagination-bullets,
 .swiper-pagination-custom,
 .swiper-pagination-fraction {
@@ -1683,73 +1684,73 @@ a.version {
   height: 12px;
 }
 
-/* line 1438, src/sass/style.scss */
+/* line 1439, src/sass/style.scss */
 .swiper-slide.overview .quest-images {
   border-left: solid 1px rgba(224, 255, 240, 0.8);
   border-right: solid 1px rgba(224, 255, 240, 0.8);
 }
 
-/* line 1443, src/sass/style.scss */
+/* line 1444, src/sass/style.scss */
 .quest-group-name, .quest-group-title {
   display: block;
 }
 
-/* line 1452, src/sass/style.scss */
+/* line 1453, src/sass/style.scss */
 .swiper-slide .title .quest-group-name {
   margin: auto;
   width: 248px;
 }
 
-/* line 1457, src/sass/style.scss */
+/* line 1458, src/sass/style.scss */
 .fit-box {
   white-space: nowrap;
   -webkit-transform-origin: top left;
 }
 
-/* line 1465, src/sass/style.scss */
+/* line 1466, src/sass/style.scss */
 .swiper-slide .title .overview-only {
   display: none;
 }
 
-/* line 1469, src/sass/style.scss */
+/* line 1470, src/sass/style.scss */
 .swiper-slide.overview .title .overview-only {
   display: inline-block;
 }
 
-/* line 1473, src/sass/style.scss */
+/* line 1474, src/sass/style.scss */
 .swiper-slide.overview .title img.overview-only {
   display: inline-block;
   border: 0.5px solid #3c0;
   border-radius: 6px;
 }
 
-/* line 1479, src/sass/style.scss */
+/* line 1480, src/sass/style.scss */
 .wrong-hood-wrapper, .not-yet-wrapper {
   position: relative;
 }
 
-/* line 1483, src/sass/style.scss */
+/* line 1484, src/sass/style.scss */
 div + .wrong-hood-wrapper {
   width: 77px;
   display: inline-block;
 }
 
-/* line 1488, src/sass/style.scss */
+/* line 1489, src/sass/style.scss */
 .quest-icon .wrong-hood-wrapper {
   width: 100px;
 }
 
-/* line 1495, src/sass/style.scss */
+/* line 1496, src/sass/style.scss */
 input.wrong-hood {
   text-align: left;
 }
 
-/* line 1499, src/sass/style.scss */
+/* line 1500, src/sass/style.scss */
 input + img.wrong-hood-overlay {
   bottom: 8px;
 }
 
-/* line 1503, src/sass/style.scss */
+/* line 1504, src/sass/style.scss */
 img.wrong-hood-overlay {
   position: absolute;
   bottom: 6px;
@@ -1758,88 +1759,88 @@ img.wrong-hood-overlay {
   height: 12px;
 }
 
-/* line 1514, src/sass/style.scss */
+/* line 1515, src/sass/style.scss */
 span.not-yet-overlay {
   position: absolute;
   bottom: 14px;
   right: 7px;
 }
 
-/* line 1520, src/sass/style.scss */
+/* line 1521, src/sass/style.scss */
 .quests span.not-yet-overlay {
   bottom: 21px;
   right: 21px;
 }
 
-/* line 1525, src/sass/style.scss */
+/* line 1526, src/sass/style.scss */
 .swiper-slide .description {
   display: none;
   border-left: solid 1px rgba(224, 255, 240, 0.8);
   border-right: solid 1px rgba(224, 255, 240, 0.8);
 }
 
-/* line 1531, src/sass/style.scss */
+/* line 1532, src/sass/style.scss */
 .swiper-slide.overview .description, .swiper-slide .description.show-expanded {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-/* line 1535, src/sass/style.scss */
+/* line 1536, src/sass/style.scss */
 .swiper-slide.overview .description.empty {
   border-left: none;
   border-right: none;
 }
 
-/* line 1540, src/sass/style.scss */
+/* line 1541, src/sass/style.scss */
 .swiper-slide.overview .quests {
   display: none;
 }
 
-/* line 1544, src/sass/style.scss */
+/* line 1545, src/sass/style.scss */
 .swiper-slide .quests {
   border: none;
   border-radius: 0;
 }
 
-/* line 1559, src/sass/style.scss */
+/* line 1560, src/sass/style.scss */
 .swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {
   top: 25px;
 }
 
-/* line 1569, src/sass/style.scss */
+/* line 1570, src/sass/style.scss */
 .system-message-response {
   text-align: center;
   border: solid 1px #f8fefc;
   border-radius: 3px;
 }
 
-/* line 1575, src/sass/style.scss */
+/* line 1576, src/sass/style.scss */
 div.description-speech-bubble-wrapper {
   text-align: left;
 }
 
-/* line 1579, src/sass/style.scss */
+/* line 1580, src/sass/style.scss */
 div.speech-bubble-wrapper {
   text-align: left;
 }
 
-/* line 1589, src/sass/style.scss */
+/* line 1590, src/sass/style.scss */
 .quests .quest-icon-baseline-overlay {
   border-radius: 4px;
 }
 
-/* line 1593, src/sass/style.scss */
+/* line 1594, src/sass/style.scss */
 .quests .quest-icon-overlay {
   border-radius: 4px;
 }
 
-/* line 1597, src/sass/style.scss */
+/* line 1598, src/sass/style.scss */
 .bonus-text {
   text-align: center;
 }
 
-/* line 1601, src/sass/style.scss */
+/* line 1602, src/sass/style.scss */
 .lesser-bonus-text {
   text-align: center;
 }

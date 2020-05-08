@@ -1036,7 +1036,7 @@ a.try-an-election, input.try-an-election {
 .event a {
   display: block;
   padding: 4px 8px;
-  font-size: 1.125rem;
+  font-size: 1.1rem;
   font-weight: bold;
   background-color: #cc0;
   border-radius: 50px;
@@ -1195,6 +1195,7 @@ img.round4 {
 
 /* based on https://codepen.io/stilllife00/pen/avXpgJ */
 .colorize-blue {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
   filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-180deg) saturate(1000%) contrast(0.8);
 }
 
