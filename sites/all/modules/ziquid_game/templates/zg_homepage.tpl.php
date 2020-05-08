@@ -89,13 +89,8 @@ firep("adding $money money because last_bonus_date = {$game_user->last_bonus_dat
 }
 
 // Get values of current hood's alder.
-$sql = 'SELECT `values` FROM `users`
-  inner join elected_officials on elected_officials.fkey_users_id = users.id
-  WHERE fkey_neighborhoods_id = %d
-  and elected_officials.fkey_elected_positions_id = 1;';
-$result = db_query($sql, $game_user->fkey_neighborhoods_id);
-$alder = db_fetch_object($result);
-firep($alder, 'values of current hood alder');
+$alder = zg_get_hood_alder($game_user->fkey_neighborhoods_id);
+firep($alder, 'current hood alder');
 $alder_values = drupal_strtolower($alder->values);
 $player_values = drupal_strtolower($game_user->values);
 

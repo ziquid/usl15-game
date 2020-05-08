@@ -3,7 +3,7 @@
  */
 #player {
   position: absolute;
-  top: 4px;
+  top: 0;
   left: 80px;
   width: calc(100% - 160px);
   height: 42px;
@@ -23,6 +23,9 @@
   .player_location {
     border: solid 1px #dd7a;
     border-radius: 9px;
+    display: inline-block;
+    margin: 0;
+    padding-top: 2px;
   }
 }
 

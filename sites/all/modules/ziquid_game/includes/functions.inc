@@ -869,7 +869,7 @@ function zg_fetch_users_by_id($ids) {
 
   $sql = 'SELECT distinct users.*,
     user_creations.datetime as startdate,
-    `values`.party_title, `values`.party_icon,
+    `values`.party_title, `values`.party_icon, `values`.color,
     elected_positions.name as ep_name,
     elected_positions.id as ep_level,
     elected_officials.approval_rating,
@@ -2463,13 +2463,40 @@ function zg_render_user_header(&$user) {
     ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
     '">' . $user->username . '</a>';
 
-  $user->display->location = $user->location;
+  $user->display->location = '<a href="/' . $game . '/move/' . $arg2 . '/0">' .
+    $user->location . '</a>';
+  $alder = zg_get_hood_alder($user->fkey_neighborhoods_id);
+  firep($alder, 'Alder player');
+  $hood_values = strlen($alder->values) ? drupal_strtolower($alder->values) : 'nothing';
+  $hood_color = strlen($alder->color) ? $alder->color . 'cc' : '333c';
 
   $user->display->user_header = '<div>' . $user->display->username . '</div><div>' .
     '<span class="player_level">' . $user->display->level . '</span>' .
     '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
     '<span class="player_party">' . $user->display->party . '</span></div>' .
-    '<div class="player_location">' . $user->display->location . '</div>';
+    '<div><div class="player_location location-values-' . $hood_values . '" ' .
+    'style="background-color: #' . $hood_color . ';">' .
+    $user->display->location . '</div></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
   return $user->display->user_header;
+}
+
+/**
+ * Get the specified neighborhood's Alder info.
+ * @param $hood
+ *
+ * @return null|object|\stdClass
+ *   The value of the current hood's Alder, if any.
+ */
+function zg_get_hood_alder($hood) {
+  $sql = 'SELECT `id` FROM `users`
+  inner join elected_officials on elected_officials.fkey_users_id = users.id
+  WHERE fkey_neighborhoods_id = %d
+  and elected_officials.fkey_elected_positions_id = 1;';
+  $result = db_query($sql, $hood);
+  $alder = db_fetch_object($result);
+  if (property_exists($result, 'id')) {
+    return zg_fetch_user_by_id((int) $alder->id);
+  }
+  return NULL;
 }
