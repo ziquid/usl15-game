@@ -52,8 +52,9 @@ EOF;
 
   zg_button();
 
-  if (substr($phone_id, 0, 3) == 'ai-')
+  if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
+  }
 
   game_karma($game_user, "No elections in current hood", -25);
 
@@ -229,7 +230,7 @@ EOF;
   echo '<div class="election-succeeded">' . t('Success!') . '</div>';
   echo '<div class="subtitle">' .
     t('You ran unopposed and automatically win!') . '</div>';
-  zg_button('elections', 'Continue');
+  zg_button('elections');
 
   $message = "$game_user->username ran unopposed for the seat $item->ep_name" .
     " in $location.";
@@ -257,7 +258,7 @@ if ($game_user->level > ($item->level + 15)) {
   echo '<div class="election-failed">' . t('Sorry!') . '</div>';
   echo t('<div class="subtitle">Your @influence is too high to challenge @name</div>',
     ['@influence' => $game_text['experience'], '@name' => $item->username]);
-  zg_button('elections', 'Continue');
+  zg_button('elections');
   db_set_active();
   return;
 }
@@ -362,31 +363,19 @@ firep("His/her $extra_defending_votes voters vote for him/her");
 // Also don't allow defenders with more than 100k endurance.
 if (($is_limited) && ($item->ep_id == 1)) {
 
-  // Opponent has too much influence!
   if ($opp_influence > 100000) {
 
-    // Stack the votes so you automatically win.
+    // Opponent has too much influence!
     $extra_votes += 10000;
-firep('10000 extra voters spontaneously arrive to vote for you!');
-//mail('joseph@cheek.com', 'Alder in training hood has too much endurance!',
-//  "$item->username [$opp_influence] in $location is voted out of office");
-
   }
-  else if ($my_influence > 100000) {
+  elseif ($my_influence > 100000) {
 
-      // Challenger has too much influence.
-      // Do not allow him/her to challenge.
-//mail('joseph@cheek.com',
-//  'Challenger for Alder in training hood has too much influence!',
-//  "$game_user->username [$my_influence] in $location " .
-//  'is not allowed to challenge.');
-
+    // Challenger has too much influence.
     echo '<div class="election-failed">' . t('Sorry!') . '</div>';
     echo '<div class="subtitle">' .
-      t('Your influence is too high to challenge ') . $item->username .
-      '.</div>';
-    echo '<div class="election-continue"><a href="/' . $game . '/elections/' .
-      $arg2 . '">' . t('Continue') . '</a></div>';
+      t('Your influence is too high to challenge @user.', ['@user' => $item->username]) .
+      '</div>';
+    zg_button('elections');
 
     db_set_active();
     return;
@@ -833,14 +822,14 @@ if ($votes < 0) {
   // Party office.
   if ($item->type == 2) {
 
-    // Make it so s/he can't perform a major action for a day.
+    // Make it so player can't perform a major action for a day.
     $set_value = '_' . arg(0) . '_set_value';
     $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
   }
 
   if ($item->ep_id == 1) {
 
-    // You beat the Alderman - all type 1 officials in that neighborhood lose their seats.
+    // You beat the Alder - all type 1 officials in that hood lose their seats.
     $data = [];
     $sql = 'SELECT users.id FROM elected_officials
       left join users on elected_officials.fkey_users_id = users.id
