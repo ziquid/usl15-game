@@ -1667,7 +1667,7 @@ function usl_esa_bounce_callback($phone_id) {
   db_set_active();
   zg_song($game_user, 'Jump teaser', TRUE);
 
-  if ($game_user->meta == 'admin' || $game_user->meta == 'employee') {
+  if ($game_user->meta == 'admin' || $game_user->meta == 'staff') {
     $button = zg_render_button('/stlouis/bounce') .
       "<p class='center'>(if you dare)</p>";
   }
