@@ -234,30 +234,36 @@ function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig)
 
   // FIXME: move SQL to a function.
   $sql = 'select clan_messages.*, users.username, users.phone_id,
-  elected_positions.name as ep_name,
-  clan_members.is_clan_leader,
-  clans.acronym as clan_acronym, clans.name as clan_name,
-  clans.rules as clan_rules
-  
-  from clan_messages 
-  
-  left join users on clan_messages.fkey_users_from_id = users.id
-  
-  LEFT OUTER JOIN elected_officials
-  ON elected_officials.fkey_users_id = users.id
-  
-  LEFT OUTER JOIN elected_positions
-  ON elected_positions.id = elected_officials.fkey_elected_positions_id
-  
-  LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
-    clan_messages.fkey_users_from_id
-  
-  LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-  
-  where clan_messages.fkey_neighborhoods_id = %d
-    AND clan_messages.is_announcement = 0
-  order by id DESC
-  LIMIT 50;';
+    users.level,
+    elected_positions.name as ep_name,
+    clan_members.is_clan_leader,
+    UPPER(clans.acronym) as clan_acronym, clans.name as clan_name,
+    clans.rules as clan_rules,
+    "clan" as type,
+    "" as subtype,
+    neighborhoods.name as location
+
+    from clan_messages 
+    
+    left join users on clan_messages.fkey_users_from_id = users.id
+    
+    LEFT OUTER JOIN elected_officials
+    ON elected_officials.fkey_users_id = users.id
+    
+    LEFT OUTER JOIN elected_positions
+    ON elected_positions.id = elected_officials.fkey_elected_positions_id
+    
+    LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
+      clan_messages.fkey_users_from_id
+    
+    LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+    
+    LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
+    
+    where clan_messages.fkey_neighborhoods_id = %d
+      AND clan_messages.is_announcement = 0
+    order by id DESC
+    LIMIT 50;';
 
   $result = db_query($sql, $clan_id);
   $data = [];

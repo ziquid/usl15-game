@@ -1613,6 +1613,18 @@ body.game-stlouis .ask-name {
   margin-bottom: 9px;
 }
 
+/* line 1194, src/sass/common/_index.scss */
+body.game-stlouis .admin-online {
+  -webkit-filter: drop-shadow(0 0 3px #f8fefd);
+          filter: drop-shadow(0 0 3px #f8fefd);
+}
+
+/* line 1198, src/sass/common/_index.scss */
+body.game-stlouis .staff-online {
+  -webkit-filter: drop-shadow(0 0 2px yellow);
+          filter: drop-shadow(0 0 2px yellow);
+}
+
 /* line 8, src/sass/stlouis.scss */
 body.game-stlouis.portrait-orientation {
   /**
@@ -1882,7 +1894,6 @@ body.game-stlouis.landscape-orientation #player .player_location {
 
 /* line 33, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_username {
-  text-decoration: none;
   color: #dd7;
   font-size: .75rem;
   font-family: Georgia,times new roman,serif;
@@ -1917,7 +1928,6 @@ body.game-stlouis.landscape-orientation .player_username.not_online {
 body.game-stlouis.landscape-orientation .player_level, body.game-stlouis.landscape-orientation .player_clan, body.game-stlouis.landscape-orientation .player_party, body.game-stlouis.landscape-orientation .player_location {
   font-size: 0.625rem;
   padding: 5px 5px 2px;
-  text-decoration: none;
   color: #dd7a;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;
@@ -1927,16 +1937,10 @@ body.game-stlouis.landscape-orientation .player_level, body.game-stlouis.landsca
   text-transform: uppercase;
 }
 
-/* line 71, src/sass/landscape/_player.scss */
-body.game-stlouis.landscape-orientation .player_level a, body.game-stlouis.landscape-orientation .player_clan a, body.game-stlouis.landscape-orientation .player_party a, body.game-stlouis.landscape-orientation .player_location a {
-  text-decoration: none;
-}
-
 /* line 76, src/sass/landscape/_player.scss */
 body.game-stlouis.landscape-orientation .player_seat {
   font-size: 0.755rem;
   padding: 5px 2px 2px;
-  text-decoration: none;
   color: #dd7a;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;

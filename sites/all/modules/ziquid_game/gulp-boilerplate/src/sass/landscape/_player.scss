@@ -31,7 +31,7 @@
 }
 
 .player_username {
-  text-decoration: none;
+  //text-decoration: none;
   color: #dd7;
   font-size: .75rem;
   font-family: Georgia,times new roman,serif;
@@ -59,7 +59,7 @@
 .player_level, .player_clan, .player_party, .player_location {
   font-size: 0.625rem;
   padding: 5px 5px 2px;
-  text-decoration: none;
+  //text-decoration: none;
   color: #dd7a;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;
@@ -69,14 +69,14 @@
   border-radius: 5px;
   text-transform: uppercase;
   a {
-    text-decoration: none;
+    //text-decoration: none;
   }
 }
 
 .player_seat {
   font-size: 0.755rem;
   padding: 5px 2px 2px;
-  text-decoration: none;
+  //text-decoration: none;
   color: #dd7a;
   font-family: Georgia, "Times New Roman", serif;
   font-weight: 400;

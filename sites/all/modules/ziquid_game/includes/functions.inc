@@ -1920,13 +1920,15 @@ function zg_get_all_messages($game_user) {
   (
   select user_messages.timestamp, user_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   user_messages.private, user_messages.id as msg_id,
   user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
   "user" as type,
-  subtype
+  subtype,
+  neighborhoods.name as location
   from user_messages
   left join users on user_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -1936,6 +1938,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   user_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   where fkey_users_to_id = %d
   order by timestamp DESC limit %d
   )
@@ -1945,13 +1948,15 @@ function zg_get_all_messages($game_user) {
   (
   select challenge_messages.timestamp, challenge_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, challenge_messages.id as msg_id,
   challenge_messages.fkey_users_from_id, challenge_messages.fkey_users_to_id,
   "challenge" as type,
-  "" as subtype
+  "" as subtype,
+  neighborhoods.name as location
   from challenge_messages
   left join users on challenge_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -1961,6 +1966,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   challenge_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   where fkey_users_to_id = %d
   order by timestamp DESC limit %d
   )
@@ -1971,13 +1977,15 @@ function zg_get_all_messages($game_user) {
   (
   select neighborhood_messages.timestamp, neighborhood_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, neighborhood_messages.id as msg_id,
   neighborhood_messages.fkey_users_from_id, 0 as fkey_users_to_id,
   "hood" as type,
-  "" as subtype
+  "" as subtype,
+  neighborhoods.name as location
   from neighborhood_messages
   left join users on neighborhood_messages.fkey_users_from_id =
     users.id
@@ -1988,6 +1996,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   neighborhood_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   where neighborhood_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
   )
@@ -1998,13 +2007,15 @@ function zg_get_all_messages($game_user) {
   (
   select clan_messages.timestamp, clan_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, clan_messages.id as msg_id,
   clan_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "clan" as type,
-  "" as subtype
+  "" as subtype,
+  neighborhoods.name as location
   from clan_messages
   left join users on clan_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -2014,6 +2025,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     clan_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   ' . $clan_sql . '
   order by timestamp DESC limit %d
   )
@@ -2024,13 +2036,15 @@ function zg_get_all_messages($game_user) {
   (
   select values_messages.timestamp, values_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, values_messages.id as msg_id,
   values_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "values" as type,
-  "" as subtype
+  "" as subtype,
+  neighborhoods.name as location
   from values_messages
   left join users on values_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -2040,6 +2054,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
     values_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   where values_messages.fkey_values_id = %d
 --    AND values_messages.fkey_neighborhoods_id = %d
   order by timestamp DESC limit %d
@@ -2050,13 +2065,15 @@ function zg_get_all_messages($game_user) {
   (
   select system_messages.timestamp, system_messages.message,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, system_messages.id as msg_id,
   system_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "mayor" as type,
-  subtype
+  subtype,
+  neighborhoods.name as location
   from system_messages
   left join users on system_messages.fkey_users_from_id = users.id
   LEFT OUTER JOIN elected_officials
@@ -2066,6 +2083,7 @@ function zg_get_all_messages($game_user) {
   LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
   system_messages.fkey_users_from_id
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
   order by timestamp DESC limit %d
   )
 
@@ -2127,6 +2145,7 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   select user_messages.timestamp, user_messages.message,
   user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
   users.username, users.phone_id, users.values,
+  users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
@@ -2148,6 +2167,7 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   user_messages.fkey_users_from_id
 
   LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
+  LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
 
   where fkey_users_to_id = %d AND user_messages.id > %d
   ' . $no_private . '
@@ -2212,14 +2232,16 @@ function zg_format_message($game_user, $check_user_id, &$message) {
     $message->display->private_css = $message->display->private_text = '';
   }
 
-  $message->display->private_css .= ' ' . $message->type . ' ' . $message->type . '-' . $message->subtype;
+  $message->display->private_css .= ' ' . $message->type . ' ' .
+    $message->type . '-' . $message->subtype;
 
   if (empty($message->username)) {
     $message->display->username = '';
     $message->display->reply = '';
   }
   else {
-    $message->display->username = 'from ' . zg_render_user($message);
+    $message->display->username = 'from ' .
+      zg_render_user($message, $message->type . '_msg');
     if (!in_array($message->username, ['USLCE Game', 'The Socialite'])) {
       $message->display->reply = zg_render_button('user', 'View / Respond', '/id:' .
         $message->fkey_users_from_id);
@@ -2286,6 +2308,7 @@ function zg_short_format_int($num) {
     return number_format($num, 0) . 'T';
   }
 }
+
 /**
  * Format items in a message for display.
  *
@@ -2328,7 +2351,13 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
  */
 function zg_render_user(&$user, $type = 'html') {
   $function_name = 'zg_render_user_' . $type;
-  return $function_name($user);
+
+  if (function_exists($function_name)) {
+    return $function_name($user);
+  }
+  else {
+    return zg_render_user_html($user);
+  }
 }
 
 /**
@@ -2418,6 +2447,61 @@ function zg_render_user_clan(&$user) {
 }
 
 /**
+ * Render a user as clan message view.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The clan view html rendering of the user object.
+ */
+function zg_render_user_clan_msg(&$user) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
+
+  if (!property_exists($user, 'display')) {
+    $user->display = new \stdClass();
+  }
+  $user->display->clan_acronym = '';
+  if (strlen($user->clan_acronym)) {
+    $user->display->clan_acronym = "($user->clan_acronym)";
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan_acronym .= '*';
+  }
+
+  $user->display->level = $user->level;
+  $user->display->location = $user->location;
+
+  $player_class = 'player_username';
+  $last_access = REQUEST_TIME - strtotime($user->last_access);
+  firep([REQUEST_TIME, strtotime($user->last_access), $last_access], 'last access times');
+  if ($last_access < 300) {
+    $player_class .= ' online_now';
+  }
+  elseif ($last_access < 900) {
+    $player_class .= ' online_recently';
+  }
+  else {
+    $player_class .= ' not_online';
+  }
+
+  $user->display->username = '<a class="' . $player_class . '" href="/' . $game .
+    '/user/' . $arg2 . '">' . $user->username . '</a>' . $user->display->clan_acronym;
+
+  if (strlen($user->ep_name)) {
+    $user->display->username = '<span class="player_seat">' . $user->ep_name .
+      '</span> ' . $user->display->username;
+  }
+
+  $user->display->user_clan = $user->display->username .
+    '<span class="player_level">(' . $user->display->level . '/' .
+    $user->display->location . ')</span>';
+  return $user->display->user_clan;
+}
+
+/**
  * Render a user as header.
  *
  * @param object $user
@@ -2501,4 +2585,30 @@ function zg_get_hood_alder($hood) {
     return zg_fetch_user_by_id((int) $alder->id);
   }
   return NULL;
+}
+
+/**
+ * Get Admin or staff online presence.
+ *
+ * @return string
+ *   A string depicting any online presence.
+ */
+function zg_get_online_presence() {
+  $sql = 'select count(*) as count from users
+    where meta = "admin" 
+    and last_access > (CURRENT_TIMESTAMP - 300);';
+  $result = db_query($sql);
+  $admin = db_fetch_object($result);
+  if ($admin->count) {
+    return 'admin-online';
+  }
+  $sql = 'select count(*) as count from users
+    where meta = "staff" 
+    and last_access > (CURRENT_TIMESTAMP - 300);';
+  $result = db_query($sql);
+  $staff = db_fetch_object($result);
+  if ($staff->count) {
+    return 'staff-online';
+  }
+  return '';
 }

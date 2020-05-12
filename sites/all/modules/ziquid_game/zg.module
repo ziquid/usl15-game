@@ -1444,6 +1444,8 @@ function zg_fetch_header(\stdClass $game_user) {
       'setting');
   }
 
+  $online_presence = zg_get_online_presence();
+
   if (zg_is_landscape()) {
 
     // Landscape header/menus.
@@ -1462,11 +1464,12 @@ function zg_fetch_header(\stdClass $game_user) {
 
 <!-- menu -->
 <div id="menu-toggle">
-  <img id="menu-toggle-button" src="/sites/default/files/images/{$game}_home_icon.png"/>
+  <img id="menu-toggle-button" class="$online_presence"
+    src="/sites/default/files/images/{$game}_home_icon.png"/>
 </div>
 
 <div class="menu-button" id="menu-button-1" data-home-link="/$game/home/$arg2">
-  <img src="/sites/default/files/images/{$game}_home_icon.png" />
+  <img class="$online_presence" src="/sites/default/files/images/{$game}_home_icon.png"/>
   <div class="label">
     Home
   </div>
@@ -1588,7 +1591,7 @@ $game_user->energy_max <div class="energy-text">Energy</div>
   <div id="energy-time">$energy_text</div></div>
   <div class="home">
     <a href="/$game/home/$arg2">
-      <img src="/sites/default/files/images/{$game}_home_icon.png"/>
+      <img src="/sites/default/files/images/{$game}_home_icon.png" class="$online_presence"/>
       <div id="msg-badge"></div>
     </a>
   </div>
