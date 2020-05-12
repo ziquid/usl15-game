@@ -31,6 +31,9 @@ function stlouis_event_mothers_day_homepage_event_notice(\stdClass $game_user, &
   <div class="event-text">
     How can you make this Mother\'s Day memorable?
   </div>
+  <div class="event-title">
+    ~ Second round now available ~
+  </div>
 </div>';
 }
 
