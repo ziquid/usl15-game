@@ -23,7 +23,7 @@ include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $q = $_GET['q'];
 
-if (empty($game_user->username)) {
+if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
