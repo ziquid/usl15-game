@@ -60,7 +60,7 @@
 	  mail('joseph@ziquid.com', $game . ' Google Checkout Luck purchase', $msg);
 
 //  }
-//  drupal_goto($game . '/elders/' . $phone_id);
+//  drupal_goto($game . '/elders/' . $arg2);
 
   echo '<notification-acknowledgement xmlns="http://checkout.google.com/schema/2"
     serial-number="' . $_POST['serial-number'] . '" />';
