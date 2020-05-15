@@ -21,12 +21,13 @@
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
-$q = $_GET['q'];
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
+
+$q = $_GET['q'];
 
 $sql = 'SELECT users.*,  elected_positions.name as ep_name,
   clan_members.is_clan_leader,

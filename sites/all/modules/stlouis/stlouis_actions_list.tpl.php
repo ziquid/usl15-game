@@ -23,6 +23,11 @@
     '_actions.inc';
   $game_user = $fetch_user();
 
+  if (empty($game_user->username) || $game_user->username == '(new player)') {
+    db_set_active();
+    drupal_goto($game . '/choose_name/' . $arg2);
+  }
+
   if ($game_user->level < 6) {
 
     echo <<< EOF
@@ -50,11 +55,6 @@ EOF;
   }
 
   $fetch_header($game_user);
-
-  if (empty($game_user->username) || $game_user->username == '(new player)') {
-    db_set_active();
-    drupal_goto($game . '/choose_name/' . $arg2);
-  }
 
   $sql = 'select name, district from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);
