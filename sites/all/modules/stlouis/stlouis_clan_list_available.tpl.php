@@ -25,7 +25,7 @@
 
   if (empty($game_user->username) || $game_user->username == '(new player)') {
     db_set_active();
-    drupal_goto($game . '/choose_name/' . $phone_id);
+    drupal_goto($game . '/choose_name/' . $arg2);
   }
 
   $sql = 'SELECT clan_title from `values`
