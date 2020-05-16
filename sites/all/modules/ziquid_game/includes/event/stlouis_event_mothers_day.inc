@@ -28,11 +28,11 @@ function stlouis_event_mothers_day_homepage_event_notice(\stdClass $game_user, &
   <div class="event-tagline">
     <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1017">Mother\'s Day In Quarantine</a>
   </div>
-  <div class="event-text">
-    How can you make this Mother\'s Day memorable?
-  </div>
   <div class="event-title">
-    ~ Second round Bonus now available ~
+    ~ Second round bonus available ~
+  </div>
+  <div class="event-tagline small">
+    <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1005">Also Finish Mother\'s Day 2018</a>
   </div>
 </div>';
 }
@@ -41,5 +41,12 @@ function stlouis_event_mothers_day_homepage_event_notice(\stdClass $game_user, &
  * Implements hook_flag_show_quest_group_ID().
  */
 function stlouis_event_mothers_day_flag_show_quest_group_1017(\stdClass $game_user, \stdClass $qg) {
+  return TRUE;
+}
+
+/**
+ * Implements hook_flag_show_quest_group_ID().
+ */
+function stlouis_event_mothers_day_flag_show_quest_group_1005(\stdClass $game_user, \stdClass $qg) {
   return TRUE;
 }
