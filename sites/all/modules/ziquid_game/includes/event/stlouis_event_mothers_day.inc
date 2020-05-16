@@ -23,7 +23,7 @@ function stlouis_event_mothers_day_homepage_event_notice(\stdClass $game_user, &
   $event_text .= '
 <div class="event">
   <div class="event-title">
-    ~ May 8 - 15 ~
+    ~ EXTENDED through May 18 ~
   </div>
   <div class="event-tagline">
     <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1017">Mother\'s Day In Quarantine</a>

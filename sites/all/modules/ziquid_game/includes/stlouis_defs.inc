@@ -174,6 +174,9 @@ switch ($today) {
   case '2020-05-13':
   case '2020-05-14':
   case '2020-05-15':
+  case '2020-05-16':
+  case '2020-05-17':
+  case '2020-05-18':
     $event_type[] = EVENT_MOTHERS_DAY;
     break;
 
