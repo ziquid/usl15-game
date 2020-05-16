@@ -31,8 +31,13 @@ function stlouis_event_mothers_day_homepage_event_notice(\stdClass $game_user, &
   <div class="event-title">
     ~ Second round bonus available ~
   </div>
+</div>
+<div class="event">
+  <div class="event-text">
+    Didn\'t finish Mother\'s Day missions in 2018?
+  </div>
   <div class="event-tagline small">
-    <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1005">Also Finish Mother\'s Day 2018</a>
+    <a href="/' . $game . '/quest_groups/' . $arg2 . '#group-1005">Finish Mother\'s Day 2018</a>
   </div>
 </div>';
 }
