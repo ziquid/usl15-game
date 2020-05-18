@@ -18,7 +18,7 @@
  */
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = $fetch_user();
 
   $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`

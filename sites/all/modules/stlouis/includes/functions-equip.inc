@@ -22,7 +22,7 @@
 function game_required_equipment(\stdClass $game_user, $equipment_id, $req_quantity = 1) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $eo = game_fetch_equip_by_id($game_user, $equipment_id);
 
@@ -178,7 +178,7 @@ function game_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $op
 function game_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   static $party_title;
   $classes = [];
   $header = '';
@@ -779,7 +779,7 @@ EOF;
  */
 function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // BUG!  How do these get here?
   if ($id == 0) {
@@ -871,7 +871,7 @@ function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_pric
  */
 function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // FIXME: refactor to use game_fetch_equip_by_id().
   $sql = 'select * from equipment where id = %d;';
@@ -926,7 +926,7 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
  */
 function game_equipment_use(&$game_user, $id, $quantity) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   if (game_equipment_lose($game_user, $id, $quantity, 0)) {
     $sql = 'update equipment_ownership set quantity_used = quantity_used + %d
@@ -942,7 +942,7 @@ function game_equipment_use(&$game_user, $id, $quantity) {
 function game_show_equipment(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $arg2 = check_plain(arg(2));
   static $party_title;
 

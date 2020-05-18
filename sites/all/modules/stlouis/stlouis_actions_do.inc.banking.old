@@ -14,7 +14,7 @@ function _stlouis_action_open_a_bank_account_function(&$outcome_reason,
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
   $can_do_again = FALSE;
@@ -92,7 +92,7 @@ function _stlouis_action_close_a_bank_account_function(&$outcome_reason,
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
   $can_do_again = FALSE;
@@ -181,7 +181,7 @@ function _stlouis_action_list_your_bank_accounts_function(&$outcome_reason,
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -226,7 +226,7 @@ function _stlouis_action_change_a_bank_account_password_function(&$outcome_reaso
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -307,7 +307,7 @@ function _stlouis_action_deposit_funds_function(&$outcome_reason,
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;
@@ -494,7 +494,7 @@ function _stlouis_action_withdraw_funds_function(&$outcome_reason,
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
   $game_user = $fetch_user();
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
 //    $can_do_again = FALSE;

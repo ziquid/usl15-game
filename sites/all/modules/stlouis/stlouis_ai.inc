@@ -23,7 +23,7 @@ function game_move_ai() {
   global $game, $ai_output, $bt_skip;
 
   // $game = check_plain(arg(0));.
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = $fetch_user();
 
   // No need to do AI moves on a Windows Platform.
@@ -1139,7 +1139,7 @@ function _ai_boost_experience($ai_id, $boost_flags = 0) {
 
   global $game;
 
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $ai_user = game_ai_fetch_user($ai_id);
   game_ai_out("Trying to boost experience of $ai_id");
@@ -1825,7 +1825,7 @@ function game_ai_buy_land($ai_id) {
  */
 function game_ai_debate_players($ai_id, $num_debates = 99) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $ai_user = game_ai_fetch_user($ai_id);
   $num_attempts = min($num_debates, $ai_user->actions);
 

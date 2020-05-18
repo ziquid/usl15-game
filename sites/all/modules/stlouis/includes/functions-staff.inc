@@ -49,7 +49,7 @@ function game_fetch_staff_by_id($game_user, $staff_id) {
 function game_show_staff($game_user, $item, &$ai_output, $options = []) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   static $party_title;
   $classes = [];
 
@@ -718,7 +718,7 @@ function game_fetch_next_staff($game_user) {
  */
 function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // BUG!  How do these get here?
   if ($id == 0) {
@@ -810,7 +810,7 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
  */
 function game_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // FIXME: refactor to use game_fetch_staff_by_id().
   $sql = 'select * from staff where id = %d;';
@@ -859,7 +859,7 @@ function game_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
  */
 function game_required_staff(\stdClass $game_user, $staff_id, $req_quantity) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'select quantity from staff_ownership
     where fkey_staff_id = %d and fkey_users_id = %d;';

@@ -28,7 +28,7 @@ function stlouis_cron() {
   define('REQUEST_TIME', time());
 
   db_set_active('game_' . $game);
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // AI moves.
   include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
