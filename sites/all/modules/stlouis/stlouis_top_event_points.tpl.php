@@ -21,12 +21,13 @@
 
   include drupal_get_path('module', $game) . '/game_defs.inc';
   $game_user = $fetch_user();
-  $fetch_header($game_user);
 
   if (empty($game_user->username) || $game_user->username == '(new player)') {
     db_set_active();
     drupal_goto($game . '/choose_name/' . $arg2);
   }
+
+  $fetch_header($game_user);
 
   $sql = 'select count(id) as count from users
     where meta = "zombie";';

@@ -20,14 +20,15 @@
 global $game, $phone_id;
 include drupal_get_path('module', $game) . '/game_defs.inc';
 $game_user = $fetch_user();
-$show_where = check_plain($_GET['where']);
-$show_what = check_plain($_GET['what']);
-zg_alter('top20_list_show_what', $game_user, $show_what);
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
+
+$show_where = check_plain($_GET['where']);
+$show_what = check_plain($_GET['what']);
+zg_alter('top20_list_show_what', $game_user, $show_what);
 
 if ($debate == 'Box') {
   $title = 'Top Boxers';
