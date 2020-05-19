@@ -119,7 +119,7 @@ EOF;
 function NO_clan_required_equipment($game_user, $equipment_id, $req_quantity) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'select quantity from clan_equipment_ownership
     where fkey_equipment_id = %d and fkey_clans_id = %d;';
@@ -355,7 +355,7 @@ function NO_has_clan_equipment($game_user, $id, $quantity) {
 function NO_show_actions_menu($game_user) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $arg2 = check_plain(arg(2));
 
   if (arg(3) == '') $normal_active = 'active';
@@ -375,7 +375,7 @@ EOF;
 function NO_show_clan_menu($game_user) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
@@ -492,7 +492,7 @@ function NO_election_won($game_user, $id) {
 function NO_hierarchy_status($game_user, $level) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $ret = new StdClass();
 
@@ -699,7 +699,7 @@ firep($eq->name . ' wore out!');
 function NO_show_favor($game_user, $item, $view = 'initiator', $bounty = -1) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   static $location, $party_title;
 

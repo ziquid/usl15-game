@@ -136,7 +136,7 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
 function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   static $party_title;
 
   if (empty($party_title)) {
@@ -556,7 +556,7 @@ EOF;
 
 function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'select * from land_ownership
     where fkey_land_id = %d and fkey_users_id = %d;';
@@ -595,7 +595,7 @@ function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
 
 function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // FIXME: refactor to use game_fetch_land_by_id().
   $sql = 'select * from land where id = %d;';

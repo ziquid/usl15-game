@@ -18,7 +18,7 @@ require_once drupal_get_path('module', 'stlouis') . '/includes/functions-land.in
 function game_button($link = 'home', $type = 'continue', $extra_link = '') {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $link = $game . '/' . $link . '/' . $arg2 . $extra_link;
 
   echo <<< EOF
@@ -43,7 +43,7 @@ EOF;
  */
 function game_speech($game_user, $text, $force = FALSE) {
 //  global $game;
-//  include drupal_get_path('module', $game) . '/game_defs.inc';
+//  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   if ($force || game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
     drupal_add_js([
       'stlouis' => [
@@ -231,7 +231,7 @@ function game_fetch_visible_quest_groups(\stdClass $game_user) {
  */
 function game_show_quest_group(\stdClass $game_user, $item, &$ai_output) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $link = 'quest_groups';
 
@@ -258,7 +258,7 @@ EOF;
  */
 function game_show_quest_group_slide(\stdClass $game_user, \stdClass $qgo, $options = []) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   if (strpos($qgo->class, 'hidden') !== FALSE) {
     return;
@@ -544,7 +544,7 @@ function game_recalc_income(\stdClass $game_user) {
 function game_show_aides_menu(\stdClass $game_user) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $title = '';
 
   if (substr(arg(1), 0, 4) == 'land') {
@@ -666,7 +666,7 @@ EOF;
 function game_show_elections_menu(\stdClass $game_user) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $arg2 = check_plain(arg(2));
 
   if (substr(arg(1), 0, 7) == 'debates') {
@@ -700,7 +700,7 @@ EOF;
 function game_show_profile_menu(\stdClass $game_user) {
 
   global $game, $phone_id;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $arg2 = check_plain(arg(2));
   $arg3 = check_plain(arg(3));
 
@@ -742,7 +742,7 @@ EOF;
 function game_show_quest_slide(\stdClass $game_user, \stdClass $item) {
 
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 //firep($item, 'quest given to game_show_quest_slide()');
   $sql = 'select id from quests where `group` = %d
     order by id asc limit 1;';
@@ -1022,7 +1022,7 @@ EOF;
  */
 function game_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   if (strpos($obj->meta, 'use_job_picture') !== FALSE) {
     $sql = 'SELECT land.id FROM `land_ownership`
@@ -1047,7 +1047,7 @@ function game_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
 
 function game_competency_gain(\stdClass $game_user, $id, $level = 1) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   // If id is string, find numerical id.
   if (gettype($id) == 'string') {
@@ -1145,7 +1145,7 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
  */
 function game_action_use(\stdClass $game_user, $quantity = 1) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   if ($quantity < 1) {
     return TRUE;
@@ -1185,7 +1185,7 @@ function game_action_use(\stdClass $game_user, $quantity = 1) {
  */
 function game_karma(\stdClass $game_user, $text, $quantity) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'update users set karma = karma + %d where id = %d;';
   db_query($sql, $quantity, $game_user->id);
@@ -1217,7 +1217,7 @@ function game_karma(\stdClass $game_user, $text, $quantity) {
  */
 function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   global $game;
-  include drupal_get_path('module', $game) . '/game_defs.inc';
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $sql = 'update users set luck = luck + %d
     where id = %d;';

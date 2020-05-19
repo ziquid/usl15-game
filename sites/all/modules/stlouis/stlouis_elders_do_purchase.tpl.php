@@ -18,7 +18,7 @@
  */
 
 global $game, $phone_id, $purchasing_luck;
-include drupal_get_path('module', $game) . '/game_defs.inc';
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $purchasing_luck = TRUE;
 $game_user = $fetch_user();
 
