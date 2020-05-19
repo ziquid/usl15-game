@@ -19,7 +19,7 @@
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $referral_code = check_plain($_GET['referral_code']);
 
   if ((substr($phone_id, 0, 3) == 'sdk') ||

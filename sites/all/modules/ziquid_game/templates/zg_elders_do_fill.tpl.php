@@ -65,7 +65,7 @@ switch ($fill_type) {
       $sql = 'update users set actions = actions_max where id = %d;';
       $result = db_query($sql, $game_user->id);
 
-      $game_user = $fetch_user();
+      $game_user = zg_fetch_user();
       $fetch_header($game_user);
 
       echo '<div class="subtitle">Amusez-vous bien !</div>';

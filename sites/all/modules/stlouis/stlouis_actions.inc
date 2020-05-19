@@ -12,7 +12,7 @@ function actionlist() {
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $sql_to_add = '';
   $actions_active = 'AND actions.active = 1';
@@ -495,7 +495,7 @@ firep('allowed not_met users: ' . $allowed_string);
 function game_preaction_plant_flower_seeds(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->neighborhood_rating_change += ($comp_level->level * 0.02);
@@ -505,7 +505,7 @@ function game_preaction_plant_flower_seeds(&$action) {
 function game_preaction_spread_gossip(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->rating_change -= ($comp_level->level * 0.03);
@@ -531,7 +531,7 @@ function zg_preaction_steal_some_value(&$game_user, &$action) {
 function game_preaction_support_your_local_official(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->influence_change += ($comp_level->level * 3);
@@ -541,7 +541,7 @@ function game_preaction_support_your_local_official(&$action) {
 function game_preaction_support_your_party_official(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->influence_change += ($comp_level->level * 3);
@@ -551,7 +551,7 @@ function game_preaction_support_your_party_official(&$action) {
 function game_preaction_throw_eggs(&$action) {
   global $game;
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $comp_level = game_competency_level($game_user, (int) $action->competency_enhanced_1);
   $action->influence_change -= ($comp_level->level * 2);

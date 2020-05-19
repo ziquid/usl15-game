@@ -11,7 +11,7 @@
 function _stlouis_action_create_a_clan_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = $arg3;
   $can_do_again = FALSE;
 
@@ -131,7 +131,7 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   $get_value = '_' . $game . '_get_value';
   $remove_value = '_' . $game . '_remove_value';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = $arg3;
   $can_do_again = FALSE;
 
@@ -333,7 +333,7 @@ firep($now, 'time now');
 function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = $arg3;
   $can_do_again = FALSE;
 
@@ -408,7 +408,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $set_value = '_' . $game . '_set_value';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $can_do_again = FALSE;
 
   $target_name = $target->ep_name . ' ' . $target->username;
@@ -463,7 +463,7 @@ function _stlouis_action_change_clan_leadership_function(&$outcome_reason,
   global $game;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = $_GET['target'];
@@ -535,7 +535,7 @@ function _stlouis_action_change_clan_rules_function(&$outcome_reason, $target,
   global $game, $phone_id;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = arg(3);
 
   $clan_rules = check_plain($_GET['rules']);
@@ -585,7 +585,7 @@ function _stlouis_action_write_on_a_billboard_function(&$outcome_reason, $target
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = $arg3;
 
   $welcome_msg = check_plain($_GET['welcome_msg']);
@@ -700,7 +700,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $can_do_again = FALSE;
   $target_id = $_GET['target'];
 
@@ -820,7 +820,7 @@ function _stlouis_action_roll_call_function(&$outcome_reason, $target, &$can_do_
   global $game, $phone_id;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $location = $game_user->location;
 
   $data = [];
@@ -932,7 +932,7 @@ function _stlouis_action_ping_function(&$outcome_reason, $target, &$can_do_again
   global $game, $phone_id;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $data = [];
   $sql = 'SELECT username, experience, initiative, endurance,
@@ -1051,7 +1051,7 @@ function _stlouis_action_steal_some_value_function(&$outcome_reason,
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $can_do_again = FALSE;
 
   game_karma($game_user, "Stole some value!", -5);
@@ -1067,7 +1067,7 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = arg(3);
   $sure = check_plain($_GET['sure']);
 
@@ -1174,7 +1174,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $sql = 'update users set energy = energy + 30 where id = %d;';
   db_query($sql, $game_user->id);
@@ -1187,7 +1187,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   }
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   if ($game_user->energy > $game_user->energy_max) {
     game_competency_gain($game_user, 'satiated');
@@ -1202,7 +1202,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
 function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $set_value = '_' . $game . '_set_value';
 
   $sql = 'update users set energy = energy + 500 where id = %d;';
@@ -1242,7 +1242,7 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
 function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $set_value = '_' . $game . '_set_value';
 
   $outcome_reason .= '<div class="action-effect">' .
@@ -1283,7 +1283,7 @@ function _stlouis_action_throw_eggs_function(&$outcome_reason, $target, &$can_do
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $can_do_again = TRUE;
 
   $target_name = $target->ep_name . ' ' . $target->username;
@@ -1322,7 +1322,7 @@ function _stlouis_action_meet_someone_new_function(&$outcome_reason,
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   // Both players must be in the same hood.
   if ($game_user->fkey_neighborhoods_id != $target->fkey_neighborhoods_id) {
@@ -1340,7 +1340,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = check_plain($_GET['target']) + 0;
@@ -1369,7 +1369,7 @@ function _stlouis_action_spread_gossip_function(&$outcome_reason,
 function _stlouis_action_plant_flower_seeds_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   // No unaffiliated plantings.
   if ($game_user->fkey_values_id == 0) {
@@ -1398,7 +1398,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   global $game, $phone_id, $action;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $get_value = '_' . $game . '_get_value';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = (int) $_GET['target'];
@@ -1477,7 +1477,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
 function _stlouis_action_check_for_planting_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
 
   $data = [];
@@ -1558,7 +1558,7 @@ EOF;
 function _stlouis_action_check_for_vandalism_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
 
   $data = [];
@@ -1638,7 +1638,7 @@ function _stlouis_action_critique_last_debates_function(&$outcome_reason, $targe
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
 
   $data = [];
@@ -1717,7 +1717,7 @@ EOF;
 function _stlouis_action_listen_for_rumors_function(&$outcome_reason, $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
 
   $data = [];
@@ -1794,7 +1794,7 @@ function _stlouis_action_count_your_benefactors_function(&$outcome_reason,
   $target, &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
 
   $data = [];
@@ -1870,7 +1870,7 @@ EOF;
 function _stlouis_action_check_security_cameras_function(&$outcome_reason, $target) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = $arg3;
   $msg_shown = FALSE;
 
@@ -2107,7 +2107,7 @@ function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
     return FALSE;
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $sql = 'select * from users where id = %d;';
   $result = db_query($sql, $target_id);
@@ -2254,7 +2254,7 @@ function _stlouis_action_count_your_votes_function(&$outcome_reason, $target,
   &$can_do_again) {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
   $can_do_again = FALSE;
 
@@ -2339,7 +2339,7 @@ function _stlouis_action_get_challenge_results_function(&$outcome_reason, $targe
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $msg_shown = FALSE;
   $can_do_again = FALSE;
 
@@ -2423,7 +2423,7 @@ EOF;
 function _stlouis_check_for_friendly_hood() {
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   if ($game_user->meta == 'admin') {
     return TRUE;
@@ -2445,7 +2445,7 @@ function _stlouis_action_clear_clan_announcements_function(&$outcome_reason, $ta
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $action_id = arg(3);
   $sure = check_plain($_GET['sure']);
 
@@ -2488,7 +2488,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $target_id = (int) $_GET['target'];
 
   $sql = 'SELECT elected_officials.id
@@ -2519,7 +2519,7 @@ function _stlouis_action_support_your_party_official_function(
   &$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $target_id = (int) $_GET['target'];
 
   $sql = 'SELECT elected_officials.id
@@ -2590,7 +2590,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
     return FALSE;
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   $sql = 'select users.*, `values`.fkey_neighborhoods_id as home_hood from users
     left join `values` on users.fkey_values_id = `values`.id
@@ -2675,7 +2675,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_don_a_different_costume_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 /*
     $sql = 'update users set username =
       concat(elt(floor (rand() * 13) + 1,
@@ -2690,7 +2690,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       where id = %d';
     $result = db_query($sql, $game_user->id);
 
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 */
     $outcome_reason = '<div class="title">Halloween is over!</div>';
 
@@ -2702,7 +2702,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_remove_your_costume_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $old_username = $game_user->username;
     $can_do_again = FALSE;
 
@@ -2710,7 +2710,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
       where id = %d';
     $result = db_query($sql, $game_user->id);
 
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $new_username = $game_user->username;
 
     if ($old_username != $new_username) {
@@ -2747,7 +2747,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_trick_or_treat_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $old_username = $game_user->username;
 //    $can_do_again = FALSE;
 
@@ -3075,7 +3075,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_check_out_all_the_people_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     $outcome_reason = '<div class="title">Sorry</div>
       <div class="subtitle">They\'ve all gone home</div>';
@@ -3158,7 +3158,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
     $target, &$can_do_again) {
 
     $fetch_user = '_' . arg(0) . '_fetch_user';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     // Not in Fountain Park?  Act as normal.
     if ($game_user->fkey_neighborhoods_id != 80) return TRUE;
@@ -3186,7 +3186,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_hunt_for_zombies_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     $sql = 'select * from users where meta = "zombie"
       order by abs(level - %d) ASC
@@ -3216,7 +3216,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_hunt_for_zombies_in_your_neighborhood_function
     (&$outcome_reason, $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     $sql = 'select * from users
       where meta = "zombie" and fkey_neighborhoods_id = %d
@@ -3247,7 +3247,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   function _stlouis_action_sing_christmas_carols_function(&$outcome_reason,
     $target, &$can_do_again) {
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 //    $can_do_again = FALSE;
 
     $sql = 'select name, special_int from neighborhoods where id = %d;';
@@ -3685,7 +3685,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
     global $game, $phone_id;
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
 
     $outcome_reason .= '<div class="action-effect">' .
       t('Poof!') . '</div>';
@@ -3705,7 +3705,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 firep($target);
 
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $action_id = arg(3);
 //    $can_do_again = FALSE;
 
@@ -3765,7 +3765,7 @@ firep($target);
     global $game, $phone_id;
 
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $action_id = arg(3);
     $can_do_again = FALSE;
 
@@ -3927,7 +3927,7 @@ EOF;
     global $game, $phone_id;
 
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-    $game_user = $fetch_user();
+    $game_user = zg_fetch_user();
     $action_id = arg(3);
     $can_do_again = FALSE;
 

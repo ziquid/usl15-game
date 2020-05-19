@@ -552,7 +552,7 @@ function zg_action_use(\stdClass $game_user, $quantity = 1) {
   }
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 }
 
