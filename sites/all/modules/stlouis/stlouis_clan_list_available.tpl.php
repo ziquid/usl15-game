@@ -27,7 +27,7 @@
     drupal_goto($game . '/choose_name/' . $arg2);
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   $sql = 'SELECT clan_title from `values`
     where id = %d;';

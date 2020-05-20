@@ -76,7 +76,7 @@ $data = game_fetch_visible_staff($game_user);
 $next = game_fetch_next_staff($game_user);
 
 // ------ VIEW ------
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 game_show_aides_menu($game_user);
 
 if ($game_user->level < 15) {

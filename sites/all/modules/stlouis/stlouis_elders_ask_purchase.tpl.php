@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = $fetch_user();
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 
 /*  if ($game == 'stlouis') {
 

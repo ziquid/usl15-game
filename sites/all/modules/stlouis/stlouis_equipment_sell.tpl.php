@@ -75,7 +75,7 @@ $data = game_fetch_visible_equip($game_user);
 $next = game_fetch_next_equip($game_user);
 
 // ------ VIEW ------
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 game_show_aides_menu($game_user);
 
 if ($game_user->level < 15) {
