@@ -100,7 +100,7 @@ if (empty($game_user->password)) {
 }
 else {
   // Allow them to navigate out of this.
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   $quote = "Hello, <em>$game_user->username</em>!&nbsp; What would you like
     your new password to be?";

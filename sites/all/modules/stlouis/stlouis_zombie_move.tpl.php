@@ -21,7 +21,7 @@
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = $fetch_user();
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   $sql = 'select * from users
     where id = %d;';
