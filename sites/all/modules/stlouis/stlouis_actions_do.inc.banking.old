@@ -13,7 +13,7 @@ function _stlouis_action_open_a_bank_account_function(&$outcome_reason,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -91,7 +91,7 @@ function _stlouis_action_close_a_bank_account_function(&$outcome_reason,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -180,7 +180,7 @@ function _stlouis_action_list_your_bank_accounts_function(&$outcome_reason,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -225,7 +225,7 @@ function _stlouis_action_change_a_bank_account_password_function(&$outcome_reaso
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -306,7 +306,7 @@ function _stlouis_action_deposit_funds_function(&$outcome_reason,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -401,7 +401,7 @@ firep($item);
 
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   // Check moolah.
 
@@ -480,7 +480,7 @@ EOF;
     db_query('update bank_accounts set transaction_lock = 0
       where id = %d;', $item->id);
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 
 }
@@ -493,7 +493,7 @@ function _stlouis_action_withdraw_funds_function(&$outcome_reason,
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $action_id = arg(3);
   $arg2 = check_plain(arg(2));
@@ -587,7 +587,7 @@ firep($item);
 
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   // Check moolah.
 
@@ -668,7 +668,7 @@ EOF;
     db_query('update bank_accounts set transaction_lock = 0
       where id = %d;', $item->id);
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 
 }
@@ -677,7 +677,7 @@ function _stlouis_action_open_a_small_present_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 //    $can_do_again = FALSE;
 
 
@@ -1121,7 +1121,7 @@ function _stlouis_action_open_a_medium_present_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 //    $can_do_again = FALSE;
 
 
@@ -1601,7 +1601,7 @@ function _stlouis_action_open_a_large_present_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 //    $can_do_again = FALSE;
 
 
@@ -2087,7 +2087,7 @@ function _stlouis_action_open_a_giant_present_function(&$outcome_reason,
   $target, &$can_do_again) {
 
   $fetch_user = '_' . arg(0) . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 //    $can_do_again = FALSE;
 
 
@@ -2467,7 +2467,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   global $game, $phone_id;
 
   $fetch_user = '_' . $game . '_fetch_user';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   $can_do_again = FALSE;
   $get_value = '_' . $game . '_get_value';
   $set_value = '_' . $game . '_set_value';

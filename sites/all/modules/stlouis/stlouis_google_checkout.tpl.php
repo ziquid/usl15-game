@@ -24,7 +24,7 @@
 
   $game = check_plain(arg(0));
 
-//  $game_user = $fetch_user();
+//  $game_user = zg_fetch_user();
 
  /* if (($_SERVER['REMOTE_ADDR'] == '66.211.170.66') ||
     (strpos($_SERVER['HTTP_USER_AGENT'], 'com.cheek.stlouis') !== FALSE) ||

@@ -1166,7 +1166,7 @@ function game_action_use(\stdClass $game_user, $quantity = 1) {
   }
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 }
 
@@ -1197,7 +1197,7 @@ function game_karma(\stdClass $game_user, $text, $quantity) {
     "(was: $game_user->karma) for: $text", $quantity);
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 }
 
@@ -1235,7 +1235,7 @@ function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
   }
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
   return TRUE;
 }
 

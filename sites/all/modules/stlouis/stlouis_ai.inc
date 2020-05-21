@@ -24,7 +24,7 @@ function game_move_ai() {
 
   // $game = check_plain(arg(0));.
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   // No need to do AI moves on a Windows Platform.
   if (!function_exists('sys_getloadavg')) {

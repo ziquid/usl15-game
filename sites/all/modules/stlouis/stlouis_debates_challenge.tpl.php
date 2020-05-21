@@ -271,7 +271,7 @@ if ($won) {
        $game_user->id);
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   if ($event_type == EVENT_DEBATE) {
     $bump = '_' . $game . '_bump_event_tags_con';
@@ -598,7 +598,7 @@ else {
 
   }
 
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
   if ($event_type == EVENT_DEBATE) {
     $bump = '_' . $game . '_bump_event_tags_con';

@@ -21,7 +21,7 @@ global $game, $phone_id, $action;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions.inc';
 include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
-$game_user = $fetch_user();
+$game_user = zg_fetch_user();
 
 if ($game_user->meta == 'frozen') {
   zg_fetch_header($game_user);
@@ -501,7 +501,7 @@ firep($st->name . ' has run away!');
   $outcome_reason .= zg_render_button('actions', 'Perform a different action', '', 'big-68');
 
   // Reprocess user object.
-  $game_user = $fetch_user();
+  $game_user = zg_fetch_user();
 
 }
 else {

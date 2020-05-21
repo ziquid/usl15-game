@@ -20,7 +20,7 @@
 global $game, $phone_id, $purchasing_luck;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $purchasing_luck = TRUE;
-$game_user = $fetch_user();
+$game_user = zg_fetch_user();
 
 $ip_address = ip_address();
 if (($ip_address == '66.211.170.66') ||
