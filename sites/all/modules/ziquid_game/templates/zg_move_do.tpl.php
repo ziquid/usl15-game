@@ -60,7 +60,7 @@ if ($neighborhood_id > 0) {
 
   if ($game_user->actions < $actions_to_move) {
 
-    $fetch_header($game_user);
+    zg_fetch_header($game_user);
 
     echo '<div class="land-failed">' . t('Out of Action!') . '</div>';
     zg_button('elders_do_fill', t('Refill your Action (1&nbsp;Luck)'),

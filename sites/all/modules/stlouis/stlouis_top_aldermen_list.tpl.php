@@ -26,7 +26,7 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 
 echo <<< EOF
 <div class="news">

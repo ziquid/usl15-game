@@ -292,8 +292,8 @@ if (arg(0) != 'node' && arg(0) != 'devel' && arg(0) != 'admin') {
 }
 $arg2 = check_plain(arg(2));
 $arg3 = check_plain(arg(3));
-$fetch_user = 'zg_user';
-$fetch_header = 'zg_header';
+$fetch_user = 'zg_fetch_user';
+$fetch_header = 'zg_fetch_header';
 $slack_channel = 'wonderland-data';
 
 // Add events to include list.

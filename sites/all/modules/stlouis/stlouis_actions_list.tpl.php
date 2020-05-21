@@ -54,7 +54,7 @@ EOF;
 
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   $sql = 'select name, district from neighborhoods where id = %d;';
   $result = db_query($sql, $game_user->fkey_neighborhoods_id);

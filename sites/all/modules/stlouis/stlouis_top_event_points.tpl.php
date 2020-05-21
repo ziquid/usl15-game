@@ -27,7 +27,7 @@
     drupal_goto($game . '/choose_name/' . $arg2);
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   $sql = 'select count(id) as count from users
     where meta = "zombie";';

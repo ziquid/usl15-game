@@ -26,7 +26,7 @@ $game_user = zg_fetch_user();
 
   $link = $destination ? $destination : "/$game/user/$phone_id";
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">
@@ -66,7 +66,7 @@ switch ($fill_type) {
       $result = db_query($sql, $game_user->id);
 
       $game_user = zg_fetch_user();
-      $fetch_header($game_user);
+      zg_fetch_header($game_user);
 
       echo '<div class="subtitle">Amusez-vous bien !</div>';
       echo '<div class="subtitle">

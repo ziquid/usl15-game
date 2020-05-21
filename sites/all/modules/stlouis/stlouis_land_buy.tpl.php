@@ -141,7 +141,7 @@ $data = game_fetch_visible_land($game_user);
 $next = game_fetch_next_land($game_user);
 
 // ------- VIEW ------
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 game_show_aides_menu($game_user);
 game_show_land($game_user, $game_land, $options);
 ?>

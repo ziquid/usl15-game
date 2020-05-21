@@ -27,7 +27,7 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 
  // User id.
 if (substr($arg3, 0, 3) == 'id:') {

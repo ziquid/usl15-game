@@ -24,7 +24,7 @@ include drupal_get_path('module', $game) . '/' . $game . '_actions_do.inc';
 $game_user = zg_fetch_user();
 
 if ($game_user->meta == 'frozen') {
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
   db_set_active();
 
 ?>
@@ -511,7 +511,7 @@ else {
   $ai_output = 'action-failed';
 }
 
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 
   echo <<< EOF
 <div class="title">

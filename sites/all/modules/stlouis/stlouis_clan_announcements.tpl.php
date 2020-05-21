@@ -26,7 +26,7 @@
     drupal_goto($game . '/choose_name/' . $arg2);
   }
 
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
 
     // Save the message, if any.
     $message = check_plain($_GET['message']);

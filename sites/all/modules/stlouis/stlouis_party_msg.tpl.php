@@ -33,7 +33,7 @@ $message_orig = check_plain($_GET['message']);
 $message = _stlouis_filter_profanity($message_orig);
 
 if (strlen($message) < 3) {
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
   echo '<div class="message-error">Your message must be at least 3
     characters long.</div>';
   echo '<div class="election-continue"><a href="/' . $game . '/home/' .
@@ -45,7 +45,7 @@ if (strlen($message) < 3) {
 }
 
 if (substr($message, 0, 3) == 'XXX') {
-  $fetch_header($game_user);
+  zg_fetch_header($game_user);
   echo '<div class="message-error">Your message contains words that are not
     allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
   echo '<div class="election-continue"><a href="/' . $game . '/home/' .

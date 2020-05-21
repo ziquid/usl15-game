@@ -95,7 +95,7 @@ else {
 }
 
 // Show the stuff.
-$fetch_header($game_user);
+zg_fetch_header($game_user);
 game_show_aides_menu($game_user);
 
 echo <<< EOF
