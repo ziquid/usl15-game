@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    May 23, 2020
+  </div>
+  <ul>
+    <li>
+      Added "Online Tutor" for "Raising the Grade" missions' second-round bonus.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     May 6, 2020
   </div>
   <ul>

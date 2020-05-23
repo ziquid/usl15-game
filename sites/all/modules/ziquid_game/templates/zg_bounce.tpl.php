@@ -19,7 +19,7 @@
 
 $game = check_plain(arg(0));
 $arg2 = check_plain(arg(2));
-$version = 'v0.9.7, May 6 2020';
+$version = 'v0.9.7a, May 23 2020';
 
 db_set_active('game_' . $game);
 $d = zg_get_html([
