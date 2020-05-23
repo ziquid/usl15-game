@@ -1170,6 +1170,22 @@ function _stlouis_action_erase_your_wall_function(&$outcome_reason,
     return TRUE;
   }
 
+function _stlouis_action_learn_with_your_tutor_function(&$outcome_reason, $target, &$can_do_again) {
+
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $game_user = zg_fetch_user();
+
+  // Fast comps for the next five minutes.
+  zg_set_timer($game_user, 'fast_comps_15', 300);
+  zg_set_timer($game_user, 'next_major_action', 14400);
+
+  $outcome_reason .= '<div class="action-effect">' .
+    t('Your mind becomes more clear as you prepare to learn') . '</div>';
+
+  return TRUE;
+}
+
 function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can_do_again) {
 
   global $game;
@@ -2153,8 +2169,7 @@ function _stlouis_action_expel_a_party_member_function(&$outcome_reason,
   $data = db_fetch_object($result);
   $ep_name = $data->ep_name;
 
-  $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 7200);
+  zg_set_timer($game_user, 'next_major_action', 7200);
 
   $sql = "select party_title from `values` where id = '%d';";
   $result = db_query($sql, $game_user->fkey_values_id);

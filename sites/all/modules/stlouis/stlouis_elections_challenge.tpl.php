@@ -189,8 +189,8 @@ if (empty($item->id)) {
   // Party office.
   if ($item->type == 2) {
 
-    // Make it so s/he can't perform a major action for a day.
-    game_set_timer($game_user, 'next_major_action', 86400);
+    // Make it so player can't perform a major action for a day.
+    zg_set_timer($game_user, 'next_major_action', 86400);
   }
 
   // You can only hold one position.
@@ -823,8 +823,7 @@ if ($votes < 0) {
   if ($item->type == 2) {
 
     // Make it so player can't perform a major action for a day.
-    $set_value = '_' . arg(0) . '_set_value';
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 86400);
+    zg_set_timer($game_user, 'next_major_action', 86400);
   }
 
   if ($item->ep_id == 1) {

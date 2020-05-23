@@ -1860,6 +1860,9 @@ function zg_slack($type, $message) {
     case 'bots':
       $slack_channel .= '-bots';
       break;
+
+    case 'luck':
+      return TRUE;
   }
 
   return slack_send_message($slack_message, $slack_channel);
