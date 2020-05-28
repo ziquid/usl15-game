@@ -329,8 +329,7 @@ EOF;
   <form action="/$game/actions_do/$arg2/$item->id">
 EOF;
 
-  $get_value = '_' . $game . '_get_value';
-  $next_major_action_time = game_get_value($game_user, 'next_major_action');
+  $next_major_action_time = zg_get_value($game_user, 'next_major_action');
   $next_major_action_time_remaining = !empty($next_major_action_time) ?
     (int) $next_major_action_time - REQUEST_TIME : 0;
 

@@ -30,7 +30,7 @@ function zg_new_user_fetch_quest_group_0(\stdClass $game_user, \stdClass &$qg) {
     }
   }
 
-  $newUserHelpShown = game_get_value($game_user, 'newUserHelpShown', []);
+  $newUserHelpShown = zg_get_value($game_user, 'newUserHelpShown', []);
   firep($newUserHelpShown, 'new user help shown');
 
   // No experience: intro text, hide extra quests.

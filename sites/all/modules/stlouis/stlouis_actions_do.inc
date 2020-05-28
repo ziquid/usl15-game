@@ -128,7 +128,6 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  $get_value = '_' . $game . '_get_value';
   $remove_value = '_' . $game . '_remove_value';
 
   $game_user = zg_fetch_user();
@@ -288,7 +287,7 @@ EOF;
   }
 
   // Prohibited from joining for a time?
-  $join_allowed_time = $get_value($game_user->id, 'cant_join_clan', 0);
+  $join_allowed_time = $zg_get_value($game_user->id, 'cant_join_clan', 0);
   $now = REQUEST_TIME;
 firep($join_allowed_time, 'allowed time');
 firep($now, 'time now');
@@ -1413,14 +1412,13 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
 
   global $game, $phone_id, $action;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $get_value = '_' . $game . '_get_value';
   $game_user = zg_fetch_user();
 
   $target_name = $target->ep_name . ' ' . $target->username;
   $target_id = (int) $_GET['target'];
 
   if ((substr($phone_id, 0, 3) == 'sdk') ||
-    $get_value($game_user->id, 'sdk') == 1) {
+    $zg_get_value($game_user->id, 'sdk') == 1) {
     $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
       '</div><div class="action-effect">SDK users cannot give Actions.</div>';
     return FALSE;
