@@ -287,7 +287,7 @@ EOF;
   }
 
   // Prohibited from joining for a time?
-  $join_allowed_time = $zg_get_value($game_user->id, 'cant_join_clan', 0);
+  $join_allowed_time = zg_get_value($game_user->id, 'cant_join_clan', 0);
   $now = REQUEST_TIME;
 firep($join_allowed_time, 'allowed time');
 firep($now, 'time now');

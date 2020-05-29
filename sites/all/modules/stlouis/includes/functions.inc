@@ -1665,7 +1665,7 @@ function game_set_timer($game_user, $timer_key, $time_secs) {
  * @return mixed
  *   The value, if found, or $default, if not found.
  */
-function zg_get_value($game_user, $key, $default = NULL) {
+function game_get_value($game_user, $key, $default = NULL) {
   $sql = 'SELECT `value` FROM {user_attributes}
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
   $result = db_query($sql, (int) $game_user->id, $key);
