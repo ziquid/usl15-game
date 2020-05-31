@@ -307,7 +307,7 @@ EOF;
       if ($q->fkey_neighborhoods_id &&
         ($q->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id)) {
         $q->wrong_hood = 'wrong-hood';
-        list( , , $q->actions_to_move, ) = game_get_actions_to_move($game_user,
+        list(, , $q->actions_to_move,) = game_get_actions_to_move($game_user,
           $game_user->fkey_neighborhoods_id, $q->fkey_neighborhoods_id);
 
         // Color code the wrong-hood icon.
@@ -1215,7 +1215,9 @@ function game_karma(\stdClass $game_user, $text, $quantity) {
  * @param string $subtype
  *   Subtype of $type.
  */
-function game_luck(\stdClass $game_user, $quantity, $text, $type, $subtype) {
+function game_luck(\stdClass &$game_user, $quantity, $text, $type, $subtype) {
+  return zg_luck($game_user, $quantity, $game_user->luck, $quantity, $game_user->luck + $quantity, $text, $type, $subtype);
+
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
@@ -1730,7 +1732,7 @@ function game_remove_value($game_user, $key) {
  * @param \stdClass $game_user
  *   The game's user object.
  *
- * @return int
+ * @return array
  *   The offer.
  */
 function game_luck_money_offer($game_user) {

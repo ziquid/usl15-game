@@ -133,18 +133,12 @@ if (($game_user->money < $action->values_cost) &&
 
   $action_succeeded = FALSE;
   $outcome_reason = '<div class="land-failed">' .
-  t('Out of @value!', ['@value' => $game_user->values]) .
-    '</div>';
+    t('Out of @value!', ['@value' => $game_user->values]) . '</div>' .
+    zg_luck_money_render_button($game_user, "$game/actions/$arg2");
 
   if (substr($phone_id, 0, 3) == 'ai-') {
     $ai_output = 'action-failed no-money';
   }
-  $offer = zg_luck_money_offer($game_user);
-  $outcome_reason .= '<div class="try-an-election-wrapper"><div
-    class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-    $arg2 . '/money?destination=/' . $game . '/actions/' . $arg2 .
-    '">Receive ' . $offer . ' ' . $game_user->values .
-    ' (1&nbsp;Luck)</a></div></div>';
 }
 
 $action_function = $game . '_action_' .

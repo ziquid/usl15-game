@@ -631,6 +631,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
     case 'action':
     case 'change_party':
     case 'energy':
+    case 'money':
       $sql = 'insert into luck_use (fkey_users_id, use_type, amount_before, 
         amount_filled, amount_now, luck_remaining, comment)
         values (%d, "%s", %d, %d, %d, %d, "%s");';
@@ -642,7 +643,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
   zg_slack('luck', $text);
 
   // Reprocess user object.
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_user_by_id($game_user->id);
   return TRUE;
 }
 
@@ -1303,27 +1304,33 @@ function zg_normal_luck_money_offer(\stdClass $game_user) {
  *
  * @param \stdClass $game_user
  *   The game's user object.
+ * @param string $destination
  *
  * @return string
  *   The button, as a string of HTML.
  */
-function zg_luck_money_render_button(\stdClass $game_user) {
+function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  $offer = zg_luck_money_offer($game_user);
+  list($offer, $comment) = zg_luck_money_offer($game_user);
+  $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
-    $type = "Receive $offer $game_user->values (1&nbsp;$luck)";
+    $type = "Receive $formatted_offer $game_user->values (1&nbsp;$luck)";
   }
   else {
-    $type = "Receive <span class='highlight'>$offer</span> $game_user->values (1&nbsp;$luck)";
+    $type = "Receive <span class='highlight'>$formatted_offer</span> $game_user->values (1&nbsp;$luck)";
   }
+
+  $extra_link = '/money';
+  if (strlen($destination)) {
+    $extra_link .= '?destination=/' . $destination;
+  }
+
   return zg_render_button('elders_do_fill',
-    $type,
-    '/money',
-    'big-80 slide-in-content');
+    $type, $extra_link, 'big-80 slide-in-content');
 }
 
 /**
@@ -1332,23 +1339,14 @@ function zg_luck_money_render_button(\stdClass $game_user) {
  * @param \stdClass $game_user
  *   The game's user object.
  *
- * @return int
- *   The offer.
+ * @return array
+ *   The offer as an integer and explanation text, if any.
  */
 function zg_luck_money_offer(\stdClass $game_user) {
-  global $game;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-
   $offer = zg_normal_luck_money_offer($game_user);
-
-  if ($event_type == EVENT_DOUBLE_LUCK_MONEY) {
-    $offer *= 2;
-  }
-
   $comment = '';
   zg_alter('luck_money_offer', $game_user, $offer, $comment);
-
-  return $offer;
+  return [$offer, $comment];
 }
 
 /**
@@ -1364,6 +1362,22 @@ function zg_luck_energy_offer(\stdClass $game_user) {
   $offer = $game_user->energy_max;
   $comment = '';
   zg_alter('luck_energy_offer', $game_user, $offer, $comment);
+  return [$offer, $comment];
+}
+
+/**
+ * Return the amount of action the game offers for one Luck.
+ *
+ * @param \stdClass $game_user
+ *   The game's user object.
+ *
+ * @return array
+ *   The offer as an integer and explanation text, if any.
+ */
+function zg_luck_action_offer(\stdClass $game_user) {
+  $offer = $game_user->action_max;
+  $comment = '';
+  zg_alter('luck_action_offer', $game_user, $offer, $comment);
   return [$offer, $comment];
 }
 
@@ -1861,8 +1875,8 @@ function zg_slack($type, $message) {
       $slack_channel .= '-bots';
       break;
 
-    case 'luck':
-      return TRUE;
+//    case 'luck':
+//      return TRUE;
   }
 
   return slack_send_message($slack_message, $slack_channel);

@@ -53,7 +53,8 @@ else {
   $luck_text = '<p>You are <strong class="yellow">Out of ' . $luck . '</strong>.</p>';
   $help_text = '<p>Would you like more ' . $luck . '?</p>';
 }
-$offer = number_format(game_luck_money_offer($game_user));
+list($offer, $comment) = zg_luck_money_offer($game_user);
+$offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man ' . $happy . '">
   </div>
@@ -183,3 +184,5 @@ db_set_active();
 foreach ($menus as $menu) {
   print $menu;
 }
+?>
+</div>

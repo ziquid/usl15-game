@@ -761,17 +761,12 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Not enough money.
   if ($game_user->money < $money_required) {
-    $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough @value', ['@value' => $game_user->values]) .
       '</div><div class="action-effect">You do not have enough ' .
       $game_user->values . ' to declare this Level ' . $target_user->level .
-      ' player <em>persona non grata</em>.</div>
-      <div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/money?destination=/' . $game . '/actions/' . $phone_id .
-      '">Receive ' . $offer . ' ' . $game_user->values .
-      ' (1&nbsp;Luck)</a></div></div>';
+      ' player <em>persona non grata</em>.</div>' .
+      zg_luck_money_render_button($game_user, "$game/actions/$arg2");
     return FALSE;
   }
 
@@ -2641,16 +2636,11 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   // Not enough money.
   if ($game_user->money < $money_required) {
-    $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough @value!', ['@value' => $game_user->values]) .
-      '</div><div class="action-effect">You do not have enough ' . $game_user->values . ' to
-        expel these ' . $num_users . ' players.</div>
-      <div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/money?destination=/' . $game . '/actions/' . $arg2 .
-      '">Receive ' . $offer . ' ' . $game_user->values .
-      ' (1&nbsp;Luck)</a></div></div>';
+      '</div><div class="action-effect">You do not have enough ' . $game_user->values .
+      ' to expel these ' . $num_users . ' players.</div>'.
+      zg_luck_money_render_button($game_user, "$game/actions/$arg2");
     return FALSE;
   }
 
