@@ -185,7 +185,7 @@ EOF;
 
     echo <<< EOF
 <div class="land">
-  <div class="land-icon"><img src="$image" border="0" width="96"></div>
+  <div class="land-icon"><img src="$image" class="round4" border="0" width="96"></div>
   <div class="land-details">
     <div class="land-name">$name</div>
     <div class="land-description">$description</div>
