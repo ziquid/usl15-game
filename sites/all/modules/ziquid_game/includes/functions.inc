@@ -1389,7 +1389,7 @@ function zg_luck_energy_offer(\stdClass $game_user) {
  *   The offer as an integer and explanation text, if any.
  */
 function zg_luck_action_offer(\stdClass $game_user) {
-  $offer = $game_user->action_max;
+  $offer = $game_user->actions_max;
   $comment = '';
   zg_alter('luck_action_offer', $game_user, $offer, $comment);
   return [$offer, $comment];
