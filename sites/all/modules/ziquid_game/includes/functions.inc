@@ -1215,7 +1215,7 @@ function zg_timed_bonus_in_effect($id, $bonus_key) {
  *   The number of seconds to set for the timer.
  */
 function zg_set_timer($id, $timer_key, $time_secs) {
-  zg_set_value($id, $timer_key, REQUEST_TIME + $time_secs);
+  zg_set_timer($id, $timer_key, + $time_secs);
 }
 
 /**
