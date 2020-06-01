@@ -117,27 +117,9 @@ function zg_render_staff(\stdClass $game_user, \stdClass $item, &$ai_output, arr
   switch ($options['staff-buy-succeeded']) {
 
     case 'failed no-money':
-      $offer = zg_luck_money_offer($game_user);
-      $header = '<div class="title">' .
-
-        // FIXME remove special characters from text here.
-        t('∆ @value <span>Insufficient</span> ∆',
-          ['@value' => $game_user->values]) . '
-        </div>
-        <div class="try-an-election-wrapper">
-          <div class="try-an-election">
-            <a href="/' . $game . '/elders_do_fill/' . $arg2 .
-                '/money?destination=/' . $game . '/staff/' . $arg2 . '">' .
-              t('Receive @offer @values (1&nbsp;@luck',
-              [
-                '@offer' => $offer,
-                '@values' => $game_user->values,
-                '@luck' => $luck,
-              ]) . ')
-            </a>
-          </div>
-        </div>';
-
+      $header = '<div class="land-failed">' .
+        t('Out of @value!', ['@value' => $game_user->values]) . '</div>' .
+        zg_luck_money_render_button($game_user, "$game/staff/$arg2");
       $failed = 'failed';
       break;
 

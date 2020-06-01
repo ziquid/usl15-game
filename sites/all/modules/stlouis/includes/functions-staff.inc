@@ -47,6 +47,7 @@ function game_fetch_staff_by_id($game_user, $staff_id) {
 *   Options that modify the display behavior.
 */
 function game_show_staff($game_user, $item, &$ai_output, $options = []) {
+  return zg_show_staff($game_user, $item, $ai_output, $options);
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';

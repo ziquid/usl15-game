@@ -134,6 +134,8 @@ function game_fetch_land_by_id(\stdClass $game_user, $land_id) {
 }
 
 function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
+  zg_show_land($game_user, $item, $options);
+  return;
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';

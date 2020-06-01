@@ -100,9 +100,12 @@ switch ($fill_type) {
     }
 
     if ($game_user->actions < $game_user->actions_max) {
-      $amount_filled = $game_user->actions_max;
-      $amount_now = $game_user->actions + $amount_filled;
+      list($amount_filled, $comment) = zg_luck_action_offer($game_user);
+      $amount_now = $amount_filled;
       $text = "Player {$game_user->username} refilled action (from $game_user->actions to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck before, now 1 less).";
+      if (strlen($comment)) {
+        $text .= ' (' . $comment . ')';
+      }
       $sql = 'update users set actions = %d where id = %d;';
       db_query($sql, $amount_filled, $game_user->id);
       zg_luck($game_user, -1, $game_user->actions, $amount_filled,
@@ -165,13 +168,16 @@ switch ($fill_type) {
       return;
     }
 
-    $amount_filled = zg_luck_money_offer($game_user);
-    $sql = 'update users set money = money + %d, luck = luck - 1
-      where id = %d;';
+    list($amount_filled, $comment) = zg_luck_money_offer($game_user);
+    $amount_now = $amount_filled;
+    $text = "Player {$game_user->username} bought $amount_filled money (now $amount_now) using 1 $luck ($game_user->luck $luck before, now 1 less).";
+    if (strlen($comment)) {
+      $text .= ' (' . $comment . ')';
+    }
+    $sql = 'update users set money = money + %d where id = %d;';
     db_query($sql, $amount_filled, $game_user->id);
-    // FIXME replace with zg_luck().
-    $luck_remaining--;
-    db_query($sql_log, $game_user->id, $fill_type, $amount_filled, $luck_remaining);
+    zg_luck($game_user, -1, $game_user->money, $amount_filled,
+      $amount_now, $text, $fill_type, 'fill');
     break;
 
 }

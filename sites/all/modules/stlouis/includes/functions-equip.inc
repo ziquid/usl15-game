@@ -175,7 +175,8 @@ function game_show_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $op
  * @return string
  *   The rendered HTML.
  */
-function game_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, $options = []) {
+function game_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, array $options = []) {
+  return zg_render_equip($game_user, $item, $ai_output, $options);
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';

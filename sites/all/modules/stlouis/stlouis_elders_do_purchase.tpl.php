@@ -199,7 +199,7 @@ ob_end_clean();
     ' Luck via ' . $subtype . ' (currently ' . $game_user->luck . ') at URL ' .
     $_SERVER['REQUEST_URI'] . ' (IP Address ' . $ip_address
     . ')';
-  game_luck($game_user, $luck, $msg, 'purchase', $subtype);
+  zg_luck($game_user, $luck, $game_user->luck, $luck, $game_user->luck + $luck, $msg, 'purchase', $subtype);
 }
 
 echo 'YES';

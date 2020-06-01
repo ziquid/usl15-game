@@ -406,7 +406,6 @@ function _stlouis_action_leave_your_clan_function(&$outcome_reason, $target, &$c
 function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target, &$can_do_again) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $set_value = '_' . $game . '_set_value';
   $game_user = zg_fetch_user();
   $can_do_again = FALSE;
 
@@ -441,7 +440,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
   db_query($sql, $target_id);
 
-  $set_value($target_id, 'cant_join_clan', REQUEST_TIME + 7200);
+  zg_set_value($target_id, 'cant_join_clan', REQUEST_TIME + 7200);
 
   $sql = 'insert into clan_messages (fkey_users_from_id,
     fkey_neighborhoods_id, message) values (%d, %d, "%s");';
@@ -760,17 +759,12 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Not enough money.
   if ($game_user->money < $money_required) {
-    $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough @value', ['@value' => $game_user->values]) .
       '</div><div class="action-effect">You do not have enough ' .
       $game_user->values . ' to declare this Level ' . $target_user->level .
-      ' player <em>persona non grata</em>.</div>
-      <div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/money?destination=/' . $game . '/actions/' . $phone_id .
-      '">Receive ' . $offer . ' ' . $game_user->values .
-      ' (1&nbsp;Luck)</a></div></div>';
+      ' player <em>persona non grata</em>.</div>' .
+      zg_luck_money_render_button($game_user, "$game/actions/$arg2");
     return FALSE;
   }
 
@@ -805,8 +799,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Set major_action counter for three minutes.
   if ($ep_type > 1) {
-    $set_value = '_' . $game . '_set_value';
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 180);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 180);
   }
 
   $outcome_reason .= '<div class="action-effect">' . $target_user->username .
@@ -1218,7 +1211,6 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
-  $set_value = '_' . $game . '_set_value';
 
   $sql = 'update users set energy = energy + 500 where id = %d;';
   db_query($sql, $game_user->id);
@@ -1241,10 +1233,10 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
       You need to sit down for a few minutes.
     </div>';
 
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 180);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 180);
   }
   else {
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 30);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 30);
   }
 
   if ($game_user->energy > $game_user->energy_max) {
@@ -1258,7 +1250,6 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
-  $set_value = '_' . $game . '_set_value';
 
   $outcome_reason .= '<div class="action-effect">' .
     t('Wowzers!') . '</div>';
@@ -1268,10 +1259,10 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
       t('Low Blood Sugar!') .
       '</div><div class="action-effect">You need to sit down for a few minutes.</div>';
 
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 300);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 300);
   }
   else {
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 60);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 60);
   }
 
   $sql = 'update users set actions = actions + 50, energy = energy - 500 where id = %d;';
@@ -2639,16 +2630,11 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
 
   // Not enough money.
   if ($game_user->money < $money_required) {
-    $offer = game_luck_money_offer($game_user);
     $outcome_reason = '<div class="land-failed">' .
       t('Not enough @value!', ['@value' => $game_user->values]) .
-      '</div><div class="action-effect">You do not have enough ' . $game_user->values . ' to
-        expel these ' . $num_users . ' players.</div>
-      <div class="try-an-election-wrapper"><div
-      class="try-an-election"><a href="/' . $game . '/elders_do_fill/' .
-      $phone_id . '/money?destination=/' . $game . '/actions/' . $arg2 .
-      '">Receive ' . $offer . ' ' . $game_user->values .
-      ' (1&nbsp;Luck)</a></div></div>';
+      '</div><div class="action-effect">You do not have enough ' . $game_user->values .
+      ' to expel these ' . $num_users . ' players.</div>'.
+      zg_luck_money_render_button($game_user, "$game/actions/$arg2");
     return FALSE;
   }
 
@@ -2669,8 +2655,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   }
 
   // Save as major action.
-  $set_value = '_' . $game . '_set_value';
-  $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 900);
+  zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 900);
 
   // Deduct your Action, money.
   $sql = 'update users set money = money - %d where id = %d;';
