@@ -1137,18 +1137,21 @@ function zg_irish_name() {
 /**
  * Can I perform an action yet?
  *
- * @param \stdClass $game_user
- *   The user object.
+ * @param \stdClass|int $id
+ *   The user object or user ID.
  * @param string $key
  *   The key to check.
  *
- * @return \stdClass
+ * @return object
  *   An object with whether the action can be performed; if FALSE, also the
  *   hours, minutes, and seconds until action can be performed.
  */
-function zg_can_do_yet(\stdClass $game_user, $key) {
+function zg_can_do_yet($id, $key) {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
   $can_do = new stdClass();
-  $can_do->time_ready = (int) zg_get_value($game_user, $key, REQUEST_TIME);
+  $can_do->time_ready = (int) zg_get_value($id, $key, REQUEST_TIME);
   $can_do->time_remaining = $can_do->time_ready - REQUEST_TIME;
 
   if ($can_do->time_remaining > 0) {
@@ -1170,8 +1173,8 @@ function zg_can_do_yet(\stdClass $game_user, $key) {
  *
  * Logically the opposite of zg_can_do_yet().
  *
- * @param \stdClass $game_user
- *   The user object.
+ * @param \stdClass|int $id
+ *   The user object or user ID.
  * @param string $bonus_key
  *   The key to check.
  *
@@ -1179,9 +1182,12 @@ function zg_can_do_yet(\stdClass $game_user, $key) {
  *   An object with whether a bonus is in effect and the hours, minutes, and
  *   seconds remaining, or FALSE.
  */
-function zg_timed_bonus_in_effect(\stdClass $game_user, $bonus_key) {
+function zg_timed_bonus_in_effect($id, $bonus_key) {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
   $in_effect = new stdClass();
-  $in_effect->time_ready = (int) zg_get_value($game_user, $bonus_key, REQUEST_TIME);
+  $in_effect->time_ready = (int) zg_get_value($id, $bonus_key, REQUEST_TIME);
   $in_effect->time_remaining = $in_effect->time_ready - REQUEST_TIME;
 
   if ($in_effect->time_remaining > 0) {
@@ -1201,22 +1207,22 @@ function zg_timed_bonus_in_effect(\stdClass $game_user, $bonus_key) {
 /**
  * Set timer for user (either for bonus or disallowed action).
  *
- * @param \stdClass $game_user
- *   The user object.
+ * @param \stdClass|int $id
+ *   The game user object or user ID.
  * @param string $timer_key
  *   The key to set.
  * @param int $time_secs
  *   The number of seconds to set for the timer.
  */
-function zg_set_timer(\stdClass $game_user, $timer_key, $time_secs) {
-  zg_set_value($game_user, $timer_key, REQUEST_TIME + $time_secs);
+function zg_set_timer($id, $timer_key, $time_secs) {
+  zg_set_value($id, $timer_key, REQUEST_TIME + $time_secs);
 }
 
 /**
  * Return the value for the key in the db if found, or $default if not found.
  *
- * @param \stdClass $game_user
- *   The zg_user object.
+ * @param \stdClass|int $id
+ *   The game user object or user ID.
  * @param string $key
  *   The key to use for the query.
  * @param mixed $default
@@ -1225,11 +1231,13 @@ function zg_set_timer(\stdClass $game_user, $timer_key, $time_secs) {
  * @return mixed
  *   The value, if found, or $default, if not found.
  */
-function zg_get_value(\stdClass $game_user, $key, $default = NULL) {
-
+function zg_get_value($id, $key, $default = NULL) {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
   $sql = 'SELECT `value` FROM {user_attributes}
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
-  $item = db_query($sql, (int) $game_user->id, $key)->fetch_object();
+  $item = db_query($sql, (int) $id, $key)->fetch_object();
 
   // Serialized data?  Undo it.
   if (substr($item->value, 0, 11) == 'serialized:') {
@@ -1244,8 +1252,8 @@ function zg_get_value(\stdClass $game_user, $key, $default = NULL) {
  *
  * Updates the value if the KVP already exists.
  *
- * @param \stdClass $game_user
- *   The game user object.
+ * @param \stdClass|int $id
+ *   The game user object or user ID.
  * @param string $key
  *   The key to use for the value in the db.
  * @param string $value
@@ -1254,7 +1262,10 @@ function zg_get_value(\stdClass $game_user, $key, $default = NULL) {
  * @return bool
  *   TRUE if the set succeeded; FALSE otherwise.
  */
-function zg_set_value(\stdClass $game_user, $key, $value = 'set') {
+function zg_set_value($id, $key, $value = 'set') {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
 
   // Array?  Serialize the data before storing.
   if (is_array($value)) {
@@ -1263,24 +1274,27 @@ function zg_set_value(\stdClass $game_user, $key, $value = 'set') {
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
-  return db_query($sql, $game_user->id, $key, $value, $value);
+  return db_query($sql, $id, $key, $value, $value);
 }
 
 /**
  * Remove a KVP for a user.
  *
- * @param \stdClass $game_user
- *   The game user object.
+ * @param \stdClass|int $id
+ *   The game user object or user ID.
  * @param string $key
  *   The key to remove.
  *
  * @return bool
  *   Whether the removal succeeded or not.
  */
-function zg_remove_value(\stdClass $game_user, $key) {
+function zg_remove_value($id, $key) {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
   $sql = 'delete from {user_attributes}
     where `fkey_users_id` = %d and `key` = "%s";';
-  return db_query($sql, $game_user->id, $key);
+  return db_query($sql, $id, $key);
 }
 
 /**
