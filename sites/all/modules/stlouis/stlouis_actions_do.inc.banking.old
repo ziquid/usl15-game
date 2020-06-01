@@ -2470,7 +2470,6 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   $game_user = zg_fetch_user();
   $can_do_again = FALSE;
   $get_value = '_' . $game . '_get_value';
-  $set_value = '_' . $game . '_set_value';
 
   $next_major_action_time =
     $get_value($game_user->id, 'next_major_action', 0);
@@ -2497,7 +2496,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
       <div class="subtitle">That\'s 45 minutes that you will never
       get back</div>';
 
-    $set_value($game_user->id, 'next_major_action', REQUEST_TIME + 2700);
+    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 2700);
 
     return TRUE;
 
@@ -2551,7 +2550,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
 
   }
 
-  $set_value($game_user->id, 'next_major_action',
+  zg_set_value($game_user, 'next_major_action',
     REQUEST_TIME + $major_action_timer);
 
   return TRUE;
