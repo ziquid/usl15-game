@@ -441,7 +441,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
   db_query($sql, $target_id);
 
-  $zg_set_value($target_id, 'cant_join_clan', REQUEST_TIME + 7200);
+  zg_set_value($target_id, 'cant_join_clan', REQUEST_TIME + 7200);
 
   $sql = 'insert into clan_messages (fkey_users_from_id,
     fkey_neighborhoods_id, message) values (%d, %d, "%s");';
@@ -805,7 +805,6 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Set major_action counter for three minutes.
   if ($ep_type > 1) {
-    $zg_set_value = '_' . $game . '_set_value';
     zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 180);
   }
 
