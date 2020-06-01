@@ -483,7 +483,13 @@ firep($st->name . ' has run away!');
 
   }
 
-  $outcome_reason .= zg_render_button('user', 'View ' . $target->ep_name . ' ' . $target->username, '/id:' . $_GET['target'], 'big-68');
+  // View yourself or target.
+  if ($action->target == 'none') {
+    $outcome_reason .= zg_render_button('user', 'View Yourself', '', 'big-68');
+  }
+  else {
+    $outcome_reason .= zg_render_button('user', 'View ' . $target->ep_name . ' ' . $target->username, '/id:' . $_GET['target'], 'big-68');
+  }
 
   if ($can_do_again) {
     $outcome_reason .= zg_render_button('actions_do', "Do it again", '/' . $action_id . '?target=' . $_GET['target'], 'big-68');
@@ -495,7 +501,7 @@ firep($st->name . ' has run away!');
   $outcome_reason .= zg_render_button('actions', 'Perform a different action', '', 'big-68');
 
   // Reprocess user object.
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_user_by_id($game_user->id);
 
 }
 else {
@@ -505,11 +511,14 @@ else {
   $ai_output = 'action-failed';
 }
 
+/* ====== VIEW ====== */
+
 zg_fetch_header($game_user);
+db_set_active();
 
   echo <<< EOF
 <div class="title">
-$title
+  $title
 </div>
 $outcome_reason
 EOF;
@@ -520,4 +529,3 @@ if (substr($phone_id, 0, 3) == 'ai-') {
     " \"/>\n-->";
 }
 
-db_set_active();

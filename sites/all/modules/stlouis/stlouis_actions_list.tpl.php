@@ -155,16 +155,20 @@ EOF;
       $cost .= "$item->values_cost $game_user->values";
     }
 
-    if (!empty($item->fkey_equipment_id)) {
-      $image = "/sites/default/files/images/equipment/$game-$item->fkey_equipment_id.png";
-    }
-    else {
-      $image = "/sites/default/files/images/staff/$game-$item->fkey_staff_id.png";
-    }
-
     if (is_file($_SERVER['DOCUMENT_ROOT'] .
-      "/sites/default/files/images/actions/$game-{$item->id}.png"))
+      "/sites/default/files/images/actions/$game-{$item->id}.png")) {
       $image = "/sites/default/files/images/actions/$game-$item->id.png";
+    }
+    elseif (!empty($item->fkey_equipment_id)) {
+      $game_equip = zg_fetch_equip_by_id($game_user, $item->fkey_equipment_id);
+      zg_get_icon_path($game_user, $game_equip, 'equipment');
+      $image = $game_equip->icon_path;
+    }
+    elseif (!empty($item->fkey_staff_id)) {
+      $game_staff = zg_fetch_staff_by_id($game_user, $item->fkey_staff_id);
+      zg_get_icon_path($game_user, $game_staff, 'staff');
+      $image = $game_staff->icon_path;
+    }
 
     if ($item->target == 'none') {
       $target = t('Your');
