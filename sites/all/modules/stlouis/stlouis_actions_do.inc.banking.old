@@ -2469,10 +2469,9 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
   $fetch_user = '_' . $game . '_fetch_user';
   $game_user = zg_fetch_user();
   $can_do_again = FALSE;
-  $get_value = '_' . $game . '_get_value';
 
   $next_major_action_time =
-    $get_value($game_user->id, 'next_major_action', 0);
+    zg_get_value($game_user, 'next_major_action', 0);
 
   // Egads! Hacking!
   if ($next_major_action_time > REQUEST_TIME) {

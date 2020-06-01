@@ -25,7 +25,7 @@ $game_user = zg_fetch_user();
 
 // User chose to toggle!
 if ($arg3 == 'yes') {
-  zg_set_value($game_user, 'enabled_alpha', !game_get_value($game_user, 'enabled_alpha'));
+  zg_set_value($game_user, 'enabled_alpha', !zg_get_value($game_user, 'enabled_alpha'));
   db_set_active();
   drupal_goto("/$game/elders/$arg2");
 }

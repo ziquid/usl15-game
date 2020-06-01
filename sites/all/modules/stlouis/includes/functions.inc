@@ -44,7 +44,7 @@ EOF;
 function game_speech($game_user, $text, $force = FALSE) {
 //  global $game;
 //  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  if ($force || game_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
+  if ($force || zg_get_value($game_user, 'GiveMeMyTongue', FALSE)) {
     drupal_add_js([
       'stlouis' => [
         'speech' => $text,
@@ -1590,7 +1590,7 @@ function game_zombie_name() {
  */
 function game_can_do_yet($game_user, $key) {
   $can_do = new stdClass();
-  $can_do->time_ready = (int) game_get_value($game_user, $key, REQUEST_TIME);
+  $can_do->time_ready = (int) zg_get_value($game_user, $key, REQUEST_TIME);
   $can_do->time_remaining = $can_do->time_ready - REQUEST_TIME;
 
   if ($can_do->time_remaining > 0) {
@@ -1623,7 +1623,7 @@ function game_can_do_yet($game_user, $key) {
  */
 function game_timed_bonus_in_effect($game_user, $bonus_key) {
   $in_effect = new stdClass();
-  $in_effect->time_ready = (int) game_get_value($game_user, $bonus_key, REQUEST_TIME);
+  $in_effect->time_ready = (int) zg_get_value($game_user, $bonus_key, REQUEST_TIME);
   $in_effect->time_remaining = $in_effect->time_ready - REQUEST_TIME;
 
   if ($in_effect->time_remaining > 0) {
