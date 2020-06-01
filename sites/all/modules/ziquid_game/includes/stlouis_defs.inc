@@ -21,6 +21,7 @@ define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
 define(EVENT_CHRISTMAS, 'event_christmas');
 define(EVENT_DEAD_PRESIDENTS, 'event_dead_presidents');
+define(EVENT_DOUBLE_LUCK_ACTION, 'event_double_luck_action');
 define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
 
 define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
@@ -220,6 +221,12 @@ switch ($today) {
   case '2018-06-02':
   case '2018-06-03':
     $event_type = EVENT_POLL_JUN_01_2018;
+    break;
+
+  case '2020-06-01':
+  case '2020-06-02':
+  case '2020-06-03':
+    $event_type[] = EVENT_DOUBLE_LUCK_ACTION;
     break;
 
   case '2018-06-12':

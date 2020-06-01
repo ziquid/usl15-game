@@ -502,6 +502,9 @@ p:first-of-type {
   padding: 4px 4px 10px;
   background-color: #1a22;
   color: #1a2;
+  .event-title {
+    color: #cc0;
+  }
 }
 
 .event-info .subtitle {

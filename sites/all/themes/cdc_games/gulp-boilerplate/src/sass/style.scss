@@ -1031,25 +1031,23 @@ a.try-an-election, input.try-an-election {
   margin: 14px 0 6px 4px;
   text-align: center;
   color: #a55;
-}
-
-.event a {
-  display: block;
-  padding: 4px 8px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  background-color: #cc0;
-  border-radius: 50px;
-  margin: 10px auto 0;
-  width: 160px;
-  text-decoration: none;
-}
-
-.event .event-title {
-  margin: 3px;
-  font-size: 0.9375rem;
-  font-family: Georgia, "times new roman", serif;
-  font-weight: bold;
+  a {
+    display: block;
+    padding: 4px 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    background-color: #cc0;
+    border-radius: 50px;
+    margin: 10px auto 0;
+    width: 160px;
+    text-decoration: none;
+  }
+ .event-title {
+   margin: 3px;
+   font-size: 0.9375rem;
+   font-family: Georgia, "times new roman", serif;
+   font-weight: bold;
+ }
 }
 
 .event-text {
@@ -1058,19 +1056,14 @@ a.try-an-election, input.try-an-election {
 }
 
 .event-tagline {
-  clear: both;
   font-weight: bold;
   text-align: center;
   font-size: 0.875rem;
   font-family: georgia, times new roman, times, serif;
-}
-
-.event-tagline.small{
-  clear: both;
-  padding-bottom: 4px;
-  text-align: center;
-  font-size: 0.875rem;
-  font-family: times new roman, times, serif;
+  &.small {
+    padding-bottom: 4px;
+    font-family: times new roman, times, serif;
+  }
 }
 
 a .event-text {

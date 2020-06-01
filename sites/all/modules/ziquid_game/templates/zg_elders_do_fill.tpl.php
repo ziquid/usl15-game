@@ -99,19 +99,27 @@ switch ($fill_type) {
       return;
     }
 
-    if ($game_user->actions < $game_user->actions_max) {
-      list($amount_filled, $comment) = zg_luck_action_offer($game_user);
-      $amount_now = $amount_filled;
+    list($amount_now, $comment) = zg_luck_action_offer($game_user);
+    $amount_filled = $amount_now - $game_user->actions;
+    if ($game_user->actions < $amount_now) {
       $text = "Player {$game_user->username} refilled action (from $game_user->actions to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck before, now 1 less).";
       if (strlen($comment)) {
         $text .= ' (' . $comment . ')';
       }
       $sql = 'update users set actions = %d where id = %d;';
-      db_query($sql, $amount_filled, $game_user->id);
+      db_query($sql, $amount_now, $game_user->id);
       zg_luck($game_user, -1, $game_user->actions, $amount_filled,
         $amount_now, $text, $fill_type, 'fill');
     }
+    else {
+      $text = "Player {$game_user->username} attempted to refill $fill_type (from $game_user->actions to $amount_now, gain of $amount_filled) using 1 $luck ($game_user->luck $luck currently) but was refused as $fill_type is already full.";
+      if (strlen($comment)) {
+        $text .= ' (' . $comment . ')';
+      }
+      zg_luck($game_user, 0, $game_user->actions, $amount_filled,
+        $amount_now, $text, $fill_type, 'fill');
 
+    }
     break;
 
   case 'energy':

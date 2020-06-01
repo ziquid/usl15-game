@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Jun 01, 2020
+  </div>
+  <ul>
+    <li>
+      Double Luck Action Event.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     May 23, 2020
   </div>
   <ul>
