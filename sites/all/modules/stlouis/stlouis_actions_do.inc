@@ -287,7 +287,7 @@ EOF;
   }
 
   // Prohibited from joining for a time?
-  $join_allowed_time = zg_get_value($game_user->id, 'cant_join_clan', 0);
+  $join_allowed_time = zg_get_value($game_user, 'cant_join_clan', 0);
   $now = REQUEST_TIME;
 firep($join_allowed_time, 'allowed time');
 firep($now, 'time now');
@@ -1418,7 +1418,7 @@ function _stlouis_action_give_to_a_clan_member_function(&$outcome_reason, $targe
   $target_id = (int) $_GET['target'];
 
   if ((substr($phone_id, 0, 3) == 'sdk') ||
-    $zg_get_value($game_user->id, 'sdk') == 1) {
+    zg_get_value($game_user, 'sdk') == 1) {
     $outcome_reason = '<div class="land-failed">' . t('Sorry!') .
       '</div><div class="action-effect">SDK users cannot give Actions.</div>';
     return FALSE;
