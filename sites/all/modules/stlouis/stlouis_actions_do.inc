@@ -440,7 +440,7 @@ function _stlouis_action_remove_a_clan_member_function(&$outcome_reason, $target
   $sql = 'delete from clan_messages where fkey_users_from_id = %d;';
   db_query($sql, $target_id);
 
-  zg_set_timer($target_id, 'cant_join_clan', + 7200);
+  zg_set_timer($target_id, 'cant_join_clan', 7200);
 
   $sql = 'insert into clan_messages (fkey_users_from_id,
     fkey_neighborhoods_id, message) values (%d, %d, "%s");';
@@ -799,7 +799,7 @@ function _stlouis_action_declare_someone_persona_non_grata_function(&$outcome_re
 
   // Set major_action counter for three minutes.
   if ($ep_type > 1) {
-    zg_set_timer($game_user, 'next_major_action', + 180);
+    zg_set_timer($game_user, 'next_major_action', 180);
   }
 
   $outcome_reason .= '<div class="action-effect">' . $target_user->username .
@@ -1233,10 +1233,10 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
       You need to sit down for a few minutes.
     </div>';
 
-    zg_set_timer($game_user, 'next_major_action', + 180);
+    zg_set_timer($game_user, 'next_major_action', 180);
   }
   else {
-    zg_set_timer($game_user, 'next_major_action', + 30);
+    zg_set_timer($game_user, 'next_major_action', 30);
   }
 
   if ($game_user->energy > $game_user->energy_max) {
@@ -1259,10 +1259,10 @@ function _stlouis_action_take_some_meth_function(&$outcome_reason, $target, &$ca
       t('Low Blood Sugar!') .
       '</div><div class="action-effect">You need to sit down for a few minutes.</div>';
 
-    zg_set_timer($game_user, 'next_major_action', + 300);
+    zg_set_timer($game_user, 'next_major_action', 300);
   }
   else {
-    zg_set_timer($game_user, 'next_major_action', + 60);
+    zg_set_timer($game_user, 'next_major_action', 60);
   }
 
   $sql = 'update users set actions = actions + 50, energy = energy - 500 where id = %d;';
@@ -2655,7 +2655,7 @@ function _stlouis_action_evacuate_forest_park_function(&$outcome_reason,
   }
 
   // Save as major action.
-  zg_set_timer($game_user, 'next_major_action', + 900);
+  zg_set_timer($game_user, 'next_major_action', 900);
 
   // Deduct your Action, money.
   $sql = 'update users set money = money - %d where id = %d;';
