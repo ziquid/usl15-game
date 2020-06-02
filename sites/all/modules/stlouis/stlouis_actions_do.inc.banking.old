@@ -2495,7 +2495,7 @@ function _stlouis_action_exploit_your_seat_function(&$outcome_reason,
       <div class="subtitle">That\'s 45 minutes that you will never
       get back</div>';
 
-    zg_set_value($game_user, 'next_major_action', REQUEST_TIME + 2700);
+    zg_set_timer($game_user, 'next_major_action', 2700);
 
     return TRUE;
 
