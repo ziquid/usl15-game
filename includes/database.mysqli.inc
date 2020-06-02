@@ -82,7 +82,7 @@ function db_connect($url) {
   // certain one has been set; otherwise, MySQL defaults to 'utf8_general_ci'
   // for UTF-8.
   if (!empty($GLOBALS['db_collation'])) {
-    mysqli_query($connection, 'SET NAMES utf8mb4 COLLATE ' . $GLOBALS['db_collation']);
+    mysqli_query($connection, 'SET NAMES utf8 COLLATE ' . $GLOBALS['db_collation']);
   }
   else {
     mysqli_query($connection, 'SET NAMES utf8');
@@ -262,7 +262,7 @@ function db_query_range($query) {
  *
  * Use this as a substitute for db_query() when the results need to be stored
  * in a temporary table.
- *
+ * 
  * User-supplied arguments to the query should be passed in as separate parameters
  * so that they can be properly escaped to avoid SQL injection attacks.
  *
