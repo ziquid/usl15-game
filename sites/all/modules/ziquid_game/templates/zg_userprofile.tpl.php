@@ -616,7 +616,7 @@ foreach ($data as $item) {
     </div>
     <div class="message-body {$item->display->private_css}">
       {$item->display->delete}
-      <p>$item->message</p>{$item->display->reply}
+      <p>{$item->display->message}</p>{$item->display->reply}
     </div>
   </div>
 EOF;

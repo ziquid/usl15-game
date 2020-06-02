@@ -1328,7 +1328,7 @@ function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  list($offer, $comment) = zg_luck_money_offer($game_user);
+  [$offer, $comment] = zg_luck_money_offer($game_user);
   $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
@@ -1630,7 +1630,7 @@ function zg_get_fbid() {
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
-  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
+  [$encoded_sig, $payload] = explode('.', $signed_request, 2);
   $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
@@ -2298,6 +2298,30 @@ EOF;
   else {
     $message->display->delete = '';
   }
+
+  $message->display->message = zg_expand_shortcode($message->message);
+}
+
+/**
+ * Expand shortcodes embedded in messages, such as [yt:...].
+ *
+ * @param string $message
+ *   The message to parse.
+ *
+ * @return string
+ *   The parsed message.
+ */
+function zg_expand_shortcode($message) {
+  $message = preg_replace(
+    [
+      '/\[yt:([A-Za-z0-9]+)\]/i',
+    ],
+    [
+      ' <a href="external://youtu.be/\1">youtu.be/\1</a> ',
+    ],
+    $message
+  );
+  return $message;
 
 }
 
