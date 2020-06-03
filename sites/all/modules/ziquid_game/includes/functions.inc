@@ -908,6 +908,7 @@ function zg_fetch_users_by_id($ids) {
   $result = db_query($sql, $id_string);
   $data = [];
   while ($item = db_fetch_object($result)) {
+    $item->id = (int) $item->id;
     $data[] = $item;
   }
 
