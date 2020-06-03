@@ -591,7 +591,7 @@ function game_land_gain(\stdClass &$game_user, $id, $quantity, $ex_price = 0) {
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_user_by_id($game_user->id);
   return TRUE;
 }
 
@@ -645,6 +645,6 @@ function game_land_lose(\stdClass $game_user, $id, $quantity, $ex_price = 0) {
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_user_by_id($game_user->id);
   return TRUE;
 }
