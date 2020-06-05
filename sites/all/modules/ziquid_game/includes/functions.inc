@@ -1329,7 +1329,7 @@ function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  [$offer, $comment] = zg_luck_money_offer($game_user);
+  list($offer, $comment) = zg_luck_money_offer($game_user);
   $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
