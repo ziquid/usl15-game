@@ -1631,7 +1631,7 @@ function zg_get_fbid() {
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
-  [$encoded_sig, $payload] = explode('.', $signed_request, 2);
+  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
   $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
