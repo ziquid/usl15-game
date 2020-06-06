@@ -1882,6 +1882,7 @@ function zg_slack($type, $message) {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $slack_message = $type . ': ' . $message;
+  $slack_channel = '#uslce';
 
   switch (mb_strtolower($type)) {
 
@@ -1890,8 +1891,9 @@ function zg_slack($type, $message) {
       $slack_channel .= '-bots';
       break;
 
-//    case 'luck':
-//      return TRUE;
+    case 'luck':
+      $slack_channel .= '-luck';
+      break;
   }
 
   return slack_send_message($slack_message, $slack_channel);

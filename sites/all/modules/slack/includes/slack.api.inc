@@ -9,21 +9,21 @@
  * Send message to the Slack.
  *
  * @param string $message
- *   The message sent to the channel
+ *   The message to send to the channel.
  * @param string $channel
- *   The channel in the Slack service to send messages
+ *   The channel in the Slack service to send the message.
  * @param string $username
- *   The bot name displayed in the channel
+ *   The bot name displayed in the channel.
  *
  * @return bool|object
  *   Slack response.
  */
 function slack_send_message($message, $channel = '', $username = '') {
-  $webhook_url = slack_get_default_webhook_url();
+  $webhook_url = slack_get_webhook_url($channel);
   if (!$webhook_url) {
     return FALSE;
   }
-  $message_options = array();
+  $message_options = [];
   if ($channel) {
     $message_options['channel'] = $channel;
   }
@@ -43,16 +43,14 @@ function slack_send_message($message, $channel = '', $username = '') {
 /**
  * Send message to the Slack with more options.
  *
- * @param string $team_name
- *   Your team name in the Slack
- * @param string $team_token
- *   The token from "Incoming WebHooks" integration in the Slack
+ * @param string $webhook_url
+ *   The URL to send the message to.
  * @param string $message
- *   The message sent to the channel
+ *   The message sent to the channel.
  * @param array $message_options
- *   An associative array, it can contain:
+ *   An associative array.  It can contain:
  *     - channel: The channel in the Slack service to send messages
- *     - username: The bot name displayed in the channel
+ *     - username: The bot name displayed in the channel.
  *
  * @return object
  *   Can contain:
@@ -62,14 +60,40 @@ function slack_send_message($message, $channel = '', $username = '') {
  *     - code:                200        404           500
  *     - error:               -          Not found     Server Error
  */
-function _slack_send_message($webhook_url, $message, $message_options = array()) {
-  $headers = array(
+function _slack_send_message($webhook_url, $message, array $message_options = []) {
+  $headers = [
     'Content-Type' => 'application/x-www-form-urlencoded',
-  );
+  ];
   $message_options['text'] = $message;
   $sending_data = 'payload=' . drupal_to_js($message_options);
   $result = drupal_http_request($webhook_url, $headers, 'POST', $sending_data);
   return $result;
+}
+
+/**
+ * Get Webhook URL for a given channel.
+ *
+ * @param string $channel
+ *   The channel to which to send a message.
+ *
+ * @return string
+ *   Get default Webhook URL.
+ *
+ * @todo Create a config page for these.
+ */
+function slack_get_webhook_url($channel) {
+  $webhooks = [
+    '#uslce' => 'https://hooks.slack.com/services/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',
+    '#uslce-bots' => 'https://hooks.slack.com/services/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',
+    '#uslce-luck' => 'https://hooks.slack.com/services/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',
+  ];
+  if (array_key_exists($channel, $webhooks)) {
+    $webhook = $webhooks[$channel];
+  }
+  else {
+    $webhook = variable_get('slack_webhook_url', NULL);
+  }
+  return $webhook;
 }
 
 /**
@@ -79,8 +103,8 @@ function _slack_send_message($webhook_url, $message, $message_options = array())
  *   Get default Webhook URL.
  */
 function slack_get_default_webhook_url() {
-  $channel = variable_get('slack_webhook_url', NULL);
-  return $channel;
+  $webhook = variable_get('slack_webhook_url', NULL);
+  return $webhook;
 }
 
 /**
