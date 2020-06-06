@@ -31,7 +31,9 @@ function zg_cron() {
       where level >= 25 and meta <> "admin" and meta <> "staff" 
       and meta <> "zombie" and meta NOT LIKE "ai%";';
     $result = db_query($sql)->fetch_object();
-    zg_slack('cron', "$result->luck Luck amongst $result->players players.");
+    if ($result->players) {
+      zg_slack('cron', "$game: $result->luck Luck amongst $result->players players.");
+    }
 
     // Module has its own cron?  Skip this cron, except for hook_cron().
     if (function_exists($game . '_cron')) {
