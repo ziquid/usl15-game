@@ -23,6 +23,7 @@ global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $ai_output = 'land-prices';
+zg_slack('pages', "\"Aides\" for Player \"$game_user->username\".");
 
 zg_recalc_income($game_user);
 $data = zg_fetch_visible_land($game_user);

@@ -26,6 +26,7 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
+zg_slack('pages', "\"Elections\" for Player \"$game_user->username\".");
 zg_fetch_header($game_user);
 
 // Do AI moves from this page!!!

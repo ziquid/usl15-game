@@ -28,6 +28,8 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
+zg_slack('pages', "\"User Profile\" for Player \"$game_user->username\".");
+
 $q = $_GET['q'];
 $message_error = '';
 

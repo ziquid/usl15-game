@@ -31,6 +31,8 @@ $game_user_str = zg_render_user($game_user, 'header');
 $welcome_msg = strlen($game_user->username) ? t('Welcome back to') :
   t('Welcome to');
 
+zg_slack('pages', "\"Bounce\" for Player \"$game_user->username\".");
+
 if ($arg2 == 'facebook') {
 
   //  $phone_id = zg_get_fbid();

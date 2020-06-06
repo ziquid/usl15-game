@@ -54,6 +54,7 @@ EOF;
 
   }
 
+  zg_slack('pages', "\"Actions\" for Player \"$game_user->username\".");
   zg_fetch_header($game_user);
 
   $sql = 'select name, district from neighborhoods where id = %d;';

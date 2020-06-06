@@ -30,13 +30,14 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
 
 zg_fetch_header($game_user);
 
+// Useful for freshening stats.
 if (substr($phone_id, 0, 3) == 'ai-') {
-
-  // Useful for freshening stats.
   echo "<!--\n<ai \"elders\"/>\n-->";
   db_set_active();
   return;
 }
+
+zg_slack('pages', "\"Elders\": Player \"$game_user->username\".");
 
 if ($game_user->luck > 99) {
   $happy = 'happy';

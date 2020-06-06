@@ -1922,6 +1922,7 @@ function zg_slack($type, $message) {
     case 'competency-gain':
     case 'loot':
     case 'luck':
+    case 'pages':
     case 'ran-out-of':
       $slack_channel .= '-' . $type;
       break;
