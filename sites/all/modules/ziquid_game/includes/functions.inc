@@ -1899,6 +1899,7 @@ function zg_slack($type, $message) {
     case 'bots':
     case 'loot':
     case 'luck':
+    case 'ran-out-of':
       $slack_channel .= '-' . $type;
       break;
   }

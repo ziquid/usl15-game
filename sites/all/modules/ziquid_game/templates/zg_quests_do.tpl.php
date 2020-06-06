@@ -43,11 +43,9 @@ else {
   $outcome_reason = '<div class="quest-succeeded">' . t('Success!') .
     '</div>';
 }
-// Check to see if quest prerequisites are met.
+// Check to see if quest prerequisites are met.  Unlimited quests below level 6.
 if (($game_user->energy < $quest_action->required_energy) &&
   ($game_user->level >= 6)) {
-
-  // Unlimited quests below level 6.
   $quest_succeeded = FALSE;
   $outcome_reason = '<div class="quest-failed">' . t('Not enough Energy!') .
     '</div>' .
@@ -57,6 +55,10 @@ if (($game_user->energy < $quest_action->required_energy) &&
       $game_quest->group, 'big-68');
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
+  zg_slack('ran-out-of', 'Player ' . $game_user->username .
+    ' does not have enough Energy (has ' . $game_user->energy . ', needs ' .
+    $quest_action->required_energy . ') to perform quest ' . $quest_action->id .
+    ': "' . $quest_action->name . '".');
 
   zg_competency_gain($game_user, 'too tired');
 }
