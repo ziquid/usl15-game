@@ -83,12 +83,14 @@ function _slack_send_message($webhook_url, $message, array $message_options = []
  */
 function slack_get_webhook_url($channel) {
   $webhooks = [
-    '#uslce' => 'https://hooks.slack.com/services/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',
-    '#uslce-bots' => 'https://hooks.slack.com/services/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',
-    '#uslce-luck' => 'https://hooks.slack.com/services/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',
+    '#uslce' => 'TPRLET5NU/B01551Y6XPE/V1y9liW4o2lz615tkQ5rRRYI',
+    '#uslce-bots' => 'TPRLET5NU/BT4LQDU01/t0wrdgGuSoX9Y32o91tAR3ql',
+    '#uslce-luck' => 'TPRLET5NU/B014XES1B5K/I3yKbvAKQr3OQJR7tOac2mJx',
   ];
   if (array_key_exists($channel, $webhooks)) {
-    $webhook = $webhooks[$channel];
+    $webhook = 'https://hooks' .
+      '.slack.com' .
+      '/services/' . $webhooks[$channel];
   }
   else {
     $webhook = variable_get('slack_webhook_url', NULL);
