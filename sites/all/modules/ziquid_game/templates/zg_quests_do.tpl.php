@@ -420,7 +420,8 @@ EOF;
 
       // Get quest group stats.
       $sql = 'SELECT sum( bonus_given ) AS completed,
-        count( quests.id ) AS total, quest_groups.ready_for_bonus
+        count( quests.id ) AS total, quest_groups.ready_for_bonus,
+        quest_groups.name
         FROM `quests`
         LEFT OUTER JOIN quest_completion
         ON quest_completion.fkey_quests_id = quests.id
@@ -443,7 +444,7 @@ EOF;
         $land_id = $item->fkey_land_id;
         $st_id = $item->fkey_staff_id;
 
-        // Anything to give him/her?
+        // Anything to give player?
         if (($eq_id + $land_id + $st_id) > 0) {
 
           // Equipment bonus.
@@ -454,6 +455,10 @@ EOF;
               zg_equipment_gain($game_user, $eq_id, 1, 0);
 
             if ($eq_success) {
+              zg_slack('loot', 'Player ' . $game_user->username .
+                ' looted equipment ' . $game_equipment->id . ': "' . $game_equipment->name .
+                '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
+                $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
@@ -463,7 +468,7 @@ EOF;
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('quest object' , $game_quest);
+              $response = zg_slack('quest object', $game_quest);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
@@ -494,12 +499,16 @@ EOF;
               zg_staff_gain($game_user, $st_id, 1, 0);
 
             if ($st_success) {
+              zg_slack('loot', 'Player ' . $game_user->username .
+                ' looted staff ' . $game_staff->id . ': "' . $game_staff->name .
+                '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
+                $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack('error', 'could not give 2nd-round st bonus for quest ' . $game_quest->id .
-                " due to $st_success, $st_reason, $st_details",
-                $slack_channel);
+              zg_slack('error', 'could not give 2nd-round st bonus for quest ' .
+                $game_quest->id .
+                " due to $st_success, $st_reason, $st_details");
               $response = zg_slack('user object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
@@ -550,21 +559,22 @@ EOF;
   }
 
   // Check for loot -- equipment.
-  if ($quest_action->chance_of_loot > 0 && $quest_action->chance_of_loot < 30) {
+  if ($quest_action->chance_of_loot > 0) {
     $game_equipment = zg_fetch_equip_by_id($game_user, $quest_action->fkey_loot_equipment_id);
     $under_limit = $game_equipment->quantity_limit > (int) $game_equipment->quantity;
+  }
 
-    // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
-    if ($game_equipment->quantity == 0) {
+  // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
+  if ($quest_action->chance_of_loot > 0 && $quest_action->chance_of_loot < 30 &&
+    $game_equipment->quantity == 0) {
       $quest_action->chance_of_loot = 30;
-    }
   }
 
   if ((($game_user->level <= 6 && $quest_action->chance_of_loot > 0)
       || $quest_action->chance_of_loot >= mt_rand(1, 99))
     && ($under_limit || $game_equipment->quantity_limit == 0)) {
 
-    $loot = zg_fetch_equip_by_id($game_user, $quest_action->fkey_loot_equipment_id);
+    $loot = $game_equipment;
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
@@ -573,36 +583,88 @@ EOF;
         zg_competency_gain($game_user, 'drunk');
       }
 
-      zg_equipment_gain($game_user, $quest_action->fkey_loot_equipment_id);
-      zg_competency_gain($game_user, 'looter');
-      $loot_html = zg_render_equip($game_user, $loot, $ai_output,
-        ['equipment-succeeded' => 'loot']);
+      list($eq_success, $eq_reason, $eq_details) =
+        zg_equipment_gain($game_user, $quest_action->fkey_loot_equipment_id);
+
+      if ($eq_success) {
+        zg_slack('loot', 'Player ' . $game_user->username .
+          ' looted equipment ' . $loot->id . ': "' . $loot->name .
+          '" as loot for quest ' . $quest_action->id . ': "' .
+          $quest_action->name . '".');
+        zg_competency_gain($game_user, 'looter');
+        $loot_html = zg_render_equip($game_user, $loot, $ai_output,
+          ['equipment-succeeded' => 'loot']);
+
+      }
+      else {
+        zg_slack('error', 'could not give loot eq bonus for quest ' .
+          $game_quest->name . ' (' . $game_quest->id . ') ' .
+          " due to $eq_success, $eq_reason, $eq_details");
+        $response = zg_slack('user object', $game_user);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+        $response = zg_slack('quest object', $quest_action);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+        $response = zg_slack('equipment object', $loot);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+      }
     }
   }
 
   // Check for loot -- staff.
-  if ($quest_action->chance_of_loot_staff > 0 && $quest_action->chance_of_loot_staff < 30) {
+  if ($quest_action->chance_of_loot_staff > 0) {
     $game_staff = zg_fetch_staff_by_id($game_user, $quest_action->fkey_loot_staff_id);
     $under_limit = $game_staff->quantity_limit > (int) $game_staff->quantity;
+  }
 
-    // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
-    if ($game_staff->quantity == 0) {
+  // Haven't gotten any of this loot yet?  Bump loot chance up to 30%.
+  if ($quest_action->chance_of_loot_staff > 0 && $quest_action->chance_of_loot_staff < 30 &&
+    $game_staff->quantity == 0) {
       $quest_action->chance_of_loot_staff = 30;
-    }
   }
 
   if ((($game_user->level <= 6 && $quest_action->chance_of_loot_staff > 0)
       || $quest_action->chance_of_loot_staff >= mt_rand(1, 99))
     && ($under_limit || $game_staff->quantity_limit == 0)) {
 
-    $loot = zg_fetch_staff_by_id($game_user, $quest_action->fkey_loot_staff_id);
+    $loot = $game_staff;
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
-      zg_staff_gain($game_user, $quest_action->fkey_loot_staff_id);
-      zg_competency_gain($game_user, 'looter');
-      $loot_html = zg_render_staff($game_user, $loot, $ai_output,
-        ['equipment-succeeded' => 'loot']);
+      list($st_success, $st_reason, $st_details) =
+        zg_staff_gain($game_user, $quest_action->fkey_loot_staff_id);
+
+      if ($st_success) {
+        zg_slack('loot', 'Player ' . $game_user->username .
+          ' looted staff ' . $loot->id . ': "' . $loot->name .
+          '" as loot for quest ' . $quest_action->id . ': "' .
+          $quest_action->name . '".');
+        zg_competency_gain($game_user, 'looter');
+        $loot_html = zg_render_staff($game_user, $loot, $ai_output,
+         ['equipment-succeeded' => 'loot']);
+      }
+      else {
+        zg_slack('error', 'could not give loot st bonus for quest ' .
+          $game_quest->name . ' (' . $game_quest->id . ') ' .
+          " due to $st_success, $st_reason, $st_details");
+        $response = zg_slack('user object', $game_user);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+        $response = zg_slack('quest object', $quest_action);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+        $response = zg_slack('staff object', $loot);
+        if ($response !== TRUE) {
+          firep($response, 'slack response');
+        }
+      }
     }
   }
 
@@ -683,14 +745,12 @@ if ($game_user->level >= 6) {
 $game_quest->optionShowBeforeTitle = TRUE;
 array_unshift($qgo->q, $game_quest);
 //firep($game_quest, 'game_quest object at show');
-echo <<< EOF
+?>
+
 <div class="swiper-container">
   <div class="swiper-wrapper">
-EOF;
-zg_show_quest_group_slide($game_user, $qgo);
-echo <<< EOF
+    <?php zg_show_quest_group_slide($game_user, $qgo); ?>
   </div>
 </div>
-EOF;
 
-db_set_active();
+<?php db_set_active();

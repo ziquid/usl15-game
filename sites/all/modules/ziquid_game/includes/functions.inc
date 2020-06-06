@@ -1881,18 +1881,25 @@ function zg_slack($type, $message) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
+  // Not a scalar?  Print its contents.
+  if (is_object($message) ||is_array($message)) {
+    $message = print_r($message, TRUE);
+  }
+
+  $type = mb_strtolower($type);
   $slack_message = $type . ': ' . $message;
   $slack_channel = '#uslce';
 
-  switch (mb_strtolower($type)) {
+  switch ($type) {
 
     case 'bot':
-    case 'bots':
       $slack_channel .= '-bots';
       break;
 
+    case 'bots':
+    case 'loot':
     case 'luck':
-      $slack_channel .= '-luck';
+      $slack_channel .= '-' . $type;
       break;
   }
 

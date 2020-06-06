@@ -84,7 +84,8 @@ function _slack_send_message($webhook_url, $message, array $message_options = []
 function slack_get_webhook_url($channel) {
   $webhooks = [
     '#uslce' => 'TPRLET5NU/B01551Y6XPE/V1y9liW4o2lz615tkQ5rRRYI',
-    '#uslce-bots' => 'TPRLET5NU/BT4LQDU01/t0wrdgGuSoX9Y32o91tAR3ql',
+    '#uslce-bots' => 'TPRLET5NU/B014XF029V3/nktXgN3qcrb68UhRFXoUf4aH',
+    '#uslce-loot' => 'TPRLET5NU/B015NMD0C8G/G6HIiQDruVJYmnKcgIYsR0zg',
     '#uslce-luck' => 'TPRLET5NU/B014J4905LP/HVr0oFE1vKtCEzLrud64KCNd',
   ];
   if (array_key_exists($channel, $webhooks)) {
