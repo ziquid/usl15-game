@@ -85,7 +85,7 @@ function slack_get_webhook_url($channel) {
   $webhooks = [
     '#uslce' => 'TPRLET5NU/B01551Y6XPE/V1y9liW4o2lz615tkQ5rRRYI',
     '#uslce-bots' => 'TPRLET5NU/BT4LQDU01/t0wrdgGuSoX9Y32o91tAR3ql',
-    '#uslce-luck' => 'TPRLET5NU/B014XES1B5K/I3yKbvAKQr3OQJR7tOac2mJx',
+    '#uslce-luck' => 'TPRLET5NU/B014J4905LP/HVr0oFE1vKtCEzLrud64KCNd',
   ];
   if (array_key_exists($channel, $webhooks)) {
     $webhook = 'https://hooks' .
