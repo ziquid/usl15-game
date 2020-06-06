@@ -41,7 +41,7 @@ function zg_cron() {
     db_set_active();
     $sql = 'select count(sid) as anon_users from sessions 
       where uid = 0 and timestamp >= "%s"';
-    $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 900))->fetch_object();
+    $result = db_query($sql, REQUEST_TIME - 900)->fetch_object();
     db_set_active('game_' . $game);
     if ($result->anon_users) {
       $msg .= "$result->anon_users players online.  ";
