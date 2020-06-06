@@ -476,9 +476,9 @@ function zg_competency_gain(\stdClass $game_user, $id) {
   }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
-    zg_slack('competency-gain', 'Player "' . $game_user->username .
-      '" tried to gain comp ' . $id . ': "' . $item->name . '" but must wait ' .
-      (REQUEST_TIME - strtotime($data->timestamp)) . ' more seconds.');
+//    zg_slack('competency-gain', 'Player "' . $game_user->username .
+//      '" tried to gain comp ' . $id . ': "' . $item->name . '" but must wait ' .
+//      (REQUEST_TIME - strtotime($data->timestamp)) . ' more seconds.');
 firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
   }
