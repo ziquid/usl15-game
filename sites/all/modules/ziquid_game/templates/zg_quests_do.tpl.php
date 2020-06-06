@@ -55,8 +55,8 @@ if (($game_user->energy < $quest_action->required_energy) &&
       $game_quest->group, 'big-68');
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
-  zg_slack('ran-out-of', 'Player ' . $game_user->username .
-    ' does not have enough Energy (has ' . $game_user->energy . ', needs ' .
+  zg_slack('ran-out-of', 'Player "' . $game_user->username .
+    '" does not have enough Energy (has ' . $game_user->energy . ', needs ' .
     $quest_action->required_energy . ') to perform quest ' . $quest_action->id .
     ': "' . $quest_action->name . '".');
 
@@ -457,8 +457,8 @@ EOF;
               zg_equipment_gain($game_user, $eq_id, 1, 0);
 
             if ($eq_success) {
-              zg_slack('loot', 'Player ' . $game_user->username .
-                ' looted equipment ' . $game_equipment->id . ': "' . $game_equipment->name .
+              zg_slack('loot', 'Player "' . $game_user->username .
+                '" looted equipment ' . $game_equipment->id . ': "' . $game_equipment->name .
                 '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
                 $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
@@ -501,8 +501,8 @@ EOF;
               zg_staff_gain($game_user, $st_id, 1, 0);
 
             if ($st_success) {
-              zg_slack('loot', 'Player ' . $game_user->username .
-                ' looted staff ' . $game_staff->id . ': "' . $game_staff->name .
+              zg_slack('loot', 'Player "' . $game_user->username .
+                '" looted staff ' . $game_staff->id . ': "' . $game_staff->name .
                 '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
                 $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
@@ -589,8 +589,8 @@ EOF;
         zg_equipment_gain($game_user, $quest_action->fkey_loot_equipment_id);
 
       if ($eq_success) {
-        zg_slack('loot', 'Player ' . $game_user->username .
-          ' looted equipment ' . $loot->id . ': "' . $loot->name .
+        zg_slack('loot', 'Player "' . $game_user->username .
+          '" looted equipment ' . $loot->id . ': "' . $loot->name .
           '" as loot for quest ' . $quest_action->id . ': "' .
           $quest_action->name . '".');
         zg_competency_gain($game_user, 'looter');
@@ -642,8 +642,8 @@ EOF;
         zg_staff_gain($game_user, $quest_action->fkey_loot_staff_id);
 
       if ($st_success) {
-        zg_slack('loot', 'Player ' . $game_user->username .
-          ' looted staff ' . $loot->id . ': "' . $loot->name .
+        zg_slack('loot', 'Player "' . $game_user->username .
+          '" looted staff ' . $loot->id . ': "' . $loot->name .
           '" as loot for quest ' . $quest_action->id . ': "' .
           $quest_action->name . '".');
         zg_competency_gain($game_user, 'looter');

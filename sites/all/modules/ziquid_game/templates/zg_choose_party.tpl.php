@@ -79,7 +79,7 @@ if ($party_id != 0) {
   if ($game_user->fkey_values_id != 0) {
     zg_luck($game_user, -5, $game_user->fkey_values_id, 0, $party_id,
       $game_user->username . ' changed parties to ' . $item->party_title . ' from ' . $game_user->party_title,
-      'change_party', '');
+      'change_party', $item->party_title);
   }
 
   // Also delete any offices held.

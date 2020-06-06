@@ -446,6 +446,7 @@ function zg_competency_gain(\stdClass $game_user, $id) {
       // Not found! Create it!
       $sql = 'insert into competencies (name, level) values ("%s", %d);';
       db_query($sql, $id, 1);
+      $name = $id;
 
       $sql = 'select * from competencies where name = "%s";';
       $result = db_query($sql, $id);
@@ -475,6 +476,9 @@ function zg_competency_gain(\stdClass $game_user, $id) {
   }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
+    zg_slack('competency-gain', 'Player "' . $game_user->username .
+      '" tried to gain comp ' . $id . ': "' . $item->name . '" but must wait ' .
+      (REQUEST_TIME - strtotime($data->timestamp)) . ' more seconds.');
 firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
   }
@@ -487,8 +491,11 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       where fkey_competencies_id = %d and fkey_users_id = %d;';
     db_query($sql, $id, $game_user->id);
     $comp_after = zg_competency_level($game_user, $id);
+    zg_slack('competency-gain', 'Player "' . $game_user->username .
+      '" gained one point of comp ' . $id . ': "' . $item->name . '" (now ' .
+      $comp_after->use_count . ', "' . $comp_after->level_name_2 . '").');
 
-    // Leveled up!
+    // Leveled up?
     if ($comp_after->level > $comp_before->level) {
       zg_send_user_message(1, $game_user->id, 1,
         'You have increased your competency &quot;<span class="initial-caps">'
@@ -496,8 +503,19 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       . $comp_after->level_name_2 . ' and have gained '
       . $comp_after->level . ' luck.', 'comp');
 
-      $sql = 'update users set luck = luck + %d where id = %d;';
-      db_query($sql, $comp_after->level, $game_user->id);
+      $luck = $comp_after->level;
+      $msg = 'Player "' . $game_user->username . '" gained ' . $luck .
+        ' Luck via comp gain (previously ' . $game_user->luck .
+        ' Luck, now ' . ($game_user->luck + $luck) . ') for becoming "' .
+        $comp_after->level_name_2 . '" in comp ' .
+        $id . ': "' . $item->name . '".';
+      zg_luck($game_user, $luck, $game_user->luck, $luck,
+        $game_user->luck + $luck, $msg, 'competency',
+        $item->name);
+      zg_slack('competency-gain', 'Player "' . $game_user->username .
+        '" has attained comp level ' . $comp_after->level . ': "' .
+        $comp_after->level_name_2 . '" for comp ' . $id . ': "' .
+        $item->name . '".');
     }
 
   }
@@ -508,6 +526,9 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       (fkey_users_id, fkey_competencies_id, use_count) values
       (%d, %d, 1);';
     db_query($sql, $game_user->id, $id);
+    zg_slack('competency-gain', 'Player "' . $game_user->username .
+      '" newly started learning comp ' . $id . ': "' . $item->name . '".');
+
     if ($game_user->level > 6) {
       zg_send_user_message(1, $game_user->id, 1,
       'You have started learning a new competency, &quot;<span class="initial-caps">'
@@ -620,23 +641,24 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
 
   switch ($type) {
 
+    case 'competency':
     case 'purchase':
-      // FIXME: amount_now really should be amount_before.
-      $sql = 'insert into purchases (fkey_users_id, amount_now, amount_purchased, purchase)
-        values (%d, %d, %d, "%s");';
-      db_query($sql, $game_user->id, $game_user->luck, $quantity, $text);
-      mail('joseph@ziquid.com', $game . ' Luck purchase', $text);
+      // FIXME: amount_now is really the amount before purchase.
+      // The column name in the database should be changed.
+      $sql = 'insert into purchases (fkey_users_id, type, subtype, amount_now, amount_purchased, purchase)
+        values (%d, "%s", "%s", %d, %d, "%s");';
+      db_query($sql, $game_user->id, $type, $subtype, $game_user->luck, $quantity, $text);
       break;
 
     case 'action':
     case 'change_party':
     case 'energy':
     case 'money':
-      $sql = 'insert into luck_use (fkey_users_id, use_type, amount_before, 
-        amount_filled, amount_now, luck_remaining, comment)
-        values (%d, "%s", %d, %d, %d, %d, "%s");';
-      db_query($sql, $game_user->id, $type, $amount_before, $amount_filled,
-        $amount_now, $game_user->luck + $quantity, $text);
+      $sql = 'insert into luck_use (fkey_users_id, use_type, subtype, 
+        amount_before, amount_filled, amount_now, luck_remaining, comment)
+        values (%d, "%s", "%s", %d, %d, %d, %d, "%s");';
+      db_query($sql, $game_user->id, $type, $subytpe, $amount_before,
+        $amount_filled, $amount_now, $game_user->luck + $quantity, $text);
       break;
   }
 
@@ -1897,6 +1919,7 @@ function zg_slack($type, $message) {
       break;
 
     case 'bots':
+    case 'competency-gain':
     case 'loot':
     case 'luck':
     case 'ran-out-of':

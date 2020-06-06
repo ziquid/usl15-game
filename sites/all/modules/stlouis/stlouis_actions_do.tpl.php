@@ -126,6 +126,10 @@ if ($game_user->actions < $action->cost) {
     'Refill your Action (1&nbsp;Luck)',
     '/action?destination=/' . $game . '/actions/' . $arg2,
     'big-68');
+
+  zg_slack('ran-out-of', 'Player "' . $game_user->username .
+    '" does not have enough Action (has ' . $game_user->actions . ', needs ' .
+    $action->cost . ') to perform action ' . $arg2 . ': "' . $action->name . '".');
 }
 
 if (($game_user->money < $action->values_cost) &&
@@ -187,10 +191,10 @@ if ($action_succeeded) {
 
   // Affect competencies.
   if ($action->competency_enhanced_1 != 0) {
-    game_competency_gain($game_user, (int) $action->competency_enhanced_1);
+    zg_competency_gain($game_user, (int) $action->competency_enhanced_1);
   }
   if ($action->competency_enhanced_2 != 0) {
-    game_competency_gain($game_user, (int) $action->competency_enhanced_2);
+    zg_competency_gain($game_user, (int) $action->competency_enhanced_2);
   }
 
   // Affect influence.
