@@ -86,6 +86,7 @@ function slack_get_webhook_url($channel) {
     '#uslce' => 'TPRLET5NU/B01551Y6XPE/V1y9liW4o2lz615tkQ5rRRYI',
     '#uslce-bots' => 'TPRLET5NU/B014XF029V3/nktXgN3qcrb68UhRFXoUf4aH',
     '#uslce-competency-gain' => 'TPRLET5NU/B014J5HLAG7/bicbW7Il0SGtOF5kswFBERMT',
+    '#uslce-cron' => 'TPRLET5NU/B014YV35PGS/sl0rtj5NJEeRRPMfQUAObwlw',
     '#uslce-loot' => 'TPRLET5NU/B015NMD0C8G/G6HIiQDruVJYmnKcgIYsR0zg',
     '#uslce-luck' => 'TPRLET5NU/B014J4905LP/HVr0oFE1vKtCEzLrud64KCNd',
     '#uslce-pages' => 'TPRLET5NU/B014J6QC4FR/i9NJ5SYNisAa1sVDXycGe8oE',

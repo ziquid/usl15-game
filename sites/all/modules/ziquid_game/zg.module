@@ -27,6 +27,12 @@ function zg_cron() {
     db_set_active('game_' . $game);
     include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
+    $sql = 'select sum(luck) as luck, count(id) as players from users 
+      where level >= 25 and meta <> "admin" and meta <> "staff" 
+      and meta <> "zombie" and meta NOT LIKE "ai%";';
+    $result = db_query($sql)->fetch_object();
+    zg_slack('cron', "$result->luck Luck amongst $result->players players.");
+
     // Module has its own cron?  Skip this cron, except for hook_cron().
     if (function_exists($game . '_cron')) {
       zg_alter('cron', NULL);

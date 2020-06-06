@@ -1919,6 +1919,7 @@ function zg_slack($type, $message) {
       break;
 
     case 'bots':
+    case 'cron':
     case 'competency-gain':
     case 'loot':
     case 'luck':
