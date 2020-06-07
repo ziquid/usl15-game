@@ -32,7 +32,7 @@ function stlouis_cron() {
 
   // AI moves.
   include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
-  game_move_ai();
+  zg_move_ai();
 
   // Save old approval ratings.
   $sql = 'update elected_officials set approval_45 = approval_30,
