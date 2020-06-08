@@ -1939,7 +1939,7 @@ function zg_slack($game_user, $type, $subtype, $message) {
     return FALSE;
   }
 
-  // Not meta property?  complain.
+  // No meta property?  complain.
   if (!property_exists($game_user, 'meta')) {
     $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
     $message = 'FIXME: $game_user parameter to zg_slack() had no meta property: (' .
@@ -1956,6 +1956,11 @@ function zg_slack($game_user, $type, $subtype, $message) {
   // Bot?  Log only to the bots channel.
   if (substr($game_user->meta, 0, 3) == 'ai_' ||
     $game_user->meta == 'zombie') {
+
+    // We don't need to track bot pages.
+    if ($type == 'pages') {
+      return TRUE;
+    }
     return zg_send_slack_message('bots', $type, $subtype, $message);
   }
 
@@ -2006,6 +2011,7 @@ function zg_send_slack_message($channel, $type, $subtype, $message) {
       $slack_channel .= '-bots';
       break;
 
+    case 'debug':
     case 'error':
       $slack_channel .= '-errors';
       break;

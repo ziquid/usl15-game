@@ -596,7 +596,7 @@ EOF;
         zg_slack($game_user, 'loot', $loot->name,
           'Player "' . $game_user->username .
           '" looted equipment ' . $loot->id . ': "' . $loot->name .
-          '" as loot for quest ' . $quest_action->id . ': "' .
+          '" from quest ' . $quest_action->id . ': "' .
           $quest_action->name . '".');
         zg_competency_gain($game_user, 'looter');
         $loot_html = zg_render_equip($game_user, $loot, $ai_output,
@@ -651,7 +651,7 @@ EOF;
         zg_slack($game_user, 'loot', $loot->name,
           'Player "' . $game_user->username .
           '" looted staff ' . $loot->id . ', "' . $loot->name .
-          '" as loot for quest ' . $quest_action->id . ', "' .
+          '" from quest ' . $quest_action->id . ', "' .
           $quest_action->name . '".');
         zg_competency_gain($game_user, 'looter');
         $loot_html = zg_render_staff($game_user, $loot, $ai_output,
@@ -659,7 +659,7 @@ EOF;
       }
       else {
         zg_slack($game_user, 'error', 'loot failure',
-          'could not give loot st bonus for quest ' .
+          'could not give loot staff bonus for quest ' .
           $game_quest->name . ' (' . $game_quest->id . ') ' .
           " due to $st_success, $st_reason, $st_details");
         $response = zg_slack($game_user, 'debug', 'user object', $game_user);
