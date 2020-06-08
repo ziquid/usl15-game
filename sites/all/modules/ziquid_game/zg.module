@@ -395,7 +395,14 @@ function zg_init() {
   }
 
   if (in_array($game, zg_get_game_list())) {
-    define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
+
+    if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083') {
+      define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME'] - 14400);
+//      firep(date('Y-m-d H:i:s', REQUEST_TIME), 'server request time');
+    }
+    else {
+      define('REQUEST_TIME', (int) $_SERVER['REQUEST_TIME']);
+    }
 
     // Don't cache anything.
     $conf['cache'] = FALSE;

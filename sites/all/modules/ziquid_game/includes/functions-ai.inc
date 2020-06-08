@@ -1885,7 +1885,7 @@ function zg_ai_debate_players($ai_id, $num_debates = 99) {
 
   // $debate_wait_time = 1200;
   // $zombie_debate_wait = 300;
-  $sql = 'SELECT users.id, users.username
+  $sql = 'SELECT users.id, users.username, users.meta
     FROM users
     LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = users.id
     LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
@@ -1894,6 +1894,7 @@ function zg_ai_debate_players($ai_id, $num_debates = 99) {
     AND username <> ""
     AND (debates_last_time < "%s" OR
      (users.meta = "zombie" AND debates_last_time < "%s"))
+    AND users.meta NOT like "ai_%"
     AND users.level > %d
     AND users.level < %d
     ORDER BY abs(users.experience - %d) ASC
@@ -2021,9 +2022,12 @@ function zg_ai_list_all_ais() {
     LEFT OUTER JOIN clan_members
     ON clan_members.fkey_users_id = users.id
     where users.meta like "ai_%"
+      and last_access < "%s"
+      and actions > 0
+      and money >= 100
     and clan_members.fkey_users_id IS NULL
     limit 6;';
-  $result = db_query($sql);
+  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 900));
   $data = [];
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
@@ -2037,9 +2041,10 @@ function zg_ai_list_all_ais() {
   $data = [];
   $sql = 'select phone_id from users
     where meta like "ai_%"
+      and last_access < "%s"
     order by money DESC
     limit 2;';
-  $result = db_query($sql);
+  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 900));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
@@ -2052,9 +2057,10 @@ function zg_ai_list_all_ais() {
   $data = [];
   $sql = 'select phone_id from users
     where meta like "ai_%"
+      and last_access < "%s"
     order by income ASC
     limit 3;';
-  $result = db_query($sql);
+  $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME - 900));
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
