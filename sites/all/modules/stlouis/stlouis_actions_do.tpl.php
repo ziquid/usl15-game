@@ -127,9 +127,10 @@ if ($game_user->actions < $action->cost) {
     '/action?destination=/' . $game . '/actions/' . $arg2,
     'big-68');
 
-  zg_slack('ran-out-of', 'Player "' . $game_user->username .
+  zg_slack($game_user, 'ran-out-of', 'action',
+    'Player "' . $game_user->username .
     '" does not have enough Action (has ' . $game_user->actions . ', needs ' .
-    $action->cost . ') to perform action ' . $arg2 . ': "' . $action->name . '".');
+    $action->cost . ') to perform action ' . $action->id . ', "' . $action->name . '".');
 }
 
 if (($game_user->money < $action->values_cost) &&
@@ -143,6 +144,10 @@ if (($game_user->money < $action->values_cost) &&
   if (substr($phone_id, 0, 3) == 'ai-') {
     $ai_output = 'action-failed no-money';
   }
+  zg_slack($game_user, 'ran-out-of', 'money',
+    'Player "' . $game_user->username .
+    '" does not have enough Money (has ' . $game_user->money . ', needs ' .
+    $action->values_cost . ') to perform action ' . $action->id . ', "' . $action->name . '".');
 }
 
 $action_function = $game . '_action_' .

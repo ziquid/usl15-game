@@ -26,12 +26,12 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-zg_slack('pages', "\"Debates\" for Player \"$game_user->username\".");
+zg_slack($game_user, 'pages', 'debates_list',
+  "\"Debates\" for Player \"$game_user->username\".");
 zg_fetch_header($game_user);
 
-// Do AI moves from this page!!!
+// Do AI moves from this page.
 if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
-  include drupal_get_path('module', $game) . '/' . $game . '_ai.inc';
   zg_move_ai();
 }
 

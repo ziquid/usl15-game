@@ -55,7 +55,8 @@ if (($game_user->energy < $quest_action->required_energy) &&
       $game_quest->group, 'big-68');
   $extra_html = '<p>&nbsp;</p><p class="second">&nbsp;</p>';
   $ai_output = 'quest-failed not-enough-energy';
-  zg_slack('ran-out-of', 'Player "' . $game_user->username .
+  zg_slack($game_user, 'ran-out-of', 'energy',
+    'Player "' . $game_user->username .
     '" does not have enough Energy (has ' . $game_user->energy . ', needs ' .
     $quest_action->required_energy . ') to perform quest ' . $quest_action->id .
     ': "' . $quest_action->name . '".');
@@ -457,24 +458,25 @@ EOF;
               zg_equipment_gain($game_user, $eq_id, 1, 0);
 
             if ($eq_success) {
-              zg_slack('loot', 'Player "' . $game_user->username .
+              zg_slack($game_user,'loot', $game_equipment->name,
+                'Player "' . $game_user->username .
                 '" looted equipment ' . $game_equipment->id . ': "' . $game_equipment->name .
                 '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
                 $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack('error', 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
+              zg_slack($game_user, 'error', 'could not give 2nd-round eq bonus for quest ' . $game_quest->id .
                 " due to $eq_success, $eq_reason, $eq_details");
-              $response = zg_slack('user object', $game_user);
+              $response = zg_slack($game_user, 'debug', 'user object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('quest object', $game_quest);
+              $response = zg_slack($game_user, 'debug', 'quest object', $game_quest);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('equipment object', $game_equipment);
+              $response = zg_slack($game_user, 'debug', 'equipment object', $game_equipment);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
@@ -501,25 +503,27 @@ EOF;
               zg_staff_gain($game_user, $st_id, 1, 0);
 
             if ($st_success) {
-              zg_slack('loot', 'Player "' . $game_user->username .
+              zg_slack($game_user, 'loot', $game_staff->name,
+                'Player "' . $game_user->username .
                 '" looted staff ' . $game_staff->id . ': "' . $game_staff->name .
                 '" as 2nd-round bonus for quest group ' . $quest_group->id . ': "' .
                 $quest_group->name . '".');
               zg_competency_gain($game_user, 'second-mile saint');
             }
             else {
-              zg_slack('error', 'could not give 2nd-round st bonus for quest ' .
+              zg_slack($game_user, 'error', 'bonus failure',
+                'could not give 2nd-round st bonus for quest ' .
                 $game_quest->id .
                 " due to $st_success, $st_reason, $st_details");
-              $response = zg_slack('user object', $game_user);
+              $response = zg_slack($game_user, 'debug', 'user object', $game_user);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('quest object', $game_quest);
+              $response = zg_slack($game_user, 'debug', 'quest object', $game_quest);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
-              $response = zg_slack('staff object', $game_staff);
+              $response = zg_slack($game_user, 'debug', 'staff object', $game_staff);
               if ($response !== TRUE) {
                 firep($response, 'slack response');
               }
@@ -589,7 +593,8 @@ EOF;
         zg_equipment_gain($game_user, $quest_action->fkey_loot_equipment_id);
 
       if ($eq_success) {
-        zg_slack('loot', 'Player "' . $game_user->username .
+        zg_slack($game_user, 'loot', $loot->name,
+          'Player "' . $game_user->username .
           '" looted equipment ' . $loot->id . ': "' . $loot->name .
           '" as loot for quest ' . $quest_action->id . ': "' .
           $quest_action->name . '".');
@@ -599,18 +604,19 @@ EOF;
 
       }
       else {
-        zg_slack('error', 'could not give loot eq bonus for quest ' .
+        zg_slack($game_user, 'error', 'loot failure',
+          'could not give loot eq bonus for quest ' .
           $game_quest->name . ' (' . $game_quest->id . ') ' .
           " due to $eq_success, $eq_reason, $eq_details");
-        $response = zg_slack('user object', $game_user);
+        $response = zg_slack($game_user, 'debug', 'user object', $game_user);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }
-        $response = zg_slack('quest object', $quest_action);
+        $response = zg_slack($game_user, 'debug', 'quest object', $quest_action);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }
-        $response = zg_slack('equipment object', $loot);
+        $response = zg_slack($game_user, 'debug', 'equipment object', $loot);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }
@@ -642,27 +648,29 @@ EOF;
         zg_staff_gain($game_user, $quest_action->fkey_loot_staff_id);
 
       if ($st_success) {
-        zg_slack('loot', 'Player "' . $game_user->username .
-          '" looted staff ' . $loot->id . ': "' . $loot->name .
-          '" as loot for quest ' . $quest_action->id . ': "' .
+        zg_slack($game_user, 'loot', $loot->name,
+          'Player "' . $game_user->username .
+          '" looted staff ' . $loot->id . ', "' . $loot->name .
+          '" as loot for quest ' . $quest_action->id . ', "' .
           $quest_action->name . '".');
         zg_competency_gain($game_user, 'looter');
         $loot_html = zg_render_staff($game_user, $loot, $ai_output,
          ['equipment-succeeded' => 'loot']);
       }
       else {
-        zg_slack('error', 'could not give loot st bonus for quest ' .
+        zg_slack($game_user, 'error', 'loot failure',
+          'could not give loot st bonus for quest ' .
           $game_quest->name . ' (' . $game_quest->id . ') ' .
           " due to $st_success, $st_reason, $st_details");
-        $response = zg_slack('user object', $game_user);
+        $response = zg_slack($game_user, 'debug', 'user object', $game_user);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }
-        $response = zg_slack('quest object', $quest_action);
+        $response = zg_slack($game_user, 'debug', 'quest object', $quest_action);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }
-        $response = zg_slack('staff object', $loot);
+        $response = zg_slack($game_user, 'debug', 'staff object', $loot);
         if ($response !== TRUE) {
           firep($response, 'slack response');
         }

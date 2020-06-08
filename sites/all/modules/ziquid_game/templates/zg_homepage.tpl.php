@@ -32,7 +32,7 @@ $d = zg_get_html(
   ]
 );
 
-zg_slack('pages', "\"Home\" for Player \"$game_user->username\".");
+zg_slack($game_user, 'pages', 'home', "\"Home\" for Player \"$game_user->username\".");
 zg_competency_gain($game_user, 'where the heart is');
 
 if (substr($phone_id, 0, 3) == 'ai-') {

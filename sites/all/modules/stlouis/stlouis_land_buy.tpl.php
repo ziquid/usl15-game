@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_land_buy.tpl.php
- * Stloiuis land buy
+ * @file
+ * Buy land.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -32,7 +32,7 @@ if ($quantity === 'use-quantity') {
   $quantity = (int) check_plain($_GET['quantity']);
 }
 
-$game_land = game_fetch_land_by_id($game_user, $land_id);
+$game_land = zg_fetch_land_by_id($game_user, $land_id);
 $orig_quantity = $count = $quantity;
 $land_price = 0;
 
@@ -57,13 +57,13 @@ if ($game_user->money < $land_price) {
 if ($game_user->level < $game_land->required_level) {
   $options['land-buy-succeeded'] = 'failed not-required-level';
   $ai_output = 'land-failed not-required-level';
-  game_karma($game_user,
+  zg_karma($game_user,
     "trying to purchase $game_land->name at level $game_user->level", -100);
 }
 
 // Not required competency.
 if ($game_land->fkey_required_competencies_id > 0) {
-  $check = game_competency_level($game_user,
+  $check = zg_competency_level($game_user,
     (int) $game_land->fkey_required_competencies_id);
 // firep($check);
   if ($check->level < $game_land->required_competencies_level) {
@@ -77,7 +77,7 @@ if ($game_land->fkey_neighborhoods_id != 0 &&
   $game_land->fkey_neighborhoods_id != $game_user->fkey_neighborhoods_id) {
   $options['land-buy-succeeded'] = 'failed not-required-hood';
   $ai_output = 'land-failed not-required-hood';
-  game_karma($game_user,
+  zg_karma($game_user,
     "trying to purchase $game_land->name in wrong hood", -50);
 }
 
@@ -86,7 +86,7 @@ if ($game_land->fkey_values_id != 0 &&
   $game_land->fkey_values_id != $game_user->fkey_values_id) {
   $options['land-buy-succeeded'] = 'failed not-required-party';
   $ai_output = 'land-failed not-required-party';
-  game_karma($game_user,
+  zg_karma($game_user,
     "trying to purchase $game_land->name in wrong party", -50);
 }
 
@@ -94,7 +94,7 @@ if ($game_land->fkey_values_id != 0 &&
 if ($game_land->active != 1) {
   $options['land-buy-succeeded'] = 'failed not-active';
   $ai_output = 'land-failed not-active';
-  game_karma($game_user,
+  zg_karma($game_user,
     "trying to purchase $game_land->name which is not active", -500);
 }
 
@@ -102,7 +102,7 @@ if ($game_land->active != 1) {
 if ($game_land->is_loot != 0) {
   $options['land-buy-succeeded'] = 'failed is-loot';
   $ai_output = 'land-failed is-loot';
-  game_karma($game_user,
+  zg_karma($game_user,
     "trying to purchase $game_land->name which is loot", -25);
 }
 
@@ -128,36 +128,36 @@ if ($options['land-buy-succeeded'] == 'buy-success') {
 
   // Investment?  Add competency.
   if ($game_land->type == 'investment') {
-    game_competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
+    zg_competency_gain($game_user, (int) $game_land->fkey_enhanced_competencies_id);
   }
-  game_land_gain($game_user, $land_id, $quantity, $land_price);
+  zg_land_gain($game_user, $land_id, $quantity, $land_price);
 }
 else {
   $quantity = 0;
 }
 
 $game_land->quantity = $game_land->quantity + $quantity;
-$data = game_fetch_visible_land($game_user);
-$next = game_fetch_next_land($game_user);
+$data = zg_fetch_visible_land($game_user);
+$next = zg_fetch_next_land($game_user);
 
 // ------- VIEW ------
 zg_fetch_header($game_user);
-game_show_aides_menu($game_user);
-game_show_land($game_user, $game_land, $options);
+zg_show_aides_menu($game_user);
+zg_show_land($game_user, $game_land, $options);
 ?>
 <div class="title">
   Available <?php print $land_plural; ?>
 </div>
 <?php
-  game_show_ai_output($phone_id, $ai_output);
+  zg_show_ai_output($phone_id, $ai_output);
 ?>
 <div id="all-land">
   <?php
     foreach ($data as $item):
-      game_show_land($game_user, $item);
+      zg_show_land($game_user, $item);
     endforeach;
     if (!empty($next)):
-      game_show_land($game_user, $next, ['soon' => TRUE]);
+      zg_show_land($game_user, $next, ['soon' => TRUE]);
     endif;
     db_set_active();
   ?>

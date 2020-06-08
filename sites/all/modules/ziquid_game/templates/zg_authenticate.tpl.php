@@ -87,7 +87,8 @@ if ($password == trim($game_user->password) || password_verify($password, trim($
   drupal_goto("$game/home/$arg2");
 }
 
-zg_slack('pages', "\"Authenticate\" for Player \"$game_user->username\".");
+zg_slack($game_user, 'pages', 'authenticate',
+  "\"Authenticate\" for Player \"$game_user->username\".");
 
 /* ------ VIEW ------ */
 ?>

@@ -50,18 +50,17 @@ function zg_cron() {
     }
 
     if (strlen($msg)) {
-      zg_slack('cron', "$game: $msg");
+      zg_slack(NULL,'cron', "$game stats", $msg);
     }
+
+    // AI moves.
+    zg_move_ai();
 
     // Module has its own cron?  Skip this cron, except for hook_cron().
     if (function_exists($game . '_cron')) {
       zg_alter('cron', NULL);
       continue;
     }
-
-    // AI moves.
-    // include drupal_get_path('module', 'zg') . '/' . $game . '_ai.inc';
-    // zg_move_ai();
 
     // Save old approval ratings.
     $sql = 'update elected_officials set approval_45 = approval_30,

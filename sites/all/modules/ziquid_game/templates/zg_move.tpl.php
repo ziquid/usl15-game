@@ -20,7 +20,8 @@
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
-zg_slack('pages', "\"Move\" for Player \"$game_user->username\".");
+zg_slack($game_user, 'pages', 'move',
+  "\"Move\" for Player \"$game_user->username\".");
 zg_fetch_header($game_user);
 
 $sql = 'select name from neighborhoods where id = %d;';

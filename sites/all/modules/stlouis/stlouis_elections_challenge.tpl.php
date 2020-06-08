@@ -56,8 +56,7 @@ EOF;
     echo "<!--\n<ai \"election-failed none-here\"/>\n-->";
   }
 
-  game_karma($game_user, "No elections in current hood", -25);
-
+  zg_karma($game_user, "No elections in current hood", -25);
   db_set_active();
   return;
 }
@@ -234,7 +233,7 @@ EOF;
 
   $message = "$game_user->username ran unopposed for the seat $item->ep_name" .
     " in $location.";
-  zg_slack('Challenge', $message);
+  zg_slack($game_user, 'challenge', $item->ep_name, $message);
 
   if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"election-won\"/>\n-->";
@@ -817,7 +816,7 @@ if ($votes < 0) {
       '%place' => $game_user->location,
     ]
   );
-  zg_slack('challenge', $message);
+  zg_slack($game_user, 'challenge', $item->ep_name, $message);
 
   // Party office.
   if ($item->type == 2) {
@@ -941,7 +940,7 @@ else {
       '%place' => $game_user->location,
     ]
   );
-  zg_slack('challenge', $message);
+  zg_slack($game_user, 'challenge', $item->ep_name, $message);
 
   // You lost.
   if (substr($phone_id, 0, 3) == 'ai-')

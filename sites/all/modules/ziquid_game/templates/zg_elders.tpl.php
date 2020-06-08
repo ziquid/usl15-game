@@ -37,7 +37,8 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   return;
 }
 
-zg_slack('pages', "\"Elders\": Player \"$game_user->username\".");
+zg_slack($game_user, 'pages', 'elders',
+  "\"Elders\": Player \"$game_user->username\".");
 
 if ($game_user->luck > 99) {
   $happy = 'happy';

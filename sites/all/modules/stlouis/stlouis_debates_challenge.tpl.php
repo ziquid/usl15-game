@@ -85,7 +85,8 @@ if ($game_user->actions == 0) {
   if (substr($phone_id, 0, 3) == 'ai-') {
     echo "<!--\n<ai \"debate-no-action\"/>\n-->";
   }
-  zg_slack('ran-out-of', 'Player "' . $game_user->username .
+  zg_slack($game_user, 'ran-out-of', 'action',
+    'Player "' . $game_user->username .
     '" does not have enough Action (has ' . $game_user->actions . ', needs ' .
     '1) to debate "' . $username . '".');
 

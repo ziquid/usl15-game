@@ -10,10 +10,12 @@
  * .
  */
 
-require_once drupal_get_path('module', 'zg') . '/includes/functions-staff.inc';
-require_once drupal_get_path('module', 'zg') . '/includes/functions-equip.inc';
-require_once drupal_get_path('module', 'zg') . '/includes/functions-quests.inc';
-require_once drupal_get_path('module', 'zg') . '/includes/functions-land.inc';
+$zg_path = drupal_get_path('module', 'zg');
+require_once $zg_path . '/includes/functions-ai.inc';
+require_once $zg_path . '/includes/functions-equip.inc';
+require_once $zg_path . '/includes/functions-land.inc';
+require_once $zg_path . '/includes/functions-quests.inc';
+require_once $zg_path . '/includes/functions-staff.inc';
 
 /**
  * Show a button.
@@ -150,7 +152,7 @@ function zg_song(\stdClass $game_user, $song, $force = FALSE) {
  * @param \stdClass $game_user
  *   The game user object.
  */
-function zg_recalc_income(\stdClass $game_user) {
+function zg_recalc_income(\stdClass &$game_user) {
   $sql = 'update users set income =
     (SELECT sum(land.payout * land_ownership.quantity)
     as income from land
@@ -179,12 +181,13 @@ function zg_recalc_income(\stdClass $game_user) {
   $sql = 'update users set expenses = %d where id = %d;';
   db_query($sql, $eq->expenses + $st->expenses, $game_user->id);
 
-  $sql = 'select income, expenses from users
+  $sql = 'select income, expenses, money from users
     where id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
   $game_user->income = $item->income;
   $game_user->expenses = $item->expenses;
+  $game_user->money = $item->money;
 
   zg_alter('recalc_income', $game_user);
 }
@@ -476,8 +479,9 @@ function zg_competency_gain(\stdClass $game_user, $id) {
   }
 
   if ((REQUEST_TIME - strtotime($data->timestamp)) < $competency_gain_wait_time) {
-//    zg_slack('competency-gain', 'Player "' . $game_user->username .
-//      '" tried to gain comp ' . $id . ': "' . $item->name . '" but must wait ' .
+//    zg_slack($game_user, 'competency-gain', $item->name,
+//     'Player "' . $game_user->username .
+//      '" tried to gain comp ' . $id . ', "' . $item->name . '" but must wait ' .
 //      (REQUEST_TIME - strtotime($data->timestamp)) . ' more seconds.');
 firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
     return FALSE;
@@ -491,9 +495,14 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       where fkey_competencies_id = %d and fkey_users_id = %d;';
     db_query($sql, $id, $game_user->id);
     $comp_after = zg_competency_level($game_user, $id);
-    zg_slack('competency-gain', 'Player "' . $game_user->username .
-      '" gained one point of comp ' . $id . ': "' . $item->name . '" (now ' .
-      $comp_after->use_count . ', "' . $comp_after->level_name_2 . '").');
+
+    // Log if not already masterfully competent.
+    if ($comp_after->level < 5) {
+      zg_slack($game_user, 'competency-gain', $item->name,
+        'Player "' . $game_user->username .
+        '" gained for comp ' . $id . ', "' . $item->name . '" (now ' .
+        $comp_after->use_count . ', "' . $comp_after->level_name_2 . '").');
+    }
 
     // Leveled up?
     if ($comp_after->level > $comp_before->level) {
@@ -512,9 +521,10 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       zg_luck($game_user, $luck, $game_user->luck, $luck,
         $game_user->luck + $luck, $msg, 'competency',
         $item->name);
-      zg_slack('competency-gain', 'Player "' . $game_user->username .
-        '" has attained comp level ' . $comp_after->level . ': "' .
-        $comp_after->level_name_2 . '" for comp ' . $id . ': "' .
+      zg_slack($game_user, 'competency-gain', $item->name,
+        'Player "' . $game_user->username .
+        '" has attained comp level ' . $comp_after->level . ', "' .
+        $comp_after->level_name_2 . '" for comp ' . $id . ', "' .
         $item->name . '".');
     }
 
@@ -526,8 +536,9 @@ firep('Last gain of competency &quot;' . $item->name . '&quot; too recent');
       (fkey_users_id, fkey_competencies_id, use_count) values
       (%d, %d, 1);';
     db_query($sql, $game_user->id, $id);
-    zg_slack('competency-gain', 'Player "' . $game_user->username .
-      '" newly started learning comp ' . $id . ': "' . $item->name . '".');
+    zg_slack($game_user, 'competency-gain', $item->name,
+      'Player "' . $game_user->username .
+      '" has newly started learning comp ' . $id . ', "' . $item->name . '".');
 
     if ($game_user->level > 6) {
       zg_send_user_message(1, $game_user->id, 1,
@@ -662,7 +673,13 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
       break;
   }
 
-  zg_slack('luck', $text);
+  $slack_subtype = $type;
+
+  if (in_array(['action', 'energy', 'money'], $slack_subtype)) {
+    $slack_subtype .= '_refill';
+  }
+
+  zg_slack($game_user, 'luck', $slack_subtype, $text);
 
   // Reprocess user object.
   $game_user = zg_fetch_user_by_id($game_user->id);
@@ -696,8 +713,9 @@ function zg_competency_level(\stdClass $game_user, $id) {
     }
     else {
       echo 'competency_level for id ' . $id . ' doesn\'t exist!';
-      zg_slack('error', 'competency_level for id ' . $id . 'doesn\'t exist!');
-      zg_slack('game user', print_r($game_user, TRUE));
+      zg_slack($game_user, 'error', 'competency-missing',
+        'competency_level for id ' . $id . 'doesn\'t exist!');
+      zg_slack($game_user, 'error', 'game user', $game_user);
       die;
     }
 
@@ -859,6 +877,7 @@ function zg_competency_name($comp) {
 function zg_fetch_user_by_id($id) {
   $user = zg_fetch_users_by_id([$id]);
   if (is_array($user)) {
+    zg_slack($user[0], 'debug', 'game user', $user[0]);
     return $user[0];
   }
   return NULL;
@@ -1351,7 +1370,7 @@ function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  list($offer, $comment) = zg_luck_money_offer($game_user);
+  [$offer, $comment] = zg_luck_money_offer($game_user);
   $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
@@ -1653,7 +1672,7 @@ function zg_get_fbid() {
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
-  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
+  [$encoded_sig, $payload] = explode('.', $signed_request, 2);
   $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
@@ -1890,43 +1909,125 @@ if (!function_exists('drupal_html_class')) {
 }
 
 /**
- * Send message to Slack.
+ * Send a message from a player to Slack.
  *
+ * @param object|null $game_user
+ *   The game user object, or NULL if from cron.
  * @param string $type
+ *   The type of the message.
+ * @param string $subtype
+ *   The subtype of the message.
+ * @param string $message
+ *   The message to post into a channel.
+ *
+ * @return bool|object
+ *   Whether the send was successful or not.
+ */
+function zg_slack($game_user, $type, $subtype, $message) {
+
+  // Only cron or bot messages can be playerless.
+  if ($game_user === NULL && ($type == 'cron' || $type == 'bots')) {
+    return zg_send_slack_message($type, $type, $subtype, $message);
+  }
+
+  // Not a user object?  complain.
+  if (!is_object($game_user)) {
+    $bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 2);
+    $message = 'FIXME: zg_slack had no $game_user object: (' .
+      basename($bt[0]['file']) . ':' . $bt[0]['line'] . '): ' . $message;
+    zg_send_slack_message('error', $type, $subtype, $message);
+    return FALSE;
+  }
+
+  // Not meta property?  complain.
+  if (!property_exists($game_user, 'meta')) {
+    $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    $message = 'FIXME: $game_user parameter to zg_slack() had no meta property: (' .
+      basename($bt[0]['file']) . ':' . $bt[0]['line'] . '): ' . $message;
+    zg_send_slack_message('error', $type, $subtype, $message);
+    return FALSE;
+  }
+
+  // Admin player or dev box?  Log only to the devs channel.
+  if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083' || $game_user->meta == 'admin') {
+    return zg_send_slack_message('devs', $type, $subtype, $message);
+  }
+
+  // Bot?  Log only to the bots channel.
+  if (substr($game_user->meta, 0, 3) == 'ai_' ||
+    $game_user->meta == 'zombie') {
+    return zg_send_slack_message('bots', $type, $subtype, $message);
+  }
+
+  return zg_send_slack_message($type, $type, $subtype, $_SERVER['HTTP_HOST'] . $message);
+}
+
+/**
+ * Send a message to Slack.
+ *
+ * @param string $channel
+ *   The channel of the message.
+ * @param string $type
+ *   The type of the message.
+ * @param string $subtype
  *   The type of the message.
  * @param string $message
  *   The message to post into a channel.
  *
  * @return bool|object
+ *   Whether the send was successful or not.
  */
-function zg_slack($type, $message) {
+function zg_send_slack_message($channel, $type, $subtype, $message) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
+  $bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+  if ($bt[1]['function'] != 'zg_slack') {
+    slack_send_message('zg_send_slack_message() erroneously called from '
+      . $bt[1]['function'] . ' at ' . basename($bt[1]['file']) . ':' .
+      $bt[1]['line'] . '.', '#uslce-errors');
+  }
+
   // Not a scalar?  Print its contents.
-  if (is_object($message) ||is_array($message)) {
+  if (is_object($message) || is_array($message)) {
     $message = print_r($message, TRUE);
   }
 
   $type = mb_strtolower($type);
-  $slack_message = $type . ': ' . $message;
+  $datetime = new DateTime();
+  $datetimestring = $datetime->format('H:i:s.v');
+  $slack_message = '(' . $datetimestring . ': ' . $type . '/' . $subtype . '): ' .
+    nl2br($message);
   $slack_channel = '#uslce';
 
-  switch ($type) {
+  switch ($channel) {
 
     case 'bot':
       $slack_channel .= '-bots';
       break;
 
+    case 'error':
+      $slack_channel .= '-errors';
+      break;
+
     case 'bots':
     case 'cron':
     case 'competency-gain':
+    case 'devs':
+    case 'errors':
     case 'loot':
     case 'luck':
     case 'pages':
     case 'ran-out-of':
-      $slack_channel .= '-' . $type;
+      $slack_channel .= '-' . $channel;
       break;
+  }
+
+//  dpm($slack_message, 'would send this message to ' . $slack_channel);
+
+  // Luck refill message?  Also send to 'ran-out-of' channel for comparison.
+  if ($channel == 'luck' && substr($subtype, -7) == '_refill') {
+    slack_send_message($slack_message, '#uslce-ran-out-of');
   }
 
   return slack_send_message($slack_message, $slack_channel);

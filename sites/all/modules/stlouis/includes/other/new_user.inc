@@ -74,7 +74,7 @@ EOF;
 EOF;
     $qg->descriptionShowExpanded = TRUE;
     $newUserHelpShown['01SecondMission'] = TRUE;
-    game_set_value($game_user, 'newUserHelpShown', $newUserHelpShown);
+    zg_set_value($game_user, 'newUserHelpShown', $newUserHelpShown);
   }
 
   elseif ($game_user->level == 3) {

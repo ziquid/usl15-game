@@ -40,7 +40,8 @@ function zg_move_ai() {
   $load = sys_getloadavg();
 
   if ($load[0] > 7) {
-    zg_slack('bots', 'not performing AI moves for ' .
+    zg_slack(NULL, 'bots', 'warning',
+      'not performing AI moves for ' .
       $game_name_full . " since load average is $load[0]");
     return;
   }
@@ -49,7 +50,8 @@ function zg_move_ai() {
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
-    zg_slack('bots','not performing AI moves for ' .
+    zg_slack(NULL, 'bots', 'warning',
+      'not performing AI moves for ' .
       $game_name_full . " since lock could not be acquired");
     db_set_active('game_' . $game);
     return;
@@ -85,7 +87,7 @@ function zg_move_ai() {
 
   // From cron?  Send to Slack.
   if (arg(0) == 'node') {
-    zg_slack('bots', $ai_output);
+    zg_slack(NULL, 'bots', 'output', $ai_output);
   }
 
   db_set_active();
@@ -304,15 +306,15 @@ function zg_ai_web_request($ai_id, $screen, $arg1 = '') {
   global $game, $base_url;
 
   $uri = $base_url . "/$game/$screen/$ai_id";
-  if ($arg1 != '') {
+  if (strlen($arg1)) {
     $uri .= "/$arg1";
   }
 
-  if (($screen != 'home') &&
-    ($screen != 'debates_challenge') &&
-    ($screen != 'land')) {
-    zg_ai_out("$ai_id: web-req for $screen/$arg1 @ $uri");
-  }
+//  if (($screen != 'home') &&
+//    ($screen != 'debates_challenge') &&
+//    ($screen != 'land')) {
+    $ai_out = "web-req: $screen/$ai_id/$arg1";
+//  }
 
   $response = file_get_contents($uri);
   $ai_response_start = strpos($response, "\n<ai ") + 5;
@@ -326,9 +328,9 @@ function zg_ai_web_request($ai_id, $screen, $arg1 = '') {
     $ai_response = $response;
   }
 
-  if (($screen != 'home') &&
-    ($screen != 'land')) {
-    zg_ai_out("server response: $ai_response");
+  if (($screen != 'home')) {
+//    ($screen != 'land-o')) {
+    zg_ai_out($ai_out . ", response: $ai_response");
   }
 
   return trim(str_replace('"', '', $ai_response));
@@ -857,8 +859,9 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
+  $ai_bot = zg_fetch_user_by_id($id_to_check);
   // mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);.
-  zg_slack('bots', $ai_output);
+  zg_slack($ai_bot, 'bots', 'new bot creation', $ai_output);
 }
 
 /**
@@ -1833,6 +1836,7 @@ function zg_ai_buy_land($ai_id) {
   $response = array_slice(explode(' ', $ai_response), 1);
   $can_buy = [];
   $did_buy = FALSE;
+  zg_ai_out("I have $ai_user->money money...");
 
   foreach ($response as $res) {
     if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0)) {
@@ -1841,11 +1845,12 @@ function zg_ai_buy_land($ai_id) {
   }
 
   foreach (array_reverse($can_buy) as $item) {
-    zg_ai_out("I have $ai_user->money money, so I can buy item #$item...");
+//    zg_ai_out("I have $ai_user->money money, so I can buy item #$item...");
 
     $ai_response = zg_ai_web_request($ai_id, 'land_buy', "$item/1");
     if ($ai_response == 'land-succeeded') {
       $did_buy = TRUE;
+      zg_recalc_income($ai_user);
     }
   }
 

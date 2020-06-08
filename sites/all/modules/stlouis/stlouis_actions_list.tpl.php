@@ -17,72 +17,71 @@
  * .
  */
 
-  global $game, $phone_id;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  include drupal_get_path('module', $game) . '/' . $game .
-    '_actions.inc';
-  $game_user = zg_fetch_user();
+global $game, $phone_id;
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+include drupal_get_path('module', $game) . '/' . $game .
+  '_actions.inc';
+$game_user = zg_fetch_user();
 
-  if (empty($game_user->username) || $game_user->username == '(new player)') {
-    db_set_active();
-    drupal_goto($game . '/choose_name/' . $arg2);
-  }
+if (empty($game_user->username) || $game_user->username == '(new player)') {
+  db_set_active();
+  drupal_goto($game . '/choose_name/' . $arg2);
+}
 
-  if ($game_user->level < 6) {
+if ($game_user->level < 6) {
 
-    echo <<< EOF
+  echo <<< EOF
 <div class="title">
 <img src="/sites/default/files/images/{$game}_title.png"/>
 </div>
 <p>&nbsp;</p>
 <div class="welcome">
-  <div class="wise_old_man_small">
-  </div>
-  <p>&quot;You're not yet influential enough for this page.&nbsp;
-  Come back at level 6.&quot;</p>
-  <p class="second">&nbsp;</p>
-  <p class="second">&nbsp;</p>
-  <p class="second">&nbsp;</p>
+<div class="wise_old_man_small">
+</div>
+<p>&quot;You're not yet influential enough for this page.&nbsp;
+Come back at level 6.&quot;</p>
+<p class="second">&nbsp;</p>
+<p class="second">&nbsp;</p>
+<p class="second">&nbsp;</p>
 </div>
 <div class="subtitle"><a
-  href="/$game/quests/$arg2"><img
-    src="/sites/default/files/images/{$game}_continue.png"/></a></div>
+href="/$game/quests/$arg2"><img
+  src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 
-    db_set_active();
-    return;
+  db_set_active();
+  return;
+}
 
-  }
+zg_slack($game_user, 'pages', 'actions',
+  "\"Actions\" for Player \"$game_user->username\".");
+zg_fetch_header($game_user);
 
-  zg_slack('pages', "\"Actions\" for Player \"$game_user->username\".");
-  zg_fetch_header($game_user);
+$sql = 'select name, district from neighborhoods where id = %d;';
+$result = db_query($sql, $game_user->fkey_neighborhoods_id);
+$data = db_fetch_object($result);
+$location = $data->name;
+$district = $data->district;
 
-  $sql = 'select name, district from neighborhoods where id = %d;';
-  $result = db_query($sql, $game_user->fkey_neighborhoods_id);
-  $data = db_fetch_object($result);
-  $location = $data->name;
-  $district = $data->district;
+$sql = 'select party_title from `values` where id = %d;';
+$result = db_query($sql, $game_user->fkey_values_id);
+$data = db_fetch_object($result);
+$party_title = preg_replace('/^The /', '', $data->party_title);
 
-  $sql = 'select party_title from `values` where id = %d;';
-  $result = db_query($sql, $game_user->fkey_values_id);
-  $data = db_fetch_object($result);
-  $party_title = preg_replace('/^The /', '', $data->party_title);
+$sql_to_add = '';
+$actions_active = 'AND actions.active = 1';
 
-  $sql_to_add = '';
-  $actions_active = 'AND actions.active = 1';
+if ($game_user->meta == 'frozen') {
 
-  if ($game_user->meta == 'frozen') {
-
-    echo <<< EOF
+  echo <<< EOF
 <div class="title">Frozen!</div>
 <div class="subtitle">You have been tagged and cannot perform any actions</div>
 <div class="subtitle">Call on a teammate to unfreeze you!</div>
 EOF;
 
-   db_set_active();
-  return;
-
-  }
+ db_set_active();
+return;
+}
 
 //  if ($game == 'stlouis') {
 //

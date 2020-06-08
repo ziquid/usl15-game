@@ -31,8 +31,8 @@ $game_user = new stdClass();
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $d = zg_get_html(['tagline']);
 
-zg_slack('error', 'Error ' . $error_code . ' for phone ID '
-  . $phone_id);
+zg_slack($game_user, 'error', $error_code,
+  'Error ' . $error_code . ' for phone ID ' . $phone_id);
 zg_song($game_user, 'In the air tonight teaser', TRUE);
 db_set_active();
 
