@@ -1959,7 +1959,7 @@ function zg_slack($game_user, $type, $subtype, $message) {
     return zg_send_slack_message('bots', $type, $subtype, $message);
   }
 
-  return zg_send_slack_message($type, $type, $subtype, $_SERVER['HTTP_HOST'] . $message);
+  return zg_send_slack_message($type, $type, $subtype, $message);
 }
 
 /**

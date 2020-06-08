@@ -132,7 +132,14 @@ function zg_ai_out($output) {
 }
 
 /**
+ * Do something and log it.
  *
+ * @param string $goal
+ *   What to do.
+ *
+ * @return mixed|bool
+ *   The return value from calling the function to do the goal or FALSE if
+ *   that goal function has not yet been implemented.
  */
 function zg_ai_do($goal) {
 
@@ -151,6 +158,9 @@ function zg_ai_do($goal) {
   if (is_bool($return)) {
     $return_str = $return ? 'TRUE' : 'FALSE';
   }
+  elseif (is_object($return)) {
+    $return_str = 'object';
+  }
   else {
     $return_str = $return;
   }
@@ -167,7 +177,7 @@ function zg_ai_build() {
   zg_ai_out('figuring out what is the best building course of action');
 
   // Find most energy.
-  $sql = 'select phone_id, energy from users
+  $sql = 'select phone_id, energy, actions from users
     where meta like "ai_%" and energy >= 20 and actions >= 1
     order by ((actions * 20) + energy) desc
     limit 1;';
@@ -180,11 +190,10 @@ function zg_ai_build() {
   }
 
   $ai_id = $item->phone_id;
-  zg_ai_out("Choosing player #$ai_id because he has energy {$item->energy}");
 
   zg_ai_web_request($ai_id, 'home');
   $ai_user = zg_ai_fetch_user($ai_id);
-  zg_ai_out("Building player #$ai_id");
+  zg_ai_out("Building player #$ai_id with {$item->energy} energy, {$item->actions} action");
 
   if ($ai_user->skill_points > 0) {
     zg_ai_out('We have skill points to allocate!');
