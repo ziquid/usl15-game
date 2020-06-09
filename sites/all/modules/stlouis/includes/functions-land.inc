@@ -206,7 +206,7 @@ function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
         t('Insufficient Competency') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'incompetent');
+      zg_competency_gain($game_user, 'incompetent');
       break;
 
     case 'failed not-required-hood':
@@ -216,7 +216,7 @@ function game_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'lost');
+      zg_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':

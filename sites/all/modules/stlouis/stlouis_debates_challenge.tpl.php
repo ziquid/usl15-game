@@ -230,7 +230,7 @@ db_query($sql, $game_user->id, $item->id, 0, 0, ($won ? 1 : 0),
 // Did you win?
 if ($won) {
 
-  game_competency_gain($game_user, 'challenger');
+  zg_competency_gain($game_user, 'challenger');
 
   // The experience you gain is based on their level.
   $experience_gained = mt_rand(floor($item->level / 3),
@@ -307,7 +307,7 @@ if ($won) {
   // Zombies!
   if ($item->meta == 'zombie') {
 
-    game_competency_gain($game_user, 'zombie whisperer');
+    zg_competency_gain($game_user, 'zombie whisperer');
     if ($game_user->debates_won >= ($game_user->level * 100)
     || $game_user->meta == 'admin') {
 
@@ -458,7 +458,7 @@ EOF;
   // Debatebots
   if ($item->meta == 'debatebot') {
 
-    game_competency_gain($game_user, 'beat a bot');
+    zg_competency_gain($game_user, 'beat a bot');
 
     $sql = 'select id from neighborhoods where has_elections = 1
       and id <> %d
@@ -552,7 +552,7 @@ firep("update equipment_ownership set fkey_users_id = $game_user->id
 else {
 
   // You lost.
-  game_competency_gain($item, 'defender');
+  zg_competency_gain($item, 'defender');
 
   $experience_gained = mt_rand(floor($game_user->level / 3),
     ceil($game_user->level * 2 / 3));
