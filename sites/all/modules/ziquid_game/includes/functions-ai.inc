@@ -2073,26 +2073,45 @@ function zg_ai_list_all_ais() {
   // Or not.
 //  return;
 
+  zg_ai_out(zg_ai_show_brief_stats());
+
+}
+
+/**
+ * Show brief stats for all AI bots.
+ *
+ * @return string
+ *   The stats, as a string.
+ */
+function zg_ai_show_brief_stats() {
   $data = [];
-  $sql = 'select users.*, clan_members.fkey_clans_id
-    from users
-    LEFT OUTER JOIN clan_members
-    ON clan_members.fkey_users_id = users.id
+  $stats = '';
+
+  $sql = 'select users.id from users
     where meta like "ai_%"
     order by experience desc;';
   $result = db_query($sql);
   while ($item = db_fetch_object($result)) {
-    $data[] = $item;
+    $data[] = (int) $item->id;
   }
 
-  foreach ($data as $item) {
-
-    zg_ai_out(sprintf('%-8s (level %03d %-8s)  energy:%4d  actions:%3d/%3d  ' .
-      'money:%8d  last_access:%15s', $item->phone_id, $item->level,
-      substr($item->meta, 3),
-      $item->energy, $item->actions, $item->actions_max, $item->money,
-      substr($item->last_access, 5)));
-
+  $bots = zg_fetch_users_by_id($data);
+  foreach ($bots as $bot) {
+    zg_fetch_user_extra_attributes($bot);
+    $stats .= sprintf('%-8s (level %03d %-8s)  energy:%4d/%4d  actions:%3d/%3d  ' .
+      'money:%8d  last_access:%15s', $bot->phone_id, $bot->level,
+      substr($bot->meta, 3),
+      $bot->energy, $bot->energy_max, $bot->actions, $bot->actions_max, $bot->money,
+      zg_format_date($bot->last_access)) . PHP_EOL;
+    $stats .= sprintf('loc:%-20s clan:%3s  ini:%-12s end:%-12s elo:%-12s  ' .
+        'luck:%4d',
+      $bot->location, $bot->clan_acronym,
+      "{$bot->total_initiative}({$bot->initiative}x{$bot->extra_initiative})",
+      "{$bot->total_endurance}({$bot->endurance}x{$bot->extra_endurance})",
+      "{$bot->total_elocution}({$bot->elocution}x{$bot->extra_elocution})",
+      $bot->luck) . PHP_EOL;
+    $stats .= PHP_EOL;
   }
 
+  return $stats;
 }

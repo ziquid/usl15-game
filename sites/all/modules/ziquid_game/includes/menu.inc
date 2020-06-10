@@ -34,6 +34,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/bots/%'] = [
+      'title' => 'Ziquid Game Bounce',
+      'page callback' => 'zg_bots_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/bounce/%'] = [
       'title' => 'Ziquid Game Bounce',
       'page callback' => 'zg_bounce_callback',
@@ -1623,6 +1631,37 @@ function zg_authenticate_callback($phone_id) {
   }
 
   return theme('zg_authenticate', $phone_id);
+}
+
+/**
+ * Bounce callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The bounce page HTML, or access denied if the player has no
+ *   access.
+ */
+function zg_bots_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  $game = check_plain(arg(0));
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+
+  if ($game_user->meta !== 'admin') {
+    return drupal_access_denied();
+  }
+
+  // Refresh every 30 seconds.
+  drupal_set_html_head('<meta http-equiv="refresh" content="30">');
+  echo '<pre>';
+  print zg_ai_show_brief_stats();
+  echo '</pre>';
+  db_set_active();
 }
 
 /**

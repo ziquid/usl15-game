@@ -499,53 +499,7 @@ function zg_init() {
   }
 }
 
-/**
- * Format a date according to game guidelines.
- *
- * @param int|string $epoch
- *   The date to format, converted to an int, if necessary.
- *
- * @return false|mixed|string|null
- *   The date, as a string.
- */
-function zg_format_date($epoch) {
 
-  if (is_string($epoch)) {
-    $epoch = strtotime($epoch);
-  }
-
-  $time_diff = REQUEST_TIME - $epoch;
-// firep("time difference: $time_diff");
-
-  if ($time_diff < 10) {
-    return t('A few seconds ago');
-  }
-  else if ($time_diff < 60) {
-    return t('@time seconds ago', ['@time' => $time_diff]);
-  }
-  else if ($time_diff < 120) {
-    return t('1 minute ago');
-  }
-  else if ($time_diff < 3600) {
-    return t('@time minutes ago', ['@time' => floor($time_diff / 60)]);
-  }
-  else if ($time_diff < 7200) {
-    return t('1 hour ago');
-  }
-  else if ($time_diff < 86400) {
-    return t('@time hours ago', ['@time' => floor($time_diff / 3600)]);
-  }
-  else if ($time_diff < 172800) {
-    return t('A day ago');
-  }
-  else if ($time_diff < 1728000) {
-    return t('@time days ago', ['@time' => floor($time_diff / 86400)]);
-  }
-  else {
-    return date('d M Y', $epoch);
-  }
-
-}
 
 function zg_ordinal($num) {
 

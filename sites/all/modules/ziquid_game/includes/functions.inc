@@ -966,6 +966,51 @@ function zg_fetch_users_by_id($ids) {
 }
 
 /**
+ * Fetch some of the extra attributes a user has.
+ *
+ * @param object $game_user
+ *   The game user object.
+ */
+function zg_fetch_user_extra_attributes(&$game_user) {
+  $sql = 'SELECT
+  SUM( staff.extra_votes * staff_ownership.quantity ) AS extra_votes,
+  SUM( staff.extra_defending_votes * staff_ownership.quantity )
+    AS extra_defending_votes,
+  SUM( staff.initiative_bonus * staff_ownership.quantity ) AS initiative,
+  SUM( staff.endurance_bonus * staff_ownership.quantity ) AS endurance,
+  SUM( staff.elocution_bonus * staff_ownership.quantity ) AS elocution
+  FROM staff
+  LEFT JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
+  AND staff_ownership.fkey_users_id = %d;';
+  $result = db_query($sql, $item->id);
+  $staff_bonus = db_fetch_object($result);
+
+  $sql = 'SELECT
+  SUM( equipment.initiative_bonus * equipment_ownership.quantity ) AS initiative,
+  SUM( equipment.endurance_bonus * equipment_ownership.quantity ) AS endurance,
+  SUM( equipment.elocution_bonus * equipment_ownership.quantity ) AS elocution
+  FROM equipment
+  LEFT JOIN equipment_ownership
+  ON equipment_ownership.fkey_equipment_id = equipment.id
+  AND equipment_ownership.fkey_users_id = %d;';
+  $result = db_query($sql, $game_user->id);
+  $equipment_bonus = db_fetch_object($result);
+
+  $game_user->extra_initiative = $staff_bonus->initiative + $equipment_bonus->initiative;
+  $game_user->total_initiative = $game_user->extra_initiative * $game_user->initiative;
+  $game_user->extra_endurance = $staff_bonus->endurance + $equipment_bonus->endurance;
+  $game_user->total_endurance = $game_user->extra_endurance * $game_user->endurance;
+  $game_user->extra_elocution = $staff_bonus->elocution + $equipment_bonus->elocution;
+  $game_user->total_elocution = $game_user->extra_elocution * $game_user->elocution;
+  $extra_votes = (int) $staff_bonus->extra_votes;
+  $extra_defending_votes = (int) $staff_bonus->extra_defending_votes;
+  zg_alter('extra_votes', $game_user, $extra_votes,
+    $extra_defending_votes);
+  $game_user->extra_votes = $extra_votes;
+  $game_user->extra_defending_votes = $extra_defending_votes;
+}
+
+/**
  * Get the user ID from the phone ID.
  *
  * @param string $phone_id
@@ -2809,4 +2854,52 @@ function zg_get_online_presence() {
     return 'staff-online';
   }
   return '';
+}
+
+/**
+ * Format a date according to game guidelines.
+ *
+ * @param int|string $epoch
+ *   The date to format, converted to an int, if necessary.
+ *
+ * @return false|mixed|string|null
+ *   The date, as a string.
+ */
+function zg_format_date($epoch) {
+
+  if (is_string($epoch)) {
+    $epoch = strtotime($epoch);
+  }
+
+  $time_diff = REQUEST_TIME - $epoch;
+  // firep("time difference: $time_diff");
+
+  if ($time_diff < 10) {
+    return t('A few seconds ago');
+  }
+  elseif ($time_diff < 60) {
+    return t('@time seconds ago', ['@time' => $time_diff]);
+  }
+  elseif ($time_diff < 120) {
+    return t('1 minute ago');
+  }
+  elseif ($time_diff < 3600) {
+    return t('@time minutes ago', ['@time' => floor($time_diff / 60)]);
+  }
+  elseif ($time_diff < 7200) {
+    return t('1 hour ago');
+  }
+  elseif ($time_diff < 86400) {
+    return t('@time hours ago', ['@time' => floor($time_diff / 3600)]);
+  }
+  elseif ($time_diff < 172800) {
+    return t('A day ago');
+  }
+  elseif ($time_diff < 1728000) {
+    return t('@time days ago', ['@time' => floor($time_diff / 86400)]);
+  }
+  else {
+    return date('d M Y', $epoch);
+  }
+
 }
