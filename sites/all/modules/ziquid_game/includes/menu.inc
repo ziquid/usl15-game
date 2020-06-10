@@ -1656,12 +1656,12 @@ function zg_bots_callback($phone_id) {
     return drupal_access_denied();
   }
 
+  $stats = zg_ai_show_brief_stats();
+
   // Refresh every 30 seconds.
-  drupal_set_html_head('<meta http-equiv="refresh" content="30">');
-  echo '<pre>';
-  print zg_ai_show_brief_stats();
-  echo '</pre>';
   db_set_active();
+  header('Refresh: 30');
+  print '<pre>' . $stats . '</pre>';
 }
 
 /**
