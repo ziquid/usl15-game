@@ -118,7 +118,7 @@ function game_show_staff($game_user, $item, &$ai_output, $options = []) {
         t('∆ Location <span>Incorrect</span> ∆') .
         '</div>';
       $failed = 'failed';
-      game_competency_gain($game_user, 'lost');
+      zg_competency_gain($game_user, 'lost');
       break;
 
     case 'failed not-required-party':

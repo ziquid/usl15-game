@@ -1198,7 +1198,7 @@ function _stlouis_action_eat_some_food_function(&$outcome_reason, $target, &$can
   $game_user = zg_fetch_user();
 
   if ($game_user->energy > $game_user->energy_max) {
-    game_competency_gain($game_user, 'satiated');
+    zg_competency_gain($game_user, 'satiated');
   }
 
   $outcome_reason .= '<div class="action-effect">' .
@@ -1240,7 +1240,7 @@ function _stlouis_action_drink_an_energy_drink_function(&$outcome_reason, $targe
   }
 
   if ($game_user->energy > $game_user->energy_max) {
-    game_competency_gain($game_user, 'satiated');
+    zg_competency_gain($game_user, 'satiated');
   }
 
   return TRUE;
@@ -2507,7 +2507,7 @@ function _stlouis_action_support_your_local_official_function(&$outcome_reason,
   $item = db_fetch_object($result);
 
   if ($item) {
-    game_competency_gain($target, 'trustworthy');
+    zg_competency_gain($target, 'trustworthy');
     return TRUE;
   }
   else {
@@ -2538,7 +2538,7 @@ function _stlouis_action_support_your_party_official_function(
   $item = db_fetch_object($result);
 
   if ($item) {
-    game_competency_gain($target, 'trustworthy');
+    zg_competency_gain($target, 'trustworthy');
     return TRUE;
   }
   else {
