@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_elders_preferences.tpl.php
- * Stlouis preferences page
+ * @file
+ * Stlouis preferences page.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -17,25 +17,25 @@
  * .
  */
 
-  global $game, $phone_id;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
-  zg_fetch_header($game_user);
+global $game, $phone_id;
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
+zg_fetch_header($game_user);
 
-  $ask_luck_refill = trim(check_plain($_GET['ask_luck_refill']));
-  if ($ask_luck_refill <= 0) {
-    $ask_luck_refill = 0;
-  }
- 
-  $currentPreferences = _stlouis_get_value($game_user->id, 'ask_before_refilling_luck',0);
-  if ($currentPreferences > 0) {
-    $checkedYes = 'checked="checked"';
-  }
-  else {
-    $checkedNo = 'checked="checked"';
-  }
+$ask_luck_refill = trim(check_plain($_GET['ask_luck_refill']));
+if ($ask_luck_refill <= 0) {
+  $ask_luck_refill = 0;
+}
 
-  echo <<< EOF
+$currentPreferences = zg_get_value($game_user, 'ask_before_refilling_luck',FALSE);
+if ($currentPreferences) {
+  $checkedYes = 'checked="checked"';
+}
+else {
+  $checkedNo = 'checked="checked"';
+}
+
+echo <<< EOF
 <div class="title">Game Preferences</div>
 <div class="subtitle">Ask for confirmation when refilling with $luck?</div>  
 <div class="menu-option">
@@ -49,9 +49,9 @@
   </div>  
 </div>
 EOF;
-  
-  if (($ask_luck_refill) >= 0) {
-    _stlouis_set_value($game_user->id, 'ask_before_refilling_luck', $ask_luck_refill);
-  }
 
-  db_set_active();
+if (($ask_luck_refill) >= 0) {
+  zg_set_value($game_user, 'ask_before_refilling_luck', (bool) $ask_luck_refill);
+}
+
+db_set_active();

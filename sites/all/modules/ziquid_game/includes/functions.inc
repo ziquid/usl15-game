@@ -1415,7 +1415,7 @@ function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  [$offer, $comment] = zg_luck_money_offer($game_user);
+  list($offer, $comment) = zg_luck_money_offer($game_user);
   $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
@@ -1717,7 +1717,7 @@ function zg_get_fbid() {
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
-  [$encoded_sig, $payload] = explode('.', $signed_request, 2);
+  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
   $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
@@ -2144,6 +2144,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   user_messages.private, user_messages.id as msg_id,
+  0 AS is_announcement,
   user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
   "user" as type,
   subtype,
@@ -2172,6 +2173,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, challenge_messages.id as msg_id,
+  0 AS is_announcement,
   challenge_messages.fkey_users_from_id, challenge_messages.fkey_users_to_id,
   "challenge" as type,
   "" as subtype,
@@ -2201,6 +2203,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, neighborhood_messages.id as msg_id,
+  0 AS is_announcement,
   neighborhood_messages.fkey_users_from_id, 0 as fkey_users_to_id,
   "hood" as type,
   "" as subtype,
@@ -2229,8 +2232,9 @@ function zg_get_all_messages($game_user) {
   users.level,
   elected_positions.name as ep_name,
   clan_members.is_clan_leader,
-  clans.acronym as clan_acronym,
+  UPPER(clans.acronym) as clan_acronym,
   0 AS private, clan_messages.id as msg_id,
+  clan_messages.is_announcement,
   clan_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "clan" as type,
   "" as subtype,
@@ -2260,6 +2264,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, values_messages.id as msg_id,
+  0 AS is_announcement,
   values_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "values" as type,
   "" as subtype,
@@ -2289,6 +2294,7 @@ function zg_get_all_messages($game_user) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   0 AS private, system_messages.id as msg_id,
+  0 AS is_announcement,
   system_messages.fkey_users_from_id, 0 AS fkey_users_to_id,
   "mayor" as type,
   subtype,
@@ -2369,6 +2375,7 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   clan_members.is_clan_leader,
   clans.acronym as clan_acronym,
   user_messages.private, user_messages.id as msg_id,
+  0 AS is_announcement,
   "user" as type,
   subtype
 
@@ -2453,6 +2460,13 @@ function zg_format_message($game_user, $check_user_id, &$message) {
 
   $message->display->private_css .= ' ' . $message->type . ' ' .
     $message->type . '-' . $message->subtype;
+
+  if ($message->is_announcement) {
+    $message->display->item_css = 'announcement';
+  }
+  else {
+    $message->display->item_css = '';
+  }
 
   if (empty($message->username)) {
     $message->display->username = '';
@@ -2862,7 +2876,7 @@ function zg_get_online_presence() {
  * @param int|string $epoch
  *   The date to format, converted to an int, if necessary.
  *
- * @return false|mixed|string|null
+ * @return string
  *   The date, as a string.
  */
 function zg_format_date($epoch) {

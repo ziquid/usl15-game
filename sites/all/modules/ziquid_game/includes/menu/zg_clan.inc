@@ -80,16 +80,16 @@ function zg_clan_callback($phone_id, $clan_id) {
     $clan_data['messages'] = [
       'title' => t('@clan (@tla) clan messages',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_msg', 'old page',
-        '/' . $game_user->fkey_clans_id),
+//      'button' => zg_render_button('clan_msg', 'old page',
+//        '/' . $game_user->fkey_clans_id),
       'items' => zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig),
       'errors' => $errors,
     ];
     $clan_data['announcements'] = [
       'title' => t('@clan (@tla) clan announcements',
         ['@clan' => $game_user->clan_name, '@tla' => $game_user->clan_acronym]),
-      'button' => zg_render_button('clan_announcements', 'old page',
-        '/' . $game_user->fkey_clans_id),
+//      'button' => zg_render_button('clan_announcements', 'old page',
+//        '/' . $game_user->fkey_clans_id),
       'items' => zg_get_clan_announcements($game_user, $clan_id, $game, $arg2, $message_orig),
       'errors' => $errors,
     ];
@@ -180,7 +180,7 @@ function zg_get_clan_members($clan_id) {
   $member_ids = $rendered_users = [];
 
   $sql = 'SELECT users.id from users
-    left join clan_members on users.id = clan_members.fkey_users_id
+    inner join clan_members on users.id = clan_members.fkey_users_id
     where clan_members.fkey_clans_id = %d;';
   $result = db_query($sql, $clan_id);
 
@@ -240,6 +240,7 @@ function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig)
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
     UPPER(clans.acronym) as clan_acronym, clans.name as clan_name,
+    0 AS private, clan_messages.id as msg_id,
     clans.rules as clan_rules,
     "clan" as type,
     "" as subtype,
@@ -263,7 +264,7 @@ function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig)
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
     
     where clan_messages.fkey_neighborhoods_id = %d
-      AND clan_messages.is_announcement = 0
+--      AND clan_messages.is_announcement = 0
     order by id DESC
     LIMIT 50;';
 
@@ -279,7 +280,7 @@ function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig)
     // FIXME: render messages in a function.
     $rendered_messages[] = <<< EOF
     <li class="overlay-list-item">
-      <div class="news-item $item->type" id="{$item->display->msg_id}">
+      <div class="news-item $item->type {$item->display->item_css}" id="{$item->display->msg_id}">
         <div class="dateline">
           {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
         </div>
@@ -333,6 +334,7 @@ function zg_get_clan_announcements($game_user, $clan_id, $game, $arg2, $message_
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
     UPPER(clans.acronym) as clan_acronym, clans.name as clan_name,
+    0 AS private, clan_messages.id as msg_id,
     clans.rules as clan_rules,
     "clan" as type,
     "" as subtype,
@@ -372,7 +374,7 @@ function zg_get_clan_announcements($game_user, $clan_id, $game, $arg2, $message_
     // FIXME: render messages in a function.
     $rendered_messages[] = <<< EOF
     <li class="overlay-list-item">
-      <div class="news-item $item->type" id="{$item->display->msg_id}">
+      <div class="news-item $item->type {$item->display->item_css}" id="{$item->display->msg_id}">
         <div class="dateline">
           {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
         </div>

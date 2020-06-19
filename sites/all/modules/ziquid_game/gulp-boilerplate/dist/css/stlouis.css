@@ -715,30 +715,36 @@ body.game-stlouis .news .message-reply.not-yet {
   color: black;
 }
 
-/* line 460, src/sass/common/_index.scss */
+/* line 458, src/sass/common/_index.scss */
+body.game-stlouis .news-item.announcement .message-body {
+  font-weight: bold;
+  color: yellow;
+}
+
+/* line 465, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .heading {
   clear: both;
 }
 
-/* line 464, src/sass/common/_index.scss */
+/* line 469, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .action {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 469, src/sass/common/_index.scss */
+/* line 474, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .action.not-yet {
   background-color: #333833 !important;
   border: 1px solid #333833 !important;
 }
 
-/* line 474, src/sass/common/_index.scss */
+/* line 479, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .skill-point {
   display: inline-block;
   margin-left: 8px;
 }
 
-/* line 477, src/sass/common/_index.scss */
+/* line 482, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .skill-point.not-yet a {
   background-color: #333833 !important;
   -webkit-box-shadow: inset 0 1px 0 0 #343934;
@@ -751,18 +757,18 @@ body.game-stlouis .user-profile .skill-point.not-yet a {
   text-shadow: 0 1px 0 #343934;
 }
 
-/* line 488, src/sass/common/_index.scss */
+/* line 493, src/sass/common/_index.scss */
 body.game-stlouis .user-profile .user-profile .event-status {
   color: #b33;
 }
 
-/* line 494, src/sass/common/_index.scss */
+/* line 499, src/sass/common/_index.scss */
 body.game-stlouis .highlighted {
   color: #188433;
   font-weight: bold;
 }
 
-/* line 499, src/sass/common/_index.scss */
+/* line 504, src/sass/common/_index.scss */
 body.game-stlouis .event {
   border: #1a2 solid 1px;
   border-radius: 8px;
@@ -771,44 +777,44 @@ body.game-stlouis .event {
   color: #1a2;
 }
 
-/* line 505, src/sass/common/_index.scss */
+/* line 510, src/sass/common/_index.scss */
 body.game-stlouis .event .event-title {
   color: #cc0;
 }
 
-/* line 510, src/sass/common/_index.scss */
+/* line 515, src/sass/common/_index.scss */
 body.game-stlouis .event-info .subtitle {
   color: #c33;
   font-weight: bold;
   margin-top: 20px;
 }
 
-/* line 516, src/sass/common/_index.scss */
+/* line 521, src/sass/common/_index.scss */
 body.game-stlouis .event-info .subsubtitle {
   color: #aaa;
 }
 
-/* line 520, src/sass/common/_index.scss */
+/* line 525, src/sass/common/_index.scss */
 body.game-stlouis a.version {
   color: #aa6;
   text-decoration: none;
   text-align: center;
 }
 
-/* line 528, src/sass/common/_index.scss */
+/* line 533, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu img {
   width: 310px;
   border-radius: 4px;
 }
 
-/* line 534, src/sass/common/_index.scss */
+/* line 539, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li {
   list-style-type: none;
   list-style-image: none;
   margin: 0;
 }
 
-/* line 538, src/sass/common/_index.scss */
+/* line 543, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span {
   position: absolute;
   z-index: 11;
@@ -821,12 +827,12 @@ body.game-stlouis .new-main-menu ul li span {
   color: #f8fef800;
 }
 
-/* line 548, src/sass/common/_index.scss */
+/* line 553, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.odd {
   width: 39px;
 }
 
-/* line 551, src/sass/common/_index.scss */
+/* line 556, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.value {
   height: 16px;
   top: 0;
@@ -834,17 +840,17 @@ body.game-stlouis .new-main-menu ul li span.value {
   padding-top: 6px;
 }
 
-/* line 556, src/sass/common/_index.scss */
+/* line 561, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.value.first {
   border-radius: 4px 0 0 0;
 }
 
-/* line 559, src/sass/common/_index.scss */
+/* line 564, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.value.last {
   border-radius: 0 4px 0 0;
 }
 
-/* line 563, src/sass/common/_index.scss */
+/* line 568, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.label {
   top: 182px;
   height: 16px;
@@ -852,100 +858,100 @@ body.game-stlouis .new-main-menu ul li span.label {
   margin-top: 0;
 }
 
-/* line 569, src/sass/common/_index.scss */
+/* line 574, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.ammunition {
   background-color: #0805;
   left: 4px;
 }
 
-/* line 572, src/sass/common/_index.scss */
+/* line 577, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.ammunition.label {
   background-color: #080d;
 }
 
-/* line 576, src/sass/common/_index.scss */
+/* line 581, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.beauty {
   background-color: #e005;
   color: #f8fefd;
   left: 43px;
 }
 
-/* line 580, src/sass/common/_index.scss */
+/* line 585, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.beauty.label {
   background-color: #e00d;
 }
 
-/* line 584, src/sass/common/_index.scss */
+/* line 589, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.chaos {
   background-color: #e705;
   left: 82px;
   width: 38px;
 }
 
-/* line 588, src/sass/common/_index.scss */
+/* line 593, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.chaos.label {
   background-color: #e70d;
 }
 
-/* line 592, src/sass/common/_index.scss */
+/* line 597, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.faith {
   color: #00000000;
   background-color: #dd05;
   left: 120px;
 }
 
-/* line 596, src/sass/common/_index.scss */
+/* line 601, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.faith.label {
   background-color: #dd0d;
 }
 
-/* line 600, src/sass/common/_index.scss */
+/* line 605, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.finance {
   color: #00000000;
   background-color: #eee5;
   left: 159px;
 }
 
-/* line 604, src/sass/common/_index.scss */
+/* line 609, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.finance.label {
   background-color: #eeed;
 }
 
-/* line 608, src/sass/common/_index.scss */
+/* line 613, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.health {
   background-color: #0e05;
   left: 198px;
   width: 38px;
 }
 
-/* line 612, src/sass/common/_index.scss */
+/* line 617, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.health.label {
   background-color: #0e0d;
 }
 
-/* line 616, src/sass/common/_index.scss */
+/* line 621, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.intelligence {
   background-color: #00e5;
   left: 236px;
 }
 
-/* line 619, src/sass/common/_index.scss */
+/* line 624, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.intelligence.label {
   background-color: #00ed;
 }
 
-/* line 623, src/sass/common/_index.scss */
+/* line 628, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.strength {
   background-color: #e0e5;
   left: 275px;
 }
 
-/* line 626, src/sass/common/_index.scss */
+/* line 631, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li span.strength.label {
   background-color: #e0ed;
 }
 
-/* line 631, src/sass/common/_index.scss */
+/* line 636, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a {
   position: absolute;
   z-index: 12;
@@ -962,19 +968,19 @@ body.game-stlouis .new-main-menu ul li a {
   border-radius: 5px;
 }
 
-/* line 646, src/sass/common/_index.scss */
+/* line 651, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.actions-menu {
   top: 57px;
   left: 197px;
 }
 
-/* line 650, src/sass/common/_index.scss */
+/* line 655, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.aides-menu {
   top: 37px;
   left: 197px;
 }
 
-/* line 654, src/sass/common/_index.scss */
+/* line 659, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.clan-menu {
   top: 140px;
   left: 106px;
@@ -983,20 +989,20 @@ body.game-stlouis .new-main-menu ul li a.clan-menu {
   background-color: #0009;
 }
 
-/* line 661, src/sass/common/_index.scss */
+/* line 666, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.boxing-menu {
   top: 37px;
   left: 44px;
   border: #e00d solid 0.5px;
 }
 
-/* line 666, src/sass/common/_index.scss */
+/* line 671, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.debates-menu {
   top: 37px;
   left: 45px;
 }
 
-/* line 670, src/sass/common/_index.scss */
+/* line 675, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.elders-menu {
   top: 97px;
   left: 130px;
@@ -1005,13 +1011,13 @@ body.game-stlouis .new-main-menu ul li a.elders-menu {
   background-color: #0007;
 }
 
-/* line 677, src/sass/common/_index.scss */
+/* line 682, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.elections-menu {
   top: 57px;
   left: 45px;
 }
 
-/* line 681, src/sass/common/_index.scss */
+/* line 686, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.forum-menu {
   top: 140px;
   left: 239px;
@@ -1020,7 +1026,7 @@ body.game-stlouis .new-main-menu ul li a.forum-menu {
   background-color: #0009;
 }
 
-/* line 688, src/sass/common/_index.scss */
+/* line 693, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.help-menu {
   top: 140px;
   left: 169px;
@@ -1029,7 +1035,7 @@ body.game-stlouis .new-main-menu ul li a.help-menu {
   background-color: #0009;
 }
 
-/* line 695, src/sass/common/_index.scss */
+/* line 700, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.missions-menu {
   top: 10px;
   left: 102px;
@@ -1039,7 +1045,7 @@ body.game-stlouis .new-main-menu ul li a.missions-menu {
   min-width: 120px;
 }
 
-/* line 703, src/sass/common/_index.scss */
+/* line 708, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.move-menu {
   top: 87px;
   left: 130px;
@@ -1048,7 +1054,7 @@ body.game-stlouis .new-main-menu ul li a.move-menu {
   background-color: #0006;
 }
 
-/* line 710, src/sass/common/_index.scss */
+/* line 715, src/sass/common/_index.scss */
 body.game-stlouis .new-main-menu ul li a.profile-menu {
   top: 140px;
   left: 38px;
@@ -1057,22 +1063,22 @@ body.game-stlouis .new-main-menu ul li a.profile-menu {
   background-color: #0009;
 }
 
-/* line 722, src/sass/common/_index.scss */
+/* line 727, src/sass/common/_index.scss */
 body.game-stlouis .competency-pip {
   border-right: solid 2px #693318 !important;
 }
 
-/* line 726, src/sass/common/_index.scss */
+/* line 731, src/sass/common/_index.scss */
 body.game-stlouis .competency-pip.attained {
   border-right: solid 2px #188433 !important;
 }
 
-/* line 730, src/sass/common/_index.scss */
+/* line 735, src/sass/common/_index.scss */
 body.game-stlouis .too-soon {
   color: rgba(255, 255, 70, 0.7);
 }
 
-/* line 734, src/sass/common/_index.scss */
+/* line 739, src/sass/common/_index.scss */
 body.game-stlouis .competency-tag {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
@@ -1089,133 +1095,133 @@ body.game-stlouis .competency-tag {
   font-family: "times new roman", Roman, serif;
 }
 
-/* line 748, src/sass/common/_index.scss */
+/* line 753, src/sass/common/_index.scss */
 body.game-stlouis textarea {
   background-color: lightgrey;
 }
 
-/* line 752, src/sass/common/_index.scss */
+/* line 757, src/sass/common/_index.scss */
 body.game-stlouis .location-ammunition {
   border-top: #080 solid 1px;
 }
 
-/* line 756, src/sass/common/_index.scss */
+/* line 761, src/sass/common/_index.scss */
 body.game-stlouis .location-chaos {
   border-top: #ffa500 solid 1px;
 }
 
-/* line 760, src/sass/common/_index.scss */
+/* line 765, src/sass/common/_index.scss */
 body.game-stlouis .location-charisma {
   border-top: #e00 solid 1px;
 }
 
-/* line 764, src/sass/common/_index.scss */
+/* line 769, src/sass/common/_index.scss */
 body.game-stlouis .location-finance {
   border-top: #e0e0e0 solid 1px;
 }
 
-/* line 768, src/sass/common/_index.scss */
+/* line 773, src/sass/common/_index.scss */
 body.game-stlouis .location-goo {
   border-top: #800080 solid 1px;
 }
 
-/* line 772, src/sass/common/_index.scss */
+/* line 777, src/sass/common/_index.scss */
 body.game-stlouis .location-greenbacks {
   border-top: #fff dotted 1px;
 }
 
-/* line 776, src/sass/common/_index.scss */
+/* line 781, src/sass/common/_index.scss */
 body.game-stlouis .location-health {
   border-top: #0f0 solid 1px;
 }
 
-/* line 780, src/sass/common/_index.scss */
+/* line 785, src/sass/common/_index.scss */
 body.game-stlouis .location-humility {
   border-top: #dd0 solid 1px;
 }
 
-/* line 784, src/sass/common/_index.scss */
+/* line 789, src/sass/common/_index.scss */
 body.game-stlouis .location-intelligence {
   border-top: #35f solid 1px;
 }
 
-/* line 788, src/sass/common/_index.scss */
+/* line 793, src/sass/common/_index.scss */
 body.game-stlouis .location-strength {
   border-top: #0ee solid 1px;
 }
 
-/* line 792, src/sass/common/_index.scss */
+/* line 797, src/sass/common/_index.scss */
 body.game-stlouis .player-ammunition {
   padding-bottom: 0;
   border-bottom: #080 solid 1.5px;
 }
 
-/* line 797, src/sass/common/_index.scss */
+/* line 802, src/sass/common/_index.scss */
 body.game-stlouis .player-chaos {
   padding-bottom: 0;
   border-bottom: #ffa500 solid 1.5px;
 }
 
-/* line 802, src/sass/common/_index.scss */
+/* line 807, src/sass/common/_index.scss */
 body.game-stlouis .player-charisma {
   padding-bottom: 0;
   border-bottom: #e00 solid 1.5px;
 }
 
-/* line 807, src/sass/common/_index.scss */
+/* line 812, src/sass/common/_index.scss */
 body.game-stlouis .player-finance {
   padding-bottom: 0;
   border-bottom: #e0e0e0 solid 1.5px;
 }
 
-/* line 812, src/sass/common/_index.scss */
+/* line 817, src/sass/common/_index.scss */
 body.game-stlouis .player-goo {
   padding-bottom: 0;
   border-bottom: #800080 solid 1.5px;
 }
 
-/* line 817, src/sass/common/_index.scss */
+/* line 822, src/sass/common/_index.scss */
 body.game-stlouis .player-greenbacks {
   padding-bottom: 0;
   border-bottom: solid #fefefe 1.5px;
 }
 
-/* line 822, src/sass/common/_index.scss */
+/* line 827, src/sass/common/_index.scss */
 body.game-stlouis .player-health {
   padding-bottom: 0;
   border-bottom: #0f0 solid 1.5px;
 }
 
-/* line 827, src/sass/common/_index.scss */
+/* line 832, src/sass/common/_index.scss */
 body.game-stlouis .player-humility {
   padding-bottom: 0;
   border-bottom: #dd0 solid 1.5px;
 }
 
-/* line 832, src/sass/common/_index.scss */
+/* line 837, src/sass/common/_index.scss */
 body.game-stlouis .player-intelligence {
   padding-bottom: 0;
   border-bottom: #35f solid 1.5px;
 }
 
-/* line 837, src/sass/common/_index.scss */
+/* line 842, src/sass/common/_index.scss */
 body.game-stlouis .player-strength {
   padding-bottom: 0;
   border-bottom: #0ee solid 1.5px;
 }
 
-/* line 842, src/sass/common/_index.scss */
+/* line 847, src/sass/common/_index.scss */
 body.game-stlouis #drupalforfirebug_general {
   margin-top: 60px;
   display: block !important;
 }
 
-/* line 847, src/sass/common/_index.scss */
+/* line 852, src/sass/common/_index.scss */
 body.game-stlouis .swiper-container {
   width: 100%;
 }
 
-/* line 851, src/sass/common/_index.scss */
+/* line 856, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide {
   text-align: center;
   font-size: 1.125rem;
@@ -1231,22 +1237,22 @@ body.game-stlouis .swiper-slide {
   min-height: 440px;
 }
 
-/* line 869, src/sass/common/_index.scss */
+/* line 874, src/sass/common/_index.scss */
 body.game-stlouis .swiper-pagination .swiper-pagination-bullet {
   background: rgba(48, 188, 0, 0.6);
 }
 
-/* line 873, src/sass/common/_index.scss */
+/* line 878, src/sass/common/_index.scss */
 body.game-stlouis .swiper-pagination-bullet {
   opacity: 0.6;
 }
 
-/* line 877, src/sass/common/_index.scss */
+/* line 882, src/sass/common/_index.scss */
 body.game-stlouis .swiper-pagination-bullet-active {
   opacity: 1;
 }
 
-/* line 881, src/sass/common/_index.scss */
+/* line 886, src/sass/common/_index.scss */
 body.game-stlouis .swiper-container-horizontal > .swiper-pagination-bullets,
 body.game-stlouis .swiper-pagination-custom,
 body.game-stlouis .swiper-pagination-fraction {
@@ -1254,24 +1260,24 @@ body.game-stlouis .swiper-pagination-fraction {
   height: 12px;
 }
 
-/* line 888, src/sass/common/_index.scss */
+/* line 893, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title {
   text-shadow: 1px 1px 3px #444;
 }
 
-/* line 892, src/sass/common/_index.scss */
+/* line 897, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title.loot {
   font-size: 1rem;
 }
 
-/* line 896, src/sass/common/_index.scss */
+/* line 901, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .quest-images {
   margin: 0 2px;
   font-weight: initial;
   font-size: 0.6875rem;
 }
 
-/* line 902, src/sass/common/_index.scss */
+/* line 907, src/sass/common/_index.scss */
 body.game-stlouis .quest-group-name, body.game-stlouis .quest-group-title {
   font-size: 1.375rem;
   font-weight: bold;
@@ -1281,48 +1287,48 @@ body.game-stlouis .quest-group-name, body.game-stlouis .quest-group-title {
   text-shadow: 2px 2px 6px black;
 }
 
-/* line 911, src/sass/common/_index.scss */
+/* line 916, src/sass/common/_index.scss */
 body.game-stlouis .quest-group-name a, body.game-stlouis .quest-group-title a {
   text-decoration: none;
 }
 
-/* line 915, src/sass/common/_index.scss */
+/* line 920, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title .quest-group-name {
   margin: auto;
 }
 
-/* line 919, src/sass/common/_index.scss */
+/* line 924, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title .quest-group-title {
   margin: 14px auto 0;
 }
 
-/* line 923, src/sass/common/_index.scss */
+/* line 928, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title .quest-group-name {
   width: 248px;
 }
 
-/* line 927, src/sass/common/_index.scss */
+/* line 932, src/sass/common/_index.scss */
 body.game-stlouis .fit-box {
   white-space: nowrap;
   -webkit-transform-origin: top left;
 }
 
-/* line 932, src/sass/common/_index.scss */
+/* line 937, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title .quest-group-name.admin-obfuscate {
   text-decoration: line-through;
 }
 
-/* line 936, src/sass/common/_index.scss */
+/* line 941, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .title .overview-only {
   display: none;
 }
 
-/* line 940, src/sass/common/_index.scss */
+/* line 945, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide.overview .title .overview-only {
   display: inline-block;
 }
 
-/* line 944, src/sass/common/_index.scss */
+/* line 949, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide.overview .title img.overview-only {
   display: inline-block;
   width: 68px;
@@ -1333,39 +1339,39 @@ body.game-stlouis .swiper-slide.overview .title img.overview-only {
   border-radius: 6px;
 }
 
-/* line 953, src/sass/common/_index.scss */
+/* line 958, src/sass/common/_index.scss */
 body.game-stlouis .wrong-hood-wrapper, body.game-stlouis .not-yet-wrapper {
   position: relative;
 }
 
-/* line 957, src/sass/common/_index.scss */
+/* line 962, src/sass/common/_index.scss */
 body.game-stlouis div + .wrong-hood-wrapper {
   width: 77px;
   display: inline-block;
 }
 
-/* line 962, src/sass/common/_index.scss */
+/* line 967, src/sass/common/_index.scss */
 body.game-stlouis .quest-icon .wrong-hood-wrapper {
   width: 100px;
 }
 
-/* line 966, src/sass/common/_index.scss */
+/* line 971, src/sass/common/_index.scss */
 body.game-stlouis img.wrong-hood {
   -webkit-filter: grayscale(60%);
           filter: grayscale(60%);
 }
 
-/* line 970, src/sass/common/_index.scss */
+/* line 975, src/sass/common/_index.scss */
 body.game-stlouis input.wrong-hood {
   text-align: left;
 }
 
-/* line 974, src/sass/common/_index.scss */
+/* line 979, src/sass/common/_index.scss */
 body.game-stlouis input + img.wrong-hood-overlay {
   bottom: 8px;
 }
 
-/* line 978, src/sass/common/_index.scss */
+/* line 983, src/sass/common/_index.scss */
 body.game-stlouis img.wrong-hood-overlay {
   position: absolute;
   bottom: 6px;
@@ -1374,13 +1380,13 @@ body.game-stlouis img.wrong-hood-overlay {
   height: 12px;
 }
 
-/* line 986, src/sass/common/_index.scss */
+/* line 991, src/sass/common/_index.scss */
 body.game-stlouis .not-yet-wrapper img.not-yet {
   -webkit-filter: contrast(11%) brightness(50%);
           filter: contrast(11%) brightness(50%);
 }
 
-/* line 990, src/sass/common/_index.scss */
+/* line 995, src/sass/common/_index.scss */
 body.game-stlouis span.not-yet-overlay {
   position: absolute;
   bottom: 14px;
@@ -1393,13 +1399,13 @@ body.game-stlouis span.not-yet-overlay {
   text-shadow: 0 1px 0 beige;
 }
 
-/* line 1002, src/sass/common/_index.scss */
+/* line 1007, src/sass/common/_index.scss */
 body.game-stlouis .quests span.not-yet-overlay {
   bottom: 21px;
   right: 21px;
 }
 
-/* line 1007, src/sass/common/_index.scss */
+/* line 1012, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .description {
   display: none;
   color: #e0e8ee;
@@ -1417,26 +1423,26 @@ body.game-stlouis .swiper-slide .description {
   background-color: rgba(0, 0, 0, 0.17);
 }
 
-/* line 1022, src/sass/common/_index.scss */
+/* line 1027, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide.overview .description, body.game-stlouis .swiper-slide .description.show-expanded {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-/* line 1026, src/sass/common/_index.scss */
+/* line 1031, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide.overview .description.empty {
   border-left: none;
   border-right: none;
   background-color: inherit;
 }
 
-/* line 1032, src/sass/common/_index.scss */
+/* line 1037, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide.overview .quests {
   display: none;
 }
 
-/* line 1036, src/sass/common/_index.scss */
+/* line 1041, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .quests {
   background-color: rgba(10, 20, 15, 0.45);
   margin-left: 0;
@@ -1445,12 +1451,12 @@ body.game-stlouis .swiper-slide .quests {
   border-radius: 0;
 }
 
-/* line 1046, src/sass/common/_index.scss */
+/* line 1051, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .quests .quest-name a {
   color: #3fd453;
 }
 
-/* line 1050, src/sass/common/_index.scss */
+/* line 1055, src/sass/common/_index.scss */
 body.game-stlouis .swiper-slide .quests .quest-experience,
 body.game-stlouis .swiper-slide .quests .quest-money,
 body.game-stlouis .swiper-slide .quests .quest-required_energy,
@@ -1459,24 +1465,24 @@ body.game-stlouis .swiper-slide .quests .quest-payout {
   color: #3fd453;
 }
 
-/* line 1058, src/sass/common/_index.scss */
+/* line 1063, src/sass/common/_index.scss */
 body.game-stlouis .swiper-container .swiper-button-next, body.game-stlouis .swiper-container .swiper-button-prev {
   top: 25px;
 }
 
-/* line 1062, src/sass/common/_index.scss */
+/* line 1067, src/sass/common/_index.scss */
 body.game-stlouis .swiper-container .swiper-button-prev, body.game-stlouis .swiper-container .swiper-container-rtl
 .swiper-button-next {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1067, src/sass/common/_index.scss */
+/* line 1072, src/sass/common/_index.scss */
 body.game-stlouis .swiper-container .swiper-button-next, body.game-stlouis .swiper-container .swiper-container-rtl
 .swiper-button-prev {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1072, src/sass/common/_index.scss */
+/* line 1077, src/sass/common/_index.scss */
 body.game-stlouis .highlight {
   color: #f0fef8 !important;
   -webkit-text-stroke: 0.4px #cc0;
@@ -1486,7 +1492,7 @@ body.game-stlouis .highlight {
   text-shadow: #0004 2px 2px;
 }
 
-/* line 1081, src/sass/common/_index.scss */
+/* line 1086, src/sass/common/_index.scss */
 body.game-stlouis .tagline {
   text-align: center;
   color: #687;
@@ -1499,7 +1505,7 @@ body.game-stlouis .tagline {
   margin-bottom: 4px;
 }
 
-/* line 1093, src/sass/common/_index.scss */
+/* line 1098, src/sass/common/_index.scss */
 body.game-stlouis .bounce-welcome {
   text-align: center;
   color: #687;
@@ -1511,7 +1517,7 @@ body.game-stlouis .bounce-welcome {
   margin-bottom: 4px;
 }
 
-/* line 1104, src/sass/common/_index.scss */
+/* line 1109, src/sass/common/_index.scss */
 body.game-stlouis .system-message-response {
   background-color: green;
   text-align: center;
@@ -1521,7 +1527,7 @@ body.game-stlouis .system-message-response {
   margin: 6px 2px 4px;
 }
 
-/* line 1113, src/sass/common/_index.scss */
+/* line 1118, src/sass/common/_index.scss */
 body.game-stlouis div.description-speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1531,7 +1537,7 @@ body.game-stlouis div.description-speech-bubble-wrapper {
   height: 84px;
 }
 
-/* line 1122, src/sass/common/_index.scss */
+/* line 1127, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1539,36 +1545,36 @@ body.game-stlouis div.speech-bubble-wrapper {
   margin: 8px 0;
 }
 
-/* line 1129, src/sass/common/_index.scss */
+/* line 1134, src/sass/common/_index.scss */
 body.game-stlouis div.description-speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1134, src/sass/common/_index.scss */
+/* line 1139, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1139, src/sass/common/_index.scss */
+/* line 1144, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man.sad {
   background-position: 0 9px;
   height: 80px;
 }
 
-/* line 1144, src/sass/common/_index.scss */
+/* line 1149, src/sass/common/_index.scss */
 body.game-stlouis div.speech-bubble-wrapper .wise_old_man.embarrassed {
   background-position: 0 18px;
   height: 80px;
 }
 
-/* line 1149, src/sass/common/_index.scss */
+/* line 1154, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon {
   position: relative;
 }
 
-/* line 1153, src/sass/common/_index.scss */
+/* line 1158, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon-baseline-overlay {
   position: absolute;
   left: 0;
@@ -1578,7 +1584,7 @@ body.game-stlouis .quests .quest-icon-baseline-overlay {
   border-radius: 4px;
 }
 
-/* line 1162, src/sass/common/_index.scss */
+/* line 1167, src/sass/common/_index.scss */
 body.game-stlouis .quests .quest-icon-overlay {
   position: absolute;
   left: 0;
@@ -1588,7 +1594,7 @@ body.game-stlouis .quests .quest-icon-overlay {
   border-radius: 4px;
 }
 
-/* line 1171, src/sass/common/_index.scss */
+/* line 1176, src/sass/common/_index.scss */
 body.game-stlouis .bonus-text {
   text-align: center;
   text-transform: uppercase;
@@ -1598,7 +1604,7 @@ body.game-stlouis .bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1180, src/sass/common/_index.scss */
+/* line 1185, src/sass/common/_index.scss */
 body.game-stlouis .lesser-bonus-text {
   text-align: center;
   font-weight: bold;
@@ -1607,24 +1613,24 @@ body.game-stlouis .lesser-bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1188, src/sass/common/_index.scss */
+/* line 1193, src/sass/common/_index.scss */
 body.game-stlouis div.lesser-bonus-text {
   margin: 12px 0;
 }
 
-/* line 1192, src/sass/common/_index.scss */
+/* line 1197, src/sass/common/_index.scss */
 body.game-stlouis .ask-name {
   margin-top: 15px;
   margin-bottom: 9px;
 }
 
-/* line 1197, src/sass/common/_index.scss */
+/* line 1202, src/sass/common/_index.scss */
 body.game-stlouis .admin-online {
   -webkit-filter: drop-shadow(0 0 3px #f8fefd);
           filter: drop-shadow(0 0 3px #f8fefd);
 }
 
-/* line 1201, src/sass/common/_index.scss */
+/* line 1206, src/sass/common/_index.scss */
 body.game-stlouis .staff-online {
   -webkit-filter: drop-shadow(0 0 2px yellow);
           filter: drop-shadow(0 0 2px yellow);

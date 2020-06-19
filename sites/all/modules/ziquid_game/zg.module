@@ -499,8 +499,6 @@ function zg_init() {
   }
 }
 
-
-
 function zg_ordinal($num) {
 
   // lifted from http://php.net/manual/en/function.number-format.php

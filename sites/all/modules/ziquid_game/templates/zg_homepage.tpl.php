@@ -350,7 +350,7 @@ EOF;
 
 foreach ($data as $item) {
   echo <<< EOF
-    <div class="news-item $item->type" id="{$item->display->msg_id}">
+    <div class="news-item $item->type {$item->display->item_css}" id="{$item->display->msg_id}">
       <div class="dateline">
         {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
       </div>
