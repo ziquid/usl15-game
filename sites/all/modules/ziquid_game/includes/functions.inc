@@ -1339,7 +1339,7 @@ function zg_get_value($id, $key, $default = NULL) {
  *
  * Updates the value if the KVP already exists.
  *
- * @param \stdClass|int $id
+ * @param object|int $id
  *   The game user object or user ID.
  * @param string $key
  *   The key to use for the value in the db.
@@ -1354,14 +1354,78 @@ function zg_set_value($id, $key, $value = 'set') {
     $id = $id->id;
   }
 
-  // Array?  Serialize the data before storing.
-  if (is_array($value)) {
+  // Non-string?  Serialize the data before storing.
+  if (!is_string($value)) {
     $value = 'serialized:' . serialize($value);
   }
   $sql = 'INSERT INTO {user_attributes}
     (`fkey_users_id`, `key`, `value`) VALUES (%d, "%s", "%s")
     ON DUPLICATE KEY UPDATE `value` = "%s", last_update = CURRENT_TIMESTAMP;';
   return db_query($sql, $id, $key, $value, $value);
+}
+
+
+/**
+ * Return the value for the key in the db if found, or $default if not found.
+ *
+ * @param \stdClass|int $id
+ *   The game user object or user ID.
+ * @param string $key
+ *   The key to use for the query.
+ * @param mixed $default
+ *   The result to return if KVP is not found.
+ *
+ * @return mixed
+ *   The value, if found, or $default, if not found.
+ */
+function zg_get_cache($id, $key, $default = NULL) {
+  if (is_object($id) && property_exists($id, 'id')) {
+    $id = $id->id;
+  }
+  $sql = 'SELECT `value` FROM {user_attributes}
+    WHERE `fkey_users_id` = %d AND `key` = "%s";';
+  $item = db_query($sql, (int) $id, $key)->fetch_object();
+
+  // Serialized data?  Undo it.
+  if (substr($item->value, 0, 11) == 'serialized:') {
+    return unserialize(substr($item->value, 11));
+  }
+
+  return !empty($item->value) ? $item->value : $default;
+}
+
+/**
+ * Cache a value for a certain key and domain.
+ *
+ * Updates the value if the DKV already exists.
+ *
+ * @param string $key
+ *   The key to use for the value in the db.
+ * @param string $value
+ *   The value to set in the db.
+ * @param string $domain
+ *   The domain of the cache.  Defaults to the name of the calling function.
+ *
+ * @return bool
+ *   TRUE if the set succeeded; FALSE otherwise.
+ */
+function zg_set_cache($key, $value, $domain = '') {
+  // Not a string?  Serialize the data before storing.
+  if (!is_string($value)) {
+    $value = 'serialized:' . serialize($value);
+  }
+
+  // Set a default for domain.
+  if (!strlen($domain)) {
+    $bt = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+    firep($bt, 'backtrace');
+    $domain = 'backtrace';
+  }
+
+  $sql = 'INSERT INTO {cache}
+    (cache_key, cache_value, cache_domain) VALUES ("%s", "%s", "%s")
+    ON DUPLICATE KEY UPDATE cache_value = "%s", last_update = CURRENT_TIMESTAMP;';
+  return db_query($sql, $key, $value, $domain, $value);
 }
 
 /**
@@ -2516,10 +2580,10 @@ EOF;
 function zg_expand_shortcode($message) {
   $message = preg_replace(
     [
-      '/\[yt:([A-Za-z0-9]+)\]/i',
+      '/\[yt:([-A-Za-z0-9]+)\]/i',
     ],
     [
-      ' <a href="external://youtu.be/\1">youtu.be/\1</a> ',
+      ' <a href="external://youtu.be/\1" class="needs-web-title">YouTube: \1</a> ',
     ],
     $message
   );
@@ -2916,4 +2980,26 @@ function zg_format_date($epoch) {
     return date('d M Y', $epoch);
   }
 
+}
+
+/**
+ * Get the title of a web page.
+ *
+ * @param string $url
+ *   The url to check.
+ *
+ * @return string|null
+ *   The title, if any was found, or NULL.
+ */
+function zg_get_web_title($url) {
+//  if ($title = zg_get_cache($url)) {
+//    return $title;
+//  }
+
+  $page = file_get_contents($url);
+  $title = preg_match('/<title[^>]*>(.*?)<\/title>/ims', $page, $match)
+    ? $match[1] : NULL;
+
+  zg_set_cache($url, $title);
+  return $title;
 }

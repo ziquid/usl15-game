@@ -286,7 +286,7 @@ function zg_get_clan_messages($game_user, $clan_id, $game, $arg2, $message_orig)
         </div>
         <div class="message-body {$item->display->private_css}">
           {$item->display->delete}
-          <p>$item->message</p>{$item->display->reply}
+          <p>{$item->display->message}</p>{$item->display->reply}
         </div>
       </div>
     </li>
@@ -380,7 +380,7 @@ function zg_get_clan_announcements($game_user, $clan_id, $game, $arg2, $message_
         </div>
         <div class="message-body {$item->display->private_css}">
           {$item->display->delete}
-          <p>$item->message</p>{$item->display->reply}
+          <p>{$item->display->message}</p>{$item->display->reply}
         </div>
       </div>
     </li>
