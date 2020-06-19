@@ -38,6 +38,16 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Jun 19, 2020
+  </div>
+  <ul>
+    <li>
+      Better theming for clan announcements.
+    </li>
+  </ul>
+
+
+  <div class="subtitle">
     Jun 01, 2020
   </div>
   <ul>
