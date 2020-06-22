@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @file stlouis_clan_announcements.tpl.php
- * Stlouis clan announcements page
+ * @file
+ * Game clan announcements page.
  *
  * Synced with CG: no
  * Synced with 2114: no
@@ -17,44 +17,46 @@
  * .
  */
 
-  global $game, $phone_id;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+global $game, $phone_id;
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+$game_user = zg_fetch_user();
 
-  if (empty($game_user->username) || $game_user->username == '(new player)') {
-    db_set_active();
-    drupal_goto($game . '/choose_name/' . $arg2);
-  }
+if (empty($game_user->username) || $game_user->username == '(new player)') {
+  db_set_active();
+  drupal_goto($game . '/choose_name/' . $arg2);
+}
 
-  zg_fetch_header($game_user);
+if ($game_user->fkey_clans_id != $clan_id) {
+  // FIXME: debit karma.
+  db_set_active();
+  drupal_goto($game . '/home/' . $arg2);
+}
 
-    // Save the message, if any.
-    $message = check_plain($_GET['message']);
-firep($message);
+zg_fetch_header($game_user);
 
-  if (strlen($message) > 0 and strlen($message) < 3) {
-    echo '<div class="message-error">Your message must be at least 3
-      characters long.</div>';
-    $message = '';
-  }
+// Save the message, if any.
+$message_orig = check_plain($_GET['message']);
+$message = zg_filter_profanity($message_orig);
+firep($message, 'message');
 
-  $sql = 'select fkey_clans_id from clan_members where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
-  $item = db_fetch_object($result);
+if (strlen($message) > 0 && strlen($message) < 3) {
+  echo '<div class="message-error">Your message must be at least 3
+    characters long.</div>';
+  $message = '';
+}
 
-  if ($item->fkey_clans_id != $clan_id) {
-    db_set_active();
-    drupal_goto($game . '/home/' . $arg2);
-  }
+if (substr($message, 0, 3) == 'XXX') {
+  echo '<div class="message-error">Your message contains words that are not
+    allowed.&nbsp; Please rephrase.&nbsp; ' . $message . '</div>';
+  $message = '';
+}
 
-  if (!empty($message)) {
-
-    $sql = 'insert into clan_messages (fkey_users_from_id,
-      fkey_neighborhoods_id, message, is_announcement)
-      values (%d, %d, "%s", 1);';
-    $result = db_query($sql, $game_user->id, $clan_id, $message);
-
-  }
+if (!empty($message)) {
+  $sql = 'insert into clan_messages (fkey_users_from_id,
+    fkey_neighborhoods_id, message, is_announcement) values (%d, %d, "%s", 1);';
+  $result = db_query($sql, $game_user->id, $clan_id, $message);
+  $message_orig = '';
+}
 
   echo <<< EOF
 <div class="news">
@@ -74,74 +76,67 @@ firep($message);
     </div>
   </form>
 </div>
-EOF;
-
-  echo <<< EOF
 <div class="news">
   <div class="messages-title">
     Messages
   </div>
 EOF;
 
-  $sql = 'select clan_messages.*, users.username, users.phone_id,
+$sql = 'select clan_messages.*, users.username, users.phone_id,
+    users.level,
     elected_positions.name as ep_name,
     clan_members.is_clan_leader,
-    clans.acronym as clan_acronym, clans.name as clan_name,
-    clans.rules as clan_rules
+    UPPER(clans.acronym) as clan_acronym, clans.name as clan_name,
+    0 AS private, clan_messages.id as msg_id,
+    clans.rules as clan_rules,
+    "clan" as type,
+    "" as subtype,
+    neighborhoods.name as location
 
-    from clan_messages
-
+    from clan_messages 
+    
     left join users on clan_messages.fkey_users_from_id = users.id
-
+    
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
-
+    
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
+    
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id =
       clan_messages.fkey_users_from_id
-
+    
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
+    
+    LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
+    
     where clan_messages.fkey_neighborhoods_id = %d
-      AND clan_messages.is_announcement = 1
+    AND clan_messages.is_announcement = 1
     order by id DESC
     LIMIT 50;';
 
-  $result = db_query($sql, $clan_id);
-  $msg_shown = FALSE;
+$result = db_query($sql, $clan_id);
+$msg_shown = FALSE;
 
-  $data = [];
-  while ($item = db_fetch_object($result)) $data[] = $item;
+$data = [];
+while ($item = db_fetch_object($result)) {
+  $data[] = $item;
+}
+zg_format_messages($game_user, $game_user->id, $data);
+db_set_active();
 
-  foreach ($data as $item) {
-firep($item->id);
-    $display_time = game_format_date(strtotime($item->timestamp));
-    $clan_acronym = '';
-
-  if (!empty($item->clan_acronym))
-    $clan_acronym = "($item->clan_acronym)";
-
-  if ($item->is_clan_leader)
-    $clan_acronym .= '*';
-
-    echo <<< EOF
-<div class="dateline">
-  $display_time from $item->ep_name $item->username $clan_acronym
-</div>
-<div class="message-body">
+foreach ($data as $item) {
+  $msg_shown = TRUE;
+  echo <<< EOF
+    <div class="news-item $item->type {$item->display->item_css}" id="{$item->display->msg_id}">
+      <div class="dateline">
+        {$item->display->timestamp} {$item->display->username} {$item->display->private_text}
+      </div>
+      <div class="message-body {$item->display->private_css}">
+        {$item->display->delete}
+        <p>{$item->display->message}</p>{$item->display->reply}
+      </div>
+    </div>
 EOF;
 
-    echo <<< EOF
-  <p>$item->message</p>
-  <div class="message-reply-wrapper"><div class="message-reply">
-    <a href="/$game/user/$arg2/$item->phone_id">View / Respond</a>
-  </div></div>
-</div>
-EOF;
-    $msg_shown = TRUE;
-
-  }
-
-  db_set_active();
+}

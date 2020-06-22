@@ -2,7 +2,7 @@
 
 /**
  * @file
- * Stlouis clan messages page.
+ * Game clan messages page.
  *
  * Synced with CG: no
  * Synced with 2114: no
