@@ -128,8 +128,6 @@ function _stlouis_action_join_a_clan_function(&$outcome_reason, $target,
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  $remove_value = '_' . $game . '_remove_value';
-
   $game_user = zg_fetch_user();
   $action_id = $arg3;
   $can_do_again = FALSE;
@@ -309,7 +307,7 @@ firep($now, 'time now');
   }
 
   // Join succeeded!
-  $remove_value($target_id, 'cant_join_clan');
+  zg_remove_value($target_id, 'cant_join_clan');
   $sql = 'insert into clan_members (fkey_clans_id, fkey_users_id,
     is_clan_leader) values ((select id from clans where acronym = "%s"),
     %d, 0);';
