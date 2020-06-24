@@ -79,6 +79,7 @@ db_set_active();
 <br>
 <br>
 <br>
+<p class="center small">For support, please contact <strong>zipport@ziquid.com</strong>.</p>
 <br>
 
 <a class="version" href="/<?php print $game; ?>/changelog/<?php print $arg2; ?>">
