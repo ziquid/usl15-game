@@ -6,6 +6,7 @@
  *
  * Synced with CG: no
  * Synced with 2114: no
+ * .
  */
 
 define(EVENT_NONE, 0);
@@ -28,6 +29,7 @@ define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
 define(EVENT_FLAG_DAY, 'event_flag_day');
 define(EVENT_GROUNDHOG_DAY, 'event_groundhog_day');
 define(EVENT_HALLOWEEN, 'event_halloween');
+define(EVENT_INDEPENDENCE_DAY, 'event_independence_day');
 
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
@@ -258,6 +260,10 @@ switch ($today) {
   case '2018-07-03':
   case '2018-07-04':
     $event_type = EVENT_STATS_ONLY_HOOD;
+    break;
+
+  case '2020-07-04':
+    $event_type[] = EVENT_INDEPENDENCE_DAY;
     break;
 
   case '2018-07-10':
