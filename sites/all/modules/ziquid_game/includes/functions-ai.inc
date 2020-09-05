@@ -9,11 +9,13 @@
  * .
  */
 
+include_once __DIR__ . '/functions-ai-plan.inc';
+
 define('CONSERVE_ACTIONS', 1);
 define('CONSERVE_MONEY', 2);
 
 /**
- *
+ * Top-level bot entry point.
  */
 function zg_move_ai() {
 
@@ -26,14 +28,77 @@ function zg_move_ai() {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
 
+  // PRE failed?  return.
+  if (!zg_pre_move_ai($game, $game_user, $game_name_full, $ai_output)) {
+    return $ai_output;
+  };
+
+//  $ai_goals = [
+//    'list all ais', // [0 =>
+//    ['list all ais'], // [0 =>
+//    'ai1' => 'list all ais', // [ai1 =>
+//    'ai2' => ['list all ais'], // [ai2 =>
+//    ['ai3' => 'list all ais'], // ai3 =>
+
+//    'list all ais', 1, 2, 3, // [2-5 =>
+//    ['list all ais', 1, 2, 3], // [6 =>
+//    'ai4' => 'list all ais', 1, 2, 3, // [ai4 =>
+//    'ai5' => ['list all ais', 1, 2, 3], // [ai5 =>
+//    ['ai6' => 'list all ais', 1, 2, 3], // ai6 =>
+//    ['have num players', 1],
+//    ['have num clan leaders', 1],
+//    'build',
+//  ];
+
+  $ai_goals = [
+    ['need_bots_num_type', 9, 'protester'],
+    'protest',
+    'build',
+  ];
+
+  zg_ai_out(zg_print_r($ai_goals));
+  zg_ai_do_goals($ai_goals);
+
+  //  zg_ai_do('have_num_interns', 21) && zg_ai_do('build');
+  //  zg_ai_do('have_num_members', 18) && zg_ai_do('build');
+  //  zg_ai_do('have_num_treasurers', 2) && zg_ai_do('build');
+  //  zg_ai_do('have_num_alders', 1) && zg_ai_do('build');.
+
+  zg_post_move_ai($game, $game_user, $ai_output);
+  return $ai_output;
+}
+
+/**
+ * Stuff to do before moving AIs.
+ *
+ * @param string $game
+ *   The name of the game.
+ * @param object $game_user
+ *   The game user object.
+ * @param string $game_name_full
+ *   The full name of the game.
+ * @param string $ai_output
+ *   The AI log output.
+ *
+ * @return bool
+ *   Whether this function succeeded or not.
+ */
+function zg_pre_move_ai($game, $game_user, $game_name_full, &$ai_output) {
+
+  global $game, $ai_output, $bt_skip;
+
+  $ai_pre_goals = [
+    ['refresh', 3],
+  ];
+
   // No need to do AI moves on a Windows Platform.
   if (!function_exists('sys_getloadavg')) {
-    return;
+    return FALSE;
   }
 
   // Nor on local.
   if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083') {
-//    return;
+    //    return FALSE;
   }
 
   // No AI moves if load is too high.
@@ -43,18 +108,18 @@ function zg_move_ai() {
     zg_slack(NULL, 'bots', 'warning',
       'not performing AI moves for ' .
       $game_name_full . " since load average is $load[0]");
-    return;
+    return FALSE;
   }
 
   db_set_active();
   lock_init();
 
   if (!lock_acquire('ai_move', 1.0)) {
-    zg_slack(NULL, 'bots', 'warning',
+    zg_slack($game_user, 'bots', 'warning',
       'not performing AI moves for ' .
       $game_name_full . " since lock could not be acquired");
     db_set_active('game_' . $game);
-    return;
+    return FALSE;
   }
 
   db_set_active('game_' . $game);
@@ -62,20 +127,19 @@ function zg_move_ai() {
   $bt_skip = count(debug_backtrace());
   zg_ai_out('start: load avg ' . $load[0]);
 
-  zg_ai_list_all_ais();
+  zg_ai_out(zg_print_r($ai_pre_goals));
+  zg_ai_do_goals($ai_pre_goals);
+  return TRUE;
+}
 
-  zg_ai_do('have num players', 1);
-//  zg_ai_do('build');
-//  zg_ai_do('build');
-//  zg_ai_do('build');
-  // zg_ai_do('build');
-  //  zg_ai_do('build');
-  zg_ai_do('have num clan leaders', 1) && zg_ai_do('build');
-  //  zg_ai_do('have_num_interns', 21) && zg_ai_do('build');
-  //  zg_ai_do('have_num_members', 18) && zg_ai_do('build');
-  //  zg_ai_do('have_num_treasurers', 2) && zg_ai_do('build');
-  //  zg_ai_do('have_num_alders', 1) && zg_ai_do('build');.
-  // From player?  send to firep.
+/**
+ * Stuff to do after moving AIs.
+ *
+ * @param $game
+ * @param $game_user
+ * @param $ai_output
+ */
+function zg_post_move_ai($game, $game_user, $ai_output) {
   if ($game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
     firep($ai_output, 'ai output');
   }
@@ -87,7 +151,7 @@ function zg_move_ai() {
 
   // From cron?  Send to Slack.
   if (arg(0) == 'node') {
-    zg_slack(NULL, 'bots', 'output', $ai_output);
+    zg_slack($game_user, 'bots', 'output', $ai_output);
   }
 
   db_set_active();
@@ -96,7 +160,10 @@ function zg_move_ai() {
 }
 
 /**
+ * Log output.
  *
+ * @param string $output
+ *   The string to log.
  */
 function zg_ai_out($output) {
 
@@ -132,6 +199,116 @@ function zg_ai_out($output) {
 }
 
 /**
+ * Turn a set of goals into a set of detailed plans.
+ *
+ * @param string[] $goals
+ *   What to do.
+ *
+ * @return string[]
+ *   A detailed set of plans.
+ */
+function zg_ai_plan($goals) {
+
+  $plans = [];
+  foreach ($goals as $var => $goal) {
+//    zg_ai_out('$var plus $goal is: ' . $var . ' => ' . print_r($goal, TRUE));
+
+    // Accidentally did $key => ['a', 'b', ...]?  Turn it into $key => [$key => 'a', 'b', ...].
+    if (is_array($goal) && !is_numeric($var)) {
+      $first_value = reset($goal);
+      $first_key = key($goal);
+      if (is_numeric($first_key)) {
+        array_shift($goal);
+        $goal = [$var => $first_value] + $goal;
+      }
+    }
+
+    // Used shorthand string syntax?  Convert into an array, preserving the key.
+    if (!is_array($goal)) {
+      $goal = [$var => $goal];
+//      zg_ai_out('$var plus $goal is: ' . $var . ' => ' . print_r($goal, TRUE));
+    }
+
+    // Plan how to accomplish the goal.
+    $plan_function = 'zg_ai_plan_' . str_replace(' ', '_', reset($goal));
+    $args = array_slice($goal, 1);
+
+    if (function_exists($plan_function)) {
+      zg_ai_out('calling ' . $plan_function . '(' . implode(', ', $args) . ')');
+      $temp_plan = call_user_func_array($plan_function, $args);
+
+      // Used shorthand string syntax?  Convert into an array, preserving the key.
+      if (!is_array($temp_plan)) {
+        $temp_plan = [$var => $temp_plan];
+      }
+
+      // Have a variable (named key for first goal item)?  Ensure last plan uses
+      // that key as its variable, if it doesn't have its own var already.
+      if (!is_numeric($var)) {
+        $last_value = end($temp_plan);
+        $last_key = key($temp_plan);
+        if (is_numeric($last_key)) {
+          $temp_plan = array_slice($temp_plan, 0, -1) + [$var => $last_value];
+        }
+      }
+
+      // Copy plan into $plans array.
+      $plans[$var] = [
+        '#original' => $goal,
+      ] + zg_ai_plan($temp_plan);
+//      foreach ($temp_plan as $key => $temp_plan_item) {
+//        if (!is_array($temp_plan_item)) {
+//          $plans[$var][$key] = [$key => $temp_plan_item];
+//        }
+//        else {
+//          $plans[$var][$key] = $temp_plan_item;
+//        }
+//      }
+    }
+    else {
+      zg_ai_out('warning: could not find function ' . $plan_function . '.');
+      $plans[] = $goal;
+    }
+  }
+
+  return $plans;
+}
+
+/**
+ * Perform a set of goals.
+ *
+ * @param array[] $goals
+ *   What to do.
+ *
+ * @return bool
+ *   Whether the plans were successfully executed or not.
+ */
+function zg_ai_do_goals($goals) {
+
+  $success = TRUE;
+  foreach ($goals as $var => $goal) {
+    if ($var === '#type') {
+      if ($goal !== 'goals') {
+        zg_ai_out('returning FALSE because #type != goals');
+        return FALSE;
+      }
+      continue;
+    }
+
+    if (!is_array($goal)) {
+      $goal = [$goal];
+    }
+    zg_ai_out('calling zg_ai_do with params of ' . zg_print_r($goal));
+    $return = call_user_func_array('zg_ai_do', $goal);
+    if (is_bool($return) && !$return) {
+      return FALSE;
+    }
+  }
+
+  return TRUE;
+}
+
+/**
  * Do something and log it.
  *
  * @param string $goal
@@ -143,6 +320,7 @@ function zg_ai_out($output) {
  */
 function zg_ai_do($goal) {
 
+  global $last_value;
   // Work toward a specific goal, if not already accomplished.
   $goal_function = 'zg_ai_' . str_replace(' ', '_', $goal);
   $args = func_get_args();
@@ -155,16 +333,13 @@ function zg_ai_do($goal) {
 
   zg_ai_out('calling ' . $goal_function . '(' . implode(', ', $args) . ')');
   $return = call_user_func_array($goal_function, $args);
-  if (is_bool($return)) {
-    $return_str = $return ? 'TRUE' : 'FALSE';
+  zg_ai_out('returned: ' . zg_print_r($return));
+  $last_value = NULL;
+  if (is_array($return) && array_key_exists('#type', $return) &&
+    $return['#type'] == 'goals') {
+    zg_ai_do_goals($return);
   }
-  elseif (is_object($return)) {
-    $return_str = 'object';
-  }
-  else {
-    $return_str = $return;
-  }
-  zg_ai_out('returning ' . gettype($return) . ': ' . $return_str);
+  $last_value = $return;
   return $return;
 }
 
@@ -1992,6 +2167,15 @@ function zg_ai_join_clan($ai_id, $clan = 'TC1') {
   return zg_ai_web_request($ai_id, 'actions_do', $action_id . '?acronym=' . $clan);
 }
 
+function zg_ai_plan_housekeeping() {
+  return [
+    'freshen ais',
+    ['join clan', 'TC1'],
+    ['richest num buy land', 2],
+    ['poorest num buy land', 3],
+  ];
+}
+
 /**
  * List all AI players.
  *
@@ -2074,7 +2258,6 @@ function zg_ai_list_all_ais() {
 //  return;
 
   zg_ai_out(zg_ai_show_brief_stats());
-
 }
 
 /**
@@ -2097,15 +2280,17 @@ function zg_ai_show_brief_stats() {
 
   $bots = zg_fetch_users_by_id($data);
   foreach ($bots as $bot) {
+    $clan_leader = $bot->is_clan_leader ? '*' : ' ';
     zg_fetch_user_extra_attributes($bot);
-    $stats .= sprintf('%-8s (level %03d %-8s)  energy:%4d/%4d  actions:%3d/%3d  ' .
-      'money:%8d  last_access:%15s', $bot->phone_id, $bot->level,
-      substr($bot->meta, 3),
-      $bot->energy, $bot->energy_max, $bot->actions, $bot->actions_max, $bot->money,
+    $stats .= sprintf('%-8s (level %03d %-8s)  inf:%9s  engy:%4d/%4d  acts:%3d/%3d  ' .
+      '$$$:%9s  last acc:%15s', $bot->phone_id, $bot->level,
+      substr($bot->meta, 3),  number_format($bot->experience),
+      $bot->energy, $bot->energy_max, $bot->actions, $bot->actions_max,
+        number_format($bot->money),
       zg_format_date($bot->last_access)) . PHP_EOL;
-    $stats .= sprintf('loc:%-20s clan:%3s  ini:%-12s end:%-12s elo:%-12s  ' .
+    $stats .= sprintf('loc:%-20s clan:%3s%1s ini:%-12s end:%-12s elo:%-12s  ' .
         'luck:%4d',
-      $bot->location, $bot->clan_acronym,
+      $bot->location, $bot->clan_acronym, $clan_leader,
       "{$bot->total_initiative}({$bot->initiative}x{$bot->extra_initiative})",
       "{$bot->total_endurance}({$bot->endurance}x{$bot->extra_endurance})",
       "{$bot->total_elocution}({$bot->elocution}x{$bot->extra_elocution})",
@@ -2232,4 +2417,15 @@ function zg_ai_name() {
 
   return $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
+}
+
+/**
+ * Return the last value saved.
+ *
+ * @return mixed
+ *   The last value.
+ */
+function zg_ai_get_last_value() {
+  global $last_value;
+  return $last_value;
 }

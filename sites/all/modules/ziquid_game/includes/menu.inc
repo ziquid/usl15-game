@@ -1634,13 +1634,13 @@ function zg_authenticate_callback($phone_id) {
 }
 
 /**
- * Bounce callback function.
+ * Bots callback function.
  *
  * @param string $phone_id
  *   The phone ID of the player.
  *
  * @return mixed|string|string[]|void|null
- *   The bounce page HTML, or access denied if the player has no
+ *   The bots page HTML, or access denied if the player has no
  *   access.
  */
 function zg_bots_callback($phone_id) {
@@ -1657,11 +1657,13 @@ function zg_bots_callback($phone_id) {
   }
 
   $stats = zg_ai_show_brief_stats();
+  $ai_move = zg_move_ai();
 
   // Refresh every 30 seconds.
   db_set_active();
-  header('Refresh: 30');
+  header('Refresh: 10');
   print '<pre>' . $stats . '</pre>';
+  print '<pre>' . $ai_move . '</pre>';
 }
 
 /**

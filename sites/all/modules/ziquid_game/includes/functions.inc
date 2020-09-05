@@ -1479,7 +1479,7 @@ function zg_luck_money_render_button(\stdClass $game_user, $destination = '') {
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $normal_offer = zg_normal_luck_money_offer($game_user);
-  list($offer, $comment) = zg_luck_money_offer($game_user);
+  [$offer, $comment] = zg_luck_money_offer($game_user);
   $formatted_offer = number_format($offer);
 
   if ($offer == $normal_offer) {
@@ -1781,7 +1781,7 @@ function zg_get_fbid() {
   $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
-  list($encoded_sig, $payload) = explode('.', $signed_request, 2);
+  [$encoded_sig, $payload] = explode('.', $signed_request, 2);
   $data = json_decode(base64_decode(strtr($payload, '-_', '+/')), TRUE);
 
   if (empty($data["user_id"])) {
@@ -3002,4 +3002,83 @@ function zg_get_web_title($url) {
 
   zg_set_cache($url, $title);
   return $title;
+}
+
+/**
+ * Print any variable or set of variables in a condensed format.
+ *
+ * @return string
+ *   The condensed values.
+ */
+function zg_print_r() {
+  $indent = 0;
+  $output = '';
+  $args = func_get_args();
+  foreach ($args as $k => $v) {
+    $output .= zg_printdented($indent, $k, $v);
+  }
+  return $output;
+}
+
+function zg_printdented($indent, $k, $v) {
+  $output = str_repeat('  ', $indent) . $k . ' => ';
+  if (is_scalar($v) || is_null($v)) {
+    $output .= zg_get_var_type($v) . ' ' . PHP_EOL;
+  }
+  else {
+    $all_scalars = is_array($v);
+    foreach ($v as $vv) {
+      $all_scalars &= is_scalar($vv);
+    }
+    if ($all_scalars) {
+      $v2 = [];
+      foreach ($v as $vk => $vv) {
+        $v2[$vk] = zg_get_var_type($vv);
+      }
+      $output .= '[' . implode(', ', $v2) . ']' . PHP_EOL;
+    }
+    else {
+      $output .= zg_get_var_type($v) . ' ' . PHP_EOL;
+      foreach ($v as $vk => $vv) {
+        $output .= zg_printdented($indent + 1, $vk, $vv);
+      }
+    }
+  }
+  return $output;
+}
+
+/**
+ * Return a string with the type of the variable and its value.
+ *
+ * @param mixed $var
+ *   The variable to find the type of.
+ *
+ * @return string
+ *   The type of the variable and its value.
+ */
+function zg_get_var_type($var): string {
+  $type = gettype($var);
+
+  switch ($type) {
+    case 'string':
+      return '"' . $var . '"';
+
+    case 'integer':
+    case 'float':
+    case 'double':
+      return $var;
+
+    case 'boolean':
+      return $var ? 'TRUE' : 'FALSE';
+
+    case 'array':
+    case 'object':
+      return '(' . substr($type, 0, 3) . ')';
+
+    case 'NULL':
+      return 'NULL';
+
+    default:
+      return '(' . substr($type, 0, 3) . ') ' . $var;
+  }
 }
