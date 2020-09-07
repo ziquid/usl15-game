@@ -30,6 +30,7 @@ define(EVENT_FLAG_DAY, 'event_flag_day');
 define(EVENT_GROUNDHOG_DAY, 'event_groundhog_day');
 define(EVENT_HALLOWEEN, 'event_halloween');
 define(EVENT_INDEPENDENCE_DAY, 'event_independence_day');
+define(EVENT_LABOR_DAY, 'event_labor_day');
 
 define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
 define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
@@ -269,6 +270,14 @@ switch ($today) {
   case '2018-07-10':
   case '2018-07-11':
     $event_type = EVENT_ROT13_COMPS;
+    break;
+
+  /* ------ SEPTEMBER ------ */
+  case '2020-09-07':
+  case '2020-09-08':
+  case '2020-09-09':
+  case '2020-09-10':
+    $event_type[] = EVENT_LABOR_DAY;
     break;
 
   /* ------ OCTOBER ------ */
