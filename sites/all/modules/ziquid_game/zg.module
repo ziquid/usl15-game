@@ -770,7 +770,12 @@ function zg_reset_event_tags_con($id) {
 }
 
 /**
- * Fetch the user object.
+ * Fetch the user object in preparation for showing a page.
+ *
+ * Does many checks, in addition to fetching the user object, to ensure that
+ * the user object is up to date and should have access to the game/page.  If
+ * you just want a user object from the db, zg_fetch_user_by_id() is much faster
+ * and doesn't perform these checks.
  *
  * @param bool $force
  *   TRUE if the user object must be read from the database (ie, the cache is

@@ -886,7 +886,7 @@ function zg_fetch_user_by_id($id) {
 /**
  * Retrieve the specified user objects.
  *
- * @param array $ids
+ * @param int[]|string[] $ids
  *   The user IDs (int) or the phone IDs (string).  All the elements of the
  *   array must be of the same type.
  *
@@ -982,7 +982,7 @@ function zg_fetch_user_extra_attributes(&$game_user) {
   FROM staff
   LEFT JOIN staff_ownership ON staff_ownership.fkey_staff_id = staff.id
   AND staff_ownership.fkey_users_id = %d;';
-  $result = db_query($sql, $item->id);
+  $result = db_query($sql, $game_user->id);
   $staff_bonus = db_fetch_object($result);
 
   $sql = 'SELECT
@@ -1308,12 +1308,12 @@ function zg_set_timer($id, $timer_key, $time_secs) {
 /**
  * Return the value for the key in the db if found, or $default if not found.
  *
- * @param \stdClass|int $id
+ * @param object|int $id
  *   The game user object or user ID.
  * @param string $key
  *   The key to use for the query.
  * @param mixed $default
- *   The result to return if KVP is not found.
+ *   The result to return if the KVP is not found.
  *
  * @return mixed
  *   The value, if found, or $default, if not found.
@@ -3081,4 +3081,28 @@ function zg_get_var_type($var): string {
     default:
       return '(' . substr($type, 0, 3) . ') ' . $var;
   }
+}
+
+function zg_server_is_distressed() {
+  return zg_get_loadavg() >= 16;
+}
+
+function zg_server_is_busy() {
+  return zg_get_loadavg() >= 8;
+}
+
+/**
+ * Get the load average.  Doesn't work on Winders.
+ *
+ * @return int
+ *   The load average over the last minute.
+ */
+function zg_get_loadavg() {
+  // FIXME get real load avg on Winders.
+  if (!function_exists('sys_getloadavg')) {
+    return 1;
+  }
+
+  $load = sys_getloadavg();
+  return $load[0];
 }

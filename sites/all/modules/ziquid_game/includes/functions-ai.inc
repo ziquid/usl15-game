@@ -10,6 +10,7 @@
  */
 
 include_once __DIR__ . '/functions-ai-plan.inc';
+include_once __DIR__ . '/functions-ai-goals.inc';
 
 define('CONSERVE_ACTIONS', 1);
 define('CONSERVE_MONEY', 2);
@@ -24,7 +25,6 @@ function zg_move_ai() {
 
   global $game, $ai_output, $bt_skip;
 
-  // $game = check_plain(arg(0));.
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
   $game_user = zg_fetch_user();
 
@@ -34,30 +34,34 @@ function zg_move_ai() {
   };
 
 //  $ai_goals = [
-//    'list all ais', // [0 =>
-//    ['list all ais'], // [0 =>
-//    'ai1' => 'list all ais', // [ai1 =>
-//    'ai2' => ['list all ais'], // [ai2 =>
-//    ['ai3' => 'list all ais'], // ai3 =>
-
-//    'list all ais', 1, 2, 3, // [2-5 =>
-//    ['list all ais', 1, 2, 3], // [6 =>
-//    'ai4' => 'list all ais', 1, 2, 3, // [ai4 =>
-//    'ai5' => ['list all ais', 1, 2, 3], // [ai5 =>
-//    ['ai6' => 'list all ais', 1, 2, 3], // ai6 =>
-//    ['have num players', 1],
-//    ['have num clan leaders', 1],
+//    ['need_bots_num_type', 9, 'protester'],
+//    'protest',
 //    'build',
 //  ];
 
-  $ai_goals = [
-    ['need_bots_num_type', 9, 'protester'],
-    'protest',
-    'build',
-  ];
+  [$bot, $goals, $results] = zg_ai_get_bot_goals_results();
+  zg_ai_out(zg_ai_show_bot_brief_stats($bot));
+  zg_ai_out($goals, 'goals pre-do');
+  $results[] = $result = zg_ai_do_goal($bot, reset($goals), end($results));
+  zg_ai_out($result, 'result from zg_ai_do_goal');
 
-  zg_ai_out(zg_print_r($ai_goals));
-  zg_ai_do_goals($ai_goals);
+  if (zg_ai_is_goals_type($result)) {
+    $goals = zg_ai_expand_goals($result, $goals);
+  }
+
+  if (zg_ai_is_data_type($result)) {
+    $goals = zg_ai_remove_successful_goal($goals);
+  }
+
+  if ($result['success'] === FALSE) {
+    $goals = zg_ai_remove_failed_goal($goals);
+  }
+
+//  zg_ai_do_goal($bot, ['web request', 'home'], []);
+//  $bot = zg_fetch_user_by_id($bot->phone_id);
+//  zg_ai_out(zg_ai_show_bot_brief_stats($bot));
+  zg_ai_out($goals, 'goals post-do');
+  zg_ai_set_bot_goals_results($bot, $goals, $results);
 
   //  zg_ai_do('have_num_interns', 21) && zg_ai_do('build');
   //  zg_ai_do('have_num_members', 18) && zg_ai_do('build');
@@ -87,27 +91,8 @@ function zg_pre_move_ai($game, $game_user, $game_name_full, &$ai_output) {
 
   global $game, $ai_output, $bt_skip;
 
-  $ai_pre_goals = [
-    ['refresh', 3],
-  ];
-
-  // No need to do AI moves on a Windows Platform.
-  if (!function_exists('sys_getloadavg')) {
-    return FALSE;
-  }
-
-  // Nor on local.
-  if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083') {
-    //    return FALSE;
-  }
-
-  // No AI moves if load is too high.
-  $load = sys_getloadavg();
-
-  if ($load[0] > 7) {
-    zg_slack(NULL, 'bots', 'warning',
-      'not performing AI moves for ' .
-      $game_name_full . " since load average is $load[0]");
+  if (zg_server_is_distressed()) {
+    zg_ai_out(zg_get_loadavg(), 'not performing AI moves because load average is');
     return FALSE;
   }
 
@@ -125,10 +110,7 @@ function zg_pre_move_ai($game, $game_user, $game_name_full, &$ai_output) {
   db_set_active('game_' . $game);
   $ai_output = '';
   $bt_skip = count(debug_backtrace());
-  zg_ai_out('start: load avg ' . $load[0]);
 
-  zg_ai_out(zg_print_r($ai_pre_goals));
-  zg_ai_do_goals($ai_pre_goals);
   return TRUE;
 }
 
@@ -162,29 +144,41 @@ function zg_post_move_ai($game, $game_user, $ai_output) {
 /**
  * Log output.
  *
- * @param string $output
- *   The string to log.
+ * @param mixed $output
+ *   The string to log.  If not a scalar, will be printed with zg_print_r().
+ * @param string $title
+ *   The title, if any.
  */
-function zg_ai_out($output) {
-
-  // Add output to $ai_output.
+function zg_ai_out($output, $title = '') {
   global $ai_output, $bt_skip;
+
+  if (!is_scalar($output)) {
+    $output = zg_print_r($output);
+  }
+
+  if (is_bool($output)) {
+    $output = $output ? 'TRUE' : 'FALSE';
+  }
+
+  if (strlen($title)) {
+    $title .= ': ';
+  }
 
   $bt = debug_backtrace();
 //  firep($bt, 'backtrace');
   $args = '(' . implode(', ', $bt[1]['args']) . ')';
-  $line = '(L:' . $bt[0]['line'] . ')';
+  $line = '(L:' . $bt[0]['line'] . '): ';
   $spaces = str_repeat('| ', count($bt) - $bt_skip);
 
   if ((count($bt) - $bt_skip) <= 2) {
-    $ai_output .= "\n";
+    $ai_output .= PHP_EOL;
   }
 
   if ($bt[1]['function'] == 'zg_ai_do') {
-    $ai_output .= $spaces . "$output\n";
+    $ai_output .= $spaces . $title . $output . PHP_EOL;
   }
   else {
-    $ai_output .= $spaces . "$line: $output\n";
+    $ai_output .= $spaces . $line . $title . $output . PHP_EOL;
   }
 
   // FIXME: this doesn't actually do anything.
@@ -207,7 +201,7 @@ function zg_ai_out($output) {
  * @return string[]
  *   A detailed set of plans.
  */
-function zg_ai_plan($goals) {
+function old_zg_ai_plan($goals) {
 
   $plans = [];
   foreach ($goals as $var => $goal) {
@@ -275,125 +269,101 @@ function zg_ai_plan($goals) {
 }
 
 /**
- * Perform a set of goals.
+ * Attempt to perform one goal.
  *
- * @param array[] $goals
- *   What to do.
+ * @param object $bot
+ *   The bot object.
+ * @param array|string $goal
+ *   The goal to attempt to perform.
+ * @param array|false $last_result
+ *   The result of the last goal's performance attempt, or FALSE if none.
  *
- * @return bool
- *   Whether the plans were successfully executed or not.
+ * @return array
+ *   Details about the results of the goal performance attempt.
  */
-function zg_ai_do_goals($goals) {
-
-  $success = TRUE;
-  foreach ($goals as $var => $goal) {
-    if ($var === '#type') {
-      if ($goal !== 'goals') {
-        zg_ai_out('returning FALSE because #type != goals');
-        return FALSE;
-      }
-      continue;
-    }
-
-    if (!is_array($goal)) {
-      $goal = [$goal];
-    }
-    zg_ai_out('calling zg_ai_do with params of ' . zg_print_r($goal));
-    $return = call_user_func_array('zg_ai_do', $goal);
-    if (is_bool($return) && !$return) {
-      return FALSE;
-    }
-  }
-
-  return TRUE;
-}
-
-/**
- * Do something and log it.
- *
- * @param string $goal
- *   What to do.
- *
- * @return mixed|bool
- *   The return value from calling the function to do the goal or FALSE if
- *   that goal function has not yet been implemented.
- */
-function zg_ai_do($goal) {
+function zg_ai_do_goal($bot, $goal, $last_result) {
 
   global $last_value;
-  // Work toward a specific goal, if not already accomplished.
-  $goal_function = 'zg_ai_' . str_replace(' ', '_', $goal);
-  $args = func_get_args();
-  $args = array_slice($args, 1);
+
+  if (!is_array($goal)) {
+    $goal = [$goal];
+  }
+
+  $result = [
+    'original goal' => $goal,
+  ];
+
+  if (!is_array($last_result)) {
+    $last_result = [$last_result];
+  }
+
+  zg_ai_out($last_result, 'last result');
+  if (array_key_exists('return value', $last_result)) {
+    $last_value = zg_ai_get_data($last_result);
+  }
+  else {
+    $last_value = [];
+  }
+  zg_ai_out($last_value, 'last value');
+
+  $goal_function = 'zg_ai_' . str_replace(' ', '_', reset($goal));
+  $args = array_slice($goal, 1);
+  array_unshift($args, $bot);
+//  zg_ai_out($args, 'args');
 
   if (!function_exists($goal_function)) {
-    zg_ai_out("*FIXME: MISSING* $goal_function(" . implode(', ', $args) . ')');
-    return FALSE;
+    zg_ai_out($goal, "*FIXME: MISSING* $goal_function");
+    $result['error'] = "Missing function $goal_function()";
+    $result['success'] = FALSE;
+    return $result;
   }
 
-  zg_ai_out('calling ' . $goal_function . '(' . implode(', ', $args) . ')');
+  zg_ai_out('calling ' . $goal_function . '($bot, ' . implode(', ', array_slice($args, 1)) . ')');
   $return = call_user_func_array($goal_function, $args);
-  zg_ai_out('returned: ' . zg_print_r($return));
-  $last_value = NULL;
-  if (is_array($return) && array_key_exists('#type', $return) &&
-    $return['#type'] == 'goals') {
-    zg_ai_do_goals($return);
-  }
-  $last_value = $return;
-  return $return;
+//  zg_ai_out('returned: ' . zg_print_r($return));
+
+  $result['return value'] = $return;
+  $result['success'] = TRUE;
+//  zg_ai_out('result: ' . zg_print_r($result));
+  return $result;
 }
 
 /**
  * Generic function for building a random AI player.
  *
+ * @param object $bot
+ *   The bot object.
+ *
  * @return bool|mixed
  */
-function zg_ai_build() {
-  zg_ai_out('figuring out what is the best building course of action');
-
-  // Find most energy.
-  $sql = 'select phone_id, energy, actions from users
-    where meta like "ai_%" and energy >= 20 and actions >= 1
-    order by ((actions * 20) + energy) desc
-    limit 1;';
-  $result = db_query($sql);
-  $item = db_fetch_object($result);
-
-  if (empty($item)) {
-    zg_ai_out("No bots with enough energy or actions!");
-    return FALSE;
-  }
-
-  $ai_id = $item->phone_id;
-
-  zg_ai_web_request($ai_id, 'home');
-  $ai_user = zg_ai_fetch_user($ai_id);
-  zg_ai_out("Building player #$ai_id with {$item->energy} energy, {$item->actions} action");
-
-  if ($ai_user->skill_points > 0) {
-    zg_ai_out('We have skill points to allocate!');
-    return zg_ai_do('allocate skill points', $ai_id);
-  }
-
-  return zg_ai_do('do quest', $ai_id, 4) |
-    zg_ai_do('do quest', $ai_id, 3) |
-    zg_ai_do('do quest', $ai_id, 2) |
-    zg_ai_do('do quest', $ai_id, 1) |
-    zg_ai_do('debate players', $ai_id, 3);
+function zg_ai_build($bot) {
+  return zg_ai_goals_type([
+    ['quest', 1],
+    ['quest', 2],
+    ['quest', 3],
+    ['quest', 4],
+    ['debate'],
+    ['debate'],
+    ['debate'],
+  ]);
 }
 
 /**
  * Perform a quest as a specific AI player.
  *
- * @param string $ai_id
- *   The phone ID of the AI player.
+ * @param object $bot
+ *   The bot object.
  * @param int $quest
  *   The quest ID.
  *
- * @return bool
- *   Whether the quest succeeded or failed.
+ * @return array
+ *   The result array.
  */
-function zg_ai_do_quest($ai_id, $quest) {
+function zg_ai_quest($bot, $quest) {
+  return zg_ai_goals_type([
+    ['web request', 'quests_do', $quest],
+  ]);
+
   $ai_response = zg_ai_web_request($ai_id, 'quests_do', $quest);
 
   if ($ai_response == 'quest-succeeded') {
@@ -476,20 +446,20 @@ function zg_ai_do_quest($ai_id, $quest) {
 /**
  * Call a specific web request.
  *
- * @param string $ai_id
- *   The Phone ID of the AI player.
+ * @param object $bot
+ *   The bot object.
  * @param string $screen
  *   The name of the screen.
  * @param string $arg1
  *   Any additional arguments to the request.
  *
- * @return string
- *   The resulting string.
+ * @return array
+ *   The resulting string wrapped as a data type.
  */
-function zg_ai_web_request($ai_id, $screen, $arg1 = '') {
+function zg_ai_web_request($bot, string $screen, $arg1 = '') {
   global $game, $base_url;
 
-  $uri = $base_url . "/$game/$screen/$ai_id";
+  $uri = $base_url . "/$game/$screen/{$bot->phone_id}";
   if (strlen($arg1)) {
     $uri .= "/$arg1";
   }
@@ -497,7 +467,7 @@ function zg_ai_web_request($ai_id, $screen, $arg1 = '') {
 //  if (($screen != 'home') &&
 //    ($screen != 'debates_challenge') &&
 //    ($screen != 'land')) {
-    $ai_out = "web-req: $screen/$ai_id/$arg1";
+    $ai_out = "web-req: $screen/{$bot->phone_id}/$arg1";
 //  }
 
   $response = file_get_contents($uri);
@@ -517,7 +487,9 @@ function zg_ai_web_request($ai_id, $screen, $arg1 = '') {
     zg_ai_out($ai_out . ", response: $ai_response");
   }
 
-  return trim(str_replace('"', '', $ai_response));
+  return zg_ai_data_type([
+    trim(str_replace('"', '', $ai_response))
+  ]);
 }
 
 /**
@@ -1921,43 +1893,90 @@ function _ai_distance($xcoor1, $ycoor1, $xcoor2, $ycoor2) {
 /**
  * Get more elocution aides for bot.
  *
- * @param string $ai_id
- *   The player ID of the AI bot.
+ * @param object $bot
+ *   The bot object.
  *
- * @return bool
- *   Whether any elocution aides could be successfully obtained.
+ * @return array
+ *   The result array.
  */
-function zg_ai_increase_elocution_stats($ai_id) {
-  $ai_user = zg_ai_fetch_user($ai_id);
+function zg_ai_increase_elocution_stats($bot) {
+  return zg_ai_goals_type([
+    ['web request', 'equipment'],
+    ['explode aides results'],
+    ['filter aides results', 'elo'],
+    ['filter aides results affordable'],
+    ['purchase equipment'],
+  ]);
+}
 
-  $ai_response = zg_ai_web_request($ai_id, 'equipment');
-  $response = array_slice(explode(' ', $ai_response), 1);
-  $can_buy = 0;
+/**
+ * Turn a string of aides results into an array.
+ *
+ * @return array[]
+ *   The result array.
+ */
+function zg_ai_explode_aides_results() {
+  $data = zg_ai_get_last_value();
+  $data = array_slice(explode(' ', reset($data)), 1);
+  return zg_ai_data_type($data);
+}
 
-  foreach ($response as $res) {
-
-    // No elo aides?
-    if (strpos($res, '/+elo:') === FALSE) {
-      continue;
-    }
-
-    // Only look at elo aides.
-    // Remove /+elo: fluff.
-    $res = substr($res, 0, strpos($res, '/'));
-    if ($ai_user->money >= (substr($res, strpos($res, '=') + 1) + 0)) {
-      $can_buy = substr($res, 0, strpos($res, '='));
+/**
+ * Filter a list of aides for a specific type.  Strip off the type metadata.
+ *
+ * @param object $bot
+ *   The bot object.
+ * @param string $type
+ *   The type of aide for which to filter.
+ *
+ * @return array[]
+ *   The data which matches the specified type.
+ */
+function zg_ai_filter_aides_results($bot, string $type) {
+  $old = zg_ai_get_last_value();
+  $new = [];
+  $needle = '/+' . $type . ':';
+  foreach ($old as $item) {
+    if (strpos($item, $needle) !== FALSE) {
+      $exploded = explode('/', $item, 2);
+      $new[] = $exploded[0];
     }
   }
+  return zg_ai_data_type($new);
+}
 
-  if ($can_buy > 0) {
-    // zg_ai_out("I have $ai_user->money money, " .
-    //        "so I can buy aide #$can_buy...");.
-    $ai_response = zg_ai_web_request($ai_id, 'equipment_buy', "$can_buy/1");
-    return TRUE;
+/**
+ * Filter a list of aides to find ones that the bot can afford.  Return the IDs.
+ *
+ * @param object $bot
+ *   The bot object.
+ *
+ * @return array[]
+ *   The aide IDs which the bot can afford.
+ */
+function zg_ai_filter_aides_results_affordable($bot) {
+  $old = zg_ai_get_last_value();
+  $new = [];
+  foreach ($old as $item) {
+    [$id, $cost] = explode('=', $item);
+    if ((int) $bot->money >= (int) $cost) {
+      $new[] = $id;
+    }
   }
-  // zg_ai_out("I have $ai_user->money money, " .
-  //        "so I can't buy any elocution aides!");.
-  return FALSE;
+  return zg_ai_data_type($new);
+}
+
+function zg_ai_purchase_equipment($bot, $id = '', $quantity = 1) {
+  if (!strlen($id)) {
+    return zg_ai_goals_type([
+      ['save data', zg_ai_get_last_value()],
+      ['foreach', 'purchase equipment'],
+    ]);
+  }
+
+  return zg_ai_goals_type([
+    ['web request', 'equipment_buy', "$id/$quantity"],
+  ]);
 }
 
 /**
@@ -2042,21 +2061,36 @@ function zg_ai_buy_land($ai_id) {
 }
 
 /**
- * Debate players a specific number of times.
+ * FInd players to debate and debate them.
  *
- * @param string $ai_id
- *   The player ID of the AI bot.
- * @param int $num_debates
- *   Max number of debates to attempt.
+ * @param $bot
+ *   The bot object.
  *
- * @return bool
- *   Whether any debates were successful or not.
+ * @return array[]
+ *   The result array.
  */
-function zg_ai_debate_players($ai_id, $num_debates = 99) {
+function zg_ai_debate($bot) {
+  return zg_ai_goals_type([
+    ['find players to debate', 3],
+    ['foreach', 'debate player'],
+  ]);
+}
+
+/**
+ * Find players to debate.
+ *
+ * @param object $bot
+ *   The bot object.
+ * @param int $num
+ *   Max number of players to find.
+ *
+ * @return array
+ *   The result array.
+ */
+function zg_ai_find_players_to_debate($bot, $num = 99) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $ai_user = zg_ai_fetch_user($ai_id);
-  $num_attempts = min($num_debates, $ai_user->actions);
+  $num = min($num, $bot->actions);
 
   // $debate_wait_time = 1200;
   // $zombie_debate_wait = 300;
@@ -2075,45 +2109,68 @@ function zg_ai_debate_players($ai_id, $num_debates = 99) {
     ORDER BY abs(users.experience - %d) ASC
     LIMIT %d;';
 
-  $result = db_query($sql, $ai_user->id, $ai_user->fkey_clans_id,
+  $result = db_query($sql, $bot->id, $bot->fkey_clans_id,
     date('Y-m-d H:i:s', REQUEST_TIME - $debate_time),
     date('Y-m-d H:i:s', REQUEST_TIME - $zombie_debate_wait),
-    $ai_user->level - 15,
-    $ai_user->level + 15, $ai_user->experience, $num_attempts);
+    $bot->level - 15, $bot->level + 15, $bot->experience, $num);
   $data = [];
   while ($item = db_fetch_object($result)) {
     $data[] = $item;
   }
-  $successful_debate = FALSE;
-  zg_ai_out("Found " . count($data) .
-    " players to debate ($ai_user->actions actions)");
+  return zg_ai_data_type($data);
+}
 
-  foreach ($data as $item) {
-    zg_ai_out("Can debate $item->username");
-    $ai_response = zg_ai_web_request($ai_id, 'debates_challenge', $item->id);
+/**
+ * Debate a player.
+ *
+ * @param object $bot
+ *   The bot object.
+ * @param object $player
+ *   Which player to debate.
+ *
+ * @return array[]
+ *   The result array.
+ */
+function zg_ai_debate_player($bot, $player) {
+  return zg_ai_goals_type([
+    ['web request', 'debates_challenge', $player->id],
+    ['interpret debate results'],
+  ]);
+}
 
-    if ($ai_response == 'debate-won') {
-      // zg_ai_out('Woohoo!  Player debated and won!');.
-      $successful_debate = TRUE;
-    }
+/**
+ * Interpret debate results.  Take action if needed.
+ *
+ * @param object $bot
+ *   The bot object.
+ *
+ * @return array
+ *   The result array.
+ */
+function zg_ai_interpret_debate_results($bot) {
+  $data = zg_ai_get_last_value();
+  zg_ai_out($data, 'debate results data from last value');
+  $server_response = reset($data);
+  $success = FALSE;
 
-    if ($ai_response == 'debate-lost') {
-      // zg_ai_out('Egads!  Player debated and lost');.
-      zg_ai_do('increase elocution stats', $ai_id);
-    }
-
-    if ($ai_response == 'debate-no-action') {
-      // zg_ai_out('Egads!  Out of Action!');.
-      break;
-    }
-
-    if ($ai_response == 'debate-must-wait') {
-      // zg_ai_out("Must wait to debate $item->username");.
-      continue;
-    }
+  if ($server_response === 'debate-won') {
+    $success = TRUE;
   }
 
-  return ($successful_debate);
+  if ($server_response === 'debate-no-action') {
+    // FIXME: consider spending Luck to refill actions?
+  }
+
+//  if ($server_response == 'debate-must-wait') {
+//  }
+
+  if ($server_response === 'debate-lost') {
+    return zg_ai_goals_type([
+      ['increase elocution stats']
+    ]);
+  }
+
+  return zg_ai_data_type([$success]);
 }
 
 /**
@@ -2122,10 +2179,10 @@ function zg_ai_debate_players($ai_id, $num_debates = 99) {
  * @param string $ai_id
  *   The phone ID of the AI player.
  *
- * @return bool|null|object|\stdClass
+ * @return bool|null|object
  *   The ai player object.
  */
-function zg_ai_fetch_user($ai_id) {
+function old_zg_ai_fetch_user($ai_id) {
   static $count = 4;
 
   $sql = 'select users.*, clan_members.fkey_clans_id
@@ -2161,13 +2218,13 @@ function zg_ai_fetch_user($ai_id) {
  * @return string
  *   Output from the web request.
  */
-function zg_ai_join_clan($ai_id, $clan = 'TC1') {
+function old_zg_ai_join_clan($ai_id, $clan = 'TC1') {
   // FIXME: game_find_action_by_id('join a clan');.
   $action_id = 2;
   return zg_ai_web_request($ai_id, 'actions_do', $action_id . '?acronym=' . $clan);
 }
 
-function zg_ai_plan_housekeeping() {
+function old_zg_ai_plan_housekeeping() {
   return [
     'freshen ais',
     ['join clan', 'TC1'],
@@ -2181,7 +2238,7 @@ function zg_ai_plan_housekeeping() {
  *
  * Freshen stats of those that haven't been accessed recently.
  */
-function zg_ai_list_all_ais() {
+function old_zg_ai_list_all_ais() {
   $sql = 'select phone_id from users
     where meta like "ai_%"
     and last_access < "%s"
@@ -2280,24 +2337,38 @@ function zg_ai_show_brief_stats() {
 
   $bots = zg_fetch_users_by_id($data);
   foreach ($bots as $bot) {
-    $clan_leader = $bot->is_clan_leader ? '*' : ' ';
-    zg_fetch_user_extra_attributes($bot);
-    $stats .= sprintf('%-8s (level %03d %-8s)  inf:%9s  engy:%4d/%4d  acts:%3d/%3d  ' .
+    $stats .= zg_ai_show_bot_brief_stats($bot);
+  }
+
+  return $stats;
+}
+
+/**
+ * Show brief stats for a single AI bot.
+ *
+ * @param object $bot
+ *   A bot object.
+ *
+ * @return string
+ *   The stats.
+ */
+function zg_ai_show_bot_brief_stats($bot) {
+  $clan_leader = $bot->is_clan_leader ? '*' : ' ';
+  zg_fetch_user_extra_attributes($bot);
+  $stats = sprintf('%-8s (level %03d %-8s)  inf:%9s  engy:%4d/%4d  acts:%3d/%3d  ' .
       '$$$:%9s  last acc:%15s', $bot->phone_id, $bot->level,
-      substr($bot->meta, 3),  number_format($bot->experience),
+      substr($bot->meta, 3), number_format($bot->experience),
       $bot->energy, $bot->energy_max, $bot->actions, $bot->actions_max,
-        number_format($bot->money),
+      number_format($bot->money),
       zg_format_date($bot->last_access)) . PHP_EOL;
-    $stats .= sprintf('loc:%-20s clan:%3s%1s ini:%-12s end:%-12s elo:%-12s  ' .
-        'luck:%4d',
+  $stats .= sprintf('loc:%-20s clan:%3s%1s ini:%-12s end:%-12s elo:%-12s  ' .
+      'luck:%4d',
       $bot->location, $bot->clan_acronym, $clan_leader,
       "{$bot->total_initiative}({$bot->initiative}x{$bot->extra_initiative})",
       "{$bot->total_endurance}({$bot->endurance}x{$bot->extra_endurance})",
       "{$bot->total_elocution}({$bot->elocution}x{$bot->extra_elocution})",
       $bot->luck) . PHP_EOL;
-    $stats .= PHP_EOL;
-  }
-
+  $stats .= PHP_EOL;
   return $stats;
 }
 
@@ -2428,4 +2499,19 @@ function zg_ai_name() {
 function zg_ai_get_last_value() {
   global $last_value;
   return $last_value;
+}
+
+/**
+ * Save specified data so that it will be available as the last value.
+ *
+ * @param object $bot
+ *   The bot object.
+ * @param array $data
+ *   The data to save.
+ *
+ * @return array[]
+ *   The data, as a data array.
+ */
+function zg_ai_save_data($bot, array $data) {
+  return zg_ai_data_type($data);
 }

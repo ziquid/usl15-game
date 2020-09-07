@@ -20,7 +20,7 @@
  * @return array[]
  *   A plan array.
  */
-function zg_ai_need_bots_num_type($num, $type) {
+function old_zg_ai_need_bots_num_type($num, $type) {
   return [
     '#type' => 'goals',
     ['count_bots_type', $type],
@@ -29,7 +29,7 @@ function zg_ai_need_bots_num_type($num, $type) {
   ];
 }
 
-function zg_ai_plan_create_or_repurpose_bot_type($type) {
+function old_zg_ai_plan_create_or_repurpose_bot_type($type) {
   return [
     ['count_bots_type', 'minion'],
     ['if', '>', 0],
@@ -44,7 +44,7 @@ function zg_ai_plan_create_or_repurpose_bot_type($type) {
  *
  * @return string[]
  */
-function zg_ai_plan_convert_to_type($type) {
+function old_zg_ai_plan_convert_to_type($type) {
   return [
     '#type' => 'goals',
     'dunno',
@@ -60,7 +60,7 @@ function zg_ai_plan_convert_to_type($type) {
  * @return int
  *   The count.
  */
-function zg_ai_count_bots_type($type) {
+function old_zg_ai_count_bots_type($type) {
   $sql = 'select count(*) as count from users
     where meta like "ai_%s";';
   $result = db_query($sql, $type)->fetch_object();
@@ -77,7 +77,7 @@ function zg_ai_count_bots_type($type) {
  *
  * @return false|string[]|void
  */
-function zg_ai_doneif($operator, $val2) {
+function old_zg_ai_doneif($operator, $val2) {
   $val1 = zg_ai_get_last_value();
   zg_ai_out("$val1 $operator $val2");
 
@@ -102,26 +102,12 @@ function zg_ai_doneif($operator, $val2) {
   return NULL;
 }
 
-function zg_ai_protest() {
+function old_zg_ai_protest() {
   return [
     '#type' => 'goals',
     ['move_to_hood', 'downtown'],
     ['debate'],
     ['build'],
-  ];
-}
-
-/**
- * Find bots that need refreshing and refresh them.
- *
- * @return array
- *   A list of goals.
- */
-function zg_ai_refresh() {
-  return [
-    '#type' => 'goals',
-    ['find stale bots', 3],
-    'refresh bots',
   ];
 }
 
@@ -134,7 +120,7 @@ function zg_ai_refresh() {
  * @return string[]
  *   Stale bots, if any.
  */
-function zg_ai_find_stale_bots($num) {
+function old_zg_ai_find_stale_bots($num) {
   $data = [];
   $sql = 'select phone_id from users
     where meta like "ai_%"
@@ -148,34 +134,54 @@ function zg_ai_find_stale_bots($num) {
   return $data;
 }
 
-function zg_ai_refresh_bots() {
-  $bots = zg_ai_get_last_value();
-//  zg_ai_out('will refresh ' . zg_print_r($bots));
-  return [
-    '#type' => 'goals',
-    ['foreach', $bots, 'web request', 'home'],
-  ];
+/**
+ * Refresh a bot's stats.
+ *
+ * @param $bot
+ *  The bot object.
+ *
+ * @return array
+ *   The result array.
+ */
+function zg_ai_refresh($bot) {
+  return zg_ai_goals_type([
+    ['web request', 'home'],
+  ]);
 }
 
 /**
- * Expand a list and goals into individual goals.
+ * Expand a list and a goal into multiple goals.
  *
- * @param $data
- *   The list to expand.
- * @param $goal
+ * @param object $bot
+ *   The bot object.
+ * @param string $goal
  *   The goal to perform for each member of the list.
  *
- * @return string[]
- *   Goals to perform.
+ * @return array
+ *   The result array.
  */
-function zg_ai_foreach($data, $goal) {
-  $goals = [
-    '#type' => 'goals',
-  ];
+function zg_ai_foreach($bot, string $goal) {
+  $goals = [];
   $args = func_get_args();
+  $data = zg_ai_get_last_value();
+//  zg_ai_out($data, 'FOREACH data from last value');
+
+  // No data in the list?  This expands to nothing.
+  if (!count($data)) {
+    return zg_ai_data_type([
+      'No data in list; not performing foreach',
+    ]);
+  }
+
+  $first_item = reset($data);
+  if (!count($first_item)) {
+    return zg_ai_data_type([
+      'No data in list; not performing foreach',
+    ]);
+  }
 
   foreach ($data as $item) {
     $goals[] = [$goal, $item] + $args;
   }
-  return $goals;
+  return zg_ai_goals_type($goals);
 }
