@@ -1662,7 +1662,7 @@ function zg_bots_callback($phone_id) {
 
   // Refresh every 30 seconds.
   db_set_active();
-//  header('Refresh: 10');
+  header('Refresh: 10');
   print '<pre>' . $stats . '</pre>';
   print '<pre>' . $ai_move . '</pre>';
   $end = microtime(TRUE);

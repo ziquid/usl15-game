@@ -166,7 +166,7 @@ function zg_ai_out($output, $title = '') {
 
   $bt = debug_backtrace();
 //  firep($bt, 'backtrace');
-  $args = '(' . implode(', ', $bt[1]['args']) . ')';
+//  $args = '(' . implode(', ', $bt[1]['args']) . ')';
   $line = '(L:' . $bt[0]['line'] . '): ';
   $spaces = str_repeat('| ', count($bt) - $bt_skip);
 
