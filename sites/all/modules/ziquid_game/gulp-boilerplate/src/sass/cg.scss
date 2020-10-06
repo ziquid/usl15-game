@@ -1,0 +1,20 @@
+@import 'vars/cg';
+
+body.game-cg {
+  margin: 4px auto 40px;
+  background-color: $background-color;
+  color: $color;
+
+  @import 'common/index';
+  @import 'common/cg_overrides';
+  @import 'cg/cg_orig';
+
+  &.portrait-orientation {
+    @import 'portrait/index';
+  }
+
+  &.landscape-orientation {
+    @import 'landscape/index';
+  }
+
+}

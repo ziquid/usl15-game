@@ -1,0 +1,80 @@
+&::after {
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-10deg) saturate(1000%) contrast(0.8);
+}
+
+header {
+  background: url(/sites/default/files/images/celestial_glory_header_bg.jpg) !important;
+}
+
+header.hood1 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_1.jpg) !important;
+}
+
+header.hood2 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_2.jpg) !important;
+}
+
+header.hood3 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_3.jpg) !important;
+}
+
+header.hood4 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_4.jpg) !important;
+}
+
+header.hood5 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_5.jpg) !important;
+}
+
+header.hood6 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_6.jpg) !important;
+}
+
+header.hood7 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_7.jpg) !important;
+}
+
+header.hood8 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_8.jpg) !important;
+}
+
+header.hood9 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_9.jpg) !important;
+}
+
+header.hood10 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_10.jpg) !important;
+}
+
+header.hood11 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_11.jpg) !important;
+}
+
+header.hood12 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_12.jpg) !important;
+}
+
+header.hood13 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_13.jpg) !important;
+}
+
+header.hood14 {
+  background: url(/sites/default/files/images/celestial_glory_header_bg_14.jpg) !important;
+}
+
+.tagline {
+  text-transform: none;
+  margin-top: -12px;
+  letter-spacing: 1px;
+  text-shadow: 0 0.9px 0 beige;
+  font-family: fantasy;
+  font-size: 15px;
+}
+
+.new-main-menu {
+
+  img {
+    border-radius: 10px;
+    opacity: 0.6;
+  }
+}

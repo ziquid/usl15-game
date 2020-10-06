@@ -1416,8 +1416,7 @@ function zg_fetch_header(\stdClass $game_user) {
   }
 
   // Show it!
-  $hood = '';
-  $arg2 = check_plain(arg(2));
+  $hood = 'hood' . $game_user->fkey_neighborhoods_id;
 
   $max_user_message = zg_get_value($game_user, 'max_user_message', FALSE);
   if (($max_user_message !== FALSE) && (arg(1) != 'home') &&

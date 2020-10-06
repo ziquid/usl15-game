@@ -1,7 +1,9 @@
+@import 'vars/stlouis';
+
 body.game-stlouis {
   margin: 4px auto 40px;
-  background-color: #001b00;
-  color: #f8fefb;
+  background-color: $background-color;
+  color: $color;
 
   @import 'common/index';
 

@@ -3,4 +3,4 @@ description = Uprising: St. Louis game
 package = ziquid games
 core = 6.x
 
-version = "6.x-0.70"
+version = "6.x-0.98"
