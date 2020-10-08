@@ -242,7 +242,8 @@ if (zg_user_has_trait($game_user, 'show_highlighted_quest_groups_on_map')) {
   $title_shown = FALSE;
 
   foreach ($hood_equip as $item) {
-    if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+    if ($game_user->fkey_neighborhoods_id &&
+      $item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
       if (!$title_shown) {
         echo <<< EOF
 <br>
@@ -262,7 +263,8 @@ EOF;
   $title_shown = FALSE;
 
   foreach ($hood_staff as $item) {
-    if ($item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
+    if ($game_user->fkey_neighborhoods_id &&
+      $item->fkey_neighborhoods_id == $game_user->fkey_neighborhoods_id) {
       if (!$title_shown) {
         echo <<< EOF
 <br>

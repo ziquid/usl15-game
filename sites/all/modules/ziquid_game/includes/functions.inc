@@ -1156,7 +1156,7 @@ function zg_zombie_name() {
     'Zero',
   ];
 
-  return 'PoliZombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
+  return 'Zombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 }
 
@@ -1735,9 +1735,9 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
 function zg_get_game_list() {
   return [
     'cg',
-    'detroit',
+//    'detroit',
     'stlouis',
-    'wonderland',
+//    'wonderland',
   ];
 }
 

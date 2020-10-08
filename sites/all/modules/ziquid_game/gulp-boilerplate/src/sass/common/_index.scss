@@ -917,7 +917,7 @@ textarea {
   font-weight: bold;
   display: block;
   -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
-  -webkit-text-fill-color: limegreen;
+  -webkit-text-fill-color: $quest-group-title-color;
   text-shadow: 2px 2px 6px black;
 }
 
@@ -1057,7 +1057,7 @@ span.not-yet-overlay {
 }
 
 .swiper-slide .quests .quest-name a {
-  color: #3fd453;
+  color: $quest-link-color;
 }
 
 .swiper-slide .quests .quest-experience,
@@ -1065,7 +1065,7 @@ span.not-yet-overlay {
 .swiper-slide .quests .quest-required_energy,
 .swiper-slide .quests .quest-required_stuff,
 .swiper-slide .quests .quest-payout {
-  color: #3fd453;
+  color: $quest-link-color;
 }
 
 .swiper-container .swiper-button-next, .swiper-container .swiper-button-prev {

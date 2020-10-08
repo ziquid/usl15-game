@@ -1279,7 +1279,7 @@ body.game-cg .quest-group-name, body.game-cg .quest-group-title {
   font-weight: bold;
   display: block;
   -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.5);
-  -webkit-text-fill-color: limegreen;
+  -webkit-text-fill-color: #bf6f2f;
   text-shadow: 2px 2px 6px black;
 }
 
@@ -1449,7 +1449,7 @@ body.game-cg .swiper-slide .quests {
 
 /* line 1059, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests .quest-name a {
-  color: #3fd453;
+  color: #bf6f2f;
 }
 
 /* line 1063, src/sass/common/_index.scss */
@@ -1458,7 +1458,7 @@ body.game-cg .swiper-slide .quests .quest-money,
 body.game-cg .swiper-slide .quests .quest-required_energy,
 body.game-cg .swiper-slide .quests .quest-required_stuff,
 body.game-cg .swiper-slide .quests .quest-payout {
-  color: #3fd453;
+  color: #bf6f2f;
 }
 
 /* line 1071, src/sass/common/_index.scss */

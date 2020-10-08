@@ -631,3 +631,40 @@ function zg_land_lose(\stdClass &$game_user, $id, $quantity = 1, $ex_price = 0) 
   $game_user = zg_fetch_user_by_id($game_user->id);
   return TRUE;
 }
+
+/**
+ * Show a picture of required land.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param int $land_id
+ *   The land id.
+ * @param int $req_quantity
+ *   The quantity required.
+ */
+function zg_required_land(\stdClass $game_user, $land_id, $req_quantity = 1) {
+  global $game;
+  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  $st = zg_fetch_land_by_id($game_user, $land_id);
+
+  if ($st->quantity >= $req_quantity) {
+    $not_yet = $a_start = $a_end = '';
+  }
+  else {
+    $not_yet = 'not-yet';
+    $a_start = '<a href="/' . $game . '/land_hire/' .
+      $arg2 . '/' . $land_id . '/' .
+      ($req_quantity - $st->quantity) . '">';
+    $a_end = '</a>';
+  }
+
+  echo <<< EOF
+<div class="quest-required_stuff">Requires
+  <div class="quest-required_equipment">
+    $a_start
+      <img class="$not_yet" src="{$st->icon_path}" width="48">
+    $a_end
+  </div>&nbsp;x$req_quantity
+</div>
+EOF;
+}

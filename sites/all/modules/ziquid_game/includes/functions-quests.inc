@@ -838,7 +838,7 @@ EOF;
 
       // Required land.
       if ($item->land_required_quantity > 0) {
-        _required_land($game_user, $item->fkey_land_required_id,
+        zg_required_land($game_user, $item->fkey_land_required_id,
           $item->land_required_quantity);
       }
 

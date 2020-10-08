@@ -107,14 +107,6 @@ function celestial_glory_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['cg/quests_do/%/%'] = array(
-    'title' => 'Celestial Glory Quests Do',
-    'page callback' => 'celestial_glory_quests_do_callback',
-    'page arguments' => array(2, 3),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['cg/elders/%'] = array(
     'title' => 'Celestial Glory Elders',
     'page callback' => 'celestial_glory_elders_callback',
@@ -459,22 +451,6 @@ function celestial_glory_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['cg/move/%/%'] = array(
-    'title' => 'Celestial Glory Move',
-    'page callback' => 'celestial_glory_move_callback',
-    'page arguments' => array(2, 3),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['cg/move_do/%/%'] = array(
-    'title' => 'Celestial Glory Move Do',
-    'page callback' => 'celestial_glory_move_do_callback',
-    'page arguments' => array(2, 3),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['cg/authenticate/%'] = array(
     'title' => 'Celestial Glory Authenticate',
     'page callback' => 'celestial_glory_authenticate_callback',
@@ -694,17 +670,6 @@ function celestial_glory_quests_list_callback($phone_id) {
   }
 
   return theme('celestial_glory_quests_list', $phone_id);
-
-}
-
-
-function celestial_glory_quests_do_callback($phone_id, $quest_id) {
-
-  if (empty($phone_id) || !is_numeric($quest_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('celestial_glory_quests_do', $phone_id, $quest_id);
 
 }
 

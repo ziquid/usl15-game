@@ -743,7 +743,7 @@ $loc_quests = t('@location @quests', [
 <a href="/$game/quest_groups/$arg2#group-{$game_quest->group}">$loc_quests</a>
 EOF;
 
-$title = "<span class=\"quest-group-title\" $older_missions_html $loc_quests $newer_missions_html</span>";
+$title = "<div class=\"quest-group-title\" $older_missions_html $loc_quests $newer_missions_html</div>";
 
 // Reread quest group object.
 $qgo = zg_fetch_quest_groups($game_user, $group_id);

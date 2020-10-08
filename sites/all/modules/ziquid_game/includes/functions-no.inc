@@ -153,45 +153,6 @@ EOF;
 
 }
 
-function NO_required_land($game_user, $land_id, $req_quantity) {
-
-  global $game;
-  $arg2 = check_plain(arg(2));
-
-  $sql = 'select quantity from land_ownership
-    where fkey_land_id = %d and fkey_users_id = %d;';
-  $result = db_query($sql, $land_id, $game_user->id);
-  $quantity = db_fetch_object($result);
-
-  if ($quantity->quantity >= $req_quantity) {
-
-    $not_yet = $a_start = $a_end = '';
-
-  }
-  else {
-
-    $not_yet = 'not-yet';
-    $a_start = '<a href="/' . $game . '/land_buy/' .
-      $arg2 . '/' . $land_id . '/' .
-      ($req_quantity - $quantity->quantity) . '">';
-    $a_end = '</a>';
-
-  }
-
-  echo <<< EOF
-<div class="quest-required_stuff">Requires
-  <div class="quest-required_equipment">
-    $a_start
-      <img class="$not_yet"
-        src="/sites/default/files/images/land/$game-$land_id.png"
-        width="48">
-    $a_end
-  </div>&nbsp;x$req_quantity
-</div>
-EOF;
-
-}
-
 function NO_required_elected_position($game_user, $id, $name) {
 
   global $game;

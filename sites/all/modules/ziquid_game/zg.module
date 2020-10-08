@@ -251,6 +251,7 @@ function zg_cron() {
     }
 
     // Update maps.
+    /*
     $map_large = imagecreatefrompng('sites/default/files/images/stlouis_map_large.png');
     $map_large_overlay =
       imagecreatefrompng('sites/default/files/images/stlouis_map_large_overlay.png');
@@ -316,6 +317,7 @@ function zg_cron() {
     imagedestroy($map_mid);
     imagedestroy($map_top);
     imagedestroy($map_bottom);
+    */
 
     // Set up includes and init() for event, if any.
     if ($event_type !== EVENT_NONE) {

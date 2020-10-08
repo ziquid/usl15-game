@@ -23,7 +23,7 @@ require_once(drupal_get_path('module', 'celestial_glory') . '/admin.inc');
 
 function celestial_glory_cron() {
 
-  db_set_active('game_celestial_glory');
+  db_set_active('game_cg');
 
 // save old approval ratings
 
@@ -134,7 +134,7 @@ function celestial_glory_cron() {
 */
 
   // update maps now done after each CP toss.
-//   _celestial_glory_draw_maps();
+   _celestial_glory_draw_maps();
 
 // prune old log files
   $sql = 'delete from challenge_messages where timestamp < "%s"

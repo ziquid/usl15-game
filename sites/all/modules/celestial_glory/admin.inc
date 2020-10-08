@@ -11,7 +11,7 @@ function _celestial_glory_draw_maps() {
 
   // Grab and slice the files.
   $map_large = imagecreatefromjpeg(
-    'sites/default/files/images/celestial_glory_map_large.jpg'
+    'sites/default/files/images/cg_map_large.jpg'
   );
   $map_mid = imagecreatetruecolor(530, 600);
   $map_large_colored = imagecreatetruecolor(800, 500);
@@ -32,14 +32,13 @@ function _celestial_glory_draw_maps() {
   foreach ($data as $item) {
 
     $icon = imagecreatefrompng(
-      'sites/default/files/images/celestial_glory_clan_'
+      'sites/default/files/images/cg_clan_'
       . $item->clan_icon . '.png');
     $icon_scaled = imagescale($icon, 32, 32);
     imagecopy($map_large, $icon_scaled, $item->xcoor - 12, $item->ycoor, 0, 0,
       32, 32);
     imagedestroy($icon);
     imagedestroy($icon_scaled);
-
   }
 
   // Save the files.
@@ -47,17 +46,17 @@ function _celestial_glory_draw_maps() {
   imagecopy($map_bottom_colored, $map_large, 0, 0, 0, 500, 800, 300);
 
   imagejpeg($map_large_colored,
-    'sites/default/files/images/celestial_glory_map_large_colored.jpg');
+    'sites/default/files/images/cg_map_large_colored.jpg');
   imagejpeg($map_bottom_colored,
-    'sites/default/files/images/celestial_glory_map_large_bottom_colored.jpg');
+    'sites/default/files/images/cg_map_large_bottom_colored.jpg');
 
   imagecopy($map_mid, $map_large, 0, 0, 0, 0, 530, 600);
   imagecopy($map_bottom, $map_large, 0, 0, 200, 500, 530, 300);
 
   imagejpeg($map_mid,
-    'sites/default/files/images/celestial_glory_map_mid.jpg');
+    'sites/default/files/images/cg_map_mid.jpg');
   imagejpeg($map_bottom,
-    'sites/default/files/images/celestial_glory_map_bottom.jpg');
+    'sites/default/files/images/cg_map_bottom.jpg');
 
   // Clean up.
   imagedestroy($map_large);
@@ -65,5 +64,4 @@ function _celestial_glory_draw_maps() {
   imagedestroy($map_bottom);
   imagedestroy($map_large_colored);
   imagedestroy($map_bottom_colored);
-
 }
