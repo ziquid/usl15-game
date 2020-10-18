@@ -19,13 +19,12 @@
 
 $game = check_plain(arg(0));
 $arg2 = check_plain(arg(2));
-$version = 'v0.9.7c, Jun 19 2020';
+$version = 'v0.9.8, Oct 18 2020';
 
 db_set_active('game_' . $game);
 $d = zg_get_html([
   'tagline',
 ]);
-$button = zg_render_button();
 $game_user = zg_fetch_user_by_id(zg_get_phoneid());
 $game_user_str = zg_render_user($game_user, 'header');
 $welcome_msg = strlen($game_user->username) ? t('Welcome back to') :

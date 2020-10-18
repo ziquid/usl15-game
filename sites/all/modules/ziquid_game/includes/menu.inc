@@ -35,7 +35,7 @@ function zg_menu() {
     ];
 
     $items[$game . '/bots/%'] = [
-      'title' => 'Ziquid Game Bounce',
+      'title' => 'Ziquid Game Bots',
       'page callback' => 'zg_bots_callback',
       'page arguments' => [2],
       'access arguments' => ['access game content'],
@@ -1684,10 +1684,24 @@ function zg_bounce_callback($phone_id) {
     return drupal_access_denied();
   }
 
+  $game = check_plain(arg(0));
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  db_set_active();
+
   $module_path = drupal_get_path('module', 'zg');
   drupal_add_js($module_path . '/js/zg_bounce.js', 'module',
     'footer');
-  return theme('zg_bounce', $phone_id);
+
+  $button = zg_render_button();
+  if ($game == 'stlouis' &&
+    ($game_user->meta == 'admin' || $game_user->meta == 'staff')) {
+    $button .= "<p class='center'>or</p>" .
+      zg_render_button('/cg/bounce', 'Read the Book of Mormon') .
+      "<p class='center'>(if you wish)</p>";
+  }
+
+  return theme('zg_bounce', $phone_id, $button);
 }
 
 /**
@@ -2258,6 +2272,7 @@ function zg_theme() {
       'template' => 'templates/zg_bounce',
       'arguments' => [
         'phone_id' => NULL,
+        'button' => zg_render_button(),
       ],
     ],
 
