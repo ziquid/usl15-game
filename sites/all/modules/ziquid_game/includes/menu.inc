@@ -1687,6 +1687,7 @@ function zg_bounce_callback($phone_id) {
   $game = check_plain(arg(0));
   db_set_active('game_' . $game);
   $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  $cheat = zg_get_value($game_user, 'GoldenPlatesFTW', FALSE);
   db_set_active();
 
   $module_path = drupal_get_path('module', 'zg');
@@ -1695,8 +1696,7 @@ function zg_bounce_callback($phone_id) {
 
   $button = zg_render_button();
   if ($game == 'stlouis' &&
-    ($game_user->meta == 'admin' || $game_user->meta == 'staff' ||
-    zg_get_value($game_user, 'GoldenPlatesFTW', FALSE))) {
+    ($game_user->meta == 'admin' || $game_user->meta == 'staff' || $cheat)) {
     $button .= "<p class='center'>or</p>" .
       zg_render_button('/cg/bounce', 'Read the Book of Mormon') .
       "<p class='center'>(if you wish)</p>";
