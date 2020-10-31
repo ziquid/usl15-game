@@ -129,12 +129,17 @@ function zg_fetch_land_by_id(\stdClass $game_user, $land_id) {
   WHERE land.id = %d;';
   $result = db_query($sql, $game_user->id, $land_id);
   $item = db_fetch_object($result);
-  $item->competency = zg_competency_name($item->competency);
-  $item->competency_name_1 = zg_competency_name($item->competency_name_1);
+  if (is_object($item)) {
+    $item->competency = zg_competency_name($item->competency);
+    $item->competency_name_1 = zg_competency_name($item->competency_name_1);
+    zg_get_icon_path($game_user, $item, 'land');
+  }
   return $item;
 }
 
 function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
+
+  // FIXME: support $options['max-affordable'] from CG.
 
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
@@ -153,6 +158,10 @@ function zg_show_land(\stdClass $game_user, \stdClass $item, $options = []) {
     case 'buy-success':
       if ($item->type == 'job') {
         $header = '<div class="land-succeeded">' . t('You got a job!') .
+          '</div>';
+      }
+      elseif ($item->type == 'goods') {
+        $header = '<div class="land-succeeded">' . t('Goods Purchased') .
           '</div>';
       }
       else {
@@ -296,7 +305,7 @@ EOF;
   $item->name
 </a>
 EOF;
-    $buy_button = <<< EOF
+    $buy_button = $apply_button = <<< EOF
 <div class="land-buy-button">
   <a href="/$game/land_buy/$arg2/$item->id/1">
     Buy
@@ -304,7 +313,7 @@ EOF;
 </div>
 EOF;
     // Current job?  Change 'Apply' button to 'Work Overtime' button.
-    if (strlen($current) == 0) {
+    if ($item->type == 'job' && !strlen($current)) {
       $apply_button = <<< EOF
 <div class="land-buy-button">
   <a href="/$game/land_buy/$arg2/$item->id/1">
@@ -313,7 +322,7 @@ EOF;
 </div>
 EOF;
     }
-    else {
+    elseif ($item->type == 'job' && strlen($current)) {
       $can_work_again = zg_can_do_yet($game_user, 'can_work_again');
 //      firep($can_work_again, 'can work again');
       if ($can_work_again->allowed) {
@@ -411,7 +420,7 @@ EOF;
   }
 
   $reqs = '';
-  if ($item->type == 'investment') {
+  if ($item->type == 'investment' || $item->type == 'goods') {
     echo <<< EOF
     <div class="land-owned">Owned: $quantity</div>
 EOF;
@@ -484,7 +493,7 @@ EOF;
   </div>
 EOF;
   }
-  elseif ($item->type == 'investment') {
+  elseif ($item->type == 'investment' || $item->type == 'goods') {
 
     // Attempt to buy.
     if ($options['land-buy-succeeded']) {
@@ -557,6 +566,10 @@ function zg_land_gain(\stdClass &$game_user, $id, $quantity = 1, $ex_price = 0) 
       (fkey_users_id, fkey_land_id, quantity) values
       (%d, %d, %d);';
     db_query($sql, $game_user->id, $id, $quantity);
+  }
+
+  if ($quantity >= 100) {
+    zg_competency_gain($game_user, 'big spender');
   }
 
   // Start the income clock, if needed.
@@ -652,7 +665,7 @@ function zg_required_land(\stdClass $game_user, $land_id, $req_quantity = 1) {
   }
   else {
     $not_yet = 'not-yet';
-    $a_start = '<a href="/' . $game . '/land_hire/' .
+    $a_start = '<a href="/' . $game . '/land_buy/' .
       $arg2 . '/' . $land_id . '/' .
       ($req_quantity - $st->quantity) . '">';
     $a_end = '</a>';

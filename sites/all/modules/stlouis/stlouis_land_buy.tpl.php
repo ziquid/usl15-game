@@ -4,7 +4,7 @@
  * @file
  * Buy land.
  *
- * Synced with CG: no
+ * Synced with CG: yes
  * Synced with 2114: no
  * Ready for phpcbf: no
  * Ready for MVC separation: no
@@ -35,13 +35,17 @@ if ($quantity === 'use-quantity') {
 $game_land = zg_fetch_land_by_id($game_user, $land_id);
 $orig_quantity = $count = $quantity;
 $land_price = 0;
+$options = [];
 
 while ($count--) {
   $land_price += $game_land->price + (($game_land->quantity + $count) *
     $game_land->price_increase);
+
+  if ($land_price <= $game_user->money) {
+    $options['max-affordable'] = $orig_quantity - $count;
+  }
 }
 
-$options = [];
 $options['land-buy-succeeded'] = 'buy-success';
 $options['orig-quantity'] = $orig_quantity;
 $ai_output = 'land-succeeded';

@@ -68,6 +68,14 @@ p:first-of-type {
   margin-top: 0;
 }
 
+.speech-bubble {
+  background-color: $speech-bubble-background-color;
+}
+
+.speech-bubble::after {
+  border-right-color: $speech-bubble-background-color;
+}
+
 .speech-bubble p:first-of-type {
   margin-top: 9px;
 }
@@ -231,7 +239,7 @@ p:first-of-type {
 }
 
 .level-up.happy {
-  background-image: url('/sites/default/files/images/stlouis_wise_old_man_happy.png');
+  background-image: url('/sites/default/files/images/#{$elder-happy}');
   background-repeat: no-repeat;
   background-position: 2px 2px;
   background-size: contain;
@@ -307,7 +315,7 @@ p:first-of-type {
 }
 
 .wise_old_man.happy {
-  background-image: url('/sites/default/files/images/stlouis_wise_old_man_happy.png');
+  background-image: url('/sites/default/files/images/#{$elder-happy}');
   background-repeat: no-repeat;
   background-position: 0 0;
   width: 54px;
@@ -318,7 +326,7 @@ p:first-of-type {
 }
 
 .city-icon {
-  background-image: url('/sites/default/files/images/stlouis_city_icon.jpg');
+  background-image: url('/sites/default/files/images/#{$city-icon}');
   background-repeat: no-repeat;
   background-position: 0 1px;
   width: 106px;
@@ -405,8 +413,8 @@ p:first-of-type {
   }
 
   .news-buttons {
-    background-color: rgba(48, 144, 0, 0.4);
-    color: #3b0;
+    background-color: $news-buttons-background-color;
+    color: $news-buttons-color;
     border-radius: 12px 10px 12px 0;
     width: fit-content;
     margin: 0 auto 6px;

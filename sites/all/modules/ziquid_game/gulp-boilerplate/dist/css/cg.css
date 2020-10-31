@@ -252,26 +252,36 @@ body.game-cg p:first-of-type {
 }
 
 /* line 71, src/sass/common/_index.scss */
+body.game-cg .speech-bubble {
+  background-color: #421;
+}
+
+/* line 75, src/sass/common/_index.scss */
+body.game-cg .speech-bubble::after {
+  border-right-color: #421;
+}
+
+/* line 79, src/sass/common/_index.scss */
 body.game-cg .speech-bubble p:first-of-type {
   margin-top: 9px;
 }
 
-/* line 75, src/sass/common/_index.scss */
+/* line 83, src/sass/common/_index.scss */
 body.game-cg .speech-bubble .message-error {
   padding-top: 0;
 }
 
-/* line 79, src/sass/common/_index.scss */
+/* line 87, src/sass/common/_index.scss */
 body.game-cg .speech-bubble .subtitle {
   clear: none;
 }
 
-/* line 83, src/sass/common/_index.scss */
+/* line 91, src/sass/common/_index.scss */
 body.game-cg .main-menu, body.game-cg .elders-menu {
   font-weight: bold;
 }
 
-/* line 87, src/sass/common/_index.scss */
+/* line 95, src/sass/common/_index.scss */
 body.game-cg .main-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
@@ -282,7 +292,7 @@ body.game-cg .main-menu .menu-option {
   background: #444f44;
 }
 
-/* line 97, src/sass/common/_index.scss */
+/* line 105, src/sass/common/_index.scss */
 body.game-cg .elders-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
@@ -293,18 +303,18 @@ body.game-cg .elders-menu .menu-option {
   background: #444f44;
 }
 
-/* line 107, src/sass/common/_index.scss */
+/* line 115, src/sass/common/_index.scss */
 body.game-cg .menu-option a {
   text-decoration: none;
 }
 
-/* line 111, src/sass/common/_index.scss */
+/* line 119, src/sass/common/_index.scss */
 body.game-cg .menu-option.not-yet {
   text-decoration: none;
   color: #bbb;
 }
 
-/* line 116, src/sass/common/_index.scss */
+/* line 124, src/sass/common/_index.scss */
 body.game-cg .quests, body.game-cg .land {
   background-color: rgba(13, 15, 13, 0.25);
   text-shadow: none;
@@ -312,7 +322,7 @@ body.game-cg .quests, body.game-cg .land {
   min-height: 60px;
 }
 
-/* line 123, src/sass/common/_index.scss */
+/* line 131, src/sass/common/_index.scss */
 body.game-cg .quests .quest-experience, body.game-cg .quests .quest-money,
 body.game-cg .quests .quest-required_energy, body.game-cg .quests .quest-required_stuff,
 body.game-cg .quests .quest-payout,
@@ -321,28 +331,28 @@ body.game-cg .land .land-required_level, body.game-cg .land-soon .land-action-co
   color: #1ca443;
 }
 
-/* line 131, src/sass/common/_index.scss */
+/* line 139, src/sass/common/_index.scss */
 body.game-cg .quests .quest-required_stuff.missing {
   color: #e4344f;
 }
 
-/* line 135, src/sass/common/_index.scss */
+/* line 143, src/sass/common/_index.scss */
 body.game-cg .quests .quest-loot {
   color: #d4c41c;
 }
 
-/* line 139, src/sass/common/_index.scss */
+/* line 147, src/sass/common/_index.scss */
 body.game-cg .quests .quest-payout.negative,
 body.game-cg .land .land-payout.negative, body.game-cg .land-soon .land-payout.negative {
   color: #e4344f;
 }
 
-/* line 144, src/sass/common/_index.scss */
+/* line 152, src/sass/common/_index.scss */
 body.game-cg .quests .quest-description, body.game-cg .land .land-description {
   color: #cbb;
 }
 
-/* line 148, src/sass/common/_index.scss */
+/* line 156, src/sass/common/_index.scss */
 body.game-cg .quests .quest-description .not-yet, body.game-cg .land .land-description .not-yet {
   color: #c23;
   font-weight: bold;
@@ -351,7 +361,7 @@ body.game-cg .quests .quest-description .not-yet, body.game-cg .land .land-descr
   margin-left: 10px;
 }
 
-/* line 156, src/sass/common/_index.scss */
+/* line 164, src/sass/common/_index.scss */
 body.game-cg .quest-required_stuff .quest-required_equipment img.not-yet {
   border: solid 0.5px #c00;
   border-radius: 4px;
@@ -359,14 +369,14 @@ body.game-cg .quest-required_stuff .quest-required_equipment img.not-yet {
           box-shadow: 1px 1px 3px rgba(192, 0, 0, 0.6);
 }
 
-/* line 162, src/sass/common/_index.scss */
+/* line 170, src/sass/common/_index.scss */
 body.game-cg .quests .quest-required_stuff .quest-required_equipment img {
   border-radius: 4px;
   -webkit-box-shadow: 1px 1px 3px rgba(0, 192, 0, 0.6);
           box-shadow: 1px 1px 3px rgba(0, 192, 0, 0.6);
 }
 
-/* line 167, src/sass/common/_index.scss */
+/* line 175, src/sass/common/_index.scss */
 body.game-cg .quests-soon .quest-experience, body.game-cg .quests-soon .quest-money,
 body.game-cg .quests-soon .quest-required_energy,
 body.game-cg .land-soon .land-cost, body.game-cg .land-soon .land-payout,
@@ -374,7 +384,7 @@ body.game-cg .land-soon .land-required_level {
   color: #0e5221;
 }
 
-/* line 174, src/sass/common/_index.scss */
+/* line 182, src/sass/common/_index.scss */
 body.game-cg .quests-soon a, body.game-cg .quests-soon a:link, body.game-cg .quests-soon a:visited,
 body.game-cg .quests-soon a:hover, body.game-cg .quests-soon a:active,
 body.game-cg .land-soon a, body.game-cg .land-soon a:link, body.game-cg .land-soon a:visited,
@@ -382,17 +392,17 @@ body.game-cg .land-soon a:hover, body.game-cg .land-soon a:active {
   color: #0e5221;
 }
 
-/* line 181, src/sass/common/_index.scss */
+/* line 189, src/sass/common/_index.scss */
 body.game-cg .quest-succeeded, body.game-cg .election-succeeded, body.game-cg .land-succeeded {
   color: #1ca443;
 }
 
-/* line 185, src/sass/common/_index.scss */
+/* line 193, src/sass/common/_index.scss */
 body.game-cg .quest-failed, body.game-cg .election-failed, body.game-cg .land-failed, body.game-cg .title.failed {
   color: #c4244f;
 }
 
-/* line 189, src/sass/common/_index.scss */
+/* line 197, src/sass/common/_index.scss */
 body.game-cg .quest-do-again, body.game-cg .land-buy-again {
   text-align: right;
   margin-right: 8px;
@@ -401,7 +411,7 @@ body.game-cg .quest-do-again, body.game-cg .land-buy-again {
   font-size: 0.75rem;
 }
 
-/* line 197, src/sass/common/_index.scss */
+/* line 205, src/sass/common/_index.scss */
 body.game-cg .quest-do-again-inside, body.game-cg .land-buy-again-inside {
   padding: 3px;
   background-color: #1ca443;
@@ -411,42 +421,42 @@ body.game-cg .quest-do-again-inside, body.game-cg .land-buy-again-inside {
   float: right;
 }
 
-/* line 206, src/sass/common/_index.scss */
+/* line 214, src/sass/common/_index.scss */
 body.game-cg .quest-do-again a, body.game-cg .land-buy-again a {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 211, src/sass/common/_index.scss */
+/* line 219, src/sass/common/_index.scss */
 body.game-cg .quests .quest-name.loot {
   color: #d4c41c;
 }
 
-/* line 215, src/sass/common/_index.scss */
+/* line 223, src/sass/common/_index.scss */
 body.game-cg .quests .quest-name.not-yet {
   color: #9aa;
 }
 
-/* line 219, src/sass/common/_index.scss */
+/* line 227, src/sass/common/_index.scss */
 body.game-cg .quests .quest-num, body.game-cg .quests .quest-requisites, body.game-cg .quests .quest-disbursements {
   display: none;
 }
 
-/* line 223, src/sass/common/_index.scss */
+/* line 231, src/sass/common/_index.scss */
 body.game-cg .land .land-owned {
   color: #fff;
 }
 
-/* line 227, src/sass/common/_index.scss */
+/* line 235, src/sass/common/_index.scss */
 body.game-cg .level-up {
   border: 1px solid rgba(255, 255, 255, 0.7) !important;
   background-color: #0e5221;
   min-height: 72px;
 }
 
-/* line 233, src/sass/common/_index.scss */
+/* line 241, src/sass/common/_index.scss */
 body.game-cg .level-up.happy {
-  background-image: url("/sites/default/files/images/stlouis_wise_old_man_happy.png");
+  background-image: url("/sites/default/files/images/cg_lehi_large.png");
   background-repeat: no-repeat;
   background-position: 2px 2px;
   background-size: contain;
@@ -454,7 +464,7 @@ body.game-cg .level-up.happy {
   -webkit-background-size: 54px 72px;
 }
 
-/* line 243, src/sass/common/_index.scss */
+/* line 251, src/sass/common/_index.scss */
 body.game-cg .choose-clan-name {
   margin-left: 6px;
   font-weight: bold;
@@ -462,12 +472,12 @@ body.game-cg .choose-clan-name {
   color: #1ca443;
 }
 
-/* line 250, src/sass/common/_index.scss */
+/* line 258, src/sass/common/_index.scss */
 body.game-cg .choose-clan-name a {
   text-decoration: none;
 }
 
-/* line 254, src/sass/common/_index.scss */
+/* line 262, src/sass/common/_index.scss */
 body.game-cg .choose-clan-slogan {
   margin: 0 0 8px 54px;
   font-style: italic;
@@ -475,17 +485,17 @@ body.game-cg .choose-clan-slogan {
   color: #bcb;
 }
 
-/* line 261, src/sass/common/_index.scss */
+/* line 269, src/sass/common/_index.scss */
 body.game-cg .help .subtitle {
   margin: 8px 0 4px;
 }
 
-/* line 265, src/sass/common/_index.scss */
+/* line 273, src/sass/common/_index.scss */
 body.game-cg .help .subtitle {
   color: #1ca443;
 }
 
-/* line 269, src/sass/common/_index.scss */
+/* line 277, src/sass/common/_index.scss */
 body.game-cg .wise_old_man_large, body.game-cg .wise_old_man {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_large.png");
   background-repeat: no-repeat;
@@ -495,7 +505,7 @@ body.game-cg .wise_old_man_large, body.game-cg .wise_old_man {
   float: left;
 }
 
-/* line 278, src/sass/common/_index.scss */
+/* line 286, src/sass/common/_index.scss */
 body.game-cg .wise_old_man_small, body.game-cg .wise_old_man.small {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_small.png");
   background-repeat: no-repeat;
@@ -505,7 +515,7 @@ body.game-cg .wise_old_man_small, body.game-cg .wise_old_man.small {
   float: left;
 }
 
-/* line 287, src/sass/common/_index.scss */
+/* line 295, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.sad {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_sad.png");
   background-repeat: no-repeat;
@@ -517,7 +527,7 @@ body.game-cg .wise_old_man.sad {
   margin-right: 12px;
 }
 
-/* line 298, src/sass/common/_index.scss */
+/* line 306, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.embarrassed {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_sad2.png");
   background-repeat: no-repeat;
@@ -529,9 +539,9 @@ body.game-cg .wise_old_man.embarrassed {
   margin-right: 12px;
 }
 
-/* line 309, src/sass/common/_index.scss */
+/* line 317, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.happy {
-  background-image: url("/sites/default/files/images/stlouis_wise_old_man_happy.png");
+  background-image: url("/sites/default/files/images/cg_lehi_large.png");
   background-repeat: no-repeat;
   background-position: 0 0;
   width: 54px;
@@ -541,7 +551,7 @@ body.game-cg .wise_old_man.happy {
   margin-right: 12px;
 }
 
-/* line 320, src/sass/common/_index.scss */
+/* line 328, src/sass/common/_index.scss */
 body.game-cg .city-icon {
   background-image: url("/sites/default/files/images/stlouis_city_icon.jpg");
   background-repeat: no-repeat;
@@ -553,17 +563,17 @@ body.game-cg .city-icon {
   margin-right: 14px;
 }
 
-/* line 331, src/sass/common/_index.scss */
+/* line 339, src/sass/common/_index.scss */
 body.game-cg .username-error {
   color: #c4244f;
 }
 
-/* line 335, src/sass/common/_index.scss */
+/* line 343, src/sass/common/_index.scss */
 body.game-cg .elections-header {
   color: #1aa443;
 }
 
-/* line 339, src/sass/common/_index.scss */
+/* line 347, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action, body.game-cg .land .land-buy-button,
 body.game-cg .land .land-sell-button, body.game-cg .land .land-perform-button,
 body.game-cg .send-message-send-wrapper .send-message-send,
@@ -575,7 +585,7 @@ body.game-cg .quests .quests-perform-button, body.game-cg .crafting-submit-butto
   -moz-border-radius: 4px;
 }
 
-/* line 350, src/sass/common/_index.scss */
+/* line 358, src/sass/common/_index.scss */
 body.game-cg .send-message .block-user {
   padding: 3px 12px;
   background-color: #188433;
@@ -584,39 +594,39 @@ body.game-cg .send-message .block-user {
   -moz-border-radius: 4px;
 }
 
-/* line 358, src/sass/common/_index.scss */
+/* line 366, src/sass/common/_index.scss */
 body.game-cg .send-message .block-user a {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 363, src/sass/common/_index.scss */
+/* line 371, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action.not-yet, body.game-cg .land .land-buy-button.not-yet,
 body.game-cg .land .land-sell-button.not-yet {
   background-color: #333833;
   border: 1px solid #333833;
 }
 
-/* line 369, src/sass/common/_index.scss */
+/* line 377, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action a, body.game-cg .land .land-buy-button a,
 body.game-cg .land .land-sell-button a, body.game-cg .land form input.land-buy-button {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 375, src/sass/common/_index.scss */
+/* line 383, src/sass/common/_index.scss */
 body.game-cg .try-an-election {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 380, src/sass/common/_index.scss */
+/* line 388, src/sass/common/_index.scss */
 body.game-cg .try-an-election.not-yet {
   background-color: #333833 !important;
   border: 1px solid #333833 !important;
 }
 
-/* line 385, src/sass/common/_index.scss */
+/* line 393, src/sass/common/_index.scss */
 body.game-cg .location {
   color: #f8fdfe;
   font: 0.625rem Helvetica,Arial,sans-serif;
@@ -628,21 +638,21 @@ body.game-cg .location {
   border-radius: 0 0 12px 12px;
 }
 
-/* line 396, src/sass/common/_index.scss */
+/* line 404, src/sass/common/_index.scss */
 body.game-cg .location + .news {
   margin-top: 0;
 }
 
-/* line 402, src/sass/common/_index.scss */
+/* line 410, src/sass/common/_index.scss */
 body.game-cg .news .news-item {
   text-transform: none;
   font-variant: none;
 }
 
-/* line 407, src/sass/common/_index.scss */
+/* line 415, src/sass/common/_index.scss */
 body.game-cg .news .news-buttons {
-  background-color: rgba(48, 144, 0, 0.4);
-  color: #3b0;
+  background-color: #0000;
+  color: #0000;
   border-radius: 12px 10px 12px 0;
   width: -webkit-fit-content;
   width: -moz-fit-content;
@@ -651,13 +661,13 @@ body.game-cg .news .news-buttons {
   padding: 0;
 }
 
-/* line 416, src/sass/common/_index.scss */
+/* line 424, src/sass/common/_index.scss */
 body.game-cg .news .dateline {
   padding-left: 10px;
   color: #cfd5d1;
 }
 
-/* line 421, src/sass/common/_index.scss */
+/* line 429, src/sass/common/_index.scss */
 body.game-cg .news .message-body {
   padding: 4px 8px 8px 4px;
   background-color: rgba(16, 24, 20, 0.8) !important;
@@ -666,70 +676,70 @@ body.game-cg .news .message-body {
           box-shadow: 2px 2px 5px #000;
 }
 
-/* line 428, src/sass/common/_index.scss */
+/* line 436, src/sass/common/_index.scss */
 body.game-cg .news .message-body.user.user-png {
   font-weight: bold;
 }
 
-/* line 432, src/sass/common/_index.scss */
+/* line 440, src/sass/common/_index.scss */
 body.game-cg .news .message-body.user.user-comp {
   color: #85851f;
 }
 
-/* line 436, src/sass/common/_index.scss */
+/* line 444, src/sass/common/_index.scss */
 body.game-cg .news .message-body.mayor.mayor-system {
   color: green;
   font-style: italic;
 }
 
-/* line 441, src/sass/common/_index.scss */
+/* line 449, src/sass/common/_index.scss */
 body.game-cg .news .message-body.mayor.mayor-mayor {
   color: green;
 }
 
-/* line 445, src/sass/common/_index.scss */
+/* line 453, src/sass/common/_index.scss */
 body.game-cg .news .message-reply {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 450, src/sass/common/_index.scss */
+/* line 458, src/sass/common/_index.scss */
 body.game-cg .news .message-reply.not-yet {
   background-color: #bbb !important;
   border: 1px solid #bbb !important;
   color: black;
 }
 
-/* line 458, src/sass/common/_index.scss */
+/* line 466, src/sass/common/_index.scss */
 body.game-cg .news-item.announcement .message-body {
   font-weight: bold;
   color: yellow;
 }
 
-/* line 465, src/sass/common/_index.scss */
+/* line 473, src/sass/common/_index.scss */
 body.game-cg .user-profile .heading {
   clear: both;
 }
 
-/* line 469, src/sass/common/_index.scss */
+/* line 477, src/sass/common/_index.scss */
 body.game-cg .user-profile .action {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 474, src/sass/common/_index.scss */
+/* line 482, src/sass/common/_index.scss */
 body.game-cg .user-profile .action.not-yet {
   background-color: #333833 !important;
   border: 1px solid #333833 !important;
 }
 
-/* line 479, src/sass/common/_index.scss */
+/* line 487, src/sass/common/_index.scss */
 body.game-cg .user-profile .skill-point {
   display: inline-block;
   margin-left: 8px;
 }
 
-/* line 482, src/sass/common/_index.scss */
+/* line 490, src/sass/common/_index.scss */
 body.game-cg .user-profile .skill-point.not-yet a {
   background-color: #333833 !important;
   -webkit-box-shadow: inset 0 1px 0 0 #343934;
@@ -742,18 +752,18 @@ body.game-cg .user-profile .skill-point.not-yet a {
   text-shadow: 0 1px 0 #343934;
 }
 
-/* line 493, src/sass/common/_index.scss */
+/* line 501, src/sass/common/_index.scss */
 body.game-cg .user-profile .user-profile .event-status {
   color: #b33;
 }
 
-/* line 499, src/sass/common/_index.scss */
+/* line 507, src/sass/common/_index.scss */
 body.game-cg .highlighted {
   color: #188433;
   font-weight: bold;
 }
 
-/* line 504, src/sass/common/_index.scss */
+/* line 512, src/sass/common/_index.scss */
 body.game-cg .event {
   border: #1a2 solid 1px;
   border-radius: 8px;
@@ -762,49 +772,49 @@ body.game-cg .event {
   color: #1a2;
 }
 
-/* line 510, src/sass/common/_index.scss */
+/* line 518, src/sass/common/_index.scss */
 body.game-cg .event .event-title {
   color: #cc0;
 }
 
-/* line 515, src/sass/common/_index.scss */
+/* line 523, src/sass/common/_index.scss */
 body.game-cg .event-info .subtitle {
   color: #c33;
   font-weight: bold;
   margin-top: 20px;
 }
 
-/* line 521, src/sass/common/_index.scss */
+/* line 529, src/sass/common/_index.scss */
 body.game-cg .event-info .subsubtitle {
   color: #aaa;
 }
 
-/* line 525, src/sass/common/_index.scss */
+/* line 533, src/sass/common/_index.scss */
 body.game-cg a.version {
   color: #aa6;
   text-decoration: none;
   text-align: center;
 }
 
-/* line 533, src/sass/common/_index.scss */
+/* line 541, src/sass/common/_index.scss */
 body.game-cg .new-main-menu img {
   width: 310px;
   border-radius: 4px;
 }
 
-/* line 538, src/sass/common/_index.scss */
+/* line 546, src/sass/common/_index.scss */
 body.game-cg .new-main-menu .value-links {
   display: none;
 }
 
-/* line 543, src/sass/common/_index.scss */
+/* line 551, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li {
   list-style-type: none;
   list-style-image: none;
   margin: 0;
 }
 
-/* line 547, src/sass/common/_index.scss */
+/* line 555, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span {
   position: absolute;
   z-index: 11;
@@ -817,12 +827,12 @@ body.game-cg .new-main-menu ul li span {
   color: #f8fef800;
 }
 
-/* line 557, src/sass/common/_index.scss */
+/* line 565, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.odd {
   width: 39px;
 }
 
-/* line 560, src/sass/common/_index.scss */
+/* line 568, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value {
   height: 16px;
   top: 0;
@@ -830,17 +840,17 @@ body.game-cg .new-main-menu ul li span.value {
   padding-top: 6px;
 }
 
-/* line 565, src/sass/common/_index.scss */
+/* line 573, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value.first {
   border-radius: 4px 0 0 0;
 }
 
-/* line 568, src/sass/common/_index.scss */
+/* line 576, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value.last {
   border-radius: 0 4px 0 0;
 }
 
-/* line 572, src/sass/common/_index.scss */
+/* line 580, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.label {
   top: 182px;
   height: 16px;
@@ -848,100 +858,100 @@ body.game-cg .new-main-menu ul li span.label {
   margin-top: 0;
 }
 
-/* line 578, src/sass/common/_index.scss */
+/* line 586, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.ammunition {
   background-color: #0805;
   left: 4px;
 }
 
-/* line 581, src/sass/common/_index.scss */
+/* line 589, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.ammunition.label {
   background-color: #080d;
 }
 
-/* line 585, src/sass/common/_index.scss */
+/* line 593, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.beauty {
   background-color: #e005;
   color: #f8fefd;
   left: 43px;
 }
 
-/* line 589, src/sass/common/_index.scss */
+/* line 597, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.beauty.label {
   background-color: #e00d;
 }
 
-/* line 593, src/sass/common/_index.scss */
+/* line 601, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.chaos {
   background-color: #e705;
   left: 82px;
   width: 38px;
 }
 
-/* line 597, src/sass/common/_index.scss */
+/* line 605, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.chaos.label {
   background-color: #e70d;
 }
 
-/* line 601, src/sass/common/_index.scss */
+/* line 609, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.faith {
   color: #00000000;
   background-color: #dd05;
   left: 120px;
 }
 
-/* line 605, src/sass/common/_index.scss */
+/* line 613, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.faith.label {
   background-color: #dd0d;
 }
 
-/* line 609, src/sass/common/_index.scss */
+/* line 617, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.finance {
   color: #00000000;
   background-color: #eee5;
   left: 159px;
 }
 
-/* line 613, src/sass/common/_index.scss */
+/* line 621, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.finance.label {
   background-color: #eeed;
 }
 
-/* line 617, src/sass/common/_index.scss */
+/* line 625, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.health {
   background-color: #0e05;
   left: 198px;
   width: 38px;
 }
 
-/* line 621, src/sass/common/_index.scss */
+/* line 629, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.health.label {
   background-color: #0e0d;
 }
 
-/* line 625, src/sass/common/_index.scss */
+/* line 633, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.intelligence {
   background-color: #00e5;
   left: 236px;
 }
 
-/* line 628, src/sass/common/_index.scss */
+/* line 636, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.intelligence.label {
   background-color: #00ed;
 }
 
-/* line 632, src/sass/common/_index.scss */
+/* line 640, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.strength {
   background-color: #e0e5;
   left: 275px;
 }
 
-/* line 635, src/sass/common/_index.scss */
+/* line 643, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.strength.label {
   background-color: #e0ed;
 }
 
-/* line 640, src/sass/common/_index.scss */
+/* line 648, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a {
   position: absolute;
   z-index: 12;
@@ -958,19 +968,19 @@ body.game-cg .new-main-menu ul li a {
   border-radius: 5px;
 }
 
-/* line 655, src/sass/common/_index.scss */
+/* line 663, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.actions-menu {
   top: 57px;
   left: 197px;
 }
 
-/* line 659, src/sass/common/_index.scss */
+/* line 667, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.aides-menu {
   top: 37px;
   left: 197px;
 }
 
-/* line 663, src/sass/common/_index.scss */
+/* line 671, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.clan-menu {
   top: 140px;
   left: 106px;
@@ -979,26 +989,26 @@ body.game-cg .new-main-menu ul li a.clan-menu {
   background-color: #0009;
 }
 
-/* line 670, src/sass/common/_index.scss */
+/* line 678, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.boxing-menu {
   top: 37px;
   left: 44px;
   border: #e00d solid 0.5px;
 }
 
-/* line 675, src/sass/common/_index.scss */
+/* line 683, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.debates-menu {
   top: 37px;
   left: 45px;
 }
 
-/* line 679, src/sass/common/_index.scss */
+/* line 687, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.trials-menu {
   top: 37px;
   left: 45px;
 }
 
-/* line 683, src/sass/common/_index.scss */
+/* line 691, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.elders-menu {
   top: 97px;
   left: 130px;
@@ -1007,13 +1017,13 @@ body.game-cg .new-main-menu ul li a.elders-menu {
   background-color: #0007;
 }
 
-/* line 690, src/sass/common/_index.scss */
+/* line 698, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.elections-menu {
   top: 57px;
   left: 45px;
 }
 
-/* line 694, src/sass/common/_index.scss */
+/* line 702, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.forum-menu {
   top: 140px;
   left: 239px;
@@ -1022,7 +1032,7 @@ body.game-cg .new-main-menu ul li a.forum-menu {
   background-color: #0009;
 }
 
-/* line 701, src/sass/common/_index.scss */
+/* line 709, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.help-menu {
   top: 140px;
   left: 169px;
@@ -1031,7 +1041,7 @@ body.game-cg .new-main-menu ul li a.help-menu {
   background-color: #0009;
 }
 
-/* line 708, src/sass/common/_index.scss */
+/* line 716, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.missions-menu {
   top: 10px;
   left: 102px;
@@ -1041,7 +1051,7 @@ body.game-cg .new-main-menu ul li a.missions-menu {
   min-width: 120px;
 }
 
-/* line 716, src/sass/common/_index.scss */
+/* line 724, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.move-menu {
   top: 87px;
   left: 130px;
@@ -1050,7 +1060,7 @@ body.game-cg .new-main-menu ul li a.move-menu {
   background-color: #0006;
 }
 
-/* line 723, src/sass/common/_index.scss */
+/* line 731, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.profile-menu {
   top: 140px;
   left: 38px;
@@ -1059,22 +1069,22 @@ body.game-cg .new-main-menu ul li a.profile-menu {
   background-color: #0009;
 }
 
-/* line 735, src/sass/common/_index.scss */
+/* line 743, src/sass/common/_index.scss */
 body.game-cg .competency-pip {
   border-right: solid 2px #693318 !important;
 }
 
-/* line 739, src/sass/common/_index.scss */
+/* line 747, src/sass/common/_index.scss */
 body.game-cg .competency-pip.attained {
   border-right: solid 2px #188433 !important;
 }
 
-/* line 743, src/sass/common/_index.scss */
+/* line 751, src/sass/common/_index.scss */
 body.game-cg .too-soon {
   color: rgba(255, 255, 70, 0.7);
 }
 
-/* line 747, src/sass/common/_index.scss */
+/* line 755, src/sass/common/_index.scss */
 body.game-cg .competency-tag {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
@@ -1091,133 +1101,133 @@ body.game-cg .competency-tag {
   font-family: "times new roman", Roman, serif;
 }
 
-/* line 761, src/sass/common/_index.scss */
+/* line 769, src/sass/common/_index.scss */
 body.game-cg textarea {
   background-color: lightgrey;
 }
 
-/* line 765, src/sass/common/_index.scss */
+/* line 773, src/sass/common/_index.scss */
 body.game-cg .location-ammunition {
   border-top: #080 solid 1px;
 }
 
-/* line 769, src/sass/common/_index.scss */
+/* line 777, src/sass/common/_index.scss */
 body.game-cg .location-chaos {
   border-top: #ffa500 solid 1px;
 }
 
-/* line 773, src/sass/common/_index.scss */
+/* line 781, src/sass/common/_index.scss */
 body.game-cg .location-charisma {
   border-top: #e00 solid 1px;
 }
 
-/* line 777, src/sass/common/_index.scss */
+/* line 785, src/sass/common/_index.scss */
 body.game-cg .location-finance {
   border-top: #e0e0e0 solid 1px;
 }
 
-/* line 781, src/sass/common/_index.scss */
+/* line 789, src/sass/common/_index.scss */
 body.game-cg .location-goo {
   border-top: #800080 solid 1px;
 }
 
-/* line 785, src/sass/common/_index.scss */
+/* line 793, src/sass/common/_index.scss */
 body.game-cg .location-greenbacks {
   border-top: #fff dotted 1px;
 }
 
-/* line 789, src/sass/common/_index.scss */
+/* line 797, src/sass/common/_index.scss */
 body.game-cg .location-health {
   border-top: #0f0 solid 1px;
 }
 
-/* line 793, src/sass/common/_index.scss */
+/* line 801, src/sass/common/_index.scss */
 body.game-cg .location-humility {
   border-top: #dd0 solid 1px;
 }
 
-/* line 797, src/sass/common/_index.scss */
+/* line 805, src/sass/common/_index.scss */
 body.game-cg .location-intelligence {
   border-top: #35f solid 1px;
 }
 
-/* line 801, src/sass/common/_index.scss */
+/* line 809, src/sass/common/_index.scss */
 body.game-cg .location-strength {
   border-top: #0ee solid 1px;
 }
 
-/* line 805, src/sass/common/_index.scss */
+/* line 813, src/sass/common/_index.scss */
 body.game-cg .player-ammunition {
   padding-bottom: 0;
   border-bottom: #080 solid 1.5px;
 }
 
-/* line 810, src/sass/common/_index.scss */
+/* line 818, src/sass/common/_index.scss */
 body.game-cg .player-chaos {
   padding-bottom: 0;
   border-bottom: #ffa500 solid 1.5px;
 }
 
-/* line 815, src/sass/common/_index.scss */
+/* line 823, src/sass/common/_index.scss */
 body.game-cg .player-charisma {
   padding-bottom: 0;
   border-bottom: #e00 solid 1.5px;
 }
 
-/* line 820, src/sass/common/_index.scss */
+/* line 828, src/sass/common/_index.scss */
 body.game-cg .player-finance {
   padding-bottom: 0;
   border-bottom: #e0e0e0 solid 1.5px;
 }
 
-/* line 825, src/sass/common/_index.scss */
+/* line 833, src/sass/common/_index.scss */
 body.game-cg .player-goo {
   padding-bottom: 0;
   border-bottom: #800080 solid 1.5px;
 }
 
-/* line 830, src/sass/common/_index.scss */
+/* line 838, src/sass/common/_index.scss */
 body.game-cg .player-greenbacks {
   padding-bottom: 0;
   border-bottom: solid #fefefe 1.5px;
 }
 
-/* line 835, src/sass/common/_index.scss */
+/* line 843, src/sass/common/_index.scss */
 body.game-cg .player-health {
   padding-bottom: 0;
   border-bottom: #0f0 solid 1.5px;
 }
 
-/* line 840, src/sass/common/_index.scss */
+/* line 848, src/sass/common/_index.scss */
 body.game-cg .player-humility {
   padding-bottom: 0;
   border-bottom: #dd0 solid 1.5px;
 }
 
-/* line 845, src/sass/common/_index.scss */
+/* line 853, src/sass/common/_index.scss */
 body.game-cg .player-intelligence {
   padding-bottom: 0;
   border-bottom: #35f solid 1.5px;
 }
 
-/* line 850, src/sass/common/_index.scss */
+/* line 858, src/sass/common/_index.scss */
 body.game-cg .player-strength {
   padding-bottom: 0;
   border-bottom: #0ee solid 1.5px;
 }
 
-/* line 855, src/sass/common/_index.scss */
+/* line 863, src/sass/common/_index.scss */
 body.game-cg #drupalforfirebug_general {
   margin-top: 60px;
   display: block !important;
 }
 
-/* line 860, src/sass/common/_index.scss */
+/* line 868, src/sass/common/_index.scss */
 body.game-cg .swiper-container {
   width: 100%;
 }
 
-/* line 864, src/sass/common/_index.scss */
+/* line 872, src/sass/common/_index.scss */
 body.game-cg .swiper-slide {
   text-align: center;
   font-size: 1.125rem;
@@ -1233,22 +1243,22 @@ body.game-cg .swiper-slide {
   min-height: 440px;
 }
 
-/* line 882, src/sass/common/_index.scss */
+/* line 890, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination .swiper-pagination-bullet {
   background: rgba(48, 188, 0, 0.6);
 }
 
-/* line 886, src/sass/common/_index.scss */
+/* line 894, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination-bullet {
   opacity: 0.6;
 }
 
-/* line 890, src/sass/common/_index.scss */
+/* line 898, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination-bullet-active {
   opacity: 1;
 }
 
-/* line 894, src/sass/common/_index.scss */
+/* line 902, src/sass/common/_index.scss */
 body.game-cg .swiper-container-horizontal > .swiper-pagination-bullets,
 body.game-cg .swiper-pagination-custom,
 body.game-cg .swiper-pagination-fraction {
@@ -1256,24 +1266,24 @@ body.game-cg .swiper-pagination-fraction {
   height: 12px;
 }
 
-/* line 901, src/sass/common/_index.scss */
+/* line 909, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title {
   text-shadow: 1px 1px 3px #444;
 }
 
-/* line 905, src/sass/common/_index.scss */
+/* line 913, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title.loot {
   font-size: 1rem;
 }
 
-/* line 909, src/sass/common/_index.scss */
+/* line 917, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quest-images {
   margin: 0 2px;
   font-weight: initial;
   font-size: 0.6875rem;
 }
 
-/* line 915, src/sass/common/_index.scss */
+/* line 923, src/sass/common/_index.scss */
 body.game-cg .quest-group-name, body.game-cg .quest-group-title {
   font-size: 1.375rem;
   font-weight: bold;
@@ -1283,48 +1293,48 @@ body.game-cg .quest-group-name, body.game-cg .quest-group-title {
   text-shadow: 2px 2px 6px black;
 }
 
-/* line 924, src/sass/common/_index.scss */
+/* line 932, src/sass/common/_index.scss */
 body.game-cg .quest-group-name a, body.game-cg .quest-group-title a {
   text-decoration: none;
 }
 
-/* line 928, src/sass/common/_index.scss */
+/* line 936, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name {
   margin: auto;
 }
 
-/* line 932, src/sass/common/_index.scss */
+/* line 940, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-title {
   margin: 14px auto 0;
 }
 
-/* line 936, src/sass/common/_index.scss */
+/* line 944, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name {
   width: 248px;
 }
 
-/* line 940, src/sass/common/_index.scss */
+/* line 948, src/sass/common/_index.scss */
 body.game-cg .fit-box {
   white-space: nowrap;
   -webkit-transform-origin: top left;
 }
 
-/* line 945, src/sass/common/_index.scss */
+/* line 953, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name.admin-obfuscate {
   text-decoration: line-through;
 }
 
-/* line 949, src/sass/common/_index.scss */
+/* line 957, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .overview-only {
   display: none;
 }
 
-/* line 953, src/sass/common/_index.scss */
+/* line 961, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .title .overview-only {
   display: inline-block;
 }
 
-/* line 957, src/sass/common/_index.scss */
+/* line 965, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .title img.overview-only {
   display: inline-block;
   width: 68px;
@@ -1335,39 +1345,39 @@ body.game-cg .swiper-slide.overview .title img.overview-only {
   border-radius: 6px;
 }
 
-/* line 966, src/sass/common/_index.scss */
+/* line 974, src/sass/common/_index.scss */
 body.game-cg .wrong-hood-wrapper, body.game-cg .not-yet-wrapper {
   position: relative;
 }
 
-/* line 970, src/sass/common/_index.scss */
+/* line 978, src/sass/common/_index.scss */
 body.game-cg div + .wrong-hood-wrapper {
   width: 77px;
   display: inline-block;
 }
 
-/* line 975, src/sass/common/_index.scss */
+/* line 983, src/sass/common/_index.scss */
 body.game-cg .quest-icon .wrong-hood-wrapper {
   width: 100px;
 }
 
-/* line 979, src/sass/common/_index.scss */
+/* line 987, src/sass/common/_index.scss */
 body.game-cg img.wrong-hood {
   -webkit-filter: grayscale(60%);
           filter: grayscale(60%);
 }
 
-/* line 983, src/sass/common/_index.scss */
+/* line 991, src/sass/common/_index.scss */
 body.game-cg input.wrong-hood {
   text-align: left;
 }
 
-/* line 987, src/sass/common/_index.scss */
+/* line 995, src/sass/common/_index.scss */
 body.game-cg input + img.wrong-hood-overlay {
   bottom: 8px;
 }
 
-/* line 991, src/sass/common/_index.scss */
+/* line 999, src/sass/common/_index.scss */
 body.game-cg img.wrong-hood-overlay {
   position: absolute;
   bottom: 6px;
@@ -1376,13 +1386,13 @@ body.game-cg img.wrong-hood-overlay {
   height: 12px;
 }
 
-/* line 999, src/sass/common/_index.scss */
+/* line 1007, src/sass/common/_index.scss */
 body.game-cg .not-yet-wrapper img.not-yet {
   -webkit-filter: contrast(11%) brightness(50%);
           filter: contrast(11%) brightness(50%);
 }
 
-/* line 1003, src/sass/common/_index.scss */
+/* line 1011, src/sass/common/_index.scss */
 body.game-cg span.not-yet-overlay {
   position: absolute;
   bottom: 14px;
@@ -1395,13 +1405,13 @@ body.game-cg span.not-yet-overlay {
   text-shadow: 0 1px 0 beige;
 }
 
-/* line 1015, src/sass/common/_index.scss */
+/* line 1023, src/sass/common/_index.scss */
 body.game-cg .quests span.not-yet-overlay {
   bottom: 21px;
   right: 21px;
 }
 
-/* line 1020, src/sass/common/_index.scss */
+/* line 1028, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .description {
   display: none;
   color: #e0e8ee;
@@ -1419,26 +1429,26 @@ body.game-cg .swiper-slide .description {
   background-color: rgba(0, 0, 0, 0.17);
 }
 
-/* line 1035, src/sass/common/_index.scss */
+/* line 1043, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .description, body.game-cg .swiper-slide .description.show-expanded {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-/* line 1039, src/sass/common/_index.scss */
+/* line 1047, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .description.empty {
   border-left: none;
   border-right: none;
   background-color: inherit;
 }
 
-/* line 1045, src/sass/common/_index.scss */
+/* line 1053, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .quests {
   display: none;
 }
 
-/* line 1049, src/sass/common/_index.scss */
+/* line 1057, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests {
   background-color: rgba(10, 20, 15, 0.45);
   margin-left: 0;
@@ -1447,12 +1457,12 @@ body.game-cg .swiper-slide .quests {
   border-radius: 0;
 }
 
-/* line 1059, src/sass/common/_index.scss */
+/* line 1067, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests .quest-name a {
   color: #bf6f2f;
 }
 
-/* line 1063, src/sass/common/_index.scss */
+/* line 1071, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests .quest-experience,
 body.game-cg .swiper-slide .quests .quest-money,
 body.game-cg .swiper-slide .quests .quest-required_energy,
@@ -1461,24 +1471,24 @@ body.game-cg .swiper-slide .quests .quest-payout {
   color: #bf6f2f;
 }
 
-/* line 1071, src/sass/common/_index.scss */
+/* line 1079, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-next, body.game-cg .swiper-container .swiper-button-prev {
   top: 25px;
 }
 
-/* line 1075, src/sass/common/_index.scss */
+/* line 1083, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-prev, body.game-cg .swiper-container .swiper-container-rtl
 .swiper-button-next {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1080, src/sass/common/_index.scss */
+/* line 1088, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-next, body.game-cg .swiper-container .swiper-container-rtl
 .swiper-button-prev {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1085, src/sass/common/_index.scss */
+/* line 1093, src/sass/common/_index.scss */
 body.game-cg .highlight {
   color: #f0fef8 !important;
   -webkit-text-stroke: 0.4px #cc0;
@@ -1488,7 +1498,7 @@ body.game-cg .highlight {
   text-shadow: #0004 2px 2px;
 }
 
-/* line 1094, src/sass/common/_index.scss */
+/* line 1102, src/sass/common/_index.scss */
 body.game-cg .tagline {
   text-align: center;
   color: #a84;
@@ -1501,7 +1511,7 @@ body.game-cg .tagline {
   margin-bottom: 4px;
 }
 
-/* line 1106, src/sass/common/_index.scss */
+/* line 1114, src/sass/common/_index.scss */
 body.game-cg .bounce-welcome {
   text-align: center;
   color: #687;
@@ -1513,7 +1523,7 @@ body.game-cg .bounce-welcome {
   margin-bottom: 4px;
 }
 
-/* line 1117, src/sass/common/_index.scss */
+/* line 1125, src/sass/common/_index.scss */
 body.game-cg .system-message-response {
   background-color: green;
   text-align: center;
@@ -1523,7 +1533,7 @@ body.game-cg .system-message-response {
   margin: 6px 2px 4px;
 }
 
-/* line 1126, src/sass/common/_index.scss */
+/* line 1134, src/sass/common/_index.scss */
 body.game-cg div.description-speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1533,7 +1543,7 @@ body.game-cg div.description-speech-bubble-wrapper {
   height: 84px;
 }
 
-/* line 1135, src/sass/common/_index.scss */
+/* line 1143, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1541,36 +1551,36 @@ body.game-cg div.speech-bubble-wrapper {
   margin: 8px 0;
 }
 
-/* line 1142, src/sass/common/_index.scss */
+/* line 1150, src/sass/common/_index.scss */
 body.game-cg div.description-speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1147, src/sass/common/_index.scss */
+/* line 1155, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1152, src/sass/common/_index.scss */
+/* line 1160, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man.sad {
   background-position: 0 9px;
   height: 80px;
 }
 
-/* line 1157, src/sass/common/_index.scss */
+/* line 1165, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man.embarrassed {
   background-position: 0 18px;
   height: 80px;
 }
 
-/* line 1162, src/sass/common/_index.scss */
+/* line 1170, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon {
   position: relative;
 }
 
-/* line 1166, src/sass/common/_index.scss */
+/* line 1174, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon-baseline-overlay {
   position: absolute;
   left: 0;
@@ -1580,7 +1590,7 @@ body.game-cg .quests .quest-icon-baseline-overlay {
   border-radius: 4px;
 }
 
-/* line 1175, src/sass/common/_index.scss */
+/* line 1183, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon-overlay {
   position: absolute;
   left: 0;
@@ -1590,7 +1600,7 @@ body.game-cg .quests .quest-icon-overlay {
   border-radius: 4px;
 }
 
-/* line 1184, src/sass/common/_index.scss */
+/* line 1192, src/sass/common/_index.scss */
 body.game-cg .bonus-text {
   text-align: center;
   text-transform: uppercase;
@@ -1600,7 +1610,7 @@ body.game-cg .bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1193, src/sass/common/_index.scss */
+/* line 1201, src/sass/common/_index.scss */
 body.game-cg .lesser-bonus-text {
   text-align: center;
   font-weight: bold;
@@ -1609,24 +1619,24 @@ body.game-cg .lesser-bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1201, src/sass/common/_index.scss */
+/* line 1209, src/sass/common/_index.scss */
 body.game-cg div.lesser-bonus-text {
   margin: 12px 0;
 }
 
-/* line 1205, src/sass/common/_index.scss */
+/* line 1213, src/sass/common/_index.scss */
 body.game-cg .ask-name {
   margin-top: 15px;
   margin-bottom: 9px;
 }
 
-/* line 1210, src/sass/common/_index.scss */
+/* line 1218, src/sass/common/_index.scss */
 body.game-cg .admin-online {
   -webkit-filter: drop-shadow(0 0 3px #f8fefd);
           filter: drop-shadow(0 0 3px #f8fefd);
 }
 
-/* line 1214, src/sass/common/_index.scss */
+/* line 1222, src/sass/common/_index.scss */
 body.game-cg .staff-online {
   -webkit-filter: drop-shadow(0 0 2px yellow);
           filter: drop-shadow(0 0 2px yellow);
