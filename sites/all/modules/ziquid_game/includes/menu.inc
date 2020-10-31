@@ -1695,7 +1695,8 @@ function zg_bounce_callback($phone_id) {
 
   $button = zg_render_button();
   if ($game == 'stlouis' &&
-    ($game_user->meta == 'admin' || $game_user->meta == 'staff')) {
+    ($game_user->meta == 'admin' || $game_user->meta == 'staff' ||
+    zg_get_value($game_user, 'GoldenPlatesFTW', FALSE))) {
     $button .= "<p class='center'>or</p>" .
       zg_render_button('/cg/bounce', 'Read the Book of Mormon') .
       "<p class='center'>(if you wish)</p>";

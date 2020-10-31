@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Oct 31, 2020
+  </div>
+  <ul>
+    <li>
+      Added "GoldenPlatesFTW" cheat code.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jun 19, 2020
   </div>
   <ul>
