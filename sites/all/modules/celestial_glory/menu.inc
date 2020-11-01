@@ -323,22 +323,6 @@ function celestial_glory_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['cg/land/%'] = array(
-    'title' => 'Celestial Glory Land',
-    'page callback' => 'celestial_glory_land_list_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
-  $items['cg/land_buy/%/%/%'] = array(
-    'title' => 'Celestial Glory Land Buy',
-    'page callback' => 'celestial_glory_land_buy_callback',
-    'page arguments' => array(2, 3, 4),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['cg/land_sell/%/%/%'] = array(
     'title' => 'Celestial Glory Land Sell',
     'page callback' => 'celestial_glory_land_sell_callback',
@@ -981,30 +965,6 @@ function celestial_glory_aides_callback($phone_id) {
 
 }
 
-
-function celestial_glory_land_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('celestial_glory_land_list', $phone_id);
-
-}
-
-
-function celestial_glory_land_buy_callback($phone_id, $land_id, $quantity) {
-
-  if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
-    ($quantity === 'use-quantity'))) {
-    return drupal_access_denied();
-  }
-
-  return theme('celestial_glory_land_buy', $phone_id, $land_id, $quantity);
-
-}
-
-
 function celestial_glory_land_sell_callback($phone_id, $land_id, $quantity) {
 
   if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
@@ -1575,22 +1535,6 @@ function celestial_glory_theme() {
       'template' => 'celestial_glory_aides',
       'arguments' => array(
         'phone_id' => null,
-      )
-    ),
-
-    'celestial_glory_land_list' => array(
-      'template' => 'celestial_glory_land_list',
-      'arguments' => array(
-        'phone_id' => null,
-      )
-    ),
-
-    'celestial_glory_land_buy' => array(
-      'template' => 'celestial_glory_land_buy',
-      'arguments' => array(
-        'phone_id' => null,
-        'land_id' => null,
-        'quantity' => null,
       )
     ),
 

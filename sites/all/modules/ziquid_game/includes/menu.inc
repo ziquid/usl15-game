@@ -189,6 +189,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/land_buy/%/%/%'] = [
+      'title' => 'Ziquid Game Land Buy',
+      'page callback' => 'zg_land_buy_callback',
+      'page arguments' => [2, 3, 4],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/msg_count/%/%'] = [
       'title' => 'Ziquid Game Message Count',
       'page callback' => 'zg_msg_count_callback',
@@ -444,14 +452,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Enter Referral Code',
     'page callback' => 'zg_enter_referral_code_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/land_buy/%/%/%'] = [
-    'title' => 'Ziquid Game Land Buy',
-    'page callback' => 'zg_land_buy_callback',
-    'page arguments' => [2, 3, 4],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];

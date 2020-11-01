@@ -196,14 +196,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/land_buy/%/%/%'] = [
-    'title' => 'St. Louis Land Buy',
-    'page callback' => 'stlouis_land_buy_callback',
-    'page arguments' => [2, 3, 4],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/land_sell/%/%/%'] = [
     'title' => 'St. Louis Land Sell',
     'page callback' => 'stlouis_land_sell_callback',
@@ -764,29 +756,6 @@ function stlouis_enter_referral_code_callback($phone_id) {
 }
 
 /**
- * Land buy callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $land_id
- *
- * @param string $quantity
- *
- *
- * @return mixed|string|string[]|void|null
- *   The land buy page HTML, or access denied if the player has no access.
- */
-function stlouis_land_buy_callback($phone_id, $land_id, $quantity) {
-
-  if (empty($phone_id) || !is_numeric($land_id) || !(is_numeric($quantity) ||
-    ($quantity === 'use-quantity'))) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_land_buy', $phone_id, $land_id, $quantity);
-}
-
-/**
  * Land sell callback function.
  *
  * @param string $phone_id
@@ -1234,15 +1203,6 @@ function stlouis_theme() {
       'template' => 'stlouis_enter_referral_code',
       'arguments' => [
         'phone_id' => NULL,
-      ],
-    ],
-
-    'stlouis_land_buy' => [
-      'template' => 'stlouis_land_buy',
-      'arguments' => [
-        'phone_id' => NULL,
-        'land_id' => NULL,
-        'quantity' => NULL,
       ],
     ],
 
