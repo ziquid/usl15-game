@@ -1702,6 +1702,10 @@ function zg_bounce_callback($phone_id) {
       "<p class='center'>(if you wish)</p>";
   }
 
+  if ($game == 'cg') {
+    zg_song($game_user, 'Faith teaser', TRUE);
+  }
+
   return theme('zg_bounce', $phone_id, $button);
 }
 

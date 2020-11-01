@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Nov 1, 2020
+  </div>
+  <ul>
+    <li>
+      We needed more Faith, so I added some.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Oct 31, 2020
   </div>
   <ul>
