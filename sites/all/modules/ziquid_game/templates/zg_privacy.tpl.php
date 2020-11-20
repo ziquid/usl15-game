@@ -2,7 +2,7 @@
 
 /**
  * @file
- * The game's changelog.
+ * The game's privacy policy.
  *
  * Synced with CG: yes
  * Synced with 2114: N/A

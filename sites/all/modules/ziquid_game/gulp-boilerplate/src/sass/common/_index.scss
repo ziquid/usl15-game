@@ -735,6 +735,13 @@ a.version {
           min-width: 50px;
           background-color: #0009;
         }
+        &.extra-menu-link {
+          top: 160px;
+          left: 8px;
+          font-size: 0.75rem;
+          min-width: 100px;
+          background-color: #0000;
+        }
       }
     }
   }

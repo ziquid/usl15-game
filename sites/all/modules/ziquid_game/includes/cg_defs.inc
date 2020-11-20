@@ -2,66 +2,23 @@
 
 /**
  * @file
- * StLouis game definitions.
+ * Celestial Glory game definitions.
  *
- * Synced with CG: no
+ * Synced with CG: duh
  * Synced with 2114: no
  * .
  */
 
-define(EVENT_NONE, 0);
-define(EVENT_DONE, 1);
-define(EVENT_DEBATE, 2);
-define(EVENT_ST_PATTYS_MAP, 3);
-define(EVENT_APRIL_FOOLS, 4);
-define(EVENT_NEW_NAMES, 5);
-define(EVENT_PRE_MAY, 6);
-define(EVENT_CINCO_DE_MAYO, 7);
-define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
-define(EVENT_DOUBLE_LUCK_MONEY, 9);
+include __DIR__ . '/game_defs.inc';
 
-define(EVENT_CHRISTMAS, 'event_christmas');
-define(EVENT_DEAD_PRESIDENTS, 'event_dead_presidents');
-define(EVENT_DOUBLE_LUCK_ACTION, 'event_double_luck_action');
-define(EVENT_DOUBLE_LUCK_ENERGY, 'event_double_luck_energy');
-
-define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
-define(EVENT_FLAG_DAY, 'event_flag_day');
-define(EVENT_GROUNDHOG_DAY, 'event_groundhog_day');
-define(EVENT_HALLOWEEN, 'event_halloween');
-define(EVENT_INDEPENDENCE_DAY, 'event_independence_day');
-define(EVENT_LABOR_DAY, 'event_labor_day');
-
-define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
-define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
-define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
-define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
-define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
-define(EVENT_MOTHERS_DAY, 'event_mothers_day');
-define(EVENT_MOVE_3, 'event_move_3');
-define(EVENT_NYE_PARTY, 'event_nye_party');
-define(EVENT_ONE_MINUTE_COMPS, 'event_one_minute_comps');
-define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
-define(EVENT_ROT13_COMPS, 'event_rot13_comps');
-define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
-define(EVENT_ST_PATTYS, 'event_st_pattys');
-define(EVENT_SUPPERBOWL, 'event_supperbowl');
-define(EVENT_THANKSGIVING, 'event_thanksgiving');
-
-define(MISSION_NONE, 1000);
-define(MISSION_MAY, 1005);
-define(MISSION_JUN, 1006);
-define(MISSION_JUL, 1007);
-define(MISSION_OCT, 1010);
-
-$debate_wait_time = 900; // 1200
-$zombie_debate_wait = 180; // 300
-$event_type = [];
-$month_mission = MISSION_NONE;
-$energy_wait = 300;
-$energy_wait_str = '5 minutes';
-$competency_gain_wait_time = 180;
-$competency_gain_wait_time_str = '3 minutes';
+//$debate_wait_time = 900; // 1200
+//$zombie_debate_wait = 180; // 300
+//$event_type = [];
+//$month_mission = MISSION_NONE;
+//$energy_wait = 300;
+//$energy_wait_str = '5 minutes';
+//$competency_gain_wait_time = 180;
+//$competency_gain_wait_time_str = '3 minutes';
 
 global $game;
 
@@ -393,6 +350,273 @@ if (($date >= '2017-04-02') && ($date <= '2017-04-07')) {
 }
 */
 
+$today = date('Y-m-d', REQUEST_TIME - 3600);
+switch ($today) {
+
+  /* ------ JANUARY ------ */
+  case '2019-01-01':
+  case '2019-01-02':
+  case '2019-01-03':
+  case '2019-01-04':
+  case '2019-01-05':
+  case '2019-01-06':
+    $event_type[] = EVENT_CHRISTMAS;
+    break;
+
+  case '2020-01-28':
+    $event_type[] = 'event_jan_28_2020';
+    break;
+
+  case '2020-01-29':
+    $event_type[] = 'event_jan_29_2020';
+    break;
+
+  /* ------ FEBRUARY ------ */
+  case '2020-02-01':
+    $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
+  case '2020-02-02':
+    $event_type[] = EVENT_SUPPERBOWL;
+    $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
+  case '2020-02-03':
+  case '2020-02-04':
+  case '2020-02-05':
+  case '2020-02-06':
+  case '2020-02-07':
+  case '2020-02-08':
+  case '2020-02-09':
+  case '2020-02-10':
+    $event_type[] = EVENT_GROUNDHOG_DAY;
+    break;
+
+  case '2020-02-12':
+  case '2020-02-13':
+  case '2020-02-14':
+  case '2020-02-15':
+  case '2020-02-16':
+  case '2020-02-17':
+    $event_type[] = EVENT_DEAD_PRESIDENTS;
+    break;
+
+  /* ------ MARCH ------ */
+  case '2013-03-08':
+    $event_type = EVENT_DEBATE;
+    $debate_wait_time = 600; // 900; // 1200;
+    break;
+
+  case '2013-03-09':
+    $event_type = EVENT_DONE;
+    break;
+
+  case '2020-03-16':
+  case '2020-03-17':
+    $event_type[] = EVENT_ST_PATTYS;
+    break;
+
+  case '2018-03-17':
+    $event_type = EVENT_ST_PATTYS_MAP;
+    break;
+
+  case '2018-03-18':
+    $event_type = EVENT_NEW_NAMES;
+    break;
+
+  /* ------ APRIL ------ */
+  case '2018-04-01':
+    $event_type = EVENT_APRIL_FOOLS;
+    break;
+
+  case '2020-04-06':
+  case '2020-04-07':
+  case '2020-04-08':
+  case '2020-04-09':
+  case '2020-04-10':
+    $event_type[] = EVENT_ONE_MINUTE_COMPS;
+    break;
+
+  case '2018-04-30':
+    $event_type = EVENT_PRE_MAY;
+    break;
+
+  /* ------ MAY ----- */
+  case '2018-05-01':
+  case '2018-05-02':
+  case '2018-05-03':
+  case '2018-05-04':
+    $month_mission = MISSION_MAY;
+    break;
+
+  case '2018-05-05':
+  case '2018-05-06':
+    $month_mission = MISSION_MAY;
+    $event_type = EVENT_CINCO_DE_MAYO;
+    break;
+
+  case '2020-05-08':
+  case '2020-05-09':
+  case '2020-05-10':
+  case '2020-05-11':
+  case '2020-05-12':
+  case '2020-05-13':
+  case '2020-05-14':
+  case '2020-05-15':
+  case '2020-05-16':
+  case '2020-05-17':
+  case '2020-05-18':
+    $event_type[] = EVENT_MOTHERS_DAY;
+    break;
+
+  case '2018-05-14':
+  case '2018-05-15':
+    $event_type = EVENT_DOUBLE_LUCK_MONEY;
+    break;
+
+  case '2018-05-18':
+  case '2018-05-19':
+  case '2018-05-20':
+    $event_type = EVENT_CINCO_DE_MAYO;
+    break;
+
+  case '2018-05-22':
+    $event_type = EVENT_MOVE_3;
+    break;
+
+  case '2018-05-24':
+    $event_type = EVENT_PRE_MEMORIAL_DAY;
+    break;
+
+  case '2018-05-25':
+    $event_type = EVENT_MEMORIAL_DAY_1;
+    break;
+
+  case '2018-05-26':
+    $event_type = EVENT_MEMORIAL_DAY_2;
+    break;
+
+  case '2018-05-27':
+    $event_type = EVENT_MEMORIAL_DAY_3;
+    break;
+
+  case '2018-05-28':
+    $event_type = EVENT_MEMORIAL_DAY_4;
+    break;
+
+  /* ------ JUNE ------ */
+  case '2018-06-01':
+  case '2018-06-02':
+  case '2018-06-03':
+    $event_type = EVENT_POLL_JUN_01_2018;
+    break;
+
+  case '2020-06-01':
+  case '2020-06-02':
+  case '2020-06-03':
+    $event_type[] = EVENT_DOUBLE_LUCK_ACTION;
+    break;
+
+  case '2018-06-12':
+    $event_type = EVENT_FAST_COMPETENCIES;
+    $competency_gain_wait_time = 30;
+    $competency_gain_wait_time_str = '30 seconds';
+    break;
+
+  case '2018-06-14':
+    $event_type = EVENT_FLAG_DAY;
+    break;
+
+  case '2018-06-16':
+  case '2018-06-17':
+  case '2018-06-18':
+  case '2018-06-19':
+  case '2018-06-23':
+  case '2018-06-24':
+    $month_mission = MISSION_JUN;
+    break;
+
+  case '2018-06-30':
+    $event_type = EVENT_STATS_ONLY_HOOD;
+    break;
+
+  /* ------ JULY ------ */
+  case '2018-07-01':
+  case '2018-07-02':
+  case '2018-07-03':
+  case '2018-07-04':
+    $event_type = EVENT_STATS_ONLY_HOOD;
+    break;
+
+  case '2020-07-04':
+    $event_type[] = EVENT_INDEPENDENCE_DAY;
+    break;
+
+  case '2018-07-10':
+  case '2018-07-11':
+    $event_type = EVENT_ROT13_COMPS;
+    break;
+
+  /* ------ SEPTEMBER ------ */
+  case '2020-09-07':
+  case '2020-09-08':
+  case '2020-09-09':
+  case '2020-09-10':
+    $event_type[] = EVENT_LABOR_DAY;
+    break;
+
+  /* ------ OCTOBER ------ */
+  case '2018-10-23':
+  case '2018-10-24':
+  case '2018-10-25':
+  case '2018-10-26':
+  case '2018-10-27':
+  case '2018-10-28':
+  case '2018-10-29':
+  case '2018-10-30':
+  case '2018-10-31':
+    $event_type = EVENT_HALLOWEEN;
+    break;
+
+  /* ------ NOVEMBER ------ */
+  case '2020-11-20':
+  case '2020-11-21':
+  case '2020-11-22':
+  case '2020-11-23':
+  case '2020-11-24':
+  case '2020-11-25':
+  case '2020-11-26':
+  case '2020-11-27':
+  case '2020-11-28':
+  case '2020-11-29':
+  case '2018-11-30':
+    $event_type[] = EVENT_THANKSGIVING;
+    break;
+
+  /* ------ DECEMBER ------ */
+  case '2018-12-12':
+  case '2018-12-13':
+  case '2018-12-14':
+  case '2018-12-15':
+  case '2018-12-16':
+  case '2018-12-17':
+    $event_type = EVENT_DOUBLE_LUCK_ENERGY;
+    break;
+
+  case '2018-12-22':
+  case '2018-12-23':
+  case '2018-12-24':
+  case '2018-12-25':
+  case '2018-12-26':
+  case '2018-12-27':
+  case '2018-12-28':
+  case '2018-12-29':
+  case '2018-12-30':
+  case '2018-12-31':
+    $event_type[] = EVENT_CHRISTMAS;
+    break;
+}
+
 $alderman = 'Chief Priest';
 $aldermen = 'Chief Priests';
 $alder_short = 'CP';
@@ -429,7 +653,7 @@ $game_settings = [
   'competencies' => [],
 ];
 
-$game_text = [
+$game_text = array_merge($game_text, [
   'action' => 'Action',
   'actions' => 'Actions',
   'actions_short' => 'Acts',
@@ -486,7 +710,7 @@ $game_text = [
   'quest_lower' => 'quest',
   'staff' => 'Staff',
   'staff_tab' => 'Staff/Agents',
-];
+]);
 
 if ($event_type == EVENT_NEW_NAMES) {
   $game_settings['competencies']['uncouth'] = 'joelene';
@@ -494,7 +718,7 @@ if ($event_type == EVENT_NEW_NAMES) {
 }
 
 // Boxing day.
-if ((date('Y-m-d') == '2019-12-26')) {
+if ((date('m-d') == '12-26')) {
   $debate = 'Box';
   $debate_tab = 'Boxing';
   $top20 = 'Top Boxers';
@@ -521,19 +745,6 @@ $quest_lower = strtolower($quest);
 $residence_lower = strtolower($residence);
 $system_lower = strtolower($system);
 
-// Function-wide defs.
-if (arg(0) != 'node' && arg(0) != 'devel' && arg(0) != 'admin') {
-  $game = check_plain(arg(0));
-
-  // Pretend usl_esa is stlouis for now.
-  if ($game == 'usl_esa') {
-    $game = 'stlouis';
-  }
-}
-$arg2 = check_plain(arg(2));
-$arg3 = check_plain(arg(3));
-$fetch_user = 'zg_fetch_user';
-$fetch_header = 'zg_fetch_header';
 $slack_channel = '#cg';
 
 // Add events to include list.

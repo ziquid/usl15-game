@@ -17,9 +17,8 @@
  * .
  */
 
-$game = check_plain(arg(0));
-$arg2 = check_plain(arg(2));
-$version = 'v0.9.8, Nov 1 2020';
+include drupal_get_path('module', 'zg') . '/includes/game_defs.inc';
+$version = $game_settings['version'] . ' ' . $game_settings['last_update'];
 
 db_set_active('game_' . $game);
 $d = zg_get_html([

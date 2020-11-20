@@ -18,13 +18,11 @@
  */
 
 /* ------ CONTROLLER ------ */
-
-$version = 'v0.9.8, Nov 1 2020';
-
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
 $message = check_plain($_GET['message']);
+$version = $game_settings['version'] . ' ' . $game_settings['last_update'];
 
 $d = zg_get_html(
   [
@@ -128,9 +126,10 @@ firep($referral_code);
   }
 }
 
-$event_text = '';
+$event_text = $extra_menu = $extra_menu_links = '';
 zg_alter('homepage_event_notice', $game_user, $event_text);
 zg_alter('homepage_menu', $game_user, $extra_menu);
+zg_alter('homepage_menu_links', $game_user, $extra_menu_links);
 
 $link = 'quest_groups';
 $lqg = zg_fetch_latest_quest_group($game_user);
@@ -310,6 +309,7 @@ $extra_bonus
         </a>
       </li>
 
+      {$extra_menu_links}
     </ul>
   </div>
   <div class="location portrait-only">

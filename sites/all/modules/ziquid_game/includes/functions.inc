@@ -117,6 +117,10 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
  */
 function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
   if ($force || !zg_get_value($game_user, 'SoundOff', FALSE)) {
+    if (substr($sound, 0, 4) != 'http') {
+      $sound = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+        '/sounds/' . $sound;
+    }
     drupal_add_js([
       'zg' => [
         'sound' => $sound,
@@ -2903,7 +2907,7 @@ function zg_get_hood_alder($hood) {
   $result = db_query($sql, $hood);
   $alder = db_fetch_object($result);
   firep($alder, 'alder id');
-  if (property_exists($alder, 'id')) {
+  if (is_object($alder) && property_exists($alder, 'id')) {
     return zg_fetch_user_by_id((int) $alder->id);
   }
   return NULL;

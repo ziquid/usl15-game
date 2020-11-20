@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Nov 20, 2020
+  </div>
+  <ul>
+    <li>
+      Jumping is now optional.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Nov 1, 2020
   </div>
   <ul>

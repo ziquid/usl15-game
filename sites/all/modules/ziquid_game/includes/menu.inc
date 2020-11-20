@@ -157,6 +157,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/extra_menu_link/%'] = [
+      'title' => 'Ziquid Game Extra Menu Link Page',
+      'page callback' => 'zg_extra_menu_link_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/error/%/%'] = [
       'title' => 'Ziquid Game Error Page',
       'page callback' => 'zg_error_callback',
@@ -1728,9 +1736,9 @@ function usl_esa_bounce_callback($phone_id) {
   db_set_active('game_' . $game);
   $game_user = zg_fetch_user_by_id(zg_get_phoneid());
   db_set_active();
-  zg_song($game_user, 'Jump teaser', TRUE);
 
   if ($game_user->meta == 'admin' || $game_user->meta == 'staff') {
+    zg_song($game_user, 'Jump teaser', TRUE);
     $button = zg_render_button('/stlouis/bounce') .
       "<p class='center'>(if you dare)</p>";
   }
@@ -1838,6 +1846,28 @@ function zg_error_callback($phone_id, $error_code) {
     return drupal_access_denied();
   }
   return theme('zg_error', $phone_id, $error_code);
+}
+/**
+ * Extra menu link callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The error page HTML, or access denied if the player has no access.
+ */
+function zg_extra_menu_link_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  $game = check_plain(arg(0));
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  db_set_active();
+
+  zg_sound($game_user, 'applause.mp3');
+  return theme('zg_extra_menu_link', $phone_id);
 }
 
 /**
@@ -2330,6 +2360,14 @@ function zg_theme() {
       'arguments' => [
         'phone_id' => NULL,
         'error_code' => NULL,
+      ],
+    ],
+
+    'zg_extra_menu_link' => [
+      'template' => 'templates/zg_extra_menu_link',
+      'arguments' => [
+        'phone_id' => NULL,
+        'button' => zg_render_button('home', 'Go Back Home'),
       ],
     ],
 
