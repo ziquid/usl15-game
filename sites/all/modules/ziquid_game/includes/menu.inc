@@ -1864,9 +1864,9 @@ function zg_extra_menu_link_callback($phone_id) {
   $game = check_plain(arg(0));
   db_set_active('game_' . $game);
   $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  zg_sound($game_user, 'applause.mp3');
   db_set_active();
 
-  zg_sound($game_user, 'applause.mp3');
   return theme('zg_extra_menu_link', $phone_id);
 }
 
