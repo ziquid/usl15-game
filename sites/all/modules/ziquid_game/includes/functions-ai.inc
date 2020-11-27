@@ -2335,7 +2335,7 @@ function zg_ai_show_brief_stats() {
     $data[] = (int) $item->id;
   }
 
-  $bots = zg_fetch_users_by_id($data);
+  $bots = zg_fetch_users_by_ids($data);
   foreach ($bots as $bot) {
     $stats .= zg_ai_show_bot_brief_stats($bot);
   }

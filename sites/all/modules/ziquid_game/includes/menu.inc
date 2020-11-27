@@ -108,6 +108,14 @@ function zg_menu() {
       'file' => 'includes/menu/zg_dashboard.inc',
     ];
 
+    $items[$game . '/debates/%'] = [
+      'title' => 'Ziquid Game Debates List',
+      'page callback' => 'zg_debates_list_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/elders/%'] = [
       'title' => 'Ziquid Game Elders',
       'page callback' => 'zg_elders_callback',
@@ -395,14 +403,6 @@ function zg_menu() {
   $items[$game . '/help/%'] = [
     'title' => 'Ziquid Game Help',
     'page callback' => 'zg_help_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/debates/%'] = [
-    'title' => 'Ziquid Game Debates List',
-    'page callback' => 'zg_debates_list_callback',
     'page arguments' => [2],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,

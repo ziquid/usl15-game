@@ -29,20 +29,12 @@ if (empty($game_user->username) || $game_user->username == '(new player)') {
 zg_slack($game_user, 'pages', 'debates_list',
   "\"Debates\" for Player \"$game_user->username\".");
 zg_fetch_header($game_user);
+zg_show_elections_menu($game_user);
 
 // Do AI moves from this page.
 if (mt_rand(0, 5) == 1 || $game_user->meta == 'toxiboss' || $game_user->meta == 'admin') {
   zg_move_ai();
 }
-
-echo <<< EOF
-<div class="news">
-<a href="/$game/debates/$arg2" class="button active">{$debate_tab}</a>
-<a href="/$game/elections/$arg2" class="button">Elections</a>
-<a href="/$game/top20/$arg2" class="button">$top20</a>
-<a href="/$game/top_aldermen/$arg2" class="button">Top $alders_short</a>
-</div>
-EOF;
 
 if (!$game_user->seen_neighborhood_quests) {
 
@@ -132,6 +124,22 @@ $sql = 'SELECT username, experience, `values`.party_title, `values`.party_icon,
   AND users.level < %d
   ORDER BY abs(users.experience - %d) ASC
   LIMIT 12;'; // and users.fkey_neighborhoods_id = %d
+$sql = 'SELECT users.id
+  FROM users
+  LEFT JOIN `values` ON users.fkey_values_id = `values`.id
+  LEFT OUTER JOIN clan_members ON clan_members.fkey_users_id = users.id
+  LEFT OUTER JOIN clans ON clan_members.fkey_clans_id = clans.id
+  LEFT OUTER JOIN neighborhoods
+    ON users.fkey_neighborhoods_id = neighborhoods.id
+  WHERE users.id <> %d
+  AND (clans.id <> %d OR clans.id IS NULL OR users.meta = "zombie")
+  AND username <> ""
+  AND (debates_last_time < "%s" OR
+   (users.meta = "zombie" AND debates_last_time < "%s"))
+  AND users.level > %d
+  AND users.level < %d
+  ORDER BY abs(users.experience - %d) ASC
+  LIMIT 12;'; // and users.fkey_neighborhoods_id = %d
 $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
   date('Y-m-d H:i:s', REQUEST_TIME - $debate_wait_time),
   date('Y-m-d H:i:s', REQUEST_TIME - $zombie_debate_wait),
@@ -139,12 +147,10 @@ $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
   $game_user->level + 15, $game_user->experience);
 
 // Jwc flag day - make debates much more active.
-$count = 12;
-while ($count-- && $item = db_fetch_object($result)) {
-  $data[] = $item;
+while ($item = db_fetch_object($result)) {
+  $data[] = (int) $item->id;
 }
-firep(db_affected_rows(), 'rows affected');
-
+$users = zg_fetch_users_by_ids($data);
 echo <<< EOF
 <div class="elections-header">
   <div class="election-details">
@@ -156,12 +162,9 @@ echo <<< EOF
 <div class="elections">
 EOF;
 
-foreach ($data as $item) {
+foreach ($users as $item) {
   zg_alter('debates_list', $game_user, $item);
 firep($item, 'player to debate');
-
-  $username = $item->username;
-  if (empty($username)) $username = '<em>Anonymous</em>';
 
   if ($item->id == $game_user->id) {
     $clan_class = 'election-details me';
@@ -170,38 +173,11 @@ firep($item, 'player to debate');
     $clan_class = 'election-details';
   }
 
-  $icon = $game . '_clan_' . $item->party_icon . '.png';
-  $clan_acronym = '';
-
-  if (!empty($item->clan_acronym)) {
-    $clan_acronym = "($item->clan_acronym)";
-
-    $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
-      strtolower($item->clan_acronym) . '.png';
-
-    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
-      $icon = $game . '_clan_' . strtolower($item->clan_acronym) . '.png';
-    }
-  }
-
-  if ($item->is_clan_leader) {
-    $clan_acronym .= '*';
-  }
-
-  $action_class = '';
   $action = $debate;
 
   $button = zg_render_button('debates_challenge', $action, '/' . $item->id);
-  echo <<< EOF
-<div class="$clan_class">
-  <div class="clan-icon"><img width="24"
-    src="/sites/default/files/images/$icon"/></div>
-  <div class="clan-title">$item->party_title</div>
-  <div class="opponent-name"><a
-    href="/$game/user/$arg2/id:$item->id">$username $clan_acronym</a></div>
-  $button
-</div>
-EOF;
+  print '<div class="' . $clan_class . '">' . zg_render_user($item, 'debates_list')
+  . $button . '</div>';
 
 }
 

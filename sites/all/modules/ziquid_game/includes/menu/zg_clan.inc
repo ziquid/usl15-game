@@ -189,7 +189,7 @@ function zg_get_clan_members($clan_id) {
   }
   firep($member_ids, 'clan member ids');
 
-  $users = zg_fetch_users_by_id($member_ids);
+  $users = zg_fetch_users_by_ids($member_ids);
 
   foreach ($users as $user) {
     firep($user, 'clan member');

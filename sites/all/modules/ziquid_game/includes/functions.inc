@@ -879,7 +879,7 @@ function zg_competency_name($comp) {
  *   The user object, if any.
  */
 function zg_fetch_user_by_id($id) {
-  $user = zg_fetch_users_by_id([$id]);
+  $user = zg_fetch_users_by_ids([$id]);
   if (is_array($user)) {
     zg_slack($user[0], 'debug', 'game user', $user[0]);
     return $user[0];
@@ -897,7 +897,7 @@ function zg_fetch_user_by_id($id) {
  * @return object[]
  *   The user objects, if any.
  */
-function zg_fetch_users_by_id($ids) {
+function zg_fetch_users_by_ids($ids) {
 
   if (!is_array($ids)) {
     $ids = [$ids];
@@ -964,7 +964,7 @@ function zg_fetch_users_by_id($ids) {
     }
 
     zg_alter('fetch_user', $item);
-    firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_id');
+    firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_ids');
   }
   return $data;
 }
@@ -2665,7 +2665,7 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
 }
 
 /**
- * Render a user as html.
+ * Render a user as a certain view type.
  *
  * @param object $user
  *   The user object.
@@ -2711,10 +2711,11 @@ function zg_render_user_html(&$user) {
 
   $user->display->class = 'player-' . drupal_strtolower($user->values);
 
-  $user->display->user_html = $user->ep_name . ' <span class="' .
+  $user->display->rendered_html = '<span class="user-display user-display-html">' .
+    $user->ep_name . ' <span class="' .
     $user->display->class . '">' . $user->username . '</span> ' .
-    $user->display->clan_acronym;
-  return $user->display->user_html;
+    $user->display->clan_acronym . '</span>';
+  return $user->display->rendered_html;
 }
 
 /**
@@ -2828,6 +2829,74 @@ function zg_render_user_clan_msg(&$user) {
 }
 
 /**
+ * Render a user in the debate list view.
+ *
+ * @param object $user
+ *   The user object.
+ *
+ * @return string
+ *   The debate list view html rendering of the user.
+ */
+function zg_render_user_debates_list(&$user) {
+  $game = check_plain(arg(0));
+  $arg2 = check_plain(arg(2));
+
+  if (!property_exists($user, 'display')) {
+    $user->display = new \stdClass();
+  }
+
+  $user->display->icon = $game . '_clan_' . $user->party_icon . '.png';
+  $user->display->clan_acronym = '';
+  if (strlen($user->clan_acronym)) {
+    $user->display->clan_acronym = "($user->clan_acronym)";
+
+    $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
+      strtolower($user->clan_acronym) . '.png';
+
+    if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
+      $user->display->icon = $game . '_clan_' . strtolower($user->clan_acronym) . '.png';
+    }
+  }
+
+  if ($user->is_clan_leader) {
+    $user->display->clan_acronym .= '*';
+  }
+
+  $user->display->level = $user->level;
+  $user->display->location = $user->location;
+
+  $player_class = 'player_username player-' . drupal_strtolower($user->values);
+  $last_access = REQUEST_TIME - strtotime($user->last_access);
+  firep([REQUEST_TIME, strtotime($user->last_access), $last_access], 'last access times');
+  if ($last_access < 300) {
+    $player_class .= ' online_now';
+  }
+  elseif ($last_access < 900) {
+    $player_class .= ' online_recently';
+  }
+  else {
+    $player_class .= ' not_online';
+  }
+
+  $user->display->username = '<a class="' . $player_class . '" href="/' . $game .
+    '/user/' . $arg2 . '/id:' . $user->id . '">' . $user->username . '</a>' . $user->display->clan_acronym;
+
+  if (strlen($user->ep_name)) {
+    $user->display->username = '<span class="player_seat">' . $user->ep_name .
+      '</span> ' . $user->display->username;
+  }
+
+  $user->display->debates_list =
+    '<span class="user-display user-display-debates-list">' .
+      '<div class="clan-icon"><img width="24"
+      src="/sites/default/files/images/' . $user->display->icon . '"/></div>' .
+    $user->display->username .
+    '<span class="player_level">(' . $user->display->level . '/' .
+    $user->display->location . ')</span></span>';
+  return $user->display->debates_list;
+}
+
+/**
  * Render a user as header.
  *
  * @param object $user
@@ -2921,7 +2990,7 @@ function zg_get_hood_alder($hood) {
  */
 function zg_get_online_presence() {
   $sql = 'select count(*) as count from users
-    where meta = "admin" 
+    where meta = "admin"
     and last_access > (CURRENT_TIMESTAMP - 300);';
   $result = db_query($sql);
   $admin = db_fetch_object($result);
@@ -2929,7 +2998,7 @@ function zg_get_online_presence() {
     return 'admin-online';
   }
   $sql = 'select count(*) as count from users
-    where meta = "staff" 
+    where meta = "staff"
     and last_access > (CURRENT_TIMESTAMP - 300);';
   $result = db_query($sql);
   $staff = db_fetch_object($result);

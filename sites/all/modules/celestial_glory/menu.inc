@@ -235,14 +235,6 @@ function celestial_glory_menu() {
     'type' => MENU_CALLBACK,
   );
 
-  $items['cg/debates/%'] = array(
-    'title' => 'Celestial Glory Debates List',
-    'page callback' => 'celestial_glory_debates_list_callback',
-    'page arguments' => array(2),
-    'access arguments' => array('access celestial_glory content'),
-    'type' => MENU_CALLBACK,
-  );
-
   $items['cg/debates_challenge/%/%'] = array(
     'title' => 'Celestial Glory Debates Challenge',
     'page callback' => 'celestial_glory_debates_challenge_callback',
@@ -843,18 +835,6 @@ function celestial_glory_prize_list_callback($phone_id) {
   return theme('celestial_glory_prize_list', $phone_id);
 
 }
-
-
-function celestial_glory_debates_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('celestial_glory_debates_list', $phone_id);
-
-}
-
 
 function celestial_glory_debates_challenge_callback($phone_id, $position_id) {
 
@@ -1474,13 +1454,6 @@ function celestial_glory_theme() {
       )
     ),
 
-    'celestial_glory_debates_list' => array(
-      'template' => 'celestial_glory_debates_list',
-      'arguments' => array(
-        'phone_id' => null,
-      )
-    ),
-
     'celestial_glory_debates_challenge' => array(
       'template' => 'celestial_glory_debates_challenge',
       'arguments' => array(
@@ -1648,22 +1621,6 @@ function celestial_glory_theme() {
         'phone_id' => null,
         'equipment_id' => null,
         'quantity' => null,
-      )
-    ),
-
-    'celestial_glory_move' => array(
-      'template' => 'celestial_glory_move',
-      'arguments' => array(
-        'phone_id' => null,
-        'neighborhood_id' => null,
-      )
-    ),
-
-    'celestial_glory_move_do' => array(
-      'template' => 'celestial_glory_move_do',
-      'arguments' => array(
-        'phone_id' => null,
-        'neighborhood_id' => null,
       )
     ),
 
