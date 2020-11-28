@@ -833,11 +833,9 @@ color: #5abafe;
 }
 
 .elections .election-details .clan-icon {
-  float: left;
-}
-
-.elections .election-details .clan-icon img {
-  width: 24px;
+  display: inline-block;
+  width: 36px;
+  vertical-align: text-top;
 }
 
 .can-broadcast-to-party {

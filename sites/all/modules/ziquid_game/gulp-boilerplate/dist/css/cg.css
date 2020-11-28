@@ -11,6 +11,9 @@ body.game-cg {
   margin: 4px auto 40px;
   background-color: #1c130b;
   color: #f8fefb;
+  /**
+ * @section Player styles
+ */
 }
 
 /* line 1, src/sass/common/_button.scss */
@@ -128,6 +131,114 @@ body.game-cg .button.button-debate {
   margin: 26px 3px 0 0;
 }
 
+/* line 4, src/sass/common/_player.scss */
+body.game-cg #player {
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: calc(100% - 160px);
+  height: 42px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  border-bottom: solid 1.5px #080c;
+}
+
+/* line 15, src/sass/common/_player.scss */
+body.game-cg #player div {
+  margin: 2px 0;
+}
+
+/* line 19, src/sass/common/_player.scss */
+body.game-cg #player .player_username {
+  font-size: 0.9375rem;
+}
+
+/* line 23, src/sass/common/_player.scss */
+body.game-cg #player .player_location {
+  border: solid 1px #dd7a;
+  border-radius: 9px;
+  display: inline-block;
+  margin: 0;
+  padding-top: 2px;
+  background-color: #050e;
+}
+
+/* line 33, src/sass/common/_player.scss */
+body.game-cg .user-display {
+  position: relative;
+  margin-left: 42px;
+}
+
+/* line 37, src/sass/common/_player.scss */
+body.game-cg .user-display img.clan-icon {
+  display: inline-block;
+  width: 36px;
+  position: absolute;
+  left: -42px;
+  top: 0;
+}
+
+/* line 46, src/sass/common/_player.scss */
+body.game-cg .player_username {
+  text-decoration: none;
+  color: #dd7;
+  font-size: .75rem;
+  font-weight: 700;
+  min-width: 80px;
+  text-align: center;
+  background-color: #0003;
+}
+
+/* line 58, src/sass/common/_player.scss */
+body.game-cg .player_username.online_now {
+  border-left: solid 1.5px green;
+  padding-left: 2px;
+}
+
+/* line 62, src/sass/common/_player.scss */
+body.game-cg .player_username.online_recently {
+  border-left: solid 1.5px yellow;
+  padding-left: 2px;
+}
+
+/* line 66, src/sass/common/_player.scss */
+body.game-cg .player_username.not_online {
+  border-left: solid 1.5px red;
+  padding-left: 2px;
+}
+
+/* line 72, src/sass/common/_player.scss */
+body.game-cg .player_level, body.game-cg .player_clan, body.game-cg .player_party, body.game-cg .player_location {
+  font-size: 0.625rem;
+  padding: 5px 5px 2px;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  -webkit-text-stroke: .35px darkgreen;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* line 89, src/sass/common/_player.scss */
+body.game-cg .player_seat {
+  font-size: 0.755rem;
+  padding: 5px 2px 2px;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  -webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* line 101, src/sass/common/_player.scss */
+body.game-cg .player_seat a {
+  text-decoration: none;
+}
+
 /* line 1, src/sass/common/_slidein.scss */
 body.game-cg .slide-in {
   z-index: 10;
@@ -170,7 +281,7 @@ body.game-cg .slide-in.show .slide-in-content, body.game-cg .slide-in .slide-in-
   -webkit-transform: translateX(0) !important;
 }
 
-/* line 4, src/sass/common/_index.scss */
+/* line 5, src/sass/common/_index.scss */
 body.game-cg::after {
   content: "";
   background: url(/sites/default/files/images/cg_bg.jpg);
@@ -187,27 +298,27 @@ body.game-cg::after {
           filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
 }
 
-/* line 19, src/sass/common/_index.scss */
+/* line 20, src/sass/common/_index.scss */
 body.game-cg a, body.game-cg a:link, body.game-cg a:visited, body.game-cg a:hover, body.game-cg a:active {
   color: #bf6f2f;
 }
 
-/* line 23, src/sass/common/_index.scss */
+/* line 24, src/sass/common/_index.scss */
 body.game-cg li {
   list-style-image: url("/sites/default/files/images/redbullet.png");
 }
 
-/* line 27, src/sass/common/_index.scss */
+/* line 28, src/sass/common/_index.scss */
 body.game-cg .title.loot {
   color: #d4c41c;
 }
 
-/* line 31, src/sass/common/_index.scss */
+/* line 32, src/sass/common/_index.scss */
 body.game-cg .yellow {
   color: #d4c41c !important;
 }
 
-/* line 35, src/sass/common/_index.scss */
+/* line 36, src/sass/common/_index.scss */
 body.game-cg .welcome {
   border: 1px solid #bf6f2f;
   color: #f8fefb;
@@ -216,7 +327,7 @@ body.game-cg .welcome {
           box-shadow: 1px 1px 3px lightblue;
 }
 
-/* line 42, src/sass/common/_index.scss */
+/* line 43, src/sass/common/_index.scss */
 body.game-cg .welcome .subtitle {
   color: #1ca443;
   font-weight: bold;
@@ -225,63 +336,63 @@ body.game-cg .welcome .subtitle {
   clear: none;
 }
 
-/* line 50, src/sass/common/_index.scss */
+/* line 51, src/sass/common/_index.scss */
 body.game-cg .welcome p + .subtitle {
   margin-top: 18px;
 }
 
-/* line 54, src/sass/common/_index.scss */
+/* line 55, src/sass/common/_index.scss */
 body.game-cg .welcome-continue a, body.game-cg .election-continue a {
   border: 1px solid #1ca443;
   background-color: #1ca443;
 }
 
-/* line 59, src/sass/common/_index.scss */
+/* line 60, src/sass/common/_index.scss */
 body.game-cg .welcome ul {
   clear: none;
 }
 
-/* line 63, src/sass/common/_index.scss */
+/* line 64, src/sass/common/_index.scss */
 body.game-cg p {
   margin: 9px 8px 9px 14px;
 }
 
-/* line 67, src/sass/common/_index.scss */
+/* line 68, src/sass/common/_index.scss */
 body.game-cg p:first-of-type {
   margin-top: 0;
 }
 
-/* line 71, src/sass/common/_index.scss */
+/* line 72, src/sass/common/_index.scss */
 body.game-cg .speech-bubble {
   background-color: #421;
 }
 
-/* line 75, src/sass/common/_index.scss */
+/* line 76, src/sass/common/_index.scss */
 body.game-cg .speech-bubble::after {
   border-right-color: #421;
 }
 
-/* line 79, src/sass/common/_index.scss */
+/* line 80, src/sass/common/_index.scss */
 body.game-cg .speech-bubble p:first-of-type {
   margin-top: 9px;
 }
 
-/* line 83, src/sass/common/_index.scss */
+/* line 84, src/sass/common/_index.scss */
 body.game-cg .speech-bubble .message-error {
   padding-top: 0;
 }
 
-/* line 87, src/sass/common/_index.scss */
+/* line 88, src/sass/common/_index.scss */
 body.game-cg .speech-bubble .subtitle {
   clear: none;
 }
 
-/* line 91, src/sass/common/_index.scss */
+/* line 92, src/sass/common/_index.scss */
 body.game-cg .main-menu, body.game-cg .elders-menu {
   font-weight: bold;
 }
 
-/* line 95, src/sass/common/_index.scss */
+/* line 96, src/sass/common/_index.scss */
 body.game-cg .main-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
@@ -292,7 +403,7 @@ body.game-cg .main-menu .menu-option {
   background: #444f44;
 }
 
-/* line 105, src/sass/common/_index.scss */
+/* line 106, src/sass/common/_index.scss */
 body.game-cg .elders-menu .menu-option {
   border: 2px solid white;
   border-radius: 4px;
@@ -303,18 +414,18 @@ body.game-cg .elders-menu .menu-option {
   background: #444f44;
 }
 
-/* line 115, src/sass/common/_index.scss */
+/* line 116, src/sass/common/_index.scss */
 body.game-cg .menu-option a {
   text-decoration: none;
 }
 
-/* line 119, src/sass/common/_index.scss */
+/* line 120, src/sass/common/_index.scss */
 body.game-cg .menu-option.not-yet {
   text-decoration: none;
   color: #bbb;
 }
 
-/* line 124, src/sass/common/_index.scss */
+/* line 125, src/sass/common/_index.scss */
 body.game-cg .quests, body.game-cg .land {
   background-color: rgba(13, 15, 13, 0.25);
   text-shadow: none;
@@ -322,7 +433,7 @@ body.game-cg .quests, body.game-cg .land {
   min-height: 60px;
 }
 
-/* line 131, src/sass/common/_index.scss */
+/* line 132, src/sass/common/_index.scss */
 body.game-cg .quests .quest-experience, body.game-cg .quests .quest-money,
 body.game-cg .quests .quest-required_energy, body.game-cg .quests .quest-required_stuff,
 body.game-cg .quests .quest-payout,
@@ -331,28 +442,28 @@ body.game-cg .land .land-required_level, body.game-cg .land-soon .land-action-co
   color: #1ca443;
 }
 
-/* line 139, src/sass/common/_index.scss */
+/* line 140, src/sass/common/_index.scss */
 body.game-cg .quests .quest-required_stuff.missing {
   color: #e4344f;
 }
 
-/* line 143, src/sass/common/_index.scss */
+/* line 144, src/sass/common/_index.scss */
 body.game-cg .quests .quest-loot {
   color: #d4c41c;
 }
 
-/* line 147, src/sass/common/_index.scss */
+/* line 148, src/sass/common/_index.scss */
 body.game-cg .quests .quest-payout.negative,
 body.game-cg .land .land-payout.negative, body.game-cg .land-soon .land-payout.negative {
   color: #e4344f;
 }
 
-/* line 152, src/sass/common/_index.scss */
+/* line 153, src/sass/common/_index.scss */
 body.game-cg .quests .quest-description, body.game-cg .land .land-description {
   color: #cbb;
 }
 
-/* line 156, src/sass/common/_index.scss */
+/* line 157, src/sass/common/_index.scss */
 body.game-cg .quests .quest-description .not-yet, body.game-cg .land .land-description .not-yet {
   color: #c23;
   font-weight: bold;
@@ -361,7 +472,7 @@ body.game-cg .quests .quest-description .not-yet, body.game-cg .land .land-descr
   margin-left: 10px;
 }
 
-/* line 164, src/sass/common/_index.scss */
+/* line 165, src/sass/common/_index.scss */
 body.game-cg .quest-required_stuff .quest-required_equipment img.not-yet {
   border: solid 0.5px #c00;
   border-radius: 4px;
@@ -369,14 +480,14 @@ body.game-cg .quest-required_stuff .quest-required_equipment img.not-yet {
           box-shadow: 1px 1px 3px rgba(192, 0, 0, 0.6);
 }
 
-/* line 170, src/sass/common/_index.scss */
+/* line 171, src/sass/common/_index.scss */
 body.game-cg .quests .quest-required_stuff .quest-required_equipment img {
   border-radius: 4px;
   -webkit-box-shadow: 1px 1px 3px rgba(0, 192, 0, 0.6);
           box-shadow: 1px 1px 3px rgba(0, 192, 0, 0.6);
 }
 
-/* line 175, src/sass/common/_index.scss */
+/* line 176, src/sass/common/_index.scss */
 body.game-cg .quests-soon .quest-experience, body.game-cg .quests-soon .quest-money,
 body.game-cg .quests-soon .quest-required_energy,
 body.game-cg .land-soon .land-cost, body.game-cg .land-soon .land-payout,
@@ -384,7 +495,7 @@ body.game-cg .land-soon .land-required_level {
   color: #0e5221;
 }
 
-/* line 182, src/sass/common/_index.scss */
+/* line 183, src/sass/common/_index.scss */
 body.game-cg .quests-soon a, body.game-cg .quests-soon a:link, body.game-cg .quests-soon a:visited,
 body.game-cg .quests-soon a:hover, body.game-cg .quests-soon a:active,
 body.game-cg .land-soon a, body.game-cg .land-soon a:link, body.game-cg .land-soon a:visited,
@@ -392,17 +503,17 @@ body.game-cg .land-soon a:hover, body.game-cg .land-soon a:active {
   color: #0e5221;
 }
 
-/* line 189, src/sass/common/_index.scss */
+/* line 190, src/sass/common/_index.scss */
 body.game-cg .quest-succeeded, body.game-cg .election-succeeded, body.game-cg .land-succeeded {
   color: #1ca443;
 }
 
-/* line 193, src/sass/common/_index.scss */
+/* line 194, src/sass/common/_index.scss */
 body.game-cg .quest-failed, body.game-cg .election-failed, body.game-cg .land-failed, body.game-cg .title.failed {
   color: #c4244f;
 }
 
-/* line 197, src/sass/common/_index.scss */
+/* line 198, src/sass/common/_index.scss */
 body.game-cg .quest-do-again, body.game-cg .land-buy-again {
   text-align: right;
   margin-right: 8px;
@@ -411,7 +522,7 @@ body.game-cg .quest-do-again, body.game-cg .land-buy-again {
   font-size: 0.75rem;
 }
 
-/* line 205, src/sass/common/_index.scss */
+/* line 206, src/sass/common/_index.scss */
 body.game-cg .quest-do-again-inside, body.game-cg .land-buy-again-inside {
   padding: 3px;
   background-color: #1ca443;
@@ -421,40 +532,40 @@ body.game-cg .quest-do-again-inside, body.game-cg .land-buy-again-inside {
   float: right;
 }
 
-/* line 214, src/sass/common/_index.scss */
+/* line 215, src/sass/common/_index.scss */
 body.game-cg .quest-do-again a, body.game-cg .land-buy-again a {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 219, src/sass/common/_index.scss */
+/* line 220, src/sass/common/_index.scss */
 body.game-cg .quests .quest-name.loot {
   color: #d4c41c;
 }
 
-/* line 223, src/sass/common/_index.scss */
+/* line 224, src/sass/common/_index.scss */
 body.game-cg .quests .quest-name.not-yet {
   color: #9aa;
 }
 
-/* line 227, src/sass/common/_index.scss */
+/* line 228, src/sass/common/_index.scss */
 body.game-cg .quests .quest-num, body.game-cg .quests .quest-requisites, body.game-cg .quests .quest-disbursements {
   display: none;
 }
 
-/* line 231, src/sass/common/_index.scss */
+/* line 232, src/sass/common/_index.scss */
 body.game-cg .land .land-owned {
   color: #fff;
 }
 
-/* line 235, src/sass/common/_index.scss */
+/* line 236, src/sass/common/_index.scss */
 body.game-cg .level-up {
   border: 1px solid rgba(255, 255, 255, 0.7) !important;
   background-color: #0e5221;
   min-height: 72px;
 }
 
-/* line 241, src/sass/common/_index.scss */
+/* line 242, src/sass/common/_index.scss */
 body.game-cg .level-up.happy {
   background-image: url("/sites/default/files/images/cg_lehi_large.png");
   background-repeat: no-repeat;
@@ -464,7 +575,7 @@ body.game-cg .level-up.happy {
   -webkit-background-size: 54px 72px;
 }
 
-/* line 251, src/sass/common/_index.scss */
+/* line 252, src/sass/common/_index.scss */
 body.game-cg .choose-clan-name {
   margin-left: 6px;
   font-weight: bold;
@@ -472,12 +583,12 @@ body.game-cg .choose-clan-name {
   color: #1ca443;
 }
 
-/* line 258, src/sass/common/_index.scss */
+/* line 259, src/sass/common/_index.scss */
 body.game-cg .choose-clan-name a {
   text-decoration: none;
 }
 
-/* line 262, src/sass/common/_index.scss */
+/* line 263, src/sass/common/_index.scss */
 body.game-cg .choose-clan-slogan {
   margin: 0 0 8px 54px;
   font-style: italic;
@@ -485,17 +596,17 @@ body.game-cg .choose-clan-slogan {
   color: #bcb;
 }
 
-/* line 269, src/sass/common/_index.scss */
+/* line 270, src/sass/common/_index.scss */
 body.game-cg .help .subtitle {
   margin: 8px 0 4px;
 }
 
-/* line 273, src/sass/common/_index.scss */
+/* line 274, src/sass/common/_index.scss */
 body.game-cg .help .subtitle {
   color: #1ca443;
 }
 
-/* line 277, src/sass/common/_index.scss */
+/* line 278, src/sass/common/_index.scss */
 body.game-cg .wise_old_man_large, body.game-cg .wise_old_man {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_large.png");
   background-repeat: no-repeat;
@@ -505,7 +616,7 @@ body.game-cg .wise_old_man_large, body.game-cg .wise_old_man {
   float: left;
 }
 
-/* line 286, src/sass/common/_index.scss */
+/* line 287, src/sass/common/_index.scss */
 body.game-cg .wise_old_man_small, body.game-cg .wise_old_man.small {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_small.png");
   background-repeat: no-repeat;
@@ -515,7 +626,7 @@ body.game-cg .wise_old_man_small, body.game-cg .wise_old_man.small {
   float: left;
 }
 
-/* line 295, src/sass/common/_index.scss */
+/* line 296, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.sad {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_sad.png");
   background-repeat: no-repeat;
@@ -527,7 +638,7 @@ body.game-cg .wise_old_man.sad {
   margin-right: 12px;
 }
 
-/* line 306, src/sass/common/_index.scss */
+/* line 307, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.embarrassed {
   background-image: url("/sites/default/files/images/stlouis_wise_old_man_sad2.png");
   background-repeat: no-repeat;
@@ -539,7 +650,7 @@ body.game-cg .wise_old_man.embarrassed {
   margin-right: 12px;
 }
 
-/* line 317, src/sass/common/_index.scss */
+/* line 318, src/sass/common/_index.scss */
 body.game-cg .wise_old_man.happy {
   background-image: url("/sites/default/files/images/cg_lehi_large.png");
   background-repeat: no-repeat;
@@ -551,7 +662,7 @@ body.game-cg .wise_old_man.happy {
   margin-right: 12px;
 }
 
-/* line 328, src/sass/common/_index.scss */
+/* line 329, src/sass/common/_index.scss */
 body.game-cg .city-icon {
   background-image: url("/sites/default/files/images/cg_lehi_large.png");
   background-repeat: no-repeat;
@@ -563,17 +674,17 @@ body.game-cg .city-icon {
   margin-right: 14px;
 }
 
-/* line 339, src/sass/common/_index.scss */
+/* line 340, src/sass/common/_index.scss */
 body.game-cg .username-error {
   color: #c4244f;
 }
 
-/* line 343, src/sass/common/_index.scss */
+/* line 344, src/sass/common/_index.scss */
 body.game-cg .elections-header {
   color: #1aa443;
 }
 
-/* line 347, src/sass/common/_index.scss */
+/* line 348, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action, body.game-cg .land .land-buy-button,
 body.game-cg .land .land-sell-button, body.game-cg .land .land-perform-button,
 body.game-cg .send-message-send-wrapper .send-message-send,
@@ -585,7 +696,7 @@ body.game-cg .quests .quests-perform-button, body.game-cg .crafting-submit-butto
   -moz-border-radius: 4px;
 }
 
-/* line 358, src/sass/common/_index.scss */
+/* line 359, src/sass/common/_index.scss */
 body.game-cg .send-message .block-user {
   padding: 3px 12px;
   background-color: #188433;
@@ -594,39 +705,39 @@ body.game-cg .send-message .block-user {
   -moz-border-radius: 4px;
 }
 
-/* line 366, src/sass/common/_index.scss */
+/* line 367, src/sass/common/_index.scss */
 body.game-cg .send-message .block-user a {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 371, src/sass/common/_index.scss */
+/* line 372, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action.not-yet, body.game-cg .land .land-buy-button.not-yet,
 body.game-cg .land .land-sell-button.not-yet {
   background-color: #333833;
   border: 1px solid #333833;
 }
 
-/* line 377, src/sass/common/_index.scss */
+/* line 378, src/sass/common/_index.scss */
 body.game-cg .elections .election-details .action a, body.game-cg .land .land-buy-button a,
 body.game-cg .land .land-sell-button a, body.game-cg .land form input.land-buy-button {
   color: #fff;
   text-decoration: none;
 }
 
-/* line 383, src/sass/common/_index.scss */
+/* line 384, src/sass/common/_index.scss */
 body.game-cg .try-an-election {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 388, src/sass/common/_index.scss */
+/* line 389, src/sass/common/_index.scss */
 body.game-cg .try-an-election.not-yet {
   background-color: #333833 !important;
   border: 1px solid #333833 !important;
 }
 
-/* line 393, src/sass/common/_index.scss */
+/* line 394, src/sass/common/_index.scss */
 body.game-cg .location {
   color: #f8fdfe;
   font: 0.625rem Helvetica,Arial,sans-serif;
@@ -638,18 +749,18 @@ body.game-cg .location {
   border-radius: 0 0 12px 12px;
 }
 
-/* line 404, src/sass/common/_index.scss */
+/* line 405, src/sass/common/_index.scss */
 body.game-cg .location + .news {
   margin-top: 0;
 }
 
-/* line 410, src/sass/common/_index.scss */
+/* line 411, src/sass/common/_index.scss */
 body.game-cg .news .news-item {
   text-transform: none;
   font-variant: none;
 }
 
-/* line 415, src/sass/common/_index.scss */
+/* line 416, src/sass/common/_index.scss */
 body.game-cg .news .news-buttons {
   background-color: #0000;
   color: #0000;
@@ -661,13 +772,13 @@ body.game-cg .news .news-buttons {
   padding: 0;
 }
 
-/* line 424, src/sass/common/_index.scss */
+/* line 425, src/sass/common/_index.scss */
 body.game-cg .news .dateline {
   padding-left: 10px;
   color: #cfd5d1;
 }
 
-/* line 429, src/sass/common/_index.scss */
+/* line 430, src/sass/common/_index.scss */
 body.game-cg .news .message-body {
   padding: 4px 8px 8px 4px;
   background-color: rgba(16, 24, 20, 0.8) !important;
@@ -676,70 +787,70 @@ body.game-cg .news .message-body {
           box-shadow: 2px 2px 5px #000;
 }
 
-/* line 436, src/sass/common/_index.scss */
+/* line 437, src/sass/common/_index.scss */
 body.game-cg .news .message-body.user.user-png {
   font-weight: bold;
 }
 
-/* line 440, src/sass/common/_index.scss */
+/* line 441, src/sass/common/_index.scss */
 body.game-cg .news .message-body.user.user-comp {
   color: #85851f;
 }
 
-/* line 444, src/sass/common/_index.scss */
+/* line 445, src/sass/common/_index.scss */
 body.game-cg .news .message-body.mayor.mayor-system {
   color: green;
   font-style: italic;
 }
 
-/* line 449, src/sass/common/_index.scss */
+/* line 450, src/sass/common/_index.scss */
 body.game-cg .news .message-body.mayor.mayor-mayor {
   color: green;
 }
 
-/* line 453, src/sass/common/_index.scss */
+/* line 454, src/sass/common/_index.scss */
 body.game-cg .news .message-reply {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 458, src/sass/common/_index.scss */
+/* line 459, src/sass/common/_index.scss */
 body.game-cg .news .message-reply.not-yet {
   background-color: #bbb !important;
   border: 1px solid #bbb !important;
   color: black;
 }
 
-/* line 466, src/sass/common/_index.scss */
+/* line 467, src/sass/common/_index.scss */
 body.game-cg .news-item.announcement .message-body {
   font-weight: bold;
   color: yellow;
 }
 
-/* line 473, src/sass/common/_index.scss */
+/* line 474, src/sass/common/_index.scss */
 body.game-cg .user-profile .heading {
   clear: both;
 }
 
-/* line 477, src/sass/common/_index.scss */
+/* line 478, src/sass/common/_index.scss */
 body.game-cg .user-profile .action {
   background-color: #188433 !important;
   border: 1px solid #188433 !important;
 }
 
-/* line 482, src/sass/common/_index.scss */
+/* line 483, src/sass/common/_index.scss */
 body.game-cg .user-profile .action.not-yet {
   background-color: #333833 !important;
   border: 1px solid #333833 !important;
 }
 
-/* line 487, src/sass/common/_index.scss */
+/* line 488, src/sass/common/_index.scss */
 body.game-cg .user-profile .skill-point {
   display: inline-block;
   margin-left: 8px;
 }
 
-/* line 490, src/sass/common/_index.scss */
+/* line 491, src/sass/common/_index.scss */
 body.game-cg .user-profile .skill-point.not-yet a {
   background-color: #333833 !important;
   -webkit-box-shadow: inset 0 1px 0 0 #343934;
@@ -752,18 +863,18 @@ body.game-cg .user-profile .skill-point.not-yet a {
   text-shadow: 0 1px 0 #343934;
 }
 
-/* line 501, src/sass/common/_index.scss */
+/* line 502, src/sass/common/_index.scss */
 body.game-cg .user-profile .user-profile .event-status {
   color: #b33;
 }
 
-/* line 507, src/sass/common/_index.scss */
+/* line 508, src/sass/common/_index.scss */
 body.game-cg .highlighted {
   color: #188433;
   font-weight: bold;
 }
 
-/* line 512, src/sass/common/_index.scss */
+/* line 513, src/sass/common/_index.scss */
 body.game-cg .event {
   border: #1a2 solid 1px;
   border-radius: 8px;
@@ -772,49 +883,49 @@ body.game-cg .event {
   color: #1a2;
 }
 
-/* line 518, src/sass/common/_index.scss */
+/* line 519, src/sass/common/_index.scss */
 body.game-cg .event .event-title {
   color: #cc0;
 }
 
-/* line 523, src/sass/common/_index.scss */
+/* line 524, src/sass/common/_index.scss */
 body.game-cg .event-info .subtitle {
   color: #c33;
   font-weight: bold;
   margin-top: 20px;
 }
 
-/* line 529, src/sass/common/_index.scss */
+/* line 530, src/sass/common/_index.scss */
 body.game-cg .event-info .subsubtitle {
   color: #aaa;
 }
 
-/* line 533, src/sass/common/_index.scss */
+/* line 534, src/sass/common/_index.scss */
 body.game-cg a.version {
   color: #aa6;
   text-decoration: none;
   text-align: center;
 }
 
-/* line 541, src/sass/common/_index.scss */
+/* line 542, src/sass/common/_index.scss */
 body.game-cg .new-main-menu img {
   width: 310px;
   border-radius: 4px;
 }
 
-/* line 546, src/sass/common/_index.scss */
+/* line 547, src/sass/common/_index.scss */
 body.game-cg .new-main-menu .value-links {
   display: none;
 }
 
-/* line 551, src/sass/common/_index.scss */
+/* line 552, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li {
   list-style-type: none;
   list-style-image: none;
   margin: 0;
 }
 
-/* line 555, src/sass/common/_index.scss */
+/* line 556, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span {
   position: absolute;
   z-index: 11;
@@ -827,12 +938,12 @@ body.game-cg .new-main-menu ul li span {
   color: #f8fef800;
 }
 
-/* line 565, src/sass/common/_index.scss */
+/* line 566, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.odd {
   width: 39px;
 }
 
-/* line 568, src/sass/common/_index.scss */
+/* line 569, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value {
   height: 16px;
   top: 0;
@@ -840,17 +951,17 @@ body.game-cg .new-main-menu ul li span.value {
   padding-top: 6px;
 }
 
-/* line 573, src/sass/common/_index.scss */
+/* line 574, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value.first {
   border-radius: 4px 0 0 0;
 }
 
-/* line 576, src/sass/common/_index.scss */
+/* line 577, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.value.last {
   border-radius: 0 4px 0 0;
 }
 
-/* line 580, src/sass/common/_index.scss */
+/* line 581, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.label {
   top: 182px;
   height: 16px;
@@ -858,100 +969,100 @@ body.game-cg .new-main-menu ul li span.label {
   margin-top: 0;
 }
 
-/* line 586, src/sass/common/_index.scss */
+/* line 587, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.ammunition {
   background-color: #0805;
   left: 4px;
 }
 
-/* line 589, src/sass/common/_index.scss */
+/* line 590, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.ammunition.label {
   background-color: #080d;
 }
 
-/* line 593, src/sass/common/_index.scss */
+/* line 594, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.beauty {
   background-color: #e005;
   color: #f8fefd;
   left: 43px;
 }
 
-/* line 597, src/sass/common/_index.scss */
+/* line 598, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.beauty.label {
   background-color: #e00d;
 }
 
-/* line 601, src/sass/common/_index.scss */
+/* line 602, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.chaos {
   background-color: #e705;
   left: 82px;
   width: 38px;
 }
 
-/* line 605, src/sass/common/_index.scss */
+/* line 606, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.chaos.label {
   background-color: #e70d;
 }
 
-/* line 609, src/sass/common/_index.scss */
+/* line 610, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.faith {
   color: #00000000;
   background-color: #dd05;
   left: 120px;
 }
 
-/* line 613, src/sass/common/_index.scss */
+/* line 614, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.faith.label {
   background-color: #dd0d;
 }
 
-/* line 617, src/sass/common/_index.scss */
+/* line 618, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.finance {
   color: #00000000;
   background-color: #eee5;
   left: 159px;
 }
 
-/* line 621, src/sass/common/_index.scss */
+/* line 622, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.finance.label {
   background-color: #eeed;
 }
 
-/* line 625, src/sass/common/_index.scss */
+/* line 626, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.health {
   background-color: #0e05;
   left: 198px;
   width: 38px;
 }
 
-/* line 629, src/sass/common/_index.scss */
+/* line 630, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.health.label {
   background-color: #0e0d;
 }
 
-/* line 633, src/sass/common/_index.scss */
+/* line 634, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.intelligence {
   background-color: #00e5;
   left: 236px;
 }
 
-/* line 636, src/sass/common/_index.scss */
+/* line 637, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.intelligence.label {
   background-color: #00ed;
 }
 
-/* line 640, src/sass/common/_index.scss */
+/* line 641, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.strength {
   background-color: #e0e5;
   left: 275px;
 }
 
-/* line 643, src/sass/common/_index.scss */
+/* line 644, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li span.strength.label {
   background-color: #e0ed;
 }
 
-/* line 648, src/sass/common/_index.scss */
+/* line 649, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a {
   position: absolute;
   z-index: 12;
@@ -968,19 +1079,19 @@ body.game-cg .new-main-menu ul li a {
   border-radius: 5px;
 }
 
-/* line 663, src/sass/common/_index.scss */
+/* line 664, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.actions-menu {
   top: 57px;
   left: 197px;
 }
 
-/* line 667, src/sass/common/_index.scss */
+/* line 668, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.aides-menu {
   top: 37px;
   left: 197px;
 }
 
-/* line 671, src/sass/common/_index.scss */
+/* line 672, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.clan-menu {
   top: 140px;
   left: 106px;
@@ -989,26 +1100,26 @@ body.game-cg .new-main-menu ul li a.clan-menu {
   background-color: #0009;
 }
 
-/* line 678, src/sass/common/_index.scss */
+/* line 679, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.boxing-menu {
   top: 37px;
   left: 44px;
   border: #e00d solid 0.5px;
 }
 
-/* line 683, src/sass/common/_index.scss */
+/* line 684, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.debates-menu {
   top: 37px;
   left: 45px;
 }
 
-/* line 687, src/sass/common/_index.scss */
+/* line 688, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.trials-menu {
   top: 37px;
   left: 45px;
 }
 
-/* line 691, src/sass/common/_index.scss */
+/* line 692, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.elders-menu {
   top: 97px;
   left: 130px;
@@ -1017,13 +1128,13 @@ body.game-cg .new-main-menu ul li a.elders-menu {
   background-color: #0007;
 }
 
-/* line 698, src/sass/common/_index.scss */
+/* line 699, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.elections-menu {
   top: 57px;
   left: 45px;
 }
 
-/* line 702, src/sass/common/_index.scss */
+/* line 703, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.forum-menu {
   top: 140px;
   left: 239px;
@@ -1032,7 +1143,7 @@ body.game-cg .new-main-menu ul li a.forum-menu {
   background-color: #0009;
 }
 
-/* line 709, src/sass/common/_index.scss */
+/* line 710, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.help-menu {
   top: 140px;
   left: 169px;
@@ -1041,7 +1152,7 @@ body.game-cg .new-main-menu ul li a.help-menu {
   background-color: #0009;
 }
 
-/* line 716, src/sass/common/_index.scss */
+/* line 717, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.missions-menu {
   top: 10px;
   left: 102px;
@@ -1051,7 +1162,7 @@ body.game-cg .new-main-menu ul li a.missions-menu {
   min-width: 120px;
 }
 
-/* line 724, src/sass/common/_index.scss */
+/* line 725, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.move-menu {
   top: 87px;
   left: 130px;
@@ -1060,7 +1171,7 @@ body.game-cg .new-main-menu ul li a.move-menu {
   background-color: #0006;
 }
 
-/* line 731, src/sass/common/_index.scss */
+/* line 732, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.profile-menu {
   top: 140px;
   left: 38px;
@@ -1069,7 +1180,7 @@ body.game-cg .new-main-menu ul li a.profile-menu {
   background-color: #0009;
 }
 
-/* line 738, src/sass/common/_index.scss */
+/* line 739, src/sass/common/_index.scss */
 body.game-cg .new-main-menu ul li a.extra-menu-link {
   top: 160px;
   left: 8px;
@@ -1078,22 +1189,22 @@ body.game-cg .new-main-menu ul li a.extra-menu-link {
   background-color: #0000;
 }
 
-/* line 750, src/sass/common/_index.scss */
+/* line 751, src/sass/common/_index.scss */
 body.game-cg .competency-pip {
   border-right: solid 2px #693318 !important;
 }
 
-/* line 754, src/sass/common/_index.scss */
+/* line 755, src/sass/common/_index.scss */
 body.game-cg .competency-pip.attained {
   border-right: solid 2px #188433 !important;
 }
 
-/* line 758, src/sass/common/_index.scss */
+/* line 759, src/sass/common/_index.scss */
 body.game-cg .too-soon {
   color: rgba(255, 255, 70, 0.7);
 }
 
-/* line 762, src/sass/common/_index.scss */
+/* line 763, src/sass/common/_index.scss */
 body.game-cg .competency-tag {
   -webkit-transform: rotate(-90deg);
           transform: rotate(-90deg);
@@ -1110,133 +1221,133 @@ body.game-cg .competency-tag {
   font-family: "times new roman", Roman, serif;
 }
 
-/* line 776, src/sass/common/_index.scss */
+/* line 777, src/sass/common/_index.scss */
 body.game-cg textarea {
   background-color: lightgrey;
 }
 
-/* line 780, src/sass/common/_index.scss */
+/* line 781, src/sass/common/_index.scss */
 body.game-cg .location-ammunition {
   border-top: #080 solid 1px;
 }
 
-/* line 784, src/sass/common/_index.scss */
+/* line 785, src/sass/common/_index.scss */
 body.game-cg .location-chaos {
   border-top: #ffa500 solid 1px;
 }
 
-/* line 788, src/sass/common/_index.scss */
+/* line 789, src/sass/common/_index.scss */
 body.game-cg .location-charisma {
   border-top: #e00 solid 1px;
 }
 
-/* line 792, src/sass/common/_index.scss */
+/* line 793, src/sass/common/_index.scss */
 body.game-cg .location-finance {
   border-top: #e0e0e0 solid 1px;
 }
 
-/* line 796, src/sass/common/_index.scss */
+/* line 797, src/sass/common/_index.scss */
 body.game-cg .location-goo {
   border-top: #800080 solid 1px;
 }
 
-/* line 800, src/sass/common/_index.scss */
+/* line 801, src/sass/common/_index.scss */
 body.game-cg .location-greenbacks {
   border-top: #fff dotted 1px;
 }
 
-/* line 804, src/sass/common/_index.scss */
+/* line 805, src/sass/common/_index.scss */
 body.game-cg .location-health {
   border-top: #0f0 solid 1px;
 }
 
-/* line 808, src/sass/common/_index.scss */
+/* line 809, src/sass/common/_index.scss */
 body.game-cg .location-humility {
   border-top: #dd0 solid 1px;
 }
 
-/* line 812, src/sass/common/_index.scss */
+/* line 813, src/sass/common/_index.scss */
 body.game-cg .location-intelligence {
   border-top: #35f solid 1px;
 }
 
-/* line 816, src/sass/common/_index.scss */
+/* line 817, src/sass/common/_index.scss */
 body.game-cg .location-strength {
   border-top: #0ee solid 1px;
 }
 
-/* line 820, src/sass/common/_index.scss */
+/* line 821, src/sass/common/_index.scss */
 body.game-cg .player-ammunition {
   padding-bottom: 0;
   border-bottom: #080 solid 1.5px;
 }
 
-/* line 825, src/sass/common/_index.scss */
+/* line 826, src/sass/common/_index.scss */
 body.game-cg .player-chaos {
   padding-bottom: 0;
   border-bottom: #ffa500 solid 1.5px;
 }
 
-/* line 830, src/sass/common/_index.scss */
+/* line 831, src/sass/common/_index.scss */
 body.game-cg .player-charisma {
   padding-bottom: 0;
   border-bottom: #e00 solid 1.5px;
 }
 
-/* line 835, src/sass/common/_index.scss */
+/* line 836, src/sass/common/_index.scss */
 body.game-cg .player-finance {
   padding-bottom: 0;
   border-bottom: #e0e0e0 solid 1.5px;
 }
 
-/* line 840, src/sass/common/_index.scss */
+/* line 841, src/sass/common/_index.scss */
 body.game-cg .player-goo {
   padding-bottom: 0;
   border-bottom: #800080 solid 1.5px;
 }
 
-/* line 845, src/sass/common/_index.scss */
+/* line 846, src/sass/common/_index.scss */
 body.game-cg .player-greenbacks {
   padding-bottom: 0;
   border-bottom: solid #fefefe 1.5px;
 }
 
-/* line 850, src/sass/common/_index.scss */
+/* line 851, src/sass/common/_index.scss */
 body.game-cg .player-health {
   padding-bottom: 0;
   border-bottom: #0f0 solid 1.5px;
 }
 
-/* line 855, src/sass/common/_index.scss */
+/* line 856, src/sass/common/_index.scss */
 body.game-cg .player-humility {
   padding-bottom: 0;
   border-bottom: #dd0 solid 1.5px;
 }
 
-/* line 860, src/sass/common/_index.scss */
+/* line 861, src/sass/common/_index.scss */
 body.game-cg .player-intelligence {
   padding-bottom: 0;
   border-bottom: #35f solid 1.5px;
 }
 
-/* line 865, src/sass/common/_index.scss */
+/* line 866, src/sass/common/_index.scss */
 body.game-cg .player-strength {
   padding-bottom: 0;
   border-bottom: #0ee solid 1.5px;
 }
 
-/* line 870, src/sass/common/_index.scss */
+/* line 871, src/sass/common/_index.scss */
 body.game-cg #drupalforfirebug_general {
   margin-top: 60px;
   display: block !important;
 }
 
-/* line 875, src/sass/common/_index.scss */
+/* line 876, src/sass/common/_index.scss */
 body.game-cg .swiper-container {
   width: 100%;
 }
 
-/* line 879, src/sass/common/_index.scss */
+/* line 880, src/sass/common/_index.scss */
 body.game-cg .swiper-slide {
   text-align: center;
   font-size: 1.125rem;
@@ -1252,22 +1363,22 @@ body.game-cg .swiper-slide {
   min-height: 440px;
 }
 
-/* line 897, src/sass/common/_index.scss */
+/* line 898, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination .swiper-pagination-bullet {
   background: rgba(48, 188, 0, 0.6);
 }
 
-/* line 901, src/sass/common/_index.scss */
+/* line 902, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination-bullet {
   opacity: 0.6;
 }
 
-/* line 905, src/sass/common/_index.scss */
+/* line 906, src/sass/common/_index.scss */
 body.game-cg .swiper-pagination-bullet-active {
   opacity: 1;
 }
 
-/* line 909, src/sass/common/_index.scss */
+/* line 910, src/sass/common/_index.scss */
 body.game-cg .swiper-container-horizontal > .swiper-pagination-bullets,
 body.game-cg .swiper-pagination-custom,
 body.game-cg .swiper-pagination-fraction {
@@ -1275,24 +1386,24 @@ body.game-cg .swiper-pagination-fraction {
   height: 12px;
 }
 
-/* line 916, src/sass/common/_index.scss */
+/* line 917, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title {
   text-shadow: 1px 1px 3px #444;
 }
 
-/* line 920, src/sass/common/_index.scss */
+/* line 921, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title.loot {
   font-size: 1rem;
 }
 
-/* line 924, src/sass/common/_index.scss */
+/* line 925, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quest-images {
   margin: 0 2px;
   font-weight: initial;
   font-size: 0.6875rem;
 }
 
-/* line 930, src/sass/common/_index.scss */
+/* line 931, src/sass/common/_index.scss */
 body.game-cg .quest-group-name, body.game-cg .quest-group-title {
   font-size: 1.375rem;
   font-weight: bold;
@@ -1302,48 +1413,48 @@ body.game-cg .quest-group-name, body.game-cg .quest-group-title {
   text-shadow: 2px 2px 6px black;
 }
 
-/* line 939, src/sass/common/_index.scss */
+/* line 940, src/sass/common/_index.scss */
 body.game-cg .quest-group-name a, body.game-cg .quest-group-title a {
   text-decoration: none;
 }
 
-/* line 943, src/sass/common/_index.scss */
+/* line 944, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name {
   margin: auto;
 }
 
-/* line 947, src/sass/common/_index.scss */
+/* line 948, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-title {
   margin: 14px auto 0;
 }
 
-/* line 951, src/sass/common/_index.scss */
+/* line 952, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name {
   width: 248px;
 }
 
-/* line 955, src/sass/common/_index.scss */
+/* line 956, src/sass/common/_index.scss */
 body.game-cg .fit-box {
   white-space: nowrap;
   -webkit-transform-origin: top left;
 }
 
-/* line 960, src/sass/common/_index.scss */
+/* line 961, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .quest-group-name.admin-obfuscate {
   text-decoration: line-through;
 }
 
-/* line 964, src/sass/common/_index.scss */
+/* line 965, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .title .overview-only {
   display: none;
 }
 
-/* line 968, src/sass/common/_index.scss */
+/* line 969, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .title .overview-only {
   display: inline-block;
 }
 
-/* line 972, src/sass/common/_index.scss */
+/* line 973, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .title img.overview-only {
   display: inline-block;
   width: 68px;
@@ -1354,39 +1465,39 @@ body.game-cg .swiper-slide.overview .title img.overview-only {
   border-radius: 6px;
 }
 
-/* line 981, src/sass/common/_index.scss */
+/* line 982, src/sass/common/_index.scss */
 body.game-cg .wrong-hood-wrapper, body.game-cg .not-yet-wrapper {
   position: relative;
 }
 
-/* line 985, src/sass/common/_index.scss */
+/* line 986, src/sass/common/_index.scss */
 body.game-cg div + .wrong-hood-wrapper {
   width: 77px;
   display: inline-block;
 }
 
-/* line 990, src/sass/common/_index.scss */
+/* line 991, src/sass/common/_index.scss */
 body.game-cg .quest-icon .wrong-hood-wrapper {
   width: 100px;
 }
 
-/* line 994, src/sass/common/_index.scss */
+/* line 995, src/sass/common/_index.scss */
 body.game-cg img.wrong-hood {
   -webkit-filter: grayscale(60%);
           filter: grayscale(60%);
 }
 
-/* line 998, src/sass/common/_index.scss */
+/* line 999, src/sass/common/_index.scss */
 body.game-cg input.wrong-hood {
   text-align: left;
 }
 
-/* line 1002, src/sass/common/_index.scss */
+/* line 1003, src/sass/common/_index.scss */
 body.game-cg input + img.wrong-hood-overlay {
   bottom: 8px;
 }
 
-/* line 1006, src/sass/common/_index.scss */
+/* line 1007, src/sass/common/_index.scss */
 body.game-cg img.wrong-hood-overlay {
   position: absolute;
   bottom: 6px;
@@ -1395,13 +1506,13 @@ body.game-cg img.wrong-hood-overlay {
   height: 12px;
 }
 
-/* line 1014, src/sass/common/_index.scss */
+/* line 1015, src/sass/common/_index.scss */
 body.game-cg .not-yet-wrapper img.not-yet {
   -webkit-filter: contrast(11%) brightness(50%);
           filter: contrast(11%) brightness(50%);
 }
 
-/* line 1018, src/sass/common/_index.scss */
+/* line 1019, src/sass/common/_index.scss */
 body.game-cg span.not-yet-overlay {
   position: absolute;
   bottom: 14px;
@@ -1414,13 +1525,13 @@ body.game-cg span.not-yet-overlay {
   text-shadow: 0 1px 0 beige;
 }
 
-/* line 1030, src/sass/common/_index.scss */
+/* line 1031, src/sass/common/_index.scss */
 body.game-cg .quests span.not-yet-overlay {
   bottom: 21px;
   right: 21px;
 }
 
-/* line 1035, src/sass/common/_index.scss */
+/* line 1036, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .description {
   display: none;
   color: #e0e8ee;
@@ -1438,26 +1549,26 @@ body.game-cg .swiper-slide .description {
   background-color: rgba(0, 0, 0, 0.17);
 }
 
-/* line 1050, src/sass/common/_index.scss */
+/* line 1051, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .description, body.game-cg .swiper-slide .description.show-expanded {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-/* line 1054, src/sass/common/_index.scss */
+/* line 1055, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .description.empty {
   border-left: none;
   border-right: none;
   background-color: inherit;
 }
 
-/* line 1060, src/sass/common/_index.scss */
+/* line 1061, src/sass/common/_index.scss */
 body.game-cg .swiper-slide.overview .quests {
   display: none;
 }
 
-/* line 1064, src/sass/common/_index.scss */
+/* line 1065, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests {
   background-color: rgba(10, 20, 15, 0.45);
   margin-left: 0;
@@ -1466,12 +1577,12 @@ body.game-cg .swiper-slide .quests {
   border-radius: 0;
 }
 
-/* line 1074, src/sass/common/_index.scss */
+/* line 1075, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests .quest-name a {
   color: #bf6f2f;
 }
 
-/* line 1078, src/sass/common/_index.scss */
+/* line 1079, src/sass/common/_index.scss */
 body.game-cg .swiper-slide .quests .quest-experience,
 body.game-cg .swiper-slide .quests .quest-money,
 body.game-cg .swiper-slide .quests .quest-required_energy,
@@ -1480,24 +1591,24 @@ body.game-cg .swiper-slide .quests .quest-payout {
   color: #bf6f2f;
 }
 
-/* line 1086, src/sass/common/_index.scss */
+/* line 1087, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-next, body.game-cg .swiper-container .swiper-button-prev {
   top: 25px;
 }
 
-/* line 1090, src/sass/common/_index.scss */
+/* line 1091, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-prev, body.game-cg .swiper-container .swiper-container-rtl
 .swiper-button-next {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1095, src/sass/common/_index.scss */
+/* line 1096, src/sass/common/_index.scss */
 body.game-cg .swiper-container .swiper-button-next, body.game-cg .swiper-container .swiper-container-rtl
 .swiper-button-prev {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'%3E%3Cpath%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%231fb423'%2F%3E%3C%2Fsvg%3E");
 }
 
-/* line 1100, src/sass/common/_index.scss */
+/* line 1101, src/sass/common/_index.scss */
 body.game-cg .highlight {
   color: #f0fef8 !important;
   -webkit-text-stroke: 0.4px #cc0;
@@ -1507,7 +1618,7 @@ body.game-cg .highlight {
   text-shadow: #0004 2px 2px;
 }
 
-/* line 1109, src/sass/common/_index.scss */
+/* line 1110, src/sass/common/_index.scss */
 body.game-cg .tagline {
   text-align: center;
   color: #a84;
@@ -1520,7 +1631,7 @@ body.game-cg .tagline {
   margin-bottom: 4px;
 }
 
-/* line 1121, src/sass/common/_index.scss */
+/* line 1122, src/sass/common/_index.scss */
 body.game-cg .bounce-welcome {
   text-align: center;
   color: #687;
@@ -1532,7 +1643,7 @@ body.game-cg .bounce-welcome {
   margin-bottom: 4px;
 }
 
-/* line 1132, src/sass/common/_index.scss */
+/* line 1133, src/sass/common/_index.scss */
 body.game-cg .system-message-response {
   background-color: green;
   text-align: center;
@@ -1542,7 +1653,7 @@ body.game-cg .system-message-response {
   margin: 6px 2px 4px;
 }
 
-/* line 1141, src/sass/common/_index.scss */
+/* line 1142, src/sass/common/_index.scss */
 body.game-cg div.description-speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1552,7 +1663,7 @@ body.game-cg div.description-speech-bubble-wrapper {
   height: 84px;
 }
 
-/* line 1150, src/sass/common/_index.scss */
+/* line 1151, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper {
   font-size: 0.6875rem;
   text-align: left;
@@ -1560,36 +1671,36 @@ body.game-cg div.speech-bubble-wrapper {
   margin: 8px 0;
 }
 
-/* line 1157, src/sass/common/_index.scss */
+/* line 1158, src/sass/common/_index.scss */
 body.game-cg div.description-speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1162, src/sass/common/_index.scss */
+/* line 1163, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man {
   background-position: 0 0;
   height: 80px;
 }
 
-/* line 1167, src/sass/common/_index.scss */
+/* line 1168, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man.sad {
   background-position: 0 9px;
   height: 80px;
 }
 
-/* line 1172, src/sass/common/_index.scss */
+/* line 1173, src/sass/common/_index.scss */
 body.game-cg div.speech-bubble-wrapper .wise_old_man.embarrassed {
   background-position: 0 18px;
   height: 80px;
 }
 
-/* line 1177, src/sass/common/_index.scss */
+/* line 1178, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon {
   position: relative;
 }
 
-/* line 1181, src/sass/common/_index.scss */
+/* line 1182, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon-baseline-overlay {
   position: absolute;
   left: 0;
@@ -1599,7 +1710,7 @@ body.game-cg .quests .quest-icon-baseline-overlay {
   border-radius: 4px;
 }
 
-/* line 1190, src/sass/common/_index.scss */
+/* line 1191, src/sass/common/_index.scss */
 body.game-cg .quests .quest-icon-overlay {
   position: absolute;
   left: 0;
@@ -1609,7 +1720,7 @@ body.game-cg .quests .quest-icon-overlay {
   border-radius: 4px;
 }
 
-/* line 1199, src/sass/common/_index.scss */
+/* line 1200, src/sass/common/_index.scss */
 body.game-cg .bonus-text {
   text-align: center;
   text-transform: uppercase;
@@ -1619,7 +1730,7 @@ body.game-cg .bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1208, src/sass/common/_index.scss */
+/* line 1209, src/sass/common/_index.scss */
 body.game-cg .lesser-bonus-text {
   text-align: center;
   font-weight: bold;
@@ -1628,24 +1739,24 @@ body.game-cg .lesser-bonus-text {
   text-shadow: 1px 1px 4px #0d0f0d;
 }
 
-/* line 1216, src/sass/common/_index.scss */
+/* line 1217, src/sass/common/_index.scss */
 body.game-cg div.lesser-bonus-text {
   margin: 12px 0;
 }
 
-/* line 1220, src/sass/common/_index.scss */
+/* line 1221, src/sass/common/_index.scss */
 body.game-cg .ask-name {
   margin-top: 15px;
   margin-bottom: 9px;
 }
 
-/* line 1225, src/sass/common/_index.scss */
+/* line 1226, src/sass/common/_index.scss */
 body.game-cg .admin-online {
   -webkit-filter: drop-shadow(0 0 3px #f8fefd);
           filter: drop-shadow(0 0 3px #f8fefd);
 }
 
-/* line 1229, src/sass/common/_index.scss */
+/* line 1230, src/sass/common/_index.scss */
 body.game-cg .staff-online {
   -webkit-filter: drop-shadow(0 0 2px yellow);
           filter: drop-shadow(0 0 2px yellow);
@@ -2127,6 +2238,9 @@ body.game-cg.portrait-orientation {
   /**
  * @section Header styles
  */
+  /**
+ * @section Player styles
+ */
 }
 
 /* line 5, src/sass/portrait/_header.scss */
@@ -2205,7 +2319,7 @@ body.game-cg.portrait-orientation header .level-text {
   right: 2px;
 }
 
-/* line 3, src/sass/portrait/_index.scss */
+/* line 4, src/sass/portrait/_index.scss */
 body.game-cg.portrait-orientation .landscape-only {
   display: none !important;
 }
@@ -2354,102 +2468,6 @@ body.game-cg.landscape-orientation .menu-button#menu-button-3 {
 body.game-cg.landscape-orientation .menu-button#menu-button-4 {
   top: 62px;
   left: 2px;
-}
-
-/* line 4, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation #player {
-  position: absolute;
-  top: 0;
-  left: 80px;
-  width: calc(100% - 160px);
-  height: 42px;
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.35);
-  z-index: 1;
-  border-bottom: solid 1.5px #080c;
-}
-
-/* line 15, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation #player div {
-  margin: 2px 0;
-}
-
-/* line 19, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation #player .player_username {
-  font-size: 0.9375rem;
-}
-
-/* line 23, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation #player .player_location {
-  border: solid 1px #dd7a;
-  border-radius: 9px;
-  display: inline-block;
-  margin: 0;
-  padding-top: 2px;
-  background-color: #050e;
-}
-
-/* line 33, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_username {
-  color: #dd7;
-  font-size: .75rem;
-  font-family: Georgia,times new roman,serif;
-  font-weight: 700;
-  text-shadow: 1px 1px 2px #e008;
-  min-width: 80px;
-  text-align: center;
-  -webkit-text-stroke: .35px darkred;
-  background-color: #0003;
-  border-radius: 5px;
-}
-
-/* line 45, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_username.online_now {
-  border-left: solid 1px green;
-  padding-left: 3px;
-}
-
-/* line 49, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_username.online_recently {
-  border-left: solid 1px yellow;
-  padding-left: 3px;
-}
-
-/* line 53, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_username.not_online {
-  border-left: solid 1px red;
-  padding-left: 3px;
-}
-
-/* line 59, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_level, body.game-cg.landscape-orientation .player_clan, body.game-cg.landscape-orientation .player_party, body.game-cg.landscape-orientation .player_location {
-  font-size: 0.625rem;
-  padding: 5px 5px 2px;
-  color: #dd7a;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  -webkit-text-stroke: .35px darkgreen;
-  background-color: #0003;
-  border-radius: 5px;
-  text-transform: uppercase;
-}
-
-/* line 76, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_seat {
-  font-size: 0.755rem;
-  padding: 5px 2px 2px;
-  color: #dd7a;
-  font-family: Georgia, "Times New Roman", serif;
-  font-weight: 400;
-  -webkit-text-stroke: .35px darkred;
-  background-color: #0003;
-  border-radius: 5px;
-  text-transform: uppercase;
-}
-
-/* line 88, src/sass/landscape/_player.scss */
-body.game-cg.landscape-orientation .player_seat a {
-  text-decoration: none;
 }
 
 /* line 4, src/sass/landscape/_people.scss */

@@ -1,0 +1,104 @@
+/**
+ * @section Player styles
+ */
+#player {
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: calc(100% - 160px);
+  height: 42px;
+  text-align: center;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: 1;
+  border-bottom: solid 1.5px #080c;
+
+  div {
+    margin: 2px 0;
+  }
+
+  .player_username {
+    font-size: 0.9375rem;
+  }
+
+  .player_location {
+    border: solid 1px #dd7a;
+    border-radius: 9px;
+    display: inline-block;
+    margin: 0;
+    padding-top: 2px;
+    background-color: #050e;
+  }
+}
+
+.user-display {
+  position: relative;
+  margin-left: 42px;
+
+  img.clan-icon {
+    display: inline-block;
+    width: 36px;
+    position: absolute;
+    left: -42px;
+    top: 0;
+  }
+}
+
+.player_username {
+  text-decoration: none;
+  color: #dd7;
+  font-size: .75rem;
+  //font-family: Georgia,times new roman,serif;
+  font-weight: 700;
+  //text-shadow: 1px 1px 2px #e008;
+  min-width: 80px;
+  text-align: center;
+  //-webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  //border-radius: 5px;
+  &.online_now {
+    border-left: solid 1.5px green;
+    padding-left: 2px;
+  }
+  &.online_recently {
+    border-left: solid 1.5px yellow;
+    padding-left: 2px;
+  }
+  &.not_online {
+    border-left: solid 1.5px red;
+    padding-left: 2px;
+  }
+}
+
+.player_level, .player_clan, .player_party, .player_location {
+  font-size: 0.625rem;
+  padding: 5px 5px 2px;
+  //text-decoration: none;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  //text-shadow: 1px 1px 2px #0e08;
+  -webkit-text-stroke: .35px darkgreen;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+  a {
+    //text-decoration: none;
+  }
+}
+
+.player_seat {
+  font-size: 0.755rem;
+  padding: 5px 2px 2px;
+  //text-decoration: none;
+  color: #dd7a;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  //text-shadow: 1px 1px 2px #0e08;
+  -webkit-text-stroke: .35px darkred;
+  background-color: #0003;
+  border-radius: 5px;
+  text-transform: uppercase;
+  a {
+    text-decoration: none;
+  }
+}

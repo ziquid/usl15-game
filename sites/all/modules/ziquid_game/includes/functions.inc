@@ -2887,12 +2887,11 @@ function zg_render_user_debates_list(&$user) {
   }
 
   $user->display->debates_list =
-    '<span class="user-display user-display-debates-list">' .
-      '<div class="clan-icon"><img width="24"
-      src="/sites/default/files/images/' . $user->display->icon . '"/></div>' .
-    $user->display->username .
+    '<div class="user-display user-display-debates-list">' .
+    '<img class="clan-icon" src="/sites/default/files/images/' .
+    $user->display->icon . '"/>' . $user->display->username .
     '<span class="player_level">(' . $user->display->level . '/' .
-    $user->display->location . ')</span></span>';
+    $user->display->location . ')</span></div>';
   return $user->display->debates_list;
 }
 
