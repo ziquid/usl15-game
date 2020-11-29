@@ -2879,7 +2879,8 @@ function zg_render_user_debates_list(&$user) {
   }
 
   $user->display->username = '<a class="' . $player_class . '" href="/' . $game .
-    '/user/' . $arg2 . '/id:' . $user->id . '">' . $user->username . '</a>' . $user->display->clan_acronym;
+    '/user/' . $arg2 . '/id:' . $user->id . '">' . $user->username . '</a>' .
+    '<span class="player_clan">' . $user->display->clan_acronym . '</span>';
 
   if (strlen($user->ep_name)) {
     $user->display->username = '<span class="player_seat">' . $user->ep_name .

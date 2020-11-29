@@ -64,7 +64,7 @@ body.game-stlouis button, body.game-stlouis .button {
   padding: 3px 8px 4px;
   text-decoration: none;
   text-shadow: 0 1px 0 #528009;
-  margin: 8px 0 8px;
+  margin: 8px 0 4px;
   text-transform: capitalize;
 }
 
@@ -117,18 +117,14 @@ body.game-stlouis .halflight button, body.game-stlouis .halflight .button {
 /* line 83, src/sass/common/_button.scss */
 body.game-stlouis .button-wrapper {
   text-align: center;
+  position: relative;
 }
 
-/* line 87, src/sass/common/_button.scss */
+/* line 88, src/sass/common/_button.scss */
 body.game-stlouis .button-wrapper.button-wrapper-do-again,
 body.game-stlouis .button-wrapper.button-wrapper-debate,
 body.game-stlouis .button-wrapper.button-wrapper-view---respond {
   text-align: right;
-}
-
-/* line 93, src/sass/common/_button.scss */
-body.game-stlouis .button.button-debate {
-  margin: 26px 3px 0 0;
 }
 
 /* line 4, src/sass/common/_player.scss */
@@ -192,20 +188,20 @@ body.game-stlouis .player_username {
 
 /* line 58, src/sass/common/_player.scss */
 body.game-stlouis .player_username.online_now {
-  border-left: solid 1.5px green;
-  padding-left: 2px;
+  border-right: solid 1.5px green;
+  padding-right: 2px;
 }
 
 /* line 62, src/sass/common/_player.scss */
 body.game-stlouis .player_username.online_recently {
-  border-left: solid 1.5px yellow;
-  padding-left: 2px;
+  border-right: solid 1.5px yellow;
+  padding-right: 2px;
 }
 
 /* line 66, src/sass/common/_player.scss */
 body.game-stlouis .player_username.not_online {
-  border-left: solid 1.5px red;
-  padding-left: 2px;
+  border-right: solid 1.5px red;
+  padding-right: 2px;
 }
 
 /* line 72, src/sass/common/_player.scss */
@@ -219,9 +215,10 @@ body.game-stlouis .player_level, body.game-stlouis .player_clan, body.game-stlou
   background-color: #0003;
   border-radius: 5px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
-/* line 89, src/sass/common/_player.scss */
+/* line 90, src/sass/common/_player.scss */
 body.game-stlouis .player_seat {
   font-size: 0.755rem;
   padding: 5px 2px 2px;
@@ -234,7 +231,7 @@ body.game-stlouis .player_seat {
   text-transform: uppercase;
 }
 
-/* line 101, src/sass/common/_player.scss */
+/* line 102, src/sass/common/_player.scss */
 body.game-stlouis .player_seat a {
   text-decoration: none;
 }

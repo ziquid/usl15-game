@@ -175,9 +175,10 @@ firep($item, 'player to debate');
 
   $action = $debate;
 
-  $button = zg_render_button('debates_challenge', $action, '/' . $item->id);
+  $button_debate = zg_render_button('debates_challenge', $action, '/' . $item->id);
+  $button_view = zg_render_button('user', 'View', '/id:' . $item->id);
   print '<div class="' . $clan_class . '">' . zg_render_user($item, 'debates_list')
-  . $button . '</div>';
+  . $button_debate . /*$button_view . */'</div>';
 
 }
 

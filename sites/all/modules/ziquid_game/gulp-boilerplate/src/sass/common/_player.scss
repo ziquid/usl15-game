@@ -56,16 +56,16 @@
   background-color: #0003;
   //border-radius: 5px;
   &.online_now {
-    border-left: solid 1.5px green;
-    padding-left: 2px;
+    border-right: solid 1.5px green;
+    padding-right: 2px;
   }
   &.online_recently {
-    border-left: solid 1.5px yellow;
-    padding-left: 2px;
+    border-right: solid 1.5px yellow;
+    padding-right: 2px;
   }
   &.not_online {
-    border-left: solid 1.5px red;
-    padding-left: 2px;
+    border-right: solid 1.5px red;
+    padding-right: 2px;
   }
 }
 
@@ -81,6 +81,7 @@
   background-color: #0003;
   border-radius: 5px;
   text-transform: uppercase;
+  white-space: nowrap;
   a {
     //text-decoration: none;
   }
