@@ -172,7 +172,6 @@ function zg_loop(\stdClass $game_user, $loop, $force = FALSE) {
     ],
   ], 'setting');
 }
-}
 
 /**
  * Recalc the income and expenses for a user.
