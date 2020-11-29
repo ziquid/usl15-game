@@ -124,6 +124,7 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
     drupal_add_js([
       'zg' => [
         'sound' => $sound,
+        'numberOfLoops' => 0,
       ],
     ], 'setting');
   }
@@ -148,6 +149,29 @@ function zg_song(\stdClass $game_user, $song, $force = FALSE) {
     '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
   zg_sound($game_user, $sound_file, $force);
+}
+
+/**
+ * Tell the client to play a loop.
+ *
+ * @param \stdClass $game_user
+ *   The game user object.
+ * @param string $loop
+ *   The loop name.
+ * @param bool $force
+ *   Force the game client to play the loop even if user has not opted in.
+ */
+function zg_loop(\stdClass $game_user, $loop, $force = FALSE) {
+  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+    '/sounds/' . $loop . ' loop.mp3';
+  firep($sound_file, 'loop file');
+  zg_sound($game_user, $sound_file, $force);
+  drupal_add_js([
+    'zg' => [
+      'numberOfLoops' => 9,
+    ],
+  ], 'setting');
+}
 }
 
 /**
