@@ -124,7 +124,7 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
     drupal_add_js([
       'zg' => [
         'sound' => $sound,
-        'numberOfLoops' => 0,
+        'numberOfLoops' => '0',
       ],
     ], 'setting');
   }
@@ -168,7 +168,7 @@ function zg_loop(\stdClass $game_user, $loop, $force = FALSE) {
   zg_sound($game_user, $sound_file, $force);
   drupal_add_js([
     'zg' => [
-      'numberOfLoops' => 9,
+      'numberOfLoops' => '9',
     ],
   ], 'setting');
 }
