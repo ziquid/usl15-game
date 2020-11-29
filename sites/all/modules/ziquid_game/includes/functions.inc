@@ -114,8 +114,11 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
  * @param bool $force
  *   Force the code to instruct the client to play the sound even if user has
  *   not opted in.
+ * @param string $number_of_loops
+ *   The number of times to loop back to play the sound again.  Default is 0
+ *   (play once).
  */
-function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
+function zg_sound(\stdClass $game_user, $sound, $force = FALSE, $number_of_loops = '0') {
   if ($force || !zg_get_value($game_user, 'SoundOff', FALSE)) {
     if (substr($sound, 0, 4) != 'http') {
       $sound = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
@@ -124,7 +127,7 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE) {
     drupal_add_js([
       'zg' => [
         'sound' => $sound,
-        'numberOfLoops' => '0',
+        'numberOfLoops' => $number_of_loops . '',
       ],
     ], 'setting');
   }
@@ -165,12 +168,7 @@ function zg_loop(\stdClass $game_user, $loop, $force = FALSE) {
   $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
     '/sounds/' . $loop . ' loop.mp3';
   firep($sound_file, 'loop file');
-  zg_sound($game_user, $sound_file, $force);
-  drupal_add_js([
-    'zg' => [
-      'numberOfLoops' => '9',
-    ],
-  ], 'setting');
+  zg_sound($game_user, $sound_file, $force, '9');
 }
 
 /**
