@@ -1090,11 +1090,11 @@ function zg_welcome_callback($phone_id) {
   // Prime the cache.
   drupal_get_path('module', 'zg');
 
-  $game = check_plain(arg(0));
-  db_set_active('game_' . $game);
-  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
-  db_set_active();
-  zg_loop($game_user, 'Knight Rider', TRUE);
+//  $game = check_plain(arg(0));
+//  db_set_active('game_' . $game);
+//  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+//  db_set_active();
+//  zg_loop($game_user, 'Knight Rider', TRUE);
   return theme('zg_welcome', $phone_id);
 }
 
