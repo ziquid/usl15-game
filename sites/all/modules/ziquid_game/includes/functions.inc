@@ -984,6 +984,7 @@ function zg_fetch_users_by_ids($ids) {
       'fetch of ' . count($ids) . ' returned ' . count($data) . ' results at ');
     zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
       'IDs: ' . implode(', ', $ids));
+    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', $ids);
   }
 
   foreach ($data as &$item) {
@@ -2069,7 +2070,8 @@ if (!function_exists('drupal_html_class')) {
 function zg_slack($game_user, $type, $subtype, $message) {
 
   // Only cron or bot or fetch_user messages can be playerless.
-  if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $subtype == 'zg_fetch_users_by_ids')) {
+  if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $subtype == 'zg_fetch_users_by_ids'
+    || $_GET['q'] == 'node')) {
     return zg_send_slack_message($type, $type, $subtype, $message);
   }
 
