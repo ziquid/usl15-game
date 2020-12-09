@@ -978,6 +978,14 @@ function zg_fetch_users_by_ids($ids) {
     $data[] = $item;
   }
 
+  // Data retrieval error?
+  if (count($data) != count($ids)) {
+    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
+      'fetch of ' . count($ids) . ' returned ' . count($data) . ' results at ');
+    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
+      'IDs: ' . implode(', ', $ids));
+  }
+
   foreach ($data as &$item) {
 
     if (empty($item->ep_level)) {
@@ -2060,8 +2068,8 @@ if (!function_exists('drupal_html_class')) {
  */
 function zg_slack($game_user, $type, $subtype, $message) {
 
-  // Only cron or bot messages can be playerless.
-  if ($game_user === NULL && ($type == 'cron' || $type == 'bots')) {
+  // Only cron or bot or fetch_user messages can be playerless.
+  if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $subtype == 'zg_fetch_users_by_ids')) {
     return zg_send_slack_message($type, $type, $subtype, $message);
   }
 
@@ -2130,14 +2138,14 @@ function zg_send_slack_message($channel, $type, $subtype, $message) {
 
   // Not a scalar?  Print its contents.
   if (is_object($message) || is_array($message)) {
-    $message = print_r($message, TRUE);
+    $message = zg_print_r($message);
   }
 
   $type = mb_strtolower($type);
   $datetime = new DateTime();
   $datetimestring = $datetime->format('H:i:s.v');
   $slack_message = '(' . $datetimestring . ': ' . $type . '/' . $subtype . '): ' .
-    nl2br($message);
+    nl2br($message) . ' /' . $_GET['q'];
   $slack_channel = '#uslce';
 
   switch ($channel) {
@@ -2912,7 +2920,7 @@ function zg_render_user_debates_list(&$user) {
     '<div class="user-display user-display-debates-list">' .
     '<img class="clan-icon" src="/sites/default/files/images/' .
     $user->display->icon . '"/>' . $user->display->username .
-    '<span class="player_level">(' . $user->display->level . '/' .
+    ' <span class="player_level">(' . $user->display->level . '/' .
     $user->display->location . ')</span></div>';
   return $user->display->debates_list;
 }

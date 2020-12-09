@@ -151,6 +151,8 @@ while ($item = db_fetch_object($result)) {
   $data[] = (int) $item->id;
 }
 $users = zg_fetch_users_by_ids($data);
+db_set_active();
+
 echo <<< EOF
 <div class="elections-header">
   <div class="election-details">
@@ -184,4 +186,4 @@ firep($item, 'player to debate');
 
 echo '</div>';
 
-db_set_active();
+
