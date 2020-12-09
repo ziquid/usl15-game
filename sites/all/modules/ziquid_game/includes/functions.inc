@@ -935,7 +935,11 @@ function zg_fetch_users_by_ids($ids) {
     $id_string = implode(',', $ids);
   }
   else {
-    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', 'type is: ' . $id_type);
+
+    // Log this exception, unless running from cron.
+    if ($_GET['q'] !== 'node') {
+      zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', 'type is: ' . $id_type);
+    }
     return NULL;
   }
 
