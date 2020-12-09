@@ -925,13 +925,18 @@ function zg_fetch_users_by_ids($ids) {
   }
 
   // Find user from phone_id.
-  if (gettype($ids[0]) == 'string') {
+  $id_type = gettype($ids[0]);
+  if ($id_type == 'string') {
     $where = 'WHERE users.phone_id in ("%s")';
     $id_string = implode('","', $ids);
   }
-  else {
+  elseif ($id_type == 'integer') {
     $where = 'WHERE users.id in (%s)';
     $id_string = implode(',', $ids);
+  }
+  else {
+    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', 'type is: ' . $id_type);
+    return NULL;
   }
 
   $sql = 'SELECT distinct users.*,
@@ -941,35 +946,35 @@ function zg_fetch_users_by_ids($ids) {
     elected_positions.id as ep_level,
     elected_officials.approval_rating,
     elected_positions.energy_bonus as ep_energy_bonus,
-
+  
     clan_members.is_clan_leader,
     clans.name as clan_name, clans.acronym as clan_acronym,
     clans.id as fkey_clans_id,
     event_points.points,
-
+  
     neighborhoods.name as location
-
+  
     FROM `users`
-
+  
     LEFT JOIN `values` ON users.fkey_values_id = `values`.id
-
+  
     LEFT OUTER JOIN elected_officials
     ON elected_officials.fkey_users_id = users.id
-
+  
     LEFT OUTER JOIN elected_positions
     ON elected_positions.id = elected_officials.fkey_elected_positions_id
-
+  
     LEFT OUTER JOIN clan_members on clan_members.fkey_users_id = users.id
-
+  
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
-
+  
     LEFT JOIN user_creations on user_creations.phone_id = users.phone_id
-
+  
     LEFT JOIN event_points on event_points.fkey_users_id = users.id
-
+  
     LEFT JOIN neighborhoods on users.fkey_neighborhoods_id = neighborhoods.id
 
-    ' . $where . ';';
+  ' . $where . ';';
 
   $result = db_query($sql, $id_string);
   $data = [];
@@ -2069,6 +2074,11 @@ if (!function_exists('drupal_html_class')) {
  */
 function zg_slack($game_user, $type, $subtype, $message) {
 
+  // Not a scalar?  Print its contents.
+  if (is_object($message) || is_array($message)) {
+    $message = zg_print_r($message);
+  }
+
   // Only cron or bot or fetch_user messages can be playerless.
   if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $subtype == 'zg_fetch_users_by_ids'
     || $_GET['q'] == 'node')) {
@@ -2138,11 +2148,6 @@ function zg_send_slack_message($channel, $type, $subtype, $message) {
       $bt[1]['line'] . '.', '#uslce-errors');
   }
 
-  // Not a scalar?  Print its contents.
-  if (is_object($message) || is_array($message)) {
-    $message = zg_print_r($message);
-  }
-
   $type = mb_strtolower($type);
   $datetime = new DateTime();
   $datetimestring = $datetime->format('H:i:s.v');
@@ -2159,6 +2164,8 @@ function zg_send_slack_message($channel, $type, $subtype, $message) {
     case 'debug':
     case 'error':
       $slack_channel .= '-errors';
+      $slack_message = '(' .
+        basename($bt[1]['file']) . ':' . $bt[1]['line'] . '): ' . $slack_message;
       break;
 
     case 'bots':
