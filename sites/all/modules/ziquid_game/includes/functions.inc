@@ -944,7 +944,7 @@ function zg_fetch_users_by_ids($ids) {
   }
 
   $sql = 'SELECT distinct users.*,
-    user_creations.datetime as startdate,
+    -- user_creations.datetime as startdate,
     `values`.party_title, `values`.party_icon, `values`.color,
     elected_positions.name as ep_name,
     elected_positions.id as ep_level,
@@ -972,7 +972,7 @@ function zg_fetch_users_by_ids($ids) {
   
     LEFT OUTER JOIN clans on clan_members.fkey_clans_id = clans.id
   
-    LEFT JOIN user_creations on user_creations.phone_id = users.phone_id
+    -- LEFT JOIN user_creations on user_creations.phone_id = users.phone_id
   
     LEFT JOIN event_points on event_points.fkey_users_id = users.id
   
@@ -981,11 +981,27 @@ function zg_fetch_users_by_ids($ids) {
   ' . $where . ';';
 
   $result = db_query($sql, $id_string);
-  $data = [];
+  $data = $phone_ids = $start_dates = [];
+
   while ($item = db_fetch_object($result)) {
     $item->id = (int) $item->id;
     $data[] = $item;
+    $phone_ids[] = $item->phone_id;
   }
+
+  $sql = 'select phone_id, MAX(datetime) as startdate from user_creations
+    where phone_id in ("' . implode('","', $phone_ids) . '")
+    group by phone_id;';
+  $result = db_query($sql);
+  while ($item = db_fetch_object($result)) {
+    $start_dates[$item->phone_id] = $item->startdate;
+  }
+
+  foreach ($data as &$item) {
+    $item->startdate = $start_dates[$item->phone_id];
+  }
+
+  $debug_full = FALSE;
 
   // Data retrieval error?
   if (count($data) != count($ids)) {
@@ -994,6 +1010,7 @@ function zg_fetch_users_by_ids($ids) {
     zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
       'IDs: ' . implode(', ', $ids));
     zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', $ids);
+    $debug_full = TRUE;
   }
 
   foreach ($data as &$item) {
@@ -1003,7 +1020,12 @@ function zg_fetch_users_by_ids($ids) {
     }
 
     zg_alter('fetch_user', $item);
-    firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_ids');
+    if ($debug_full) {
+      firep($item, 'zg_fetch_users_by_ids');
+    }
+    else {
+      firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_ids');
+    }
   }
   return $data;
 }
