@@ -36,6 +36,21 @@ Drupal.behaviors.zg = function (context) {
       setTimeout(zg_header_check_message_count, 20, Drupal.settings.zg.check_message_count_url);
     }
 
+    if (Drupal.settings.zg.snowstorm) {
+      snowStorm.autoStart = true;
+      snowStorm.excludeMobile = false;
+      snowStorm.className = "snowMobileFoo";
+      snowStorm.animationInterval = 50;
+      snowStorm.flakesMax = 100;
+      snowStorm.flakesMaxActive = 50;
+      snowStorm.snowColor = '#777777';
+      snowStorm.snowCharacter = '❄';
+      snowStorm.flakeWidth = 12;
+      snowStorm.flakeHeight = 12;
+      snowStorm.useMeltEffect = true;
+      // snowStorm.useTwinkleEffect = true;
+    }
+
     var level = parseInt(Drupal.settings.zg.level);
     // level = 1;
     var red = Math.max(level - 100, 0);

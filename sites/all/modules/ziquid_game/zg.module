@@ -423,6 +423,12 @@ function zg_init() {
     drupal_add_js($module_path . '/js/zg.js');
     jquery_ui_add(array('ui.draggable', 'ui.droppable', 'ui.sortable'));
 
+    $month = (int) date('n');
+    if ($month < 4 || $month > 10) {
+      drupal_add_js($module_path . '/js/snowstorm/snowstorm-min.js');
+      drupal_add_js(['zg' => ['snowstorm' => TRUE]], 'setting');
+    }
+
     $custom_theme = 'cdc_games';
 
     drupal_add_css($module_path . '/css/' . $game . '.css');

@@ -183,7 +183,7 @@ firep($item, 'player to debate');
   . $button_debate . /*$button_view . */'</div>';
 
 }
-
-echo '</div>';
+?>
+</div>
 
 
