@@ -40,13 +40,13 @@ Drupal.behaviors.zg = function (context) {
       snowStorm.autoStart = true;
       snowStorm.excludeMobile = false;
       snowStorm.className = "snowMobileFoo";
-      snowStorm.animationInterval = 60;
-      snowStorm.flakesMax = 80;
+      snowStorm.animationInterval = 100;
+      snowStorm.flakesMax = 60;
       snowStorm.flakesMaxActive = 40;
       snowStorm.snowColor = '#777777';
       snowStorm.snowCharacter = '❄';
-      snowStorm.flakeWidth = 16;
-      snowStorm.flakeHeight = 16;
+      snowStorm.flakeWidth = 14;
+      snowStorm.flakeHeight = 14;
       snowStorm.useMeltEffect = true;
       // snowStorm.useTwinkleEffect = true;
     }
