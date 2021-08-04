@@ -1641,7 +1641,7 @@ function _drupal_bootstrap_sanitize_request() {
     $sanitized_keys = array_unique($sanitized_keys);
 
     if (count($sanitized_keys) && !empty($conf['sanitize_input_logging'])) {
-      trigger_error(check_plain(sprintf('Potentially unsafe keys removed from request parameters: %s', implode(', ', $sanitized_keys)), E_USER_WARNING));
+      trigger_error(check_plain(sprintf('Potentially unsafe keys removed from request parameters: %s', implode(', ', $sanitized_keys))), E_USER_WARNING);
     }
 
     $sanitized = TRUE;
@@ -1662,6 +1662,7 @@ function _drupal_bootstrap_sanitize_input(&$input, $whitelist = array()) {
 
   if (is_array($input)) {
     foreach ($input as $key => $value) {
+      $key = (string) $key;
       if ($key !== '' && $key[0] === '#' && !in_array($key, $whitelist, TRUE)) {
         unset($input[$key]);
         $sanitized_keys[] = $key;
