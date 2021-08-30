@@ -1,8 +1,11 @@
 #!/bin/bash
 
-DRUSH=`which d7 2>/dev/null`
-[ "$DRUSH" == "" ] && DRUSH=`which d6 2>/dev/null`
-[ "$DRUSH" == "" ] && DRUSH=`which drush 2>/dev/null`
+composer install
+DRUSH=$PWD/vendor/bin/drush
+
+# DRUSH=`which d7 2>/dev/null`
+# [ "$DRUSH" == "" ] && DRUSH=`which d6 2>/dev/null`
+# [ "$DRUSH" == "" ] && DRUSH=`which drush 2>/dev/null`
 
 SCOPE=local
 echo "$PWD" | grep -s -q htdocs && SCOPE=prod
