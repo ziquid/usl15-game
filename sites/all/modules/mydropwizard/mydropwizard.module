@@ -168,7 +168,33 @@ function mydropwizard_menu() {
     'type' => MENU_CALLBACK,
   );
 
+  // For the new monitoring system.
+  $items['admin/settings/mydropwizard'] = array(
+    'title' => 'myDropWizard',
+    'description' => 'Administer settings for myDropWizard monitoring.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('mydropwizard_admin_settings'),
+    'access arguments' => array('administer mydropwizard'),
+    'file' => 'mydropwizard.admin.inc',
+  );
+
+  $items['mydropwizard/agent/vitals'] = array(
+    'type' => MENU_CALLBACK,
+    'page callback' => 'mydropwizard_request_vitals_page',
+    'access callback' => TRUE,
+    'file' => 'mydropwizard.pages.inc',
+  );
+
   return $items;
+}
+
+/**
+ * Implements hook_perm().
+ */
+function mydropwizard_perm() {
+  return array(
+    'administer mydropwizard',
+  );
 }
 
 /**
@@ -371,6 +397,24 @@ function mydropwizard_cron() {
     mydropwizard_refresh();
     _mydropwizard_cron_notify();
   }
+
+  // For the new monitoring system.
+  if (mydropwizard_get_submission_mode() !== 'push') {
+    return;
+  }
+
+  $current_time = time();
+
+  // Only push if its been at least an hour.
+  $last_push_time = variable_get('mydropwizard_last_push', 0);
+  if ($last_push_time > $current_time - 3600) {
+    return;
+  }
+
+  module_load_include('inc', 'mydropwizard', 'mydropwizard.data');
+  mydropwizard_send_vitals_data();
+
+  variable_set('mydropwizard_last_push', $current_time);
 }
 
 /**
@@ -714,3 +758,26 @@ function mydropwizard_invalidate_cache() {
 /**
  * @} End of "defgroup mydropwizard_status_cache".
  */
+
+/**
+ * Gets the submission mode.
+ *
+ * @return string
+ *   The submission mode.
+ */
+function mydropwizard_get_submission_mode() {
+  return variable_get('mydropwizard_submission_mode', 'pull');
+}
+
+/**
+ * Gets an API object for making requests to the API.
+ */
+function mydropwizard_api() {
+  static $api = NULL;
+  if (!$api) {
+    module_load_include('inc', 'mydropwizard', 'mydropwizard.api');
+    $api = new myDropWizardApi();
+  }
+  return $api;
+}
+

@@ -3,9 +3,8 @@ description = Get accurate update status from Drupal 6 Long-Term Support vendors
 core = 6.x
 package = Support
 
-; Information added by Drupal.org packaging script on 2017-11-17
-version = "6.x-1.7"
+; Information added by Drupal.org packaging script on 2021-01-12
+version = "6.x-1.8"
 core = "6.x"
 project = "mydropwizard"
-datestamp = "1510945093"
-
+datestamp = "1610488834"

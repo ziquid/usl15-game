@@ -74,7 +74,6 @@ function _mydropwizard_refresh() {
   $statistics_data = drupal_to_js(array(
     'site_key' => $site_key,
     'projects' => $project_versions,
-    'mydropwizard_key' => variable_get('mydropwizard_customer_key', ''),
   ));
   if (variable_get('mydropwizard_http_post_disabled', FALSE)) {
     // This is a hack for a customer site that seemingly can't do HTTP POST

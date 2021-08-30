@@ -42,19 +42,6 @@ function mydropwizard_settings() {
     '#description' => t('You can choose to send e-mail only if a security update is available, or to be notified about all newer versions. If there are updates available of Drupal core or any of your installed modules and themes, your site will always print a message on the <a href="@status_report">status report</a> page, and will also display an error message on administration pages if there is a security update.', array('@status_report' => url('admin/reports/status')))
   );
 
-  $form['mydropwizard_customers'] = array(
-    '#type' => 'fieldset',
-    '#title' => t('myDropWizard customer settings'),
-    '#collapsible' => TRUE,
-    '#collapsed' => TRUE,
-  );
-  $form['mydropwizard_customers']['mydropwizard_customer_key'] = array(
-    '#type' => 'textfield',
-    '#title' => t('myDropWizard customer key'),
-    '#description' => t("If you're a myDropWizard customer, plesae put the key given to you by support here. This allows us to monitor they modules you have in use. If you're not a myDropWizard customer, just ignore this - it's optional."),
-    '#default_value' => variable_get('mydropwizard_customer_key', ''),
-  );
-
   $form = system_settings_form($form);
   // Custom valiation callback for the email notification setting.
   $form['#validate'][] = 'mydropwizard_settings_validate';

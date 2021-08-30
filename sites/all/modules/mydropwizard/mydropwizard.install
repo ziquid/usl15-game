@@ -38,6 +38,13 @@ function mydropwizard_uninstall() {
     'mydropwizard_notification_threshold',
     'mydropwizard_notify_emails',
     'mydropwizard_customer_key',
+    // For the new monitoring system.
+    'mydropwizard_username',
+    'mydropwizard_api_key',
+    'mydropwizard_submission_mode',
+    'mydropwizard_site_id',
+    'mydropwizard_api_endpoint',
+    'mydropwizard_last_push',
   );
   foreach ($variables as $variable) {
     variable_del($variable);
