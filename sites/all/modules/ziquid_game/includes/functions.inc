@@ -107,7 +107,7 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 /**
  * Tell the client to download and play a sound.
  *
- * @param \stdClass $game_user
+ * @param \stdClass|null $game_user
  *   The game user object.
  * @param string $sound
  *   The sound file's URL.
@@ -118,7 +118,7 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
  *   The number of times to loop back to play the sound again.  Default is 0
  *   (play once).
  */
-function zg_sound(\stdClass $game_user, $sound, $force = FALSE, $number_of_loops = '0') {
+function zg_sound($game_user, $sound, $force = FALSE, $number_of_loops = '0') {
   if ($force || !zg_get_value($game_user, 'SoundOff', FALSE)) {
     if (substr($sound, 0, 4) != 'http') {
       $sound = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
@@ -140,14 +140,14 @@ function zg_sound(\stdClass $game_user, $sound, $force = FALSE, $number_of_loops
  * recently and plays shorter versions if the longer versions have been played
  * too much recently.
  *
- * @param \stdClass $game_user
+ * @param \stdClass|null $game_user
  *   The game user object.
  * @param string $song
  *   The song name.
  * @param bool $force
  *   Force the game client to play the song even if user has not opted in.
  */
-function zg_song(\stdClass $game_user, $song, $force = FALSE) {
+function zg_song($game_user, $song, $force = FALSE) {
   $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
     '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
@@ -157,14 +157,14 @@ function zg_song(\stdClass $game_user, $song, $force = FALSE) {
 /**
  * Tell the client to play a loop.
  *
- * @param \stdClass $game_user
+ * @param \stdClass|null $game_user
  *   The game user object.
  * @param string $loop
  *   The loop name.
  * @param bool $force
  *   Force the game client to play the loop even if user has not opted in.
  */
-function zg_loop(\stdClass $game_user, $loop, $force = FALSE) {
+function zg_loop($game_user, $loop, $force = FALSE) {
   $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
     '/sounds/' . $loop . ' loop.mp3';
   firep($sound_file, 'loop file');
@@ -1373,7 +1373,7 @@ function zg_set_timer($id, $timer_key, $time_secs) {
 /**
  * Return the value for the key in the db if found, or $default if not found.
  *
- * @param object|int $id
+ * @param object|int|null $id
  *   The game user object or user ID.
  * @param string $key
  *   The key to use for the query.
@@ -1384,6 +1384,10 @@ function zg_set_timer($id, $timer_key, $time_secs) {
  *   The value, if found, or $default, if not found.
  */
 function zg_get_value($id, $key, $default = NULL) {
+  if (is_null($id)) {
+    return $default;
+  }
+
   if (is_object($id) && property_exists($id, 'id')) {
     $id = $id->id;
   }
