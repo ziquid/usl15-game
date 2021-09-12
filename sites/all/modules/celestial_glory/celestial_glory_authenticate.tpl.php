@@ -29,15 +29,9 @@
     (arg(2) != 'facebook') && // unidentified facebook user
     (substr(arg(2), 0, 3) != 'ms=') // unidentified MS user
   ) {
-/*
-      mail('joseph@cheek.com', 'unauthorized client',
-       	"Unauthorized user agent of " . $_SERVER['HTTP_USER_AGENT'] .
-        " for phone_id " . check_plain(arg(2)));
-*/
       echo t('This game must be accessed through an authorized client.  ');
       echo t('Please e-mail zipport@ziquid.com if you have any questions.');
       exit;
-
   }
 
   $password = trim(check_plain($_GET['password']));
