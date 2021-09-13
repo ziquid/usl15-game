@@ -130,6 +130,10 @@ DirectoryIndex index.php
   RewriteCond %{REQUEST_URI} ^/celestial_glory/
   RewriteRule ^celestial_glory/(.*)$ http://cg.game.ziquid.com/cg/$1 [L,R=301]
 
+  RewriteCond %{HTTP_HOST} ^cg\.game\.ziquid\.com$ [NC]
+  RewriteCond %{REQUEST_URI} ^/var/www/html/uslce/prod/
+  RewriteRule ^var/www/html/uslce/prod/(.*)$ http://cg.game.ziquid.com/$1 [L,R=301]
+
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
   # For example if your site is at http://example.com/drupal uncomment and
