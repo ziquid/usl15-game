@@ -805,8 +805,9 @@ function zg_fetch_user($force = FALSE) {
 
   // Only allow access through authorized clients.
   if (((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.celestialglory') === FALSE) &&
     (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.detroit') === FALSE)) &&
+    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE) &&
 
     // Paypal IPN addresses.
     ($ip_addr != '66.211.170.66') &&
