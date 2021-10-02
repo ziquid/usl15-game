@@ -1,0 +1,10 @@
+name: uslce
+recipe: drupal6
+config:
+  php: '7.4'
+  composer_version: '2.1.3'
+  via: apache:2.4
+  webroot: .
+  database: mysql:5.7
+  drush: ^8
+  xdebug: false
