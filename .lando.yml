@@ -2,9 +2,19 @@ name: uslce
 recipe: drupal6
 config:
   php: '7.4'
-  composer_version: '2.1.3'
+  composer_version: '2.1.8'
   via: apache:2.4
   webroot: .
-  database: mysql:5.7
   drush: ^8
   xdebug: false
+services:
+  database:
+    type: mysql:5.7
+    run_as_root:
+      # Creates the extra databases as root since the app user does not have those privileges
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS cg_game; GRANT ALL PRIVILEGES ON cg_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS uslce_game; GRANT ALL PRIVILEGES ON uslce_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
+  phpmyadmin:
+    type: phpmyadmin
+    hosts: 
+      - database
