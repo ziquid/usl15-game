@@ -8,7 +8,7 @@
  * Synced with 2114: no
  */
 
-function stlouis_menu() {
+function stlouis_menuu() {
 
   $items = [];
 

@@ -24,7 +24,16 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  foreach (zg_get_game_list() as $game) {
+  $items['%/bounce/%'] = [
+    'title' => 'Ziquid Game Bounce',
+    'page callback' => 'zg_bounce_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access game content'],
+    'type' => MENU_CALLBACK,
+  ];
+
+  $game_list = zg_get_game_list();
+  foreach ($game_list as $game) {
 
     $items[$game . '/authenticate/%'] = [
       'title' => 'Ziquid Game Authenticate',
@@ -1698,6 +1707,10 @@ function zg_bounce_callback($phone_id) {
   }
 
   $game = check_plain(arg(0));
+  if (!in_array($game, zg_get_game_list())) {
+    return drupal_access_denied();
+  }
+
   db_set_active('game_' . $game);
   $game_user = zg_fetch_user_by_id(zg_get_phoneid());
   $cheat = zg_get_value($game_user, 'GoldenPlatesFTW', FALSE);

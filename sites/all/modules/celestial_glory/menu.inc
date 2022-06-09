@@ -1,7 +1,7 @@
 <?php
 
 
-function celestial_glory_menu() {
+function celestial_glory_menuu() {
 
   $items['cg/user/%'] = array(
     'title' => 'Celestial Glory User Profile Page',
