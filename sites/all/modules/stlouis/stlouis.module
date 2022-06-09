@@ -27,8 +27,9 @@ function stlouis_cron() {
   $game = 'stlouis';
   define('REQUEST_TIME', time());
 
-  db_set_active('game_' . $game);
+  db_set_active();
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+  db_set_active('game_' . $game);
 
   // Save old approval ratings.
   $sql = 'update elected_officials set approval_45 = approval_30,
