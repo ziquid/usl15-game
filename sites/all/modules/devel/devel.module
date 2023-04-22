@@ -212,7 +212,9 @@ function devel_menu() {
  */
 function _devel_switch_user_access($name) {
   // Suppress notices when on other pages when menu system still checks access.
-  return user_access('switch users') && drupal_valid_token($_GET['token'] ?? NULL, "devel/switch/$name|" . $_GET['destination'] ?? NULL, TRUE);
+  $token = $_GET['token'] ?? NULL;
+  $dest = $_GET['destination'] ?? NULL;
+  return user_access('switch users') && drupal_valid_token($token, "devel/switch/$name|" . $dest, TRUE);
 }
 
 function devel_menu_need_destination() {
