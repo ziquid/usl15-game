@@ -192,7 +192,7 @@ function db_result($result) {
     // The mysqli_fetch_row function has an optional second parameter $row
     // but that can't be used for compatibility with Oracle, DB2, etc.
     $array = mysqli_fetch_row($result);
-    return $array[0];
+    return $array[0] ?? FALSE;
   }
   return FALSE;
 }

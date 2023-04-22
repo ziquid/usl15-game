@@ -212,7 +212,7 @@ function devel_menu() {
  */
 function _devel_switch_user_access($name) {
   // Suppress notices when on other pages when menu system still checks access.
-  return user_access('switch users') && drupal_valid_token(@$_GET['token'], "devel/switch/$name|" . @$_GET['destination'], TRUE);
+  return user_access('switch users') && drupal_valid_token($_GET['token'] ?? NULL, "devel/switch/$name|" . $_GET['destination'] ?? NULL, TRUE);
 }
 
 function devel_menu_need_destination() {
@@ -481,7 +481,7 @@ function devel_start() {
  * @param $context
  *   An array that points to the active symbol table at the point the error occurred.
  */
-function backtrace_error_handler($error_level, $message, $filename, $line, $context) {
+function backtrace_error_handler($error_level, $message, $filename, $line, $context = NULL) {
   // Don't respond to the error if it was suppressed with a '@'.
   if (error_reporting() == 0) {
     return;
@@ -1820,9 +1820,11 @@ function dargs($always = TRUE) {
   }
 }
 
-// An alias for drupal_debug().
-function dd($data, $label = NULL) {
-  return drupal_debug($data, $label);
+if (!function_exists('dd')) {
+  // An alias for drupal_debug().
+  function dd($data, $label = NULL) {
+    return drupal_debug($data, $label);
+  }
 }
 
 // Log any variable to a drupal_debug.log in the site's temp directory.
