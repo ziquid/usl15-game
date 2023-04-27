@@ -101,11 +101,12 @@ else {
 firep($comp_show_level, 'final comp_show_level value (' . $extra_comp .
   ' were extra)');
 
+$want_jol = '';
 //$want_jol = ($_GET['want_jol'] == 'yes') ? '/want_jol' : '';
 //if (arg(4) == 'want_jol') $want_jol = '/want_jol';
 
-$message_orig = check_plain($_GET['message']);
-$message = _stlouis_filter_profanity($message_orig);
+$message_orig = key_exists('message', $_GET) ? check_plain($_GET['message']) : '';
+$message = zg_filter_profanity($message_orig);
 //firep($message);
 
 if (strlen($message) && strlen($message) < 3) {
@@ -152,7 +153,8 @@ $icon = $game . '_clan_' . $item->party_icon . '.png';
 $party_title = preg_replace('/^The /', '', $item->party_title);
 
 // Save the message, if any.
-$private = check_plain($_GET['private']) == '1' ? 1 : 0;
+$private = key_exists('private', $_GET) ? check_plain($_GET['private']) : '';
+$private = ($private == '1') ? 1 : 0;
 
 if (!empty($message)) {
   zg_send_user_message($game_user->id, $item->id, $private, $message);
@@ -242,6 +244,7 @@ if (!empty($item->clan_acronym)) {
   $clan_link = $item->clan_name;
 }
 else {
+  $clan_acronym = '';
   $clan_link = t('None');
 }
 

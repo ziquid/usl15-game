@@ -394,6 +394,9 @@ function zg_show_profile_menu(\stdClass $game_user) {
     $comp_active = 'active';
   }
 
+  // FIXME.
+  $favor = 'Favor';
+
   echo <<< EOF
 <div class="news">
   <a href="/$game/user/$arg2/$arg3" class="button $user_active">Profile</a>
@@ -998,7 +1001,7 @@ function zg_fetch_users_by_ids($ids) {
   }
 
   foreach ($data as &$item) {
-    $item->startdate = $start_dates[$item->phone_id];
+    $item->startdate = $start_dates[$item->phone_id] ?? 'Unknown';
   }
 
   $debug_full = FALSE;
@@ -1395,8 +1398,12 @@ function zg_get_value($id, $key, $default = NULL) {
     WHERE `fkey_users_id` = %d AND `key` = "%s";';
   $item = db_query($sql, (int) $id, $key)->fetch_object();
 
+  if (!$item) {
+    return $default;
+  }
+
   // Serialized data?  Undo it.
-  if (substr($item->value, 0, 11) == 'serialized:') {
+  if (property_exists($item, 'value') && substr($item->value, 0, 11) == 'serialized:') {
     return unserialize(substr($item->value, 11));
   }
 
@@ -2504,6 +2511,10 @@ function zg_get_new_user_messages($game_user, $check_user_id, $msg_id = 0) {
   if ($game_user->id != $check_user_id) {
     $no_private = ' AND (private = 0 OR user_messages.fkey_users_from_id = %d) ';
   }
+  else {
+    $no_private = '';
+  }
+
   $sql = '
   select user_messages.timestamp, user_messages.message,
   user_messages.fkey_users_from_id, user_messages.fkey_users_to_id,
