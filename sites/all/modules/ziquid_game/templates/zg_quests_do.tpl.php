@@ -43,6 +43,7 @@ else {
   $outcome_reason = '<div class="quest-succeeded">' . t('Success!') .
     '</div>';
 }
+
 // Check to see if quest prerequisites are met.  Unlimited quests below level 6.
 if (($game_user->energy < $quest_action->required_energy) &&
   ($game_user->level >= 6)) {

@@ -731,11 +731,17 @@ EOF;
   }
 
   // Show the quest!
-  echo <<< EOF
-$item->outcome
-$item->loot_html
-$item->quest_completion_html
-EOF;
+  if (property_exists($item, 'outcome')) {
+    echo $item->outcome;
+  }
+
+  if (property_exists($item, 'loot_html')) {
+    echo $item->loot_html;
+  }
+
+  if (property_exists($item, 'quest_completion_html')) {
+    echo $item->quest_completion_html;
+  }
 
   if ($dont_show_at_all) {
     return;
