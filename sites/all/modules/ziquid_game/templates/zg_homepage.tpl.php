@@ -21,7 +21,7 @@
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $game_user = zg_fetch_user();
-$message = check_plain($_GET['message']);
+$message = key_exists('message', $_GET) ? check_plain($_GET['message']) : '';
 $version = $game_settings['version'] . ' ' . $game_settings['last_update'];
 
 $d = zg_get_html(
@@ -405,4 +405,3 @@ $("#news-mayor").addClass("active");
 </script>
 <!--  <div id="personal-text">-->
 EOF;
-

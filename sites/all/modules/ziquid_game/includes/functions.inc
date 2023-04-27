@@ -953,6 +953,7 @@ function zg_fetch_users_by_ids($ids) {
     elected_positions.id as ep_level,
     elected_officials.approval_rating,
     elected_positions.energy_bonus as ep_energy_bonus,
+    elected_positions.can_broadcast_to_party,
   
     clan_members.is_clan_leader,
     clans.name as clan_name, clans.acronym as clan_acronym,
@@ -2248,7 +2249,7 @@ function zg_get_all_messages($game_user) {
   WHERE fkey_users_id = %d;';
   $result = db_query($sql, $game_user->id);
   $item = db_fetch_object($result);
-  $elected_official_type = $item->type;
+  $elected_official_type = $item->type ?? '';
   firep($elected_official_type, 'elected_official_type');
 
   $clan_sql = 'where clan_messages.fkey_neighborhoods_id = %d';
