@@ -590,6 +590,7 @@ function zg_save_user_agent($game_user) {
         // New user_agent and a password -- gotta authenticate!
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
+        db_set_active();
         drupal_goto("$game/authenticate/$arg2");
       }
 
@@ -640,6 +641,7 @@ function zg_save_user_IP($game_user) {
       else {
         $game = check_plain(arg(0));
         $arg2 = check_plain(arg(2));
+        db_set_active();
         drupal_goto("$game/authenticate/$arg2");
       }
     }
