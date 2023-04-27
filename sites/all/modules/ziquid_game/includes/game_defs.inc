@@ -9,6 +9,7 @@
  * .
  */
 
+if (!defined('EVENT_NONE')) {
 define("EVENT_NONE", 0);
 define("EVENT_DONE", 1);
 define("EVENT_DEBATE", 2);
@@ -53,6 +54,7 @@ define("MISSION_MAY", 1005);
 define("MISSION_JUN", 1006);
 define("MISSION_JUL", 1007);
 define("MISSION_OCT", 1010);
+}
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300
