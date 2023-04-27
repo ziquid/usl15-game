@@ -424,7 +424,8 @@ function zg_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
-  if (strpos($obj->meta, 'use_job_picture') !== FALSE) {
+  if (property_exists($obj, 'meta') &&
+    strpos($obj->meta, 'use_job_picture') !== FALSE) {
     $sql = 'SELECT land.id FROM `land_ownership`
       LEFT JOIN land ON fkey_land_id = land.id
       WHERE fkey_users_id = %d

@@ -652,7 +652,7 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
   $dont_show_at_all = FALSE;
 
   $wrong_hood = $wrong_hood_wrapper = $wrong_hood_overlay = $comment_start
-    = $comment_end = $go_there = '';
+    = $comment_end = $go_there = $do_again_button = '';
 
   // Has quest actions?  Don't allow clicking on image or title.
   if (property_exists($item, 'quest_actions') && is_array($item->quest_actions)) {
@@ -660,7 +660,7 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
     $comment_end = ' -->';
   }
 
-  if (strlen($item->quest_completion_html)) {
+  if (property_exists($item, 'quest_completion_html')) {
     $item->quest_completion_html = '<div class="quest-completed-wrapper">' .
       $item->quest_completion_html . '</div>';
   }
