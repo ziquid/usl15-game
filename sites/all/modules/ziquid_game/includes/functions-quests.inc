@@ -501,7 +501,8 @@ function zg_fetch_quest_group_stats(\stdClass $game_user, $active_quests, $group
   $percentage_divisor = 1;
   $next_group_html = '';
 
-  if (property_exists($quest_group_completion, 'times_completed') &&
+  if (is_object($quest_group_completion) &&
+    property_exists($quest_group_completion, 'times_completed') &&
     $quest_group_completion->times_completed > 0) {
     $next_group_html = t('(2nd round)');
     $percentage_target = 200;
