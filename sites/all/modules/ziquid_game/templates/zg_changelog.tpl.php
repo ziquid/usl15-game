@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
   <div class="subtitle">
+    Apr 30, 2023
+  </div>
+  <ul>
+    <li>
+      PHP 8.1 support.
+    </li>
+  </ul>
+
+  <div class="subtitle">
     Jul 10, 2022
   </div>
   <ul>
