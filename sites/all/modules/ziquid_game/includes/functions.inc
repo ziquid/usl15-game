@@ -1024,6 +1024,11 @@ function zg_fetch_users_by_ids($ids) {
       $item->ep_level = 0;
     }
 
+    // @todo: how does this happen?
+    if ($item->actions_next_gain === '0000-00-00 00:00:00') {
+      $item->actions_next_gain = date('Y-m-d H:i:s');
+    }
+
     zg_alter('fetch_user', $item);
     if ($debug_full) {
       firep($item, 'zg_fetch_users_by_ids');
