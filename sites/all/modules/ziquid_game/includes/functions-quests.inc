@@ -254,8 +254,8 @@ function zg_fetch_highlighted_quest_groups(\stdClass $game_user) {
   $data = $data2 = [];
   $sql = 'SELECT qg.*, q.required_level FROM `quest_groups` qg
     left join quests q on q.group = qg.id
-    where q.required_level <= %d
-    group by qg.id';
+    where q.required_level <= %d;';
+//    group by qg.id';
   $result = db_query($sql, $game_user->level);
   while ($item = db_fetch_object($result)) {
     $data[] = $item;

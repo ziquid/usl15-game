@@ -2144,7 +2144,7 @@ function zg_slack($game_user, $type, $subtype, $message) {
   }
 
   // Admin player or dev box?  Log only to the devs channel.
-  if ($_SERVER['HTTP_HOST'] == 'usl15.dd:8083' || $game_user->meta == 'admin') {
+  if ($_SERVER['HTTP_HOST'] == 'uslce.lndo.site' || $game_user->meta == 'admin') {
     return zg_send_slack_message('devs', $type, $subtype, $message);
   }
 

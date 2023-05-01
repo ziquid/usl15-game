@@ -369,7 +369,8 @@ function zg_render_equip(\stdClass $game_user, \stdClass $item, &$ai_output, arr
     $sql = 'select name from neighborhoods where id = %d;';
     $result = db_query($sql, $item->fkey_neighborhoods_id);
     $hood = db_fetch_object($result);
-    $cant_buy_reason = '(' . $hood->name . ' only)';
+    $hood = is_object($hood) ? $hood->name : '';
+    $cant_buy_reason = '(' . $hood . ' only)';
   }
 
   if ($item->fkey_values_id != 0 &&
