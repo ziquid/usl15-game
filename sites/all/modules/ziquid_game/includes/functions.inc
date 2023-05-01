@@ -906,7 +906,7 @@ function zg_competency_name($comp) {
 function zg_fetch_user_by_id($id) {
   $user = zg_fetch_users_by_ids([$id]);
   if (is_array($user)) {
-    zg_slack($user[0], 'debug', 'game user', $user[0]);
+//    zg_slack($user[0], 'debug', 'game user', $user[0]);
     return $user[0];
   }
   return NULL;
