@@ -31,7 +31,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div>
 <?php print $closure ?>
 <div id="copyright">
-  Copyright &copy; 2017-2022 Ziquid Design Studio, LLC.
+  Copyright &copy; 2017-2023 Ziquid Design Studio, LLC.
 <br><br>&nbsp;
 </div>
 </body>
