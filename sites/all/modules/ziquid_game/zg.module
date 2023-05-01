@@ -21,7 +21,9 @@ require_once drupal_get_path('module', 'zg') . '/includes/profanity.inc';
  */
 function zg_cron() {
   global $game;
-  define('REQUEST_TIME', time());
+  if (!defined('REQUEST_TIME')) {
+    define('REQUEST_TIME', time());
+  };
   foreach (zg_get_game_list() as $game) {
 
     db_set_active();
@@ -321,8 +323,8 @@ function zg_cron() {
     imagedestroy($map_bottom);
     */
 
-    // Set up includes and init() for event, if any.
-    if ($event_type !== EVENT_NONE) {
+    // Set up includes and init() for events, if any.
+    foreach ($event_type as $event_active) {
       db_set_active();
       $module_path = drupal_get_path('module', $game);
       db_set_active('game_' . $game);

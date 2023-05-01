@@ -397,7 +397,7 @@ function game_zombie_name() {
     'Zero',
   ];
 
-  return 'PoliZombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
+  return /* 'PoliZombie ' . */ $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 
 }

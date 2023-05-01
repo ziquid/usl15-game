@@ -304,13 +304,15 @@ function stlouis_cron() {
 
   }
 */
-  // Set up includes and init() for event, if any.
-  if ($event_type !== EVENT_NONE) {
+  // Set up includes and init() for events, if any.
+  foreach ($event_type as $event_active) {
+    db_set_active();
     $module_path = drupal_get_path('module', $game);
-    $file_to_include = $module_path . '/events/' . $event_type . '.inc';
+    db_set_active('game_' . $game);
+    $file_to_include = $module_path . '/events/' . $event_active . '.inc';
     if (file_exists($file_to_include)) {
       include_once $file_to_include;
-      $function_name = 'game_' . $event_type . '_init';
+      $function_name = 'game_' . $event_active . '_init';
       if (function_exists($function_name)) {
         $function_name();
       }
@@ -383,4 +385,3 @@ function _stlouis_fetch_user() {
 function _stlouis_header($game_user) {
   return zg_fetch_header($game_user);
 }
-

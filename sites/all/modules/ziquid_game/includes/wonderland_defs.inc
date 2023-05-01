@@ -5,37 +5,39 @@
  * Wonderland game definitions.
  */
 
-define(EVENT_NONE, 0);
-define(EVENT_DONE, 1);
-define(EVENT_DEBATE, 2);
-define(EVENT_ST_PATTYS, 3);
-define(EVENT_APRIL_FOOLS, 4);
-define(EVENT_NEW_NAMES, 5);
-define(EVENT_PRE_MAY, 6);
-define(EVENT_CINCO_DE_MAYO, 7);
-define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
-define(EVENT_DOUBLE_LUCK_MONEY, 9);
+if (!defined('EVENT_NONE')) {
+  define(EVENT_NONE, 0);
+  define(EVENT_DONE, 1);
+  define(EVENT_DEBATE, 2);
+  define(EVENT_ST_PATTYS, 3);
+  define(EVENT_APRIL_FOOLS, 4);
+  define(EVENT_NEW_NAMES, 5);
+  define(EVENT_PRE_MAY, 6);
+  define(EVENT_CINCO_DE_MAYO, 7);
+  define(EVENT_PRE_DOUBLE_LUCK_MONEY, 8);
+  define(EVENT_DOUBLE_LUCK_MONEY, 9);
 
-define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
-define(EVENT_FLAG_DAY, 'event_flag_day');
+  define(EVENT_FAST_COMPETENCIES, 'event_fast_competencies');
+  define(EVENT_FLAG_DAY, 'event_flag_day');
 
-define(EVENT_HALLOWEEN, 'event_halloween');
+  define(EVENT_HALLOWEEN, 'event_halloween');
 
-define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
-define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
-define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
-define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
-define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
-define(EVENT_MOVE_3, 'event_move_3');
-define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
-define(EVENT_ROT13_COMPS, 'event_rot13_comps');
-define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
+  define(EVENT_PRE_MEMORIAL_DAY, 'event_pre_memorial_day');
+  define(EVENT_MEMORIAL_DAY_1, 'event_memorial_day_1');
+  define(EVENT_MEMORIAL_DAY_2, 'event_memorial_day_2');
+  define(EVENT_MEMORIAL_DAY_3, 'event_memorial_day_3');
+  define(EVENT_MEMORIAL_DAY_4, 'event_memorial_day_4');
+  define(EVENT_MOVE_3, 'event_move_3');
+  define(EVENT_POLL_JUN_01_2018, 'event_poll_jun_01_2018');
+  define(EVENT_ROT13_COMPS, 'event_rot13_comps');
+  define(EVENT_STATS_ONLY_HOOD, 'event_stats_only_hood');
 
-define(MISSION_NONE, 1000);
-define(MISSION_MAY, 1005);
-define(MISSION_JUN, 1006);
-define(MISSION_JUL, 1007);
-define(MISSION_OCT, 1010);
+  define(MISSION_NONE, 1000);
+  define(MISSION_MAY, 1005);
+  define(MISSION_JUN, 1006);
+  define(MISSION_JUL, 1007);
+  define(MISSION_OCT, 1010);
+}
 
 $debate_wait_time = 900; // 1200
 $zombie_debate_wait = 180; // 300

@@ -1231,7 +1231,7 @@ function zg_zombie_name() {
     'Zero',
   ];
 
-  return 'Zombie ' . $first[mt_rand(0, count($first) - 1)] . ' '
+  return /* 'Zombie ' . */ $first[mt_rand(0, count($first) - 1)] . ' '
     . $last[mt_rand(0, count($last) - 1)];
 }
 
