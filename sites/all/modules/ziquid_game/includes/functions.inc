@@ -179,11 +179,11 @@ function zg_loop($game_user, $loop, $force = FALSE) {
  */
 function zg_recalc_income(\stdClass &$game_user) {
   $sql = 'update users set income =
-    (SELECT sum(land.payout * land_ownership.quantity)
+    coalesce((SELECT sum(land.payout * land_ownership.quantity)
     as income from land
     left join land_ownership
     on land_ownership.fkey_land_id = land.id and
-    land_ownership.fkey_users_id = %d)
+    land_ownership.fkey_users_id = %d), 0)
     where id = %d;';
   db_query($sql, $game_user->id, $game_user->id);
 
