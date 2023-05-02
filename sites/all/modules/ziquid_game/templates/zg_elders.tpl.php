@@ -60,8 +60,8 @@ $offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man with-video ' . $happy . '">
     <video id="wise-old-man" autoplay loop muted poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
-      <source src="/sites/default/files/videos/stlouis_wise_old_man_resting_480.mov" type="video/quicktime">
-      <source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">
+      <source src="/sites/default/files/videos/stlouis-handbrake.mp4" type="video/mp4">
+      <!--<source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">-->
     </video>
   </div>
   <div class="speech-bubble with-video">
