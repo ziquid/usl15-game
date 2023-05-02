@@ -58,9 +58,12 @@ else {
 list($offer, $comment) = zg_luck_money_offer($game_user);
 $offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
-  <div class="wise_old_man ' . $happy . '">
+  <div class="wise_old_man with-video ' . $happy . '">
+    <video id="wise-old-man" autoplay loop muted poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
+      <source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">
+    </video>
   </div>
-  <div class="speech-bubble">
+  <div class="speech-bubble with-video">
     <p>Hello again, <em>' . $game_user->username . '</em>!</p>
     ' . $luck_text . '
     ' . $help_text . '
