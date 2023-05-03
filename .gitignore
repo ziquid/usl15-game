@@ -2,13 +2,11 @@
 /sites/default/settings.php*
 usl15.*.sql
 usl15.*.sql.gz
-usl15.dd
-usl15-game.dd
 /sites/default/files/images/*_map_bottom.jpg
 /sites/default/files/images/*_map_mid.jpg
 /sites/default/files/images/*_map_top.jpg
 /sites/default/files/images/*_map_large_bottom_colored.jpg
 /sites/default/files/images/*_map_large_colored.jpg
 /vendor
-cg.game.sql
-wonderland.game.sql
+*.game.sql
+*.game.sql.gz

@@ -30,14 +30,15 @@ function zg_elders_do_reset_callback($phone_id) {
     return;
   }
 
-  global $game, $phone_id;
+  global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_player();
+  $pl = zg_fetch_player();
 
-  $reset_me = check_plain(trim($_GET['reset_me']));
+  $reset_me = key_exists('reset_me', $_GET) ?
+    strtoupper(check_plain(trim($_GET['reset_me']))) : '';
 
   // To prevent errant resets.
-  if (strtoupper($reset_me) == 'RESET ME') {
+  if ($reset_me == 'RESET ME') {
 
     $d = zg_get_default(
       [
@@ -47,45 +48,45 @@ function zg_elders_do_reset_callback($phone_id) {
     );
 
     $sql = 'delete from elected_officials where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'UPDATE bank_accounts SET active = 0 where fkey_users_id = %d';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from user_competencies where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from equipment_ownership where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from land_ownership where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from staff_ownership where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from quest_completion where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from quest_group_completion where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from user_messages where fkey_users_to_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from challenge_messages where fkey_users_to_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from goals_achieved where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'select * from clan_members where fkey_users_id = %d;';
-    $item = db_query($sql, $game_user->id)->fetch_object();
+    $item = db_query($sql, $pl->id)->fetch_object();
 
     // Clan leader? Delete entire clan.
     if ($item->is_clan_leader) {
       $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-      db_query($sql, $game_user->fkey_clans_id);
+      db_query($sql, $pl->fkey_clans_id);
       $sql = 'delete from clan_members where fkey_users_id = %d;';
       db_query($sql, $item->id);
       $sql = 'delete from clans where id = %d;';
@@ -93,16 +94,16 @@ function zg_elders_do_reset_callback($phone_id) {
     }
     else {
       $sql = 'delete from clan_members where fkey_users_id = %d;';
-      db_query($sql, $game_user->id);
+      db_query($sql, $pl->id);
     }
 
     $sql = 'delete from quest_completion where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
     $sql = 'delete from {user_attributes} where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
 
-    $luck_in_sql = max($game_user->luck, 10);
+    $luck_in_sql = max($pl->luck, 10);
 
     $sql = "UPDATE users
       SET username = '',
@@ -121,21 +122,21 @@ function zg_elders_do_reset_callback($phone_id) {
       energy_next_gain = CURRENT_TIMESTAMP,
       income = 0,
       expenses = 0,
-      income_next_gain = '0000-00-00 00:00:00',
+      income_next_gain = CURRENT_TIMESTAMP,
       actions = 3,
       actions_max = 3,
-      actions_next_gain = '0000-00-00 00:00:00',
+      actions_next_gain = CURRENT_TIMESTAMP,
       initiative = 1,
       endurance = 1,
       elocution = 1,
       debates_won = 0,
       debates_lost = 0,
-      debates_last_time = '0000-00-00 00:00:00',
+      debates_last_time = CURRENT_TIMESTAMP,
       favors_asked_noncompleted = 0,
       favors_asked_completed = 0,
       favors_noncompleted = 0,
       favors_completed = 0,
-      last_bonus_date = '0000-00-00',
+      last_bonus_date = CURRENT_TIMESTAMP,
       skill_points = 0,
       luck = %d,
       -- karma
@@ -146,7 +147,7 @@ function zg_elders_do_reset_callback($phone_id) {
       -- meta_int
       WHERE id = %d;";
     db_query($sql, $d['initial_hood'], $d['initial_user_value'],
-      $luck_in_sql, $game_user->id);
+      $luck_in_sql, $pl->id);
     db_set_active();
     drupal_goto($game . '/welcome/' . $arg2, 'type=reset');
 
