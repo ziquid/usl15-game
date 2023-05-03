@@ -613,7 +613,7 @@ function zg_action_use(\stdClass $game_user, $quantity = 1) {
   }
 
   // Reprocess user object.
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 
@@ -644,7 +644,7 @@ function zg_karma(\stdClass &$game_user, $text, $quantity) {
     "(was: $game_user->karma) for: $text", $quantity);
 
   // Reprocess user object.
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 
@@ -711,7 +711,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
   zg_slack($game_user, 'luck', $slack_subtype, $text);
 
   // Reprocess user object.
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 
@@ -895,7 +895,7 @@ function zg_competency_name($comp) {
 }
 
 /**
- * Fetch a user object by phone ID or user ID.
+ * Fetch a player object by phone ID or user ID.
  *
  * @param string|int $id
  *   The user ID or phone ID of the object.
@@ -903,26 +903,26 @@ function zg_competency_name($comp) {
  * @return object|null
  *   The user object, if any.
  */
-function zg_fetch_user_by_id($id) {
-  $user = zg_fetch_users_by_ids([$id]);
-  if (is_array($user)) {
-//    zg_slack($user[0], 'debug', 'game user', $user[0]);
-    return $user[0];
+function zg_fetch_player_by_id($id) {
+  $pl = zg_fetch_players_by_ids([$id]);
+  if (is_array($pl) && count($pl)) {
+//    zg_slack($pl[0], 'debug', 'game user', $pl[0]);
+    return $pl[0];
   }
   return NULL;
 }
 
 /**
- * Retrieve the specified user objects.
+ * Retrieve the specified player objects.
  *
  * @param int[]|string[] $ids
  *   The user IDs (int) or the phone IDs (string).  All the elements of the
  *   array must be of the same type.
  *
  * @return object[]
- *   The user objects, if any.
+ *   The player objects, if any.
  */
-function zg_fetch_users_by_ids($ids) {
+function zg_fetch_players_by_ids($ids) {
 
   if (!is_array($ids)) {
     $ids = [$ids];
@@ -934,7 +934,7 @@ function zg_fetch_users_by_ids($ids) {
     $where = 'WHERE users.phone_id in ("%s")';
     $id_string = implode('","', $ids);
   }
-  elseif ($id_type == 'integer') {
+  else if ($id_type == 'integer') {
     $where = 'WHERE users.id in (%s)';
     $id_string = implode(',', $ids);
   }
@@ -1010,11 +1010,11 @@ function zg_fetch_users_by_ids($ids) {
 
   // Data retrieval error?
   if (count($data) != count($ids)) {
-    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
+    zg_slack(NULL, 'error', 'zg_fetch_players_by_ids',
       'fetch of ' . count($ids) . ' returned ' . count($data) . ' results at ');
-    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids',
+    zg_slack(NULL, 'error', 'zg_fetch_players_by_ids',
       'IDs: ' . implode(', ', $ids));
-    zg_slack(NULL, 'error', 'zg_fetch_users_by_ids', $ids);
+    zg_slack(NULL, 'error', 'zg_fetch_players_by_ids', $ids);
     $debug_full = TRUE;
   }
 
@@ -1031,10 +1031,10 @@ function zg_fetch_users_by_ids($ids) {
 
     zg_alter('fetch_user', $item);
     if ($debug_full) {
-      firep($item, 'zg_fetch_users_by_ids');
+      firep($item, 'zg_fetch_players_by_ids');
     }
     else {
-      firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_users_by_ids');
+      firep("$item->username ($item->id:$item->phone_id)", 'zg_fetch_players_by_ids');
     }
   }
   return $data;
@@ -2630,7 +2630,7 @@ function zg_format_message($game_user, $check_user_id, &$message) {
   }
   else {
     $message->display->username = 'from ' .
-      zg_render_user($message, $message->type . '_msg');
+      zg_render_player($message, $message->type . '_msg');
     if (!in_array($message->username, ['USLCE Game', 'The Socialite'])) {
       $message->display->reply = zg_render_button('user', 'View / Respond', '/id:' .
         $message->fkey_users_from_id);
@@ -2752,57 +2752,60 @@ function zg_format_messages($game_user, $check_user_id, array &$messages) {
 }
 
 /**
- * Render a user as a certain view type.
+ * Render a player object in a certain display.
  *
- * @param object $user
- *   The user object.
- * @param string $type
- *   The rendering type.  Defaults to html.
+ * @param object $pl
+ *   The player object.
+ * @param string $display
+ *   The rendering display.  Defaults to html.
  *
  * @return string
- *   The html rendering of the user object.
+ *   The html rendering of the player object.
  */
-function zg_render_user(&$user, $type = 'html') {
-  $function_name = 'zg_render_user_' . $type;
+function zg_render_player(object &$pl, $display = 'html') {
+  $function_name = 'zg_render_player_' . $display;
 
   if (function_exists($function_name)) {
-    return $function_name($user);
+    return $function_name($pl);
   }
   else {
-    return zg_render_user_html($user);
+    return zg_render_player_html($pl);
   }
 }
 
 /**
- * Render a user as html.
+ * Render a player as html.
  *
- * @param object $user
- *   The user object.
+ * @param object|null $pl
+ *   The player object.
  *
- * @return string
- *   The html rendering of the user object.
+ * @return string|false
+ *   The html rendering of the player object, or FALSE if no player obj exists.
  */
-function zg_render_user_html(&$user) {
+function zg_render_player_html(object &$pl) {
+	if (!is_object($pl)) {
+		return FALSE;
+	}
 
-  if (!property_exists($user, 'display')) {
-    $user->display = new \stdClass();
+  if (!property_exists($pl, 'display')) {
+    $pl->display = new \stdClass();
   }
-  $user->display->clan_acronym = '';
-  if (!empty($user->clan_acronym)) {
-    $user->display->clan_acronym = "($user->clan_acronym)";
+  $pl->display->clan_acronym = '';
+  if (!empty($pl->clan_acronym)) {
+    $pl->display->clan_acronym = "($pl->clan_acronym)";
   }
 
-  if ($user->is_clan_leader) {
-    $user->display->clan_acronym .= '*';
+  if ($pl->is_clan_leader) {
+    $pl->display->clan_acronym .= '*';
   }
 
-  $user->display->class = 'player-' . drupal_strtolower($user->values);
+  $pl->display->class = 'player-' . drupal_strtolower($pl->values);
 
-  $user->display->rendered_html = '<span class="user-display user-display-html">' .
-    $user->ep_name . ' <span class="' .
-    $user->display->class . '">' . $user->username . '</span> ' .
-    $user->display->clan_acronym . '</span>';
-  return $user->display->rendered_html;
+  $pl->display->rendered_html = '<span class="user-display user-display-html">' .
+    $pl->ep_name . ' <span class="' .
+    $pl->display->class . '">' . $pl->username . '</span> ' .
+    $pl->display->clan_acronym . '</span>';
+  return $pl->display->rendered_html;
 }
 
 /**
@@ -2984,67 +2987,71 @@ function zg_render_user_debates_list(&$user) {
 }
 
 /**
- * Render a user as header.
+ * Render a player's info into HTML for use in the header.
  *
- * @param object $user
- *   The user object.
+ * @param object|null $pl
+ *   The player object.
  *
- * @return string
- *   The html rendering of the user object.
+ * @return string|false
+ *   The html rendering of the player object, or FALSE if no player obj exists.
  */
-function zg_render_user_header(&$user) {
+function zg_render_player_header(&$pl) {
+	if (!is_object($pl)) {
+		return FALSE;
+	}
+
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
   $phone_id = zg_get_phoneid();
 
-  if (!property_exists($user, 'display')) {
-    $user->display = new \stdClass();
+  if (!property_exists($pl, 'display')) {
+    $pl->display = new \stdClass();
   }
-  $user->display->clan_acronym = '';
-  if (empty($user->clan_acronym)) {
-    $user->display->clan = t('No Clan');
+  $pl->display->clan_acronym = '';
+  if (empty($pl->clan_acronym)) {
+    $pl->display->clan = t('No Clan');
     $clan_link = "clan/$arg2/0";
   }
   else {
-    $user->display->clan = "Clan: $user->clan_name ($user->clan_acronym)";
-    $clan_link = "clan/$arg2/{$user->fkey_clans_id}";
+    $pl->display->clan = "Clan: $pl->clan_name ($pl->clan_acronym)";
+    $clan_link = "clan/$arg2/{$pl->fkey_clans_id}";
   }
 
-  if ($user->is_clan_leader) {
-    $user->display->clan .= '*';
+  if ($pl->is_clan_leader) {
+    $pl->display->clan .= '*';
   }
 
-  $user->display->party = "Party: $user->party_title";
+  $pl->display->party = "Party: $pl->party_title";
 
-  $level_a1 = $level_a2 = $user->display->level_tip = '';
-  if ($user->skill_points && $phone_id === $user->phone_id) {
+  $level_a1 = $level_a2 = $pl->display->level_tip = '';
+  if ($pl->skill_points && $phone_id === $pl->phone_id) {
     $level_a1 = '<a href="/' . $game . '/increase_skills/' . $arg2 . '/none">';
     $level_a2 = '</a>';
-    $user->display->level_tip = t('Tap to assign skill points');
+    $pl->display->level_tip = t('Tap to assign skill points');
   }
-  $user->display->level_num = $level_a1 . $user->level . $level_a2;
-  $user->display->level = t('Level: ') . $user->display->level_num;
+  $pl->display->level_num = $level_a1 . $pl->level . $level_a2;
+  $pl->display->level = t('Level: ') . $pl->display->level_num;
 
-  $user->display->username = '<span class="player_seat">' . $user->ep_name . '</span>' .
+  $pl->display->username = '<span class="player_seat">' . $pl->ep_name . '</span>' .
     ' <a class="player_username" href="/' . $game . '/user/' . $arg2 .
-    '">' . $user->username . '</a>';
+    '">' . $pl->username . '</a>';
 
-  $user->display->location = '<a href="/' . $game . '/move/' . $arg2 . '/0">' .
-    $user->location . '</a>';
-  $alder = zg_get_hood_alder($user->fkey_neighborhoods_id);
+  $pl->display->location = '<a href="/' . $game . '/move/' . $arg2 . '/0">' .
+    $pl->location . '</a>';
+  $alder = zg_get_hood_alder($pl->fkey_neighborhoods_id);
   firep($alder, 'Alder player');
   $hood_values = strlen($alder->values) ? drupal_strtolower($alder->values) : 'nothing';
   $hood_color = strlen($alder->color) ? $alder->color . 'aa' : '333a';
 
-  $user->display->user_header = '<div>' . $user->display->username . '</div><div>' .
-    '<span class="player_level">' . $user->display->level . '</span>' .
-    '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $user->display->clan . '</a>' .
-    '<span class="player_party">' . $user->display->party . '</span></div>' .
+  $pl->display->user_header = '<div>' . $pl->display->username . '</div><div>' .
+    '<span class="player_level">' . $pl->display->level . '</span>' .
+    '<a class="player_clan" href="/' . $game . '/' . $clan_link . '">' . $pl->display->clan . '</a>' .
+    '<span class="player_party">' . $pl->display->party . '</span></div>' .
     '<div><div class="player_location location-values-' . $hood_values . '" ' .
     'style="border-color: #' . $hood_color . ';">' .
-    $user->display->location . '</div></div>';
+    $pl->display->location . '</div></div>';
 //   . '<pre>' . print_r($user, TRUE) . '</pre>';
-  return $user->display->user_header;
+  return $pl->display->user_header;
 }
 
 /**
@@ -3064,7 +3071,7 @@ function zg_get_hood_alder($hood) {
   $alder = db_fetch_object($result);
   firep($alder, 'alder id');
   if (is_object($alder) && property_exists($alder, 'id')) {
-    return zg_fetch_user_by_id((int) $alder->id);
+    return zg_fetch_player_by_id((int) $alder->id);
   }
   return NULL;
 }

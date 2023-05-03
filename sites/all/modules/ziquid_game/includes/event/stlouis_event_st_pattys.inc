@@ -82,7 +82,7 @@ function stlouis_event_st_pattys_fetch_user(\stdClass $game_user) {
  */
 function stlouis_event_st_pattys_get_all_messages(\stdClass $game_user, &$messages) {
   foreach ($messages as &$msg) {
-    $msg_user = zg_fetch_user_by_id((int) $msg->fkey_users_from_id);
+    $msg_user = zg_fetch_player_by_id((int) $msg->fkey_users_from_id);
     $new_user_name = stlouis_event_st_pattys_get_irish_name($msg_user);
     //    firep($msg_user, 'msg user object');
     $msg->message = str_replace($msg->username, $new_user_name, $msg->message);

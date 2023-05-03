@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 /* ------ CONTROLLER ------ */
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 zg_slack($game_user, 'pages', 'quests',
   "\"Quests\" for Player \"$game_user->username\".");
 $quest_groups = zg_fetch_quest_groups($game_user);

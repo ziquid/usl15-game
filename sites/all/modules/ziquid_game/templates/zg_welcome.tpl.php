@@ -81,7 +81,7 @@ if ($page == $d['number_of_welcome_pages'] ||
   $sql = 'insert into user_creations set datetime = "%s", phone_id = "%s",
       remote_ip = "%s";';
   db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   // Notify all party welcome comm members, if any.
   $sql = 'SELECT users.id FROM `users`

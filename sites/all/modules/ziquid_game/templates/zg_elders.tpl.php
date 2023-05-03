@@ -21,7 +21,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
@@ -59,7 +59,7 @@ list($offer, $comment) = zg_luck_money_offer($game_user);
 $offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man with-video ' . $happy . '">
-    <video id="wise-old-man" autoplay loop muted controls poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
+    <video id="wise-old-man" preload="none" autoplay loop muted poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
       <source src="/sites/default/files/videos/stlouis-handbrake.mp4" type="video/mp4">
       <!--<source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">-->
     </video>

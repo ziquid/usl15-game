@@ -20,7 +20,7 @@
 global $game, $phone_id;
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 $sql = 'select `group` from quests where quests.id = %d;';
 $result = db_query($sql, $quest_id);
@@ -455,7 +455,7 @@ EOF;
           if ($eq_id > 0) {
 
             $game_equipment = zg_fetch_equip_by_id($game_user, $eq_id);
-            list($eq_success, $eq_reason, $eq_details) =
+            [$eq_success, $eq_reason, $eq_details] =
               zg_equipment_gain($game_user, $eq_id, 1, 0);
 
             if ($eq_success) {
@@ -500,7 +500,7 @@ EOF;
           if ($st_id > 0) {
 
             $game_staff = zg_fetch_staff_by_id($game_user, $st_id);
-            list($st_success, $st_reason, $st_details) =
+            [$st_success, $st_reason, $st_details] =
               zg_staff_gain($game_user, $st_id, 1, 0);
 
             if ($st_success) {
@@ -590,7 +590,7 @@ EOF;
         zg_competency_gain($game_user, 'drunk');
       }
 
-      list($eq_success, $eq_reason, $eq_details) =
+      [$eq_success, $eq_reason, $eq_details] =
         zg_equipment_gain($game_user, $quest_action->fkey_loot_equipment_id);
 
       if ($eq_success) {
@@ -645,7 +645,7 @@ EOF;
     $cumulative_expenses = $game_user->expenses + $loot->upkeep;
     if ((int) $game_user->income >= $cumulative_expenses) {
 
-      list($st_success, $st_reason, $st_details) =
+      [$st_success, $st_reason, $st_details] =
         zg_staff_gain($game_user, $quest_action->fkey_loot_staff_id);
 
       if ($st_success) {
@@ -680,9 +680,9 @@ EOF;
   }
 
   // Refetch user object, update game quest object.
-  $game_user = zg_fetch_user();
-  $game_quest->completed_percent = $percent_complete;
-  list($game_quest->rgb, $game_quest->width, $game_quest->completed_percent_overlay) =
+  $game_user = zg_fetch_player();
+	$game_quest->completed_percent = $percent_complete;
+  [$game_quest->rgb, $game_quest->width, $game_quest->completed_percent_overlay] =
     zg_get_quest_completion($game_quest->completed_percent,
       $percentage_target, $percentage_divisor);
   $game_quest->exp_added_str = "You gained <strong>$game_quest->experience</strong>";

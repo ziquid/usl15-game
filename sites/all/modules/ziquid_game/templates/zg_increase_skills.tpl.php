@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $ai_output = 'increase-skill-failed';
 
 switch ($skill) {
@@ -32,7 +32,7 @@ switch ($skill) {
       $sql = 'update users set %s = %s + 1, skill_points = skill_points - 1
         where id = %d;';
       $result = db_query($sql, $skill, $skill, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -44,7 +44,7 @@ switch ($skill) {
   skill_points = skill_points - 10
         where id = %d;';
       $result = db_query($sql, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -56,7 +56,7 @@ switch ($skill) {
   skill_points = skill_points - 10
         where id = %d;';
       $result = db_query($sql, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -68,7 +68,7 @@ switch ($skill) {
         skill_points = skill_points - 10
         where id = %d;';
       $result = db_query($sql, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -80,7 +80,7 @@ switch ($skill) {
         energy_max = energy_max + 10, skill_points = skill_points - 1
         where id = %d;';
       $result = db_query($sql, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -92,7 +92,7 @@ switch ($skill) {
         energy_max = energy_max + 100, skill_points = skill_points - 10
         where id = %d;';
       $result = db_query($sql, $game_user->id);
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -111,7 +111,7 @@ switch ($skill) {
         $result = db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
           $game_user->id);
       }
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;
@@ -130,7 +130,7 @@ switch ($skill) {
         db_query($sql, date('Y-m-d H:i:s', REQUEST_TIME + 180),
           $game_user->id);
       }
-      $game_user = zg_fetch_user();
+      $game_user = zg_fetch_player();
       $ai_output = 'increase-skill-succeeded';
     }
     break;

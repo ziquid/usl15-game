@@ -19,7 +19,7 @@
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
   $referral_code = check_plain($_GET['referral_code']);
 
   if ((substr($phone_id, 0, 3) == 'sdk') ||
@@ -56,7 +56,7 @@ EOF;
       db_set_active();
       drupal_goto($game . '/user/' . $arg2);
     }
-    
+
     // Have they already used that code?
     $sql = 'select referred_by from user_creations
       where phone_id = "%s" and referred_by <> "";';

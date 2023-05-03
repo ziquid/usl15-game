@@ -21,7 +21,7 @@ $version = 'v0.9.6, Feb 17 2020';
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $message = check_plain($_GET['message']);
 
 $d = zg_get_html(
@@ -83,7 +83,7 @@ firep("adding $money money because last_bonus_date = $last_bonus_date");
   $sql = 'update users set money = money + %d, last_bonus_date = "%s"
     where id = %d;';
   $result = db_query($sql, $money, $today, $game_user->id);
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   $extra_bonus = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man happy">

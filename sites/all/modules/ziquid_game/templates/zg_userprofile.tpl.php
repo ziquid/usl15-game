@@ -21,7 +21,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
@@ -56,7 +56,7 @@ else {
   zg_competency_gain($game_user, 'people person');
 }
 
-$item = zg_fetch_user_by_id($phone_id_to_check);
+$item = zg_fetch_player_by_id($phone_id_to_check);
 $location = $item->location;
 $points = $item->points + 0;
 $extra_comp = 0;

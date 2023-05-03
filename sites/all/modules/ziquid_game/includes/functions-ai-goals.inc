@@ -19,14 +19,14 @@ function zg_ai_get_bot_goals_results() {
     $goals = zg_ai_fetch_bot_goals($bot);
     if (is_array($goals) && count($goals)) {
       $results = zg_ai_fetch_bot_results($bot);
-      $bot = zg_fetch_user_by_id($bot->phone_id);
+      $bot = zg_fetch_player_by_id($bot->phone_id);
       return [$bot, $goals, $results];
     }
   }
 
   // No bots with goals?  Give stalest bot a goal.
   $bot = reset($bots);
-  $bot = zg_fetch_user_by_id($bot->phone_id);
+  $bot = zg_fetch_player_by_id($bot->phone_id);
   return [$bot, zg_ai_get_all_default_goals($bot), []];
 }
 

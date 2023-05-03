@@ -379,7 +379,7 @@ function game_format_date($epoch) {
 }
 
 function _stlouis_fetch_user() {
-  return zg_fetch_user();
+  return zg_fetch_player();
 }
 
 function _stlouis_header($game_user) {

@@ -32,7 +32,7 @@ function zg_elders_do_reset_callback($phone_id) {
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   $reset_me = check_plain(trim($_GET['reset_me']));
 

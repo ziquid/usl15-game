@@ -19,7 +19,7 @@
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   $sql = 'SELECT count(quests.id) as bonus FROM `quest_group_completion`
     left outer join quests

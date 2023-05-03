@@ -811,11 +811,11 @@ function _celestial_glory_filter_profanity($message) {
 }
 
 function _cg_fetch_user() {
-  return zg_fetch_user();
+  return zg_fetch_player();
 }
 
 function _celestial_glory_fetch_user() {
-  return zg_fetch_user();
+  return zg_fetch_player();
 }
 
 function _cg_header($game_user) {

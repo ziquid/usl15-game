@@ -267,7 +267,7 @@ function game_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_pric
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return [TRUE, 'success', 0];
 }
 
@@ -321,7 +321,7 @@ function game_equipment_lose(&$game_user, $id, $quantity, $eq_price = 0) {
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 
@@ -725,4 +725,3 @@ EOF;
 
   echo '</div>';
 }
-

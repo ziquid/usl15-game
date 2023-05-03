@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)')  {
   db_set_active();
@@ -39,11 +39,11 @@ if ($arg3 != '') {
 
 // Fetch user by phone ID or user ID.
 if (substr($arg3, 0, 3) == 'id:') {
-  $item = zg_fetch_user_by_id((int) substr($arg3, 3));
+  $item = zg_fetch_player_by_id((int) substr($arg3, 3));
   $phone_id_to_check = $item->phone_id;
 }
 else {
-  $item = zg_fetch_user_by_id($phone_id_to_check);
+  $item = zg_fetch_player_by_id($phone_id_to_check);
 }
 
 if (($phone_id_to_check == $phone_id) ||

@@ -21,7 +21,7 @@ global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 include drupal_get_path('module', $game) . '/' . $game .
   '_actions.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();

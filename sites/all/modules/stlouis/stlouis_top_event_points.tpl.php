@@ -20,7 +20,7 @@
   global $game, $phone_id;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   if (empty($game_user->username) || $game_user->username == '(new player)') {
     db_set_active();
@@ -39,7 +39,7 @@ echo <<< EOF
 <div class="title">Top 100 Event Players</div>
 <!--<div class="subtitle">$item->count Dead Presidents left</div>-->
 EOF;
-  
+
   $data = [];
 
     $sql = 'SELECT username, experience, initiative, endurance, 
@@ -88,7 +88,7 @@ EOF;
 </div>
 <div class="elections">
 EOF;
-  
+
   foreach ($data as $item) {
 firep($item);
 
@@ -97,10 +97,10 @@ firep($item);
     $official_link = $item->ep_name;
     if ($debate == 'Box') $official_link = $item->weight;
     $clan_class = 'election-details';
-    
+
     if ($item->can_broadcast_to_party)
       $official_link .= '<div class="can-broadcast-to-party">*</div>';
-      
+
     $official_link .= '<br/><a href="/' . $game . '/user/' .
        $arg2 . '/' . $item->phone_id . '"><em>' . $username . '</em></a>';
 
@@ -111,10 +111,10 @@ firep($item);
 
     if (!empty($item->clan_acronym))
       $clan_acronym = "($item->clan_acronym)";
-      
+
     if ($item->is_clan_leader)
       $clan_acronym .= '*';
-      
+
     echo <<< EOF
 <div class="$clan_class">
   <div class="clan-icon"><img width="24"

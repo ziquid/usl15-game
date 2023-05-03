@@ -34,7 +34,7 @@ function zg_dashboard_callback($phone_id, $stat) {
 
   global $game, $phone_id;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   switch ($stat) {
     case 'sessions':

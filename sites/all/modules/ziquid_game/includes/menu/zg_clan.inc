@@ -45,7 +45,7 @@ function zg_clan_callback($phone_id, $clan_id) {
   $module_path = drupal_get_path('module', 'zg');
   $game = check_plain(arg(0));
   include $module_path . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   // Save the message, if any.
   $message_orig = check_plain($_GET['message']);
@@ -189,11 +189,11 @@ function zg_get_clan_members($clan_id) {
   }
   firep($member_ids, 'clan member ids');
 
-  $users = zg_fetch_users_by_ids($member_ids);
+  $users = zg_fetch_players_by_ids($member_ids);
 
   foreach ($users as $user) {
     firep($user, 'clan member');
-    $rendered_users[] = '<li class="overlay-list-item">' . zg_render_user($user, 'clan') . '</li>';
+    $rendered_users[] = '<li class="overlay-list-item">' . zg_render_player($user, 'clan') . '</li>';
   }
 
   if (count($rendered_users)) {

@@ -786,21 +786,21 @@ function zg_reset_event_tags_con($id) {
 }
 
 /**
- * Fetch the user object in preparation for showing a page.
+ * Fetch the player object in preparation for showing a page.
  *
- * Does many checks, in addition to fetching the user object, to ensure that
- * the user object is up to date and should have access to the game/page.  If
- * you just want a user object from the db, zg_fetch_user_by_id() is much faster
- * and doesn't perform these checks.
+ * Does many checks, in addition to fetching the player object, to ensure that
+ * the player object is up-to-date and should have access to the game/page.  If
+ * you just want a player object from the db, zg_fetch_player_by_id() is much
+ * faster and doesn't perform these checks.
  *
  * @param bool $force
- *   TRUE if the user object must be read from the database (ie, the cache is
+ *   TRUE if the player object must be read from the database (ie, the cache is
  *   known to be bad).
  *
  * @return bool|null|object|\stdClass
- *   The user object, if any.
+ *   The player object, if any.
  */
-function zg_fetch_user($force = FALSE) {
+function zg_fetch_player($force = FALSE) {
   global $game, $phone_id, $extra_messages, $next_level, $user, $player_location_id;
 
   // Running from drush cron?  There is no user to fetch, so return silently.
@@ -921,11 +921,11 @@ function zg_fetch_user($force = FALSE) {
     
     where users.phone_id = "%s";';
 //  $result = db_query($sql, $phone_id);
-//  $game_user = db_fetch_object($result);
-  $game_user = zg_fetch_user_by_id((string) $phone_id);
+//  $pl = db_fetch_object($result);
+  $pl = zg_fetch_player_by_id((string) $phone_id);
 
   // Start welcome wizard if user not in db.
-  if (empty($game_user->id)) {
+  if (empty($pl->id)) {
     /*
         if ($arg2 == 'facebook') {
           echo 'would redirect to welcome ' . $phone_id ;
@@ -938,33 +938,33 @@ function zg_fetch_user($force = FALSE) {
     drupal_goto($game . '/welcome/' . $arg2);
   }
 
-  $game_user->password = trim($game_user->password);
-  $game_user->traits = [];
+  $pl->password = trim($pl->password);
+  $pl->traits = [];
 
-  if (strlen($game_user->meta)) {
-    zg_includes_add('user_meta_' . $game_user->meta, 'user_meta');
+  if (strlen($pl->meta)) {
+    zg_includes_add('user_meta_' . $pl->meta, 'user_meta');
   }
-  if ($game_user->level <= 25) {
+  if ($pl->level <= 25) {
     zg_includes_add('new_user', 'other');
   }
-  zg_includes_add('hood_' . $game_user->fkey_neighborhoods_id, 'hood');
+  zg_includes_add('hood_' . $pl->fkey_neighborhoods_id, 'hood');
 
   // Save the IP address, user agent of user.
-  zg_save_user_agent($game_user);
-  zg_save_user_IP($game_user);
-  zg_check_authKey($game_user);
+  zg_save_user_agent($pl);
+  zg_save_user_IP($pl);
+  zg_check_authKey($pl);
 
   if (strpos($_SERVER['HTTP_USER_AGENT'], 'BlueStacks') !== FALSE) {
-    if ($game_user->level <= 50) {
-      zg_set_value($game_user, 'sdk', 1);
+    if ($pl->level <= 50) {
+      zg_set_value($pl, 'sdk', 1);
     }
   }
 
   static $saved_party_icon = FALSE;
   if (!$saved_party_icon) {
     drupal_add_js(['zg' => [
-      'party_icon' => $game_user->party_icon,
-      'level' => $game_user->level,
+      'party_icon' => $pl->party_icon,
+      'level' => $pl->level,
     ]], 'setting');
     $saved_party_icon = TRUE;
   }
@@ -972,7 +972,7 @@ function zg_fetch_user($force = FALSE) {
   // Tell JS that we have Alpha enabled.
   static $enabled_alpha = FALSE;
   if (!$enabled_alpha) {
-    if (zg_get_value($game_user, 'enabled_alpha')) {
+    if (zg_get_value($pl, 'enabled_alpha')) {
       drupal_add_js(['zg' => ['enabled_alpha' => TRUE]], 'setting');
     }
     $enabled_alpha = TRUE;
@@ -993,22 +993,22 @@ function zg_fetch_user($force = FALSE) {
     LEFT OUTER JOIN staff_ownership
     ON staff_ownership.fkey_staff_id = staff.id
     WHERE staff_ownership.fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id, $game_user->id);
+  $result = db_query($sql, $pl->id, $pl->id);
 
   // Equipment.
   $eq = db_fetch_object($result);
-  $game_user->eq_energy_increase = $eq->energy_increase;
+  $pl->eq_energy_increase = $eq->energy_increase;
 
   // Staff.
   $st = db_fetch_object($result);
-  $game_user->st_energy_increase = $st->energy_increase;
+  $pl->st_energy_increase = $st->energy_increase;
 
   // Add includes and process init() for staff, if any.
   $sql = 'SELECT LOWER(s.name) as name from staff_ownership so
     left join staff s on s.id = so.fkey_staff_id 
     left join users u on so.fkey_users_id = u.id
     where u.id = %d and so.quantity > 0;';
-  $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $pl->id);
   $staff_list = [];
   while ($item = db_fetch_object($result)) {
     $staff_list[] = str_replace(' ', '_', $item->name);
@@ -1023,7 +1023,7 @@ function zg_fetch_user($force = FALSE) {
     left join land l on l.id = lo.fkey_land_id
     left join users u on lo.fkey_users_id = u.id
     where u.id = %d and lo.quantity > 0;';
-  $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $pl->id);
   $land_list = [];
   while ($item = db_fetch_object($result)) {
     $land_list[] = str_replace(' ', '_', $item->name);
@@ -1034,10 +1034,10 @@ function zg_fetch_user($force = FALSE) {
   }
 
   // Run fetch_user alter hooks.
-  zg_alter('fetch_user', $game_user);
+  zg_alter('fetch_user', $pl);
 
   $sql = 'select experience from levels where level = %d;';
-  $result = db_query($sql, $game_user->level + 1);
+  $result = db_query($sql, $pl->level + 1);
   $level = db_fetch_object($result);
   $next_level = $level->experience;
   if ($next_level == 0) {
@@ -1046,21 +1046,21 @@ function zg_fetch_user($force = FALSE) {
   $leveled_up = FALSE;
 
   // Leveled up!
-  if ($game_user->experience >= $next_level) {
+  if ($pl->experience >= $next_level) {
 
     $changes_made = $leveled_up = TRUE;
 
-    if ($game_user->level >= 5) {
-      $game_user->skill_points += 4;
+    if ($pl->level >= 5) {
+      $pl->skill_points += 4;
     }
 
-    $game_user->energy = $game_user->energy_max;
-    $game_user->actions = max($game_user->actions_max, $game_user->actions);
-    $game_user->level++;
+    $pl->energy = $pl->energy_max;
+    $pl->actions = max($pl->actions_max, $pl->actions);
+    $pl->level++;
 
     // Leveled up?  Read levels again!
     $sql = 'select experience from levels where level = %d;';
-    $result = db_query($sql, $game_user->level + 1);
+    $result = db_query($sql, $pl->level + 1);
     $level = db_fetch_object($result);
     $next_level = $level->experience;
     if ($next_level == 0) {
@@ -1068,17 +1068,17 @@ function zg_fetch_user($force = FALSE) {
     }
 
     // Fast comps for the next five minutes.
-    zg_set_timer($game_user, 'fast_comps_15', 300);
+    zg_set_timer($pl, 'fast_comps_15', 300);
 
     // Show the user a message (unless at Level 2 -- don't overwhelm new users).
-    if ($game_user->level > 2) {
+    if ($pl->level > 2) {
       $extra_messages .= '<div class="level-up">
       <div class="wise_old_man happy"></div>
       <div class="level-up-header">Congratulations!</div>
       <div class="level-up-text">You have reached Level ' .
-        $game_user->level . '!</div>';
+        $pl->level . '!</div>';
 
-      if ($game_user->level >= 6) {
+      if ($pl->level >= 6) {
         $extra_messages .= '<div class="level-up-text"><a href="/' . $game .
           '/increase_skills/' . $arg2 . '/none">You have
         <strong>4</strong> new skill points to spend</a></div>
@@ -1091,10 +1091,10 @@ function zg_fetch_user($force = FALSE) {
       }
 
       if (zg_get_default('has_office_level_limits')) {
-        if (!empty($game_user->max_level_for_office) &&
-          $game_user->level > $game_user->max_level_for_office) {
+        if (!empty($pl->max_level_for_office) &&
+          $pl->level > $pl->max_level_for_office) {
           $sql = 'delete from elected_officials where fkey_users_id = %d;';
-          db_query($sql, $game_user->id);
+          db_query($sql, $pl->id);
           $extra_messages .= '<div class="level-up-text">' .
             t('You have become too influential to remain
         in your current office.&nbsp; You resign your position.') . '</div>';
@@ -1106,29 +1106,29 @@ function zg_fetch_user($force = FALSE) {
   }
 
   // Calculate energy.
-  $energy_next_gain = strtotime($game_user->energy_next_gain);
-  $energy_bonus = 10 + $game_user->ep_energy_bonus +
-    $game_user->eq_energy_increase + $game_user->st_energy_increase;
+  $energy_next_gain = strtotime($pl->energy_next_gain);
+  $energy_bonus = 10 + $pl->ep_energy_bonus +
+    $pl->eq_energy_increase + $pl->st_energy_increase;
 
   // Bonus for joining a clan.
-  if (!empty($game_user->fkey_clans_id)) $energy_bonus++;
+  if (!empty($pl->fkey_clans_id)) $energy_bonus++;
   $secs_until = $energy_next_gain - REQUEST_TIME;
 
   // Do we need energy?
-  while (($game_user->energy != $game_user->energy_max) &&
+  while (($pl->energy != $pl->energy_max) &&
   ($secs_until <= 0)) {
 
     $changes_made = TRUE;
-    if ($game_user->energy < $game_user->energy_max) {
-      $game_user->energy += $energy_bonus;
-      if ($game_user->energy > $game_user->energy_max) {
-        $game_user->energy = $game_user->energy_max;
+    if ($pl->energy < $pl->energy_max) {
+      $pl->energy += $energy_bonus;
+      if ($pl->energy > $pl->energy_max) {
+        $pl->energy = $pl->energy_max;
       }
     }
     else {
-      $game_user->energy -= $energy_bonus;
-      if ($game_user->energy < $game_user->energy_max) {
-        $game_user->energy = $game_user->energy_max;
+      $pl->energy -= $energy_bonus;
+      if ($pl->energy < $pl->energy_max) {
+        $pl->energy = $pl->energy_max;
       }
     }
 
@@ -1138,13 +1138,13 @@ function zg_fetch_user($force = FALSE) {
   }
 
   // Can't go beyond max x 3.
-  if ($game_user->energy > ($game_user->energy_max * 3)) {
+  if ($pl->energy > ($pl->energy_max * 3)) {
     $changes_made = TRUE;
-    $game_user->energy = $game_user->energy_max * 3;
+    $pl->energy = $pl->energy_max * 3;
   }
 
   // Calculate income.
-  $income_next_gain = strtotime($game_user->income_next_gain);
+  $income_next_gain = strtotime($pl->income_next_gain);
   $secs_until = $income_next_gain - REQUEST_TIME;
   $max_income_gain = 72;
 
@@ -1155,7 +1155,7 @@ function zg_fetch_user($force = FALSE) {
 
     // Add money.
     if ($max_income_gain > 0) {
-      $game_user->money += $game_user->income - $game_user->expenses;
+      $pl->money += $pl->income - $pl->expenses;
     }
 
     // Next add in 60 mins.
@@ -1164,28 +1164,28 @@ function zg_fetch_user($force = FALSE) {
     $max_income_gain--;
   }
 
-  $actions_next_gain = strtotime($game_user->actions_next_gain);
+  $actions_next_gain = strtotime($pl->actions_next_gain);
   $secs_until = $actions_next_gain - REQUEST_TIME;
 
   // Calculate actions.
-  while (($game_user->actions < $game_user->actions_max) &&
+  while (($pl->actions < $pl->actions_max) &&
   ($secs_until <= 0)) {
     $changes_made = TRUE;
 
     // Add 1 action.
-    $game_user->actions++;
+    $pl->actions++;
 
     // Next add in 3 mins.
     $actions_next_gain += 180;
     $secs_until += 180;
   }
 
-  while (($game_user->actions > $game_user->actions_max) &&
+  while (($pl->actions > $pl->actions_max) &&
     ($secs_until <= 0)) {
     $changes_made = TRUE;
 
     // Delete 1 action.
-    $game_user->actions--;
+    $pl->actions--;
 
     // Next add in 3 mins.
     $actions_next_gain += 180;
@@ -1193,44 +1193,44 @@ function zg_fetch_user($force = FALSE) {
   }
 
   // Frozen.
-  if ($game_user->meta == 'frozen')
+  if ($pl->meta == 'frozen')
     $extra_messages = '<div class="title">- = * F R O Z E N * = -</div>';
 
   // Save changes, if needed.
   if ($changes_made) {
 
-    $game_user->energy_next_gain = date('Y-m-d H:i:s', $energy_next_gain);
-    $game_user->income_next_gain = date('Y-m-d H:i:s', $income_next_gain);
-    $game_user->actions_next_gain = date('Y-m-d H:i:s', $actions_next_gain);
+    $pl->energy_next_gain = date('Y-m-d H:i:s', $energy_next_gain);
+    $pl->income_next_gain = date('Y-m-d H:i:s', $income_next_gain);
+    $pl->actions_next_gain = date('Y-m-d H:i:s', $actions_next_gain);
     $sql = 'update users set energy_next_gain = "%s", energy = %d,
       energy_max = %d, level = %d, income_next_gain = "%s",
       actions = %d, actions_next_gain = "%s",
       money = %d, skill_points = %d, last_access = CURRENT_TIMESTAMP
       where id = %d;';
-    db_query($sql, $game_user->energy_next_gain,
-    $game_user->energy, $game_user->energy_max,
-    $game_user->level, $game_user->income_next_gain,
-    $game_user->actions, $game_user->actions_next_gain,
-    $game_user->money, $game_user->skill_points, $game_user->id);
+    db_query($sql, $pl->energy_next_gain,
+    $pl->energy, $pl->energy_max,
+    $pl->level, $pl->income_next_gain,
+    $pl->actions, $pl->actions_next_gain,
+    $pl->money, $pl->skill_points, $pl->id);
   }
   else {
 
     // Only save last_access.
     $sql = 'update users set last_access = CURRENT_TIMESTAMP
       where id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
   }
 
-  if ($leveled_up && ($game_user->level == zg_get_default('must_choose_party_at_level')) &&
-    (substr($game_user->meta, 0, 3) !== 'ai_')) {
+  if ($leveled_up && ($pl->level == zg_get_default('must_choose_party_at_level')) &&
+    (substr($pl->meta, 0, 3) !== 'ai_')) {
     db_set_active();
     drupal_goto($game . '/choose_party/' . $arg2 . '/0');
   }
 
-  $player_location_id = drupal_html_class($game_user->location) . '-' . $game_user->fkey_neighborhoods_id;
-  zg_alter('zg_fetch_user_end', $game_user);
-  firep($game_user, 'game_user at fetch_user');
-  return $game_user;
+  $player_location_id = drupal_html_class($pl->location) . '-' . $pl->fkey_neighborhoods_id;
+  zg_alter('zg_fetch_user_end', $pl);
+  firep($pl, 'pl at fetch_user');
+  return $pl;
 }
 
 /**
@@ -1455,7 +1455,7 @@ function zg_fetch_header(\stdClass $game_user) {
 
     // Landscape header/menus.
     $money_str = zg_short_format_int($game_user->money);
-    $game_user_str = zg_render_user($game_user, 'header');
+    $game_user_str = zg_render_player($game_user, 'header');
     $full_stats_button = zg_render_button('user', 'Full Player Stats');
 
     $lqg = zg_fetch_latest_quest_group($game_user);

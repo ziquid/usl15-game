@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
@@ -150,7 +150,7 @@ $result = db_query($sql, $game_user->id, $game_user->fkey_clans_id,
 while ($item = db_fetch_object($result)) {
   $data[] = (int) $item->id;
 }
-$users = zg_fetch_users_by_ids($data);
+$users = zg_fetch_players_by_ids($data);
 db_set_active();
 
 echo <<< EOF
@@ -179,11 +179,9 @@ firep($item, 'player to debate');
 
   $button_debate = zg_render_button('debates_challenge', $action, '/' . $item->id);
   $button_view = zg_render_button('user', 'View', '/id:' . $item->id);
-  print '<div class="' . $clan_class . '">' . zg_render_user($item, 'debates_list')
+  print '<div class="' . $clan_class . '">' . zg_render_player($item, 'debates_list')
   . $button_debate . /*$button_view . */'</div>';
 
 }
 ?>
 </div>
-
-

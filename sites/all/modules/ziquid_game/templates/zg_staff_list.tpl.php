@@ -22,7 +22,7 @@ global $game, $phone_id;
 /* ------ CONTROLLER ------ */
 
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $ai_output = 'staff-prices';
 
 // Fix expenses in case they are out of whack.

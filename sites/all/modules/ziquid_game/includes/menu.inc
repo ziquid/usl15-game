@@ -1673,7 +1673,7 @@ function zg_bots_callback($phone_id) {
 
   $game = check_plain(arg(0));
   db_set_active('game_' . $game);
-  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
 
   if ($game_user->meta !== 'admin') {
     return drupal_access_denied();
@@ -1712,7 +1712,7 @@ function zg_bounce_callback($phone_id) {
   }
 
   db_set_active('game_' . $game);
-  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
   $cheat = zg_get_value($game_user, 'GoldenPlatesFTW', FALSE);
   db_set_active();
 
@@ -1752,7 +1752,7 @@ function usl_esa_bounce_callback($phone_id) {
 
   $game = 'stlouis';
   db_set_active('game_' . $game);
-  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
   db_set_active();
 
   if ($game_user->meta == 'admin' || $game_user->meta == 'staff') {
@@ -1881,7 +1881,7 @@ function zg_extra_menu_link_callback($phone_id) {
 
   $game = check_plain(arg(0));
   db_set_active('game_' . $game);
-  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
   zg_sound($game_user, 'applause.mp3');
   db_set_active();
 
@@ -2392,4 +2392,3 @@ function zg_theme() {
   ];
 
 }
-

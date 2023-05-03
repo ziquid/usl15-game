@@ -20,7 +20,7 @@
   global $game, $phone_id;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   if (empty($game_user->username) || $game_user->username == '(new player)') {
     db_set_active();
@@ -31,10 +31,10 @@
 
   $sql = 'SELECT clan_title from `values`
     where id = %d;';
-  
+
   $result = db_query($sql, $game_user->fkey_values_id);
   $values = db_fetch_object($result);
-    
+
   echo <<< EOF
 <div class="title">Available $values->clan_title Clans</div>
 <div class="subtitle">To join a clan, go to the <em>Actions</em> screen and choose
@@ -42,7 +42,7 @@
   acronym.</div>
 <div class="clan-list">
 EOF;
-	
+
   $data = [];
   $sql = 'SELECT count( clan_members.id ) AS members, clans.name, clans.acronym,
     clans.rules
@@ -52,7 +52,7 @@ EOF;
     WHERE users.fkey_values_id = %d
     GROUP BY clans.id
     ORDER BY members DESC';
-  
+
   $result = db_query($sql, $game_user->fkey_values_id);
   while ($item = db_fetch_object($result)) $data[] = $item;
 
@@ -61,14 +61,14 @@ firep($item);
 
     if (empty($item->rules))
       $item->rules = 'No rules';
-      
+
 		echo <<< EOF
 <h4>{$item->name} ({$item->acronym}): $item->members members</h4>
 Rules: $item->rules
 EOF;
 
   }
-  
+
   echo '</div>';
 
   db_set_active();

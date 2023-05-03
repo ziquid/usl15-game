@@ -888,7 +888,7 @@ function zg_equipment_gain(\stdClass &$game_user, $id, $quantity = 1, $eq_price 
 
   // Reprocess user object.
   zg_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return [TRUE, 'success', 0];
 }
 
@@ -943,7 +943,7 @@ function zg_equipment_lose(\stdClass &$game_user, $id, $quantity = 1, $eq_price 
 
   // Reprocess user object.
   zg_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 

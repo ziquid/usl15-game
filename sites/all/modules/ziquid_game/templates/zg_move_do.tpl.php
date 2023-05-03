@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $q = $_GET['q'];
 
 // Random hood -- April fools 2013.
@@ -52,7 +52,7 @@ EOF;
 }
 
 if ($neighborhood_id > 0) {
-  list($cur_hood, $new_hood, $actions_to_move, $verb, $eq) =
+  [$cur_hood, $new_hood, $actions_to_move, $verb, $eq] =
     zg_get_actions_to_move($game_user, $current_neighborhood_id, $neighborhood_id);
 
   // April fools 2013.
@@ -157,8 +157,8 @@ if ($neighborhood_id > 0) {
     $clan_msg = '';
   }
 
-  $game_user = zg_fetch_user();
-  zg_alter('move_to_succeeded', $game_user, $current_neighborhood_id,
+  $game_user = zg_fetch_player();
+	zg_alter('move_to_succeeded', $game_user, $current_neighborhood_id,
     $neighborhood_id);
   zg_fetch_header($game_user);
 

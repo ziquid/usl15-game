@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 /* ------ CONTROLLER ------ */
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $ai_output = 'land-prices';
 zg_slack($game_user, 'pages', 'land_list', "\"Aides\" for Player \"$game_user->username\".");
 

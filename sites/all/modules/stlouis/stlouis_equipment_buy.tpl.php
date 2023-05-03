@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 // ------ CONTROLLER ------
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if ($quantity === 'use-quantity') {
   $quantity = (int) check_plain($_GET['quantity']);

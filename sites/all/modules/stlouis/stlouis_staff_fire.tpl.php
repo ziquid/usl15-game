@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 // ------ CONTROLLER ------
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 $title = t('Hire @staff and @agents', [
   '@staff' => $game_text['staff'],
   '@agents' => $game_text['agents'],

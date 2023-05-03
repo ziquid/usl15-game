@@ -26,7 +26,7 @@ function zg_move_ai() {
   global $game, $ai_output, $bt_skip;
 
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   // PRE failed?  return.
   if (!zg_pre_move_ai($game, $game_user, $game_name_full, $ai_output)) {
@@ -1015,7 +1015,7 @@ function game_ai_create_new_player() {
     fkey_values_id = 9, `values` = "Goo", meta = "ai_minion"
     where phone_id = "%s";';
   db_query($sql, "TC Emp $num", $id_to_check);
-  $ai_bot = zg_fetch_user_by_id($id_to_check);
+  $ai_bot = zg_fetch_player_by_id($id_to_check);
   // mail('joseph@ziquid.com', 'ai trying to create a new player AGAIN', $ai_output);.
   zg_slack($ai_bot, 'bots', 'new bot creation', $ai_output);
 }
@@ -2335,7 +2335,7 @@ function zg_ai_show_brief_stats() {
     $data[] = (int) $item->id;
   }
 
-  $bots = zg_fetch_users_by_ids($data);
+  $bots = zg_fetch_players_by_ids($data);
   foreach ($bots as $bot) {
     $stats .= zg_ai_show_bot_brief_stats($bot);
   }

@@ -20,7 +20,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_user();
+$game_user = zg_fetch_player();
 
 if (empty($game_user->username) || $game_user->username == '(new player)') {
   db_set_active();
@@ -275,7 +275,7 @@ if ($won) {
        $game_user->id);
   }
 
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   if ($event_type == EVENT_DEBATE) {
     $bump = '_' . $game . '_bump_event_tags_con';
@@ -602,7 +602,7 @@ else {
 
   }
 
-  $game_user = zg_fetch_user();
+  $game_user = zg_fetch_player();
 
   if ($event_type == EVENT_DEBATE) {
     $bump = '_' . $game . '_bump_event_tags_con';

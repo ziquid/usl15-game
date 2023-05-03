@@ -790,7 +790,7 @@ function game_staff_gain(&$game_user, $id, $quantity, $st_price = 0) {
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return [TRUE, 'success', 0];
 }
 
@@ -844,7 +844,7 @@ function game_staff_lose(\stdClass &$game_user, $id, $quantity, $st_price = 0) {
 
   // Reprocess user object.
   game_recalc_income($game_user);
-  $game_user = zg_fetch_user_by_id($game_user->id);
+  $game_user = zg_fetch_player_by_id($game_user->id);
   return TRUE;
 }
 

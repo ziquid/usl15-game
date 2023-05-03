@@ -24,13 +24,20 @@ db_set_active('game_' . $game);
 $d = zg_get_html([
   'tagline',
 ]);
-$game_user = zg_fetch_user_by_id(zg_get_phoneid());
-$game_user_str = zg_render_user($game_user, 'header');
-$welcome_msg = strlen($game_user->username) ? t('Welcome back to') :
+$pl = zg_fetch_player_by_id(zg_get_phoneid());
+
+// Start welcome wizard if user not in db.
+if (empty($pl->id)) {
+  db_set_active();
+  drupal_goto($game . '/welcome/' . $arg2);
+}
+
+$game_user_str = zg_render_player($pl, 'header');
+$welcome_msg = strlen($pl->username) ? t('Welcome back to') :
   t('Welcome to');
 
-zg_slack($game_user, 'pages', 'bounce',
-  "\"Bounce\" for Player \"$game_user->username\".");
+zg_slack($pl, 'pages', 'bounce',
+  "\"Bounce\" for Player \"$pl->username\".");
 
 if ($arg2 == 'facebook') {
 
@@ -46,14 +53,14 @@ EOF;
 }
 
 // Landscape?  Show user profile.
-if (zg_is_landscape() && strlen($game_user->username)) {
+if (zg_is_landscape() && strlen($pl->username)) {
   echo <<< EOF
 <!-- player -->
 <div id="player">
   $game_user_str
 </div>
 EOF;
-  zg_song($game_user, 'Jump welcome');
+  zg_song($pl, 'Jump welcome');
 }
 
 db_set_active();
