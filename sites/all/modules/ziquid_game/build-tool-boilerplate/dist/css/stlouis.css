@@ -974,6 +974,24 @@ body.game-stlouis .swiper-pagination-fraction {
 body.game-stlouis .swiper-slide .title {
 	text-shadow: 1px 1px 3px #444;
 }
+body.game-stlouis .swiper-slide .title .quest-group-name {
+	margin: auto;
+}
+body.game-stlouis .swiper-slide .title .quest-group-completion {
+	margin-bottom: 20px;
+}
+body.game-stlouis .swiper-slide .title .quest-group-title {
+	margin: 14px auto 0;
+}
+body.game-stlouis .swiper-slide .title .quest-group-name {
+	width: 248px;
+}
+body.game-stlouis .swiper-slide .title .quest-group-name.admin-obfuscate {
+	text-decoration: line-through;
+}
+body.game-stlouis .swiper-slide .title .overview-only {
+	display: none;
+}
 body.game-stlouis .swiper-slide .title.loot {
 	font-size: 1rem;
 }
@@ -993,24 +1011,9 @@ body.game-stlouis .quest-group-name, body.game-stlouis .quest-group-title {
 body.game-stlouis .quest-group-name a, body.game-stlouis .quest-group-title a {
 	text-decoration: none;
 }
-body.game-stlouis .swiper-slide .title .quest-group-name {
-	margin: auto;
-}
-body.game-stlouis .swiper-slide .title .quest-group-title {
-	margin: 14px auto 0;
-}
-body.game-stlouis .swiper-slide .title .quest-group-name {
-	width: 248px;
-}
 body.game-stlouis .fit-box {
 	white-space: nowrap;
 	-webkit-transform-origin: top left;
-}
-body.game-stlouis .swiper-slide .title .quest-group-name.admin-obfuscate {
-	text-decoration: line-through;
-}
-body.game-stlouis .swiper-slide .title .overview-only {
-	display: none;
 }
 body.game-stlouis .swiper-slide.overview .title .overview-only {
 	display: inline-block;

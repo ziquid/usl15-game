@@ -21,7 +21,7 @@ global $game, $phone_id;
 
 db_set_active('game_' . $game);
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-zg_fetch_header($game_user);
+zg_fetch_header($pl);
 db_set_active();
 ?>
 

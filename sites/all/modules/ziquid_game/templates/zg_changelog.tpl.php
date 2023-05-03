@@ -37,6 +37,15 @@ db_set_active();
     <?php print $game_name_full; ?> Changelog
   </div>
 
+    <div class="subtitle">
+        May 3, 2023
+    </div>
+    <ul>
+        <li>
+            More Elderly smiles and more bugfixes.
+        </li>
+    </ul>
+
   <div class="subtitle">
     Apr 30, 2023
   </div>

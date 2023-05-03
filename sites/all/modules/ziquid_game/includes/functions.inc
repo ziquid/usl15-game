@@ -1091,8 +1091,8 @@ function zg_fetch_user_extra_attributes(&$game_user) {
  * @param string $phone_id
  *   The phone ID to check.
  *
- * @return object|null
- *   The user ID, as an 'id' property of an object, or null if no results.
+ * @return object|false
+ *   The user ID, as an 'id' property of an object, or false if no results.
  */
 function zg_get_userid_from_phoneid($phone_id) {
   global $game;
@@ -1104,7 +1104,7 @@ function zg_get_userid_from_phoneid($phone_id) {
   if ($result) {
     return db_fetch_object($result);
   }
-  return NULL;
+  return FALSE;
 }
 
 /**

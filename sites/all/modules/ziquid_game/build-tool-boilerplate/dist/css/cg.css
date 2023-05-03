@@ -974,6 +974,24 @@ body.game-cg .swiper-pagination-fraction {
 body.game-cg .swiper-slide .title {
 	text-shadow: 1px 1px 3px #444;
 }
+body.game-cg .swiper-slide .title .quest-group-name {
+	margin: auto;
+}
+body.game-cg .swiper-slide .title .quest-group-completion {
+	margin-bottom: 20px;
+}
+body.game-cg .swiper-slide .title .quest-group-title {
+	margin: 14px auto 0;
+}
+body.game-cg .swiper-slide .title .quest-group-name {
+	width: 248px;
+}
+body.game-cg .swiper-slide .title .quest-group-name.admin-obfuscate {
+	text-decoration: line-through;
+}
+body.game-cg .swiper-slide .title .overview-only {
+	display: none;
+}
 body.game-cg .swiper-slide .title.loot {
 	font-size: 1rem;
 }
@@ -993,24 +1011,9 @@ body.game-cg .quest-group-name, body.game-cg .quest-group-title {
 body.game-cg .quest-group-name a, body.game-cg .quest-group-title a {
 	text-decoration: none;
 }
-body.game-cg .swiper-slide .title .quest-group-name {
-	margin: auto;
-}
-body.game-cg .swiper-slide .title .quest-group-title {
-	margin: 14px auto 0;
-}
-body.game-cg .swiper-slide .title .quest-group-name {
-	width: 248px;
-}
 body.game-cg .fit-box {
 	white-space: nowrap;
 	-webkit-transform-origin: top left;
-}
-body.game-cg .swiper-slide .title .quest-group-name.admin-obfuscate {
-	text-decoration: line-through;
-}
-body.game-cg .swiper-slide .title .overview-only {
-	display: none;
 }
 body.game-cg .swiper-slide.overview .title .overview-only {
 	display: inline-block;

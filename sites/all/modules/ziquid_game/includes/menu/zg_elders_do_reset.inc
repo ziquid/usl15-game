@@ -106,10 +106,10 @@ function zg_elders_do_reset_callback($phone_id) {
     $luck_in_sql = max($pl->luck, 10);
 
     $sql = "UPDATE users
-      SET username = '',
-      password = '',
-      referral_code = '',
-      referred_by = '',
+      SET username = '(new player)',
+      password = NULL,
+      referral_code = NULL,
+      referred_by = NULL,
       experience = 0,
       level = 1,
       -- last_access

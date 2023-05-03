@@ -73,15 +73,18 @@ $d = zg_get_default(
 if ($page == $d['number_of_welcome_pages'] ||
   substr($phone_id, 0, 3) == 'ai-') {
 
-  // Setup user account.
-  $sql = 'insert into users set phone_id = "%s", username = "(new player)",
+  // If account doesn't already exist, create it.
+  $pl_uid = zg_get_userid_from_phoneid($phone_id);
+  if (!$pl_uid) {
+    $sql = 'insert into users set phone_id = "%s", username = "(new player)",
       experience = 0, level = 1, fkey_neighborhoods_id = %d, fkey_values_id = 0,
       `values` = "%s", money = 500, energy = 200, energy_max = 200';
-  db_query($sql, $phone_id, $d['initial_hood'], $d['initial_user_value']);
-  $sql = 'insert into user_creations set datetime = "%s", phone_id = "%s",
+    db_query($sql, $phone_id, $d['initial_hood'], $d['initial_user_value']);
+    $sql = 'insert into user_creations set datetime = "%s", phone_id = "%s",
       remote_ip = "%s";';
-  db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
-  $game_user = zg_fetch_player();
+    db_query($sql, date('Y-m-d H:i:s'), $phone_id, $ip_address);
+  }
+  $pl = zg_fetch_player();
 
   // Notify all party welcome comm members, if any.
   $sql = 'SELECT users.id FROM `users`
@@ -95,7 +98,7 @@ if ($page == $d['number_of_welcome_pages'] ||
   }
 
   if (count($data)) {
-    zg_send_user_message($game_user->id, $data, 0,
+    zg_send_user_message($pl->id, $data, 0,
       $d['new_user_comm_member_msg'], 'user');
   }
 
@@ -105,7 +108,7 @@ if ($page == $d['number_of_welcome_pages'] ||
 }
 else {
   // Dummy object for zg_speech().
-  $game_user = new \stdClass();
+  $pl = new \stdClass();
 }
 
 /* ------ VIEW ------ */
@@ -119,6 +122,6 @@ else {
 
 <?php print $d['welcome_page_' . $page]; ?>
 <?php zg_button($button_link, 'continue', $button_extra_link); ?>
-<?php zg_speech($game_user, $d['welcome_page_' . $page . '_speech'], TRUE); ?>
+<?php zg_speech($pl, $d['welcome_page_' . $page . '_speech'], TRUE); ?>
 <?php
    db_set_active();
