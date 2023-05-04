@@ -21,14 +21,14 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_player();
+$pl = zg_fetch_player();
 
-if (empty($game_user->username) || $game_user->username == '(new player)') {
+if (empty($pl->username) || $pl->username == '(new player)') {
   db_set_active();
   drupal_goto($game . '/choose_name/' . $arg2);
 }
 
-zg_fetch_header($game_user);
+zg_fetch_header($pl);
 
 // Useful for freshening stats.
 if (substr($phone_id, 0, 3) == 'ai-') {
@@ -37,17 +37,17 @@ if (substr($phone_id, 0, 3) == 'ai-') {
   return;
 }
 
-zg_slack($game_user, 'pages', 'elders',
-  "\"Elders\": Player \"$game_user->username\".");
+zg_slack($pl, 'pages', 'elders',
+  "\"Elders\": Player \"$pl->username\".");
 
-if ($game_user->luck > 99) {
+if ($pl->luck > 99) {
   $happy = 'happy';
-  $luck_text = '<p>You have <strong>' . $game_user->luck . '&nbsp;' . $luck . '</strong>!</p>';
+  $luck_text = '<p>You have <strong>' . $pl->luck . '&nbsp;' . $luck . '</strong>!</p>';
   $help_text = '<p>How can I help you?</p>';
 }
-elseif ($game_user->luck > 0) {
+elseif ($pl->luck > 0) {
   $happy = 'small';
-  $luck_text = '<p>You have <strong>' . $game_user->luck . '</strong>&nbsp;' . $luck . '.</p>';
+  $luck_text = '<p>You have <strong>' . $pl->luck . '</strong>&nbsp;' . $luck . '.</p>';
   $help_text = '<p>How can I help you?</p>';
 }
 else {
@@ -55,17 +55,16 @@ else {
   $luck_text = '<p>You are <strong class="yellow">Out of ' . $luck . '</strong>.</p>';
   $help_text = '<p>Would you like more ' . $luck . '?</p>';
 }
-list($offer, $comment) = zg_luck_money_offer($game_user);
+[$offer, $comment] = zg_luck_money_offer($pl);
 $offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man with-video ' . $happy . '">
-    <video id="wise-old-man" preload="none" autoplay loop muted poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
-      <source src="/sites/default/files/videos/stlouis-handbrake.mp4" type="video/mp4">
-      <!--<source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">-->
+    <video id="wise-old-man" preload="none" autoplay loop muted playsinline webkit-playsinline poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
+      <source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">
     </video>
   </div>
   <div class="speech-bubble with-video">
-    <p>Hello again, <em>' . $game_user->username . '</em>!</p>
+    <p>Hello again, <em>' . $pl->username . '</em>!</p>
     ' . $luck_text . '
     ' . $help_text . '
   </div>
@@ -80,9 +79,9 @@ EOF;
 $menus = [];
 
 // Only allow users to change parties if they can join one.
-if ($game_user->level >= 6) {
+if ($pl->level >= 6) {
 
-  if ($game_user->luck > 9) {
+  if ($pl->luck > 9) {
     $menus[] = zg_render_button('choose_name',
       "Change your character's name (10&nbsp;Luck)",
       '',
@@ -95,7 +94,7 @@ if ($game_user->level >= 6) {
       'big-80 slide-in-content');
   }
 
-  if ($game_user->luck > 4) {
+  if ($pl->luck > 4) {
     $menus[] = zg_render_button('choose_party',
       "Join a different $party_lower (5&nbsp;$luck)",
       '/0',
@@ -108,7 +107,7 @@ if ($game_user->level >= 6) {
       'big-80 slide-in-content');
   }
 
-  if ($game_user->luck > 2) {
+  if ($pl->luck > 2) {
     $menus[] = zg_render_button('elders_ask_reset_skills',
       "Reset your skill points (3&nbsp;$luck)",
       '',
@@ -121,7 +120,7 @@ if ($game_user->level >= 6) {
       'big-80 slide-in-content');
   }
 
-  if ($game_user->luck > 0) {
+  if ($pl->luck > 0) {
     $menus['refill_action'] = zg_render_button('elders_do_fill',
       "Refill your Action (1&nbsp;$luck)",
       '/action',
@@ -130,7 +129,7 @@ if ($game_user->level >= 6) {
       "Refill your Energy (1&nbsp;$luck)",
       '/energy',
       'big-80 slide-in-content');
-    $menus[] = zg_luck_money_render_button($game_user);
+    $menus[] = zg_luck_money_render_button($pl);
   }
   else {
     $menus['refill_action'] = zg_render_button('',
@@ -142,7 +141,7 @@ if ($game_user->level >= 6) {
       '',
       'big-80 slide-in-content');
     $menus[] = zg_render_button('',
-      "Receive $offer $game_user->values (1&nbsp;$luck)",
+      "Receive $offer $pl->values (1&nbsp;$luck)",
       '',
       'big-80 slide-in-content');
   }
@@ -162,21 +161,21 @@ $menus[] = zg_render_button('elders_ask_purchase',
   '',
   'big-80 slide-in-content highlight');
 
-$enabled_alpha = (zg_get_value($game_user, 'enabled_alpha')) ?
+$enabled_alpha = (zg_get_value($pl, 'enabled_alpha')) ?
   'Disable' : 'Enable';
 $menus[] = zg_render_button('elders_enable_alpha',
   "$enabled_alpha pre-release (Alpha) features (Free)",
   '',
   'big-80 slide-in-content');
 
-if (zg_get_value($game_user, 'NothingButFur', FALSE)) {
+if (zg_get_value($pl, 'NothingButFur', FALSE)) {
   $menus[] = zg_render_button('/wonderland/bounce',
     "Go Down the Rabbit Hole (Free)",
     '',
     'big-80 slide-in-content halflight');
 }
 
-if (zg_get_value($game_user, 'RockThisTown', FALSE)) {
+if (zg_get_value($pl, 'RockThisTown', FALSE)) {
   $menus[] = zg_render_button('/detroit/bounce',
     "Move to Detroit (Free)",
     '',
