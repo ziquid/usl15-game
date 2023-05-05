@@ -1,8 +1,10 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 # This script builds the prod site.
 
 # shellcheck disable=SC2046
 # shellcheck disable=SC2164
+
+set -xe
 if ! echo $PWD | grep -s -q prod ; then
   echo "This script is only for the prod instance."
   exit 1

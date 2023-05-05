@@ -1,8 +1,15 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 # This script builds the dev site.
 
 # shellcheck disable=SC2046
 # shellcheck disable=SC2164
+
+set -xe
+if ! echo $PWD | grep -s -q dev ; then
+  echo "This script is only for the dev instance."
+  exit 1
+fi
+
 cd $(dirname "$0")/..
 echo --:\  $(date) :--
 git pull -f
@@ -12,7 +19,7 @@ echo drush cron
 drush sql-dump > ~ubuntu/usl15.dev.drupal.sql
 gzip -f ~ubuntu/usl15.dev.drupal.sql
 
-for a in stlouis cg detroit wonderland; do
+for a in stl1904 stlouis cg detroit wonderland; do
   echo drush sql-dump --database=game_$a
   drush sql-dump --database=game_$a > ~ubuntu/$a.dev.game.sql
   gzip -f ~ubuntu/$a.dev.game.sql
