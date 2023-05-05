@@ -4,7 +4,7 @@
 # shellcheck disable=SC2046
 # shellcheck disable=SC2164
 
-set -xe
+set -e
 if ! echo $PWD | grep -s -q prod ; then
   echo "This script is only for the prod instance."
   exit 1
