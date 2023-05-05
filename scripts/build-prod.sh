@@ -22,7 +22,7 @@ gzip -f ~ubuntu/usl15.drupal.sql
 for a in stl1904 stlouis cg detroit wonderland; do
   echo drush sql-dump --database=game_$a
   drush sql-dump --database=game_$a > ~ubuntu/$a.game.sql
-  gzip -f ~ubuntu/$a.dev.sql
+  gzip -f ~ubuntu/$a.game.sql
 done
 
 echo -n luck and active player accounts:' '
