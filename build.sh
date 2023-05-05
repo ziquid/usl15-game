@@ -8,7 +8,7 @@ DRUSH=$PWD/vendor/bin/drush
 # [ "$DRUSH" == "" ] && DRUSH=`which drush 2>/dev/null`
 
 SCOPE=local
-echo "$PWD" | grep -s -q htdocs && SCOPE=prod
+echo "$PWD" | grep -s -q prod && SCOPE=prod
 echo "$PWD" | grep -s -q dev && SCOPE=dev
 
 chmod ug+w sites/default
@@ -22,9 +22,9 @@ mv gitignore .gitignore
 $DRUSH -y updb
 
 if [ "$SCOPE" = dev ]; then
-  chown -R www-data:www-data .
+  sudo chown -R www-data:www-data sites/default/files
 fi
 
 if [ "$SCOPE" = prod ]; then
-  chown -R www-data:www-data .
+  sudo chown -R www-data:www-data sites/default/files
 fi
