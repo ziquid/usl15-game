@@ -22,9 +22,9 @@ mv gitignore .gitignore
 $DRUSH -y updb
 
 if [ "$SCOPE" = dev ]; then
-  chown -R apache:apache .
+  chown -R www-data:www-data .
 fi
 
 if [ "$SCOPE" = prod ]; then
-  chown -R apache:apache .
+  chown -R www-data:www-data .
 fi
