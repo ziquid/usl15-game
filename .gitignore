@@ -9,3 +9,4 @@ usl15.*.sql.gz
 /vendor
 *.game.sql
 *.game.sql.gz
+settings.local.php
