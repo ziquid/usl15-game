@@ -12,14 +12,6 @@ function stlouis_menu() {
 
   $items = [];
 
-  $items['stlouis/clan_list_available/%'] = [
-    'title' => 'St. Louis Available Clan List Page',
-    'page callback' => 'stlouis_clan_list_available_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/clan_announcements/%/%'] = [
     'title' => 'St. Louis Clan Announcements Page',
     'page callback' => 'stlouis_clan_announcements_callback',

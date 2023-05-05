@@ -19,7 +19,7 @@
 
 global $game, $phone_id;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_player();
+$pl = zg_fetch_player();
 
 $d = zg_get_default(
   [
@@ -39,13 +39,13 @@ $d = zg_get_default(
 if ($party_id != 0) {
 
   // No change?  Just show stats.
-  if ($party_id == $game_user->fkey_values_id) {
+  if ($party_id == $pl->fkey_values_id) {
     db_set_active();
     drupal_goto($game . '/user/' . $arg2);
   }
 
   // Changing parties? Dock experience, bring level down to match.
-  $new_experience = max(floor($game_user->experience * 0.75), 75);
+  $new_experience = max(floor($pl->experience * 0.75), 75);
 
   $sql = 'SELECT max(level) as new_level from levels where experience <= %d;';
   $result = db_query($sql, $new_experience);
@@ -56,7 +56,7 @@ if ($party_id != 0) {
     left outer join quests
     on quest_group_completion.fkey_quest_groups_id = quests.group
     WHERE fkey_users_id = %d and quests.active = 1;';
-  $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $pl->id);
   $item = db_fetch_object($result);
 
   $new_skill_points = ($new_level * 4) + $item->bonus - 20;
@@ -73,26 +73,26 @@ if ($party_id != 0) {
     where id = %d;';
   $result = db_query($sql, $item->fkey_neighborhoods_id, $party_id,
     $item->name, $new_level, $new_experience, $new_skill_points,
-    $game_user->id);
+    $pl->id);
 
   // Remove Luck if changing parties.
-  if ($game_user->fkey_values_id != 0) {
-    zg_luck($game_user, -5, $game_user->fkey_values_id, 0, $party_id,
-      $game_user->username . ' changed parties to ' . $item->party_title . ' from ' . $game_user->party_title,
+  if ($pl->fkey_values_id != 0) {
+    zg_luck($pl, -5, $pl->fkey_values_id, 0, $party_id,
+      $pl->username . ' changed parties to ' . $item->party_title . ' from ' . $pl->party_title,
       'change_party', $item->party_title);
   }
 
   // Also delete any offices held.
   $sql = 'delete from elected_officials where fkey_users_id = %d;';
-  $result = db_query($sql, $game_user->id);
+  $result = db_query($sql, $pl->id);
 
   // And any clan memberships (disband if player was the leader).
   $sql = 'select * from clan_members where fkey_users_id = %d;';
-  $item = db_query($sql, $game_user->id)->fetch_object();
+  $item = db_query($sql, $pl->id)->fetch_object();
 
   if ($item->is_clan_leader) {
     $sql = 'delete from clan_messages where fkey_neighborhoods_id = %d;';
-    db_query($sql, $game_user->fkey_clans_id);
+    db_query($sql, $pl->fkey_clans_id);
     $sql = 'delete from clan_members where fkey_clans_id = %d;';
     db_query($sql, $item->fkey_clans_id);
     $sql = 'delete from clans where id = %d;';
@@ -100,16 +100,16 @@ if ($party_id != 0) {
   }
   else {
     $sql = 'delete from clan_members where fkey_users_id = %d;';
-    db_query($sql, $game_user->id);
+    db_query($sql, $pl->id);
   }
 
   // Add 24-hour waiting period on major actions.
-  zg_set_timer($game_user, 'next_major_action', 86400);
+  zg_set_timer($pl, 'next_major_action', 86400);
 
   db_set_active();
 
   // First time choosing? Go to debates.
-  if ($game_user->fkey_values_id == 0) {
+  if ($pl->fkey_values_id == 0) {
     drupal_goto($game . '/debates/' . $arg2);
   }
 
@@ -127,7 +127,7 @@ echo <<< EOF
 </div>
 EOF;
 
-if ($game_user->level <= 6) {
+if ($pl->level <= 6) {
 
   $referral_code_button = zg_render_button('enter_referral_code', 'I have a referral code');
 

@@ -100,6 +100,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/clan_list_available/%'] = [
+      'title' => 'Ziquid Game Available Clan List Page',
+      'page callback' => 'zg_clan_list_available_callback',
+      'page arguments' => [2],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/clan_msg/%/%'] = [
       'title' => 'Ziquid Game Clan Messages Page',
       'page callback' => 'zg_clan_msg_callback',
@@ -304,14 +312,6 @@ function zg_menu() {
   }
 
   /*
-
-  $items[$game . '/clan_list_available/%'] = [
-    'title' => 'Ziquid Game Available Clan List Page',
-    'page callback' => 'zg_clan_list_available_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
 
   $items[$game . '/clan_announcements/%/%'] = [
     'title' => 'Ziquid Game Clan Announcements Page',
