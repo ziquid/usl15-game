@@ -14,10 +14,15 @@ services:
       # Creates the extra databases as root since the app user does not have those privileges
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS cg_game; GRANT ALL PRIVILEGES ON cg_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS uslce_game; GRANT ALL PRIVILEGES ON uslce_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS stl1904_game; GRANT ALL PRIVILEGES ON stl1904_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS stl2124_game; GRANT ALL PRIVILEGES ON stl2124_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS detroit_game; GRANT ALL PRIVILEGES ON detroit_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
+      - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS elysian_game; GRANT ALL PRIVILEGES ON elysian_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
       - mysql -uroot -e "CREATE DATABASE IF NOT EXISTS wonderland_game; GRANT ALL PRIVILEGES ON wonderland_game.* TO 'drupal6'@'%' IDENTIFIED by 'drupal6';"
-  phpmyadmin:
+  pma:
     type: phpmyadmin
-    hosts: 
+    hosts:
       - database
+proxy:
+  pma:
+    - pma.lndo.site

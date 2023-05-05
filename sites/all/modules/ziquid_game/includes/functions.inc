@@ -1817,9 +1817,11 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
  */
 function zg_get_game_list() {
   return [
-//     'stl2124',
+    'stl1904',
+    'stl2124',
     'cg',
     'detroit',
+    'elysian',
     'stlouis',
     'wonderland',
   ];
@@ -1835,7 +1837,7 @@ function zg_get_fbid() {
     $secret = '0b631d36aaba590fe31b2f1b9392aad7';
     $canvas_page = 'https://apps.facebook.com/uprisingstlouis/';
   }
-  else if (arg(0) == 'celestial_glory') {
+  else if (arg(0) == 'cg') {
     $app_id = '315942001775829';
     $secret = '648a1945d57bdad144677f5cfd045f62';
     $canvas_page = 'https://apps.facebook.com/celestial_glory/';
