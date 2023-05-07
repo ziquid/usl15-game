@@ -6,7 +6,7 @@ var pkg = require('./package.json');
 // Configs
 var configs = {
 	name: 'BuildToolsCookbook',
-	files: ['stlouis.scss', 'cg.scss'],
+	files: ['stlouis.scss', 'cg.scss', 'stl1904.scss'],
 	pathIn: 'src/scss',
 	pathOut: 'dist/css',
 	indentType: 'tab',

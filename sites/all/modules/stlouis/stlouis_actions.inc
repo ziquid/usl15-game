@@ -414,7 +414,9 @@ firep('allowed not_met users: ' . $allowed_string);
       $data2 = [];
       $sql = 'SELECT DISTINCT elected_positions.id AS ep_id,
             elected_positions.group as ep_group,
-            elected_positions.name AS ep_name, blah.*,
+            elected_positions.name AS ep_name,
+            elected_positions.energy_bonus AS ep_energy_bonus,
+            blah.*,
             clan_members.is_clan_leader, clans.acronym AS clan_acronym
             FROM elected_positions
             RIGHT JOIN (
@@ -422,7 +424,8 @@ firep('allowed not_met users: ' . $allowed_string);
 -- type 1: neighborhood positions
 
             SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
+              elected_officials.approval_rating, elected_positions.energy_bonus,
+              users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
             LEFT JOIN elected_positions
@@ -435,7 +438,8 @@ firep('allowed not_met users: ' . $allowed_string);
 -- type 2: party positions
 
             SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
+              elected_officials.approval_rating, elected_positions.energy_bonus,
+              users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
             LEFT JOIN elected_positions
@@ -448,7 +452,8 @@ firep('allowed not_met users: ' . $allowed_string);
 -- type 3: district positions
 
             SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
+              elected_officials.approval_rating, elected_positions.energy_bonus,
+              users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
             LEFT JOIN elected_positions
@@ -462,7 +467,8 @@ firep('allowed not_met users: ' . $allowed_string);
 -- type 4: city positions
 
             SELECT elected_officials.fkey_elected_positions_id,
-              elected_officials.approval_rating, users.*
+              elected_officials.approval_rating, elected_positions.energy_bonus,
+              users.*
             FROM elected_officials
             LEFT JOIN users ON elected_officials.fkey_users_id = users.id
             LEFT JOIN elected_positions

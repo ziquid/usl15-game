@@ -24,6 +24,14 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
+  $items['stl1904/b2/%'] = [
+    'title' => 'STL1904 Game Bounce',
+    'page callback' => 'stl1904_bounce_callback',
+    'page arguments' => [2],
+    'access arguments' => ['access game content'],
+    'type' => MENU_CALLBACK,
+  ];
+
   $items['%/bounce/%'] = [
     'title' => 'Ziquid Game Bounce',
     'page callback' => 'zg_bounce_callback',
@@ -1764,6 +1772,24 @@ function usl_esa_bounce_callback($phone_id) {
     $button = '';
   }
   return theme('usl_esa_bounce', $button);
+}
+
+/**
+ * STL1904 bounce callback function.
+ *
+ * @param string $phone_id
+ *   The phone ID of the player.
+ *
+ * @return mixed|string|string[]|void|null
+ *   The 1904 bounce page HTML, or access denied if the player has no
+ *   access.
+ */
+function stl1904_bounce_callback($phone_id) {
+  if (empty($phone_id)) {
+    return drupal_access_denied();
+  }
+
+  return 'hello!'; // zg_bounce_callback($phone_id);
 }
 
 /**
