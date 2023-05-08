@@ -219,6 +219,13 @@ body.game-cg li {
 body.game-cg .title.loot {
 	color: #d4c41c;
 }
+body.game-cg .landing {
+	margin-top: 1.75rem;
+}
+body.game-cg .landing p {
+	margin: 1rem;
+	line-height: 1.6;
+}
 body.game-cg .yellow {
 	color: #d4c41c !important;
 }
@@ -1135,11 +1142,12 @@ body.game-cg .tagline {
 	text-align: center;
 	color: #a84;
 	text-transform: uppercase;
-	margin-top: -15px;
+	-webkit-text-stroke: 0.44px #f8fefb;
+	margin-top: -12px;
 	font-weight: bold;
 	letter-spacing: 5px;
-	text-shadow: 0 0.9px 0 beige;
-	font-size: 0.6875rem;
+	text-shadow: 0.3px 0.3px 6px #eec8;
+	font-size: 0.75rem;
 	margin-bottom: 4px;
 }
 body.game-cg .bounce-welcome {

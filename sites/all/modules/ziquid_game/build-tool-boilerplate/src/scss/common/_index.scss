@@ -29,6 +29,14 @@ li {
   color: #d4c41c;
 }
 
+.landing {
+  margin-top: 1.75rem;
+  p {
+    margin: 1rem;
+    line-height: 1.6;
+  }
+}
+
 .yellow {
   color: #d4c41c !important;
 }
@@ -1111,11 +1119,12 @@ span.not-yet-overlay {
   text-align: center;
   color: $tagline-color;
   text-transform: uppercase;
-  margin-top: -15px;
+  -webkit-text-stroke: 0.44px $tagline-stroke-color;
+  margin-top: -12px;
   font-weight: bold;
   letter-spacing: 5px;
-  text-shadow: 0 0.9px 0 beige;
-  font-size: 0.6875rem;
+  text-shadow: 0.3px 0.3px 6px $tagline-shadow-color;
+  font-size: 0.75rem;
   margin-bottom: 4px;
 }
 

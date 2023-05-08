@@ -6,6 +6,7 @@ body.game-stl1904 {
   color: $color;
 
   @import 'common/index';
+  @import 'common/stl1904_overrides';
   @import 'common/stlouis_only';
 
   &.portrait-orientation {
