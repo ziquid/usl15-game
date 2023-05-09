@@ -1245,6 +1245,9 @@ body.game-cg .admin-online {
 body.game-cg .staff-online {
 	filter: drop-shadow(0 0 2px yellow);
 }
+body.game-cg .hidden {
+	display: none;
+}
 body.game-cg::after {
 	filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(-10deg) saturate(1000%) contrast(0.8);
 }

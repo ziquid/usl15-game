@@ -1245,10 +1245,14 @@ body.game-stlouis .admin-online {
 body.game-stlouis .staff-online {
 	filter: drop-shadow(0 0 2px yellow);
 }
-body.game-stlouis video#wise-old-man {
+body.game-stlouis .hidden {
+	display: none;
+}
+body.game-stlouis video#wise-old-man, body.game-stlouis video.wise-old-man {
 	display: block;
 	width: 80px;
 	border-radius: 11px;
+	position: absolute;
 }
 body.game-stlouis .speech-bubble.with-video {
 	margin-left: 85px;

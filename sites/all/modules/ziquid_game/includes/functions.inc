@@ -755,8 +755,8 @@ function zg_competency_level(\stdClass $game_user, $id) {
     $item = db_fetch_object($result);
   }
 
-  $sql = 'select use_count from user_competencies
-    where fkey_competencies_id = %d and fkey_users_id = %d;';
+  $sql = 'select coalesce((select use_count from user_competencies
+    where fkey_competencies_id = %d and fkey_users_id = %d), 0) as use_count;';
   $result = db_query($sql, $id, $game_user->id);
   $comp = db_fetch_object($result);
 

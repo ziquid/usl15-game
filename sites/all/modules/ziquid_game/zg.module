@@ -1245,6 +1245,11 @@ function zg_fetch_header(\stdClass $pl) {
   $module_path = drupal_get_path('module', 'zg');
   include $module_path . '/includes/' . $game . '_defs.inc';
 
+  $next_level_str = $next_level . '';
+  if ($next_level == 99999999) {
+    $next_level_str = 'Max';
+  }
+
   // Calculate energy change.
   $energy_bonus = 10 + $pl->ep_energy_bonus +
     $pl->eq_energy_increase + $pl->st_energy_increase;
@@ -1526,7 +1531,7 @@ function zg_fetch_header(\stdClass $pl) {
     </div>
     <div class="experience overlay-panel-3x2">
       <div class="overlay-title">{$game_text['experience']}</div>
-      <strong>$experience_str</strong> / $next_level
+      <strong>$experience_str</strong> / $next_level_str
     </div>
     <div class="energy overlay-panel-3x2">
       <div class="overlay-title">{$game_text['energy']}</div>
@@ -1590,7 +1595,7 @@ $pl->actions_max <div class="actions-text">Actions</div>
   <div id="actions-time">$actions_text</div>
   </div>
   <div class="experience"><strong>$experience_str</strong> /
-  $next_level<div class="experience-text">{$game_text['experience']}</div></div>
+  $next_level_str<div class="experience-text">{$game_text['experience']}</div></div>
 <div class="energy"><div id="energy-id">$pl->energy</div> /
 $pl->energy_max <div class="energy-text">Energy</div>
   <div id="energy-time">$energy_text</div></div>
