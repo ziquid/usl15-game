@@ -203,7 +203,7 @@ if (empty($item->id)) {
   $sql = 'insert into challenge_history
     (type, fkey_from_users_id, fkey_to_users_id, fkey_neighborhoods_id,
     fkey_elected_positions_id, won, desc_short, desc_long) values
-    ("election", %d, 0, %d, %d, 1, "' . $game_user->username .
+    ("election", %d, NULL, %d, %d, 1, "' . $game_user->username .
     ' ran unopposed and automatically won.", "' . $game_user->username .
     ' ran unopposed and automatically won.")';
   $result = db_query($sql, $game_user->id, $game_user->fkey_neighborhoods_id,

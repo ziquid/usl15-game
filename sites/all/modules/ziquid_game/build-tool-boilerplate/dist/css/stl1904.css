@@ -1252,10 +1252,12 @@ body.game-stl1904::after {
 	filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(312deg) saturate(1000%) contrast(0.44);
 }
 body.game-stl1904 video#wise-old-man, body.game-stl1904 video.wise-old-man {
-	display: block;
 	width: 80px;
 	border-radius: 11px;
 	position: absolute;
+}
+body.game-stl1904 video#video-overlay {
+	display: block;
 }
 body.game-stl1904 .speech-bubble.with-video {
 	margin-left: 85px;

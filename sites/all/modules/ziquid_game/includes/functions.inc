@@ -704,7 +704,7 @@ function zg_luck(\stdClass &$game_user, $quantity, $amount_before, $amount_fille
 
   $slack_subtype = $type;
 
-  if (in_array(['action', 'energy', 'money'], $slack_subtype)) {
+  if (in_array($slack_subtype, ['action', 'energy', 'money'])) {
     $slack_subtype .= '_refill';
   }
 

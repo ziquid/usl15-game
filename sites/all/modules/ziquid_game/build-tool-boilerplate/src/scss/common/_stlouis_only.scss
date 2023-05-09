@@ -1,9 +1,11 @@
 video {
   &#wise-old-man, &.wise-old-man {
-    display: block;
     width: 80px;
     border-radius: 11px;
     position: absolute;
+  }
+  &#video-overlay {
+    display: block;
   }
 }
 
