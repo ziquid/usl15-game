@@ -47,13 +47,20 @@ body.game-cg button, body.game-cg .button {
 	margin: 8px 0 4px;
 	text-transform: capitalize;
 }
-body.game-cg button.not-yet, body.game-cg .button.not-yet {
+body.game-cg button.not-yet, body.game-cg button:disabled, body.game-cg button[disabled], body.game-cg .button.not-yet, body.game-cg .button:disabled, body.game-cg .button[disabled] {
 	box-shadow: inset 0 1px 0 0 #999;
 	background: linear-gradient(to bottom, #888 5%, #777 100%);
 	background-color: #777;
 	border: 1px solid #999;
 	color: #bbb !important;
 	text-shadow: 0 1px 0 #808080;
+}
+body.game-cg button#listen, body.game-cg .button#listen {
+	font-size: 0.6875rem;
+	padding: 1px 12px 2px;
+	margin: 86px 0 0 13px;
+	font-weight: normal;
+	border-radius: 3px;
 }
 body.game-cg .big button, body.game-cg .big .button {
 	font-size: 0.8125rem !important;

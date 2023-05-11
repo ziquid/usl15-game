@@ -115,4 +115,64 @@ Drupal.behaviors.zg = function (context) {
     }
   });
 
+  /* Video functions. */
+  // Find videos.
+  const zg_videos = context.querySelectorAll('video');
+  const $zg_jqVideos = $(zg_videos);
+  const zg_numVideos = zg_videos.length - 1;
+  const zg_listenButton = context.querySelector('button#listen');
+  console.log(zg_videos);
+
+  // Add event listeners for end of video.
+  function zg_videoEnded(event) {
+    videoNum = $(this).data('video-num');
+    console.log("video " + videoNum + " of " + zg_numVideos + " ended!");
+    if (videoNum == zg_numVideos) {
+      zg_listenButton.disabled = false;
+      zg_showVideoNum(0);
+    }
+    else {
+      zg_showVideoNum(videoNum + 1);
+    }
+  }
+
+  zg_videos.forEach(function (currentValue, currentIndex, listObj) {
+    currentValue.addEventListener('ended', zg_videoEnded)
+  });
+
+  // Play a video.
+  async function zg_playVideo(video) {
+    try {
+      videoNum = $(video).data('video-num');
+      console.log("video " + videoNum + " of " + zg_numVideos + " is starting to play!");
+      await video.play();
+    } catch (err) {
+      console.log("video could not be played.");
+      console.log(err);
+      console.log(video);
+      zg_listenButton.disabled = false;
+    }
+  }
+
+  // Show a specific video and play it.
+  function zg_showVideoNum(num) {
+    $zg_jqVideos.hide();
+    $zg_jqVideos.eq(num).show();
+    $zg_jqVideos.eq(num).data('video-num', num);
+    $zg_jqVideos.eq(num).attr('data-video-num', num);
+    zg_playVideo(zg_videos[num]);
+  }
+
+  // Show or disable Listen button.
+  if (zg_numVideos > 1) {
+    zg_listenButton.addEventListener('click', function () {
+      this.disabled = true;
+      zg_showVideoNum(1);
+    });
+  }
+  else {
+    if (zg_listenButton) {
+      zg_listenButton.disabled = true;
+    }
+  }
 };

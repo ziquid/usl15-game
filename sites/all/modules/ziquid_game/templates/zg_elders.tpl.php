@@ -59,7 +59,7 @@ else {
 $offer = number_format($offer);
 $elder_welcome = '<div class="speech-bubble-wrapper background-color">
   <div class="wise_old_man with-video ' . $happy . '">
-    <video id="wise-old-man" preload="none" autoplay loop muted playsinline webkit-playsinline poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
+    <video id="video-overlay" class="wise-old-man" preload="none" autoplay loop muted playsinline webkit-playsinline poster="/sites/default/files/images/stlouis_wise_old_man_resting.jpg">
       <source src="/sites/default/files/videos/stlouis_wise_old_man_resting.mp4" type="video/mp4">
     </video>
   </div>
