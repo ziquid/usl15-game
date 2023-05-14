@@ -141,6 +141,14 @@ function zg_menu() {
       'type' => MENU_CALLBACK,
     ];
 
+    $items[$game . '/debates_challenge/%/%'] = [
+      'title' => 'Ziquid Game Debates Challenge',
+      'page callback' => 'zg_debates_challenge_callback',
+      'page arguments' => [2, 3],
+      'access arguments' => ['access game content'],
+      'type' => MENU_CALLBACK,
+    ];
+
     $items[$game . '/elders/%'] = [
       'title' => 'Ziquid Game Elders',
       'page callback' => 'zg_elders_callback',
@@ -421,14 +429,6 @@ function zg_menu() {
     'title' => 'Ziquid Game Help',
     'page callback' => 'zg_help_callback',
     'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items[$game . '/debates_challenge/%/%'] = [
-    'title' => 'Ziquid Game Debates Challenge',
-    'page callback' => 'zg_debates_challenge_callback',
-    'page arguments' => [2, 3],
     'access arguments' => ['access game content'],
     'type' => MENU_CALLBACK,
   ];
@@ -1109,9 +1109,9 @@ function zg_welcome_callback($phone_id) {
 
 //  $game = check_plain(arg(0));
 //  db_set_active('game_' . $game);
-//  $game_user = zg_fetch_user_by_id(zg_get_phoneid());
+//  $pl = zg_fetch_user_by_id(zg_get_phoneid());
 //  db_set_active();
-//  zg_loop($game_user, 'Knight Rider', TRUE);
+//  zg_loop($pl, 'Knight Rider', TRUE);
   return theme('zg_welcome', $phone_id);
 }
 
@@ -1178,19 +1178,19 @@ function zg_debates_list_callback($phone_id) {
  *
  * @param string $phone_id
  *   The phone ID of the player.
- * @param string $position_id
- *   The position ID to debate.
+ * @param string $opp_id
+ *   The opponent's ID.
  *
  * @return mixed|string|string[]|void|null
  *   The debates challenge page HTML, or access denied if the player has no access.
  */
-function zg_debates_challenge_callback($phone_id, $position_id) {
+function zg_debates_challenge_callback($phone_id, $opp_id) {
 
-  if (empty($phone_id) || !is_numeric($position_id)) {
+  if (empty($phone_id) || !is_numeric($opp_id)) {
     return drupal_access_denied();
   }
 
-  return theme('zg_debates_challenge', $phone_id, $position_id);
+  return theme('zg_debates_challenge', $phone_id, $opp_id);
 }
 
 /**
@@ -2186,7 +2186,7 @@ function zg_theme() {
       'template' => 'templates/zg_debates_challenge',
       'arguments' => [
         'phone_id' => NULL,
-        'position_id' => NULL,
+        'opp_id' => NULL,
       ],
     ],
 

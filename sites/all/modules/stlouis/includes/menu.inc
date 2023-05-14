@@ -124,22 +124,6 @@ function stlouis_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stlouis/debates/%'] = [
-    'title' => 'St. Louis Debates List',
-    'page callback' => 'stlouis_debates_list_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['stlouis/debates_challenge/%/%'] = [
-    'title' => 'St. Louis Debates Challenge',
-    'page callback' => 'stlouis_debates_challenge_callback',
-    'page arguments' => [2, 3],
-    'access arguments' => ['access stlouis content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $items['stlouis/elections/%'] = [
     'title' => 'St. Louis Elections List',
     'page callback' => 'stlouis_elections_list_callback',
@@ -585,47 +569,6 @@ function stlouis_help_callback($phone_id) {
   }
 
   return theme('stlouis_help', $phone_id);
-
-}
-
-/**
- * Debates list callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- *
- * @return mixed|string|string[]|void|null
- *   The debates list page HTML, or access denied if the player has no
- *   access.
- */
-function stlouis_debates_list_callback($phone_id) {
-
-  if (empty($phone_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_debates_list', $phone_id);
-
-}
-
-/**
- * Debates challenge callback function.
- *
- * @param string $phone_id
- *   The phone ID of the player.
- * @param string $position_id
- *
- *
- * @return mixed|string|string[]|void|null
- *   The debates challenge page HTML, or access denied if the player has no access.
- */
-function stlouis_debates_challenge_callback($phone_id, $position_id) {
-
-  if (empty($phone_id) || !is_numeric($position_id)) {
-    return drupal_access_denied();
-  }
-
-  return theme('stlouis_debates_challenge', $phone_id, $position_id);
 
 }
 
@@ -1149,21 +1092,6 @@ function stlouis_theme() {
 
     'stlouis_elections_challenge' => [
       'template' => 'stlouis_elections_challenge',
-      'arguments' => [
-        'phone_id' => NULL,
-        'position_id' => NULL,
-      ],
-    ],
-
-    'stlouis_debates_list' => [
-      'template' => 'stlouis_debates_list',
-      'arguments' => [
-        'phone_id' => NULL,
-      ],
-    ],
-
-    'stlouis_debates_challenge' => [
-      'template' => 'stlouis_debates_challenge',
       'arguments' => [
         'phone_id' => NULL,
         'position_id' => NULL,
