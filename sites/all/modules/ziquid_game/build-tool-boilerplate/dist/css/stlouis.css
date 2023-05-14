@@ -233,6 +233,9 @@ body.game-stlouis .landing p {
 	margin: 1rem;
 	line-height: 1.6;
 }
+body.game-stlouis .landing .speech-bubble p {
+	margin-right: 11px;
+}
 body.game-stlouis .yellow {
 	color: #d4c41c !important;
 }
@@ -1268,6 +1271,7 @@ body.game-stlouis .speech-bubble.with-video {
 }
 body.game-stlouis .wise_old_man.with-video {
 	background-image: none;
+	width: 100px;
 }
 body.game-stlouis.portrait-orientation {
 	/**

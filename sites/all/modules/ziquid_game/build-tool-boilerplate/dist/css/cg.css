@@ -233,6 +233,9 @@ body.game-cg .landing p {
 	margin: 1rem;
 	line-height: 1.6;
 }
+body.game-cg .landing .speech-bubble p {
+	margin-right: 11px;
+}
 body.game-cg .yellow {
 	color: #d4c41c !important;
 }

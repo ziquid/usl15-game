@@ -233,6 +233,9 @@ body.game-stl1904 .landing p {
 	margin: 1rem;
 	line-height: 1.6;
 }
+body.game-stl1904 .landing .speech-bubble p {
+	margin-right: 11px;
+}
 body.game-stl1904 .yellow {
 	color: #d4c41c !important;
 }
@@ -1271,6 +1274,7 @@ body.game-stl1904 .speech-bubble.with-video {
 }
 body.game-stl1904 .wise_old_man.with-video {
 	background-image: none;
+	width: 100px;
 }
 body.game-stl1904.portrait-orientation {
 	/**
