@@ -24,22 +24,6 @@ function zg_menu() {
     'type' => MENU_CALLBACK,
   ];
 
-  $items['stl1904/b2/%'] = [
-    'title' => 'STL1904 Game Bounce',
-    'page callback' => 'stl1904_bounce_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
-  $items['%/bounce/%'] = [
-    'title' => 'Ziquid Game Bounce',
-    'page callback' => 'zg_bounce_callback',
-    'page arguments' => [2],
-    'access arguments' => ['access game content'],
-    'type' => MENU_CALLBACK,
-  ];
-
   $game_list = zg_get_game_list();
   foreach ($game_list as $game) {
 
@@ -1720,8 +1704,9 @@ function zg_bounce_callback($phone_id) {
   }
 
   db_set_active('game_' . $game);
-  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
-  $cheat = zg_get_value($game_user, 'GoldenPlatesFTW', FALSE);
+  $pl = zg_fetch_player_by_id(zg_get_phoneid());
+  $cheat = zg_get_value($pl, 'GoldenPlatesFTW', FALSE);
+  $stl1904 = zg_get_value($pl, 'BackInTime', FALSE);
   db_set_active();
 
   $module_path = drupal_get_path('module', 'zg');
@@ -1730,14 +1715,20 @@ function zg_bounce_callback($phone_id) {
 
   $button = zg_render_button();
   if ($game == 'stlouis' &&
-    ($game_user->meta == 'admin' || $game_user->meta == 'staff' || $cheat)) {
+    ($pl->meta == 'admin' || $pl->meta == 'staff' || $cheat)) {
     $button .= "<p class='center'>or</p>" .
       zg_render_button('/cg/bounce', 'Read the Book of Mormon') .
       "<p class='center'>(if you wish)</p>";
   }
+  if ($game == 'stlouis' &&
+    ($pl->meta == 'admin' || $pl->meta == 'staff' || $stl1904)) {
+    $button .= "<p class='center'>or</p>" .
+      zg_render_button('/stl1904/bounce', 'Go Back in Time') .
+      "<p class='center'>(if you wish)</p>";
+  }
 
   if ($game == 'cg') {
-    zg_song($game_user, 'Faith teaser', TRUE);
+    zg_song($pl, 'Faith teaser', TRUE);
   }
 
   return theme('zg_bounce', $phone_id, $button);
