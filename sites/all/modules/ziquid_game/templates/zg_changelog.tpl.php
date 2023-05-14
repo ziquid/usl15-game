@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        May 13, 2023
+    </div>
+    <ul>
+        <li>
+            More Talking Heads and more bugfixes.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         May 3, 2023
     </div>
     <ul>
