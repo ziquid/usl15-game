@@ -411,7 +411,7 @@ EOF;
 }
 
 /**
- * Find the icon path for a given type.
+ * Find the icon path for a given type.  Saves it as the property 'icon_path'.
  *
  * @param \stdClass $game_user
  *   The game user object.
@@ -420,7 +420,7 @@ EOF;
  * @param string $type
  *   The type of object.
  */
-function zg_get_icon_path(\stdClass $game_user, \stdClass $obj, $type) {
+function zg_get_icon_path(\stdClass $game_user, \stdClass $obj, string $type): void {
   global $game;
   include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 

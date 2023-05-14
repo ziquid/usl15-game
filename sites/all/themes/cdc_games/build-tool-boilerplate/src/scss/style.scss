@@ -993,7 +993,8 @@ a.try-an-election, input.try-an-election {
   position: absolute;
   right: 9px;
   bottom: 5px;
-  text-shadow: 1px 1px 1px black, -1px -1px 1px black;
+  text-shadow: 0.5px 0.5px 0.5px black, -0.5px -0.5px 0.5px black,
+    -0.5px 0.5px 0.5px black, 0.5px -0.5px 0.5px black;
 }
 
 .debate-used-wrapper {

@@ -702,14 +702,15 @@ if (empty($data)) {
 }
 
 foreach ($data as $item) {
-firep($item);
+  firep($item, 'You used');
 
+  zg_get_icon_path($pl, $item, $item->type);
   echo <<< EOF
 <div class="debate-used">
-<img src="/sites/default/files/images/$item->type/$game-$item->id.png"
-border="0"><span class="debate-num"> x $item->quantity</span></div>
+  <img src="$item->icon_path"/>
+  <span class="debate-num"> x $item->quantity</span>
+</div>
 EOF;
-
 }
 
 // OPPONENT USED.
@@ -742,7 +743,7 @@ $sql = 'SELECT equipment.id, equipment.elocution_bonus,
   AND staff_ownership.quantity > 0
 
   ORDER BY elocution_bonus DESC;';
-$result = db_query($sql, $item_id, $item_id);
+$result = db_query($sql, $opp_id, $opp_id);
 while ($item = db_fetch_object($result)) {
   $data[] = $item;
 }
@@ -754,14 +755,17 @@ if (empty($data)) {
 foreach ($data as $item) {
   firep($item, 'debate opp used');
 
+  zg_get_icon_path($opp, $item, $item->type);
   echo <<< EOF
 <div class="debate-used">
-<img src="/sites/default/files/images/$item->type/$game-$item->id.png"
-border="0"><span class="debate-num"> x $item->quantity</span></div>
+  <img src="$item->icon_path"/>
+  <span class="debate-num"> x $item->quantity</span>
+</div>
 EOF;
-
 }
 
 zg_button('debates');
-echo '<div>&nbsp;</div>';
 db_set_active();
+?>
+</div>
+<div>&nbsp;</div>
