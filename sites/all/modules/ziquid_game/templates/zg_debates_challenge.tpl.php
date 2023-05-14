@@ -614,7 +614,7 @@ else {
 
   if ($opp->meta == 'zombie') {
 
-    $sql = 'updates users set experience = experience + 500
+    $sql = 'update users set experience = experience + 500
       where id = %d;';
     $result = db_query($sql, $opp->id);
     echo '<div class="subtitle">' . $opp->username .
