@@ -27,7 +27,7 @@ function cdc_games_preprocess_page(&$vars) {
 
   // Orientation class.
   if ((stripos($_SERVER['HTTP_USER_AGENT'], 'orientation=landscape') !== FALSE) ||
-    (substr($phone_id, 0, 9) == 'landscape')) {
+    (substr($phone_id, 0, 9) == 'landscape') || ($game === 'cg')) {
     $vars['body_classes'] .= ' landscape-orientation';
   }
   else {
