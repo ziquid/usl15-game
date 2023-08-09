@@ -4,7 +4,7 @@
 
 &::after {
   content: "";
-  background: url(/sites/default/files/images/#{$game}_bg.jpg);
+  background: url(/sites/default/files/images/#{$game}_bg.jpg?1);
   background-position: top left;
   background-attachment: fixed;
   opacity: 0.05;

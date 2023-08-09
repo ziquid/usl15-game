@@ -205,7 +205,7 @@ body.game-stlouis .slide-in.show .slide-in-content, body.game-stlouis .slide-in 
 }
 body.game-stlouis::after {
 	content: "";
-	background: url(/sites/default/files/images/stlouis_bg.jpg);
+	background: url(/sites/default/files/images/stlouis_bg.jpg?1);
 	background-position: top left;
 	background-attachment: fixed;
 	opacity: 0.05;
