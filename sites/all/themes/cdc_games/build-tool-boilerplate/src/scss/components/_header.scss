@@ -127,3 +127,34 @@ header {
     font-size: 0.6875rem;
   }
 }
+
+.site-switcher {
+  margin: 0.25rem;
+  padding: 0.25rem;
+  text-align: center;
+
+  a, span {
+    padding: 0.25rem;
+    margin: 0.75rem;
+  }
+
+  a {
+    color: #08f;
+  }
+
+  .localdev-active, .dev-active, .prod-active {
+    border: 1px solid white;
+  }
+
+  .localdev {
+    background-color: darkgreen;
+  }
+
+  .dev {
+    background-color: orange;
+  }
+
+  .prod {
+    background-color: darkred;
+  }
+}

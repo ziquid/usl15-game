@@ -41,8 +41,7 @@ firep($game_user, 'game_user object');
 zg_check_authkey($game_user);
 
 // Check for authorized client.
-if ((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
-  (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.celestialglory') === FALSE) &&
+if ((strpos($_SERVER['HTTP_USER_AGENT'], '(com.ziquid.') === FALSE) &&
 
   // Paypal IPN.
   ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&

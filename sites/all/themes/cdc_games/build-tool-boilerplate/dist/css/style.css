@@ -1,4 +1,4 @@
-/*! cdc_games theme v2.0.0 | (c) 2023 Your Name | MIT License | http://github.com/cferdinandi/build-tool-boilerplate */
+/*! cdc_games theme v2.0.0 | (c) 2024 Your Name | MIT License | http://github.com/cferdinandi/build-tool-boilerplate */
 /**
  * @section Header Styles
  */
@@ -105,6 +105,31 @@ header .level a {
 }
 header .level-text {
   font-size: 0.6875rem;
+}
+
+.site-switcher {
+  margin: 0.25rem;
+  padding: 0.25rem;
+  text-align: center;
+}
+.site-switcher a, .site-switcher span {
+  padding: 0.25rem;
+  margin: 0.75rem;
+}
+.site-switcher a {
+  color: #08f;
+}
+.site-switcher .localdev-active, .site-switcher .dev-active, .site-switcher .prod-active {
+  border: 1px solid white;
+}
+.site-switcher .localdev {
+  background-color: darkgreen;
+}
+.site-switcher .dev {
+  background-color: orange;
+}
+.site-switcher .prod {
+  background-color: darkred;
 }
 
 body {

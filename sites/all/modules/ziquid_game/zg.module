@@ -812,10 +812,7 @@ function zg_fetch_player($force = FALSE) {
   $ip_addr = ip_address();
 
   // Only allow access through authorized clients.
-  if (((strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') === FALSE) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.celestialglory') === FALSE) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.detroit') === FALSE)) &&
-    (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.wonderland') === FALSE) &&
+  if ((strpos($_SERVER['HTTP_USER_AGENT'], '(com.ziquid.') === FALSE) &&
 
     // Paypal IPN addresses.
     ($ip_addr != '66.211.170.66') &&
@@ -1609,6 +1606,44 @@ $level_text
 </header>
 EOF;
   }
+
+// site switcher
+  $site_host = $_SERVER['HTTP_HOST'];
+if (in_array($pl->meta, ['staff', 'admin', 'tester']) ||
+  in_array($site_host, ['uslce.lndo.site', 'zg.dev.games.ziquid.com'])) {
+
+  print '<div class="site-switcher">';
+
+  // Sim/Localdev
+  if ($site_host == 'uslce.lndo.site') { // Sim/Localdev
+    print '<span class="localdev localdev-active">Localdev</span>';
+  }
+  else {
+    print '<a class="localdev" href="http://uslce.lndo.site/stlouis/bounce/' . arg(2) . '">Localdev</a>';
+  }
+
+  print '|';
+
+  // Dev
+  if ($site_host == 'zg.dev.games.ziquid.com') { // Dev
+    print '<span class="dev dev-active">Dev</span>';
+  }
+  else {
+    print '<a class="dev" href="http://zg.dev.games.ziquid.com/stlouis/bounce/' . arg(2) . '">Dev</a>';
+  }
+
+  print '|';
+
+  // Prod
+  if ($site_host == 'zg.games.ziquid.com') { // Dev
+    print '<span class="prod prod-active">Prod</span>';
+  }
+  else {
+    print '<a class="prod" href="http://zg.games.ziquid.com/stlouis/bounce/' . arg(2) . '">Prod</a>';
+  }
+  print '</div>';
+  print '<div>' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '</div>';
+}
 
   print $points_text;
   print $extra_messages;
