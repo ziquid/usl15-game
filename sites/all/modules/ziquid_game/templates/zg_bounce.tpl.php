@@ -52,6 +52,7 @@ EOF;
   return;
 }
 
+/*
 // Landscape?  Show user profile.
 if (zg_is_landscape() && strlen($pl->username)) {
   echo <<< EOF
@@ -62,6 +63,7 @@ if (zg_is_landscape() && strlen($pl->username)) {
 EOF;
   zg_song($pl, 'Jump welcome');
 }
+*/
 
 db_set_active();
 ?>
