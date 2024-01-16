@@ -44,7 +44,7 @@ if ((substr($arg2, 0, 3) != 'ai-') && $ip_address != '127.0.0.1') {
   $result = db_query($sql, $ip_address);
   $item = db_fetch_object($result);
   if ($item->count > 5) {
-    $sql = 'select * from ip_whitelist where ip_address = "%s";';
+    $sql = 'select count(*) from ip_whitelist where ip_address = "%s";';
     $result = db_query($sql, $ip_address);
     $ips = db_fetch_object($result);
     if (empty($ips)) {

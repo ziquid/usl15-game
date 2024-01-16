@@ -38,6 +38,20 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jan 16, 2024
+    </div>
+<!--
+    <div class="subsubtitle">
+        Bugs Fixed
+    </div>
+-->
+    <ul>
+        <li>
+            USLCE didn't show the Elder during the welcome wizard.  Fixed.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         May 13, 2023
     </div>
     <ul>
