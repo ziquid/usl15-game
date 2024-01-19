@@ -1,5 +1,7 @@
-html {
-  font-size: 28px;
+@media (width: 744px) or (width: 810px) or (width: 820px) or (width: 834px) or (width: 1024px) {
+  html {
+    font-size: 30px;
+  }
 }
 body {
   zoom: 2;
