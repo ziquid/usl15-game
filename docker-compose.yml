@@ -1,0 +1,38 @@
+# docker-compose.yml
+
+# start the container with:
+# $ docker compose up -d
+
+# ssh in with:
+# $ docker exec -t -i usl15-game-web-1 /bin/bash
+
+services:
+  web:
+    image: ziquid/uslce:latest
+    volumes:
+      - .:/var/www/html:cached
+    ports:
+      - "80:80"
+  db:
+    image: bitnami/mysql:5.7
+    volumes:
+      - ./db/backups:/var/mysql/backups:delegated
+      - ./db/data:/bitnami/mysql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3306:3306"
+  pma:
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: ${PMA_HOST}
+      PMA_USER: ${PMA_USER}
+      PMA_PASSWORD: ${PMA_PASSWORD}
+      PHP_UPLOAD_MAX_FILESIZE: 1G
+      PHP_MAX_INPUT_VARS: 1G
+    ports:
+     - "8080:80"

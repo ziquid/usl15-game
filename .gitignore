@@ -1,4 +1,5 @@
 /nbproject/*
+/db/*
 *.sql
 *.sql.gz
 /sites/default/files/images/*_map_bottom.jpg
@@ -7,4 +8,5 @@
 /sites/default/files/images/*_map_large_bottom_colored.jpg
 /sites/default/files/images/*_map_large_colored.jpg
 /vendor
-settings.local.php
+settings.*.php
+.env
