@@ -22,6 +22,7 @@ help:
 	@echo "make run - Run the docker containers"
 	@echo "make sqlc - Connect to the MySQL container via the mysql CLI"
 	@echo "make ssh - SSH into the web container"
+	@echo "make stop - Stop the docker containers"
 
 run: # build
 	docker compose up -d
@@ -31,5 +32,8 @@ sqlc: run
 
 ssh: run
 	docker exec -t -i usl15-game-web-1 /bin/bash
+
+stop:
+	docker compose stop
 
 .PHONY: all build debug-off debug-on help run sqlc ssh
