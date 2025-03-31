@@ -45,7 +45,7 @@ Come back at level 6.&quot;</p>
 <p class="second">&nbsp;</p>
 </div>
 <div class="subtitle"><a
-href="/$game/quests/$arg2"><img
+href="/$game/quest_groups/$arg2?show_expanded=0#group-0"><img
   src="/sites/default/files/images/{$game}_continue.png"/></a></div>
 EOF;
 

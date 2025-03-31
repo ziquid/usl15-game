@@ -20,6 +20,7 @@
 /* ------ CONTROLLER ------ */
 
 global $game, $phone_id;
+include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 $pl = zg_fetch_player();
 
 if (empty($pl->username) || $pl->username == '(new player)') {

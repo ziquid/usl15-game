@@ -262,6 +262,9 @@ if ($game_user->level > ($item->level + 15)) {
   return;
 }
 
+// Game on!  Election happens.
+$election_polls = [];
+
 $sql = 'SELECT sum(staff.initiative_bonus * staff_ownership.quantity)
   as initiative from staff
   left join staff_ownership on staff_ownership.fkey_staff_id = staff.id and
@@ -770,6 +773,7 @@ while ($count--) {
     // Voter votes for you.
     $votes--;
 firep('resident votes for you');
+    $election_polls[] = 'I voted for you because of your ' . $experience . '.';
     $votes_you_influence++;
 
   }
@@ -778,6 +782,7 @@ firep('resident votes for you');
     // Votes for incumbent.
     $votes++;
 firep('resident votes for incumbent');
+    $election_polls[] = 'I voted for your opponent because of his or her ' . $experience . '.';
     $votes_opp_influence++;
 
   }
@@ -991,8 +996,7 @@ EOF;
 
 }
 
-echo '<div class="election-continue"><a href="/' . $game . '/elections/' .
-  $arg2 . '">' . t('Continue') . '</a></div>';
+zg_button('elections');
 
 $message = "$game_user->username [$my_influence] challenged $item->username " .
 "[$opp_influence] for the seat $item->ep_name in $location and " .

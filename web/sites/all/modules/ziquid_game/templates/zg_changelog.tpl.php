@@ -37,6 +37,25 @@ db_set_active();
     <?php print $game_name_full; ?> Changelog
   </div>
 
+
+    <div class="subtitle">
+        Mar 31, 2025
+    </div>
+    <ul>
+        <li>
+            Challenging for seats could result in a white screen.  Fixed.
+        </li>
+        <li>
+            Trying to views clans before entering your name resulted in a green screen.  Fixed.
+        </li>
+        <li>
+            Challenge results 'continue' button was almost unreadable.  Fixed.
+        </li>
+        <li>
+            Challenge results in an unpopulated hood resulted in a white screen.  Fixed.
+        </li>
+    </ul>
+
     <div class="subtitle">
         Jan 18, 2024
     </div>

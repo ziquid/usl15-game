@@ -1,0 +1,44 @@
+APP := usl15-game
+
+all: help
+
+build: Dockerfile
+	docker build -t ziquid/uslce .
+
+debug-off: run
+	docker exec -t -i $(APP)-web-1 cp /usr/local/etc/php/php.ini{-production,}
+	$(warning "TODO: Disable xdebug in php.ini")
+	# docker exec -t -i $(APP)-web-1 apache2ctl restart
+	docker container restart $(APP)-web-1
+
+debug-on: run
+	docker exec -t -i $(APP)-web-1 cp /usr/local/etc/php/php.ini{-development,}
+	$(warning "TODO: Enable xdebug in php.ini")
+	# docker exec -t -i $(APP)-web-1 apache2ctl restart
+	docker container restart $(APP)-web-1
+
+drush: # run
+	docker exec -t -i $(APP)-web-1 /bin/bash -c "cd web && drush $(ARGS)"
+
+help:
+	@echo "mzke build - Build all custom docker image(s) needed for this app"
+	@echo "mzke debug-on/off - En/Disable PHP debugging in the web container"
+	@echo "mzke help - Display this help message"
+	@echo "mzke run - Run the docker containers"
+	@echo "mzke sqlc - Connect to the MySQL container via the mysql CLI"
+	@echo "mzke ssh - SSH into the web container"
+	@echo "mzke stop - Stop the docker containers"
+
+run: build docker-compose.yml
+	docker compose up -d
+
+sqlc: # run
+	docker exec -t -i $(APP)-db-1 mysql -u root -p
+
+ssh: # run
+	docker exec -t -i $(APP)-web-1 /bin/bash
+
+stop:
+	docker compose stop
+
+.PHONY: all build debug-off debug-on help run sqlc ssh stop
