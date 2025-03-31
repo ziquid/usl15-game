@@ -13,12 +13,13 @@ echo "$PWD" | grep -s -q dev && SCOPE=dev
 
 cd web
 chmod ug+w sites/default
-$DRUSH -y updb
 
 if [ "$SCOPE" = dev ]; then
+  $DRUSH -y updb
   sudo chown -R www-data:www-data sites/default/files
 fi
 
 if [ "$SCOPE" = prod ]; then
+  $DRUSH -y updb
   sudo chown -R www-data:www-data sites/default/files
 fi
