@@ -14,6 +14,7 @@ cd $(dirname "$0")/..
 echo --:\  $(date) :--
 git pull -f
 ./build.sh
+cd web
 drush cc all
 echo drush cron
 drush sql-dump > ~ubuntu/usl15.dev.drupal.sql

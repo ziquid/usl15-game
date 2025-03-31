@@ -11,14 +11,8 @@ SCOPE=local
 echo "$PWD" | grep -s -q prod && SCOPE=prod
 echo "$PWD" | grep -s -q dev && SCOPE=dev
 
+cd web
 chmod ug+w sites/default
-cp .gitignore gitignore
-# $DRUSH -y -q make gdg.make
-mv gitignore .gitignore
-# $DRUSH -y en master features
-# echo enabling modules with a scope of $SCOPE
-# $DRUSH -y master-execute --scope=$SCOPE
-# $DRUSH -y fra
 $DRUSH -y updb
 
 if [ "$SCOPE" = dev ]; then
