@@ -1818,12 +1818,12 @@ function zg_get_actions_to_move(\stdClass $game_user, $from_id, $to_id) {
 function zg_get_game_list() {
   return [
     'stl1904',
-    'stl2124',
+//    'stl2124',
     'cg',
-    'detroit',
-    'elysian',
+//    'detroit',
+//    'elysian',
     'stlouis',
-    'wonderland',
+//    'wonderland',
   ];
 }
 

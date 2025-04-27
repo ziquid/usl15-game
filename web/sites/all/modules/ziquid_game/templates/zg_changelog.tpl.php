@@ -39,6 +39,18 @@ db_set_active();
 
 
     <div class="subtitle">
+        Apr 27, 2025
+    </div>
+    <ul>
+        <li>
+            The map disappeared!  Fixed.
+        </li>
+        <li>
+            Some players that should be zombies aren't becoming zombies.  Fixed.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         Mar 31, 2025
     </div>
     <ul>

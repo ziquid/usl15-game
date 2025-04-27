@@ -342,7 +342,7 @@ function stlouis_cron() {
     // Fewer than 50 zombies?  Add 100 more.
     if ($zombies->count < 50) {
 
-      $sql = 'select id from users where last_access < "%s"
+      $sql = 'select id, level from users where last_access < "%s"
         order by rand() limit 100;';
       $result = db_query($sql, date('Y-m-d', REQUEST_TIME - (86400 * 120)));
       $zombie_users = [];
@@ -358,7 +358,7 @@ function stlouis_cron() {
         }
         $sql = 'update users set meta = "zombie", username = "%s", level = %d
           where id = %d;';
-        $result = db_query($sql, $name, $zombie->level, $zombie->id);
+        db_query($sql, $name, $zombie->level, $zombie->id);
       }
 
       // Notify the game players.
