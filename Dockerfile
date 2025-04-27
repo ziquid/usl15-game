@@ -1,7 +1,7 @@
 # from https://github.com/docker-library/drupal/blob/e7202cc9967a41cf4e14aeacd32433ddd01b8b01/7/php8.2/apache-bookworm/Dockerfile
 
-# build this and tag it as 'ziquid/uslce':
-# $ docker build -t ziquid/uslce .
+# build this and tag it as 'ziquid/zg':
+# $ docker build -t ziquid/zg .
 
 FROM php:8.2-apache-bookworm
 
@@ -75,39 +75,39 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 RUN apt update -y
 RUN apt install -y default-mysql-client unzip exiftool git-core gnupg2 imagemagick openssl pv rsync ssh wget
-RUN install-php-extensions @fix_letsencrypt 
-RUN install-php-extensions apcu 
-RUN install-php-extensions bcmath 
+RUN install-php-extensions @fix_letsencrypt
+RUN install-php-extensions apcu
+RUN install-php-extensions bcmath
 RUN install-php-extensions bz2
-RUN install-php-extensions calendar 
-RUN install-php-extensions exif 
+RUN install-php-extensions calendar
+RUN install-php-extensions exif
 # RUN install-php-extensions gd
-RUN install-php-extensions gettext 
-RUN install-php-extensions imagick 
-RUN install-php-extensions imap 
-RUN install-php-extensions intl 
-RUN install-php-extensions ldap 
-RUN install-php-extensions mbstring 
-RUN install-php-extensions memcached 
-RUN install-php-extensions mysqli 
-RUN install-php-extensions oauth 
+RUN install-php-extensions gettext
+RUN install-php-extensions imagick
+RUN install-php-extensions imap
+RUN install-php-extensions intl
+RUN install-php-extensions ldap
+RUN install-php-extensions mbstring
+RUN install-php-extensions memcached
+RUN install-php-extensions mysqli
+RUN install-php-extensions oauth
 # RUN install-php-extensions opcache
-RUN install-php-extensions pcntl 
-RUN install-php-extensions pdo 
+RUN install-php-extensions pcntl
+RUN install-php-extensions pdo
 # RUN install-php-extensions pdo_mysql
 # RUN install-php-extensions pdo_pgsql
-RUN install-php-extensions redis 
-RUN install-php-extensions soap 
+RUN install-php-extensions redis
+RUN install-php-extensions soap
 RUN install-php-extensions xdebug
 RUN install-php-extensions xhprof
 # RUN install-php-extensions zip
 
 RUN chsh -s /bin/bash www-data
 RUN mkdir -p /var/www/.composer
-RUN chown -R www-data:www-data /var/www  
-RUN apt-get -y clean  
-RUN apt-get -y autoclean  
-RUN apt-get -y autoremove  
+RUN chown -R www-data:www-data /var/www
+RUN apt-get -y clean
+RUN apt-get -y autoclean
+RUN apt-get -y autoremove
 RUN rm -rf /var/lib/apt/lists/*
 RUN rm -rf /var/lib/cache/*
 RUN rm -rf /var/lib/log/*

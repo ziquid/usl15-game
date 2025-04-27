@@ -27,8 +27,17 @@ function zg_cron() {
   foreach (zg_get_game_list() as $game) {
 
     db_set_active();
-    include __DIR__ . '/includes/' . $game . '_defs.inc';
-    db_set_active('game_' . $game);
+    if (file_exists(__DIR__ . '/includes/' . $game . '_defs.inc')) {
+      include __DIR__ . '/includes/' . $game . '_defs.inc';
+    }
+    else {
+      zg_slack(NULL,'error', "cron", "No game definitions for $game.");
+    }
+    if (!db_set_active('game_' . $game)) {
+      // No game database?  Skip this game.
+      zg_slack(NULL,'error', "cron", "No game database for $game.");
+      continue;
+    }
 
     // Cron stats.
     $msg = '';
@@ -36,7 +45,15 @@ function zg_cron() {
     $sql = 'select sum(luck) as luck, count(id) as players from users 
       where level >= 25 and meta <> "admin" and meta <> "staff" 
       and meta <> "zombie" and meta NOT LIKE "ai%";';
-    $result = db_query($sql)->fetch_object();
+    try {
+      $result = db_query($sql)->fetch_object();
+    }
+    catch (Exception $e) {
+      // No game users table?  Skip this game.
+      zg_slack(NULL,'error', "cron", "No game users table for $game.");
+      db_set_active();
+      continue;
+    }
     if ($result->players) {
       $msg .= "$result->luck Luck amongst $result->players players.  ";
       db_set_active();

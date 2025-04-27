@@ -1,14 +1,21 @@
-APP := usl15-game
+#!/usr/bin/env mzke -f
 
-all: help
+APP := usl15-game
+IMAGE := ziquid/zg
+
+MAKE_USER_COMMAND ?= $(notdir $(MAKE))
+
+all: run
 
 build: Dockerfile
-	docker build -t ziquid/uslce .
+	docker build -t $(IMAGE) .
+
+composer: run
+	docker exec -t -i $(APP)-web-1 /bin/bash -c "composer $(ARGS)"
 
 debug-off: run
 	docker exec -t -i $(APP)-web-1 cp /usr/local/etc/php/php.ini{-production,}
 	$(warning "TODO: Disable xdebug in php.ini")
-	# docker exec -t -i $(APP)-web-1 apache2ctl restart
 	docker container restart $(APP)-web-1
 
 debug-on: run
@@ -17,28 +24,53 @@ debug-on: run
 	# docker exec -t -i $(APP)-web-1 apache2ctl restart
 	docker container restart $(APP)-web-1
 
-drush: # run
-	docker exec -t -i $(APP)-web-1 /bin/bash -c "cd web && drush $(ARGS)"
+drush: run
+	docker exec -t -i $(APP)-web-1 /bin/bash -c "cd web; drush $(ARGS)"
+
+COMPOSER_CMD_EXAMPLE = \"ARGS=[CMD ...]\" composer
+DRUSH_CMD_EXAMPLE = \"ARGS=[CMD ...]\" drush
+ifeq ($(IS_MZKE),YES)
+	COMPOSER_CMD_EXAMPLE = composer [CMD ...]
+	DRUSH_CMD_EXAMPLE = drush [CMD ...]
+endif
 
 help:
-	@echo "mzke build - Build all custom docker image(s) needed for this app"
-	@echo "mzke debug-on/off - En/Disable PHP debugging in the web container"
-	@echo "mzke help - Display this help message"
-	@echo "mzke run - Run the docker containers"
-	@echo "mzke sqlc - Connect to the MySQL container via the mysql CLI"
-	@echo "mzke ssh - SSH into the web container"
-	@echo "mzke stop - Stop the docker containers"
+	@echo "$(MAKE_USER_COMMAND) build - Build all custom docker image(s) needed for this app"
+	@echo "$(MAKE_USER_COMMAND) $(COMPOSER_CMD_EXAMPLE) - Run a composer command"
+	@echo "$(MAKE_USER_COMMAND) debug-(on|off) - En/Disable PHP debugging in the web container"
+	@echo "$(MAKE_USER_COMMAND) $(DRUSH_CMD_EXAMPLE) - Run a drush command"
+	@echo "$(MAKE_USER_COMMAND) help - Display this help message"
+	@echo "$(MAKE_USER_COMMAND) rerun|(re)start|rr - Run the docker containers, restart if already running"
+	@echo "$(MAKE_USER_COMMAND) (r|run|all) - Run the docker containers (doesn't restart)"
+	@echo "$(MAKE_USER_COMMAND) sqlc - Connect to the MySQL container via the mysql CLI"
+	@echo "$(MAKE_USER_COMMAND) ssh - SSH into the web container"
+	@echo "$(MAKE_USER_COMMAND) ssh-db - SSH into the db container"
+	@echo "$(MAKE_USER_COMMAND) stop - Stop the docker containers"
 
-run: build docker-compose.yml
-	docker compose up -d
+r: run
 
-sqlc: # run
+rerun: restart
+
+restart: docker-compose.yml
+	docker compose up -d $(ARGS)
+
+rr: rerun
+
+run:
+	@docker compose ls -q | grep -q $(APP) || docker compose up -d $(ARGS)
+
+sqlc: run
 	docker exec -t -i $(APP)-db-1 mysql -u root -p
 
-ssh: # run
+ssh: run
 	docker exec -t -i $(APP)-web-1 /bin/bash
+
+ssh-db: run
+	docker exec -t -i $(APP)-db-1 /bin/bash
+
+start: restart
 
 stop:
 	docker compose stop
 
-.PHONY: all build debug-off debug-on help run sqlc ssh stop
+.PHONY: all build composer debug-off debug-on drush help r rerun restart rr run sqlc ssh ssh-db start stop

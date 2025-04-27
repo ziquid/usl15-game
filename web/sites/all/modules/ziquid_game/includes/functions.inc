@@ -2126,8 +2126,9 @@ function zg_slack($game_user, $type, $subtype, $message) {
     $message = zg_print_r($message);
   }
 
-  // Only cron or bot or fetch_user messages can be playerless.
-  if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $subtype == 'zg_fetch_users_by_ids'
+  // Only cron, bot, error, debug, or fetch_user messages can be playerless.
+  if ($game_user === NULL && ($type == 'cron' || $type == 'bots' || $type == 'error'
+    || $type == 'debug' || $subtype == 'zg_fetch_users_by_ids'
     || $_GET['q'] == 'node')) {
     return zg_send_slack_message($type, $type, $subtype, $message);
   }
@@ -2186,7 +2187,7 @@ function zg_slack($game_user, $type, $subtype, $message) {
  */
 function zg_send_slack_message($channel, $type, $subtype, $message) {
   global $game;
-  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
+//  include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
 
   $bt = debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT | DEBUG_BACKTRACE_IGNORE_ARGS, 2);
   if ($bt[1]['function'] != 'zg_slack') {

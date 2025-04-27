@@ -8,11 +8,15 @@
 
 services:
   web:
-    image: ziquid/uslce:latest
+    image: ziquid/zg:latest
     volumes:
       - .:/var/www/html:cached
-    ports:
-      - "80:80"
+    expose:
+      - "80"
+    labels:
+      - "traefik.http.routers.zg.rule=(Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`))"
+    networks:
+      - traefik
   db:
     image: bitnami/mysql:5.7
     volumes:
@@ -24,8 +28,10 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - traefik
   pma:
     image: phpmyadmin:latest
     environment:
@@ -34,5 +40,17 @@ services:
       PMA_PASSWORD: ${PMA_PASSWORD}
       PHP_UPLOAD_MAX_FILESIZE: 1G
       PHP_MAX_INPUT_VARS: 1G
-    ports:
-     - "8080:80"
+    expose:
+      - "80"
+    labels:
+      - "traefik.http.routers.zg-pma.rule=(Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`)) && PathPrefix(`/pma`)"
+      - "traefik.http.middlewares.zgpma-stripprefix.stripprefix.prefixes=/pma"
+      - "traefik.http.routers.zg-pma.middlewares=zgpma-stripprefix@docker"
+    networks:
+      - traefik
+
+networks:
+  traefik:
+    driver: bridge
+    name: traefik
+    external: true
