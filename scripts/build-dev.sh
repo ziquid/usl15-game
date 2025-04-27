@@ -4,7 +4,7 @@
 # shellcheck disable=SC2046
 # shellcheck disable=SC2164
 
-set -e
+set -eux
 if ! echo $PWD | grep -s -q dev ; then
   echo "This script is only for the dev instance."
   exit 1
@@ -16,11 +16,11 @@ git pull -f
 ./build.sh
 cd web
 drush cc all
-echo drush cron
+drush cron
 drush sql-dump > ~ubuntu/usl15.dev.drupal.sql
 gzip -f ~ubuntu/usl15.dev.drupal.sql
 
-for a in stl1904 stlouis cg detroit wonderland; do
+for a in stl1904 stlouis cg; do # elysian stl2124 detroit wonderland
   echo drush sql-dump --database=game_$a
   drush sql-dump --database=game_$a > ~ubuntu/$a.dev.game.sql
   gzip -f ~ubuntu/$a.dev.game.sql
