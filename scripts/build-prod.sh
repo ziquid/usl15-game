@@ -16,11 +16,11 @@ git pull -f
 ./build.sh
 cd web
 drush cc all
-echo drush cron
+drush cron
 drush sql-dump > ~ubuntu/usl15.drupal.sql
 gzip -f ~ubuntu/usl15.drupal.sql
 
-for a in stl1904 stlouis cg detroit wonderland; do
+for a in stl1904 stlouis cg; do # elysian stl2124 detroit wonderland
   echo drush sql-dump --database=game_$a
   drush sql-dump --database=game_$a > ~ubuntu/$a.game.sql
   gzip -f ~ubuntu/$a.game.sql

@@ -4,7 +4,7 @@
 # shellcheck disable=SC2046
 # shellcheck disable=SC2164
 
-set -eux
+set -e
 if ! echo $PWD | grep -s -q dev ; then
   echo "This script is only for the dev instance."
   exit 1
