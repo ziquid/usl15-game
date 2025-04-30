@@ -14,7 +14,7 @@ services:
     expose:
       - "80"
     labels:
-      - "traefik.http.routers.zg.rule=(Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`))"
+      - "traefik.http.routers.zg.rule=(Host(`10.0.2.2`) || Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`))"
     networks:
       - traefik
   db:

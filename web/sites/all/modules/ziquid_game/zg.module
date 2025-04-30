@@ -500,10 +500,15 @@ function zg_init() {
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=533') !== FALSE) {
         // 533dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width533.css');
-      } else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
+      }
+      else if ((stripos($_SERVER['HTTP_USER_AGENT'], 'width=480') !== FALSE) ||
         (stripos($_SERVER['HTTP_USER_AGENT'], 'width=+480') !== FALSE)) {
         // 480dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width480.css');
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=440') !== FALSE) {
+        // 440dip width display.
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width440.css');
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
         // 414dip width display.
@@ -516,6 +521,18 @@ function zg_init() {
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=400') !== FALSE) {
         // 400dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width400.css');
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=393') !== FALSE) {
+        // 393dip width display.
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width393.css');
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=390') !== FALSE) {
+        // 390dip width display.
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width390.css');
+      }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=384') !== FALSE) {
+        // 384dip width display.
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width384.css');
       }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=375') !== FALSE) {
         // 375dip width display.
