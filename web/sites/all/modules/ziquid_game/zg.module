@@ -510,6 +510,10 @@ function zg_init() {
         // 440dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width440.css');
       }
+      else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=430') !== FALSE) {
+        // 430dip width display.
+        drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width430.css');
+      }
       else if (stripos($_SERVER['HTTP_USER_AGENT'], 'width=414') !== FALSE) {
         // 414dip width display.
         drupal_add_css(drupal_get_path('theme', 'cdc_games') . '/width414.css');

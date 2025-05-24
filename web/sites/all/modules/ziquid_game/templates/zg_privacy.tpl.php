@@ -17,20 +17,25 @@
  * .
  */
 
-global $game, $phone_id;
-
+global $game;
 include drupal_get_path('module', 'zg') . '/includes/' . $game . '_defs.inc';
-$game_user = zg_fetch_player();
-zg_fetch_header($game_user);
+
+$phone_id = zg_get_phoneid();
+if ($phone_id) {
+  $game_user = zg_fetch_player();
+  zg_fetch_header($game_user);
+}
 db_set_active();
 
 ?>
+<?php if ($phone_id): ?>
 <div class="news">
   <a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
   <a href="/<?php echo $game; ?>/privacy/<?php echo $arg2; ?>" class="button active">Privacy</a>
   <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
   <a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button">Changelog</a>
 </div>
+<?php endif; ?>
 
 <div class="help">
 <div class="title">
@@ -38,7 +43,7 @@ db_set_active();
 </div>
 
 <p>
-  At Ziquid Design operates USL, one of our main priorities is the privacy of our gamers. This Privacy Policy document contains the types of information that are collected and recorded by USL and how we use it.
+  Ziquid Design Studio, LLC, operates this game, USL, and one of our main priorities is the privacy of our gamers. This Privacy Policy document contains the types of information that are collected and recorded by the game, and how we use them.
 </p>
 
 <p>

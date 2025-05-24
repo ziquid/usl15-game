@@ -1114,8 +1114,12 @@ function zg_get_userid_from_phoneid($phone_id) {
  *   The phone ID, if any.
  */
 function zg_get_phoneid() {
-
   $arg2 = arg(2);
+
+  if (empty($arg2)) {
+    return FALSE;
+  }
+
   if ((substr($arg2, 0, 3) == 'fb=') || $arg2 == '') {
     mail('joseph@ziquid.com', 'fix ' . arg(0) . '/' . arg(1) . '/' . $arg2,
       'Referrer is ' . $_SERVER['HTTP_REFERER']);
@@ -1819,7 +1823,7 @@ function zg_get_game_list() {
   return [
     'stl1904',
 //    'stl2124',
-    'cg',
+//    'cg',
 //    'detroit',
 //    'elysian',
     'stlouis',

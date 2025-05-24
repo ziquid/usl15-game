@@ -37,6 +37,14 @@ db_set_active();
     <?php print $game_name_full; ?> Changelog
   </div>
 
+    <div class="subtitle">
+        May 24, 2025
+    </div>
+    <ul>
+        <li>
+            iPhone 16 Pro Max did not display screen properly.  Fixed.
+        </li>
+    </ul>
 
     <div class="subtitle">
         Apr 27, 2025
