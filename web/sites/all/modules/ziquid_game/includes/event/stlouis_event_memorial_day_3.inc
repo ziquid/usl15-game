@@ -9,12 +9,12 @@
 /**
  * Init the event.
  */
-function game_event_memorial_day_3_init() {
+function stlouis_event_memorial_day_3_init() {
 }
 
 // HOOKS
 
-function game_event_memorial_day_3_homepage_event_notice($game_user, &$event_text) {
+function stlouis_event_memorial_day_3_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
   <div class="event-title">
@@ -33,7 +33,7 @@ function game_event_memorial_day_3_homepage_event_notice($game_user, &$event_tex
 </div>';
 }
 
-function game_event_memorial_day_3_quest_item($game_user, $quest_item) {
+function stlouis_event_memorial_day_3_quest_item($game_user, $quest_item) {
 
   // Talk to disabled vets mission, 60 energy.
   if ($quest_item->id == 24) {
@@ -41,7 +41,7 @@ function game_event_memorial_day_3_quest_item($game_user, $quest_item) {
   }
 }
 
-function game_event_memorial_day_3_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
+function stlouis_event_memorial_day_3_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
 
   // Every 60 DAVs is an extra vote.
   $divisor = 60;
@@ -66,7 +66,7 @@ function game_event_memorial_day_3_extra_votes($game_user, &$extra_votes, &$extr
   firep($message, 'memorial_day extra_votes.');
 }
 
-function game_event_memorial_day_3_actions_to_move($game_user, &$actions_to_move) {
+function stlouis_event_memorial_day_3_actions_to_move($game_user, &$actions_to_move) {
 
   // Every 60 DAVs reduces actions to move, min 4.
   $divisor = 60;

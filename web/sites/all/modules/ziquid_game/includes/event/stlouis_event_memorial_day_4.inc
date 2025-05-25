@@ -9,12 +9,12 @@
 /**
  * Init the event.
  */
-function game_event_memorial_day_4_init() {
+function stlouis_event_memorial_day_4_init() {
 }
 
 // HOOKS
 
-function game_event_memorial_day_4_homepage_event_notice(\stdClass $game_user, &$event_text) {
+function stlouis_event_memorial_day_4_homepage_event_notice(\stdClass $game_user, &$event_text) {
   $event_text .= '
 <div class="event">
   <div class="event-title">
@@ -35,7 +35,7 @@ function game_event_memorial_day_4_homepage_event_notice(\stdClass $game_user, &
 </div>';
 }
 
-function game_event_memorial_day_4_quest_item(\stdClass $game_user, \stdClass $quest_item) {
+function stlouis_event_memorial_day_4_quest_item(\stdClass $game_user, \stdClass $quest_item) {
 
   // Talk to disabled vets mission, 50 energy.
   if ($quest_item->id == 24) {
@@ -43,7 +43,7 @@ function game_event_memorial_day_4_quest_item(\stdClass $game_user, \stdClass $q
   }
 }
 
-function game_event_memorial_day_4_extra_votes(\stdClass $game_user, &$extra_votes, &$extra_defending_votes) {
+function stlouis_event_memorial_day_4_extra_votes(\stdClass $game_user, &$extra_votes, &$extra_defending_votes) {
 
   // Every 50 DAVs is an extra vote.
   $divisor = 50;
@@ -69,7 +69,7 @@ function game_event_memorial_day_4_extra_votes(\stdClass $game_user, &$extra_vot
   firep($message, 'memorial_day extra_votes.');
 }
 
-function game_event_memorial_day_4_actions_to_move(\stdClass $game_user, &$actions_to_move) {
+function stlouis_event_memorial_day_4_actions_to_move(\stdClass $game_user, &$actions_to_move) {
 
   // Every 50 DAVs reduces actions to move, min 2.
   $divisor = 50;
@@ -82,7 +82,7 @@ function game_event_memorial_day_4_actions_to_move(\stdClass $game_user, &$actio
   $actions_to_move = max($actions_to_move - $vet_bonus, 2);
 }
 
-function game_event_memorial_day_4_png_cost(\stdClass $game_user, &$money_required, &$actions_required) {
+function stlouis_event_memorial_day_4_png_cost(\stdClass $game_user, &$money_required, &$actions_required) {
 
   // Halve the money and actions required.
   $money_required = floor($money_required / 2);

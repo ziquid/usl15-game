@@ -23,6 +23,7 @@ include __DIR__ . '/game_defs.inc';
 global $game;
 
 $today = date('Y-m-d', REQUEST_TIME - 3600);
+//firep("Today's date: $today", 'stlouis_defs.inc today');
 switch ($today) {
 
   /* ------ JANUARY ------ */
@@ -170,11 +171,12 @@ switch ($today) {
     break;
 
   case '2018-05-27':
-  case '2015-05-25':
+  case '2025-05-25':
     $event_type[] = EVENT_MEMORIAL_DAY_3;
     break;
 
   case '2018-05-28':
+  case '2025-05-26':
     $event_type[] = EVENT_MEMORIAL_DAY_4;
     break;
 
@@ -421,8 +423,8 @@ $system_lower = strtolower($system);
 
 $slack_channel = '#uslce';
 
-
 // Add events to include list.
 foreach ($event_type as $event) {
+//  firep("Adding event $event to include list.", 'stlouis_defs.inc');
   zg_includes_add($event, 'event');
 }

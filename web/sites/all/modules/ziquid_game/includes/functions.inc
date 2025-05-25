@@ -1657,7 +1657,9 @@ function zg_alter($hook, $game_user, &$garg2 = NULL, &$garg3 = NULL, &$garg4 = N
   foreach ($game_include_list as $type_include_file) {
     $include_file = substr($type_include_file, strpos($type_include_file, '/') + 1);
     $function_name = $game . '_' . $include_file . '_' . $hook;
+
     if (function_exists($function_name)) {
+//      firep($function_name, 'zg_alter function name');
       $retval |= $function_name($game_user, $garg2, $garg3, $garg4);
     }
   }
@@ -1697,6 +1699,7 @@ function zg_includes_add($include_file, $type) {
     $game_include_list[] = $type . '/' . $include_file;
     include_once $file_to_include;
     $function_name = $game . '_' . $include_file . '_init';
+//    firep($function_name, 'zg_includes_add function name');
     if (function_exists($function_name)) {
       $function_name();
     }

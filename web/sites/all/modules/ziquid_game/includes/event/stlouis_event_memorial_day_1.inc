@@ -1,27 +1,26 @@
 <?php
 
 /**
- * @file event_memorial_day_2.inc
- *
- * Memorial Day event, Day 2 (Saturday).
+ * @file
+ * Memorial Day event, Day 1.
  */
 
 /**
  * Init the event.
  */
-function game_event_memorial_day_2_init() {
+function stlouis_event_memorial_day_1_init() {
 }
 
-// HOOKS
+/* HOOKS */
 
-function game_event_memorial_day_2_homepage_event_notice($game_user, &$event_text) {
+function stlouis_event_memorial_day_1_homepage_event_notice($game_user, &$event_text) {
   $event_text .= '
 <div class="event">
   <div class="event-title">
-    Memorial Day Weekend Saturday
+    Memorial Day Weekend Friday
   </div>
   <div class="event-tagline">
-    ~ Every 75 Disabled American Veterans ~<br>
+    ~ Every 100 Disabled American Veterans ~<br>
     ~ Counts as an extra vote ~
   </div>
   <div class="event-text">
@@ -29,23 +28,23 @@ function game_event_memorial_day_2_homepage_event_notice($game_user, &$event_tex
     Otherwise, an extra challenging vote
   </div>
   <div class="event-text">
-    Talking to disabled veterans is now only 75 Energy
+    Talking to disabled veterans is still only 100 Energy
   </div>
 </div>';
 }
 
-function game_event_memorial_day_2_quest_item($game_user, $quest_item) {
+function stlouis_event_memorial_day_1_quest_item($game_user, $quest_item) {
 
-  // Talk to disabled vets mission, 75 energy.
+  // Talk to disabled vets mission, 100 energy.
   if ($quest_item->id == 24) {
-    $quest_item->required_energy = 75;
+    $quest_item->required_energy = 100;
   }
 }
 
-function game_event_memorial_day_2_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
+function stlouis_event_memorial_day_1_extra_votes($game_user, &$extra_votes, &$extra_defending_votes) {
 
-  // Every 75 DAVs is an extra vote.
-  $divisor = 75;
+  // Every 100 DAVs is an extra vote.
+  $divisor = 100;
   $sql = 'SELECT quantity FROM staff_ownership
     WHERE fkey_users_id = %d AND fkey_staff_id = 16;';
   $result = db_query($sql, $game_user->id);
@@ -64,5 +63,5 @@ function game_event_memorial_day_2_extra_votes($game_user, &$extra_votes, &$extr
 
   $message = 'Your ' . $vets->quantity . ' Disabled American Veterans give you an extra '
     . $vet_bonus . ' ' . $defending . ' votes.';
-  firep($message, 'memorial_day extra_votes.');
+  firep($message, 'stlouis_event_memorial_day_1_extra_votes.');
 }

@@ -10,7 +10,7 @@ services:
   web:
     image: ziquid/zg:latest
     volumes:
-      - .:/var/www/html:cached
+      - .:/var/www/html
     expose:
       - "80"
     labels:
@@ -20,7 +20,7 @@ services:
   db:
     image: bitnami/mysql:5.7
     volumes:
-      - ./db/backups:/var/mysql/backups:delegated
+      - ./db/backups:/var/mysql/backups
       - ./db/data:/bitnami/mysql/data
       - ./db/init:/docker-entrypoint-initdb.d
     environment:

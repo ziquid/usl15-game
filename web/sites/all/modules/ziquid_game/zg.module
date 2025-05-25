@@ -341,19 +341,19 @@ function zg_cron() {
     */
 
     // Set up includes and init() for events, if any.
-    foreach ($event_type as $event_active) {
-      db_set_active();
-      $module_path = drupal_get_path('module', $game);
-      db_set_active('game_' . $game);
-      $file_to_include = $module_path . '/events/' . $event_type . '.inc';
-      if (file_exists($file_to_include)) {
-        include_once $file_to_include;
-        $function_name = 'zg_' . $event_type . '_init';
-        if (function_exists($function_name)) {
-          $function_name();
-        }
-      }
-    }
+//    foreach ($event_type as $event_active) {
+//      db_set_active();
+//      $module_path = drupal_get_path('module', $game);
+//      db_set_active('game_' . $game);
+//      $file_to_include = $module_path . '/includes/event/' . $event_type . '.inc';
+//      if (file_exists($file_to_include)) {
+//        include_once $file_to_include;
+//        $function_name = 'zg_' . $event_type . '_init';
+//        if (function_exists($function_name)) {
+//          $function_name();
+//        }
+//      }
+//    }
     zg_alter('cron', NULL);
 
     if ($month_mission == MISSION_JUN) {
