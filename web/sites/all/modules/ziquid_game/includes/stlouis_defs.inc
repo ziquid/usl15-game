@@ -170,6 +170,7 @@ switch ($today) {
     break;
 
   case '2018-05-27':
+  case '2015-05-25':
     $event_type = EVENT_MEMORIAL_DAY_3;
     break;
 
