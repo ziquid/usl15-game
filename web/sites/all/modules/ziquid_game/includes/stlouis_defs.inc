@@ -166,16 +166,16 @@ switch ($today) {
 
   case '2018-05-26':
   case '2025-05-24':
-    $event_type = EVENT_MEMORIAL_DAY_2;
+    $event_type[] = EVENT_MEMORIAL_DAY_2;
     break;
 
   case '2018-05-27':
   case '2015-05-25':
-    $event_type = EVENT_MEMORIAL_DAY_3;
+    $event_type[] = EVENT_MEMORIAL_DAY_3;
     break;
 
   case '2018-05-28':
-    $event_type = EVENT_MEMORIAL_DAY_4;
+    $event_type[] = EVENT_MEMORIAL_DAY_4;
     break;
 
   /* ------ JUNE ------ */
