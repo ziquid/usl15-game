@@ -1648,16 +1648,16 @@ EOF;
 // site switcher
   $site_host = $_SERVER['HTTP_HOST'];
 if (in_array($pl->meta, ['staff', 'admin', 'tester']) ||
-  in_array($site_host, ['uslce.lndo.site:1080', 'uslce.lndo.site', 'zg.dev.games.ziquid.com'])) {
+  in_array($site_host, ['uslce.lndo.site:1080', '10.0.2.2', 'zg.dev.games.ziquid.com'])) {
 
   print '<div class="site-switcher">';
 
   // Sim/Localdev
-  if ($site_host == 'uslce.lndo.site') { // Sim/Localdev
+  if ($site_host == '10.0.2.2') { // Sim/Localdev
     print '<span class="localdev localdev-active">Localdev</span>';
   }
   else {
-    print '<a class="localdev" href="http://uslce.lndo.site/'. arg(0) . '/bounce/' . arg(2) . '">Localdev</a>';
+    print '<a class="localdev" href="http://10.0.2.2/'. arg(0) . '/bounce/' . arg(2) . '">Localdev</a>';
   }
 
   print '|';
@@ -1677,10 +1677,10 @@ if (in_array($pl->meta, ['staff', 'admin', 'tester']) ||
     print '<span class="prod prod-active">Prod</span>';
   }
   else {
-    print '<a class="prod" href="http://zg.games.ziquid.com/'. arg(0) . '/bounce/' . arg(2) . '">Prod</a>';
+    print '<a class="prod" href="https://zg.games.ziquid.com/'. arg(0) . '/bounce/' . arg(2) . '">Prod</a>';
   }
   print '</div>';
-  print '<div>' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '</div>';
+  print '<div>' . $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . '</div>';
 }
 
   print $points_text;

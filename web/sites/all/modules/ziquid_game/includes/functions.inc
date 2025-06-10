@@ -121,7 +121,7 @@ function zg_speech(\stdClass $game_user, $text, $force = FALSE) {
 function zg_sound($game_user, $sound, $force = FALSE, $number_of_loops = '0') {
   if ($force || !zg_get_value($game_user, 'SoundOff', FALSE)) {
     if (substr($sound, 0, 4) != 'http') {
-      $sound = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+      $sound = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
         '/sounds/' . $sound;
     }
     drupal_add_js([
@@ -148,7 +148,7 @@ function zg_sound($game_user, $sound, $force = FALSE, $number_of_loops = '0') {
  *   Force the game client to play the song even if user has not opted in.
  */
 function zg_song($game_user, $song, $force = FALSE) {
-  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+  $sound_file = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
     '/sounds/' . $song . ' micro.mp3';
   firep($sound_file, 'sound file');
   zg_sound($game_user, $sound_file, $force);
@@ -165,7 +165,7 @@ function zg_song($game_user, $song, $force = FALSE) {
  *   Force the game client to play the loop even if user has not opted in.
  */
 function zg_loop($game_user, $loop, $force = FALSE) {
-  $sound_file = 'http://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
+  $sound_file = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . '/' . file_directory_path() .
     '/sounds/' . $loop . ' loop.mp3';
   firep($sound_file, 'loop file');
   zg_sound($game_user, $sound_file, $force, '9');
@@ -1872,7 +1872,7 @@ function zg_get_fbid() {
 
   // GetUser() didn't work.  Try oAuth.  Maybe user needs to log in or
   // authorize the game?
-  $auth_url = 'http://www.facebook.com/dialog/oauth?client_id='
+  $auth_url = 'https://www.facebook.com/dialog/oauth?client_id='
     . $app_id . '&redirect_uri=' . urlencode($canvas_page);
 
   [$encoded_sig, $payload] = explode('.', $signed_request, 2);

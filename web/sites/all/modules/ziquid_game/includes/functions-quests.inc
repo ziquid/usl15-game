@@ -437,7 +437,7 @@ EOF;
       if (strlen($q->wrong_hood)) {
         echo <<< EOF
           <img class="wrong-hood-overlay colorize-{$q->wrong_hood_color}"
-            src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
+            src="https://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
             alt="{$q->actions_to_move} actions to move">
         </div>
 EOF;
@@ -681,7 +681,7 @@ function zg_show_quest_slide(\stdClass $game_user, \stdClass $item) {
       if ($item->hood_is_habitable) {
         $wrong_hood_overlay = <<< EOF
 <img class="wrong-hood-overlay colorize-{$item->wrong_hood_color}"
-  src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
+  src="https://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
   alt="{$item->actions_to_move} actions to move">
 EOF;
         $go_there = t('Go there');
@@ -1005,7 +1005,7 @@ function zg_render_quest_action(\stdClass $game_user, \stdClass $qa) {
     $comment_end = ' -->';
     $wrong_hood_overlay = <<< EOF
 <img class="wrong-hood-overlay colorize-{$qa->wrong_hood_color}"
-  src="http://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
+  src="https://www.clker.com/cliparts/a/Y/q/g/B/G/simple-black-car-th.png"
   alt="{$qa->actions_to_move} actions to move">
 EOF;
     $go_there = t('Go there');

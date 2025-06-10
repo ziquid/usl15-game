@@ -1911,6 +1911,12 @@ function zg_changelog_callback($phone_id) {
     return drupal_access_denied();
   }
 
+  $game = check_plain(arg(0));
+  db_set_active('game_' . $game);
+  $game_user = zg_fetch_player_by_id(zg_get_phoneid());
+  zg_sound($game_user, 'applause.mp3', TRUE);
+  db_set_active();
+
   return theme('zg_changelog', $phone_id);
 }
 
