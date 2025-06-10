@@ -32,7 +32,7 @@ db_set_active();
 <div class="news">
   <a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
   <a href="/<?php echo $game; ?>/privacy/<?php echo $arg2; ?>" class="button active">Privacy</a>
-  <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
+  <a href="externals://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
   <a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button">Changelog</a>
 </div>
 <?php endif; ?>

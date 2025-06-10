@@ -279,7 +279,7 @@ $extra_bonus
       </li>
 
       <li>
-        <a class="forum-menu" href="external://discord.gg/cFyt7w9">
+        <a class="forum-menu" href="externals://discord.gg/cFyt7w9">
           {$game_text['menu']['forum']}
         </a>
       </li>

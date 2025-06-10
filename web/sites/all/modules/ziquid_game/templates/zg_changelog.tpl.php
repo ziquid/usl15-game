@@ -28,7 +28,7 @@ db_set_active();
 <div class="news">
   <a href="/<?php echo $game; ?>/help/<?php echo $arg2; ?>" class="button">Help</a>
   <a href="/<?php echo $game; ?>/privacy/<?php echo $arg2; ?>" class="button">Privacy</a>
-  <a href="external://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
+  <a href="externals://uprising-st-louis.wikia.com/wiki/Uprising_St._Louis_Wiki" class="button">Wiki</a>
   <a href="/<?php echo $game; ?>/changelog/<?php echo $arg2; ?>" class="button active">Changelog</a>
 </div>
 
@@ -38,11 +38,20 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jun 10, 2025
+    </div>
+    <ul>
+        <li>
+            Finished moving all game assets behind an SSL connection.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         May 24, 2025
     </div>
     <ul>
         <li>
-            iPhone 16 Pro Max did not display screen properly.  Fixed.
+            iPhone 16 Pro Max did not display the game screen properly.  Fixed.
         </li>
     </ul>
 

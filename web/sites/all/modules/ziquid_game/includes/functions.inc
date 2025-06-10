@@ -2685,7 +2685,7 @@ function zg_expand_shortcode($message) {
       '/\[yt:([-A-Za-z0-9]+)\]/i',
     ],
     [
-      ' <a href="external://youtu.be/\1" class="needs-web-title">YouTube: \1</a> ',
+      ' <a href="externals://youtu.be/\1" class="needs-web-title">YouTube: \1</a> ',
     ],
     $message
   );
