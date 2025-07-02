@@ -1,4 +1,4 @@
-/*! BuildToolsCookbook v2.0.0 | (c) 2023 Your Name | MIT License | http://github.com/cferdinandi/build-tools-boilerplate */
+/*! BuildToolsCookbook v2.0.0 | (c) 2025 Your Name | MIT License | http://github.com/cferdinandi/build-tools-boilerplate */
 body.game-stlouis {
 	margin: 4px auto 40px;
 	background-color: #001b00;
@@ -87,6 +87,13 @@ body.game-stlouis .halflight button, body.game-stlouis .halflight .button {
 body.game-stlouis .button-wrapper {
 	text-align: center;
 	position: relative;
+}
+body.game-stlouis .button-wrapper.move-up {
+	margin-top: -29px;
+	margin-bottom: -3px;
+}
+body.game-stlouis .button-wrapper.move-right {
+	text-align: right;
 }
 body.game-stlouis .button-wrapper.button-wrapper-do-again,
 body.game-stlouis .button-wrapper.button-wrapper-debate,

@@ -55,7 +55,7 @@ function zg_render_button($link = 'home', $type = 'continue', $extra_link = '',
   $arg2 = check_plain(arg(2));
   $class = drupal_html_class($type);
   if (strlen($link)) {
-    if ($link[0] == '/') {
+    if (substr($link, 0, 1) == '/') {
       $link .= '/' . $arg2 . $extra_link;
     }
     else {
@@ -2929,45 +2929,49 @@ function zg_render_user_clan_msg(&$user) {
 }
 
 /**
- * Render a user in the debate list view.
+ * Render a player in the debate list view.
  *
- * @param object $user
- *   The user object.
+ * @param object|null $pl
+ *   The player object.
  *
- * @return string
- *   The debate list view html rendering of the user.
+ * @return string|false
+ *   The debates list rendering of the player object, or FALSE if no player obj exists.
  */
-function zg_render_user_debates_list(&$user) {
+function zg_render_player_debates_list(&$pl) {
   $game = check_plain(arg(0));
   $arg2 = check_plain(arg(2));
 
-  if (!property_exists($user, 'display')) {
-    $user->display = new \stdClass();
+  if (!property_exists($pl, 'display')) {
+    $pl->display = new \stdClass();
+  }
+  else if (property_exists($pl->display, 'debates_list')) {
+    // If we already have a rendered html, just return it.
+//    return $pl->display->debates_list;
   }
 
-  $user->display->icon = $game . '_clan_' . $user->party_icon . '.png';
-  $user->display->clan_acronym = '';
-  if (strlen($user->clan_acronym)) {
-    $user->display->clan_acronym = "($user->clan_acronym)";
+  $pl->display->icon = $game . '_clan_' . $pl->party_icon . '.png';
+  $pl->display->clan_acronym = '';
+  if (strlen($pl->clan_acronym)) {
+    $pl->display->clan_acronym = "($pl->clan_acronym)";
 
     $icon_path = file_directory_path() . '/images/' . $game . '_clan_' .
-      strtolower($user->clan_acronym) . '.png';
+      strtolower($pl->clan_acronym) . '.png';
 
     if (file_exists($_SERVER['DOCUMENT_ROOT'] . base_path() . $icon_path)) {
-      $user->display->icon = $game . '_clan_' . strtolower($user->clan_acronym) . '.png';
+      $pl->display->icon = $game . '_clan_' . strtolower($pl->clan_acronym) . '.png';
     }
   }
 
-  if ($user->is_clan_leader) {
-    $user->display->clan_acronym .= '*';
+  if ($pl->is_clan_leader) {
+    $pl->display->clan_acronym .= '*';
   }
 
-  $user->display->level = $user->level;
-  $user->display->location = $user->location;
+  $pl->display->level = $pl->level;
+  $pl->display->location = $pl->location;
 
-  $player_class = 'player_username player-' . drupal_strtolower($user->values);
-  $last_access = REQUEST_TIME - strtotime($user->last_access);
-  firep([REQUEST_TIME, strtotime($user->last_access), $last_access], 'last access times');
+  $player_class = 'player_username player-' . drupal_strtolower($pl->values);
+  $last_access = REQUEST_TIME - strtotime($pl->last_access);
+  firep([REQUEST_TIME, strtotime($pl->last_access), $last_access], 'last access times');
   if ($last_access < 300) {
     $player_class .= ' online_now';
   }
@@ -2978,22 +2982,22 @@ function zg_render_user_debates_list(&$user) {
     $player_class .= ' not_online';
   }
 
-  $user->display->username = '<a class="' . $player_class . '" href="/' . $game .
-    '/user/' . $arg2 . '/id:' . $user->id . '">' . $user->username . '</a>' .
-    '<span class="player_clan">' . $user->display->clan_acronym . '</span>';
+  $pl->display->username = '<a class="' . $player_class . '" href="/' . $game .
+    '/user/' . $arg2 . '/id:' . $pl->id . '">' . $pl->username . '</a>' .
+    '<span class="player_clan">' . $pl->display->clan_acronym . '</span>';
 
-  if (strlen($user->ep_name)) {
-    $user->display->username = '<span class="player_seat">' . $user->ep_name .
-      '</span> ' . $user->display->username;
+  if (strlen($pl->ep_name)) {
+    $pl->display->username = '<span class="player_seat">' . $pl->ep_name .
+      '</span> ' . $pl->display->username;
   }
 
-  $user->display->debates_list =
+  $pl->display->debates_list =
     '<div class="user-display user-display-debates-list">' .
     '<img class="clan-icon" src="/sites/default/files/images/' .
-    $user->display->icon . '"/>' . $user->display->username .
-    ' <span class="player_level">(' . $user->display->level . '/' .
-    $user->display->location . ')</span></div>';
-  return $user->display->debates_list;
+    $pl->display->icon . '"/>' . $pl->display->username .
+    ' <span class="player_level">(' . $pl->display->level . '/' .
+    $pl->display->location . ')</span></div>';
+  return $pl->display->debates_list;
 }
 
 /**

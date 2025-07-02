@@ -395,7 +395,8 @@ if (($phone_id_to_check != $phone_id) &&
     ($item->meta == 'zombie' && $debate_since > $zombie_debate_wait))) {
 
     // Debateable and enough time has passed.
-    $details_debates .= <<< EOF
+    $details_debates .= zg_render_button('debate', 'Debate', '/' . $item->id, 'move-up');
+    /*$details_debates .= <<< EOF
 <div class="news relative">
 <div class="message-reply-wrapper">
   <div class="message-reply">
@@ -403,7 +404,7 @@ if (($phone_id_to_check != $phone_id) &&
   </div>
 </div>
 </div>
-EOF;
+EOF;*/
   }
   else {
 
@@ -417,8 +418,8 @@ EOF;
 
     $time_min = floor($time_left / 60);
     $time_sec = sprintf('%02d', $time_left % 60);
-
-    $details_debates .= <<< EOF
+    $details_debates .= zg_render_button('', "Debate in $time_min:$time_sec", '', 'button-wrapper-debate move-up not-yet');
+/*    $details_debates .= <<< EOF
 <div class="news relative">
 <div class="message-reply-wrapper">
   <div class="message-reply not-yet">
@@ -426,7 +427,7 @@ EOF;
   </div>
 </div>
 </div>
-EOF;
+EOF;*/
   }
 }
 else {
@@ -508,12 +509,12 @@ else {
   $details_approval = '';
 }
 
-if ($item->skill_points == 0) {
-  $skill_button = '<div class="action not-yet">Can\'t increase skills</div>';
+if ($item->skill_points > 0) {
+  $skill_button = zg_render_button('increase_skills', 'Increase Skills', '/none', 'move-up move-right');
 }
 else {
-  $skill_button = '<div class="action"><a href="/' . $game . '/increase_skills/' .
-    $arg2 . '/none">Increase skills</a></div>';
+  $skill_button = zg_render_button('', "Can't Increase Skills", '', 'move-up move-right not-now');
+  //'<div class="action"><a href="/' . $game . '/increase_skills/' .$arg2 . '/none">Increase skills</a></div>';
 }
 
 $details_luck_expenses_skills = <<< EOF
@@ -522,7 +523,7 @@ $details_luck_expenses_skills = <<< EOF
 <div class="heading">Expenses:</div>
 <div class="value">$item->expenses</div><br>
 <div class="heading">Skill Points:</div>
-<div class="value">$item->skill_points</div>$skill_button<br>
+<div class="value">$item->skill_points</div>$skill_button
 EOF;
 
 if (strlen($item->meta)) {
@@ -648,8 +649,7 @@ zg_show_by_level($game_user, $details_vote_stats, $comp_show_level, 3);
 zg_show_by_level($game_user, $details_debates, $comp_show_level, 2);
 zg_show_by_level($game_user, $details_residence, $comp_show_level, 2);
 zg_show_by_level($game_user, $details_approval, $comp_show_level, 2);
-zg_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level,
-  6);
+zg_show_by_level($game_user, $details_luck_expenses_skills, $comp_show_level, 6);
 zg_show_by_level($game_user, $details_meta, $comp_show_level, 4);
 zg_show_by_level($game_user, $details_last_access, $comp_show_level, 5);
 zg_show_by_level($game_user, $details_end, $comp_show_level, 0);

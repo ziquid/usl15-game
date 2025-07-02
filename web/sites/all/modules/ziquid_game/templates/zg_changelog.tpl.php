@@ -38,6 +38,18 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jul 1, 2025
+    </div>
+    <ul>
+        <li>
+            Updated the look and feel of the player debate list.
+        </li>
+        <li>
+            Made a couple of buttons on the User Profile page more readable.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         Jun 10, 2025
     </div>
     <ul>

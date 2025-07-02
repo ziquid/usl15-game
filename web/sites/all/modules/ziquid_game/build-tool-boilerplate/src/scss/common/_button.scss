@@ -91,6 +91,13 @@ button, .button {
 .button-wrapper {
   text-align: center;
   position: relative;
+  &.move-up {
+    margin-top: -29px;
+    margin-bottom: -3px;
+  }
+  &.move-right {
+    text-align: right;
+  }
 }
 
 .button-wrapper.button-wrapper-do-again,

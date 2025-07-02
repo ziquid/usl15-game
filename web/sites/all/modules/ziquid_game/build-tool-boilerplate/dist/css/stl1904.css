@@ -1,4 +1,4 @@
-/*! BuildToolsCookbook v2.0.0 | (c) 2023 Your Name | MIT License | http://github.com/cferdinandi/build-tools-boilerplate */
+/*! BuildToolsCookbook v2.0.0 | (c) 2025 Your Name | MIT License | http://github.com/cferdinandi/build-tools-boilerplate */
 body.game-stl1904 {
 	margin: 4px auto 40px;
 	background-color: #170a0a;
@@ -87,6 +87,13 @@ body.game-stl1904 .halflight button, body.game-stl1904 .halflight .button {
 body.game-stl1904 .button-wrapper {
 	text-align: center;
 	position: relative;
+}
+body.game-stl1904 .button-wrapper.move-up {
+	margin-top: -29px;
+	margin-bottom: -3px;
+}
+body.game-stl1904 .button-wrapper.move-right {
+	text-align: right;
 }
 body.game-stl1904 .button-wrapper.button-wrapper-do-again,
 body.game-stl1904 .button-wrapper.button-wrapper-debate,

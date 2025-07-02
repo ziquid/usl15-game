@@ -10,3 +10,7 @@
 /vendor
 settings.*.php
 .env
+/web/sites/all/modules/ziquid_game/build-tool-boilerplate/dist/img
+/web/sites/all/modules/ziquid_game/build-tool-boilerplate/dist/index.html
+/web/sites/all/modules/ziquid_game/build-tool-boilerplate/dist/js
+/web/sites/all/modules/ziquid_game/build-tool-boilerplate/dist/svg
