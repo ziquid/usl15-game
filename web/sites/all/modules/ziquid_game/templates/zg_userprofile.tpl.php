@@ -395,7 +395,7 @@ if (($phone_id_to_check != $phone_id) &&
     ($item->meta == 'zombie' && $debate_since > $zombie_debate_wait))) {
 
     // Debateable and enough time has passed.
-    $details_debates .= zg_render_button('debate', 'Debate', '/' . $item->id, 'move-up');
+    $details_debates .= zg_render_button('debates_challenge', 'Debate', '/' . $item->id, 'move-up');
     /*$details_debates .= <<< EOF
 <div class="news relative">
 <div class="message-reply-wrapper">

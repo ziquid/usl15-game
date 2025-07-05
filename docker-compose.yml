@@ -15,6 +15,9 @@ services:
       - "80"
     labels:
       - "traefik.http.routers.zg.rule=(Host(`10.0.2.2`) || Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`))"
+      - "traefik.enable=true"
+      - "traefik.http.routers.zg.entrypoints=web,websecure"
+      - "traefik.http.services.zg.loadbalancer.server.port=80"
     networks:
       - traefik
   db:
@@ -32,6 +35,8 @@ services:
       - "3306"
     networks:
       - traefik
+    labels:
+      - "traefik.enable=true"
   pma:
     image: phpmyadmin:latest
     environment:
@@ -46,11 +51,14 @@ services:
       - "traefik.http.routers.zg-pma.rule=(Host(`zg.docker.localhost`) || Host(`zg.asrock.lan`) || Host(`zg.dev.games.ziquid.com`) || Host(`zg.games.ziquid.com`)) && PathPrefix(`/pma`)"
       - "traefik.http.middlewares.zgpma-stripprefix.stripprefix.prefixes=/pma"
       - "traefik.http.routers.zg-pma.middlewares=zgpma-stripprefix@docker"
+      - "traefik.enable=true"
+      - "traefik.http.routers.zg-pma.entrypoints=web,websecure"
+      - "traefik.http.services.zg-pma.loadbalancer.server.port=80"
     networks:
       - traefik
 
 networks:
   traefik:
-    driver: bridge
+#    driver: bridge
     name: traefik
     external: true

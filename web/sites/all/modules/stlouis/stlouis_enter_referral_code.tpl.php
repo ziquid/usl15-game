@@ -37,7 +37,7 @@
   <p class="second">&nbsp;</p>
   <div class="try-an-election-wrapper">
   <div class="try-an-election">
-    <a href="/$game/choose_clan/$arg2/0">Choose a $party_lower</a>
+    <a href="/$game/choose_party/$arg2/0">Choose a $party_lower</a>
   </div>
 </div>
 </div>
@@ -90,14 +90,13 @@ EOF;
   <p class="second">&nbsp;</p>
   <div class="try-an-election-wrapper">
   <div class="try-an-election">
-    <a href="/$game/choose_clan/$arg2/0">Choose a $party_lower</a>
+    <a href="/$game/choose_party/$arg2/0">Choose a $party_lower</a>
   </div>
 </div>
 </div>
 EOF;
 
       db_set_active();
-
       return;
 
     }
@@ -148,7 +147,7 @@ firep($mentor);
   <p class="second">&nbsp;</p>
   <div class="try-an-election-wrapper">
   <div class="try-an-election">
-    <a href="/$game/choose_clan/$arg2/0">Try again</a>
+    <a href="/$game/choose_party/$arg2/0">Try again</a>
   </div>
 </div>
 </div>
