@@ -215,14 +215,14 @@ body.game-cg::after {
 	background: url(/sites/default/files/images/cg_bg.jpg?1);
 	background-position: top left;
 	background-attachment: fixed;
-	opacity: 0.05;
+	opacity: 0.5;
 	top: 0;
 	left: 0;
 	bottom: 0;
 	right: 0;
 	position: fixed;
 	z-index: -1;
-	filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8);
+	filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8) brightness(0.1);
 }
 body.game-cg a, body.game-cg a:link, body.game-cg a:visited, body.game-cg a:hover, body.game-cg a:active {
 	color: #bf6f2f;

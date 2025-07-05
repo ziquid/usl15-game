@@ -38,6 +38,18 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jul 5, 2025
+    </div>
+    <ul>
+        <li>
+            Improved contrast by making the background darker.
+        </li>
+        <li>
+            Fixed the debate button link on the User Profile page.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         Jul 1, 2025
     </div>
     <ul>
