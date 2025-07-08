@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jul 8, 2025
+    </div>
+    <ul>
+        <li>
+            Sometimes completing a quest group didn't give the correct bonus.  Fixed.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         Jul 5, 2025
     </div>
     <ul>
