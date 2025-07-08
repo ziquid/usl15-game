@@ -242,6 +242,7 @@ $result = db_query($sql, $game_user->id, $quest_id);
 $pc = db_fetch_object($result);
 
 // Get quest completion stats.
+// @FIXME: Why are we checking this twice?  Here and in $qgc on lines 367-70.
 $sql = 'SELECT times_completed FROM `quest_group_completion`
     where fkey_users_id = %d and fkey_quest_groups_id = %d;';
 $result = db_query($sql, $game_user->id, $game_quest->group);
@@ -413,14 +414,14 @@ EOF;
           $result = db_query($sql, $game_user->id, $game_quest->group);
         }
 
-        $quest_group_completion->times_completed = 1;
+//         $quest_group_completion->times_completed = 1;
         $percentage_target = 200;
         $percentage_divisor = 2;
       }
     }
 
     // What? They've completed a 2nd time?
-    if ($qgc->times_completed == 1) {
+    else if ($qgc->times_completed == 1) {
 
       // Get quest group stats.
       $sql = 'SELECT sum( bonus_given ) AS completed,
