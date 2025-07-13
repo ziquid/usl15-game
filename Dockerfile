@@ -3,6 +3,8 @@
 # build this and tag it as 'ziquid/zg':
 # $ docker build -t ziquid/zg .
 
+LABEL org.opencontainers.image.source="https://github.com/ziquid/usl15-game"
+
 FROM php:8.2-apache-bookworm
 
 ENV APACHE_DOCUMENT_ROOT=/var/www/html/web

@@ -1,76 +1,123 @@
 #!/usr/bin/env mzke -f
 
 APP := usl15-game
-IMAGE := ziquid/zg
+IMAGE := ghcr.io/ziquid/zg
+IS_DRUPAL := Y
+
+HOST_OS := $(shell uname)
+# $(info HOST_OS is $(HOST_OS))
+
+ifeq ($(HOST_OS),Darwin)
+DOCKER_DAEMON := com.[d]ocker.backend
+endif
+
+ifeq ($(HOST_OS),Linux)
+DOCKER_DAEMON := [d]ockerd
+endif
+
+DOCKER_RUNNING := $(shell ps ax | grep -qs $(DOCKER_DAEMON) && echo Y || echo N)
+# $(info DOCKER_RUNNING is $(DOCKER_RUNNING))
 
 MAKE_USER_COMMAND ?= $(notdir $(MAKE))
+# MAKEVARS = $(shell echo '$(.VARIABLES)' | tr \  \\n | grep -i m.ke)
+# $(info $(foreach var,$(MAKEVARS),$(info "$(var) = $($(var))")))
 
-all: run
+COMPOSER_CMD_EXAMPLE = $(MAKE_USER_COMMAND) \"ARGS=[CMD ...]\" composer\\nex: $(MAKE_USER_COMMAND) \"ARGS=update -W\" composer
+DRUSH_CMD_EXAMPLE = \"ARGS=[CMD ...]\" drush\\nex: $(MAKE_USER_COMMAND) \"ARGS=updb -y\" drush
+ifeq ($(IS_MZKE),YES)
+	COMPOSER_CMD_EXAMPLE = $(MAKE_USER_COMMAND) composer [CMD ...]\\nex: $(MAKE_USER_COMMAND) composer update -W
+	DRUSH_CMD_EXAMPLE = $(MAKE_USER_COMMAND) drush [CMD ...]\\nex: $(MAKE_USER_COMMAND) drush updb -y
+endif
 
-build: Dockerfile
+# $(info ARGS is $(ARGS), MAKECMDGOALS is $(MAKECMDGOALS))
+$(MAKECMDGOALS)_ARGS := $(ARGS)
+# $(info MAKECMDGOALS_ARGS is $(MAKECMDGOALS)_ARGS is $($(MAKECMDGOALS)_ARGS))
+
+.PHONY: all run start up
+all run start up: ddr ## Run the docker containers, if already stopped.  Don't restart if running.
+	docker compose up -d $($@_ARGS)
+
+ifdef IMAGE
+.PHONY: build
+build: Dockerfile ddr ## Build the custom docker image(s) needed for this app
 	docker build -t $(IMAGE) .
+endif
 
-composer: run
-	docker exec -t -i $(APP)-web-1 /bin/bash -c "composer $(ARGS)"
+ifdef IS_DRUPAL
+.PHONY: composer
+composer: run ## Run a composer command (composer-help for help)
+	docker exec -t -i $(APP)-web-1 /bin/bash -c "composer $($@_ARGS)"
 
-debug-off: run
+.PHONY: composer-help
+composer-help: ## get details about calling composer
+	$(info Run Composer commands using the following syntax:)
+	@echo $(COMPOSER_CMD_EXAMPLE)
+
+.PHONY: debug-off
+debug-off: run ## Disable PHP debugging in the web container
 	docker exec -t -i $(APP)-web-1 cp /usr/local/etc/php/php.ini{-production,}
 	$(warning "TODO: Disable xdebug in php.ini")
 	docker container restart $(APP)-web-1
 
-debug-on: run
+.PHONY: debug-on
+debug-on: run ## Enable PHP debugging in the web container
 	docker exec -t -i $(APP)-web-1 cp /usr/local/etc/php/php.ini{-development,}
 	$(warning "TODO: Enable xdebug in php.ini")
-	# docker exec -t -i $(APP)-web-1 apache2ctl restart
 	docker container restart $(APP)-web-1
+endif # IS_DRUPAL
 
-drush: run
-	docker exec -t -i $(APP)-web-1 /bin/bash -c "cd web; drush $(ARGS)"
+.PHONY: ddr dds docker-daemon-run
+ddr dds docker-daemon-run: ## Run the docker daemon, if not already running
+ifeq ($(DOCKER_RUNNING)-$(HOST_OS),N-Darwin)
+	@open -a Docker --background
+	sleep 5
+else
+	$(info Docker is running? $(DOCKER_RUNNING))
+ifeq ($(DOCKER_RUNNING),N)
+	$(error Please start Docker and try again)
+endif
+endif # N-Darwin
 
-COMPOSER_CMD_EXAMPLE = \"ARGS=[CMD ...]\" composer
-DRUSH_CMD_EXAMPLE = \"ARGS=[CMD ...]\" drush
-ifeq ($(IS_MZKE),YES)
-	COMPOSER_CMD_EXAMPLE = composer [CMD ...]
-	DRUSH_CMD_EXAMPLE = drush [CMD ...]
+ifdef IS_DRUPAL
+.PHONY: drush
+drush: run ## Run a drush command (drush-help for help)
+	docker exec -t -i $(APP)-web-1 /bin/bash -c "drush $($@_ARGS)"
+
+.PHONY: drush-help
+drush-help: ## get details about calling drush
+	$(info Drush help)
+	@echo $(DRUSH_CMD_EXAMPLE)
+endif # IS_DRUPAL
+
+.PHONY: rb rebuild
+rb rebuild: docker-compose.yml ## Recreate and restart the docker containers
+	docker compose up -d --force-recreate
+
+.PHONY: rerun restart rr
+rerun restart rr: docker-compose.yml ## (Re)start the docker containers
+	docker compose restart $($@_ARGS)
+
+ifdef IS_DRUPAL
+.PHONY: sqlc
+sqlc: run ## Connect to the MySQL container via the mysql CLI
+	docker exec -t -i $(APP)-db-1 mysql -u root -p
 endif
 
-help:
-	@echo "$(MAKE_USER_COMMAND) build - Build all custom docker image(s) needed for this app"
-	@echo "$(MAKE_USER_COMMAND) $(COMPOSER_CMD_EXAMPLE) - Run a composer command"
-	@echo "$(MAKE_USER_COMMAND) debug-(on|off) - En/Disable PHP debugging in the web container"
-	@echo "$(MAKE_USER_COMMAND) $(DRUSH_CMD_EXAMPLE) - Run a drush command"
-	@echo "$(MAKE_USER_COMMAND) help - Display this help message"
-	@echo "$(MAKE_USER_COMMAND) rerun|(re)start|rr - Run the docker containers, restart if already running"
-	@echo "$(MAKE_USER_COMMAND) (r|run|all) - Run the docker containers (doesn't restart)"
-	@echo "$(MAKE_USER_COMMAND) sqlc - Connect to the MySQL container via the mysql CLI"
-	@echo "$(MAKE_USER_COMMAND) ssh - SSH into the web container"
-	@echo "$(MAKE_USER_COMMAND) ssh-db - SSH into the db container"
-	@echo "$(MAKE_USER_COMMAND) stop - Stop the docker containers"
-
-r: run
-
-rerun: restart
-
-restart: docker-compose.yml
-	docker compose up -d $(ARGS)
-
-rr: rerun
-
-run:
-	@docker compose ls -q | grep -q $(APP) || docker compose up -d $(ARGS)
-
-sqlc: run
-	docker exec -t -i $(APP)-db-1 mysql -u root -p
-
-ssh: run
+.PHONY: ssh
+ssh: run ## SSH into the web container
 	docker exec -t -i $(APP)-web-1 /bin/bash
 
-ssh-db: run
+ifdef IS_DRUPAL
+.PHONY: ssh-db
+ssh-db: run ## SSH into the db container
 	docker exec -t -i $(APP)-db-1 /bin/bash
+endif
 
-start: restart
+.PHONY: stop
+stop: ## Stop the docker containers
+	docker compose stop $($@_ARGS)
 
-stop:
-	docker compose stop
-
-.PHONY: all build composer debug-off debug-on drush help r rerun restart rr run sqlc ssh ssh-db start stop
+.PHONY: help
+help: ## Show this help message
+	@echo "$(MAKE_USER_COMMAND) targets:"
+	@LC_ALL=C $(MAKE_USER_COMMAND) -qp -f $(firstword $(MAKEFILE_LIST)) : 2> /dev/null | awk -v RS= -F: '$$1 ~ /^[^#%. ]+$$/ { print $$1 }' | xargs -I % grep -E '^%(:| [a-zA-Z_ -]+:).*?## ' $(MAKEFILE_LIST) | sort -u | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
