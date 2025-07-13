@@ -27,6 +27,7 @@ services:
       - ./db/backups:/var/mysql/backups
       - ./db/data:/bitnami/mysql/data
       - ./db/init:/docker-entrypoint-initdb.d
+      - ./db/start:/docker-entrypoint-startdb.d
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
