@@ -856,6 +856,8 @@ function zg_fetch_player($force = FALSE) {
     ($ip_addr != '66.211.170.66') &&
     ($ip_addr != '173.0.81.1') &&
     ($ip_addr != '173.0.81.33') &&
+    ($ip_addr != '173.0.81.65') &&
+    ($ip_addr != '173.0.81.140') &&
 
     // Web users.
     ($user->roles[4] != 'web game access') &&

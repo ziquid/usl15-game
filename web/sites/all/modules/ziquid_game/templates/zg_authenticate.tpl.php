@@ -47,6 +47,8 @@ if ((strpos($_SERVER['HTTP_USER_AGENT'], '(com.ziquid.') === FALSE) &&
   ($_SERVER['REMOTE_ADDR'] != '66.211.170.66') &&
   ($_SERVER['REMOTE_ADDR'] != '173.0.81.1') &&
   ($_SERVER['REMOTE_ADDR'] != '173.0.81.33') &&
+  ($_SERVER['REMOTE_ADDR'] != '173.0.81.65') &&
+  ($_SERVER['REMOTE_ADDR'] != '173.0.81.140') &&
 
   // Web users.
   ($user->roles[4] != 'web game access') &&
