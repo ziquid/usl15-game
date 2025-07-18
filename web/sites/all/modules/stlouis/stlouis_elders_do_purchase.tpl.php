@@ -27,7 +27,8 @@ if (($ip_address == '66.211.170.66') ||
   // Paypal sandboxes.
   ($ip_address == '173.0.81.1') ||
   ($ip_address == '173.0.81.33') ||
-  ($ip_address == '173.0.82.126') ||
+  ($ip_address == '173.0.81.65') ||
+  ($ip_address == '173.0.81.140') ||
   (strpos($_SERVER['HTTP_USER_AGENT'], 'com.ziquid.uslce') !== FALSE)) {
 
   // IOS receipt data attached -- check it.

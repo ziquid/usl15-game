@@ -101,7 +101,7 @@ $top20 = 'Top 20';
 
 $game_settings = [
   'competencies' => [],
-  'last_update' => 'Jul 8, 2025',
+  'last_update' => 'Jul 17, 2025',
   'version' => 'Version:',
 ];
 

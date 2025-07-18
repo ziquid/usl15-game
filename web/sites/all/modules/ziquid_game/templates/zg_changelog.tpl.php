@@ -38,6 +38,15 @@ db_set_active();
   </div>
 
     <div class="subtitle">
+        Jul 17, 2025
+    </div>
+    <ul>
+        <li>
+            Not all Luck purchases via Paypal were being credited correctly.  Fixed.
+        </li>
+    </ul>
+
+    <div class="subtitle">
         Jul 8, 2025
     </div>
     <ul>
